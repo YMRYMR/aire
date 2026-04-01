@@ -1,0 +1,179 @@
+<UserControl x:Class="Aire.UI.MainWindow.Controls.ConversationSidebarControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Aire.UI"
+             xmlns:data="clr-namespace:Aire.Data;assembly=Aire.Core"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ui:PercentageConverter x:Key="PercentageConverter" />
+    </UserControl.Resources>
+    <Border Background="{DynamicResource AccentSurface2Brush}"
+            BorderBrush="{DynamicResource AccentBorderBrush}"
+            BorderThickness="0 0 1 0"
+            ClipToBounds="True">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="8 8 8 4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="PART_SearchTextBox"
+                         Grid.Column="0"
+                         Height="34"
+                         Padding="8 0"
+                         VerticalContentAlignment="Center"
+                         Margin="0 0 4 0"
+                         TextChanged="SearchTextBox_TextChanged">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                                <VisualBrush.Visual>
+                                                    <TextBlock Text="{DynamicResource PlaceholderSearchText}"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                                               Margin="10 0 0 0" />
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Button Grid.Column="1"
+                        x:Name="PART_NewConversationButton"
+                        Content="&#x270F;"
+                        ToolTip="New conversation"
+                        Width="34"
+                        Height="34"
+                        Padding="0"
+                        Click="NewConversationButton_Click" />
+            </Grid>
+
+            <ListBox x:Name="PART_ConversationList"
+                     Grid.Row="1"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     SelectionChanged="ConversationList_SelectionChanged"
+                     MouseRightButtonUp="ConversationList_MouseRightButtonUp">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="10 8" />
+                        <Setter Property="Margin" Value="4 1" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="Bd"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="6"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background"
+                                                    Value="{DynamicResource Surface2Brush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Bd" Property="Background"
+                                                    Value="{DynamicResource Surface3Brush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type data:ConversationSummary}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0"
+                                    Width="4"
+                                    CornerRadius="2"
+                                    Margin="0 0 8 0"
+                                    Background="{Binding ProviderColor}" />
+                            <StackPanel Grid.Column="1">
+                                <Grid>
+                                    <TextBlock x:Name="TitleDisplay"
+                                               Text="{Binding Title}"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis"
+                                               MouseDown="ConversationTitle_MouseDown">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip Content="{Binding Title}" />
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                    <TextBox x:Name="TitleEditor"
+                                             Text="{Binding EditingTitle, UpdateSourceTrigger=PropertyChanged}"
+                                             FontWeight="SemiBold"
+                                             Visibility="Collapsed"
+                                             BorderThickness="0"
+                                             Padding="0"
+                                             Margin="0"
+                                             Background="Transparent"
+                                             Foreground="{DynamicResource TextBrush}"
+                                             FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                             IsVisibleChanged="TitleEditor_IsVisibleChanged"
+                                             KeyDown="TitleEditor_KeyDown"
+                                             LostFocus="TitleEditor_LostFocus" />
+                                </Grid>
+                                <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                                    <TextBlock Text="{Binding ProviderName}"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
+                                               Margin="0 0 4 0" />
+                                    <TextBlock Text="·"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
+                                               Margin="0 0 4 0" />
+                                    <TextBlock Text="{Binding RelativeDate}"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Button Grid.Column="2"
+                                    Content="✕"
+                                    Tag="{Binding}"
+                                    Click="DeleteConversationButton_Click"
+                                    Width="22"
+                                    Height="22"
+                                    Padding="0"
+                                    Margin="8 0 0 0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    FontSize="10"
+                                    ToolTip="Delete conversation"
+                                    Opacity="0.75" />
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter TargetName="TitleDisplay" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="TitleEditor" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Border>
+</UserControl>

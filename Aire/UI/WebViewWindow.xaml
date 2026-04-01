@@ -1,0 +1,148 @@
+<Window x:Class="Aire.UI.WebViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="Aire — Browser"
+        Height="720" Width="1100"
+        MinHeight="440" MinWidth="600"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        ShowInTaskbar="True"
+        Background="{DynamicResource BackgroundBrush}"
+        Icon="/aire.ico"
+        Closed="Window_Closed">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" GlassFrameThickness="0" ResizeBorderThickness="4" UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <!-- Tab item style matching the dark theme -->
+        <Style x:Key="BrowserTabItem" TargetType="TabItem">
+            <Setter Property="Background"        Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="Foreground"        Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="BorderThickness"   Value="0" />
+            <Setter Property="Padding"           Value="0" />
+            <Setter Property="Margin"            Value="0 0 2 0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="TabBorder"
+                                Background="{DynamicResource SurfaceBrush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1 1 1 0"
+                                CornerRadius="4 4 0 0"
+                                Padding="10 6 6 6"
+                                Margin="0 2 2 0">
+                            <ContentPresenter ContentSource="Header" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource Surface2Brush}" />
+                                <Setter TargetName="TabBorder" Property="Margin"     Value="0 0 2 -1" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource Surface3Brush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Background="{DynamicResource BackgroundBrush}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />  <!-- toolbar -->
+                <RowDefinition Height="*" />     <!-- tabs + content -->
+            </Grid.RowDefinitions>
+
+            <!-- ── Toolbar ── -->
+            <Border Grid.Row="0"
+                    Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="0 0 0 1"
+                    Padding="6 5"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />  <!-- ← -->
+                        <ColumnDefinition Width="Auto" />  <!-- → -->
+                        <ColumnDefinition Width="Auto" />  <!-- ↻ -->
+                        <ColumnDefinition Width="*" />     <!-- URL bar -->
+                        <ColumnDefinition Width="Auto" />  <!-- + new tab -->
+                        <ColumnDefinition Width="Auto" />  <!-- ⊗ close all tabs -->
+                        <ColumnDefinition Width="Auto" />  <!-- ⤴ open external -->
+                        <ColumnDefinition Width="Auto" />  <!-- ✕ close -->
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" x:Name="BackButton"
+                            Content="←" ToolTip="Back"
+                            Width="30" Height="30" Padding="0"
+                            IsEnabled="False"
+                            Click="BackButton_Click" />
+
+                    <Button Grid.Column="1" x:Name="ForwardButton"
+                            Content="→" ToolTip="Forward"
+                            Width="30" Height="30" Padding="0"
+                            Margin="3 0 0 0"
+                            IsEnabled="False"
+                            Click="ForwardButton_Click" />
+
+                    <Button Grid.Column="2" x:Name="ReloadButton"
+                            Content="↻" ToolTip="Reload  (F5)"
+                            Width="30" Height="30" Padding="0"
+                            Margin="3 0 6 0"
+                            Click="ReloadButton_Click" />
+
+                    <!-- Editable URL bar -->
+                    <TextBox Grid.Column="3" x:Name="UrlBar"
+                             VerticalContentAlignment="Center"
+                             Height="30"
+                             Padding="8 0"
+                             FontSize="12"
+                             KeyDown="UrlBar_KeyDown"
+                             GotFocus="UrlBar_GotFocus" />
+
+                    <Button Grid.Column="4"
+                            Content="+" ToolTip="New tab  (Ctrl+T)"
+                            Width="30" Height="30" Padding="0"
+                            FontSize="16"
+                            Margin="6 0 0 0"
+                            Click="NewTabButton_Click" />
+
+                    <Button Grid.Column="5"
+                            Content="⊗" ToolTip="Close all tabs"
+                            Width="30" Height="30" Padding="0"
+                            Margin="3 0 0 0"
+                            Click="CloseAllTabsButton_Click" />
+
+                    <Button Grid.Column="6"
+                            Content="⤴" ToolTip="Open current page in default browser"
+                            Width="30" Height="30" Padding="0"
+                            Margin="3 0 0 0"
+                            Click="OpenExternalButton_Click" />
+
+                    <Button Grid.Column="7"
+                            Content="✕" ToolTip="Close browser"
+                            Width="30" Height="30" Padding="0"
+                            Margin="3 0 0 0"
+                            Click="CloseButton_Click" />
+                </Grid>
+            </Border>
+
+            <!-- ── Tab control ── -->
+            <TabControl Grid.Row="1"
+                        x:Name="BrowserTabs"
+                        ItemContainerStyle="{StaticResource BrowserTabItem}"
+                        Background="{DynamicResource BackgroundBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="0 1 0 0"
+                        Padding="0"
+                        SelectionChanged="BrowserTabs_SelectionChanged">
+                <!-- Tab items are added programmatically -->
+            </TabControl>
+        </Grid>
+    </Border>
+</Window>

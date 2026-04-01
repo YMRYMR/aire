@@ -1,0 +1,44 @@
+<Window x:Class="Aire.UI.InitializationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Aire"
+        Width="360" Height="160"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        ShowInTaskbar="False"
+        FontSize="13"
+        Background="{DynamicResource BackgroundBrush}">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" GlassFrameThickness="0"
+                      ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Border BorderBrush="{DynamicResource AccentBorderBrush}" BorderThickness="1">
+        <StackPanel VerticalAlignment="Center" Margin="32 24">
+
+            <!-- App name -->
+            <TextBlock Text="Aire"
+                       FontSize="22" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextBrush}"
+                       HorizontalAlignment="Center"
+                       Margin="0 0 0 18" />
+
+            <!-- Indeterminate progress bar — use PrimaryBrush so it's clearly visible -->
+            <ProgressBar x:Name="InitProgressBar"
+                         IsIndeterminate="True"
+                         Height="4"
+                         Foreground="{DynamicResource PrimaryHoverBrush}"
+                         Margin="0 0 0 12" />
+
+            <!-- Status text -->
+            <TextBlock x:Name="StatusText"
+                       Text="Starting…"
+                       FontSize="11"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       HorizontalAlignment="Center" />
+
+        </StackPanel>
+    </Border>
+</Window>

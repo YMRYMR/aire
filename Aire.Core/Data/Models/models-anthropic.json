@@ -1,0 +1,8 @@
+{
+  "providerType": "Anthropic",
+  "models": [
+    { "id": "claude-sonnet-4-5", "displayName": "Claude Sonnet 4.5", "capabilities": ["vision", "tools"] },
+    { "id": "claude-3-7-sonnet-latest", "displayName": "Claude 3.7 Sonnet", "capabilities": ["vision", "tools"] },
+    { "id": "claude-3-5-haiku-latest", "displayName": "Claude 3.5 Haiku", "capabilities": ["vision", "tools"] }
+  ]
+}

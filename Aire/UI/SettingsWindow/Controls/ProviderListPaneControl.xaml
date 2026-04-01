@@ -1,0 +1,132 @@
+<UserControl x:Class="Aire.UI.Settings.Controls.ProviderListPaneControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 8">
+            <Button x:Name="PART_AddProviderButton"
+                    Content="+ Add"
+                    Click="AddProviderButton_Click"
+                    Padding="12 6" />
+            <Button x:Name="PART_SetupWizardButton"
+                    Content="Setup Wizard"
+                    Click="SetupWizardButton_Click"
+                    Padding="12 6"
+                    Margin="8 0 0 0" />
+        </StackPanel>
+
+        <Border Grid.Row="1"
+                Background="{DynamicResource SurfaceBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <ListBox x:Name="PART_ProvidersListView"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     SelectionMode="Single"
+                     AllowDrop="True"
+                     SelectionChanged="ProvidersListView_SelectionChanged"
+                     PreviewMouseMove="ProvidersListView_PreviewMouseMove"
+                     DragOver="ProvidersListView_DragOver"
+                     Drop="ProvidersListView_Drop"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                        <Setter Property="Padding" Value="10 8" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="Bd"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="0 0 0 1"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Stretch" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Surface3Brush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Surface2Brush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="⠿"
+                                       FontSize="14"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 8 0"
+                                       Cursor="SizeAll"
+                                       ToolTip="Drag to reorder"
+                                       PreviewMouseLeftButtonDown="DragHandle_MouseDown" />
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding Name}"
+                                           Foreground="{DynamicResource TextBrush}"
+                                           FontWeight="Medium" />
+                                <TextBlock Text="{Binding DisplayType}"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           FontSize="11"
+                                           Margin="0 2 0 0" />
+                            </StackPanel>
+                            <Border Grid.Column="2"
+                                    Width="7" Height="7"
+                                    CornerRadius="4"
+                                    VerticalAlignment="Center"
+                                    Margin="8 0 4 0"
+                                    Cursor="Hand"
+                                    Tag="{Binding}"
+                                    MouseLeftButtonUp="EnabledDot_Click">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource TextSecondaryBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <Button Grid.Column="3"
+                                    Content="&#x2715;"
+                                    Tag="{Binding}"
+                                    Click="DeleteListItem_Click"
+                                    Padding="4 2"
+                                    Margin="0"
+                                    Foreground="{DynamicResource TextSecondaryBrush}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="11"
+                                    Cursor="Hand"
+                                    VerticalAlignment="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+    </Grid>
+</UserControl>

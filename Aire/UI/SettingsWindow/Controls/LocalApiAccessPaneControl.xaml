@@ -1,0 +1,66 @@
+<UserControl x:Class="Aire.UI.Settings.Controls.LocalApiAccessPaneControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border Background="{DynamicResource Surface2Brush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+            Padding="10 8"
+            Margin="0 0 0 16">
+        <StackPanel>
+            <TextBlock x:Name="PART_ApiAccessTitle"
+                       Text="Local API access"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextBrush}"
+                       FontSize="12"
+                       Margin="0 0 0 3" />
+            <TextBlock x:Name="PART_ApiAccessDescription"
+                       Text="Allow trusted local apps to open Aire, read chat history, and request actions through the local API."
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       FontSize="12"
+                       TextWrapping="Wrap"
+                       Margin="0 0 0 8" />
+            <CheckBox x:Name="PART_ApiAccessEnabledCheckBox"
+                      Content="Enable local API access"
+                      ToolTip="Lets other local apps control Aire. Leave off unless you trust the caller."
+                      Checked="ApiAccessEnabledCheckBox_Changed"
+                      Unchecked="ApiAccessEnabledCheckBox_Changed" />
+            <TextBlock x:Name="PART_ApiAccessTokenTitle"
+                       Text="Auth token"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextBrush}"
+                       FontSize="12"
+                       Margin="0 12 0 3" />
+            <TextBlock x:Name="PART_ApiAccessTokenDescription"
+                       Text="Pass this token in local API requests to authorize control."
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       FontSize="12"
+                       TextWrapping="Wrap"
+                       Margin="0 0 0 8" />
+            <Grid Margin="0 0 0 4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="PART_ApiAccessTokenBox"
+                         Grid.Column="0"
+                         IsReadOnly="True"
+                         FontFamily="Consolas, Courier New"
+                         VerticalContentAlignment="Center" />
+                <Button x:Name="PART_CopyApiAccessTokenButton"
+                        Grid.Column="2"
+                        Content="Copy"
+                        Padding="10 6"
+                        Click="CopyApiAccessTokenButton_Click" />
+                <Button x:Name="PART_RegenerateApiAccessTokenButton"
+                        Grid.Column="4"
+                        Content="Regenerate"
+                        Padding="10 6"
+                        Click="RegenerateApiAccessTokenButton_Click" />
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -1,0 +1,318 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace Aire.Services
+{
+    public class FileSystemService
+    {
+        private const int MaxFileReadBytes = 100_000; // 100 KB
+
+        public async Task<ToolExecutionResult> ExecuteAsync(ToolCallRequest request)
+        {
+            try
+            {
+                if (request.Tool == "list_directory")
+                    return ExecuteListDirectory(GetParam(request, "path"));
+
+                var text = request.Tool switch
+                {
+                    "read_file"        => await ReadFileAsync(GetParam(request, "path"), GetInt(request, "offset", 0), GetInt(request, "length", MaxFileReadBytes)),
+                    "write_file"       => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), GetBool(request, "append", false)),
+                    "write_to_file"    => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), false),
+                    "apply_diff"       => await ApplyDiffAsync(GetParam(request, "path"), GetParam(request, "diff")),
+                    "create_directory" => CreateDirectory(GetParam(request, "path")),
+                    "delete_file"      => DeleteFile(GetParam(request, "path")),
+                    "move_file"        => MoveFile(GetParam(request, "from"), GetParam(request, "to")),
+                    "search_files"        => SearchFiles(GetParam(request, "directory"), GetParam(request, "pattern")),
+                    "search_file_content" => SearchFileContent(request),
+                    _                     => $"Error: Unknown tool '{request.Tool}'"
+                };
+                return new ToolExecutionResult { TextResult = text };
+            }
+            catch (Exception ex)
+            {
+                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+            }
+        }
+
+        private static string GetParam(ToolCallRequest req, string name) =>
+            req.Parameters.TryGetProperty(name, out var v) ? v.GetString() ?? string.Empty : string.Empty;
+
+        private static int GetInt(ToolCallRequest req, string name, int defaultValue) =>
+            req.Parameters.TryGetProperty(name, out var v) && v.ValueKind == System.Text.Json.JsonValueKind.Number
+                ? v.GetInt32() : defaultValue;
+
+        private static bool GetBool(ToolCallRequest req, string name, bool defaultValue) =>
+            req.Parameters.TryGetProperty(name, out var v) && v.ValueKind == System.Text.Json.JsonValueKind.True  ? true  :
+            req.Parameters.TryGetProperty(name, out     v) && v.ValueKind == System.Text.Json.JsonValueKind.False ? false :
+            defaultValue;
+
+        // ── list_directory ─────────────────────────────────────────────────────
+
+        private static ToolExecutionResult ExecuteListDirectory(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return new ToolExecutionResult { TextResult = "Error: No path provided." };
+            if (!Directory.Exists(path))
+                return new ToolExecutionResult { TextResult = $"Error: Directory not found: {path}" };
+
+            var dirs  = Directory.GetDirectories(path).OrderBy(x => x).ToArray();
+            var files = Directory.GetFiles(path).OrderBy(x => x).ToArray();
+
+            var listing = new DirectoryListing { Path = path };
+            foreach (var d in dirs)
+                listing.Entries.Add(new DirectoryEntry { IsDirectory = true, Name = System.IO.Path.GetFileName(d) });
+            foreach (var f in files)
+            {
+                var info = new FileInfo(f);
+                listing.Entries.Add(new DirectoryEntry
+                {
+                    IsDirectory = false,
+                    Name     = info.Name,
+                    Size     = FormatSize(info.Length),
+                    Modified = info.LastWriteTime.ToString("yyyy-MM-dd HH:mm")
+                });
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Contents of: {path}");
+            foreach (var e in listing.Entries)
+            {
+                if (e.IsDirectory)
+                    sb.AppendLine($"[DIR]  {e.Name}/");
+                else
+                    sb.AppendLine($"[FILE] {e.Name}  ({e.Size}, {e.Modified})");
+            }
+            if (listing.Entries.Count == 0)
+                sb.AppendLine("(empty directory)");
+
+            return new ToolExecutionResult
+            {
+                TextResult       = sb.ToString().TrimEnd(),
+                DirectoryListing = listing
+            };
+        }
+
+        // ── Other tools ────────────────────────────────────────────────────────
+
+        private static async Task<string> ReadFileAsync(string path, int offset = 0, int length = MaxFileReadBytes)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
+            if (!File.Exists(path)) return $"Error: File not found: {path}";
+
+            length = Math.Clamp(length, 1, MaxFileReadBytes);
+            offset = Math.Max(0, offset);
+
+            var fullContent = await File.ReadAllTextAsync(path);
+            var totalChars  = fullContent.Length;
+
+            if (offset >= totalChars && totalChars > 0)
+                return $"Error: Offset {offset} is beyond end of file ({totalChars} chars total).";
+
+            var chunk      = fullContent.Substring(offset, Math.Min(length, totalChars - offset));
+            var charsRead  = chunk.Length;
+            var remaining  = totalChars - offset - charsRead;
+            var nextOffset = offset + charsRead;
+
+            var header = remaining > 0
+                ? $"File: {path} | Total: {totalChars} chars | Read: {charsRead} chars (offset {offset}–{nextOffset - 1}) | Remaining: {remaining} chars — call read_file with offset={nextOffset} to continue\n---\n"
+                : $"File: {path} | Total: {totalChars} chars | Read: {charsRead} chars (complete)\n---\n";
+
+            return header + chunk;
+        }
+
+        private static async Task<string> WriteFileAsync(string path, string content, bool append = false)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
+            var dir = System.IO.Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            if (append)
+                await File.AppendAllTextAsync(path, content);
+            else
+                await File.WriteAllTextAsync(path, content);
+            var totalSize = new FileInfo(path).Length;
+            var action    = append ? "Appended" : "Wrote";
+            return $"{action} {content.Length} characters to: {path} (file is now {FormatSize(totalSize)})";
+        }
+
+        private static async Task<string> ApplyDiffAsync(string path, string diff)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
+            if (string.IsNullOrWhiteSpace(diff)) return "Error: No diff provided.";
+            if (!File.Exists(path)) return $"Error: File not found: {path}";
+
+            var original = await File.ReadAllTextAsync(path);
+            var lines    = diff.Split('\n');
+
+            // Simple unified-diff application: look for <<<< ... ==== ... >>>> blocks
+            var result   = original;
+            int searchIdx = 0;
+
+            while (searchIdx < lines.Length)
+            {
+                // Find <<<<<<< marker
+                int startMarker = -1;
+                for (int i = searchIdx; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith("<<<<<<<"))
+                    { startMarker = i; break; }
+                }
+                if (startMarker < 0) break;
+
+                // Find ======= separator
+                int separator = -1;
+                for (int i = startMarker + 1; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith("======="))
+                    { separator = i; break; }
+                }
+                if (separator < 0) break;
+
+                // Find >>>>>>> end marker
+                int endMarker = -1;
+                for (int i = separator + 1; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith(">>>>>>>"))
+                    { endMarker = i; break; }
+                }
+                if (endMarker < 0) break;
+
+                var oldBlock = string.Join("\n", lines[(startMarker + 1)..separator]);
+                var newBlock = string.Join("\n", lines[(separator + 1)..endMarker]);
+
+                if (result.Contains(oldBlock))
+                    result = result.Replace(oldBlock, newBlock);
+
+                searchIdx = endMarker + 1;
+            }
+
+            if (result == original)
+                return "Warning: Diff applied but no changes were made (old text not found).";
+
+            await File.WriteAllTextAsync(path, result);
+            return $"Diff applied to: {path}";
+        }
+
+        private static string CreateDirectory(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
+            if (Directory.Exists(path)) return $"Directory already exists: {path}";
+            Directory.CreateDirectory(path);
+            return $"Created directory: {path}";
+        }
+
+        private static string DeleteFile(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
+            if (!File.Exists(path)) return $"Error: File not found: {path}";
+            File.Delete(path);
+            return $"Deleted: {path}";
+        }
+
+        private static string MoveFile(string from, string to)
+        {
+            if (string.IsNullOrWhiteSpace(from) || string.IsNullOrWhiteSpace(to))
+                return "Error: Source or destination path missing.";
+            if (!File.Exists(from) && !Directory.Exists(from))
+                return $"Error: Source not found: {from}";
+            var toDir = System.IO.Path.GetDirectoryName(to);
+            if (!string.IsNullOrEmpty(toDir) && !Directory.Exists(toDir))
+                Directory.CreateDirectory(toDir);
+            if (File.Exists(from)) File.Move(from, to);
+            else Directory.Move(from, to);
+            return $"Moved: '{from}' \u2192 '{to}'";
+        }
+
+        private static string SearchFiles(string directory, string pattern)
+        {
+            if (string.IsNullOrWhiteSpace(directory)) return "Error: No directory provided.";
+            if (!Directory.Exists(directory)) return $"Error: Directory not found: {directory}";
+            var searchPattern = string.IsNullOrWhiteSpace(pattern) ? "*" : pattern;
+            var files = Directory.GetFiles(directory, searchPattern, SearchOption.AllDirectories)
+                                 .Take(200).ToArray();
+            if (files.Length == 0)
+                return $"No files found matching '{searchPattern}' in: {directory}";
+            var sb = new StringBuilder();
+            sb.AppendLine($"Found {files.Length} file(s) matching '{searchPattern}' in: {directory}");
+            foreach (var f in files) sb.AppendLine($"  {f}");
+            return sb.ToString().TrimEnd();
+        }
+
+        private static string SearchFileContent(ToolCallRequest request)
+        {
+            var directory   = GetParam(request, "directory");
+            var pattern     = GetParam(request, "pattern");
+            var filePattern = GetParam(request, "file_pattern");
+            int maxResults  = 50;
+            if (request.Parameters.TryGetProperty("max_results", out var mrEl) &&
+                mrEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+                maxResults = Math.Clamp(mrEl.GetInt32(), 1, 500);
+
+            if (string.IsNullOrWhiteSpace(directory)) return "Error: directory is required.";
+            if (string.IsNullOrWhiteSpace(pattern))   return "Error: pattern is required.";
+            if (!Directory.Exists(directory))          return $"Error: Directory not found: {directory}";
+
+            try
+            {
+                var searchPattern = string.IsNullOrWhiteSpace(filePattern) ? "*" : filePattern;
+                var files         = Directory.GetFiles(directory, searchPattern, SearchOption.AllDirectories);
+
+                Regex? regex = null;
+                try { regex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled); }
+                catch { /* fall back to literal search */ }
+
+                var sb      = new StringBuilder();
+                int matches = 0;
+
+                foreach (var file in files)
+                {
+                    if (matches >= maxResults) break;
+                    try
+                    {
+                        var lines    = File.ReadAllLines(file);
+                        bool fileHit = false;
+                        for (int i = 0; i < lines.Length && matches < maxResults; i++)
+                        {
+                            bool hit = regex != null
+                                ? regex.IsMatch(lines[i])
+                                : lines[i].Contains(pattern, StringComparison.OrdinalIgnoreCase);
+                            if (!hit) continue;
+
+                            if (!fileHit)
+                            {
+                                sb.AppendLine(file);
+                                fileHit = true;
+                            }
+                            sb.AppendLine($"  {i + 1}: {lines[i].Trim()}");
+                            matches++;
+                        }
+                    }
+                    catch { /* skip unreadable files */ }
+                }
+
+                if (matches == 0) return $"No matches found for '{pattern}' in {directory}";
+                sb.Insert(0, $"{matches} match(es) for '{pattern}':\n");
+                if (matches >= maxResults) sb.AppendLine($"\n[Limit of {maxResults} results reached]");
+                return sb.ToString().TrimEnd();
+            }
+            catch (Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
+        }
+
+        private static string FormatSize(long bytes) => bytes switch
+        {
+            < 1024                => $"{bytes} B",
+            < 1024 * 1024         => $"{bytes / 1024.0:F1} KB",
+            < 1024L * 1024 * 1024 => $"{bytes / (1024.0 * 1024):F1} MB",
+            _                     => $"{bytes / (1024.0 * 1024 * 1024):F1} GB"
+        };
+    }
+}

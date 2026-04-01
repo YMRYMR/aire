@@ -1,0 +1,138 @@
+<Window x:Class="Aire.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:Aire.UI"
+        xmlns:mw="clr-namespace:Aire.UI.MainWindow.Controls"
+        xmlns:data="clr-namespace:Aire.Data;assembly=Aire.Core"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        mc:Ignorable="d"
+        Title="Aire"
+        Height="620"
+        Width="460"
+        MinHeight="420"
+        MinWidth="360"
+        WindowStartupLocation="Manual"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Icon="/aire.ico"
+        Closing="Window_Closing"
+        PreviewMouseWheel="MainWindow_PreviewMouseWheel"
+        PreviewKeyDown="MainWindow_PreviewKeyDown">
+    <Window.Resources>
+        <ui:PercentageConverter x:Key="PercentageConverter" />
+        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <sys:String x:Key="PlaceholderSearchText">Search…</sys:String>
+    </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" GlassFrameThickness="0" ResizeBorderThickness="4" UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <mw:MainHeaderControl x:Name="HeaderControl"
+                              Grid.Row="0"
+                              HeaderMouseLeftButtonDown="HeaderBorder_MouseLeftButtonDown"
+                              SidebarToggleClicked="SidebarToggleButton_Click"
+                              HelpClicked="HelpButton_Click"
+                              SettingsClicked="SettingsButton_Click"
+                              ProviderSelectionChanged="ProviderComboBox_SelectionChanged"
+                              ProviderDropDownOpened="ProviderComboBox_DropDownOpened"
+                              CheckAgainClicked="CheckAgainButton_Click"
+                              PinClicked="PinButton_Click"
+                              VoiceOutputClicked="VoiceOutputButton_Click"
+                              BrowserClicked="BrowserButton_Click" />
+
+        <!-- Content area: sidebar + chat -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="SidebarColumn" Width="0" MinWidth="0" />
+                <ColumnDefinition x:Name="SplitterColumn" Width="0" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <mw:ConversationSidebarControl x:Name="ConversationSidebar"
+                                           Grid.Column="0"
+                                           SearchBoxTextChanged="ConversationSearchBox_TextChanged"
+                                           NewConversationClicked="NewChatButton_Click"
+                                           ConversationSelectionChanged="ConversationListBox_SelectionChanged"
+                                           ConversationListRightClick="ConversationListBox_RightClick"
+                                           ConversationTitleMouseDown="ConversationTitle_MouseDown"
+                                           TitleEditorVisibleChanged="TitleEditor_IsVisibleChanged"
+                                           TitleEditorKeyDown="TitleEditor_KeyDown"
+                                           TitleEditorLostFocus="TitleEditor_LostFocus"
+                                           DeleteConversationClicked="DeleteConversation_Click" />
+
+            <!-- Sidebar resize handle -->
+            <GridSplitter x:Name="SidebarSplitter"
+                          Grid.Column="1"
+                          Width="4"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Background="{DynamicResource BorderBrush}"
+                          Cursor="SizeWE"
+                          ResizeBehavior="PreviousAndNext"
+                          ResizeDirection="Columns"
+                          Visibility="Collapsed" />
+
+            <!-- Chat messages area -->
+            <ScrollViewer Grid.Column="2"
+                          x:Name="MessagesScrollViewer"
+                      VerticalScrollBarVisibility="Auto"
+                      Padding="12 8"
+                      Background="{DynamicResource BackgroundBrush}">
+            <ScrollViewer.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Find...  Ctrl+F" Click="FindMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Header="Save chat as text..." Click="SaveChatText_Click" />
+                    <MenuItem Header="Copy chat as text" Click="CopyChatText_Click" />
+                    <Separator />
+                    <MenuItem Header="Clear conversation" Click="ClearChatMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Header="Restore original window sizes" Click="RestoreWindowSizes_Click" />
+                </ContextMenu>
+            </ScrollViewer.ContextMenu>
+            <ItemsControl x:Name="MessagesItemsControl"
+                          Background="Transparent"
+                          ItemsSource="{Binding Messages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <mw:MessageListItemControl ChatImageMouseLeftButtonUp="ChatImage_MouseLeftButtonUp"
+                                                   AnswerButtonClick="AnswerButton_Click"
+                                                   ApproveToolCallClick="ApproveToolCall_Click"
+                                                   DenyToolCallClick="DenyToolCall_Click" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <mw:SearchPanelControl x:Name="SearchPanelControl"
+                               Grid.Column="1"
+                               SearchTextChanged="SearchTextBox_TextChanged"
+                               SearchKeyDown="SearchTextBox_KeyDown"
+                               SearchPrevClicked="SearchPrev_Click"
+                               SearchNextClicked="SearchNext_Click"
+                               CloseSearchClicked="CloseSearch_Click" />
+
+        </Grid><!-- end content area (sidebar + chat) -->
+
+        <mw:MainComposerControl x:Name="ComposerControl"
+                                Grid.Row="2"
+                                EndSessionClicked="CancelMouseSession_Click"
+                                FileChipClicked="FileChip_Click"
+                                RemoveImageClicked="RemoveImageButton_Click"
+                                StopAiClicked="StopAiButton_Click"
+                                InputPreviewKeyDown="InputTextBox_KeyDown"
+                                InputPreviewDrop="InputTextBox_Drop"
+                                InputPreviewDragOver="InputTextBox_DragOver"
+                                MicClicked="MicButton_Click"
+                                ToolsClicked="ToolsButton_Click" />
+    </Grid>
+</Window>

@@ -1,0 +1,701 @@
+<Window x:Class="Aire.UI.OnboardingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Aire.UI.Controls"
+        Title="Welcome to Aire"
+        Width="480" Height="760" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        ShowInTaskbar="True"
+        FontSize="13"
+        Background="{DynamicResource BackgroundBrush}">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" GlassFrameThickness="0"
+                      ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Border BorderBrush="{DynamicResource AccentBorderBrush}" BorderThickness="1">
+    <DockPanel>
+
+        <!-- Title bar -->
+        <Border DockPanel.Dock="Top"
+                Background="{DynamicResource AccentSurfaceBrush}"
+                BorderBrush="{DynamicResource AccentBorderBrush}"
+                BorderThickness="0 0 0 1"
+                Padding="12 8"
+                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Text="Aire - Setup"
+                           FontSize="13" FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           VerticalAlignment="Center" />
+                <Button Grid.Column="1"
+                        Content="&#x2715;"
+                        Width="28" Height="28"
+                        Padding="0"
+                        Margin="0"
+                        ToolTip="Close"
+                        Click="CloseButton_Click" />
+            </Grid>
+        </Border>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+
+        <!-- Progress dots (4 steps) -->
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 20 0 0">
+            <Ellipse x:Name="Dot1" Width="8" Height="8" Margin="4 0"
+                     Fill="{DynamicResource PrimaryBrush}" />
+            <Ellipse x:Name="Dot2" Width="8" Height="8" Margin="4 0"
+                     Fill="{DynamicResource Surface3Brush}" />
+            <Ellipse x:Name="Dot3" Width="8" Height="8" Margin="4 0"
+                     Fill="{DynamicResource Surface3Brush}" />
+            <Ellipse x:Name="Dot4" Width="8" Height="8" Margin="4 0"
+                     Fill="{DynamicResource Surface3Brush}" />
+        </StackPanel>
+
+        <!-- STEP 1 - Welcome + Language -->
+        <StackPanel x:Name="Step1Panel" Margin="40 28 40 36">
+
+            <TextBlock x:Name="WelcomeTitle"
+                       Text="Welcome to Aire"
+                       FontSize="24" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextBrush}"
+                       HorizontalAlignment="Center"
+                       Margin="0 0 0 4" />
+
+            <TextBlock x:Name="WelcomeSubtitle"
+                       Text="AI for everyone"
+                       FontSize="13"
+                       Foreground="{DynamicResource PrimaryBrush}"
+                       HorizontalAlignment="Center"
+                       Margin="0 0 0 16" />
+
+            <TextBlock x:Name="WelcomeDesc"
+                       TextWrapping="Wrap"
+                       FontSize="13"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       Text="Aire is a tray-based AI chat app that lets you talk to any AI provider: OpenAI, Anthropic Claude, Google AI, Ollama, and more, all in one place."
+                       Margin="0 0 0 28" />
+
+            <!-- Language picker -->
+            <WrapPanel x:Name="LangPanel"
+                       HorizontalAlignment="Center"
+                       Margin="0 0 0 28" />
+
+            <Button x:Name="Step1NextButton"
+                    Content="Let's get started"
+                    Width="220" Height="38"
+                    HorizontalAlignment="Center"
+                    Click="Step1Next_Click" />
+        </StackPanel>
+
+        <!-- STEP 2 - Provider Picker -->
+        <StackPanel x:Name="Step2Panel" Visibility="Collapsed" Margin="40 20 40 32">
+
+            <!-- Back link -->
+            <TextBlock Text="Back"
+                       Cursor="Hand" FontSize="13"
+                       Foreground="{DynamicResource PrimaryBrush}"
+                       Margin="0 0 0 14"
+                       MouseLeftButtonUp="Step2Back_Click" />
+
+            <TextBlock x:Name="PickerTitle"
+                       Text="Choose your AI provider"
+                       FontSize="18" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextBrush}"
+                       Margin="0 0 0 4" />
+            <TextBlock x:Name="PickerSubtitle"
+                       Text="Pick one to get started. You can add more anytime."
+                       FontSize="13"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       Margin="0 0 0 20" />
+
+            <!-- Provider cards -->
+            <UniformGrid Columns="3" Margin="0 0 0 16">
+
+                <!-- OpenAI -->
+                <Button Tag="OpenAI" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#10A37F" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="O" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="OpenAI"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="GPT-4o, o3 &amp; more"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Groq -->
+                <Button Tag="Groq" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#F55036" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="G" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Groq"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Free tier, very fast"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Anthropic API -->
+                <Button Tag="Anthropic" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#D97757" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="A" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Anthropic API"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Claude Sonnet, Haiku"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Claude.ai -->
+                <Button Tag="ClaudeWeb" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#111111" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="C" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Claude.ai"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Browser sign-in"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Google AI -->
+                <Button Tag="GoogleAI" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#4285F4" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="G" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Google AI"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Gemini Pro &amp; Flash"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Ollama -->
+                <Button Tag="Ollama" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#5A5A5A" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="O" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Ollama"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Local, free, private"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- DeepSeek -->
+                <Button Tag="DeepSeek" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#0066CC" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="D" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="DeepSeek"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Chat, Reasoner, V3"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Inception -->
+                <Button Tag="Inception" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#9B59B6" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="I" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Inception"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Mercury and Inception"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- OpenRouter -->
+                <Button Tag="OpenRouter" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#6E44FF" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="R" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="OpenRouter"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="100+ models, free tier"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Zhipu AI (z.ai) -->
+                <Button Tag="Zai" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#1A6FE8" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="Z" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Zhipu AI"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="GLM models · z.ai"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Codex -->
+                <Button Tag="Codex" Margin="4" Height="116"
+                        Click="PickProvider_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18"
+                                Background="#0F172A" Margin="0 0 0 6"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="C" FontSize="16" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Codex"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Local CLI bridge"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Margin="4 2 4 0" />
+                    </StackPanel>
+                </Button>
+
+            </UniformGrid>
+
+            <!-- Custom / advanced link -->
+            <TextBlock Text="Custom / advanced setup"
+                       HorizontalAlignment="Center"
+                       Cursor="Hand" FontSize="13"
+                       Foreground="{DynamicResource PrimaryBrush}"
+                       Margin="0 16 0 0"
+                       MouseLeftButtonUp="PickCustomProvider_Click" />
+
+        </StackPanel>
+
+        <!-- STEP 3 - Configure provider -->
+        <StackPanel x:Name="Step3Panel" Visibility="Collapsed" Margin="40 20 40 32">
+
+            <!-- Back link -->
+            <TextBlock x:Name="Step3BackLink"
+                       Text="Back"
+                       Cursor="Hand" FontSize="13"
+                       Foreground="{DynamicResource PrimaryBrush}"
+                       Margin="0 0 0 14"
+                       MouseLeftButtonUp="Step3Back_Click" />
+
+            <TextBlock x:Name="Step3Title"
+                       Text="Add your first AI"
+                       FontSize="18" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextBrush}"
+                       Margin="0 0 0 4" />
+            <TextBlock x:Name="Step3Subtitle"
+                       Text="Connect to an AI provider to start chatting."
+                       FontSize="13"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       Margin="0 0 0 8" />
+
+            <!-- Visit provider button (shown when a provider with a website is selected) -->
+            <Button x:Name="VisitProviderButton"
+                    Visibility="Collapsed"
+                    Margin="0 0 0 16"
+                    Padding="12 7"
+                    HorizontalAlignment="Left"
+                    Click="VisitProviderButton_Click" />
+
+            <!-- Provider type -->
+            <TextBlock x:Name="LabelProviderType"
+                       Text="Provider type" FontSize="13"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       Margin="0 0 0 4" />
+            <ComboBox x:Name="ProviderTypeCombo"
+                      Height="32" Margin="0 0 0 12"
+                      SelectionChanged="ProviderTypeCombo_SelectionChanged">
+                <ComboBoxItem Content="OpenAI" Tag="OpenAI" />
+                <ComboBoxItem Content="Groq" Tag="Groq" />
+                <ComboBoxItem Content="OpenRouter" Tag="OpenRouter" />
+                <ComboBoxItem Content="Codex (local CLI bridge)" Tag="Codex" />
+                <ComboBoxItem Content="Anthropic API" Tag="Anthropic" />
+                <ComboBoxItem Content="Claude.ai (browser sign-in)" Tag="ClaudeWeb" />
+                <ComboBoxItem Content="Google AI" Tag="GoogleAI" />
+                <ComboBoxItem Content="Ollama (local, private)" Tag="Ollama" />
+                <ComboBoxItem Content="DeepSeek (OpenAI-compatible)" Tag="DeepSeek" />
+                <ComboBoxItem Content="Inception (OpenAI-compatible)" Tag="Inception" />
+                <ComboBoxItem Content="Zhipu AI / z.ai (OpenAI-compatible)" Tag="Zai" />
+            </ComboBox>
+
+            <!-- Name -->
+            <TextBlock x:Name="LabelName"
+                       Text="Name" FontSize="13"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       Margin="0 0 0 4" />
+            <TextBox x:Name="ProviderNameBox"
+                     FontSize="12"
+                     Height="32" Padding="8 4"
+                     VerticalContentAlignment="Center"
+                     Margin="0 0 0 12" />
+
+            <!-- API Key (hidden for Ollama) -->
+            <StackPanel x:Name="ApiKeyPanel">
+                <TextBlock x:Name="LabelApiKey"
+                           Text="API Key" FontSize="13"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           Margin="0 0 0 4" />
+                <PasswordBox x:Name="ApiKeyBox"
+                             FontSize="12"
+                             Height="32" Padding="8 4"
+                             VerticalContentAlignment="Center"
+                             Margin="0 0 0 4"
+                             PasswordChanged="ApiKeyBox_PasswordChanged" />
+                <TextBlock x:Name="ApiKeyLink"
+                           FontSize="13"
+                           Foreground="{DynamicResource PrimaryBrush}"
+                           Cursor="Hand"
+                           Margin="0 0 0 8"
+                           MouseLeftButtonUp="ApiKeyLink_Click" />
+
+                <!-- Claude.ai WebView login shown only for Claude.ai -->
+                <StackPanel x:Name="AnthropicLoginPanel" Visibility="Collapsed" Margin="0 4 0 12">
+                    <TextBlock Text="or"
+                               HorizontalAlignment="Center" FontSize="13"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0 0 0 8" />
+                    <Button x:Name="ClaudeLoginButton"
+                            Content="Login with Claude.ai"
+                            Height="30"
+                            Click="ClaudeLoginButton_Click" />
+                    <TextBlock x:Name="ClaudeSessionStatus"
+                               FontSize="13"
+                               HorizontalAlignment="Center"
+                               Margin="0 6 0 0"
+                               Visibility="Collapsed" />
+                </StackPanel>
+
+            </StackPanel>
+
+            <!-- Base URL (OpenAI compatible only) -->
+            <StackPanel x:Name="BaseUrlPanel" Visibility="Collapsed">
+                <TextBlock x:Name="LabelBaseUrl"
+                           Text="Base URL (optional, leave blank for OpenAI)" FontSize="13"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           Margin="0 0 0 4" />
+                <TextBox x:Name="BaseUrlBox"
+                         FontSize="12"
+                         Height="32" Padding="8 4"
+                         VerticalContentAlignment="Center"
+                         Margin="0 0 0 12" />
+            </StackPanel>
+
+            <!-- Standard model (non-Ollama) -->
+            <StackPanel x:Name="StandardModelPanel">
+                <TextBlock x:Name="LabelModel"
+                           Text="Model" FontSize="13"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           Margin="0 0 0 4" />
+                <ComboBox x:Name="ModelCombo"
+                          IsEditable="True"
+                          IsTextSearchEnabled="False"
+                          FontSize="12"
+                          Height="32" Margin="0 0 0 4" />
+                <TextBlock x:Name="ModelFetchStatus"
+                           FontSize="13" Margin="0 0 0 12"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           Visibility="Collapsed" />
+            </StackPanel>
+
+            <!-- Test connection (non-Ollama) -->
+            <Grid x:Name="TestGrid" Margin="0 0 0 4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="TestButton"
+                        Content="Test connection"
+                        Width="140" Height="30"
+                        Grid.Column="0"
+                        Click="TestButton_Click" />
+                <TextBox x:Name="TestResultText"
+                         Grid.Column="1"
+                         VerticalAlignment="Center"
+                         Margin="12 0 0 0"
+                         FontSize="13"
+                         Foreground="{DynamicResource TextSecondaryBrush}"
+                         IsReadOnly="True"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         TextWrapping="Wrap"
+                         Cursor="IBeam" />
+            </Grid>
+
+            <StackPanel x:Name="CodexSetupPanel" Visibility="Collapsed" Margin="0 8 0 8">
+                <Border Background="{DynamicResource Surface2Brush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Codex uses the local Codex CLI instead of an API key."
+                                   FontWeight="SemiBold"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   Margin="0 0 0 4" />
+                        <TextBlock Text="If Codex CLI is not installed yet, Aire can install it for you with npm. You may still need to run 'codex login' once in a terminal afterward."
+                                   TextWrapping="Wrap"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0 0 0 10" />
+                        <Button x:Name="CodexInstallButton"
+                                Content="Install Codex CLI"
+                                Height="34"
+                                Width="170"
+                                HorizontalAlignment="Left"
+                                Click="CodexInstallButton_Click" />
+                        <ProgressBar x:Name="CodexInstallProgressBar"
+                                     Height="4"
+                                     Margin="0 8 0 0"
+                                     IsIndeterminate="True"
+                                     Visibility="Collapsed" />
+                        <TextBlock x:Name="CodexInstallStatus"
+                                   FontSize="13"
+                                   Margin="0 8 0 0"
+                                   TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Ollama setup panel (shared control) -->
+            <controls:OllamaModelPickerControl x:Name="OllamaModelPicker"
+                                               Visibility="Collapsed"
+                                               Margin="0 8 0 0" />
+
+            <!-- Buttons row -->
+            <Grid Margin="0 20 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="SkipLink"
+                           Grid.Column="0"
+                           Text="Skip for now"
+                           FontSize="13"
+                           Foreground="{DynamicResource PrimaryBrush}"
+                           Cursor="Hand"
+                           VerticalAlignment="Center"
+                           MouseLeftButtonUp="SkipForNow_Click" />
+                <Button x:Name="Step3NextButton"
+                        Grid.Column="1"
+                        Content="Finish"
+                        Width="110" Height="34"
+                        Click="Step3Next_Click" />
+            </Grid>
+        </StackPanel>
+
+        <!-- STEP 4 - Done -->
+        <StackPanel x:Name="Step4Panel" Visibility="Collapsed" Margin="40 28 40 40">
+            <!-- Back link -->
+            <TextBlock x:Name="Step4BackLink"
+                       Text="Back"
+                       Cursor="Hand" FontSize="13"
+                       Foreground="{DynamicResource PrimaryBrush}"
+                       Margin="0 0 0 16"
+                       MouseLeftButtonUp="Step4Back_Click" />
+
+            <TextBlock x:Name="Step4Title"
+                       Text="You're all set!"
+                       FontSize="22" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextBrush}"
+                       HorizontalAlignment="Center"
+                       Margin="0 0 0 16" />
+            <TextBlock x:Name="Step4Desc"
+                       Text="Aire is running in your system tray. Click the icon any time to open the chat."
+                       TextWrapping="Wrap"
+                       FontSize="13"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       Margin="0 0 0 32" />
+            <Button x:Name="StartChattingButton"
+                    Content="Start chatting"
+                    Width="160" Height="36"
+                    HorizontalAlignment="Center"
+                    Click="StartChatting_Click" />
+        </StackPanel>
+
+    </StackPanel>
+    </ScrollViewer>
+    </DockPanel>
+    </Border>
+</Window>

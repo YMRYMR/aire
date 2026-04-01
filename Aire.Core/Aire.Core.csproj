@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Aire</RootNamespace>
+    <AssemblyName>Aire.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Betalgo.OpenAI" Version="8.7.2" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Models\models-openai.json" />
+    <EmbeddedResource Include="Data\Models\models-codex.json" />
+    <EmbeddedResource Include="Data\Models\models-anthropic.json" />
+    <EmbeddedResource Include="Data\Models\models-google.json" />
+    <EmbeddedResource Include="Data\Models\models-ollama.json" />
+    <EmbeddedResource Include="Data\Models\models-deepseek.json" />
+    <EmbeddedResource Include="Data\Models\models-groq.json" />
+    <EmbeddedResource Include="Data\Models\models-openrouter.json" />
+    <EmbeddedResource Include="Data\Models\models-inception.json" />
+    <EmbeddedResource Include="Data\Models/models-zai.json" />
+  </ItemGroup>
+
+
+</Project>

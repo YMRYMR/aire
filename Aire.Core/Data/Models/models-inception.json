@@ -1,0 +1,7 @@
+{
+  "providerType": "Inception",
+  "models": [
+    { "id": "mercury-latest", "displayName": "Mercury Latest", "capabilities": ["tools"] },
+    { "id": "inception-latest", "displayName": "Inception Latest", "capabilities": ["tools"] }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "providerType": "DeepSeek",
+  "models": [
+    { "id": "deepseek-chat", "displayName": "DeepSeek Chat", "capabilities": ["tools"] },
+    { "id": "deepseek-reasoner", "displayName": "DeepSeek Reasoner", "capabilities": ["tools"] }
+  ]
+}

@@ -1,0 +1,33 @@
+<Window x:Class="Aire.UI.SimpleInputDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Aire"
+        Width="340" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+    <StackPanel Margin="16">
+        <TextBlock x:Name="PromptText"
+                   Foreground="{DynamicResource TextBrush}"
+                   FontSize="13"
+                   Margin="0 0 0 8" />
+        <TextBox x:Name="InputBox"
+                 Height="32"
+                 Padding="8 4"
+                 VerticalContentAlignment="Center"
+                 KeyDown="InputBox_KeyDown" />
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0 12 0 0">
+            <Button Content="Cancel"
+                    Width="72" Height="30"
+                    Margin="0 0 8 0"
+                    IsCancel="True"
+                    Click="Cancel_Click" />
+            <Button Content="OK"
+                    Width="72" Height="30"
+                    IsDefault="True"
+                    Click="OK_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>

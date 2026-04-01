@@ -1,0 +1,105 @@
+<UserControl x:Class="Aire.UI.Settings.Controls.McpConnectionsPaneControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel>
+        <TextBlock x:Name="PART_McpServersTitle"
+                   Text="MCP Servers"
+                   FontSize="11"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource TextBrush}"
+                   Margin="0 0 0 4"/>
+        <TextBlock x:Name="PART_McpServersDescription"
+                   TextWrapping="Wrap"
+                   FontSize="11"
+                   Foreground="{DynamicResource TextSecondaryBrush}"
+                   Margin="0 0 0 8"
+                   Text="MCP servers extend the AI with custom tools. Most servers require Node.js (npx). Changes take effect immediately."/>
+
+        <WrapPanel Margin="0 0 0 8">
+            <Button x:Name="PART_AddMcpBtn" Content="+ Add server" Height="26" Padding="10 0" Margin="0 0 6 0" Click="AddMcpBtn_Click"/>
+            <Button x:Name="PART_McpTemplatesBtn" Content="Templates ▾" Height="26" Padding="10 0" Click="McpTemplatesBtn_Click">
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="PART_McpTemplatesMenu"/>
+                </Button.ContextMenu>
+            </Button>
+        </WrapPanel>
+
+        <ListView x:Name="PART_McpServersList" MaxHeight="180" Margin="0 0 0 4"
+                  SelectionChanged="McpServersList_SelectionChanged" FontSize="11">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="On" Width="36">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsEnabled}" Click="McpEnabledToggle_Click"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Name" Width="130" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Command" Width="160" DisplayMemberBinding="{Binding CommandPreview}"/>
+                    <GridViewColumn Header="" Width="56">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Ellipse Width="9" Height="9" Fill="{Binding StatusColor}" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="" Width="98">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Edit" Width="42" Height="20" FontSize="11" Margin="0 0 4 0" Tag="{Binding}" Click="EditMcpBtn_Click"/>
+                                    <Button Content="Delete" Width="48" Height="20" FontSize="11" Tag="{Binding}" Click="DeleteMcpBtn_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBlock x:Name="PART_McpTipText"
+                   Text="Tip: most MCP servers need Node.js — get it at nodejs.org"
+                   FontSize="11"
+                   Foreground="{DynamicResource TextSecondaryBrush}"
+                   Margin="0 3 0 6"/>
+
+        <Border x:Name="PART_McpEditPanel" Visibility="Collapsed"
+                Background="{DynamicResource Surface2Brush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                CornerRadius="4" Padding="12 10" Margin="0 0 0 4">
+            <StackPanel>
+                <TextBlock x:Name="PART_McpEditTitle" Text="Add MCP server" FontWeight="SemiBold" FontSize="11"
+                           Foreground="{DynamicResource TextBrush}" Margin="0 0 0 8"/>
+                <TextBlock Text="Name" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 3"/>
+                <TextBox x:Name="PART_McpNameBox" Height="26" Padding="6 3" VerticalContentAlignment="Center" FontSize="11" Margin="0 0 0 6"/>
+                <Grid Margin="0 0 0 6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Command" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 3"/>
+                        <TextBox x:Name="PART_McpCommandBox" Height="26" Padding="6 3" VerticalContentAlignment="Center" FontSize="11"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Arguments" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 3"/>
+                        <TextBox x:Name="PART_McpArgsBox" Height="26" Padding="6 3" VerticalContentAlignment="Center" FontSize="11"/>
+                    </StackPanel>
+                </Grid>
+                <TextBlock Text="Working directory (optional)" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 3"/>
+                <TextBox x:Name="PART_McpWorkDirBox" Height="26" Padding="6 3" VerticalContentAlignment="Center" FontSize="11" Margin="0 0 0 6"/>
+                <TextBlock Text="Environment variables — one per line: KEY=value" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 3"/>
+                <TextBox x:Name="PART_McpEnvVarsBox" Height="72" Padding="6 4" TextWrapping="Wrap" FontSize="11"
+                         AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0 0 0 8"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="PART_SaveMcpBtn" Content="Save" Width="72" Height="26" FontSize="11" Margin="0 0 6 0" Click="SaveMcpBtn_Click"/>
+                    <Button x:Name="PART_CancelMcpBtn" Content="Cancel" Width="72" Height="26" FontSize="11" Click="CancelMcpBtn_Click"/>
+                    <Button x:Name="PART_TestMcpBtn" Content="Test" Height="26" FontSize="11" Padding="10 0" Margin="14 0 0 0" Click="TestMcpBtn_Click"/>
+                    <TextBlock x:Name="PART_McpTestResult" VerticalAlignment="Center" Margin="8 0 0 0" FontSize="11"
+                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

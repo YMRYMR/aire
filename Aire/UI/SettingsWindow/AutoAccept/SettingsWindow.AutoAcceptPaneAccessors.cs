@@ -1,0 +1,61 @@
+using Aire.UI.Settings.Controls;
+using CheckBox = System.Windows.Controls.CheckBox;
+using Grid = System.Windows.Controls.Grid;
+using StackPanel = System.Windows.Controls.StackPanel;
+
+namespace Aire.UI
+{
+    public partial class SettingsWindow
+    {
+        private AutoAcceptPaneControl AutoAcceptPane => AutoAcceptPaneControl;
+        private StackPanel AutoAcceptSection => AutoAcceptPane.AutoAcceptSection;
+        private CheckBox AutoAcceptEnabledCheckBox => AutoAcceptPane.AutoAcceptEnabledCheckBox;
+        private Grid AutoAcceptToolsPanel => AutoAcceptPane.AutoAcceptToolsPanel;
+        private CheckBox AutoAcceptOpenUrlCheckBox => AutoAcceptPane.AutoAcceptOpenUrlCheckBox;
+        private CheckBox AutoAcceptHttpRequestCheckBox => AutoAcceptPane.AutoAcceptHttpRequestCheckBox;
+        private CheckBox AutoAcceptOpenBrowserTabCheckBox => AutoAcceptPane.AutoAcceptOpenBrowserTabCheckBox;
+        private CheckBox AutoAcceptListBrowserTabsCheckBox => AutoAcceptPane.AutoAcceptListBrowserTabsCheckBox;
+        private CheckBox AutoAcceptReadBrowserTabCheckBox => AutoAcceptPane.AutoAcceptReadBrowserTabCheckBox;
+        private CheckBox AutoAcceptSwitchBrowserTabCheckBox => AutoAcceptPane.AutoAcceptSwitchBrowserTabCheckBox;
+        private CheckBox AutoAcceptCloseBrowserTabCheckBox => AutoAcceptPane.AutoAcceptCloseBrowserTabCheckBox;
+        private CheckBox AutoAcceptGetBrowserHtmlCheckBox => AutoAcceptPane.AutoAcceptGetBrowserHtmlCheckBox;
+        private CheckBox AutoAcceptExecuteBrowserScriptCheckBox => AutoAcceptPane.AutoAcceptExecuteBrowserScriptCheckBox;
+        private CheckBox AutoAcceptGetBrowserCookiesCheckBox => AutoAcceptPane.AutoAcceptGetBrowserCookiesCheckBox;
+        private CheckBox AutoAcceptExecuteCommandCheckBox => AutoAcceptPane.AutoAcceptExecuteCommandCheckBox;
+        private CheckBox AutoAcceptReadCommandOutputCheckBox => AutoAcceptPane.AutoAcceptReadCommandOutputCheckBox;
+        private CheckBox AutoAcceptListFilesCheckBox => AutoAcceptPane.AutoAcceptListFilesCheckBox;
+        private CheckBox AutoAcceptReadFileCheckBox => AutoAcceptPane.AutoAcceptReadFileCheckBox;
+        private CheckBox AutoAcceptSearchFilesCheckBox => AutoAcceptPane.AutoAcceptSearchFilesCheckBox;
+        private CheckBox AutoAcceptSearchFileContentCheckBox => AutoAcceptPane.AutoAcceptSearchFileContentCheckBox;
+        private CheckBox AutoAcceptWriteToFileCheckBox => AutoAcceptPane.AutoAcceptWriteToFileCheckBox;
+        private CheckBox AutoAcceptApplyDiffCheckBox => AutoAcceptPane.AutoAcceptApplyDiffCheckBox;
+        private CheckBox AutoAcceptCreateDirectoryCheckBox => AutoAcceptPane.AutoAcceptCreateDirectoryCheckBox;
+        private CheckBox AutoAcceptDeleteFileCheckBox => AutoAcceptPane.AutoAcceptDeleteFileCheckBox;
+        private CheckBox AutoAcceptMoveFileCheckBox => AutoAcceptPane.AutoAcceptMoveFileCheckBox;
+        private CheckBox AutoAcceptOpenFileCheckBox => AutoAcceptPane.AutoAcceptOpenFileCheckBox;
+        private CheckBox AutoAcceptGetClipboardCheckBox => AutoAcceptPane.AutoAcceptGetClipboardCheckBox;
+        private CheckBox AutoAcceptSetClipboardCheckBox => AutoAcceptPane.AutoAcceptSetClipboardCheckBox;
+        private CheckBox AutoAcceptNotifyCheckBox => AutoAcceptPane.AutoAcceptNotifyCheckBox;
+        private CheckBox AutoAcceptGetSystemInfoCheckBox => AutoAcceptPane.AutoAcceptGetSystemInfoCheckBox;
+        private CheckBox AutoAcceptGetRunningProcessesCheckBox => AutoAcceptPane.AutoAcceptGetRunningProcessesCheckBox;
+        private CheckBox AutoAcceptGetActiveWindowCheckBox => AutoAcceptPane.AutoAcceptGetActiveWindowCheckBox;
+        private CheckBox AutoAcceptGetSelectedTextCheckBox => AutoAcceptPane.AutoAcceptGetSelectedTextCheckBox;
+        private CheckBox AutoAcceptRememberCheckBox => AutoAcceptPane.AutoAcceptRememberCheckBox;
+        private CheckBox AutoAcceptRecallCheckBox => AutoAcceptPane.AutoAcceptRecallCheckBox;
+        private CheckBox AutoAcceptSetReminderCheckBox => AutoAcceptPane.AutoAcceptSetReminderCheckBox;
+        private CheckBox AutoAcceptReadEmailsCheckBox => AutoAcceptPane.AutoAcceptReadEmailsCheckBox;
+        private CheckBox AutoAcceptSearchEmailsCheckBox => AutoAcceptPane.AutoAcceptSearchEmailsCheckBox;
+        private CheckBox AutoAcceptSendEmailCheckBox => AutoAcceptPane.AutoAcceptSendEmailCheckBox;
+        private CheckBox AutoAcceptReplyToEmailCheckBox => AutoAcceptPane.AutoAcceptReplyToEmailCheckBox;
+        private CheckBox AutoAcceptNewTaskCheckBox => AutoAcceptPane.AutoAcceptNewTaskCheckBox;
+        private CheckBox AutoAcceptAskFollowupQuestionCheckBox => AutoAcceptPane.AutoAcceptAskFollowupQuestionCheckBox;
+        private CheckBox AutoAcceptAttemptCompletionCheckBox => AutoAcceptPane.AutoAcceptAttemptCompletionCheckBox;
+        private CheckBox AutoAcceptSkillCheckBox => AutoAcceptPane.AutoAcceptSkillCheckBox;
+        private CheckBox AutoAcceptSwitchModeCheckBox => AutoAcceptPane.AutoAcceptSwitchModeCheckBox;
+        private CheckBox AutoAcceptSwitchModelCheckBox => AutoAcceptPane.AutoAcceptSwitchModelCheckBox;
+        private CheckBox AutoAcceptUpdateTodoListCheckBox => AutoAcceptPane.AutoAcceptUpdateTodoListCheckBox;
+        private CheckBox AutoAcceptShowImageCheckBox => AutoAcceptPane.AutoAcceptShowImageCheckBox;
+        private CheckBox AutoAcceptMouseToolsCheckBox => AutoAcceptPane.AutoAcceptMouseToolsCheckBox;
+        private CheckBox AutoAcceptKeyboardToolsCheckBox => AutoAcceptPane.AutoAcceptKeyboardToolsCheckBox;
+    }
+}

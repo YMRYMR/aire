@@ -1,0 +1,12 @@
+{
+  "providerType": "OpenRouter",
+  "models": [
+    { "id": "meta-llama/llama-3.3-70b-instruct:free", "displayName": "Llama 3.3 70B  ·  free",            "capabilities": [] },
+    { "id": "mistralai/mistral-7b-instruct:free",      "displayName": "Mistral 7B  ·  free",               "capabilities": [] },
+    { "id": "google/gemma-3-27b-it:free",              "displayName": "Gemma 3 27B  ·  free",              "capabilities": [] },
+    { "id": "deepseek/deepseek-chat",                  "displayName": "DeepSeek Chat  ·  paid",            "capabilities": ["tools"] },
+    { "id": "openai/gpt-4o",                           "displayName": "GPT-4o (via OpenRouter)  ·  paid",  "capabilities": ["tools"] },
+    { "id": "anthropic/claude-sonnet-4-5",             "displayName": "Claude Sonnet (via OR)  ·  paid",   "capabilities": ["tools"] },
+    { "id": "xiaomi/mimo-v2-pro",                      "displayName": "MiMo-v2 Pro  ·  paid",              "capabilities": ["tools", "toolformat:hermes"] }
+  ]
+}

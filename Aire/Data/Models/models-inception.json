@@ -1,0 +1,10 @@
+{
+  "providerType": "Inception",
+  "models": [
+    { "id": "mercury-latest", "displayName": "Mercury Latest", "capabilities": ["tools"] },
+    { "id": "mercury-v1", "displayName": "Mercury V1", "capabilities": ["tools"] },
+    { "id": "mercury-2", "displayName": "Mercury 2", "capabilities": ["tools"] },
+    { "id": "inception-7b", "displayName": "Inception 7B", "capabilities": ["tools"] },
+    { "id": "inception-13b", "displayName": "Inception 13B", "capabilities": ["tools", "vision"] }
+  ]
+}
