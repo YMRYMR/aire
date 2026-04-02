@@ -16,6 +16,8 @@ namespace Aire.UI
         private Button AddMcpBtn => McpConnectionsPane.AddMcpBtn;
         private Button McpTemplatesBtn => McpConnectionsPane.McpTemplatesBtn;
         private ContextMenu McpTemplatesMenu => McpConnectionsPane.McpTemplatesMenu;
+        private TextBlock McpCatalogTitle => McpConnectionsPane.McpCatalogTitle;
+        private ListView McpCatalogList => McpConnectionsPane.McpCatalogList;
         private ListView McpServersList => McpConnectionsPane.McpServersList;
         private TextBlock McpTipText => McpConnectionsPane.McpTipText;
         private Border McpEditPanel => McpConnectionsPane.McpEditPanel;

@@ -85,16 +85,18 @@ namespace Aire
                         SenderForeground = fgBrush
                     };
 
-                    if (entry.ImagePath != null && File.Exists(entry.ImagePath))
+                    if (entry.ImagePath != null)
                     {
                         try
                         {
-                            var bitmap = new System.Windows.Media.Imaging.BitmapImage(new Uri(entry.ImagePath));
-                            bitmap.Freeze();
-                            if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.User)
-                                chatMsg.AttachedImage = bitmap;
-                            else
-                                chatMsg.ScreenshotImage = bitmap;
+                            var bitmap = MainWindow.LoadChatImageSource(entry.ImagePath);
+                            if (bitmap != null)
+                            {
+                                if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.User)
+                                    chatMsg.AttachedImage = bitmap;
+                                else
+                                    chatMsg.ScreenshotImage = bitmap;
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -107,6 +109,8 @@ namespace Aire
 
                 if (_owner.Messages.Count == 0)
                     _owner.LoadWelcomeMessage();
+
+                _owner.ScrollToBottom();
             }
 
             public async Task ClearConversationAsync()
@@ -134,6 +138,7 @@ namespace Aire
                 _owner._historyIndex = -1;
                 _owner._inputDraft = string.Empty;
                 _owner._todoListMessage = null;
+                _owner.ApplyAssistantModeState(_owner._assistantModeApplicationService.GetDefaultMode().Key);
                 _owner.CloseSearch();
                 _owner.LoadWelcomeMessage();
             }
@@ -141,15 +146,11 @@ namespace Aire
             public async Task<int> CreateConversationAsync(Provider provider, string title, string systemMessage)
             {
                 var id = await _owner._conversationApplicationService.CreateConversationAsync(provider.Id, title);
+                await _owner._conversationApplicationService.UpdateConversationAssistantModeAsync(id, _owner._assistantModeKey);
                 _owner._currentConversationId = id;
                 _owner._conversationHistory.Clear();
                 _owner.Messages.Clear();
-                _owner.AddToUI(new ChatMessage
-                {
-                    Sender = "System",
-                    Text = systemMessage,
-                    SenderForeground = MainWindow.SystemFgBrush
-                });
+                _owner.AddSystemMessage(systemMessage);
                 return id;
             }
         }

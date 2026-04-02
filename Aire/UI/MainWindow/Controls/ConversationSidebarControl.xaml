@@ -146,6 +146,14 @@
                                                Foreground="{DynamicResource TextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
+                                    <TextBlock Text="{Binding AssistantModeDisplayName}"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
+                                               Margin="0 0 4 0" />
+                                    <TextBlock Text="·"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
+                                               Margin="0 0 4 0" />
                                     <TextBlock Text="{Binding RelativeDate}"
                                                Foreground="{DynamicResource TextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}" />

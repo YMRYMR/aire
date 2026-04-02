@@ -606,10 +606,10 @@ public class ServiceWorkflowRegressionTests
             }
         };
         List<ChatMessage> list = providerPresentationWorkflowService.TrimConversation(history, 2);
-        Assert.Equal(3, list.Count);
+        Assert.Equal(4, list.Count);
         Assert.Equal("system", list[0].Role);
-        Assert.Equal("assistant", list[1].Role);
-        Assert.Equal("user", list[2].Role);
+        Assert.Contains(list, message => message.Role == "user");
+        Assert.Contains(list, message => message.Role == "assistant");
         Provider[] providers = new Provider[2]
         {
             new Provider
@@ -648,6 +648,41 @@ public class ServiceWorkflowRegressionTests
         Assert.EndsWith("…", chatResponseWorkflowService.BuildTrayPreview(new string('a', 90), 10), StringComparison.Ordinal);
         ToolCallRequest request = CreateRequest("attempt_completion", "{\"result\":\"Task finished\"}");
         Assert.Equal("Task finished", chatResponseWorkflowService.ExtractCompletionResult(request));
+    }
+
+    [Fact]
+    public async Task ChatTurnApplicationService_HandleSuccessTextAsync_PreservesAssistantImageOnlyResponses()
+    {
+        string localAppData = Path.Combine(Path.GetTempPath(), "aire-chat-image-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(localAppData);
+        string oldLocalAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA");
+        Environment.SetEnvironmentVariable("LOCALAPPDATA", localAppData);
+        try
+        {
+            using DatabaseService db = new DatabaseService();
+            await db.InitializeAsync();
+            int conversationId = await db.CreateConversationAsync(1, "Image Chat");
+            var session = new ChatSessionApplicationService(db, db);
+            var toolWorkflow = new ToolExecutionWorkflowService(new ToolExecutionService(new FileSystemService(), new CommandExecutionService()), db, db);
+            var service = new ChatTurnApplicationService(session, toolWorkflow);
+
+            var result = await service.HandleSuccessTextAsync("![chart](https://example.com/chart.png)", conversationId, isWindowVisible: true);
+
+            Assert.Equal(string.Empty, result.FinalText);
+            Assert.Equal("https://example.com/chart.png", result.ImageReference);
+            Assert.Contains(await db.GetMessagesAsync(conversationId), message => message.Role == "assistant" && message.ImagePath == "https://example.com/chart.png");
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("LOCALAPPDATA", oldLocalAppData);
+            try
+            {
+                Directory.Delete(localAppData, recursive: true);
+            }
+            catch
+            {
+            }
+        }
     }
 
     [Fact]
@@ -778,6 +813,7 @@ public class ServiceWorkflowRegressionTests
             int conversationId = await db.CreateConversationAsync(1, "Untitled");
             await service.PersistUserMessageAsync(conversationId, "hello", null, "Greeting");
             await service.PersistAssistantMessageAsync(conversationId, "hi there");
+            await service.PersistAssistantMessageAsync(conversationId, "diagram", "https://example.com/diagram.png");
             await service.PersistToolStatusAsync(conversationId, "Ã¢Å“ Read file");
             await service.UpdateConversationProviderAsync(conversationId, 2);
             Aire.Data.Conversation conversation = await db.GetConversationAsync(conversationId);
@@ -787,6 +823,7 @@ public class ServiceWorkflowRegressionTests
             List<Message> messages = await db.GetMessagesAsync(conversationId);
             Assert.Contains((IEnumerable<Message>)messages, (Predicate<Message>)((Message m) => m.Role == "user" && m.Content == "hello"));
             Assert.Contains((IEnumerable<Message>)messages, (Predicate<Message>)((Message m) => m.Role == "assistant" && m.Content == "hi there"));
+            Assert.Contains((IEnumerable<Message>)messages, (Predicate<Message>)((Message m) => m.Role == "assistant" && m.ImagePath == "https://example.com/diagram.png"));
             Assert.Contains((IEnumerable<Message>)messages, (Predicate<Message>)((Message m) => m.Role == "tool" && m.Content == "Ã¢Å“ Read file"));
             Aire.Data.Conversation latest = await service.GetLatestConversationAsync(2);
             Assert.NotNull(latest);

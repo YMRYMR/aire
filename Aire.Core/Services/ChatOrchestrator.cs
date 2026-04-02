@@ -76,22 +76,65 @@ namespace Aire.Services
 
             try
             {
-                var fullResponse = string.Empty;
-                await foreach (var chunk in provider.StreamChatAsync(messages, cancellationToken).WithCancellation(cancellationToken))
+                var fullResponse = new System.Text.StringBuilder();
+                // ConfigureAwait(false) keeps each iteration on the thread pool rather than
+                // marshalling back to the WPF dispatcher after every chunk.  Without it the
+                // loop body runs at Normal priority (9) on the UI thread, starving Render (7)
+                // passes and causing the entire response to appear at once instead of streaming.
+                await foreach (var chunk in provider.StreamChatAsync(messages, cancellationToken)
+                    .WithCancellation(cancellationToken)
+                    .ConfigureAwait(false))
                 {
-                    fullResponse += chunk;
+                    fullResponse.Append(chunk);
                     ResponseChunkReceived?.Invoke(this, chunk);
                 }
 
                 ResponseCompleted?.Invoke(this, new AiResponse
                 {
-                    Content = fullResponse,
+                    Content = fullResponse.ToString(),
                     IsSuccess = true
                 });
             }
             catch (Exception ex)
             {
                 ErrorOccurred?.Invoke(this, ex.Message);
+            }
+        }
+
+        public async Task<AiResponse> StreamMessageWithHistoryAsync(
+            IEnumerable<ChatMessage> messages,
+            CancellationToken cancellationToken = default)
+        {
+            var provider = _currentProvider ?? throw new InvalidOperationException("No AI provider selected.");
+
+            try
+            {
+                var fullResponse = new System.Text.StringBuilder();
+                // ConfigureAwait(false): same reason as StreamMessageAsync above.
+                await foreach (var chunk in provider.StreamChatAsync(messages, cancellationToken)
+                    .WithCancellation(cancellationToken)
+                    .ConfigureAwait(false))
+                {
+                    fullResponse.Append(chunk);
+                    ResponseChunkReceived?.Invoke(this, chunk);
+                }
+
+                var response = new AiResponse
+                {
+                    Content = fullResponse.ToString(),
+                    IsSuccess = true
+                };
+                ResponseCompleted?.Invoke(this, response);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                ErrorOccurred?.Invoke(this, ex.Message);
+                return new AiResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
     }

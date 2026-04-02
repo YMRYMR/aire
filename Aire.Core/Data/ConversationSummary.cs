@@ -15,6 +15,20 @@ namespace Aire.Data
         public DateTime UpdatedAt { get; set; }
         public string ProviderName { get; set; } = string.Empty;
         public string ProviderColor { get; set; } = "#888888";
+        public string AssistantModeKey { get; set; } = "general";
+        public string AssistantModeDisplayName
+            => AssistantModeKey switch
+            {
+                "developer" => "Developer",
+                "creative-writer" => "Creative writer",
+                "architect" => "Architect",
+                "teacher" => "Teacher",
+                "security" => "Security",
+                "scientist" => "Scientist",
+                "psicologist" => "Psicologist",
+                "philosopher" => "Philosopher",
+                _ => "General"
+            };
 
         public string RelativeDate
         {

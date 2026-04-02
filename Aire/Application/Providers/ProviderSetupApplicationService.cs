@@ -63,6 +63,18 @@ namespace Aire.AppLayer.Providers
             => provider.ValidateConfigurationAsync(cancellationToken);
 
         /// <summary>
+        /// Validates a configured provider using the adapter seam so failures can be
+        /// classified into Aire's shared validation semantics.
+        /// </summary>
+        /// <param name="provider">Configured provider instance.</param>
+        /// <param name="cancellationToken">Cancellation token for the validation request.</param>
+        /// <returns>Enriched validation outcome including failure classification and remediation guidance.</returns>
+        public Task<ProviderValidationOutcome> ValidateDetailedAsync(
+            IAiProvider provider,
+            CancellationToken cancellationToken)
+            => _runtimeWorkflow.ValidateAsync(provider, cancellationToken);
+
+        /// <summary>
         /// Saves a newly configured provider after applying duplicate checks shared with onboarding.
         /// </summary>
         /// <param name="providerRepository">Provider repository used for duplicate detection and insert.</param>

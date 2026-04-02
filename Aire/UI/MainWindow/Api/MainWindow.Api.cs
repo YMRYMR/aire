@@ -49,20 +49,6 @@ namespace Aire
             var conv = await _conversationApplicationService.GetConversationAsync(conversationId);
             if (conv == null) return false;
 
-            var provider = (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
-                .ResolveConversationProvider(conv, ProviderComboBox.Items.OfType<Provider>());
-            if (provider != null)
-            {
-                _suppressProviderChange = true;
-                ProviderComboBox.SelectedItem = provider;
-                _suppressProviderChange = false;
-                _currentProviderId = provider.Id;
-                try { _currentProvider = _providerFactory.CreateProvider(provider); }
-                catch { _currentProvider = null; }
-                await _chatService.SetProviderAsync(provider.Id);
-                await _chatSessionApplicationService.SaveSelectedProviderAsync(provider.Id);
-            }
-
             _currentConversationId = conversationId;
             await LoadConversationMessages(conversationId);
             if (_sidebarOpen)

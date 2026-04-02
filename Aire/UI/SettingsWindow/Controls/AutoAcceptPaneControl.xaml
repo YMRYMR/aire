@@ -6,6 +6,36 @@
                   Margin="0 8 0 0">
         <StackPanel x:Name="PART_AutoAcceptSection"
                     Margin="4 8 4 16" MaxWidth="480" HorizontalAlignment="Left">
+            <TextBlock x:Name="PART_ProfileLabel"
+                       Text="Profile"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       FontSize="11"
+                       Margin="0 0 0 6" />
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 12">
+                <ComboBox x:Name="PART_ProfileComboBox"
+                          Width="220"
+                          DisplayMemberPath="Name"
+                          SelectionChanged="ProfileComboBox_SelectionChanged" />
+                <Button x:Name="PART_ApplyProfileButton"
+                        Content="Apply"
+                        Width="64"
+                        Height="34"
+                        Margin="6 0 0 0"
+                        Click="ApplyProfileButton_Click" />
+                <Button x:Name="PART_SaveProfileButton"
+                        Content="Save as"
+                        Width="74"
+                        Height="34"
+                        Margin="6 0 0 0"
+                        Click="SaveProfileButton_Click" />
+                <Button x:Name="PART_DeleteProfileButton"
+                        Content="Delete"
+                        Width="74"
+                        Height="34"
+                        Margin="6 0 0 0"
+                        Click="DeleteProfileButton_Click" />
+            </StackPanel>
+
             <Border Background="{DynamicResource Surface2Brush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="3 1 1 1"

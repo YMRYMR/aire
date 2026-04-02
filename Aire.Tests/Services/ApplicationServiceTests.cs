@@ -187,6 +187,41 @@ public sealed class ApplicationServiceTests
         Assert.Empty(await svc.GetMcpServersAsync());
     }
 
+    [Fact]
+    public void McpCatalog_BuildConfig_UsesCuratedTemplate()
+    {
+        var svc = new McpCatalogApplicationService();
+
+        var config = svc.BuildConfig("github");
+
+        Assert.Equal("GitHub", config.Name);
+        Assert.Equal("npx", config.Command);
+        Assert.Contains("@modelcontextprotocol/server-github", config.Arguments);
+        Assert.True(config.EnvVars.ContainsKey("GITHUB_PERSONAL_ACCESS_TOKEN"));
+        Assert.True(config.IsEnabled);
+    }
+
+    [Fact]
+    public void McpCatalog_FindInstalledConfig_MatchesCuratedTemplate()
+    {
+        var svc = new McpCatalogApplicationService();
+        var installed = new List<McpServerConfig>
+        {
+            new()
+            {
+                Id = 42,
+                Name = "Filesystem",
+                Command = "npx",
+                Arguments = "-y @modelcontextprotocol/server-filesystem"
+            }
+        };
+
+        var match = svc.FindInstalledConfig("filesystem", installed);
+
+        Assert.NotNull(match);
+        Assert.Equal(42, match!.Id);
+    }
+
     // ── EmailAccountApplicationService ───────────────────────────────────────
 
     [Fact]

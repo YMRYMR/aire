@@ -189,7 +189,14 @@ namespace Aire.Services
                 StopSpeaking();
                 _cts = new CancellationTokenSource();
                 IsSpeaking = true;
-                PlayMp3(mp3, _cts.Token);
+                _ = PlayMp3Async(mp3, _cts.Token).ContinueWith(_ =>
+                {
+                    if (!_cts.IsCancellationRequested)
+                    {
+                        IsSpeaking = false;
+                        SpeakingCompleted?.Invoke();
+                    }
+                }, TaskScheduler.Default);
                 return true;
             }
 
@@ -204,26 +211,53 @@ namespace Aire.Services
         {
             try
             {
+                var chunks = SplitIntoSpeechChunks(text);
+                if (chunks.Count == 0)
+                {
+                    IsSpeaking = false;
+                    return;
+                }
+
                 var edgeVoiceId = GetEdgeVoiceId();
 
                 if (!_useLocalOnly && edgeVoiceId != null)
                 {
-                    // Rate: -10..10 → -100%..+100% for Edge prosody
-                    var mp3Bytes = await EdgeTtsService.SynthesizeAsync(
-                        text, edgeVoiceId, _rate * 10, token);
-
-                    if (mp3Bytes != null && !token.IsCancellationRequested)
+                    foreach (var chunk in chunks)
                     {
-                        PlayMp3(mp3Bytes, token);
-                        return;
+                        token.ThrowIfCancellationRequested();
+
+                        // Rate: -10..10 → -100%..+100% for Edge prosody
+                        var mp3Bytes = await EdgeTtsService.SynthesizeAsync(
+                            chunk, edgeVoiceId, _rate * 10, token);
+
+                        if (mp3Bytes == null || token.IsCancellationRequested)
+                            break;
+
+                        await PlayMp3Async(mp3Bytes, token);
                     }
-                    // Fall through to WinRT when offline or Edge fails
+
+                    if (!token.IsCancellationRequested)
+                    {
+                        IsSpeaking = false;
+                        SpeakingCompleted?.Invoke();
+                    }
+                    return;
                 }
 
                 if (token.IsCancellationRequested) { IsSpeaking = false; return; }
                 if (_synth == null) { IsSpeaking = false; return; }
 
-                await SpeakWinRtAsync(text, token);
+                foreach (var chunk in chunks)
+                {
+                    token.ThrowIfCancellationRequested();
+                    await SpeakWinRtAsync(chunk, token);
+                }
+
+                if (!token.IsCancellationRequested)
+                {
+                    IsSpeaking = false;
+                    SpeakingCompleted?.Invoke();
+                }
             }
             catch (OperationCanceledException) { IsSpeaking = false; }
             catch                              { IsSpeaking = false; }
@@ -246,26 +280,26 @@ namespace Aire.Services
             return null; // local WinRT voice
         }
 
-        private void PlayMp3(byte[] mp3Bytes, CancellationToken token)
+        private Task PlayMp3Async(byte[] mp3Bytes, CancellationToken token)
         {
             var ms     = new MemoryStream(mp3Bytes);
             var reader = new Mp3FileReader(ms);
             var output = new WaveOutEvent();
             _wavePlayer = output;
+            var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
             output.PlaybackStopped += (_, _) =>
             {
                 reader.Dispose();
                 ms.Dispose();
-                if (!token.IsCancellationRequested)
-                {
-                    IsSpeaking = false;
-                    SpeakingCompleted?.Invoke();
-                }
+                tcs.TrySetResult();
             };
 
             output.Init(reader);
             output.Play();
+            if (token.CanBeCanceled)
+                token.Register(() => tcs.TrySetCanceled(token));
+            return tcs.Task;
         }
 
         private async Task SpeakWinRtAsync(string text, CancellationToken token)
@@ -285,20 +319,20 @@ namespace Aire.Services
             var reader = new WaveFileReader(ms);
             var output = new WaveOutEvent();
             _wavePlayer = output;
+            var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
             output.PlaybackStopped += (_, _) =>
             {
                 reader.Dispose();
                 ms.Dispose();
-                if (!token.IsCancellationRequested)
-                {
-                    IsSpeaking = false;
-                    SpeakingCompleted?.Invoke();
-                }
+                tcs.TrySetResult();
             };
 
             output.Init(reader);
             output.Play();
+            if (token.CanBeCanceled)
+                token.Register(() => tcs.TrySetCanceled(token));
+            await tcs.Task;
         }
 
         /// <summary>Strips markdown, URLs, and non-speech characters for natural TTS output.</summary>
@@ -363,6 +397,87 @@ namespace Aire.Services
             text = Regex.Replace(text, @"\s{2,}", " ");
 
             return text.Trim();
+        }
+
+        internal static IReadOnlyList<string> SplitIntoSpeechChunks(string text, int maxChunkLength = 280)
+        {
+            var cleaned = CleanForSpeech(text);
+            if (string.IsNullOrWhiteSpace(cleaned))
+                return Array.Empty<string>();
+
+            var chunks = new List<string>();
+            var parts = Regex.Split(cleaned, @"(?<=[\.\!\?\;\:])\s+")
+                .Select(p => p.Trim())
+                .Where(p => !string.IsNullOrWhiteSpace(p));
+
+            var current = string.Empty;
+            foreach (var part in parts)
+            {
+                if (part.Length > maxChunkLength)
+                {
+                    FlushCurrentChunk(chunks, ref current);
+                    SplitLongSegment(chunks, part, maxChunkLength);
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(current))
+                {
+                    current = part;
+                    continue;
+                }
+
+                if (current.Length + 1 + part.Length <= maxChunkLength)
+                {
+                    current += " " + part;
+                }
+                else
+                {
+                    chunks.Add(current);
+                    current = part;
+                }
+            }
+
+            FlushCurrentChunk(chunks, ref current);
+            return chunks;
+        }
+
+        private static void FlushCurrentChunk(List<string> chunks, ref string current)
+        {
+            if (!string.IsNullOrWhiteSpace(current))
+                chunks.Add(current.Trim());
+            current = string.Empty;
+        }
+
+        private static void SplitLongSegment(List<string> chunks, string segment, int maxChunkLength)
+        {
+            var words = segment.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var current = string.Empty;
+            foreach (var word in words)
+            {
+                if (word.Length > maxChunkLength)
+                {
+                    FlushCurrentChunk(chunks, ref current);
+                    for (var i = 0; i < word.Length; i += maxChunkLength)
+                        chunks.Add(word.Substring(i, Math.Min(maxChunkLength, word.Length - i)));
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(current))
+                {
+                    current = word;
+                }
+                else if (current.Length + 1 + word.Length <= maxChunkLength)
+                {
+                    current += " " + word;
+                }
+                else
+                {
+                    chunks.Add(current);
+                    current = word;
+                }
+            }
+
+            FlushCurrentChunk(chunks, ref current);
         }
 
         public void Dispose()

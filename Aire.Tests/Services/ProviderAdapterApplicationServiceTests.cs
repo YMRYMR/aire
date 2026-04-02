@@ -20,8 +20,14 @@ public class ProviderAdapterApplicationServiceTests
 
         public IAiProvider? BuildProvider(ProviderRuntimeRequest request) => null;
 
+        public Task<ProviderExecutionResult> ExecuteAsync(IAiProvider provider, ProviderRequestContext requestContext)
+            => Task.FromResult(ProviderExecutionResult.Succeeded(WorkflowIntent.AssistantText("ok")));
+
         public Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
             => Task.FromResult(new ProviderSmokeTestResult(true, null));
+
+        public Task<ProviderValidationOutcome> ValidateAsync(IAiProvider provider, CancellationToken cancellationToken)
+            => Task.FromResult(ProviderValidationOutcome.Valid());
     }
 
     [Fact]

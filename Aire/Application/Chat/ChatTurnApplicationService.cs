@@ -18,7 +18,8 @@ namespace Aire.AppLayer.Chat
         public sealed record SuccessTextResult(
             string FinalText,
             string? TrayPreview,
-            ProviderChatMessage AssistantHistoryMessage);
+            ProviderChatMessage AssistantHistoryMessage,
+            string? ImageReference);
 
         /// <summary>
         /// Result of an <c>attempt_completion</c> tool call.
@@ -40,6 +41,7 @@ namespace Aire.AppLayer.Chat
 
         private readonly ChatSessionApplicationService _chatSessionService;
         private readonly ChatResponseWorkflowService _responseWorkflow = new();
+        private readonly AssistantImageResponseApplicationService _imageResponseWorkflow = new();
         private readonly ToolFollowUpWorkflowService _toolFollowUpWorkflow = new();
         private readonly ToolExecutionWorkflowService _toolExecutionWorkflow;
 
@@ -63,15 +65,19 @@ namespace Aire.AppLayer.Chat
             bool isWindowVisible,
             int trayPreviewLength = 80)
         {
-            var finalText = _responseWorkflow.NormalizeFinalText(textContent);
+            var parsed = _imageResponseWorkflow.Parse(textContent);
+            var finalText = string.IsNullOrWhiteSpace(parsed.Text) && parsed.ImageReference != null
+                ? string.Empty
+                : _responseWorkflow.NormalizeFinalText(parsed.Text);
 
             if (conversationId.HasValue)
-                await _chatSessionService.PersistAssistantMessageAsync(conversationId.Value, finalText);
+                await _chatSessionService.PersistAssistantMessageAsync(conversationId.Value, finalText, parsed.ImageReference);
 
             return new SuccessTextResult(
                 finalText,
-                isWindowVisible ? null : _responseWorkflow.BuildTrayPreview(finalText, trayPreviewLength),
-                new ProviderChatMessage { Role = "assistant", Content = finalText });
+                isWindowVisible ? null : _responseWorkflow.BuildTrayPreview(string.IsNullOrWhiteSpace(finalText) ? parsed.Text : finalText, trayPreviewLength),
+                new ProviderChatMessage { Role = "assistant", Content = string.IsNullOrWhiteSpace(finalText) ? parsed.Text : finalText },
+                parsed.ImageReference);
         }
 
         /// <summary>

@@ -33,6 +33,7 @@ namespace Aire.Data
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     ProviderId INTEGER,
                     Title TEXT,
+                    AssistantModeKey TEXT NOT NULL DEFAULT 'general',
                     CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (ProviderId) REFERENCES Providers (Id)
@@ -259,6 +260,24 @@ namespace Aire.Data
                 await cmd.ExecuteNonQueryAsync();
             }
             catch { }
+        }
+
+        private async Task MigrateConversationAssistantModesAsync()
+        {
+            try
+            {
+                using var cmd = _connection!.CreateCommand();
+                cmd.CommandText = "ALTER TABLE Conversations ADD COLUMN AssistantModeKey TEXT NOT NULL DEFAULT 'general'";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch { }
+
+            using var normalizeCmd = _connection!.CreateCommand();
+            normalizeCmd.CommandText = @"
+                UPDATE Conversations
+                SET AssistantModeKey = 'general'
+                WHERE AssistantModeKey IS NULL OR trim(AssistantModeKey) = ''";
+            await normalizeCmd.ExecuteNonQueryAsync();
         }
 
         private async Task SeedDefaultProvidersAsync()

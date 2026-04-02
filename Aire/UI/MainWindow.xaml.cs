@@ -41,7 +41,9 @@ namespace Aire
         internal ProviderFactory _providerFactory;
         internal readonly ChatService _chatService;
         private readonly LocalApiApplicationService _localApiApplicationService;
+        private readonly AssistantModeApplicationService _assistantModeApplicationService;
         internal ChatSessionApplicationService _chatSessionApplicationService;
+        private readonly ContextSettingsApplicationService _contextSettingsApplicationService;
         internal ConversationApplicationService _conversationApplicationService;
         private readonly ConversationAssetApplicationService _conversationAssetApplicationService;
         private readonly ConversationTranscriptApplicationService _conversationTranscriptApplicationService;
@@ -82,6 +84,9 @@ namespace Aire
         internal ProviderAvailabilityTracker _availabilityTracker = ProviderAvailabilityTracker.Instance;
         private Task? _startupInitializationTask;
         private HashSet<string> _enabledToolCategories = new(StringComparer.OrdinalIgnoreCase);
+        private ContextWindowSettings _contextWindowSettings = ContextWindowSettings.Default;
+        private string _assistantModeKey = "general";
+        private string _assistantModeDisplayName = "General";
 
         // Token usage tracking
         private TokenUsage? _cachedTokenUsage;

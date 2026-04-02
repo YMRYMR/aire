@@ -53,6 +53,9 @@ namespace Aire
                 BackgroundBrush = SystemBgBrush,
                 SenderForeground = SystemFgBrush
             });
+
+            if (_currentConversationId.HasValue)
+                _ = _chatSessionApplicationService.PersistSystemMessageAsync(_currentConversationId.Value, text);
         }
 
         private void AddErrorMessage(string rawError, string? cooldownMsg = null)
@@ -67,6 +70,9 @@ namespace Aire
                 BackgroundBrush = ErrorBgBrush,
                 SenderForeground = ErrorFgBrush
             });
+
+            if (_currentConversationId.HasValue)
+                _ = _chatSessionApplicationService.PersistSystemMessageAsync(_currentConversationId.Value, text);
         }
 
         private void ScrollToBottom()

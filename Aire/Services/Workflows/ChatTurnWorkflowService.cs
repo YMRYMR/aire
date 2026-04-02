@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Aire.AppLayer.Providers;
+using Aire.Domain.Providers;
 using Aire.Providers;
 using Aire.Services.Mcp;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
@@ -52,7 +54,8 @@ namespace Aire.Services.Workflows
             string modelListSection,
             IReadOnlyList<ProviderChatMessage> conversationHistory,
             IReadOnlyList<McpToolDefinition>? mcpTools = null,
-            bool toolsEnabled = true)
+            bool toolsEnabled = true,
+            string? modePromptSection = null)
         {
             var messages = new List<ProviderChatMessage>();
             if (toolsEnabled &&
@@ -68,6 +71,8 @@ namespace Aire.Services.Workflows
                 };
 
                 sysPrompt += modelListSection;
+                if (!string.IsNullOrWhiteSpace(modePromptSection))
+                    sysPrompt += modePromptSection;
 
                 if (mcpTools != null && mcpTools.Count > 0)
                     sysPrompt += McpToolPromptBuilder.BuildSection(mcpTools);
@@ -122,20 +127,20 @@ namespace Aire.Services.Workflows
             if (!response.IsSuccess)
                 return BuildFailureOutcome(response.ErrorMessage ?? string.Empty);
 
+            var executionResult = ProviderExecutionResultMapper.FromLegacyResponse(response);
             var parsed = ToolCallParser.Parse(response.Content ?? string.Empty);
-            if (!parsed.HasToolCall)
-            {
-                var finalText = string.IsNullOrEmpty(parsed.TextContent) ? "(empty response)" : parsed.TextContent;
-                return new ChatTurnOutcome(OutcomeKind.SuccessText, finalText, parsed);
-            }
 
-            return parsed.ToolCall!.Tool switch
+            return executionResult.Intent?.Kind switch
             {
-                "switch_model" => new ChatTurnOutcome(OutcomeKind.SwitchModel, parsed.TextContent, parsed),
-                "update_todo_list" => new ChatTurnOutcome(OutcomeKind.UpdateTodoList, parsed.TextContent, parsed),
-                "ask_followup_question" => new ChatTurnOutcome(OutcomeKind.AskFollowUpQuestion, parsed.TextContent, parsed),
-                "attempt_completion" => new ChatTurnOutcome(OutcomeKind.AttemptCompletion, parsed.TextContent, parsed),
-                _ => new ChatTurnOutcome(OutcomeKind.ExecuteTool, parsed.TextContent, parsed),
+                WorkflowIntentKind.AssistantText => new ChatTurnOutcome(OutcomeKind.SuccessText, executionResult.Intent.DisplayText, parsed),
+                WorkflowIntentKind.SwitchModel => new ChatTurnOutcome(OutcomeKind.SwitchModel, executionResult.Intent.DisplayText, parsed),
+                WorkflowIntentKind.UpdateTodoList => new ChatTurnOutcome(OutcomeKind.UpdateTodoList, executionResult.Intent.DisplayText, parsed),
+                WorkflowIntentKind.FollowUpQuestion => new ChatTurnOutcome(OutcomeKind.AskFollowUpQuestion, executionResult.Intent.DisplayText, parsed),
+                WorkflowIntentKind.AttemptCompletion => new ChatTurnOutcome(OutcomeKind.AttemptCompletion, executionResult.Intent.DisplayText, parsed),
+                WorkflowIntentKind.ExecuteTool => new ChatTurnOutcome(OutcomeKind.ExecuteTool, executionResult.Intent.DisplayText, parsed),
+                WorkflowIntentKind.Error => new ChatTurnOutcome(OutcomeKind.Error, string.Empty, parsed, executionResult.Intent.ErrorMessage ?? response.ErrorMessage),
+                WorkflowIntentKind.Canceled => new ChatTurnOutcome(OutcomeKind.Canceled, string.Empty, parsed),
+                _ => new ChatTurnOutcome(OutcomeKind.SuccessText, parsed.TextContent, parsed)
             };
         }
     }

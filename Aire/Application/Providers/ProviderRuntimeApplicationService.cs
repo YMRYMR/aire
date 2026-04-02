@@ -62,6 +62,25 @@ namespace Aire.AppLayer.Providers
         public Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
             => _adapterService.Resolve(provider.ProviderType).RunSmokeTestAsync(provider, cancellationToken);
 
+        /// <summary>
+        /// Executes one provider turn through the resolved adapter using Aire's shared
+        /// provider request semantics.
+        /// </summary>
+        /// <param name="provider">Configured provider instance to execute.</param>
+        /// <param name="requestContext">Shared provider request context for the turn.</param>
+        /// <returns>A provider-independent execution result.</returns>
+        public Task<ProviderExecutionResult> ExecuteAsync(IAiProvider provider, ProviderRequestContext requestContext)
+            => _adapterService.Resolve(provider.ProviderType).ExecuteAsync(provider, requestContext);
+
+        /// <summary>
+        /// Validates a configured provider and returns Aire's shared classified validation outcome.
+        /// </summary>
+        /// <param name="provider">Configured provider instance to validate.</param>
+        /// <param name="cancellationToken">Cancellation token for the validation request.</param>
+        /// <returns>Enriched validation outcome including failure classification and guidance.</returns>
+        public Task<ProviderValidationOutcome> ValidateAsync(IAiProvider provider, CancellationToken cancellationToken)
+            => _adapterService.Resolve(provider.ProviderType).ValidateAsync(provider, cancellationToken);
+
         private sealed class ProviderRuntimeGatewayAdapter : IProviderAdapter
         {
             private readonly IProviderRuntimeGateway _runtimeGateway;
@@ -78,8 +97,26 @@ namespace Aire.AppLayer.Providers
             public IAiProvider? BuildProvider(ProviderRuntimeRequest request)
                 => _runtimeGateway.BuildProvider(request);
 
+            public async Task<ProviderExecutionResult> ExecuteAsync(IAiProvider provider, ProviderRequestContext requestContext)
+            {
+                if (requestContext.EnabledToolCategories != null)
+                    provider.SetEnabledToolCategories(requestContext.EnabledToolCategories);
+
+                var response = await provider.SendChatAsync(
+                    ProviderRequestContextMapper.ToLegacyMessages(requestContext.Messages),
+                    requestContext.CancellationToken).ConfigureAwait(false);
+
+                return ProviderExecutionResultMapper.FromLegacyResponse(response);
+            }
+
             public Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
                 => _runtimeGateway.RunSmokeTestAsync(provider, cancellationToken);
+
+            public async Task<ProviderValidationOutcome> ValidateAsync(IAiProvider provider, CancellationToken cancellationToken)
+            {
+                var result = await provider.ValidateConfigurationAsync(cancellationToken).ConfigureAwait(false);
+                return ProviderValidationOutcomeMapper.FromLegacyResult(result);
+            }
         }
     }
 }

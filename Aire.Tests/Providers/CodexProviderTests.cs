@@ -30,6 +30,16 @@ public class CodexProviderTests
     }
 
     [Fact]
+    public void Actions_ExposeCodexInstallAction()
+    {
+        var action = Assert.Single(new CodexProvider().Actions);
+
+        Assert.Equal("codex-install", action.Id);
+        Assert.Equal("Install Codex CLI", action.Label);
+        Assert.Equal(ProviderActionPlacement.ApiKeyArea, action.Placement);
+    }
+
+    [Fact]
     public void SelectCodexCliPath_PrefersLaunchableCandidates_AndIgnoresStorePackageBinary()
     {
         var preferred = new[]
@@ -121,4 +131,36 @@ public class CodexProviderTests
         Assert.Contains("read-only", psi.ArgumentList);
         Assert.Contains("shell_environment_policy.inherit=none", psi.ArgumentList);
     }
+
+    [Fact]
+    public void CreateCodexProcessStartInfo_WrapsCmdLaunchersAndOmitsDefaultModelOverride()
+    {
+        CodexProvider provider = new();
+        provider.Initialize(new ProviderConfig { Model = " default " });
+        MethodInfo method = typeof(CodexProvider).GetMethod("CreateCodexProcessStartInfo", BindingFlags.Instance | BindingFlags.NonPublic)!;
+
+        ProcessStartInfo psi = Assert.IsType<ProcessStartInfo>(method.Invoke(provider, [@"C:\Users\raul_\AppData\Roaming\npm\codex.cmd", "C:\\Temp\\out.txt"]));
+
+        Assert.Equal("cmd.exe", psi.FileName);
+        Assert.Equal("/d", psi.ArgumentList[0]);
+        Assert.Equal("/c", psi.ArgumentList[1]);
+        Assert.Equal(@"C:\Users\raul_\AppData\Roaming\npm\codex.cmd", psi.ArgumentList[2]);
+        Assert.DoesNotContain("--model", psi.ArgumentList);
+        Assert.Equal("-", psi.ArgumentList[^1]);
+    }
+
+    [Fact]
+    public void BuildPrompt_TruncatesLongConversationMessages()
+    {
+        var longContent = new string('x', 2100);
+
+        string prompt = CodexProvider.BuildPrompt(
+        [
+            new ChatMessage { Role = "user", Content = longContent }
+        ]);
+
+        Assert.Contains("[Truncated for Codex CLI prompt size]", prompt, StringComparison.Ordinal);
+        Assert.DoesNotContain(longContent, prompt, StringComparison.Ordinal);
+    }
+
 }

@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.AppLayer.Abstractions;
+using Aire.AppLayer.Providers;
 using Aire.Domain.Providers;
 using Aire.Providers;
 
@@ -43,7 +44,27 @@ namespace Aire.Services.Providers
             => _runtimeGateway.BuildProvider(request);
 
         /// <inheritdoc />
+        public async Task<ProviderExecutionResult> ExecuteAsync(IAiProvider provider, ProviderRequestContext requestContext)
+        {
+            if (requestContext.EnabledToolCategories != null)
+                provider.SetEnabledToolCategories(requestContext.EnabledToolCategories);
+
+            var response = await provider.SendChatAsync(
+                ProviderRequestContextMapper.ToLegacyMessages(requestContext.Messages),
+                requestContext.CancellationToken).ConfigureAwait(false);
+
+            return ProviderExecutionResultMapper.FromLegacyResponse(response);
+        }
+
+        /// <inheritdoc />
         public Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
             => _runtimeGateway.RunSmokeTestAsync(provider, cancellationToken);
+
+        /// <inheritdoc />
+        public async Task<ProviderValidationOutcome> ValidateAsync(IAiProvider provider, CancellationToken cancellationToken)
+        {
+            var result = await provider.ValidateConfigurationAsync(cancellationToken).ConfigureAwait(false);
+            return ProviderValidationOutcomeMapper.FromLegacyResult(result);
+        }
     }
 }

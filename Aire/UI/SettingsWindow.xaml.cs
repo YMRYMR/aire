@@ -13,8 +13,10 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Aire.AppLayer.Connections;
+using Aire.AppLayer.Chat;
 using Aire.AppLayer.Mcp;
 using Aire.AppLayer.Settings;
+using Aire.AppLayer.Tools;
 using Aire.Data;
 using Aire.Providers;
 using Aire.Services;
@@ -38,9 +40,12 @@ namespace Aire.UI
         private struct RECT { public int Left, Top, Right, Bottom; }
 
         internal DatabaseService _databaseService;
+        internal McpCatalogApplicationService _mcpCatalogApplicationService;
         internal McpConfigApplicationService _mcpConfigApplicationService;
         internal EmailAccountApplicationService _emailAccountApplicationService;
         internal AppSettingsApplicationService _appSettingsApplicationService;
+        internal ContextSettingsApplicationService _contextSettingsApplicationService;
+        internal AutoAcceptProfilesApplicationService _autoAcceptProfilesApplicationService;
         private readonly SpeechSynthesisService? _ttsService;
         private List<Provider> _providers = new();
         private Provider? _selectedProvider;
@@ -48,6 +53,8 @@ namespace Aire.UI
         private bool _suppressAppearance = true; // prevents feedback loops while initialising controls
         private bool _suppressApiAccess; // prevents feedback loops while initialising API access controls
         private bool _suppressAutoAccept; // prevents feedback loops while initialising auto‑accept controls
+        private bool _suppressContextSettings; // prevents feedback loops while initialising context controls
+        private bool _suppressAutoAcceptProfileSelection;
         private bool _isRefreshing; // set during RefreshProvidersList to suppress model-reload side effects
         internal bool _suppressModelFilter; // prevents filter from running during programmatic Text changes
         private OllamaModelItem? _preFilterSelection; // tracks selection before filtering starts
@@ -122,6 +129,7 @@ namespace Aire.UI
         // ── Collections ───────────────────────────────────────────────────────
         private System.Collections.ObjectModel.ObservableCollection<EmailAccountViewModel> _emailVms = new();
         private System.Collections.ObjectModel.ObservableCollection<McpServerViewModel>   _mcpVms   = new();
+        private System.Collections.ObjectModel.ObservableCollection<McpCatalogEntryViewModel> _mcpCatalogVms = new();
         private EmailAccountViewModel?   _editingEmailVm;
         private string            _editingOAuthRefreshToken = string.Empty;  // plaintext, in-memory only
         private McpServerViewModel?      _editingMcpVm;

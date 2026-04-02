@@ -29,7 +29,9 @@ namespace Aire
 
             _databaseService = new DatabaseService();
             _localApiApplicationService = new LocalApiApplicationService();
+            _assistantModeApplicationService = new AssistantModeApplicationService();
             _chatSessionApplicationService = new ChatSessionApplicationService(_databaseService, _databaseService);
+            _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
             _conversationApplicationService = new ConversationApplicationService(_databaseService);
             _conversationAssetApplicationService = new ConversationAssetApplicationService(_databaseService);
             _conversationTranscriptApplicationService = new ConversationTranscriptApplicationService();
@@ -110,32 +112,44 @@ namespace Aire
 
         private bool _isAttached = true;
 
-        public Task InitializeStartupAsync()
-            => _startupInitializationTask ??= InitializeStartupCoreAsync();
+        public Task InitializeStartupAsync(IProgress<string>? progress = null)
+            => _startupInitializationTask ??= InitializeStartupCoreAsync(progress);
 
-        private async Task InitializeStartupCoreAsync()
+        private async Task InitializeStartupCoreAsync(IProgress<string>? progress)
         {
             try
             {
+                progress?.Report("Opening local data store…");
                 await _databaseService.InitializeAsync();
 
+                progress?.Report("Loading auto-accept settings…");
                 var autoAcceptJson = await _chatSessionApplicationService.GetSettingAsync("auto_accept_settings");
                 if (!string.IsNullOrEmpty(autoAcceptJson))
                     UI.SettingsWindow.SetAutoAcceptCache(autoAcceptJson);
 
+                progress?.Report("Loading tool settings…");
                 var toolCategorySelection = await _toolCategorySettingsApplicationService.LoadAsync();
                 _enabledToolCategories = new HashSet<string>(toolCategorySelection.EnabledCategories, StringComparer.OrdinalIgnoreCase);
                 UpdateToolsButtonState();
 
-                int? savedProviderId = await _chatSessionApplicationService.GetSelectedProviderIdAsync();
+                progress?.Report("Loading context settings…");
+                _contextWindowSettings = await _contextSettingsApplicationService.LoadAsync();
+                ApplyAssistantModeState(_assistantModeApplicationService.GetDefaultMode().Key);
 
+                progress?.Report("Loading providers…");
+                int? savedProviderId = await _chatSessionApplicationService.GetSelectedProviderIdAsync();
                 await LoadProviders(savedProviderId: savedProviderId);
 
+                progress?.Report("Preparing conversation sidebar…");
                 InitSidebarState();
 
+                progress?.Report("Starting MCP servers…");
                 await _mcpStartupApplicationService.StartAllAsync();
+
+                progress?.Report("Refreshing email tools…");
                 await _emailToolService.RefreshIsConfiguredAsync();
 
+                progress?.Report("Startup complete.");
                 AppStartupState.MarkReady();
             }
             catch (Exception ex)

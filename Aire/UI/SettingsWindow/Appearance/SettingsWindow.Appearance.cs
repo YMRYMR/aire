@@ -45,6 +45,8 @@ namespace Aire.UI
             TabProviders.Header = L("settings.aiProviders", "AI Providers");
             TabAppearance.Header = L("settings.appearance", "Appearance");
             TabVoice.Header = L("settings.voiceOutput", "Voice");
+            TabContext.Header = L("settings.context", "Context");
+            TabAutoAccept.Header = L("settings.autoAccept", "Auto-accept");
             TabConnections.Header = L("settings.connections", "Connections");
             BrightnessLabel.Text = L("settings.brightness", "Brightness");
             ColorTintLabel.Text = L("settings.colorTint", "Color tint");
@@ -79,6 +81,18 @@ namespace Aire.UI
             DownloadVoicesButton.Content = L("settings.downloadVoices", "Download Windows voices...");
             VoiceVoiceLabel.Text = L("settings.voice", "Voice");
             VoiceSpeedLabel.Text = L("settings.voiceSpeed", "Speed");
+            ContextDescriptionText.Text = L("settings.contextDescription", "Control how much conversation history Aire sends to providers and whether stable prompt prefixes can be marked cache-friendly.");
+            EnablePromptCachingCheckBox.Content = L("settings.contextEnableCaching", "Prefer prompt caching when the provider supports it");
+            EnableConversationSummariesCheckBox.Content = L("settings.contextEnableSummaries", "Summarize older trimmed conversation context");
+            MaxMessagesLabel.Text = L("settings.contextMaxMessages", "Maximum messages in provider context");
+            AnchorMessagesLabel.Text = L("settings.contextAnchorMessages", "Anchor messages kept from earlier in the conversation");
+            UncachedRecentMessagesLabel.Text = L("settings.contextUncachedRecentMessages", "Most recent messages kept uncached");
+            SummaryMaxCharactersLabel.Text = L("settings.contextSummaryMaxCharacters", "Maximum summary size (characters)");
+            ContextHintText.Text = L("settings.contextHint", "Aire keeps system messages, a small anchored prefix, and the most recent turns. Older omitted turns can be summarized, and cached prefixes only help on providers that support prompt caching.");
+            AutoAcceptProfileLabel.Text = L("settings.profile", "Profile");
+            ApplyAutoAcceptProfileButton.Content = L("settings.apply", "Apply");
+            SaveAutoAcceptProfileButton.Content = L("settings.saveAs", "Save as");
+            DeleteAutoAcceptProfileButton.Content = L("settings.delete", "Delete");
 
             if (_selectedProvider == null)
             {

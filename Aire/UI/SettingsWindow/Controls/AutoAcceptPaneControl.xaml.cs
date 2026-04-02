@@ -1,8 +1,11 @@
 using RoutedEventArgs = System.Windows.RoutedEventArgs;
 using RoutedEventHandler = System.Windows.RoutedEventHandler;
+using Button = System.Windows.Controls.Button;
 using CheckBox = System.Windows.Controls.CheckBox;
+using ComboBox = System.Windows.Controls.ComboBox;
 using Grid = System.Windows.Controls.Grid;
 using StackPanel = System.Windows.Controls.StackPanel;
+using TextBlock = System.Windows.Controls.TextBlock;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Aire.UI.Settings.Controls
@@ -15,6 +18,11 @@ namespace Aire.UI.Settings.Controls
         }
 
         public StackPanel AutoAcceptSection => PART_AutoAcceptSection;
+        public TextBlock ProfileLabel => PART_ProfileLabel;
+        public ComboBox ProfileComboBox => PART_ProfileComboBox;
+        public Button ApplyProfileButton => PART_ApplyProfileButton;
+        public Button SaveProfileButton => PART_SaveProfileButton;
+        public Button DeleteProfileButton => PART_DeleteProfileButton;
         public CheckBox AutoAcceptEnabledCheckBox => PART_AutoAcceptEnabledCheckBox;
         public Grid AutoAcceptToolsPanel => PART_AutoAcceptToolsPanel;
         public CheckBox AutoAcceptOpenUrlCheckBox => PART_AutoAcceptOpenUrlCheckBox;
@@ -65,7 +73,15 @@ namespace Aire.UI.Settings.Controls
         public CheckBox AutoAcceptKeyboardToolsCheckBox => PART_AutoAcceptKeyboardToolsCheckBox;
 
         public event RoutedEventHandler? AutoAcceptEnabledChanged;
+        public event RoutedEventHandler? ApplyProfileClicked;
+        public event RoutedEventHandler? SaveProfileClicked;
+        public event RoutedEventHandler? DeleteProfileClicked;
+        public event System.Windows.Controls.SelectionChangedEventHandler? ProfileSelectionChanged;
 
         private void AutoAcceptEnabledCheckBox_Changed(object sender, RoutedEventArgs e) => AutoAcceptEnabledChanged?.Invoke(sender, e);
+        private void ApplyProfileButton_Click(object sender, RoutedEventArgs e) => ApplyProfileClicked?.Invoke(sender, e);
+        private void SaveProfileButton_Click(object sender, RoutedEventArgs e) => SaveProfileClicked?.Invoke(sender, e);
+        private void DeleteProfileButton_Click(object sender, RoutedEventArgs e) => DeleteProfileClicked?.Invoke(sender, e);
+        private void ProfileComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) => ProfileSelectionChanged?.Invoke(sender, e);
     }
 }

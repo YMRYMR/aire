@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Aire.AppLayer.Chat;
 using Aire.Data;
 using Aire.Providers;
 using Aire.Services;
@@ -14,6 +15,8 @@ namespace Aire.Services.Workflows
     /// </summary>
     public sealed class ProviderPresentationWorkflowService
     {
+        private readonly ConversationContextApplicationService _contextService = new();
+
         /// <summary>
         /// Trims provider history to the system messages plus the latest non-system turns.
         /// </summary>
@@ -21,13 +24,22 @@ namespace Aire.Services.Workflows
         /// <param name="maxMessages">Maximum number of non-system messages to retain.</param>
         /// <returns>A trimmed provider-history list ready for the next request.</returns>
         public List<ProviderChatMessage> TrimConversation(IReadOnlyList<ProviderChatMessage> history, int maxMessages = 40)
-        {
-            var system = history.Where(m => m.Role == "system").ToList();
-            var nonSystem = history.Where(m => m.Role != "system").ToList();
-            if (nonSystem.Count > maxMessages)
-                nonSystem = nonSystem.Skip(nonSystem.Count - maxMessages).ToList();
-            return system.Concat(nonSystem).ToList();
-        }
+            => _contextService.BuildContextWindow(history, maxMessages);
+
+        /// <summary>
+        /// Trims provider history using the persisted context-window settings.
+        /// </summary>
+        public List<ProviderChatMessage> TrimConversation(
+            IReadOnlyList<ProviderChatMessage> history,
+            ContextWindowSettings settings)
+            => _contextService.BuildContextWindow(
+                history,
+                settings.MaxMessages,
+                settings.AnchorMessages,
+                settings.UncachedRecentMessages,
+                settings.EnablePromptCaching,
+                settings.EnableConversationSummaries,
+                settings.SummaryMaxCharacters);
 
         /// <summary>
         /// Builds the model-switch helper text presented to tool-calling models.

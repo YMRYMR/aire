@@ -43,6 +43,26 @@ public class CoreServiceExtractionTests
         }
     }
 
+    private sealed class FailingAiProvider : BaseAiProvider
+    {
+        public override string ProviderType => "Failing";
+        public override string DisplayName => "Failing";
+
+        protected override ProviderCapabilities GetBaseCapabilities()
+            => ProviderCapabilities.TextChat | ProviderCapabilities.Streaming;
+
+        public override Task<AiResponse> SendChatAsync(IEnumerable<ChatMessage> messages, CancellationToken cancellationToken = default)
+            => Task.FromResult(new AiResponse { IsSuccess = false, ErrorMessage = "provider failed" });
+
+        public override async IAsyncEnumerable<string> StreamChatAsync(IEnumerable<ChatMessage> messages, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            throw new InvalidOperationException("stream failed");
+#pragma warning disable CS0162
+            yield break;
+#pragma warning restore CS0162
+        }
+    }
+
     [Fact]
     public void ProviderErrorClassifier_ClassifiesRateLimitHttpErrors()
     {
@@ -93,6 +113,59 @@ public class CoreServiceExtractionTests
     }
 
     [Fact]
+    public async Task ChatOrchestrator_SendMessageWithHistoryAsync_RequiresProvider()
+    {
+        ChatOrchestrator orchestrator = new ChatOrchestrator();
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            orchestrator.SendMessageWithHistoryAsync([new ChatMessage { Role = "user", Content = "hello" }]));
+    }
+
+    [Fact]
+    public async Task ChatOrchestrator_SendMessageWithHistoryAsync_RaisesErrorOccurred_ForFailedResponse()
+    {
+        ChatOrchestrator orchestrator = new ChatOrchestrator();
+        orchestrator.SetProvider(new FailingAiProvider());
+        string? error = null;
+        orchestrator.ErrorOccurred += (_, message) => error = message;
+
+        var response = await orchestrator.SendMessageWithHistoryAsync([new ChatMessage { Role = "user", Content = "hello" }]);
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal("provider failed", response.ErrorMessage);
+        Assert.Equal("provider failed", error);
+    }
+
+    [Fact]
+    public async Task ChatOrchestrator_StreamMessageAsync_RaisesErrorOccurred_WhenStreamingThrows()
+    {
+        ChatOrchestrator orchestrator = new ChatOrchestrator();
+        orchestrator.SetProvider(new FailingAiProvider());
+        string? error = null;
+        orchestrator.ErrorOccurred += (_, message) => error = message;
+
+        await orchestrator.StreamMessageAsync("hello");
+
+        Assert.Equal("stream failed", error);
+    }
+
+    [Fact]
+    public async Task ChatOrchestrator_StreamMessageWithHistoryAsync_RaisesChunkEvents_AndReturnsFullResponse()
+    {
+        ChatOrchestrator orchestrator = new ChatOrchestrator();
+        FakeAiProvider provider = new FakeAiProvider();
+        orchestrator.SetProvider(provider);
+        List<string> chunks = new List<string>();
+        orchestrator.ResponseChunkReceived += (_, chunk) => chunks.Add(chunk);
+
+        var response = await orchestrator.StreamMessageWithHistoryAsync([new ChatMessage { Role = "user", Content = "hello" }]);
+
+        Assert.True(response.IsSuccess);
+        Assert.Equal("echo:hello", response.Content);
+        Assert.Equal(new[] { "echo:", "hello" }, chunks);
+    }
+
+    [Fact]
     public void ToolExecutionMetadata_NormalizesKnownAliases()
     {
         Assert.Equal("read_browser_tab", ToolExecutionMetadata.NormalizeToolName("read_webbrowser_tabs"));
@@ -122,4 +195,5 @@ public class CoreServiceExtractionTests
         Assert.Contains("AVAILABLE TOOLS", toolExecutionResult.TextResult);
         Assert.Contains("execute_command", toolExecutionResult.TextResult);
     }
+
 }

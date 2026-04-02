@@ -209,6 +209,7 @@ namespace Aire
                 _currentConversationId = null;
                 _conversationHistory.Clear();
                 Messages.Clear();
+                ApplyAssistantModeState(_assistantModeApplicationService.GetDefaultMode().Key);
             }
 
             await RefreshSidebarAsync();
@@ -225,7 +226,35 @@ namespace Aire
             _currentConversationId = null;
             _conversationHistory.Clear();
             Messages.Clear();
+            ApplyAssistantModeState(_assistantModeApplicationService.GetDefaultMode().Key);
             await RefreshSidebarAsync();
+        }
+
+        private async Task SyncConversationSelectionStateAsync(int conversationId)
+        {
+            var conversation = await _conversationApplicationService.GetConversationAsync(conversationId);
+            if (conversation == null)
+                return;
+
+            ApplyAssistantModeState(conversation.AssistantModeKey);
+
+            var provider = (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
+                .ResolveConversationProvider(conversation, ProviderComboBox.Items.OfType<Provider>());
+            if (provider == null || provider.Id == _currentProviderId)
+                return;
+
+            _suppressProviderChange = true;
+            ProviderComboBox.SelectedItem = provider;
+            _suppressProviderChange = false;
+            _currentProviderId = provider.Id;
+
+            try { _currentProvider = _providerFactory.CreateProvider(provider); }
+            catch { _currentProvider = null; }
+
+            await _chatService.SetProviderAsync(provider.Id);
+            await _chatSessionApplicationService.SaveSelectedProviderAsync(provider.Id);
+            UpdateCapabilityUI();
+            StartTokenUsageRefreshTimer();
         }
     }
 }

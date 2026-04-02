@@ -44,6 +44,12 @@ namespace Aire.AppLayer.Chat
             => _conversations.UpdateConversationTitleAsync(conversationId, title);
 
         /// <summary>
+        /// Updates the stored assistant mode for one conversation.
+        /// </summary>
+        public Task UpdateConversationAssistantModeAsync(int conversationId, string assistantModeKey)
+            => _conversations.UpdateConversationAssistantModeAsync(conversationId, assistantModeKey);
+
+        /// <summary>
         /// Deletes one conversation and all of its stored messages.
         /// </summary>
         public async Task DeleteConversationAsync(int conversationId)

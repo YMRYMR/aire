@@ -21,8 +21,11 @@ namespace Aire
         internal void OpenSearch()
         {
             SearchPanel.Visibility = Visibility.Visible;
-            SearchTextBox.Focus();
-            SearchTextBox.SelectAll();
+            SearchTextBox.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                SearchPanelControl.FocusSearchBox();
+                SearchPanelControl.SelectSearchText();
+            }), System.Windows.Threading.DispatcherPriority.Input);
         }
 
         internal void CloseSearch()
@@ -105,7 +108,13 @@ namespace Aire
         private void SearchNext_Click(object sender, RoutedEventArgs e) => NavigateSearchNext();
         private void SearchPrev_Click(object sender, RoutedEventArgs e) => NavigateSearchPrev();
         private void CloseSearch_Click(object sender, RoutedEventArgs e) => CloseSearch();
+        private void SearchButton_Click(object sender, RoutedEventArgs e) => OpenSearch();
         private void FindMenuItem_Click(object sender, RoutedEventArgs e) => OpenSearch();
+        private void FindCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OpenSearch();
+            e.Handled = true;
+        }
 
         internal void NavigateSearchNext()
         {

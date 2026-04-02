@@ -498,6 +498,11 @@
                     <settingsControls:VoiceSettingsPaneControl x:Name="VoiceSettingsPaneControl" />
                 </TabItem>
 
+                <!--  ══ Context tab ══  -->
+                <TabItem x:Name="TabContext" Header="Context">
+                    <settingsControls:ContextSettingsPaneControl x:Name="ContextSettingsPaneControl" />
+                </TabItem>
+
                 <!--  ══ Auto‑accept tab ══  -->
                 <TabItem x:Name="TabAutoAccept" Header="Auto‑accept">
                     <settingsControls:AutoAcceptPaneControl x:Name="AutoAcceptPaneControl" />

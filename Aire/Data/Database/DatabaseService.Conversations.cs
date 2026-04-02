@@ -56,8 +56,8 @@ namespace Aire.Data
         {
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO Conversations (ProviderId, Title, CreatedAt, UpdatedAt)
-                VALUES (@providerId, @title, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+                INSERT INTO Conversations (ProviderId, Title, AssistantModeKey, CreatedAt, UpdatedAt)
+                VALUES (@providerId, @title, 'general', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
                 SELECT last_insert_rowid();";
             cmd.Parameters.AddWithValue("@providerId", providerId);
             cmd.Parameters.AddWithValue("@title", title);
@@ -74,7 +74,7 @@ namespace Aire.Data
         {
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                SELECT Id, ProviderId, Title, CreatedAt, UpdatedAt
+                SELECT Id, ProviderId, Title, AssistantModeKey, CreatedAt, UpdatedAt
                 FROM Conversations
                 WHERE ProviderId = @providerId
                 ORDER BY UpdatedAt DESC
@@ -88,8 +88,9 @@ namespace Aire.Data
                     Id = reader.GetInt32(0),
                     ProviderId = reader.GetInt32(1),
                     Title = reader.GetString(2),
-                    CreatedAt = reader.GetDateTime(3),
-                    UpdatedAt = reader.GetDateTime(4)
+                    AssistantModeKey = reader.IsDBNull(3) ? "general" : reader.GetString(3),
+                    CreatedAt = reader.GetDateTime(4),
+                    UpdatedAt = reader.GetDateTime(5)
                 };
             }
             return null;
@@ -108,7 +109,7 @@ namespace Aire.Data
             if (string.IsNullOrWhiteSpace(search))
             {
                 cmd.CommandText = @"
-                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, p.Color
+                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, p.Color, c.AssistantModeKey
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     ORDER BY c.UpdatedAt DESC
@@ -117,7 +118,7 @@ namespace Aire.Data
             else
             {
                 cmd.CommandText = @"
-                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, p.Color
+                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, p.Color, c.AssistantModeKey
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     LEFT JOIN Messages  m ON m.ConversationId = c.Id
@@ -137,6 +138,7 @@ namespace Aire.Data
                     UpdatedAt = reader.IsDBNull(2) ? DateTime.Now : reader.GetDateTime(2),
                     ProviderName = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
                     ProviderColor = reader.IsDBNull(4) ? "#888888" : reader.GetString(4),
+                    AssistantModeKey = reader.IsDBNull(5) ? "general" : reader.GetString(5)
                 });
             }
             return results;
@@ -151,7 +153,7 @@ namespace Aire.Data
         {
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                SELECT Id, ProviderId, Title, CreatedAt, UpdatedAt
+                SELECT Id, ProviderId, Title, AssistantModeKey, CreatedAt, UpdatedAt
                 FROM Conversations
                 WHERE Id = @id";
             cmd.Parameters.AddWithValue("@id", conversationId);
@@ -165,8 +167,9 @@ namespace Aire.Data
                 Id = reader.GetInt32(0),
                 ProviderId = reader.GetInt32(1),
                 Title = reader.IsDBNull(2) ? "Chat" : reader.GetString(2),
-                CreatedAt = reader.GetDateTime(3),
-                UpdatedAt = reader.GetDateTime(4),
+                AssistantModeKey = reader.IsDBNull(3) ? "general" : reader.GetString(3),
+                CreatedAt = reader.GetDateTime(4),
+                UpdatedAt = reader.GetDateTime(5),
             };
         }
 
@@ -194,6 +197,18 @@ namespace Aire.Data
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = "UPDATE Conversations SET ProviderId = @providerId WHERE Id = @id";
             cmd.Parameters.AddWithValue("@providerId", providerId);
+            cmd.Parameters.AddWithValue("@id", conversationId);
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        /// <summary>
+        /// Updates the stored assistant mode for a conversation.
+        /// </summary>
+        public async Task UpdateConversationAssistantModeAsync(int conversationId, string assistantModeKey)
+        {
+            using var cmd = _connection!.CreateCommand();
+            cmd.CommandText = "UPDATE Conversations SET AssistantModeKey = @assistantModeKey WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@assistantModeKey", string.IsNullOrWhiteSpace(assistantModeKey) ? "general" : assistantModeKey.Trim());
             cmd.Parameters.AddWithValue("@id", conversationId);
             await cmd.ExecuteNonQueryAsync();
         }

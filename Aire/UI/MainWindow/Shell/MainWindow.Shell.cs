@@ -187,6 +187,7 @@ namespace Aire
             HelpButton.ToolTip = L("tooltip.help", "Help");
             SettingsButton.ToolTip = L("tooltip.settings", "Settings");
             BrowserButton.ToolTip = L("tooltip.browser", "Open browser  (AI can read open tabs)");
+            ModeButton.ToolTip = L("tooltip.mode", "Assistant mode");
             MicButton.ToolTip = L("tooltip.mic", "Start voice input");
             MouseSessionLabel.Text = L("main.sessionActive", "Session active");
             EndSessionButton.Content = L("main.endSession", "End session");
@@ -194,7 +195,7 @@ namespace Aire
             RemoveImageButton.Content = L("main.remove", "Remove");
             SidebarToggleButton.ToolTip = L("tooltip.sidebar", "Conversation history");
             CheckAgainButton.ToolTip = L("tooltip.checkAvailability", "Check if provider is available again");
-            ConversationSidebar.ToolTip = L("tooltip.newConversation", "New conversation");
+            ConversationSidebar.ToolTip = null;
             ConversationSidebar.NewConversationButtonToolTip = L("tooltip.newConversation", "New conversation");
             SearchPrevButton.ToolTip = L("tooltip.previousMatch", "Previous match");
             SearchNextButton.ToolTip = L("tooltip.nextMatch", "Next match");
@@ -206,6 +207,7 @@ namespace Aire
                 warningText.Text = L("warning.largeFile", "⚠ Large file — provider may reject");
 
             Resources["PlaceholderSearchText"] = L("placeholder.search", "Search…");
+            UpdateModeButtonState();
             UpdateVoiceOutputButton();
         }
 

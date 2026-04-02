@@ -1,7 +1,10 @@
 using Aire.UI.Settings.Controls;
+using Button = System.Windows.Controls.Button;
 using CheckBox = System.Windows.Controls.CheckBox;
+using ComboBox = System.Windows.Controls.ComboBox;
 using Grid = System.Windows.Controls.Grid;
 using StackPanel = System.Windows.Controls.StackPanel;
+using TextBlock = System.Windows.Controls.TextBlock;
 
 namespace Aire.UI
 {
@@ -9,6 +12,11 @@ namespace Aire.UI
     {
         private AutoAcceptPaneControl AutoAcceptPane => AutoAcceptPaneControl;
         private StackPanel AutoAcceptSection => AutoAcceptPane.AutoAcceptSection;
+        private TextBlock AutoAcceptProfileLabel => AutoAcceptPane.ProfileLabel;
+        private ComboBox AutoAcceptProfileComboBox => AutoAcceptPane.ProfileComboBox;
+        private Button ApplyAutoAcceptProfileButton => AutoAcceptPane.ApplyProfileButton;
+        private Button SaveAutoAcceptProfileButton => AutoAcceptPane.SaveProfileButton;
+        private Button DeleteAutoAcceptProfileButton => AutoAcceptPane.DeleteProfileButton;
         private CheckBox AutoAcceptEnabledCheckBox => AutoAcceptPane.AutoAcceptEnabledCheckBox;
         private Grid AutoAcceptToolsPanel => AutoAcceptPane.AutoAcceptToolsPanel;
         private CheckBox AutoAcceptOpenUrlCheckBox => AutoAcceptPane.AutoAcceptOpenUrlCheckBox;

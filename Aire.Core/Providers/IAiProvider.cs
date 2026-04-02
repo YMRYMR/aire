@@ -15,6 +15,7 @@ namespace Aire.Providers
         public string? ImagePath { get; set; }
         public byte[]? ImageBytes { get; set; }
         public string? ImageMimeType { get; set; }
+        public bool PreferPromptCache { get; set; }
     }
 
     /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Aire.AppLayer.Mcp;
 using Aire.Services.Mcp;
 using Aire.UI.Settings.Models;
 using MessageBox = System.Windows.MessageBox;
@@ -26,6 +27,47 @@ namespace Aire.UI
             McpEditTitle.Text = "Add MCP server";
             _editingMcpVm = null;
             McpEditPanel.Visibility = Visibility.Visible;
+        }
+
+        private async void CatalogMcpActionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as System.Windows.Controls.Button)?.Tag is not McpCatalogEntryViewModel vm)
+                return;
+
+            var installed = _mcpCatalogApplicationService.FindInstalledConfig(vm.Key, _mcpVms.Select(entry => entry.Model));
+            if (installed != null)
+            {
+                if (MessageBox.Show($"Remove '{installed.Name}'?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    return;
+
+                McpManager.Instance.StopSingle(installed.Name);
+                await _mcpConfigApplicationService.DeleteMcpServerAsync(installed.Id);
+
+                var existingVm = _mcpVms.FirstOrDefault(entry => entry.Model.Id == installed.Id);
+                if (existingVm != null)
+                    _mcpVms.Remove(existingVm);
+
+                RefreshMcpCatalogState(_mcpVms.Select(entry => entry.Model).ToList());
+                return;
+            }
+
+            var config = _mcpCatalogApplicationService.BuildConfig(vm.Key);
+            var id = await _mcpConfigApplicationService.InsertMcpServerAsync(config);
+            config.Id = id;
+            var newVm = new McpServerViewModel(config);
+            _mcpVms.Add(newVm);
+
+            try
+            {
+                await McpManager.Instance.StartSingleAsync(config);
+                newVm.RefreshStatus();
+            }
+            catch
+            {
+                newVm.StatusColor = "#CC3333";
+            }
+
+            RefreshMcpCatalogState(_mcpVms.Select(entry => entry.Model).ToList());
         }
 
         private void EditMcpBtn_Click(object sender, RoutedEventArgs e)
@@ -61,6 +103,7 @@ namespace Aire.UI
             McpManager.Instance.StopSingle(vm.Model.Name);
             await _mcpConfigApplicationService.DeleteMcpServerAsync(vm.Model.Id);
             _mcpVms.Remove(vm);
+            RefreshMcpCatalogState(_mcpVms.Select(entry => entry.Model).ToList());
         }
 
         private async void McpEnabledToggle_Click(object sender, RoutedEventArgs e)
@@ -140,6 +183,7 @@ namespace Aire.UI
                 }
             }
 
+            RefreshMcpCatalogState(_mcpVms.Select(entry => entry.Model).ToList());
             McpEditPanel.Visibility = Visibility.Collapsed;
             _editingMcpVm = null;
         }

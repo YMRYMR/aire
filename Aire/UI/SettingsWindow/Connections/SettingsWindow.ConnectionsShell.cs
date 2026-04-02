@@ -8,18 +8,6 @@ namespace Aire.UI
 {
     public partial class SettingsWindow
     {
-        private static readonly (string Name, string Command, string Args, string EnvHint)[] _mcpTemplates =
-        {
-            ("GitHub",       "npx", "-y @modelcontextprotocol/server-github",      "GITHUB_PERSONAL_ACCESS_TOKEN=<paste-token-here>"),
-            ("Filesystem",   "npx", "-y @modelcontextprotocol/server-filesystem",  ""),
-            ("SQLite",       "npx", "-y @modelcontextprotocol/server-sqlite",      ""),
-            ("Brave Search", "npx", "-y @modelcontextprotocol/server-brave-search","BRAVE_API_KEY=<paste-api-key-here>"),
-            ("Web Fetch",    "npx", "-y @modelcontextprotocol/server-fetch",       ""),
-            ("Memory",       "npx", "-y @modelcontextprotocol/server-memory",      ""),
-            ("Slack",        "npx", "-y @modelcontextprotocol/server-slack",       "SLACK_BOT_TOKEN=<paste-bot-token-here>\nSLACK_TEAM_ID=<paste-team-id-here>"),
-            ("Gmail (OAuth)","npx", "-y @modelcontextprotocol/server-gmail",       "GMAIL_CLIENT_ID=<paste-client-id-here>\nGMAIL_CLIENT_SECRET=<paste-client-secret-here>\nGMAIL_REFRESH_TOKEN=<paste-refresh-token-here>"),
-        };
-
         private async void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is System.Windows.Controls.TabItem tab && tab == TabConnections)
@@ -37,6 +25,7 @@ namespace Aire.UI
             _mcpVms.Clear();
             foreach (var server in servers) _mcpVms.Add(new McpServerViewModel(server));
             McpServersList.ItemsSource = _mcpVms;
+            RefreshMcpCatalogState(servers);
 
             BuildMcpTemplatesMenu();
         }
@@ -44,24 +33,38 @@ namespace Aire.UI
         private void BuildMcpTemplatesMenu()
         {
             McpTemplatesMenu.Items.Clear();
-            foreach (var (name, cmd, args, env) in _mcpTemplates)
+            foreach (var entry in _mcpCatalogApplicationService.GetCatalog())
             {
-                var item = new System.Windows.Controls.MenuItem { Header = name };
-                var captured = (name, cmd, args, env);
-                item.Click += (_, _) => ApplyMcpTemplate(captured.name, captured.cmd, captured.args, captured.env);
+                var item = new System.Windows.Controls.MenuItem { Header = entry.Name };
+                var capturedKey = entry.Key;
+                item.Click += (_, _) => ApplyMcpTemplate(capturedKey);
                 McpTemplatesMenu.Items.Add(item);
             }
         }
 
-        private void ApplyMcpTemplate(string name, string cmd, string args, string env)
+        private void ApplyMcpTemplate(string key)
         {
-            McpNameBox.Text = name;
-            McpCommandBox.Text = cmd;
-            McpArgsBox.Text = args;
-            McpEnvVarsBox.Text = env;
+            var config = _mcpCatalogApplicationService.BuildConfig(key);
+            McpNameBox.Text = config.Name;
+            McpCommandBox.Text = config.Command;
+            McpArgsBox.Text = config.Arguments;
+            McpEnvVarsBox.Text = string.Join("\n", config.EnvVars.Select(kv => $"{kv.Key}={kv.Value}"));
             McpEditPanel.Visibility = Visibility.Visible;
-            McpEditTitle.Text = $"Add {name}";
+            McpEditTitle.Text = $"Add {config.Name}";
             _editingMcpVm = null;
+        }
+
+        private void RefreshMcpCatalogState(IReadOnlyList<Aire.Services.Mcp.McpServerConfig> servers)
+        {
+            if (_mcpCatalogVms.Count == 0)
+            {
+                foreach (var entry in _mcpCatalogApplicationService.GetCatalog())
+                    _mcpCatalogVms.Add(new McpCatalogEntryViewModel(entry));
+                McpCatalogList.ItemsSource = _mcpCatalogVms;
+            }
+
+            foreach (var vm in _mcpCatalogVms)
+                vm.RefreshInstalled(_mcpCatalogApplicationService, servers);
         }
 
         private void AddGmailBtn_Click(object sender, RoutedEventArgs e)

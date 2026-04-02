@@ -21,6 +21,7 @@ namespace Aire.UI
                 "providers" => (System.Windows.Controls.TabItem)TabProviders,
                 "appearance" => TabAppearance,
                 "voice" => TabVoice,
+                "context" => TabContext,
                 "auto-accept" => TabAutoAccept,
                 "connections" => TabConnections,
                 _ => null

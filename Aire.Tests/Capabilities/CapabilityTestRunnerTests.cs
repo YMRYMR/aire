@@ -69,6 +69,37 @@ namespace Aire.Tests.Capabilities
             public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default) => Task.FromResult<TokenUsage?>(null);
         }
 
+        private sealed class PromptCapturingProvider(ToolOutputFormat toolOutputFormat, string responseContent) : IAiProvider
+        {
+            public string ProviderType => "PromptCapture";
+            public string DisplayName => "PromptCapture";
+            public ProviderCapabilities Capabilities => ProviderCapabilities.ToolCalling | ProviderCapabilities.SystemPrompt;
+            public ToolCallMode ToolCallMode => ToolCallMode.TextBased;
+            public ToolOutputFormat ToolOutputFormat => toolOutputFormat;
+            public int PrepareCalls { get; private set; }
+            public IReadOnlyList<Aire.Providers.ChatMessage> LastMessages { get; private set; } = [];
+
+            public bool Has(ProviderCapabilities cap) => (Capabilities & cap) == cap;
+            public void Initialize(ProviderConfig config) { }
+            public void PrepareForCapabilityTesting() => PrepareCalls++;
+            public void SetToolsEnabled(bool enabled) { }
+            public void SetEnabledToolCategories(IEnumerable<string>? categories) { }
+
+            public Task<AiResponse> SendChatAsync(IEnumerable<Aire.Providers.ChatMessage> messages, CancellationToken cancellationToken = default)
+            {
+                LastMessages = messages.ToList();
+                return Task.FromResult(new AiResponse { IsSuccess = true, Content = responseContent });
+            }
+
+            public async IAsyncEnumerable<string> StreamChatAsync(IEnumerable<Aire.Providers.ChatMessage> messages, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+            {
+                yield break;
+            }
+
+            public Task<ProviderValidationResult> ValidateConfigurationAsync(CancellationToken cancellationToken = default) => Task.FromResult(ProviderValidationResult.Ok());
+            public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default) => Task.FromResult<TokenUsage?>(null);
+        }
+
         [Fact]
         public async Task CapabilityTestRunner_RunOne_CoversSuccessAndFailureBranches()
         {
@@ -134,6 +165,36 @@ namespace Aire.Tests.Capabilities
 
             await runner.RunAsync(provider, CancellationToken.None);
             Assert.Equal(CapabilityTestRunner.AllTests.Count, runner.Results.Count);
+        }
+
+        [Theory]
+        [InlineData(ToolOutputFormat.Hermes, "{\"name\": \"TOOL_NAME\", \"arguments\": {...parameters}}")]
+        [InlineData(ToolOutputFormat.React, "{\"action\": \"TOOL_NAME\", \"action_input\": {...parameters}}")]
+        [InlineData(ToolOutputFormat.NativeToolCalls, "<tool_call>{\"tool\": \"TOOL_NAME\", ...parameters}</tool_call>")]
+        public async Task CapabilityTestRunner_RunOne_UsesExpectedPromptFormat(ToolOutputFormat format, string expectedSystemPromptText)
+        {
+            CapabilityTest test = CapabilityTestRunner.AllTests.First(t => t.Id == "list_dir");
+            PromptCapturingProvider provider = new PromptCapturingProvider(format, "<tool_call>{\"tool\":\"list_directory\"}</tool_call>");
+
+            CapabilityTestResult result = await CapabilityTestRunner.RunOneAsync(provider, test, CancellationToken.None);
+
+            Assert.True(result.Passed);
+            Assert.Equal("system", provider.LastMessages[0].Role);
+            Assert.Contains(expectedSystemPromptText, provider.LastMessages[0].Content, StringComparison.OrdinalIgnoreCase);
+            Assert.Equal(test.Prompt, provider.LastMessages[1].Content);
+        }
+
+        [Fact]
+        public async Task CapabilityTestRunner_RunAll_CallsPrepareForCapabilityTesting_Once()
+        {
+            CapabilityTestRunner runner = new CapabilityTestRunner();
+            PromptCapturingProvider provider = new PromptCapturingProvider(
+                ToolOutputFormat.AireText,
+                "<tool_call>{\"tool\":\"list_directory\"}</tool_call>");
+
+            await runner.RunAsync(provider, CancellationToken.None);
+
+            Assert.Equal(1, provider.PrepareCalls);
         }
     }
 }

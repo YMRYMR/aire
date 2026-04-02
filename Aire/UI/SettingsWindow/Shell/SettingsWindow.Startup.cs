@@ -4,8 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using Aire.AppLayer.Connections;
+using Aire.AppLayer.Chat;
 using Aire.AppLayer.Mcp;
 using Aire.AppLayer.Settings;
+using Aire.AppLayer.Tools;
 using Aire.Data;
 using Aire.Providers;
 using Aire.Services;
@@ -19,9 +21,12 @@ namespace Aire.UI
         {
             InitializeComponent();
             _databaseService = new DatabaseService();
+            _mcpCatalogApplicationService = new McpCatalogApplicationService();
             _mcpConfigApplicationService = new McpConfigApplicationService(_databaseService);
             _emailAccountApplicationService = new EmailAccountApplicationService(_databaseService);
             _appSettingsApplicationService = new AppSettingsApplicationService(_databaseService);
+            _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
+            _autoAcceptProfilesApplicationService = new AutoAcceptProfilesApplicationService(_databaseService);
             _ttsService = ttsService ?? SpeechSynthesisService.Current;
             WireProviderListPaneEvents();
             WireAppearancePaneEvents();
@@ -29,6 +34,7 @@ namespace Aire.UI
             WireEmailPaneEvents();
             WireMcpPaneEvents();
             WireVoicePaneEvents();
+            WireContextPaneEvents();
             WireAutoAcceptPaneEvents();
             OllamaModelPicker.ModelSelectionChanged += (_, _) => _ = PerformAutoSave();
 
@@ -112,6 +118,8 @@ namespace Aire.UI
             {
                 await _databaseService.InitializeAsync();
                 await RefreshProvidersList();
+                await LoadContextSettings();
+                await LoadAutoAcceptProfilesAsync();
                 await LoadAutoAcceptSettings();
                 HookAutoAcceptEvents();
             }

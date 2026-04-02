@@ -822,12 +822,34 @@
                             Background="{TemplateBinding Background}"
                             CornerRadius="4"
                             Margin="0 1">
-                        <TextBlock Text="{TemplateBinding Header}"
-                                   Foreground="{TemplateBinding Foreground}"
-                                   Padding="{TemplateBinding Padding}"
-                                   VerticalAlignment="Center" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="18" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="CheckGlyph"
+                                       Grid.Column="0"
+                                       Text="✓"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{TemplateBinding Header}"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       Padding="{TemplateBinding Padding}"
+                                       VerticalAlignment="Center" />
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsCheckable" Value="True" />
+                                <Condition Property="IsChecked" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="CheckGlyph" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
                         <Trigger Property="IsHighlighted" Value="True">
                             <Setter TargetName="Bd" Property="Background"
                                     Value="{DynamicResource Surface3Brush}" />

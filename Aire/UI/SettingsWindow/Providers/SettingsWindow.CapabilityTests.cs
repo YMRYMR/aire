@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Aire.AppLayer.Abstractions;
 using Aire.AppLayer.Providers;
 using Aire.Data;
 using Aire.Domain.Providers;
@@ -96,10 +97,12 @@ namespace Aire.UI
             try
             {
                 var runtimeService = new ProviderSetupApplicationService();
-                var validation = await runtimeService.ValidateAsync(provider, ct);
+                var validation = await runtimeService.ValidateDetailedAsync(provider, ct);
                 if (!validation.IsValid)
                 {
-                    var reason = validation.Error ?? "Provider configuration is invalid.";
+                    var reason = validation.ErrorMessage ?? "Provider configuration is invalid.";
+                    if (!string.IsNullOrWhiteSpace(validation.RemediationHint))
+                        reason = $"{reason} {validation.RemediationHint}";
                     ShowToast($"Validation failed: {reason}", isError: true);
                     CapTestStatusText.Text = "Validation failed.";
                     CapTestResultsBorder.Visibility = Visibility.Collapsed;
@@ -114,7 +117,8 @@ namespace Aire.UI
                     // the individual tests will surface real failures themselves.
                     // Only hard-stop on authentication errors.
                     var err = smokeTest.ErrorMessage ?? "";
-                    bool isAuthError = err.Contains("auth", StringComparison.OrdinalIgnoreCase)
+                    bool isAuthError = validation.FailureKind == ProviderValidationFailureKind.InvalidCredentials
+                                    || err.Contains("auth", StringComparison.OrdinalIgnoreCase)
                                     || err.Contains("api key", StringComparison.OrdinalIgnoreCase)
                                     || err.Contains("unauthorized", StringComparison.OrdinalIgnoreCase)
                                     || err.Contains("forbidden", StringComparison.OrdinalIgnoreCase)
@@ -325,4 +329,3 @@ namespace Aire.UI
         }
     }
 }
-

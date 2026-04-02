@@ -63,24 +63,27 @@ namespace Aire
             // splash screen (and all subsequent windows) use the correct theme.
             AppearanceService.ApplySaved();
 
-            // Show a splash window and pre-load slow startup data (Ollama status, hardware
-            // profile, installed models) before any other window is created.
-            // Temporarily switch to explicit shutdown so WPF doesn't quit when the
-            // init window closes (it would be the only window at that moment).
+            // Show a splash window and use it to host startup work until the main
+            // window is ready to appear immediately after the splash closes.
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            var initWindow = new InitializationWindow();
-            await initWindow.RunAndCloseAsync();
-            ShutdownMode = ShutdownMode.OnLastWindowClose;
-
             _mainWindow = new MainWindow();
             MainWindow = _mainWindow;
-            try
+            var initWindow = new InitializationWindow();
+            await initWindow.RunAndCloseAsync(async progress =>
             {
-                await _mainWindow.InitializeStartupAsync();
-            }
-            catch (Exception ex)
+                progress.Report("Creating main window…");
+                await _mainWindow.InitializeStartupAsync(progress);
+            },
+            async () =>
             {
-                MessageBox.Show($"Failed to initialize Aire: {ex.Message}", "Aire", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowInitialMainWindow();
+                await Dispatcher.InvokeAsync(() => { }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+            });
+            ShutdownMode = ShutdownMode.OnLastWindowClose;
+
+            if (AppStartupState.StartupError != null)
+            {
+                MessageBox.Show($"Failed to initialize Aire: {AppStartupState.StartupError.Message}", "Aire", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             _trayService = new TrayIconService(_mainWindow);
@@ -137,8 +140,6 @@ namespace Aire
                 wizard.OpenSettingsAction = () => OnSettingsRequested(this, EventArgs.Empty);
                 wizard.ShowDialog();
             }
-
-            ShowInitialMainWindow();
 
             RestoreWindowsFromState();
         }

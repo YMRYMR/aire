@@ -17,7 +17,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Border x:Name="PART_MouseSessionBanner"
@@ -117,7 +116,7 @@
                         Click="RemoveImageButton_Click" />
             </StackPanel>
 
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -172,11 +171,16 @@
                 <Border x:Name="PART_ProgressOverlay"
                         Grid.Column="1"
                         Grid.ColumnSpan="3"
-                        Background="{DynamicResource SurfaceBrush}"
+                        Background="{DynamicResource AccentSurfaceBrush}"
+                        BorderBrush="{DynamicResource AccentBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Opacity="0.96"
                         Visibility="Collapsed"
                         Panel.ZIndex="20">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <ProgressBar IsIndeterminate="True"
+                                     Foreground="{DynamicResource PrimaryHoverBrush}"
                                      Width="200"
                                      Height="4"
                                      Margin="0 0 0 10" />

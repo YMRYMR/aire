@@ -16,6 +16,12 @@ namespace Aire.AppLayer.Providers
         public static IReadOnlyList<IProviderAdapter> CreateDefaultAdapters()
             => new IProviderAdapter[]
             {
+                new CodexCliAdapter(),
+                new OpenAiCompatibleAdapter(),
+                new GoogleAiAdapter(),
+                new AnthropicAdapter(),
+                new ClaudeWebAdapter(),
+                new OllamaAdapter(),
                 new LegacyProviderAdapter()
             };
     }

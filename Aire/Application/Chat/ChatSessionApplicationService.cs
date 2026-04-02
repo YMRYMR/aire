@@ -63,14 +63,20 @@ namespace Aire.AppLayer.Chat
         /// <summary>
         /// Persists an assistant text turn.
         /// </summary>
-        public Task PersistAssistantMessageAsync(int conversationId, string content)
-            => _conversations.SaveMessageAsync(conversationId, "assistant", content);
+        public Task PersistAssistantMessageAsync(int conversationId, string content, string? imagePath = null)
+            => _conversations.SaveMessageAsync(conversationId, "assistant", content, imagePath);
 
         /// <summary>
         /// Persists a tool status line such as approval or denial.
         /// </summary>
         public Task PersistToolStatusAsync(int conversationId, string status)
             => _conversations.SaveMessageAsync(conversationId, "tool", status);
+
+        /// <summary>
+        /// Persists a system/status line that should appear in the transcript but not in provider history.
+        /// </summary>
+        public Task PersistSystemMessageAsync(int conversationId, string content)
+            => _conversations.SaveMessageAsync(conversationId, "system", content);
 
         /// <summary>
         /// Loads an arbitrary application setting by key. Prefer typed methods where available.

@@ -37,10 +37,13 @@ namespace Aire.UI
                 }
 
                 var runtimeService = new ProviderSetupApplicationService();
-                var validation = await runtimeService.ValidateAsync(provider, ct);
+                var validation = await runtimeService.ValidateDetailedAsync(provider, ct);
                 if (!validation.IsValid)
                 {
-                    SetTestResult($"{S("onboarding.testFail", "Failed")}: {validation.Error}", false);
+                    var message = validation.ErrorMessage ?? "Provider configuration is invalid.";
+                    if (!string.IsNullOrWhiteSpace(validation.RemediationHint))
+                        message = $"{message} {validation.RemediationHint}";
+                    SetTestResult($"{S("onboarding.testFail", "Failed")}: {message}", false);
                     return;
                 }
 

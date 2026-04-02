@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Aire.AppLayer.Chat;
 using Aire.AppLayer.Providers;
 using Aire.Data;
 using Aire.Providers;
@@ -45,8 +46,13 @@ namespace Aire
                     _owner.UpdateToolsButtonState();
             }
 
-            public static List<ProviderChatMessage> WindowConversation(List<ProviderChatMessage> history, int maxMessages = 40)
-                => new ProviderPresentationWorkflowService().TrimConversation(history, maxMessages);
+            public static List<ProviderChatMessage> WindowConversation(
+                List<ProviderChatMessage> history,
+                ContextWindowSettings? settings = null,
+                int maxMessages = 40)
+                => settings != null
+                    ? new ProviderPresentationWorkflowService().TrimConversation(history, settings)
+                    : new ProviderPresentationWorkflowService().TrimConversation(history, maxMessages);
 
             public string BuildModelListSection()
                 => _presentationWorkflow.BuildModelListSection(

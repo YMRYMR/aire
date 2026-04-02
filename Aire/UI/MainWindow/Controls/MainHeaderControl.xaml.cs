@@ -15,6 +15,8 @@ namespace Aire.UI.MainWindow.Controls
         internal System.Windows.Controls.Button? _testSettingsButton;
         internal System.Windows.Controls.ComboBox? _testProviderComboBox;
         internal System.Windows.Controls.Button? _testCheckAgainButton;
+        internal System.Windows.Controls.Button? _testModeButton;
+        internal System.Windows.Controls.Button? _testSearchButton;
         internal System.Windows.Controls.Button? _testPinButton;
         internal System.Windows.Controls.Button? _testVoiceOutputButton;
         internal System.Windows.Controls.Button? _testBrowserButton;
@@ -24,6 +26,8 @@ namespace Aire.UI.MainWindow.Controls
         public System.Windows.Controls.Button SettingsButton => _testSettingsButton ?? PART_SettingsButton;
         public System.Windows.Controls.ComboBox ProviderComboBox => _testProviderComboBox ?? PART_ProviderComboBox;
         public System.Windows.Controls.Button CheckAgainButton => _testCheckAgainButton ?? PART_CheckAgainButton;
+        public System.Windows.Controls.Button ModeButton => _testModeButton ?? PART_ModeButton;
+        public System.Windows.Controls.Button SearchButton => _testSearchButton ?? PART_SearchButton;
         public System.Windows.Controls.Button PinButton => _testPinButton ?? PART_PinButton;
         public System.Windows.Controls.Button VoiceOutputButton => _testVoiceOutputButton ?? PART_VoiceOutputButton;
         public System.Windows.Controls.Button BrowserButton => _testBrowserButton ?? PART_BrowserButton;
@@ -35,6 +39,8 @@ namespace Aire.UI.MainWindow.Controls
         public event System.Windows.Controls.SelectionChangedEventHandler? ProviderSelectionChanged;
         public event EventHandler? ProviderDropDownOpened;
         public event RoutedEventHandler? CheckAgainClicked;
+        public event RoutedEventHandler? ModeClicked;
+        public event RoutedEventHandler? SearchClicked;
         public event RoutedEventHandler? PinClicked;
         public event RoutedEventHandler? VoiceOutputClicked;
         public event RoutedEventHandler? BrowserClicked;
@@ -59,6 +65,12 @@ namespace Aire.UI.MainWindow.Controls
 
         private void CheckAgainButton_Click(object sender, RoutedEventArgs e)
             => CheckAgainClicked?.Invoke(sender, e);
+
+        private void ModeButton_Click(object sender, RoutedEventArgs e)
+            => ModeClicked?.Invoke(sender, e);
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+            => SearchClicked?.Invoke(sender, e);
 
         private void PinButton_Click(object sender, RoutedEventArgs e)
             => PinClicked?.Invoke(sender, e);

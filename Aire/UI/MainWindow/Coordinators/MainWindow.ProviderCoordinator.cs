@@ -131,15 +131,7 @@ namespace Aire
                     if (plan.ConversationAction == ProviderActivationWorkflowService.ConversationActionKind.KeepCurrentConversation)
                     {
                         if (plan.ShouldAnnounceSwitch)
-                        {
-                            _owner.AddToUI(new ChatMessage
-                            {
-                                Sender = "System",
-                                Text = activation.SwitchedProviderMessage,
-                                Timestamp = DateTime.Now.ToString("HH:mm"),
-                                SenderForeground = MainWindow.SystemFgBrush
-                            });
-                        }
+                            _owner.AddSystemMessage(activation.SwitchedProviderMessage);
 
                         if (_owner._sidebarOpen)
                             await _owner.RefreshSidebarAsync();

@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Aire.AppLayer.Api;
 using Aire.Services;
 using Xunit;
@@ -74,6 +79,21 @@ namespace Aire.Tests.Services
         }
 
         [Fact]
+        public void RequestParsingHelpers_HandleInvalidAndFallbackValues()
+        {
+            using JsonDocument doc = JsonDocument.Parse("{\"conversationId\":\"oops\",\"enabled\":false,\"parameters\":\"not-an-object\"}");
+
+            Assert.Throws<InvalidOperationException>(() => LocalApiService.GetInt(doc.RootElement, "conversationId"));
+            Assert.False(LocalApiService.GetBoolOrDefault(doc.RootElement, "enabled", true));
+            Assert.False(LocalApiService.GetBoolOrDefault(doc.RootElement, "missing", false));
+            Assert.Equal(string.Empty, LocalApiService.GetString(doc.RootElement, "missing"));
+
+            JsonElement fallback = LocalApiService.GetObject(doc.RootElement, "parameters");
+            Assert.Equal(JsonValueKind.Object, fallback.ValueKind);
+            Assert.Empty(fallback.EnumerateObject());
+        }
+
+        [Fact]
         public void TraceLoggingHelpers_RedactSensitiveMethodsAndShapeExecuteTool()
         {
             ApiToolExecutionResult result = new ApiToolExecutionResult
@@ -120,6 +140,145 @@ namespace Aire.Tests.Services
             Assert.False(err.Ok);
             Assert.Equal("bad request", err.ErrorMessage);
             Assert.True((bool)cleared.cleared);
+        }
+
+        [Fact]
+        public async Task WriteResponseAsync_SerializesCamelCaseJson()
+        {
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+            using var stream = new MemoryStream();
+            using var writer = new StreamWriter(stream, leaveOpen: true);
+
+            await service.WriteResponseAsync(writer, new LocalApiResponse
+            {
+                Ok = false,
+                ErrorMessage = "bad request"
+            });
+            await writer.FlushAsync();
+            stream.Position = 0;
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+
+            Assert.Contains("\"ok\":false", json, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("\"errorMessage\":\"bad request\"", json, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task DispatchAsync_ReturnsUnknownMethodError_WithoutTouchingUi()
+        {
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+
+            var response = await service.DispatchAsync(new LocalApiRequest
+            {
+                Method = "  unknown_method  "
+            }, CancellationToken.None);
+
+            Assert.False(response.Ok);
+            Assert.Contains("Unknown method", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public void IsAuthorized_DeniesWhenExpectedTokenMissing()
+        {
+            AppState.SetApiAccessEnabled(true);
+            AppState.SetApiAccessToken(string.Empty);
+
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+
+            Assert.False(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = "anything" }));
+        }
+
+        [Fact]
+        public async Task HandleClientAsync_EmptyRequest_ReturnsEmptyRequestError()
+        {
+            AppState.SetApiAccessEnabled(true);
+            AppState.SetApiAccessToken("token");
+
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+
+            var response = await RoundTripAsync(service, string.Empty + Environment.NewLine);
+
+            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Empty request", response, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task HandleClientAsync_InvalidJson_ReturnsJsonError()
+        {
+            AppState.SetApiAccessEnabled(true);
+            AppState.SetApiAccessToken("token");
+
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+
+            var response = await RoundTripAsync(service, "{not-json}" + Environment.NewLine);
+
+            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Invalid JSON", response, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task HandleClientAsync_DisabledApi_ReturnsDisabledError()
+        {
+            AppState.SetApiAccessEnabled(false);
+            AppState.SetApiAccessToken("token");
+
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+
+            var response = await RoundTripAsync(service, "{\"method\":\"ping\",\"token\":\"token\"}" + Environment.NewLine);
+
+            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("disabled", response, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task HandleClientAsync_InvalidToken_ReturnsAuthError()
+        {
+            AppState.SetApiAccessEnabled(true);
+            AppState.SetApiAccessToken("expected-token");
+
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+
+            var response = await RoundTripAsync(service, "{\"method\":\"ping\",\"token\":\"wrong\"}" + Environment.NewLine);
+
+            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("invalid auth token", response, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static async Task<string> RoundTripAsync(LocalApiService service, string requestLine)
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            try
+            {
+                var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+                using var client = new TcpClient();
+                var connectTask = client.ConnectAsync(IPAddress.Loopback, port);
+                using var serverClient = await listener.AcceptTcpClientAsync();
+                await connectTask;
+
+                var handleTask = service.HandleClientAsync(serverClient, CancellationToken.None);
+
+                using var clientStream = client.GetStream();
+                using var writer = new StreamWriter(clientStream, leaveOpen: true) { AutoFlush = true };
+                using var reader = new StreamReader(clientStream, leaveOpen: true);
+
+                await writer.WriteAsync(requestLine);
+                var response = await reader.ReadLineAsync();
+                await handleTask;
+
+                return response ?? string.Empty;
+            }
+            finally
+            {
+                listener.Stop();
+            }
         }
     }
 }

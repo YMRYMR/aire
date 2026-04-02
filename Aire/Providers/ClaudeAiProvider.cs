@@ -204,6 +204,17 @@ namespace Aire.Providers
                             };
                         return (object)new { role = m.Role, content = blocks };
                     }
+                    if (m.PreferPromptCache)
+                    {
+                        return (object)new
+                        {
+                            role = m.Role,
+                            content = new object[]
+                            {
+                                new { type = "text", text = m.Content, cache_control = new { type = "ephemeral" } }
+                            }
+                        };
+                    }
                     return (object)new { role = m.Role, content = m.Content };
                 })
                 .ToArray();

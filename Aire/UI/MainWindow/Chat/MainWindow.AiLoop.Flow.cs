@@ -6,7 +6,8 @@ namespace Aire
 {
     public partial class MainWindow
     {
-        private void SendButton_Click(object sender, RoutedEventArgs e) => _ = SendMessageAsync();
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+            => QueueSendMessage();
 
         public async Task<bool> ApiSendMessageAsync(string text)
         {

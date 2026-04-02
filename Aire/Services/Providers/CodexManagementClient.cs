@@ -15,69 +15,64 @@ namespace Aire.Services.Providers
     /// </summary>
     public sealed class CodexManagementClient : ICodexManagementClient
     {
+        private readonly Func<CodexCliStatus> _getStatus;
+        private readonly Func<string?> _findNpm;
+        private readonly Func<string, CancellationToken, Task<(int ExitCode, string StdOut, string StdErr)>> _runInstall;
+
+        /// <summary>
+        /// Creates the Codex CLI management client over the default filesystem and process helpers.
+        /// </summary>
+        public CodexManagementClient()
+            : this(
+                static () => CodexProvider.GetCliStatus(),
+                FindNpm,
+                RunInstallAsync)
+        {
+        }
+
+        internal CodexManagementClient(
+            Func<CodexCliStatus> getStatus,
+            Func<string?> findNpm,
+            Func<string, CancellationToken, Task<(int ExitCode, string StdOut, string StdErr)>> runInstall)
+        {
+            _getStatus = getStatus;
+            _findNpm = findNpm;
+            _runInstall = runInstall;
+        }
+
         /// <inheritdoc />
         public Task<CodexCliStatus> GetStatusAsync(CancellationToken cancellationToken = default)
-            => Task.FromResult(CodexProvider.GetCliStatus());
+            => Task.FromResult(_getStatus());
 
         /// <inheritdoc />
         public async Task InstallAsync(IProgress<string>? progress = null, CancellationToken cancellationToken = default)
         {
-            if (CodexProvider.HasLaunchableCli())
+            if (_getStatus().IsInstalled)
             {
                 progress?.Report("Codex CLI is already installed.");
                 return;
             }
 
-            var npmPath = FindNpm();
+            var npmPath = _findNpm();
             if (npmPath == null)
                 throw new InvalidOperationException("npm was not found. Install Node.js first.");
 
             progress?.Report("Installing Codex CLI with npm…");
 
-            var psi = new ProcessStartInfo
-            {
-                FileName = npmPath,
-                Arguments = "install -g @openai/codex",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-            };
+            var (exitCode, stdout, stderr) = await _runInstall(npmPath, cancellationToken).ConfigureAwait(false);
 
-            using var process = new Process { StartInfo = psi };
-            if (!process.Start())
-                throw new InvalidOperationException("Failed to start npm.");
-
-            using var _ = cancellationToken.Register(() =>
-            {
-                try
-                {
-                    if (!process.HasExited)
-                        process.Kill(entireProcessTree: true);
-                }
-                catch { /* best-effort process kill on cancellation */ }
-            });
-
-            var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
-            var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
-            await process.WaitForExitAsync(cancellationToken);
-
-            var stdout = await stdoutTask.ConfigureAwait(false);
-            var stderr = await stderrTask.ConfigureAwait(false);
-
-            if (process.ExitCode != 0)
+            if (exitCode != 0)
             {
                 var message = string.IsNullOrWhiteSpace(stderr) ? stdout : stderr;
                 throw new InvalidOperationException(string.IsNullOrWhiteSpace(message)
-                    ? $"npm exited with code {process.ExitCode}."
+                    ? $"npm exited with code {exitCode}."
                     : message.Trim());
             }
 
             progress?.Report("Codex CLI installed.");
         }
 
-        private static string? FindNpm()
+        internal static string? FindNpm()
         {
             try
             {
@@ -122,6 +117,40 @@ namespace Aire.Services.Providers
             }
 
             return null;
+        }
+
+        private static async Task<(int ExitCode, string StdOut, string StdErr)> RunInstallAsync(string npmPath, CancellationToken cancellationToken)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = npmPath,
+                Arguments = "install -g @openai/codex",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+            };
+
+            using var process = new Process { StartInfo = psi };
+            if (!process.Start())
+                throw new InvalidOperationException("Failed to start npm.");
+
+            using var _ = cancellationToken.Register(() =>
+            {
+                try
+                {
+                    if (!process.HasExited)
+                        process.Kill(entireProcessTree: true);
+                }
+                catch { }
+            });
+
+            var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
+            var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
+            await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+
+            return (process.ExitCode, await stdoutTask.ConfigureAwait(false), await stderrTask.ConfigureAwait(false));
         }
     }
 }

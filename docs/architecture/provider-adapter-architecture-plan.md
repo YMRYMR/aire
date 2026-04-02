@@ -291,6 +291,33 @@ Once the seam is real:
 
 This is the fastest path toward the long-term coverage goal without padding.
 
+### Phase 6. Extract providers into a dedicated project
+
+Once the adapter seams are proven and most providers already route through
+explicit adapters, move provider implementations and provider adapters into a
+dedicated infrastructure project.
+
+Suggested target:
+
+- `Aire.Domain`
+- `Aire.Application`
+- `Aire.Infrastructure.Providers`
+- `Aire.UI.Wpf`
+
+Migration rules:
+
+- move provider implementations and provider adapters together
+- keep shared semantic contracts in `Domain` / `Application`
+- do not move WPF-only session UI concerns into the provider project
+- keep the split incremental so compile-time boundaries improve without mixing
+  in unrelated behavior changes
+
+Definition of done:
+
+- providers can be iterated on without touching unrelated app layers
+- compile-time references reflect the intended architecture
+- provider-specific tests mostly run against the dedicated provider project
+
 ## Immediate Candidate Refactors
 
 ### 1. Extract a real `CodexCliAdapter`

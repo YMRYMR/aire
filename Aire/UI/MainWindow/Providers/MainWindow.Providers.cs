@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Aire.AppLayer.Chat;
 using Aire.AppLayer.Providers;
 using Aire.Data;
 using Aire.Providers;
@@ -51,8 +52,11 @@ namespace Aire
                     _limitReachedNotificationShown,
                     _limitBubbleShown).InputToolTip);
 
-        private static List<ProviderChatMessage> WindowConversation(List<ProviderChatMessage> history, int maxMessages = 40)
-            => ProviderCoordinator.WindowConversation(history, maxMessages);
+        private static List<ProviderChatMessage> WindowConversation(
+            List<ProviderChatMessage> history,
+            ContextWindowSettings? settings = null,
+            int maxMessages = 40)
+            => ProviderCoordinator.WindowConversation(history, settings, maxMessages);
 
         internal string BuildModelListSection() => ProvidersFlow.BuildModelListSection();
 

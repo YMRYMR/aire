@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Aire.Services.Workflows;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
@@ -19,6 +20,13 @@ namespace Aire
                 var text = _owner.InputTextBox.Text.Trim();
                 if (string.IsNullOrEmpty(text) || _owner._isProcessing)
                     return;
+
+                _owner.IsThinking = true;
+                // One yield lets the overlay paint (IsThinking was already set by QueueSendMessage
+                // before this Background-priority invocation, so DataBind/Render have run).
+                // The previous UpdateLayout + Task.Delay(60) that lived here blocked or
+                // delayed the UI thread for 60 ms per send with no benefit.
+                await Task.Yield();
 
                 var wasVoice = _owner.VoiceFlow.ConsumeVoiceOrigin();
 

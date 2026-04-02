@@ -56,6 +56,7 @@ namespace Aire.Data
             await MigrateProviderBaseUrlsAsync();
             await MigrateAddSortOrderAsync();
             await MigrateProviderTimeoutsAsync();
+            await MigrateConversationAssistantModesAsync();
             await MigrateEncryptApiKeysAsync();
             await MigrateClaudeSessionProvidersAsync();
             await MigrateEmailOAuthAsync();

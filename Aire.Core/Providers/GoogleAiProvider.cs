@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.Domain.Providers;
@@ -16,6 +17,7 @@ namespace Aire.Providers
     public class GoogleAiProvider : BaseAiProvider
     {
         private static readonly HttpClient _http = new();
+        private readonly Dictionary<string, string> _cachedContentNames = new(StringComparer.Ordinal);
 
         public override string ProviderType => "GoogleAI";
         public override string DisplayName  => "Google AI (Gemini)";
@@ -41,7 +43,11 @@ namespace Aire.Providers
         private string StreamUrl =>
             $"{ApiBase}/v1beta/models/{Config.Model}:streamGenerateContent?key={Config.ApiKey}&alt=sse";
 
-        private string BuildBody(IEnumerable<ChatMessage> messages)
+        private string BuildBody(
+            IEnumerable<ChatMessage> messages,
+            string? cachedContentName = null,
+            bool includeTools = true,
+            bool includeSystemInstruction = true)
         {
             string? systemText = null;
             var contents = new List<object>();
@@ -61,31 +67,162 @@ namespace Aire.Providers
             }
 
             var genConfig = new { temperature = Config.Temperature, maxOutputTokens = Config.MaxTokens };
-            var tools     = new[]
+            object body;
+            if (!string.IsNullOrWhiteSpace(cachedContentName))
             {
-                new
+                body = new
                 {
-                    function_declarations = SharedToolDefinitions.ToGeminiFunctionDeclarations(
-                        Config.ModelCapabilities,
-                        Config.EnabledToolCategories)
+                    contents,
+                    cachedContent = cachedContentName,
+                    generationConfig = genConfig,
+                };
+            }
+            else
+            {
+                var bodyFields = new Dictionary<string, object>
+                {
+                    ["contents"] = contents,
+                    ["generationConfig"] = genConfig
+                };
+
+                if (includeTools)
+                {
+                    bodyFields["tools"] = new[]
+                    {
+                        new
+                        {
+                            function_declarations = SharedToolDefinitions.ToGeminiFunctionDeclarations(
+                                Config.ModelCapabilities,
+                                Config.EnabledToolCategories)
+                        }
+                    };
                 }
+
+                if (includeSystemInstruction && systemText != null)
+                    bodyFields["system_instruction"] = new { parts = new[] { new { text = systemText } } };
+
+                body = bodyFields;
+            }
+
+            return JsonSerializer.Serialize(body);
+        }
+
+        private async Task<string?> EnsureCachedContentAsync(
+            IReadOnlyList<ChatMessage> prefixMessages,
+            string? systemText,
+            CancellationToken cancellationToken)
+        {
+            if (prefixMessages.Count == 0)
+                return null;
+
+            var cacheKey = BuildCacheKey(prefixMessages, systemText);
+            if (_cachedContentNames.TryGetValue(cacheKey, out var existing))
+                return existing;
+
+            var cacheBody = new Dictionary<string, object>
+            {
+                ["model"] = $"models/{Config.Model}",
+                ["contents"] = prefixMessages.Select(ToGeminiContent).ToArray(),
+                ["ttl"] = "3600s"
             };
 
-            if (systemText != null)
-                return JsonSerializer.Serialize(new
+            if (!string.IsNullOrWhiteSpace(systemText))
+                cacheBody["systemInstruction"] = new
                 {
-                    system_instruction = new { parts = new[] { new { text = systemText } } },
-                    contents,
-                    tools,
-                    generationConfig = genConfig,
-                });
+                    parts = new[] { new { text = systemText } }
+                };
 
-            return JsonSerializer.Serialize(new
+            var functionDeclarations = SharedToolDefinitions.ToGeminiFunctionDeclarations(
+                Config.ModelCapabilities,
+                Config.EnabledToolCategories);
+            if (functionDeclarations.Count > 0)
             {
-                contents,
-                tools,
-                generationConfig = genConfig,
+                cacheBody["tools"] = new[]
+                {
+                    new
+                    {
+                        function_declarations = functionDeclarations
+                    }
+                };
+            }
+
+            using var req = new HttpRequestMessage(HttpMethod.Post, $"{ApiBase}/v1beta/cachedContents?key={Config.ApiKey}")
+            {
+                Content = new StringContent(JsonSerializer.Serialize(cacheBody), Encoding.UTF8, "application/json")
+            };
+
+            var resp = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
+            if (!resp.IsSuccessStatusCode)
+                return null;
+
+            using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
+            if (!doc.RootElement.TryGetProperty("name", out var nameProp))
+                return null;
+
+            var name = nameProp.GetString();
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            _cachedContentNames[cacheKey] = name;
+            return name;
+        }
+
+        private static object ToGeminiContent(ChatMessage message) => new
+        {
+            role = message.Role == "assistant" ? "model" : "user",
+            parts = new[] { new { text = message.Content } }
+        };
+
+        private string BuildCacheKey(IReadOnlyList<ChatMessage> prefixMessages, string? systemText)
+        {
+            var functionDeclarations = SharedToolDefinitions.ToGeminiFunctionDeclarations(
+                Config.ModelCapabilities,
+                Config.EnabledToolCategories);
+
+            var payload = JsonSerializer.Serialize(new
+            {
+                model = Config.Model,
+                baseUrl = ApiBase,
+                systemText,
+                tools = functionDeclarations,
+                prefix = prefixMessages.Select(m => new { m.Role, m.Content })
             });
+
+            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(payload));
+            return Convert.ToHexString(hash);
+        }
+
+        private (List<ChatMessage> Prefix, List<ChatMessage> Suffix, string? SystemText) SplitCachedPrefix(IReadOnlyList<ChatMessage> messages)
+        {
+            string? systemText = null;
+            var prefix = new List<ChatMessage>();
+            var suffix = new List<ChatMessage>();
+            var stillPrefix = true;
+
+            foreach (var message in messages)
+            {
+                if (message.Role == "system")
+                {
+                    systemText = string.IsNullOrWhiteSpace(systemText)
+                        ? message.Content
+                        : $"{systemText}\n\n{message.Content}";
+                    continue;
+                }
+
+                if (stillPrefix &&
+                    message.PreferPromptCache &&
+                    message.ImageBytes == null &&
+                    string.IsNullOrWhiteSpace(message.ImagePath))
+                {
+                    prefix.Add(message);
+                    continue;
+                }
+
+                stillPrefix = false;
+                suffix.Add(message);
+            }
+
+            return (prefix, suffix, systemText);
         }
 
         public override async Task<AiResponse> SendChatAsync(
@@ -109,9 +246,32 @@ namespace Aire.Providers
             IEnumerable<ChatMessage> messages,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
+            var messageList = messages.ToList();
+            string? requestBody;
+
+            var (prefix, suffix, systemText) = SplitCachedPrefix(messageList);
+            var shouldUseExplicitCache =
+                Config.ModelCapabilities?.Any(c =>
+                    c.Equals("tools", StringComparison.OrdinalIgnoreCase) ||
+                    c.Equals("toolcalling", StringComparison.OrdinalIgnoreCase)) != true &&
+                Config.EnabledToolCategories is not { Count: > 0 } &&
+                prefix.Count > 0;
+
+            if (shouldUseExplicitCache)
+            {
+                var cachedContentName = await EnsureCachedContentAsync(prefix, systemText, cancellationToken).ConfigureAwait(false);
+                requestBody = !string.IsNullOrWhiteSpace(cachedContentName)
+                    ? BuildBody(suffix, cachedContentName, includeTools: false, includeSystemInstruction: false)
+                    : BuildBody(messageList);
+            }
+            else
+            {
+                requestBody = BuildBody(messageList);
+            }
+
             var req = new HttpRequestMessage(HttpMethod.Post, StreamUrl)
             {
-                Content = new StringContent(BuildBody(messages), Encoding.UTF8, "application/json")
+                Content = new StringContent(requestBody, Encoding.UTF8, "application/json")
             };
 
             var resp = await _http

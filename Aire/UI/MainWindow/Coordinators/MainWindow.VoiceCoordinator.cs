@@ -75,7 +75,7 @@ namespace Aire
                 if (_isMicActive && _owner.InputTextBox.Text.Trim().Length > 0)
                 {
                     _lastMessageWasVoice = true;
-                    _ = _owner.SendMessageAsync();
+                    _owner.QueueSendMessage();
                 }
             }
 
@@ -110,7 +110,7 @@ namespace Aire
                             _isMicActive = false;
                             _isMicPaused = false;
                             _owner.SetMicButtonState(MicState.Idle);
-                            _ = _owner.SendMessageAsync();
+                            _owner.QueueSendMessage();
                         }
                         break;
                     case "AIRE CLEAR":

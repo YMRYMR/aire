@@ -31,7 +31,10 @@ namespace Aire
         }
 
         private async Task LoadConversationMessages(int conversationId)
-            => await ConversationFlow.LoadConversationMessagesAsync(conversationId);
+        {
+            await SyncConversationSelectionStateAsync(conversationId);
+            await ConversationFlow.LoadConversationMessagesAsync(conversationId);
+        }
 
         private async void ClearButton_Click(object sender, RoutedEventArgs e)
         {
@@ -79,7 +82,7 @@ namespace Aire
                         return;
                     }
                 }
-                _ = SendMessageAsync();
+                QueueSendMessage();
             }
         }
 

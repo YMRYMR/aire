@@ -78,6 +78,21 @@
                     Visibility="Collapsed"
                     Click="CheckAgainButton_Click" />
             <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="8 0 0 0">
+                <Button x:Name="PART_ModeButton"
+                        Content="General"
+                        ToolTip="Assistant mode"
+                        Height="34"
+                        Padding="10 0"
+                        Margin="0 0 4 0"
+                        Click="ModeButton_Click" />
+                <Button x:Name="PART_SearchButton"
+                        Content="&#x1F50D;"
+                        ToolTip="Find in chat  (Ctrl+F)"
+                        Width="34"
+                        Height="34"
+                        Padding="0"
+                        Margin="0 0 4 0"
+                        Click="SearchButton_Click" />
                 <Button x:Name="PART_PinButton"
                         Content="&#x1F4CC;"
                         ToolTip="Pin to tray — click to snap window above system tray"

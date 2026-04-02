@@ -52,6 +52,95 @@ public class EdgeAndSpeechCoverageTests
     }
 
     [Fact]
+    public void SpeechSynthesisService_DefaultVoiceAndCurrentSingleton_Work()
+    {
+        using var service = new SpeechSynthesisService();
+
+        service.SetUseLocalOnly(localOnly: false, notify: false);
+        service.SetVoice(null, notify: false);
+
+        string? edgeVoiceId = service.GetEdgeVoiceId();
+
+        Assert.Same(service, SpeechSynthesisService.Current);
+        Assert.False(string.IsNullOrWhiteSpace(edgeVoiceId));
+        Assert.Equal(EdgeTtsService.Voices[0].VoiceId, edgeVoiceId);
+        Assert.Contains(EdgeTtsService.Voices[0].Display, service.AvailableVoices);
+    }
+
+    [Fact]
+    public void SpeechSynthesisService_NotifyFalseAndLowerClamp_Work()
+    {
+        using var service = new SpeechSynthesisService();
+        int changed = 0;
+        service.SettingsChanged += () => changed++;
+
+        service.SetVoiceEnabled(enabled: true, notify: false);
+        service.SetUseLocalOnly(localOnly: false, notify: false);
+        service.SetVoice(EdgeTtsService.Voices[0].Display, notify: false);
+        service.SetRate(-99, notify: false);
+
+        Assert.Equal(0, changed);
+        Assert.True(service.VoiceEnabled);
+        Assert.False(service.UseLocalOnly);
+        Assert.Equal(-10, service.Rate);
+        Assert.Equal(EdgeTtsService.Voices[0].VoiceId, service.GetEdgeVoiceId());
+    }
+
+    [Fact]
+    public void SpeechSynthesisService_CleanForSpeech_StripsMarkdownUrlsAndUnicodeNoise()
+    {
+        string cleaned = SpeechSynthesisService.CleanForSpeech(
+            "## Title\n\nVisit www.example.com or https://example.com.\n```cs\nConsole.WriteLine(\"hi\");\n```\n" +
+            "A **bold** item, _italic_ item, and list:\n1. one\n2. two\nSymbols: ™ → ✓");
+
+        Assert.Contains("Title", cleaned);
+        Assert.Contains("bold", cleaned);
+        Assert.Contains("italic", cleaned);
+        Assert.DoesNotContain("www.example.com", cleaned, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("https://example.com", cleaned, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("Console.WriteLine", cleaned, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("™", cleaned, StringComparison.Ordinal);
+        Assert.DoesNotContain("✓", cleaned, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void SpeechSynthesisService_SplitIntoSpeechChunks_SplitsLongResponsesSafely()
+    {
+        string text =
+            "This is the first sentence. This is the second sentence with enough text to matter. " +
+            "This is the third sentence, which should force another chunk once the limit is small.";
+
+        var chunks = SpeechSynthesisService.SplitIntoSpeechChunks(text, maxChunkLength: 60);
+
+        Assert.True(chunks.Count >= 2);
+        Assert.All(chunks, chunk => Assert.InRange(chunk.Length, 1, 60));
+        Assert.Contains("first sentence.", chunks[0], StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void SpeechSynthesisService_SplitIntoSpeechChunks_SplitsVeryLongWord()
+    {
+        string text = "supercalifragilisticexpialidociousword another";
+
+        var chunks = SpeechSynthesisService.SplitIntoSpeechChunks(text, maxChunkLength: 10);
+
+        Assert.True(chunks.Count >= 2);
+        Assert.All(chunks, chunk => Assert.InRange(chunk.Length, 1, 10));
+    }
+
+    [Fact]
+    public void SpeechSynthesisService_Dispose_IsIdempotent()
+    {
+        var service = new SpeechSynthesisService();
+
+        service.Dispose();
+        service.Dispose();
+
+        Assert.False(service.IsSpeaking);
+        Assert.Same(service, SpeechSynthesisService.Current);
+    }
+
+    [Fact]
     public async Task SpeechRecognitionService_HelpersAndUnavailablePaths_Work()
     {
         using var service = new SpeechRecognitionService();

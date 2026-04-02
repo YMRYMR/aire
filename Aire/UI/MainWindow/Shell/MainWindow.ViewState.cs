@@ -27,6 +27,7 @@ namespace Aire
                 _isThinking = value;
                 OnPropertyChanged();
                 ProgressOverlay.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                StopAiButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

@@ -31,5 +31,10 @@ namespace Aire.Domain.Providers
         /// MIME type for <see cref="ImageBytes"/> when binary image content is supplied.
         /// </summary>
         public string? ImageMimeType { get; init; }
+
+        /// <summary>
+        /// Whether this message is part of a stable prefix that a provider may cache when supported.
+        /// </summary>
+        public bool PreferPromptCache { get; init; }
     }
 }

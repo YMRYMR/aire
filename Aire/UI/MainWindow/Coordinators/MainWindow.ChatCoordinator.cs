@@ -49,17 +49,31 @@ namespace Aire
                 var toolsEnabled = _owner.ToolsEnabled;
                 _owner._currentProvider?.SetEnabledToolCategories(_owner._enabledToolCategories);
                 _owner._currentProvider?.SetToolsEnabled(toolsEnabled);
-                var messages = _workflow.BuildRequestMessages(
-                    _owner._currentProvider,
-                    _owner.BuildModelListSection(),
-                    MainWindow.WindowConversation(_owner._conversationHistory),
-                    Services.Mcp.McpManager.Instance.GetAllTools(),
-                    toolsEnabled);
+
+                // Capture values that require the UI thread before yielding to the thread pool.
+                var modelListSection  = _owner.BuildModelListSection();
+                var modePromptSection = _owner.BuildAssistantModePrompt();
+                var mcpTools          = Services.Mcp.McpManager.Instance.GetAllTools();
+                var currentProvider   = _owner._currentProvider;
+                var history           = _owner._conversationHistory;
+                var contextSettings   = _owner._contextWindowSettings;
+
+                // WindowConversation (TrimConversation) and BuildRequestMessages (prompt string assembly)
+                // can be slow on long conversations. Running them on the thread pool lets the
+                // DispatcherTimer that drives the IsIndeterminate ProgressBar animation keep firing.
+                var messages = await Task.Run(() => _workflow.BuildRequestMessages(
+                    currentProvider,
+                    modelListSection,
+                    MainWindow.WindowConversation(history, contextSettings),
+                    mcpTools,
+                    toolsEnabled,
+                    modePromptSection));
 
                 Providers.AiResponse response;
+                ChatMessage? streamedMessage = null;
                 try
                 {
-                    response = await _owner._chatService.SendMessageWithHistoryAsync(messages, cancellationToken);
+                    (response, streamedMessage) = await RequestProviderResponseAsync(messages, cancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -93,16 +107,28 @@ namespace Aire
 
                     _owner._conversationHistory.Add(success.AssistantHistoryMessage);
 
-                    var now = DateTime.Now;
-                    _owner.AddToUI(new ChatMessage
+                    if (streamedMessage != null)
                     {
-                        Sender = "AI",
-                        Text = finalText,
-                        Timestamp = now.ToString("HH:mm"),
-                        MessageDate = now,
-                        BackgroundBrush = MainWindow.AiBgBrush,
-                        SenderForeground = MainWindow.AiFgBrush
-                    });
+                        streamedMessage.Text = finalText;
+                        if (success.ImageReference != null)
+                            streamedMessage.ScreenshotImage = MainWindow.LoadChatImageSource(success.ImageReference);
+                    }
+                    else
+                    {
+                        var now = DateTime.Now;
+                        _owner.AddToUI(new ChatMessage
+                        {
+                            Sender = "AI",
+                            Text = finalText,
+                            Timestamp = now.ToString("HH:mm"),
+                            MessageDate = now,
+                            BackgroundBrush = MainWindow.AiBgBrush,
+                            SenderForeground = MainWindow.AiFgBrush,
+                            ScreenshotImage = success.ImageReference != null
+                                ? MainWindow.LoadChatImageSource(success.ImageReference)
+                                : null
+                        });
+                    }
 
                     if (!_owner.IsVisible && _owner.TrayService != null)
                     {
@@ -123,16 +149,23 @@ namespace Aire
                 {
                     if (!string.IsNullOrEmpty(outcome.TextContent))
                     {
-                        var now = DateTime.Now;
-                        _owner.AddToUI(new ChatMessage
+                        if (streamedMessage != null)
                         {
-                            Sender = "AI",
-                            Text = outcome.TextContent,
-                            Timestamp = now.ToString("HH:mm"),
-                            MessageDate = now,
-                            BackgroundBrush = MainWindow.AiBgBrush,
-                            SenderForeground = MainWindow.AiFgBrush
-                        });
+                            streamedMessage.Text = outcome.TextContent;
+                        }
+                        else
+                        {
+                            var now = DateTime.Now;
+                            _owner.AddToUI(new ChatMessage
+                            {
+                                Sender = "AI",
+                                Text = outcome.TextContent,
+                                Timestamp = now.ToString("HH:mm"),
+                                MessageDate = now,
+                                BackgroundBrush = MainWindow.AiBgBrush,
+                                SenderForeground = MainWindow.AiFgBrush
+                            });
+                        }
                     }
 
                     if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.SwitchModel)

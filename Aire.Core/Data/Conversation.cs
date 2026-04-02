@@ -8,6 +8,7 @@ namespace Aire.Data
         public int Id { get; set; }
         public int ProviderId { get; set; }
         public string Title { get; set; } = string.Empty;
+        public string AssistantModeKey { get; set; } = "general";
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

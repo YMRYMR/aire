@@ -101,6 +101,71 @@ Definition of done:
 - manual smoke checklist passes
 - no known blocking provider or UI regressions remain
 
+### 1.8 Main-window chat search is visible and reliable  `[ ]`
+Definition of done:
+- `Ctrl+F` reliably opens chat search in the main window
+- search UI is discoverable without memorizing the shortcut
+- next/previous navigation works
+- focus lands in the search box when opened
+- tests cover the wiring and user-visible behavior where practical
+
+### 1.9 Streaming responses are supported cleanly  `[ ]`
+Definition of done:
+- supported providers can stream into the main chat UI
+- partial assistant responses render progressively without corrupting transcript state
+- stop/cancel behavior is reliable
+- tool-call and follow-up semantics still work under streaming
+- tests cover the application/service streaming paths
+
+### 1.10 MCP discovery and install/uninstall UX is easy  `[ ]`
+Definition of done:
+- users can discover MCP servers from curated sources or public registries/repositories
+- install and uninstall flows are understandable and safe
+- MCP settings make clear what is local, what is third-party, and what is enabled
+- tests cover catalog parsing, install/uninstall flow, and error handling
+
+### 1.11 Providers can return images in chat responses  `[ ]`
+Definition of done:
+- providers that support image output can return images through a shared Aire response contract
+- chat UI renders provider-returned images safely
+- persistence/transcript behavior for image responses is defined clearly
+- tests cover the non-UI image result pipeline
+
+### 1.12 Nice to have: image generation in chat  `[ ]`
+Definition of done:
+- the user can request generated images directly from chat
+- generation results appear inline in the conversation
+- provider selection or capability gating is clear
+- errors and cost/latency expectations are understandable
+
+### 1.13 Nice to have: Aire orchestration mode for multi-AI tasks  `[ ]`
+Definition of done:
+- one AI can act as the primary planner while delegating bounded subtasks to subordinate AIs
+- approval, persistence, and audit semantics remain under Aire control
+- configuration is understandable and safe
+- this does not collapse the architecture into a god orchestrator
+
+### 1.14 Context and cache handling reduces token waste  `[ ]`
+Definition of done:
+- shared context management trims or summarizes history intentionally
+- reusable cache layers exist where they actually save cost or latency
+- provider adapters can consume cached/shared context without breaking Aire semantics
+- tests cover cache invalidation and context-shaping rules
+
+### 1.15 Nice to have: auto-accept profiles are editable and have good defaults  `[ ]`
+Definition of done:
+- settings allow adding, deleting, and selecting auto-accept profiles/configurations
+- sensible built-in profiles exist, such as `Developer` and `News browser`
+- profile behavior is understandable in plain language
+- tests cover persistence and profile selection logic
+
+### 1.16 Main window supports an explicit AI mode selector  `[ ]`
+Definition of done:
+- main window exposes a mode selector such as `Developer`, `Creative writer`, `Architect`, `Teacher`
+- selected mode is passed to providers through a shared semantic contract, not ad-hoc prompt hacks
+- mode selection persists and is easy to change
+- tests cover persistence and request-shaping behavior
+
 ---
 
 ## 2. Suggested execution order
@@ -118,12 +183,28 @@ stabilized first.
 6. Run final manual smoke pass
 7. Create the public repo
 
+Additional product track after the core blockers:
+8. restore visible/reliable search in the main chat
+9. streaming responses
+10. context/cache improvements
+11. MCP discovery/install UX
+12. provider-returned images
+13. mode selector / auto-accept profiles
+14. optional image generation
+15. optional multi-AI orchestration
+
 Reasoning:
 - provider failures are user-visible and undermine trust immediately
 - window-position bugs are frustrating and cheap to regression-test
 - category-based tools control affects both UX and runtime behavior
 - architecture cleanup should happen before the large final coverage push
 - coverage should target the final architecture, not the pre-refactor shape
+- search and streaming are core chat usability features and should come before
+  larger nice-to-have platform work
+- context/cache should precede any ambitious orchestration work, otherwise the
+  token/cost story will be poor
+- MCP discovery, image output, and mode/profile features are valuable but less
+  urgent than core chat reliability
 
 ---
 
@@ -222,6 +303,47 @@ Primary test files:
 Current rule:
 - prefer direct application/service tests
 - only use UI-adjacent tests where actual wiring matters
+
+### 3.7 Chat search and streaming
+
+Primary files:
+- `Aire/UI/MainWindow/Search/`
+- `Aire/UI/MainWindow.xaml`
+- `Aire/UI/Controls/`
+- `Aire/Services/ChatService.cs`
+- `Aire/Services/Workflows/ChatTurnWorkflowService.cs`
+
+Likely work:
+- restore `Ctrl+F` and search-panel discoverability
+- verify routed key handling and focus behavior
+- move streaming-safe transcript updates through application/service seams
+
+### 3.8 MCP discovery/install UX
+
+Primary files:
+- `Aire/UI/SettingsWindow/Controls/McpConnectionsPaneControl.xaml`
+- `Aire/UI/SettingsWindow/Connections/`
+- `Aire/Services/Mcp/`
+- `Aire/Application/`
+
+Likely work:
+- define curated MCP catalog format
+- add install/uninstall application services
+- keep third-party trust boundaries explicit
+
+### 3.9 Images, modes, and profiles
+
+Primary files:
+- `Aire/Core/Providers/`
+- `Aire/Application/Providers/`
+- `Aire/UI/MainWindow/`
+- `Aire/UI/SettingsWindow/`
+- `Aire/Services/Policies/`
+
+Likely work:
+- shared image-result contracts
+- mode/profile domain contracts
+- UI controls that remain thin and app-layer driven
 
 ---
 
@@ -347,6 +469,45 @@ Tasks:
 - final git hygiene check
 - final first-public-history review
 - create/push repo only when all blocking items are done
+
+### Phase G. Core chat usability and product expansion  `[ ]`
+
+#### G1. Main-window search recovery  `[ ]`
+Tasks:
+- restore `Ctrl+F` behavior
+- make search discoverable in the UI
+- verify next/previous navigation and focus
+
+#### G2. Streaming responses  `[ ]`
+Tasks:
+- define the streaming update contract through the current architecture
+- stream partial assistant text safely into the transcript
+- verify cancellation, tool calls, and follow-up handling
+
+#### G3. Context and cache strategy  `[ ]`
+Tasks:
+- define what can be cached safely
+- add context-shaping rules that save tokens without hiding needed state
+- document invalidation and provider-adapter usage
+
+#### G4. MCP discovery/install UX  `[ ]`
+Tasks:
+- define curated/public MCP source strategy
+- add install/uninstall application flows
+- make discovery safe and understandable
+
+#### G5. Modes, profiles, and images  `[ ]`
+Tasks:
+- add AI mode selector with shared semantics
+- add editable auto-accept profiles with defaults
+- design provider-returned image contract
+- only then consider image generation as a follow-up
+
+#### G6. Optional advanced orchestration  `[ ]`
+Tasks:
+- only start after streaming, context/cache, and mode semantics are stable
+- keep one coordinator contract, not a god orchestrator
+- require strong audit and approval semantics
 
 ---
 

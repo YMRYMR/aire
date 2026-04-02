@@ -21,6 +21,12 @@
         Closing="Window_Closing"
         PreviewMouseWheel="MainWindow_PreviewMouseWheel"
         PreviewKeyDown="MainWindow_PreviewKeyDown">
+    <Window.CommandBindings>
+        <CommandBinding Command="Find" Executed="FindCommand_Executed" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="Find" Modifiers="Control" Key="F" />
+    </Window.InputBindings>
     <Window.Resources>
         <ui:PercentageConverter x:Key="PercentageConverter" />
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -45,6 +51,8 @@
                               ProviderSelectionChanged="ProviderComboBox_SelectionChanged"
                               ProviderDropDownOpened="ProviderComboBox_DropDownOpened"
                               CheckAgainClicked="CheckAgainButton_Click"
+                              ModeClicked="ModeButton_Click"
+                              SearchClicked="SearchButton_Click"
                               PinClicked="PinButton_Click"
                               VoiceOutputClicked="VoiceOutputButton_Click"
                               BrowserClicked="BrowserButton_Click" />
@@ -114,7 +122,7 @@
         </ScrollViewer>
 
         <mw:SearchPanelControl x:Name="SearchPanelControl"
-                               Grid.Column="1"
+                               Grid.Column="2"
                                SearchTextChanged="SearchTextBox_TextChanged"
                                SearchKeyDown="SearchTextBox_KeyDown"
                                SearchPrevClicked="SearchPrev_Click"
