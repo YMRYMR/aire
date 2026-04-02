@@ -1,4 +1,6 @@
 using System;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Data;
 using RoutedEventArgs = System.Windows.RoutedEventArgs;
 using RoutedEventHandler = System.Windows.RoutedEventHandler;
@@ -22,6 +24,19 @@ namespace Aire.UI.Settings.Controls
         public McpConnectionsPaneControl()
         {
             InitializeComponent();
+        }
+
+        // The ListView's internal ScrollViewer swallows MouseWheel even when its own
+        // scrolling is disabled. Re-raise the event on this UserControl so it bubbles
+        // up to the parent ScrollViewer in SettingsWindow.
+        private void McpList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Handled) return;
+            e.Handled = true;
+            RaiseEvent(new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+            {
+                RoutedEvent = MouseWheelEvent
+            });
         }
 
         public TextBlock McpServersTitle       => PART_McpServersTitle;

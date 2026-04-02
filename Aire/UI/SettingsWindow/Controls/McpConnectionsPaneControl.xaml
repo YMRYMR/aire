@@ -109,7 +109,8 @@
                   FontSize="11"
                   ItemContainerStyle="{StaticResource CardListItemStyle}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  PreviewMouseWheel="McpList_PreviewMouseWheel">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border Padding="11 9"
@@ -221,6 +222,7 @@
                   ItemContainerStyle="{StaticResource CardListItemStyle}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  PreviewMouseWheel="McpList_PreviewMouseWheel"
                   SelectionChanged="McpServersList_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
