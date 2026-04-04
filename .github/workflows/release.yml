@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Derive version
+      id: version
+      shell: pwsh
+      run: |
+        $tag = "${{ github.ref_name }}"
+        $version = $tag.TrimStart('v', 'V')
+        if ([string]::IsNullOrWhiteSpace($version)) {
+          throw "Unable to derive version from tag '$tag'."
+        }
+        "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+    - name: Restore
+      run: dotnet restore aire.sln
+
+    - name: Build release
+      run: dotnet build aire.sln -c Release -m:1 -p:Version=${{ steps.version.outputs.version }}
+
+    - name: Package portable app
+      id: package
+      shell: pwsh
+      run: |
+        $portableDir = Join-Path $env:GITHUB_WORKSPACE 'Aire\obj\publish\Aire'
+        $portableZip = Join-Path $env:RUNNER_TEMP 'Aire.Portable-win-x64.zip'
+        if (Test-Path -LiteralPath $portableZip) {
+          Remove-Item -LiteralPath $portableZip -Force
+        }
+        Compress-Archive -Path (Join-Path $portableDir '*') -DestinationPath $portableZip -Force
+        "portable_zip=$portableZip" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        "setup_exe=$(Join-Path $env:GITHUB_WORKSPACE 'Aire.Setup\obj\publish\Aire.Setup\Aire.Setup.exe')" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        "msi_path=$(Join-Path $env:GITHUB_WORKSPACE 'Aire.Installer\bin\Release\Aire.msi')" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+    - name: Publish release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          ${{ steps.package.outputs.msi_path }}
+          ${{ steps.package.outputs.setup_exe }}
+          ${{ steps.package.outputs.portable_zip }}
+        generate_release_notes: true

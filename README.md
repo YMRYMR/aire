@@ -44,6 +44,14 @@ Some providers are direct integrations, while others use OpenAI-compatible APIs 
 3. Choose a model.
 4. Open the main chat window and send your first message.
 
+## Install
+
+The easiest way to install Aire is to download the latest release from [GitHub Releases](https://github.com/YMRYMR/aire/releases/latest) and run `Aire.msi`.
+
+For a portable build, the release page also includes a zip archive of the compiled app.
+
+Update checks are built into the app and compare against the latest GitHub release.
+
 If you are not sure where to start:
 
 - easiest cloud path: `OpenAI`, `Anthropic`, or `Google AI`

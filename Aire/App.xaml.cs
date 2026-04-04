@@ -1,6 +1,6 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using Aire.Bootstrap;
 using Aire.AppLayer.Startup;
@@ -24,6 +24,7 @@ namespace Aire
         private MainWindow? _mainWindow;
         private LocalApiService? _localApiService;
         private ProviderModelRefreshService? _providerModelRefreshService;
+        private GitHubReleaseUpdateService? _updateService;
         private readonly StartupDecisionApplicationService _startupDecisionService = new();
         private readonly StartupWindowCoordinator _startupWindowCoordinator = new();
         private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
@@ -148,6 +149,9 @@ namespace Aire
                     Dispatcher.BeginInvoke(() => _trayService?.ShowNotification(title, body)));
             _providerModelRefreshService.Start();
 
+            _updateService = new GitHubReleaseUpdateService("YMRYMR", "aire");
+            _ = CheckForUpdatesAsync();
+
             SetupPreferences setupPreferences = SetupPreferencesStore.Load();
             if (setupPreferences.VoiceInputEnabled && _mainWindow?.IsVisible == true)
             {
@@ -199,6 +203,45 @@ namespace Aire
                 _localApiService.Start();
             else
                 _ = _localApiService.StopAsync();
+        }
+
+        private async Task CheckForUpdatesAsync()
+        {
+            var updateService = _updateService;
+            if (updateService == null)
+                return;
+
+            try
+            {
+                var update = await updateService.CheckLatestReleaseAsync().ConfigureAwait(false);
+                if (update == null)
+                    return;
+
+                var shouldInstall = false;
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    var result = MessageBox.Show(
+                        $"Aire {update.LatestVersion} is available.\n\nDownload and install it now?",
+                        "Aire Update",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+                    shouldInstall = result == MessageBoxResult.Yes;
+                });
+
+                if (!shouldInstall)
+                    return;
+
+                var installerPath = await updateService.DownloadInstallerAsync(update).ConfigureAwait(false);
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    updateService.LaunchInstaller(installerPath);
+                    Shutdown();
+                });
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Warn("App.Update", "Update check or installation failed", ex);
+            }
         }
     }
 }
