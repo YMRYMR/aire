@@ -22,9 +22,9 @@ namespace Aire
         // ── App state ─────────────────────────────────────────────────────────
         private TrayIconService? _trayService;
         private MainWindow? _mainWindow;
-        private SettingsWindow? _settingsWindow;
         private LocalApiService? _localApiService;
         private readonly StartupDecisionApplicationService _startupDecisionService = new();
+        private readonly StartupWindowCoordinator _startupWindowCoordinator = new();
         private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
 
         protected override async void OnStartup(StartupEventArgs e)
@@ -88,15 +88,15 @@ namespace Aire
 
             _trayService = new TrayIconService(_mainWindow);
             _trayService.OpenChatRequested += (s, args) => _trayService.ShowMainWindow();
-            _trayService.SettingsRequested += OnSettingsRequested;
+            _trayService.SettingsRequested += (_, _) => _startupWindowCoordinator.ShowSettingsWindow(_mainWindow, _mainWindow);
             _trayService.ExitRequested     += OnExitRequested;
 
             SettingsWindow.OpenRequested += tab =>
             {
-                OnSettingsRequested(this, EventArgs.Empty);
+                _startupWindowCoordinator.ShowSettingsWindow(_mainWindow, _mainWindow);
                 if (tab != null)
                     Dispatcher.BeginInvoke(
-                        () => _settingsWindow?.NavigateTo(tab),
+                        () => _startupWindowCoordinator.CurrentSettingsWindow?.NavigateTo(tab),
                         System.Windows.Threading.DispatcherPriority.Loaded);
             };
             _mainWindow.TrayService = _trayService;
@@ -136,11 +136,11 @@ namespace Aire
             {
                 _mainWindow.Hide();
                 var wizard = new OnboardingWindow();
-                wizard.OpenSettingsAction = () => OnSettingsRequested(this, EventArgs.Empty);
+                wizard.OpenSettingsAction = () => _startupWindowCoordinator.ShowSettingsWindow(_mainWindow, _mainWindow);
                 wizard.ShowDialog();
             }
 
-            RestoreWindowsFromState();
+            _startupWindowCoordinator.RestoreWindowsFromState(_mainWindow, _mainWindow);
 
             SetupPreferences setupPreferences = SetupPreferencesStore.Load();
             if (setupPreferences.VoiceInputEnabled && _mainWindow?.IsVisible == true)
@@ -191,42 +191,7 @@ namespace Aire
 
         private void OnMainWindowVisibilityChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            _windowVisibilityCoordinator.HandleMainWindowVisibilityChanged((bool)e.NewValue, _settingsWindow, WebViewWin.Current);
-        }
-
-        private void OnSettingsRequested(object? sender, EventArgs e)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                // Only open one settings window at a time.
-                if (_settingsWindow != null)
-                {
-                    _settingsWindow.Activate();
-                    return;
-                }
-
-                _settingsWindow = new SettingsWindow { Owner = _mainWindow };
-                _settingsWindow.ProvidersChanged += async () =>
-                {
-                    if (_mainWindow != null)
-                        await _mainWindow.RefreshProvidersAsync();
-                };
-                _settingsWindow.Closed += (s, args) => _settingsWindow = null;
-                _settingsWindow.Show();
-            });
-        }
-
-        private void RestoreWindowsFromState()
-        {
-            try
-            {
-                if (AppState.GetSettingsOpen())
-                    OnSettingsRequested(this, EventArgs.Empty);
-
-                if (AppState.GetBrowserOpen())
-                    new WebViewWin().Show();
-            }
-            catch { /* never crash startup */ }
+            _windowVisibilityCoordinator.HandleMainWindowVisibilityChanged((bool)e.NewValue, _startupWindowCoordinator.CurrentSettingsWindow, WebViewWin.Current);
         }
 
         private void OnExitRequested(object? sender, EventArgs e)
@@ -234,8 +199,7 @@ namespace Aire
             // Snapshot open windows BEFORE they close so the next launch can
             // restore them. IsShuttingDown stops the Closed handlers from
             // overwriting this with false.
-            AppState.SetBrowserOpen(WebViewWin.Current  != null);
-            AppState.SetSettingsOpen(SettingsWindow.Current != null);
+            _startupWindowCoordinator.SnapshotOpenWindows();
             AppState.IsShuttingDown = true;
 
             _trayService?.Dispose();
