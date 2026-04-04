@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore aire.sln
       
     - name: Build
-      run: dotnet build aire.sln --no-restore -c Release
+      run: dotnet build aire.sln --no-restore -c Release -m:1 /p:UseSharedCompilation=false
       
     - name: Test
       run: dotnet test .\Aire.Tests\Aire.Tests.csproj --no-build -c Release --verbosity normal
