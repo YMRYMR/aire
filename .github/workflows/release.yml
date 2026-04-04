@@ -4,6 +4,11 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g. 1.0.3)'
+        required: true
 
 permissions:
   contents: write
@@ -24,12 +29,25 @@ jobs:
       id: version
       shell: pwsh
       run: |
-        $tag = "${{ github.ref_name }}"
-        $version = $tag.TrimStart('v', 'V')
+        if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+          $version = "${{ github.event.inputs.version }}".TrimStart('v', 'V')
+        } else {
+          $version = "${{ github.ref_name }}".TrimStart('v', 'V')
+        }
         if ([string]::IsNullOrWhiteSpace($version)) {
-          throw "Unable to derive version from tag '$tag'."
+          throw "Unable to derive version from trigger."
         }
         "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+    - name: Create and push tag (workflow_dispatch only)
+      if: github.event_name == 'workflow_dispatch'
+      shell: pwsh
+      run: |
+        $version = "${{ steps.version.outputs.version }}"
+        git config user.name  "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag "v$version"
+        git push origin "v$version"
 
     - name: Restore
       run: dotnet restore aire.sln
