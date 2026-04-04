@@ -1,8 +1,17 @@
 using System.IO;
 using System.Reflection;
+using System.Linq;
+using System.Text;
 using System.Text.Json;
 
 namespace Aire.Data;
+
+/// <summary>
+/// Result of syncing a provider's live models into the local catalog cache.
+/// </summary>
+public sealed record ModelCatalogSyncResult(
+    bool CreatedCatalog,
+    IReadOnlyList<string> AddedModelIds);
 
 /// <summary>
 /// Loads model definitions from JSON files in <c>%LOCALAPPDATA%\Aire\Models\</c>.
@@ -132,6 +141,84 @@ public static class ModelCatalog
         }
     }
 
+    /// <summary>
+    /// Merges a provider's live models into a dedicated local cache file.
+    /// Existing entries are updated in place, and new model ids are appended.
+    /// </summary>
+    public static ModelCatalogSyncResult SyncLiveModels(string providerType, IReadOnlyList<ModelDefinition> liveModels)
+    {
+        if (string.IsNullOrWhiteSpace(providerType) || liveModels.Count == 0)
+            return new ModelCatalogSyncResult(false, Array.Empty<string>());
+
+        var modelsFolder = GetModelsFolder();
+        try
+        {
+            Directory.CreateDirectory(modelsFolder);
+        }
+        catch
+        {
+            return new ModelCatalogSyncResult(false, Array.Empty<string>());
+        }
+
+        var destPath = Path.Combine(modelsFolder, $"models-live-{SanitizeToken(providerType)}.json");
+        var createdCatalog = !File.Exists(destPath);
+
+        var catalog = createdCatalog
+            ? new ModelCatalogFile { ProviderType = providerType }
+            : LoadCatalog(destPath) ?? new ModelCatalogFile { ProviderType = providerType };
+
+        if (string.IsNullOrWhiteSpace(catalog.ProviderType))
+            catalog.ProviderType = providerType;
+
+        var orderedModels = new List<ModelDefinition>();
+        var byId = new Dictionary<string, ModelDefinition>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var existing in catalog.Models)
+        {
+            if (string.IsNullOrWhiteSpace(existing.Id) || byId.ContainsKey(existing.Id))
+                continue;
+
+            orderedModels.Add(existing);
+            byId[existing.Id] = existing;
+        }
+
+        catalog.Models = orderedModels;
+
+        var addedIds = new List<string>();
+        var changed = createdCatalog;
+        foreach (var liveModel in liveModels)
+        {
+            if (string.IsNullOrWhiteSpace(liveModel.Id))
+                continue;
+
+            if (byId.TryGetValue(liveModel.Id, out var existing))
+            {
+                changed |= MergeModel(existing, liveModel);
+                continue;
+            }
+
+            var copy = CloneModel(liveModel);
+            catalog.Models.Add(copy);
+            byId[copy.Id] = copy;
+            addedIds.Add(copy.Id);
+            changed = true;
+        }
+
+        if (changed)
+        {
+            try
+            {
+                WriteCatalog(destPath, catalog);
+            }
+            catch
+            {
+                return new ModelCatalogSyncResult(createdCatalog, Array.Empty<string>());
+            }
+        }
+
+        return new ModelCatalogSyncResult(createdCatalog, addedIds);
+    }
+
     public static string GetModelsFolder()
     {
         var envOverride = Environment.GetEnvironmentVariable("AIRE_MODELS_FOLDER");
@@ -196,5 +283,91 @@ public static class ModelCatalog
         {
             // Keep the user's existing file untouched if we can't safely merge it.
         }
+    }
+
+    private static ModelCatalogFile? LoadCatalog(string path)
+    {
+        try
+        {
+            var json = File.ReadAllText(path);
+            return JsonSerializer.Deserialize<ModelCatalogFile>(json, JsonOpts);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static bool MergeModel(ModelDefinition target, ModelDefinition source)
+    {
+        var changed = false;
+
+        if (!string.IsNullOrWhiteSpace(source.DisplayName) &&
+            !string.Equals(target.DisplayName, source.DisplayName, StringComparison.Ordinal))
+        {
+            target.DisplayName = source.DisplayName;
+            changed = true;
+        }
+
+        if (source.SizeBytes > 0 && target.SizeBytes != source.SizeBytes)
+        {
+            target.SizeBytes = source.SizeBytes;
+            changed = true;
+        }
+
+        if (source.IsInstalled != target.IsInstalled)
+        {
+            target.IsInstalled = source.IsInstalled;
+            changed = true;
+        }
+
+        if (source.Capabilities != null)
+        {
+            var sourceCaps = source.Capabilities
+                .Where(cap => !string.IsNullOrWhiteSpace(cap))
+                .ToList();
+            var currentCaps = target.Capabilities ?? [];
+            if (!currentCaps.SequenceEqual(sourceCaps, StringComparer.OrdinalIgnoreCase))
+            {
+                target.Capabilities = sourceCaps;
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private static ModelDefinition CloneModel(ModelDefinition model) => new()
+    {
+        Id = model.Id,
+        DisplayName = model.DisplayName,
+        SizeBytes = model.SizeBytes,
+        IsInstalled = model.IsInstalled,
+        Capabilities = model.Capabilities?.ToList()
+    };
+
+    private static string SanitizeToken(string value)
+    {
+        var invalid = Path.GetInvalidFileNameChars();
+        var builder = new StringBuilder(value.Length);
+        foreach (var ch in value.Trim())
+        {
+            builder.Append(Array.IndexOf(invalid, ch) >= 0 ? '_' : ch);
+        }
+
+        var token = builder.ToString().Trim();
+        return string.IsNullOrWhiteSpace(token) ? "provider" : token;
+    }
+
+    private static void WriteCatalog(string path, ModelCatalogFile catalog)
+    {
+        var json = JsonSerializer.Serialize(catalog, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
+
+        var tempPath = $"{path}.tmp";
+        File.WriteAllText(tempPath, json);
+        File.Move(tempPath, path, overwrite: true);
     }
 }

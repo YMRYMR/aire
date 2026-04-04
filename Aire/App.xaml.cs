@@ -23,6 +23,7 @@ namespace Aire
         private TrayIconService? _trayService;
         private MainWindow? _mainWindow;
         private LocalApiService? _localApiService;
+        private ProviderModelRefreshService? _providerModelRefreshService;
         private readonly StartupDecisionApplicationService _startupDecisionService = new();
         private readonly StartupWindowCoordinator _startupWindowCoordinator = new();
         private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
@@ -142,6 +143,11 @@ namespace Aire
 
             _startupWindowCoordinator.RestoreWindowsFromState(_mainWindow, _mainWindow);
 
+            _providerModelRefreshService = new ProviderModelRefreshService(
+                notificationSink: (title, body) =>
+                    Dispatcher.BeginInvoke(() => _trayService?.ShowNotification(title, body)));
+            _providerModelRefreshService.Start();
+
             SetupPreferences setupPreferences = SetupPreferencesStore.Load();
             if (setupPreferences.VoiceInputEnabled && _mainWindow?.IsVisible == true)
             {
@@ -210,6 +216,7 @@ namespace Aire
         {
             _ = Aire.Services.Mcp.McpManager.Instance.StopAllAsync();
             _mainWindow?.Cleanup();
+            _providerModelRefreshService?.Dispose();
             _trayService?.Dispose();
             _localApiService?.Dispose();
             AppState.ApiAccessChanged -= OnApiAccessChanged;
