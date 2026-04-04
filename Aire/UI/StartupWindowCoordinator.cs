@@ -1,5 +1,7 @@
 using System;
 using System.Windows;
+using System.Windows.Threading;
+using Aire.Services;
 
 using WebViewWin = Aire.UI.WebViewWindow;
 
@@ -39,6 +41,49 @@ public sealed class StartupWindowCoordinator
         };
         _settingsWindow.Closed += (_, _) => _settingsWindow = null;
         _settingsWindow.Show();
+    }
+
+    /// <summary>
+    /// Shows the main window after splash/startup has completed.
+    /// </summary>
+    public void ShowInitialMainWindow(global::Aire.MainWindow? mainWindow, TrayIconService? trayService, Dispatcher dispatcher)
+    {
+        if (mainWindow == null)
+            return;
+
+        mainWindow.WindowState = WindowState.Normal;
+
+        if (!mainWindow.IsVisible)
+            mainWindow.Show();
+
+        if (trayService?.IsAttachedToTray == true)
+        {
+            trayService.ShowMainWindow();
+        }
+        else
+        {
+            mainWindow.Activate();
+            mainWindow.Focus();
+        }
+
+        dispatcher.BeginInvoke(() =>
+        {
+            if (mainWindow == null)
+                return;
+
+            mainWindow.WindowState = WindowState.Normal;
+            if (trayService?.IsAttachedToTray == true)
+            {
+                trayService.ShowMainWindow();
+            }
+            else
+            {
+                mainWindow.Activate();
+                mainWindow.Topmost = true;
+                mainWindow.Topmost = false;
+                mainWindow.Focus();
+            }
+        }, DispatcherPriority.ApplicationIdle);
     }
 
     /// <summary>

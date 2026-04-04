@@ -77,7 +77,7 @@ namespace Aire
             },
             async () =>
             {
-                ShowInitialMainWindow();
+                _startupWindowCoordinator.ShowInitialMainWindow(_mainWindow, _trayService, Dispatcher);
                 await Dispatcher.InvokeAsync(() => { }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
             });
             ShutdownMode = ShutdownMode.OnLastWindowClose;
@@ -153,46 +153,6 @@ namespace Aire
             {
                 _ = Dispatcher.BeginInvoke(async () => await _mainWindow.TryEnableStartupVoiceInputAsync());
             }
-        }
-
-        private void ShowInitialMainWindow()
-        {
-            if (_mainWindow == null)
-                return;
-
-            _mainWindow.WindowState = WindowState.Normal;
-
-            if (!_mainWindow.IsVisible)
-                _mainWindow.Show();
-
-            if (_trayService?.IsAttachedToTray == true)
-            {
-                _trayService.ShowMainWindow();
-            }
-            else
-            {
-                _mainWindow.Activate();
-                _mainWindow.Focus();
-            }
-
-            Dispatcher.BeginInvoke(() =>
-            {
-                if (_mainWindow == null)
-                    return;
-
-                _mainWindow.WindowState = WindowState.Normal;
-                if (_trayService?.IsAttachedToTray == true)
-                {
-                    _trayService.ShowMainWindow();
-                }
-                else
-                {
-                    _mainWindow.Activate();
-                    _mainWindow.Topmost = true;
-                    _mainWindow.Topmost = false;
-                    _mainWindow.Focus();
-                }
-            }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
         private void OnMainWindowVisibilityChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
