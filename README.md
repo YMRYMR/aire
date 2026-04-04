@@ -1,6 +1,8 @@
 # Aire
 
-Aire is a Windows desktop AI workspace. It lets you talk to different AI providers from one chat window, keep local conversation history, approve or deny tool use, connect MCP servers, use voice features, and expose a loopback local API for trusted local automation.
+**Work in progress:** Aire is usable now, but it is still under active development and will continue to evolve.
+
+Aire is a Windows desktop AI workspace designed to be easy to use from day one. It lets you talk to different AI providers from one chat window, keep local conversation history, approve or deny tool use, connect MCP servers, use voice features, and expose a loopback local API for trusted local automation.
 
 ## What Aire does
 
@@ -47,6 +49,8 @@ Some providers are direct integrations, while others use OpenAI-compatible APIs 
 ## Install
 
 The easiest way to install Aire is to download the latest release from [GitHub Releases](https://github.com/YMRYMR/aire/releases/latest) and run `Aire.msi`.
+
+If you want the setup app directly, download [Aire.Setup.exe](https://github.com/YMRYMR/aire/releases/latest/download/Aire.Setup.exe).
 
 For a portable build, the release page also includes a zip archive of the compiled app.
 
