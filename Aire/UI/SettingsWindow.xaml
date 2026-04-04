@@ -520,7 +520,7 @@
 
                             <settingsControls:LocalApiAccessPaneControl x:Name="LocalApiAccessPaneControl" />
 
-                            <settingsControls:EmailConnectionsPaneControl x:Name="EmailConnectionsPaneControl" />
+                            <settingsControls:EmailConnectionsPaneControl x:Name="EmailConnectionsPaneControl" Visibility="Collapsed" />
 
                             <!--  Separator  -->
                             <Separator
