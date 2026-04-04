@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Aire.AppLayer.Chat;
 using Aire.Data;
@@ -123,34 +124,70 @@ namespace Aire
                 _owner.ScrollToBottom();
             }
 
+            public async Task SyncConversationSelectionStateAsync(int conversationId)
+            {
+                var conversation = await _owner._conversationApplicationService.GetConversationAsync(conversationId);
+                if (conversation == null)
+                    return;
+
+                _owner.ApplyAssistantModeState(conversation.AssistantModeKey);
+
+                var provider = (_owner._localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
+                    .ResolveConversationProvider(conversation, _owner.ProviderComboBox.Items.OfType<Provider>());
+                if (provider == null || provider.Id == _owner._currentProviderId)
+                    return;
+
+                _owner._suppressProviderChange = true;
+                _owner.ProviderComboBox.SelectedItem = provider;
+                _owner._suppressProviderChange = false;
+                _owner._currentProviderId = provider.Id;
+
+                try { _owner._currentProvider = _owner._providerFactory.CreateProvider(provider); }
+                catch { _owner._currentProvider = null; }
+
+                await _owner._chatService.SetProviderAsync(provider.Id);
+                await _owner._chatSessionApplicationService.SaveSelectedProviderAsync(provider.Id);
+                _owner.UpdateCapabilityUI();
+                _owner.StartTokenUsageRefreshTimer();
+            }
+
             public async Task ClearConversationAsync()
             {
                 if (_owner._currentConversationId.HasValue)
                 {
-                    var screenshotFolder = Path.Combine(MainWindow.GetScreenshotsFolder(), _owner._currentConversationId.Value.ToString());
-                    try { Directory.Delete(screenshotFolder, recursive: true); } catch { }
+                    var deleted = await DeleteConversationAsync(_owner._currentConversationId.Value);
+                    if (!deleted)
+                        return;
+                }
+
+                ResetConversationUiState();
+            }
+
+            public async Task<bool> DeleteConversationAsync(int conversationId)
+            {
+                var screenshotFolder = Path.Combine(MainWindow.GetScreenshotsFolder(), conversationId.ToString());
+                try { Directory.Delete(screenshotFolder, recursive: true); } catch { }
 
                 try
                 {
-                        await _owner._conversationApplicationService.DeleteConversationAsync(_owner._currentConversationId.Value);
-                        _owner._currentConversationId = null;
+                    await _owner._conversationApplicationService.DeleteConversationAsync(conversationId);
                 }
-                    catch
-                    {
-                        UI.ConfirmationDialog.ShowAlert(_owner, "Error", "Failed to delete conversation.");
-                        return;
-                    }
+                catch
+                {
+                    UI.ConfirmationDialog.ShowAlert(_owner, "Error", "Failed to delete conversation.");
+                    return false;
                 }
 
-                _owner.Messages.Clear();
-                _owner._conversationHistory.Clear();
-                _owner._inputHistory.Clear();
-                _owner._historyIndex = -1;
-                _owner._inputDraft = string.Empty;
-                _owner._todoListMessage = null;
-                _owner.ApplyAssistantModeState(_owner._assistantModeApplicationService.GetDefaultMode().Key);
-                _owner.CloseSearch();
-                _owner.LoadWelcomeMessage();
+                if (_owner._currentConversationId == conversationId)
+                    ResetConversationUiState();
+
+                return true;
+            }
+
+            public async Task DeleteAllConversationsAsync()
+            {
+                await _owner._conversationApplicationService.DeleteAllConversationsAsync();
+                ResetConversationUiState();
             }
 
             public async Task<int> CreateConversationAsync(Provider provider, string title, string systemMessage)
@@ -162,6 +199,20 @@ namespace Aire
                 _owner.Messages.Clear();
                 _owner.AddSystemMessage(systemMessage);
                 return id;
+            }
+
+            private void ResetConversationUiState()
+            {
+                _owner._currentConversationId = null;
+                _owner.Messages.Clear();
+                _owner._conversationHistory.Clear();
+                _owner._inputHistory.Clear();
+                _owner._historyIndex = -1;
+                _owner._inputDraft = string.Empty;
+                _owner._todoListMessage = null;
+                _owner.ApplyAssistantModeState(_owner._assistantModeApplicationService.GetDefaultMode().Key);
+                _owner.CloseSearch();
+                _owner.LoadWelcomeMessage();
             }
         }
     }

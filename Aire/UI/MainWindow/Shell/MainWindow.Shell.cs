@@ -257,12 +257,7 @@ namespace Aire
 
         private async void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
-            var hwnd = new WindowInteropHelper(this).Handle;
-            HwndSource.FromHwnd(hwnd).AddHook(WndProc);
-
-            int dark = 1;
-            DwmSetWindowAttribute(hwnd, 20, ref dark, sizeof(int));
-
+            InitializeNativeWindow();
             InputTextBox.Focus();
         }
 

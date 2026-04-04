@@ -32,7 +32,7 @@ namespace Aire
 
         private async Task LoadConversationMessages(int conversationId)
         {
-            await SyncConversationSelectionStateAsync(conversationId);
+            await ConversationFlow.SyncConversationSelectionStateAsync(conversationId);
             await ConversationFlow.LoadConversationMessagesAsync(conversationId);
         }
 

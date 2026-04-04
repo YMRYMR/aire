@@ -85,7 +85,7 @@ namespace Aire
             if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
             if (summary.Id == _currentConversationId) return;
             _currentConversationId = summary.Id;
-            await SyncConversationSelectionStateAsync(summary.Id);
+            await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
             await LoadConversationMessages(summary.Id);
         }
 
@@ -202,17 +202,7 @@ namespace Aire
                     $"Delete \"{summary.Title}\"? This cannot be undone.")) return;
 
             ConversationSidebar.SelectedItem = summary;
-
-            await _conversationApplicationService.DeleteConversationAsync(summary.Id);
-
-            if (_currentConversationId == summary.Id)
-            {
-                _currentConversationId = null;
-                _conversationHistory.Clear();
-                Messages.Clear();
-                ApplyAssistantModeState(_assistantModeApplicationService.GetDefaultMode().Key);
-            }
-
+            await ConversationFlow.DeleteConversationAsync(summary.Id);
             await RefreshSidebarAsync();
         }
 
@@ -222,40 +212,9 @@ namespace Aire
                     "Delete all conversations",
                     "Permanently delete every conversation and all messages? This cannot be undone.")) return;
 
-            await _conversationApplicationService.DeleteAllConversationsAsync();
-
-            _currentConversationId = null;
-            _conversationHistory.Clear();
-            Messages.Clear();
-            ApplyAssistantModeState(_assistantModeApplicationService.GetDefaultMode().Key);
+            await ConversationFlow.DeleteAllConversationsAsync();
             await RefreshSidebarAsync();
         }
 
-        private async Task SyncConversationSelectionStateAsync(int conversationId)
-        {
-            var conversation = await _conversationApplicationService.GetConversationAsync(conversationId);
-            if (conversation == null)
-                return;
-
-            ApplyAssistantModeState(conversation.AssistantModeKey);
-
-            var provider = (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
-                .ResolveConversationProvider(conversation, ProviderComboBox.Items.OfType<Provider>());
-            if (provider == null || provider.Id == _currentProviderId)
-                return;
-
-            _suppressProviderChange = true;
-            ProviderComboBox.SelectedItem = provider;
-            _suppressProviderChange = false;
-            _currentProviderId = provider.Id;
-
-            try { _currentProvider = _providerFactory.CreateProvider(provider); }
-            catch { _currentProvider = null; }
-
-            await _chatService.SetProviderAsync(provider.Id);
-            await _chatSessionApplicationService.SaveSelectedProviderAsync(provider.Id);
-            UpdateCapabilityUI();
-            StartTokenUsageRefreshTimer();
-        }
     }
 }
