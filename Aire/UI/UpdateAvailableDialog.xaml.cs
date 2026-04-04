@@ -1,8 +1,9 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using Aire.Services;
 
@@ -33,9 +34,10 @@ public partial class UpdateAvailableDialog : Window
         VersionText.Text = string.IsNullOrWhiteSpace(_update.ReleaseName)
             ? $"Current version: {_update.CurrentVersion}"
             : $"{_update.ReleaseName} • Current version: {_update.CurrentVersion}";
-        NotesText.Text = string.IsNullOrWhiteSpace(_update.ReleaseNotes)
+        var notes = string.IsNullOrWhiteSpace(_update.ReleaseNotes)
             ? "Install the latest update to get the newest fixes and improvements."
             : _update.ReleaseNotes;
+        RenderNotes(NotesText, notes);
 
         try
         {
@@ -93,6 +95,120 @@ public partial class UpdateAvailableDialog : Window
             AppLogger.Warn("App.Update", "Failed to open release page", ex);
         }
     }
+
+    // ── Markdown renderer ────────────────────────────────────────────────────
+    // Supports the subset of Markdown that GitHub release notes typically use:
+    //   ## / ###  headings   |   **bold**   |   `code`   |   bare URLs
+    //   * / -     bullets    |   blank lines as paragraph breaks
+
+    private static readonly Regex InlinePattern = new(
+        @"(\*\*(?<bold>.+?)\*\*|`(?<code>[^`]+)`|(?<url>https?://\S+))",
+        RegexOptions.Compiled);
+
+    private static void RenderNotes(System.Windows.Controls.TextBlock tb, string markdown)
+    {
+        tb.Inlines.Clear();
+
+        var lines = markdown.Split('\n');
+        bool firstLine = true;
+
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.TrimEnd('\r');
+
+            if (!firstLine)
+                tb.Inlines.Add(new LineBreak());
+            firstLine = false;
+
+            // Heading (## or ###)
+            if (line.StartsWith("### ", StringComparison.Ordinal))
+            {
+                tb.Inlines.Add(new Run(line[4..].Trim()) { FontWeight = FontWeights.SemiBold });
+                continue;
+            }
+            if (line.StartsWith("## ", StringComparison.Ordinal))
+            {
+                tb.Inlines.Add(new Run(line[3..].Trim()) { FontWeight = FontWeights.Bold });
+                continue;
+            }
+
+            // Blank line → extra visual gap
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                tb.Inlines.Add(new Run(" "));
+                continue;
+            }
+
+            // Bullet point
+            string bulletPrefix = string.Empty;
+            string content = line;
+            if (line.StartsWith("* ", StringComparison.Ordinal) || line.StartsWith("- ", StringComparison.Ordinal))
+            {
+                bulletPrefix = "• ";
+                content = line[2..];
+            }
+            else if (line.StartsWith("  * ", StringComparison.Ordinal) || line.StartsWith("  - ", StringComparison.Ordinal))
+            {
+                bulletPrefix = "    • ";
+                content = line[4..];
+            }
+
+            if (bulletPrefix.Length > 0)
+                tb.Inlines.Add(new Run(bulletPrefix));
+
+            AddInlineMarkdown(tb.Inlines, content);
+        }
+    }
+
+    private static void AddInlineMarkdown(InlineCollection inlines, string text)
+    {
+        int lastIndex = 0;
+        foreach (Match m in InlinePattern.Matches(text))
+        {
+            // Plain text before this match
+            if (m.Index > lastIndex)
+                inlines.Add(new Run(text[lastIndex..m.Index]));
+
+            if (m.Groups["bold"].Success)
+            {
+                inlines.Add(new Run(m.Groups["bold"].Value) { FontWeight = FontWeights.SemiBold });
+            }
+            else if (m.Groups["code"].Success)
+            {
+                inlines.Add(new Run(m.Groups["code"].Value)
+                {
+                    FontFamily = new System.Windows.Media.FontFamily("Consolas, Courier New"),
+                    Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["CodeForegroundBrush"],
+                });
+            }
+            else if (m.Groups["url"].Success)
+            {
+                var uriStr = m.Groups["url"].Value.TrimEnd('.', ',', ')');
+                if (Uri.TryCreate(uriStr, UriKind.Absolute, out var uri))
+                {
+                    var link = new Hyperlink(new Run(uriStr)) { NavigateUri = uri };
+                    link.RequestNavigate += (_, e) =>
+                    {
+                        try { Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true }); }
+                        catch (Exception ex) { AppLogger.Warn("App.Update", "Failed to open link", ex); }
+                    };
+                    inlines.Add(link);
+                }
+                else
+                {
+                    inlines.Add(new Run(m.Value));
+                }
+            }
+
+            lastIndex = m.Index + m.Length;
+        }
+
+        // Remaining plain text
+        if (lastIndex < text.Length)
+            inlines.Add(new Run(text[lastIndex..]));
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
 
     public static bool? ShowDialog(Window? owner, GitHubReleaseUpdateInfo update)
     {
