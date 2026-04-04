@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputName>Aire</OutputName>
     <InstallerPlatform>x64</InstallerPlatform>
-    <AireVersion>1.0.0</AireVersion>
+    <AireVersion>$(Version)</AireVersion>
     <AirePublishDir>$(MSBuildProjectDirectory)\..\Aire\obj\publish\Aire\</AirePublishDir>
     <SetupPublishDir>$(MSBuildProjectDirectory)\..\Aire.Setup\obj\publish\Aire.Setup\</SetupPublishDir>
   </PropertyGroup>
