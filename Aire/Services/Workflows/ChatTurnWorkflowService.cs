@@ -91,11 +91,19 @@ namespace Aire.Services.Workflows
         /// <returns>A normalized error outcome that preserves cooldown classification.</returns>
         public ChatTurnOutcome BuildErrorOutcome(Exception ex)
         {
+            if (ex is OperationCanceledException)
+            {
+                return new ChatTurnOutcome(
+                    OutcomeKind.Canceled,
+                    string.Empty,
+                    ErrorMessage: "Canceled");
+            }
+
             var cooldownReason = ProviderErrorClassifier.Classify(ex, out var cooldownMessage);
             return new ChatTurnOutcome(
                 OutcomeKind.Error,
                 string.Empty,
-                ErrorMessage: ex.Message,
+                ErrorMessage: "Chat request failed.",
                 CooldownReason: cooldownReason,
                 CooldownMessage: cooldownMessage);
         }

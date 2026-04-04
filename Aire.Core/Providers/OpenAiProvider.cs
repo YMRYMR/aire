@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Aire.Providers
     /// Compatible providers should inherit from this class and override only
     /// the metadata or provider-specific endpoints they need to customize.
     /// </summary>
-    public class OpenAiProvider : BaseAiProvider
+    public class OpenAiProvider : BaseAiProvider, IImageGenerationProvider
     {
         protected OpenAIService? _openAiService;
 
@@ -44,6 +45,8 @@ namespace Aire.Providers
         protected virtual string DefaultApiBaseUrl => "https://api.openai.com";
 
         protected virtual string[] ModelIdPrefixes => new[] { "gpt-", "o1", "o3", "o4" };
+        protected virtual bool SupportsImageGenerationOnCurrentModel =>
+            Config.ModelCapabilities?.Contains("imagegeneration", StringComparer.OrdinalIgnoreCase) == true;
 
         protected virtual bool SupportsTokenUsageEndpoint(string baseUrl) =>
             baseUrl.Contains("api.openai.com", StringComparison.OrdinalIgnoreCase);
@@ -53,6 +56,7 @@ namespace Aire.Providers
         protected virtual string BuildChatCompletionsUrl(string baseUrl) => $"{baseUrl}/v1/chat/completions";
 
         protected virtual string BuildTokenUsageUrl(string baseUrl) => $"{baseUrl}/dashboard/billing/usage";
+        protected virtual string BuildImageGenerationUrl(string baseUrl) => $"{baseUrl}/v1/images/generations";
 
         protected string EffectiveBaseUrl =>
             string.IsNullOrWhiteSpace(Config.BaseUrl)
@@ -164,7 +168,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{ProviderType} live model fetch failed: {ex.Message}");
+                Debug.WriteLine($"{ProviderType} live model fetch failed: {ex.GetType().Name}");
                 return null;
             }
         }
@@ -224,6 +228,8 @@ namespace Aire.Providers
                 Placement = ProviderActionPlacement.ModelArea,
             },
         };
+
+        public bool SupportsImageGeneration => SupportsImageGenerationOnCurrentModel;
 
         // The Betalgo SDK uses BaseDomain as a full URL and builds the request path as
         // "/{ApiVersion}/chat/completions".  Providers whose base URL contains a path
@@ -355,10 +361,11 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
                 return new AiResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = ex.Message,
+                    ErrorMessage = "OpenAI request failed.",
                     Duration = DateTime.UtcNow - startTime
                 };
             }
@@ -442,8 +449,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}: {ex.Message}");
-                return ProviderValidationResult.Fail($"{ex.GetType().Name}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                return ProviderValidationResult.Fail("OpenAI configuration validation failed.");
             }
         }
 
@@ -488,8 +495,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateViaChatProbe] {ex.GetType().Name}: {ex.Message}");
-                return ProviderValidationResult.Fail($"{ex.GetType().Name}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateViaChatProbe] {ex.GetType().Name}");
+                return ProviderValidationResult.Fail("OpenAI configuration validation failed.");
             }
         }
 
@@ -531,6 +538,107 @@ namespace Aire.Providers
             }
 
             return openAiMessage;
+        }
+
+        public virtual async Task<ImageGenerationResult> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
+        {
+            if (!SupportsImageGeneration)
+            {
+                return new ImageGenerationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "The selected model does not support image generation."
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(Config.ApiKey))
+            {
+                return new ImageGenerationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "API key is required."
+                };
+            }
+
+            var payload = JsonSerializer.Serialize(new
+            {
+                model = Config.Model,
+                prompt,
+                size = "1024x1024"
+            });
+
+            try
+            {
+                using var req = new HttpRequestMessage(HttpMethod.Post, BuildImageGenerationUrl(EffectiveBaseUrl));
+                req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
+                req.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await MetadataHttp.SendAsync(req, cancellationToken).ConfigureAwait(false);
+                var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new ImageGenerationResult
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = TryExtractApiErrorMessage(body) ?? $"HTTP {(int)response.StatusCode} {response.ReasonPhrase}"
+                    };
+                }
+
+                using var doc = JsonDocument.Parse(body);
+                if (!doc.RootElement.TryGetProperty("data", out var dataEl) || dataEl.GetArrayLength() == 0)
+                {
+                    return new ImageGenerationResult
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Image generation returned no image data."
+                    };
+                }
+
+                var first = dataEl[0];
+                string? revisedPrompt = first.TryGetProperty("revised_prompt", out var revisedPromptEl)
+                    ? revisedPromptEl.GetString()
+                    : null;
+
+                if (first.TryGetProperty("b64_json", out var base64El) &&
+                    !string.IsNullOrWhiteSpace(base64El.GetString()))
+                {
+                    return new ImageGenerationResult
+                    {
+                        IsSuccess = true,
+                        ImageBytes = Convert.FromBase64String(base64El.GetString()!),
+                        ImageMimeType = "image/png",
+                        RevisedPrompt = revisedPrompt
+                    };
+                }
+
+                if (first.TryGetProperty("url", out var urlEl) &&
+                    Uri.TryCreate(urlEl.GetString(), UriKind.Absolute, out var imageUrl))
+                {
+                    var bytes = await MetadataHttp.GetByteArrayAsync(imageUrl, cancellationToken).ConfigureAwait(false);
+                    return new ImageGenerationResult
+                    {
+                        IsSuccess = true,
+                        ImageBytes = bytes,
+                        ImageMimeType = GuessMimeType(imageUrl.AbsoluteUri) ?? "image/png",
+                        RevisedPrompt = revisedPrompt
+                    };
+                }
+
+                return new ImageGenerationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Image generation returned an unsupported payload."
+                };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.GenerateImage] {ex.GetType().Name}");
+                return new ImageGenerationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "OpenAI image generation failed."
+                };
+            }
         }
     }
 }

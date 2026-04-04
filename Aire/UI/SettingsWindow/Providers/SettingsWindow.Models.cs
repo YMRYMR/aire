@@ -1,119 +1,91 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Aire.AppLayer.Providers;
-using Aire.Data;
-using Aire.Domain.Providers;
 using Aire.Providers;
-using Aire.Services;
-using Aire.Services.Providers;
-using Aire.UI.Settings.Models;
 
 namespace Aire.UI
 {
     public partial class SettingsWindow
     {
-        private ProviderModelCoordinator? _providerModelCoordinator;
-        private ProviderModelCoordinator ProviderModels => _providerModelCoordinator ??= new ProviderModelCoordinator(this);
+        private readonly ProviderFormActionsApplicationService _providerFormActions = new();
 
         internal async void RefreshModelsButton_Click(object sender, RoutedEventArgs e)
-            => await ProviderModels.RefreshModelsAsync();
+        {
+            if (_selectedProvider == null) return;
+
+            try
+            {
+                var meta = ProviderFactory.GetMetadata(_selectedProvider.Type);
+                await PopulateModelsFromMetadataAsync(meta);
+                ShowToast("Model list refreshed from server.");
+            }
+            catch
+            {
+                ShowToast("Could not refresh models.", isError: true);
+            }
+        }
 
         private async void ImportModelsButton_Click(object sender, RoutedEventArgs e)
-            => await ProviderModels.ImportModelsAsync();
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Import Model Definitions",
+                Filter = "JSON files (*.json)|*.json",
+                Multiselect = false,
+            };
+
+            if (dialog.ShowDialog(this) != true) return;
+
+            try
+            {
+                _providerFormActions.ImportModels(dialog.FileName);
+                ShowToast("Models imported. Refreshing list…");
+
+                if (_selectedProvider == null) return;
+
+                await PopulateModelsFromMetadataAsync(ProviderFactory.GetMetadata(_selectedProvider.Type));
+            }
+            catch
+            {
+                ShowToast("Import failed.", isError: true);
+            }
+        }
 
         internal async void InstallOllamaButton_Click(object sender, RoutedEventArgs e)
-            => await ProviderModels.InstallProviderToolAsync();
-
-        private sealed class ProviderModelCoordinator
         {
-            private readonly SettingsWindow _owner;
+            if (_selectedProvider == null) return;
 
-            public ProviderModelCoordinator(SettingsWindow owner)
+            var toolStatus = _providerFormActions.GetProviderToolStatus(_selectedProvider.Type);
+            if (toolStatus?.IsInstalled == true)
             {
-                _owner = owner;
+                ShowToast(toolStatus.StatusMessage);
+                return;
             }
 
-            public async Task RefreshModelsAsync()
+            if (string.Equals(_selectedProvider.Type, "Codex", StringComparison.OrdinalIgnoreCase))
             {
-                if (_owner._selectedProvider == null) return;
-
-                try
+                if (!ConfirmationDialog.ShowCentered(
+                        this,
+                        title: "Install Codex CLI",
+                        message: "This will run 'npm install -g @openai/codex' on your system. Continue?"))
                 {
-                    var meta = ProviderFactory.GetMetadata(_owner._selectedProvider.Type);
-                    await _owner.PopulateModelsFromMetadataAsync(meta);
-                    _owner.ShowToast("Model list refreshed from server.");
+                    return;
                 }
-                catch (Exception ex)
+
+                InstallOllamaButton.IsEnabled = false;
+                CodexInstallProgressBar.Visibility = Visibility.Visible;
+                CodexInstallStatusText.Visibility = Visibility.Visible;
+                CodexInstallStatusText.Text = "Installing Codex CLI…";
+                var progress = new Progress<string>(message => Dispatcher.Invoke(() =>
                 {
-                    _owner.ShowToast($"Could not refresh models: {ex.Message}", isError: true);
-                }
-            }
-
-            public async Task ImportModelsAsync()
-            {
-                var dialog = new Microsoft.Win32.OpenFileDialog
-                {
-                    Title = "Import Model Definitions",
-                    Filter = "JSON files (*.json)|*.json",
-                    Multiselect = false,
-                };
-
-                if (dialog.ShowDialog(_owner) != true) return;
-
-                try
-                {
-                    ModelCatalog.ImportFile(dialog.FileName);
-                    _owner.ShowToast("Models imported. Refreshing list…");
-
-                    if (_owner._selectedProvider == null) return;
-
-                    await _owner.PopulateModelsFromMetadataAsync(ProviderFactory.GetMetadata(_owner._selectedProvider.Type));
-                }
-                catch (Exception ex)
-                {
-                    _owner.ShowToast($"Import failed: {ex.Message}", isError: true);
-                }
-            }
-
-            public async Task InstallProviderToolAsync()
-            {
-                if (_owner._selectedProvider == null) return;
-
-                if (_owner._selectedProvider.Type == "Codex")
-                {
-                    if (CodexProvider.HasLaunchableCli())
-                    {
-                        _owner.ShowToast("Codex CLI is already installed.");
-                        return;
-                    }
-
-                    if (!ConfirmationDialog.ShowCentered(
-                            _owner,
-                            title: "Install Codex CLI",
-                            message: "This will run 'npm install -g @openai/codex' on your system. Continue?"))
-                    {
-                        return;
-                    }
-
-                    var codexService = new CodexActionApplicationService(new CodexManagementClient());
-                    _owner.InstallOllamaButton.IsEnabled = false;
-                    _owner.CodexInstallProgressBar.Visibility = Visibility.Visible;
-                    _owner.CodexInstallStatusText.Visibility = Visibility.Visible;
-                    _owner.CodexInstallStatusText.Text = "Installing Codex CLI…";
-                    var progress = new Progress<string>(message => _owner.Dispatcher.Invoke(() =>
-                    {
-                        _owner.CodexInstallStatusText.Text = message;
-                    }));
-                    var result = await codexService.InstallAsync(progress);
-                    _owner.CodexInstallProgressBar.Visibility = Visibility.Collapsed;
-                    _owner.CodexInstallStatusText.Text = result.UserMessage;
-                    _owner.ApplyProviderMetadata(ProviderFactory.GetMetadata(_owner._selectedProvider.Type), !string.IsNullOrWhiteSpace(_owner.ApiKeyPasswordBox.Password));
-                    _owner.InstallOllamaButton.IsEnabled = true;
-                    _owner.ShowToast(result.UserMessage, isError: !result.Succeeded);
-                }
+                    CodexInstallStatusText.Text = message;
+                }));
+                var result = await _providerFormActions.InstallProviderToolAsync(_selectedProvider.Type, progress);
+                CodexInstallProgressBar.Visibility = Visibility.Collapsed;
+                CodexInstallStatusText.Text = result.UserMessage;
+                ApplyProviderMetadata(ProviderFactory.GetMetadata(_selectedProvider.Type), !string.IsNullOrWhiteSpace(ApiKeyPasswordBox.Password));
+                InstallOllamaButton.IsEnabled = true;
+                ShowToast(result.UserMessage, isError: !result.Succeeded);
             }
         }
     }

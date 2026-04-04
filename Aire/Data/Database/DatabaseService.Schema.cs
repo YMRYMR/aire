@@ -44,6 +44,7 @@ namespace Aire.Data
                     Role TEXT NOT NULL,
                     Content TEXT NOT NULL,
                     ImagePath TEXT,
+                    AttachmentsJson TEXT,
                     Tokens INTEGER,
                     CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (ConversationId) REFERENCES Conversations (Id)
@@ -277,6 +278,35 @@ namespace Aire.Data
                 UPDATE Conversations
                 SET AssistantModeKey = 'general'
                 WHERE AssistantModeKey IS NULL OR trim(AssistantModeKey) = ''";
+            await normalizeCmd.ExecuteNonQueryAsync();
+        }
+
+        private async Task MigrateConversationColorsAsync()
+        {
+            try
+            {
+                using var cmd = _connection!.CreateCommand();
+                cmd.CommandText = "ALTER TABLE Conversations ADD COLUMN Color TEXT";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch { }
+
+            using var normalizeCmd = _connection!.CreateCommand();
+            normalizeCmd.CommandText = @"
+                UPDATE Conversations
+                SET Color = CASE (abs(Id) % 10)
+                    WHEN 0 THEN '#E6B800'
+                    WHEN 1 THEN '#2FBF71'
+                    WHEN 2 THEN '#3B82F6'
+                    WHEN 3 THEN '#EC4899'
+                    WHEN 4 THEN '#F97316'
+                    WHEN 5 THEN '#8B5CF6'
+                    WHEN 6 THEN '#14B8A6'
+                    WHEN 7 THEN '#EF4444'
+                    WHEN 8 THEN '#06B6D4'
+                    ELSE '#A3A948'
+                END
+                WHERE Color IS NULL OR trim(Color) = ''";
             await normalizeCmd.ExecuteNonQueryAsync();
         }
 

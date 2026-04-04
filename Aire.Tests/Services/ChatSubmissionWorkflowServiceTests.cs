@@ -91,7 +91,7 @@ public sealed class ChatSubmissionWorkflowServiceTests
     {
         var service = new ChatSubmissionWorkflowService();
 
-        var message = service.BuildProviderHistoryMessage("hello", "C:\\images\\capture.png");
+        var message = service.BuildProviderHistoryMessage("hello", "C:\\images\\capture.png", null);
 
         Assert.Equal("user", message.Role);
         Assert.Equal("hello", message.Content);

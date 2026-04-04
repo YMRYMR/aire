@@ -271,9 +271,9 @@ public partial class ImageViewerWindow : Window
         {
             Clipboard.SetImage(_bitmap);
         }
-        catch (Exception ex)
+        catch
         {
-            ConfirmationDialog.ShowAlert(this, "Error", $"Copy failed: {ex.Message}");
+            ConfirmationDialog.ShowAlert(this, "Error", "Copy failed.");
         }
     }
 
@@ -305,9 +305,9 @@ public partial class ImageViewerWindow : Window
             using var fs = File.Create(dlg.FileName);
             encoder.Save(fs);
         }
-        catch (Exception ex)
+        catch
         {
-            ConfirmationDialog.ShowAlert(this, "Error", $"Save failed: {ex.Message}");
+            ConfirmationDialog.ShowAlert(this, "Error", "Save failed.");
         }
     }
 

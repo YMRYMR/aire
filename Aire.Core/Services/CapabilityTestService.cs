@@ -16,7 +16,14 @@ public record CapabilityTest(
     string   Name,
     string   Category,
     string   Prompt,
-    string[] ExpectedTools);
+    string[] ExpectedTools,
+    CapabilityTestKind Kind = CapabilityTestKind.ToolCall);
+
+public enum CapabilityTestKind
+{
+    ToolCall,
+    ImageGeneration,
+}
 
 /// <summary>Outcome of running one <see cref="CapabilityTest"/>.</summary>
 public record CapabilityTestResult(
@@ -46,99 +53,7 @@ public class CapabilityTestRunner
 
     public static readonly IReadOnlyList<CapabilityTest> AllTests = new[]
     {
-        // ── File System ───────────────────────────────────────────────────
-
-        new CapabilityTest(
-            "list_dir", "List directory", "File System",
-            "List all files and folders in the C:\\Windows directory.",
-            new[] { "list_directory", "execute_command" }),
-
-        new CapabilityTest(
-            "read_file", "Read file", "File System",
-            "Read the contents of the file C:\\Windows\\win.ini and show them to me.",
-            new[] { "read_file" }),
-
-        new CapabilityTest(
-            "write_file", "Write to file", "File System",
-            "Create a new file at C:\\Temp\\hello.txt with the content 'Hello, world!'.",
-            new[] { "write_file", "write_to_file" }),
-
-        new CapabilityTest(
-            "apply_diff", "Apply code diff", "File System",
-            "Apply this change to C:\\Temp\\app.cs: replace the line that says " +
-            "'Console.WriteLine(\"old\");' with 'Console.WriteLine(\"new\");'.",
-            new[] { "apply_diff" }),
-
-        new CapabilityTest(
-            "search_files", "Search files", "File System",
-            "Search for all .cs files in C:\\dev that contain the word 'logger'.",
-            new[] { "search_files" }),
-
-        new CapabilityTest(
-            "exec_cmd", "Execute command", "File System",
-            "Execute the shell command: echo hello world",
-            new[] { "execute_command" }),
-
-        new CapabilityTest(
-            "read_cmd_output", "Read command output", "File System",
-            "Show me the output of the background command that was last started.",
-            new[] { "read_command_output" }),
-
-        // ── Web ──────────────────────────────────────────────────────────
-
-        new CapabilityTest(
-            "fetch_url", "Fetch URL", "Web",
-            "Fetch the contents of https://example.com and tell me the page title.",
-            new[] { "open_url" }),
-
-        new CapabilityTest(
-            "web_search", "Web search", "Web",
-            "Search the internet for 'weather in London' and report the top result.",
-            new[] { "open_url" }),
-
-        // ── Browser ──────────────────────────────────────────────────────
-
-        new CapabilityTest(
-            "list_tabs", "List browser tabs", "Browser",
-            "Show me a list of all open tabs in the browser.",
-            new[] { "list_browser_tabs" }),
-
-        new CapabilityTest(
-            "read_tab", "Read browser tab", "Browser",
-            "Read the content of the currently open browser tab.",
-            new[] { "read_browser_tab" }),
-
-        new CapabilityTest(
-            "switch_tab", "Switch browser tab", "Browser",
-            "Switch to tab number 2 in the browser.",
-            new[] { "switch_browser_tab" }),
-
-        new CapabilityTest(
-            "close_tab", "Close browser tab", "Browser",
-            "Close the currently active browser tab.",
-            new[] { "close_browser_tab" }),
-
-        new CapabilityTest(
-            "get_html", "Get browser HTML", "Browser",
-            "Get the full HTML source of the currently open browser tab.",
-            new[] { "get_browser_html" }),
-
-        new CapabilityTest(
-            "browser_script", "Execute browser script", "Browser",
-            "Run JavaScript in the browser tab to get the page title: return document.title",
-            new[] { "execute_browser_script" }),
-
-        new CapabilityTest(
-            "browser_cookies", "Get browser cookies", "Browser",
-            "List all cookies for the currently open browser tab.",
-            new[] { "get_browser_cookies" }),
-
         // ── Agent ────────────────────────────────────────────────────────
-
-        new CapabilityTest(
-            "new_task", "Create new task", "Agent",
-            "Create a new task to refactor the authentication module in the project.",
-            new[] { "new_task" }),
 
         new CapabilityTest(
             "ask_followup", "Ask follow-up question", "Agent",
@@ -149,6 +64,11 @@ public class CapabilityTestRunner
             "attempt_completion", "Mark task complete", "Agent",
             "You have finished all the work. Signal that the task is complete with a brief summary.",
             new[] { "attempt_completion" }),
+
+        new CapabilityTest(
+            "new_task", "Create new task", "Agent",
+            "Create a new task to refactor the authentication module in the project.",
+            new[] { "new_task" }),
 
         new CapabilityTest(
             "run_skill", "Run skill", "Agent",
@@ -165,22 +85,145 @@ public class CapabilityTestRunner
             "Add 'Fix authentication bug #123' to the to-do list.",
             new[] { "update_todo_list" }),
 
+        // ── Browser ──────────────────────────────────────────────────────
+
         new CapabilityTest(
-            "show_image_url", "Show image from URL", "Agent",
-            "Show me the Wikimedia logo image from this URL: https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wikimedia-logo.svg/1024px-Wikimedia-logo.svg.png",
+            "close_tab", "Close browser tab", "Browser",
+            "Close the currently active browser tab.",
+            new[] { "close_browser_tab" }),
+
+        new CapabilityTest(
+            "browser_script", "Execute browser script", "Browser",
+            "Run JavaScript in the browser tab to get the page title: return document.title",
+            new[] { "execute_browser_script" }),
+
+        new CapabilityTest(
+            "browser_cookies", "Get browser cookies", "Browser",
+            "List all cookies for the currently open browser tab.",
+            new[] { "get_browser_cookies" }),
+
+        new CapabilityTest(
+            "get_html", "Get browser HTML", "Browser",
+            "Get the full HTML source of the currently open browser tab.",
+            new[] { "get_browser_html" }),
+
+        new CapabilityTest(
+            "list_tabs", "List browser tabs", "Browser",
+            "Show me a list of all open tabs in the browser.",
+            new[] { "list_browser_tabs" }),
+
+        new CapabilityTest(
+            "read_tab", "Read browser tab", "Browser",
+            "Read the content of the currently open browser tab.",
+            new[] { "read_browser_tab" }),
+
+        new CapabilityTest(
+            "switch_tab", "Switch browser tab", "Browser",
+            "Switch to tab number 2 in the browser.",
+            new[] { "switch_browser_tab" }),
+
+        // ── File System ───────────────────────────────────────────────────
+
+        new CapabilityTest(
+            "apply_diff", "Apply code diff", "File System",
+            "Apply this change to C:\\Temp\\app.cs: replace the line that says " +
+            "'Console.WriteLine(\"old\");' with 'Console.WriteLine(\"new\");'.",
+            new[] { "apply_diff" }),
+
+        new CapabilityTest(
+            "exec_cmd", "Execute command", "File System",
+            "Execute the shell command: echo hello world",
+            new[] { "execute_command" }),
+
+        new CapabilityTest(
+            "list_dir", "List directory", "File System",
+            "List all files and folders in the C:\\Windows directory.",
+            new[] { "list_directory", "execute_command" }),
+
+        new CapabilityTest(
+            "read_cmd_output", "Read command output", "File System",
+            "Show me the output of the background command that was last started.",
+            new[] { "read_command_output" }),
+
+        new CapabilityTest(
+            "read_file", "Read file", "File System",
+            "Read the contents of the file C:\\Windows\\win.ini and show them to me.",
+            new[] { "read_file" }),
+
+        new CapabilityTest(
+            "search_content", "Search file content", "File System",
+            "Search for all files in C:\\dev that contain the word 'Logger' in their content.",
+            new[] { "search_file_content" }),
+
+        new CapabilityTest(
+            "search_files", "Search files", "File System",
+            "Search for all .cs files in C:\\dev that contain the word 'logger'.",
+            new[] { "search_files" }),
+
+        new CapabilityTest(
+            "write_file", "Write to file", "File System",
+            "Create a new file at C:\\Temp\\hello.txt with the content 'Hello, world!'.",
+            new[] { "write_file", "write_to_file" }),
+
+        // ── Images ───────────────────────────────────────────────────────
+
+        new CapabilityTest(
+            "generate_image", "Generate image", "Images",
+            "Generate an image of a watercolor fox reading a book under a tree.",
+            Array.Empty<string>(),
+            CapabilityTestKind.ImageGeneration),
+
+        new CapabilityTest(
+            "show_image_file", "Show image from file", "Images",
+            "Display the file C:\\Windows\\Web\\Screen\\img100.jpg in the chat.",
             new[] { "show_image" }),
 
         new CapabilityTest(
-            "show_image_file", "Show image from file", "Agent",
-            "Display the file C:\\Windows\\Web\\Screen\\img100.jpg in the chat.",
+            "show_image_url", "Show image from URL", "Images",
+            "Show me the Wikimedia logo image from this URL: https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Wikimedia-logo.svg/1024px-Wikimedia-logo.svg.png",
             new[] { "show_image" }),
 
         // ── System ────────────────────────────────────────────────────────
 
         new CapabilityTest(
+            "active_window", "Get active window", "System",
+            "What window or application does the user currently have focused?",
+            new[] { "get_active_window" }),
+
+        new CapabilityTest(
             "get_clipboard", "Read clipboard", "System",
             "Read the current contents of the clipboard.",
             new[] { "get_clipboard" }),
+
+        new CapabilityTest(
+            "open_file", "Open file", "System",
+            "Open the file C:\\Windows\\win.ini with its default application.",
+            new[] { "open_file" }),
+
+        new CapabilityTest(
+            "processes", "List running processes", "System",
+            "What are the top 10 processes using the most memory right now?",
+            new[] { "get_running_processes" }),
+
+        new CapabilityTest(
+            "recall_fact", "Recall fact", "System",
+            "What is my preferred programming language? Check your memory.",
+            new[] { "recall" }),
+
+        new CapabilityTest(
+            "remember_fact", "Remember fact", "System",
+            "Remember that my preferred language is Python.",
+            new[] { "remember" }),
+
+        new CapabilityTest(
+            "reminder", "Set reminder", "System",
+            "Remind me to check the build in 5 minutes.",
+            new[] { "set_reminder" }),
+
+        new CapabilityTest(
+            "selected_text", "Get selected text", "System",
+            "Get the text the user currently has selected in their active application.",
+            new[] { "get_selected_text" }),
 
         new CapabilityTest(
             "set_clipboard", "Write clipboard", "System",
@@ -197,52 +240,22 @@ public class CapabilityTestRunner
             "Tell me about this computer: OS, RAM, disk space, and CPU.",
             new[] { "get_system_info" }),
 
-        new CapabilityTest(
-            "processes", "List running processes", "System",
-            "What are the top 10 processes using the most memory right now?",
-            new[] { "get_running_processes" }),
+        // ── Web ──────────────────────────────────────────────────────────
 
         new CapabilityTest(
-            "active_window", "Get active window", "System",
-            "What window or application does the user currently have focused?",
-            new[] { "get_active_window" }),
+            "fetch_url", "Fetch URL", "Web",
+            "Fetch the contents of https://example.com and tell me the page title.",
+            new[] { "open_url" }),
 
         new CapabilityTest(
-            "selected_text", "Get selected text", "System",
-            "Get the text the user currently has selected in their active application.",
-            new[] { "get_selected_text" }),
-
-        new CapabilityTest(
-            "open_file", "Open file", "System",
-            "Open the file C:\\Windows\\win.ini with its default application.",
-            new[] { "open_file" }),
-
-        new CapabilityTest(
-            "remember_fact", "Remember fact", "System",
-            "Remember that my preferred language is Python.",
-            new[] { "remember" }),
-
-        new CapabilityTest(
-            "recall_fact", "Recall fact", "System",
-            "What is my preferred programming language? Check your memory.",
-            new[] { "recall" }),
-
-        new CapabilityTest(
-            "reminder", "Set reminder", "System",
-            "Remind me to check the build in 5 minutes.",
-            new[] { "set_reminder" }),
-
-        new CapabilityTest(
-            "http_get", "HTTP request", "System",
+            "http_get", "HTTP request", "Web",
             "Make a GET request to https://api.github.com/zen and return the response.",
             new[] { "http_request", "open_url" }),
 
-        // ── File System (extended) ────────────────────────────────────────
-
         new CapabilityTest(
-            "search_content", "Search file content", "File System",
-            "Search for all files in C:\\dev that contain the word 'Logger' in their content.",
-            new[] { "search_file_content" }),
+            "web_search", "Web search", "Web",
+            "Search the internet for 'weather in London' and report the top result.",
+            new[] { "open_url" }),
     };
 
     // ── Test-only system prompts ──────────────────────────────────────────
@@ -333,6 +346,11 @@ public class CapabilityTestRunner
         var sw = Stopwatch.StartNew();
         try
         {
+            if (test.Kind == CapabilityTestKind.ImageGeneration)
+            {
+                return await RunImageGenerationTestAsync(provider, test, sw, ct);
+            }
+
             var sysPrompt = provider.ToolOutputFormat switch
             {
                 ToolOutputFormat.Hermes          => TestSystemPromptHermes,
@@ -366,11 +384,52 @@ public class CapabilityTestRunner
                 passed, tool, error, sw.ElapsedMilliseconds);
         }
         catch (OperationCanceledException) { throw; }
-        catch (Exception ex)
+        catch
         {
             sw.Stop();
-            return Fail(test, null, ex.Message, sw.ElapsedMilliseconds);
+            return Fail(test, null, "Capability test failed.", sw.ElapsedMilliseconds);
         }
+    }
+
+    private static async Task<CapabilityTestResult> RunImageGenerationTestAsync(
+        IAiProvider provider,
+        CapabilityTest test,
+        Stopwatch sw,
+        CancellationToken ct)
+    {
+        if (provider is not IImageGenerationProvider imageProvider || !imageProvider.SupportsImageGeneration)
+        {
+            sw.Stop();
+            return Fail(test, null, "Provider does not support image generation", sw.ElapsedMilliseconds);
+        }
+
+        var result = await imageProvider.GenerateImageAsync(test.Prompt, ct);
+        sw.Stop();
+
+        if (!result.IsSuccess)
+        {
+            var error = result.ErrorMessage ?? "Unknown failure";
+            var readable = ProviderErrorClassifier.ExtractReadableMessage(error);
+            return Fail(
+                test,
+                null,
+                $"Image generation error: {readable ?? error}",
+                sw.ElapsedMilliseconds);
+        }
+
+        if (result.ImageBytes == null || result.ImageBytes.Length == 0)
+        {
+            return Fail(test, null, "Provider returned no image data", sw.ElapsedMilliseconds);
+        }
+
+        return new CapabilityTestResult(
+            test.Id,
+            test.Name,
+            test.Category,
+            true,
+            "generate_image",
+            null,
+            sw.ElapsedMilliseconds);
     }
 
     internal static CapabilityTestResult Fail(

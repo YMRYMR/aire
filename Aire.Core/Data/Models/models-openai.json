@@ -1,6 +1,7 @@
 {
   "providerType": "OpenAI",
   "models": [
+    { "id": "gpt-image-1", "displayName": "GPT Image 1", "capabilities": ["imagegeneration"] },
     { "id": "gpt-4o",        "displayName": "GPT-4o", "capabilities": ["vision", "tools", "keyboard", "mouse"] },
     { "id": "gpt-4o-mini",   "displayName": "GPT-4o Mini", "capabilities": ["vision", "tools"] },
     { "id": "o3-mini",       "displayName": "o3 Mini", "capabilities": ["tools"] },

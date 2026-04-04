@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Aire.Bootstrap;
 using Aire.Providers;
 using Aire.Services;
 using Aire.UI;
@@ -142,6 +143,12 @@ namespace Aire
             }
 
             RestoreWindowsFromState();
+
+            SetupPreferences setupPreferences = SetupPreferencesStore.Load();
+            if (setupPreferences.VoiceInputEnabled && _mainWindow?.IsVisible == true)
+            {
+                _ = Dispatcher.BeginInvoke(async () => await _mainWindow.TryEnableStartupVoiceInputAsync());
+            }
         }
 
         private void ShowInitialMainWindow()

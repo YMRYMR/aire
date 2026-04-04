@@ -26,6 +26,7 @@ namespace Aire.AppLayer.Providers
                 ImagePath = message.ImagePath,
                 ImageBytes = message.ImageBytes,
                 ImageMimeType = message.ImageMimeType,
+                Attachments = message.Attachments,
                 PreferPromptCache = message.PreferPromptCache
             }).ToList() ?? [];
         }
@@ -44,6 +45,7 @@ namespace Aire.AppLayer.Providers
                 ImagePath = message.ImagePath,
                 ImageBytes = message.ImageBytes,
                 ImageMimeType = message.ImageMimeType,
+                Attachments = message.Attachments?.ToList(),
                 PreferPromptCache = message.PreferPromptCache
             }).ToList() ?? [];
         }

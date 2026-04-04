@@ -1,6 +1,8 @@
 {
   "providerType": "GoogleAI",
   "models": [
+    { "id": "gemini-2.5-flash-image", "displayName": "Gemini 2.5 Flash Image", "capabilities": ["vision", "imagegeneration"] },
+    { "id": "gemini-3.1-flash-image-preview", "displayName": "Gemini 3.1 Flash Image Preview", "capabilities": ["vision", "imagegeneration"] },
     { "id": "gemini-2.0-flash", "displayName": "Gemini 2.0 Flash", "capabilities": ["vision", "tools"] },
     { "id": "gemini-1.5-pro", "displayName": "Gemini 1.5 Pro", "capabilities": ["vision", "tools"] },
     { "id": "gemini-1.5-flash", "displayName": "Gemini 1.5 Flash", "capabilities": ["vision", "tools"] }

@@ -100,6 +100,46 @@ namespace Aire.Tests.Capabilities
             public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default) => Task.FromResult<TokenUsage?>(null);
         }
 
+        private sealed class ImageGenerationProvider(bool success, byte[]? imageBytes = null, string? errorMessage = null)
+            : IAiProvider, IImageGenerationProvider
+        {
+            public string ProviderType => "Image";
+            public string DisplayName => "Image";
+            public ProviderCapabilities Capabilities => ProviderCapabilities.SystemPrompt;
+            public ToolCallMode ToolCallMode => ToolCallMode.TextBased;
+            public ToolOutputFormat ToolOutputFormat => ToolOutputFormat.AireText;
+            public bool SupportsImageGeneration => true;
+
+            public bool Has(ProviderCapabilities cap) => (Capabilities & cap) == cap;
+            public void Initialize(ProviderConfig config) { }
+            public void PrepareForCapabilityTesting() { }
+            public void SetToolsEnabled(bool enabled) { }
+            public void SetEnabledToolCategories(IEnumerable<string>? categories) { }
+
+            public Task<AiResponse> SendChatAsync(IEnumerable<Aire.Providers.ChatMessage> messages, CancellationToken cancellationToken = default)
+                => Task.FromResult(new AiResponse { IsSuccess = true, Content = string.Empty });
+
+            public async IAsyncEnumerable<string> StreamChatAsync(IEnumerable<Aire.Providers.ChatMessage> messages, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+            {
+                yield break;
+            }
+
+            public Task<ProviderValidationResult> ValidateConfigurationAsync(CancellationToken cancellationToken = default)
+                => Task.FromResult(ProviderValidationResult.Ok());
+
+            public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default)
+                => Task.FromResult<TokenUsage?>(null);
+
+            public Task<ImageGenerationResult> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
+                => Task.FromResult(new ImageGenerationResult
+                {
+                    IsSuccess = success,
+                    ImageBytes = imageBytes,
+                    ErrorMessage = errorMessage,
+                    ImageMimeType = "image/png"
+                });
+        }
+
         [Fact]
         public async Task CapabilityTestRunner_RunOne_CoversSuccessAndFailureBranches()
         {
@@ -145,7 +185,7 @@ namespace Aire.Tests.Capabilities
             CapabilityTestResult exception = await CapabilityTestRunner.RunOneAsync(new ThrowingProvider("boom"), test, CancellationToken.None);
             
             Assert.False(exception.Passed);
-            Assert.Equal("boom", exception.Error);
+            Assert.Equal("Capability test failed.", exception.Error);
         }
 
         [Fact]
@@ -195,6 +235,61 @@ namespace Aire.Tests.Capabilities
             await runner.RunAsync(provider, CancellationToken.None);
 
             Assert.Equal(1, provider.PrepareCalls);
+        }
+
+        [Fact]
+        public async Task CapabilityTestRunner_RunOne_SupportsImageGenerationTests()
+        {
+            CapabilityTest test = CapabilityTestRunner.AllTests.First(t => t.Id == "generate_image");
+
+            CapabilityTestResult success = await CapabilityTestRunner.RunOneAsync(
+                new ImageGenerationProvider(true, [1, 2, 3]),
+                test,
+                CancellationToken.None);
+
+            Assert.True(success.Passed);
+            Assert.Equal("generate_image", success.ActualTool);
+        }
+
+        [Fact]
+        public async Task CapabilityTestRunner_RunOne_FailsImageGeneration_WhenUnsupported()
+        {
+            CapabilityTest test = CapabilityTestRunner.AllTests.First(t => t.Id == "generate_image");
+
+            CapabilityTestResult result = await CapabilityTestRunner.RunOneAsync(
+                new StubProvider(_ => new AiResponse { IsSuccess = true, Content = string.Empty }),
+                test,
+                CancellationToken.None);
+
+            Assert.False(result.Passed);
+            Assert.Equal("Provider does not support image generation", result.Error);
+        }
+
+        [Fact]
+        public async Task CapabilityTestRunner_RunOne_FailsImageGeneration_WhenProviderReturnsNoBytes()
+        {
+            CapabilityTest test = CapabilityTestRunner.AllTests.First(t => t.Id == "generate_image");
+
+            CapabilityTestResult result = await CapabilityTestRunner.RunOneAsync(
+                new ImageGenerationProvider(true, []),
+                test,
+                CancellationToken.None);
+
+            Assert.False(result.Passed);
+            Assert.Equal("Provider returned no image data", result.Error);
+        }
+
+        [Fact]
+        public void CapabilityTestRunner_AllTests_GroupsImageCapabilitiesUnderImages()
+        {
+            CapabilityTest generate = CapabilityTestRunner.AllTests.First(t => t.Id == "generate_image");
+            CapabilityTest showFile = CapabilityTestRunner.AllTests.First(t => t.Id == "show_image_file");
+            CapabilityTest showUrl = CapabilityTestRunner.AllTests.First(t => t.Id == "show_image_url");
+
+            Assert.Equal("Images", generate.Category);
+            Assert.Equal(CapabilityTestKind.ImageGeneration, generate.Kind);
+            Assert.Equal("Images", showFile.Category);
+            Assert.Equal("Images", showUrl.Category);
         }
     }
 }

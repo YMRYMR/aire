@@ -61,6 +61,36 @@ namespace Aire.Tests.Services
         }
 
         [Fact]
+        public void LocalApiApplicationService_NormalizeProviderType_UsesCanonicalCatalogRules()
+        {
+            LocalApiApplicationService localApiApplicationService = new LocalApiApplicationService();
+
+            Assert.Equal("GoogleAIImage", localApiApplicationService.NormalizeProviderType("google ai images"));
+            Assert.Equal("ClaudeWeb", localApiApplicationService.NormalizeProviderType("claude.ai"));
+            Assert.Equal("Zai", localApiApplicationService.NormalizeProviderType("z.ai"));
+        }
+
+        [Fact]
+        public void RequestParsingHelpers_GetNullableString_HandlesMissingAndBlankValues()
+        {
+            using JsonDocument doc = JsonDocument.Parse("{\"name\":\"  \",\"type\":\"GoogleAIImage\"}");
+
+            Assert.Null(LocalApiService.GetNullableString(doc.RootElement, "name"));
+            Assert.Equal("GoogleAIImage", LocalApiService.GetNullableString(doc.RootElement, "type"));
+            Assert.Null(LocalApiService.GetNullableString(doc.RootElement, "missing"));
+        }
+
+        [Fact]
+        public void RequestParsingHelpers_GetNullableInt_HandlesPresentAndMissingValues()
+        {
+            using JsonDocument doc = JsonDocument.Parse("{\"providerId\":13,\"blank\":\"x\"}");
+
+            Assert.Equal(13, LocalApiService.GetNullableInt(doc.RootElement, "providerId"));
+            Assert.Null(LocalApiService.GetNullableInt(doc.RootElement, "missing"));
+            Assert.Null(LocalApiService.GetNullableInt(doc.RootElement, "blank"));
+        }
+
+        [Fact]
         public void RequestParsingHelpers_HandleTypedAndMissingValues()
         {
             using JsonDocument doc = JsonDocument.Parse("{\r\n  \"conversationId\": 42,\r\n  \"afterId\": 1234567890123,\r\n  \"enabled\": \"true\",\r\n  \"title\": \" Hello \",\r\n  \"parameters\": { \"path\": \"C:/repo\" }\r\n}");
@@ -177,6 +207,63 @@ namespace Aire.Tests.Services
 
             Assert.False(response.Ok);
             Assert.Contains("Unknown method", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task DispatchAsync_ReturnsGenericError_ForUnexpectedExceptions()
+        {
+            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            var service = new LocalApiService(window);
+
+            var response = await service.DispatchAsync(new LocalApiRequest
+            {
+                Method = "ping"
+            }, CancellationToken.None);
+
+            Assert.False(response.Ok);
+            Assert.Equal("An internal error occurred.", response.ErrorMessage);
+            Assert.DoesNotContain("Object reference", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task WaitForPendingApprovalAsync_ReturnsApproval_WhenOneAppearsBeforeTimeout()
+        {
+            var attempts = 0;
+
+            var result = await LocalApiService.WaitForPendingApprovalAsync(
+                () =>
+                {
+                    attempts++;
+                    return Task.FromResult(attempts >= 3
+                        ? new ApiPendingApproval
+                        {
+                            Index = 7,
+                            Tool = "read_file",
+                            Description = "Read file",
+                            RawJson = "{}",
+                            Timestamp = "12:34"
+                        }
+                        : null);
+                },
+                timeoutSeconds: 1,
+                token: CancellationToken.None,
+                pollIntervalMs: 10);
+
+            Assert.NotNull(result);
+            Assert.Equal(7, result!.Index);
+            Assert.True(attempts >= 3);
+        }
+
+        [Fact]
+        public async Task WaitForPendingApprovalAsync_ReturnsNull_OnTimeout()
+        {
+            var result = await LocalApiService.WaitForPendingApprovalAsync(
+                () => Task.FromResult<ApiPendingApproval?>(null),
+                timeoutSeconds: 1,
+                token: CancellationToken.None,
+                pollIntervalMs: 10);
+
+            Assert.Null(result);
         }
 
         [Fact]

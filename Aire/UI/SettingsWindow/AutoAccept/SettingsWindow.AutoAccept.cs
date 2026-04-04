@@ -14,17 +14,20 @@ namespace Aire.UI
 {
     public partial class SettingsWindow
     {
+        private AutoAcceptProfilesApplicationService AutoAcceptProfilesService
+            => _autoAcceptProfilesApplicationService ??= new AutoAcceptProfilesApplicationService(_databaseService);
+
         internal async Task LoadAutoAcceptSettings()
         {
             _suppressAutoAccept = true;
             try
             {
-                var settings = await _autoAcceptProfilesApplicationService.LoadActiveConfigurationAsync();
+                var settings = await AutoAcceptProfilesService.LoadActiveConfigurationAsync();
                 ApplyAutoAcceptConfiguration(settings);
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"Failed to load auto‑accept settings: {ex}");
+                Debug.WriteLine("Failed to load auto‑accept settings.");
             }
             finally
             {
@@ -37,10 +40,10 @@ namespace Aire.UI
             _suppressAutoAcceptProfileSelection = true;
             try
             {
-                var profiles = await _autoAcceptProfilesApplicationService.LoadProfilesAsync();
+                var profiles = await AutoAcceptProfilesService.LoadProfilesAsync();
                 AutoAcceptProfileComboBox.ItemsSource = profiles;
 
-                var selectedName = await _autoAcceptProfilesApplicationService.LoadSelectedProfileNameAsync();
+                var selectedName = await AutoAcceptProfilesService.LoadSelectedProfileNameAsync();
                 AutoAcceptProfileComboBox.SelectedItem = profiles.FirstOrDefault(p =>
                         string.Equals(p.Name, selectedName, StringComparison.OrdinalIgnoreCase))
                     ?? profiles.FirstOrDefault();
@@ -85,7 +88,7 @@ namespace Aire.UI
             try
             {
                 var settings = ReadAutoAcceptConfiguration();
-                await _autoAcceptProfilesApplicationService.SaveActiveConfigurationAsync(settings);
+                await AutoAcceptProfilesService.SaveActiveConfigurationAsync(settings);
                 AutoAcceptJsonCache = JsonSerializer.Serialize(new AutoAcceptSettings
                 {
                     Enabled = settings.Enabled,
@@ -94,9 +97,9 @@ namespace Aire.UI
                     AllowKeyboardTools = settings.AllowKeyboardTools
                 });
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"Failed to save auto‑accept settings: {ex}");
+                Debug.WriteLine("Failed to save auto‑accept settings.");
             }
         }
 
@@ -237,7 +240,7 @@ namespace Aire.UI
             _suppressAutoAccept = true;
             ApplyAutoAcceptConfiguration(profile.Configuration);
             _suppressAutoAccept = false;
-            await _autoAcceptProfilesApplicationService.SaveSelectedProfileNameAsync(profile.Name);
+            await AutoAcceptProfilesService.SaveSelectedProfileNameAsync(profile.Name);
             await SaveAutoAcceptSettings();
             ShowToast($"Applied auto-accept profile: {profile.Name}");
         }
@@ -249,7 +252,7 @@ namespace Aire.UI
             if (string.IsNullOrWhiteSpace(name))
                 return;
 
-            await _autoAcceptProfilesApplicationService.SaveProfileAsync(name, ReadAutoAcceptConfiguration());
+            await AutoAcceptProfilesService.SaveProfileAsync(name, ReadAutoAcceptConfiguration());
             await LoadAutoAcceptProfilesAsync();
             ShowToast($"Saved auto-accept profile: {name}");
         }
@@ -267,7 +270,7 @@ namespace Aire.UI
                 return;
             }
 
-            await _autoAcceptProfilesApplicationService.DeleteProfileAsync(profile.Name);
+            await AutoAcceptProfilesService.DeleteProfileAsync(profile.Name);
             await LoadAutoAcceptProfilesAsync();
             ShowToast($"Deleted auto-accept profile: {profile.Name}");
         }
@@ -279,7 +282,7 @@ namespace Aire.UI
 
             UpdateAutoAcceptProfileButtons();
             if (AutoAcceptProfileComboBox.SelectedItem is AutoAcceptProfilesApplicationService.AutoAcceptProfile profile)
-                await _autoAcceptProfilesApplicationService.SaveSelectedProfileNameAsync(profile.Name);
+                await AutoAcceptProfilesService.SaveSelectedProfileNameAsync(profile.Name);
         }
     }
 }

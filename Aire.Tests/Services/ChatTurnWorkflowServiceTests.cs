@@ -106,6 +106,29 @@ public sealed class ChatTurnWorkflowServiceTests
     }
 
     [Fact]
+    public void BuildRequestMessages_IncludesCapabilityQuestionRule_InSystemPrompt()
+    {
+        var service = new ChatTurnWorkflowService();
+        var provider = new FakeProvider
+        {
+            ToolOutputFormatValue = ToolOutputFormat.AireText,
+            CapabilitiesValue = ProviderCapabilities.TextChat | ProviderCapabilities.ToolCalling | ProviderCapabilities.SystemPrompt
+        };
+
+        var messages = service.BuildRequestMessages(
+            provider,
+            string.Empty,
+            [new ChatMessage { Role = "user", Content = "Can you generate images?" }],
+            toolsEnabled: true);
+
+        Assert.Equal(2, messages.Count);
+        Assert.Contains("capability or product question", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("answer directly in plain language", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Do NOT call tools", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("Can you generate images?", messages[1].Content);
+    }
+
+    [Fact]
     public void BuildFailureOutcome_ClassifiesCooldown()
     {
         var service = new ChatTurnWorkflowService();
@@ -124,7 +147,7 @@ public sealed class ChatTurnWorkflowServiceTests
 
         var outcome = service.BuildErrorOutcome(new OperationCanceledException("Canceled"));
 
-        Assert.Equal(ChatTurnWorkflowService.OutcomeKind.Error, outcome.Kind);
+        Assert.Equal(ChatTurnWorkflowService.OutcomeKind.Canceled, outcome.Kind);
         Assert.Equal("Canceled", outcome.ErrorMessage);
     }
 

@@ -22,10 +22,11 @@ namespace Aire.Data
                 "developer" => "Developer",
                 "creative-writer" => "Creative writer",
                 "architect" => "Architect",
+                "painter" => "Painter",
                 "teacher" => "Teacher",
                 "security" => "Security",
                 "scientist" => "Scientist",
-                "psicologist" => "Psicologist",
+                "psicologist" => "Psychologist",
                 "philosopher" => "Philosopher",
                 _ => "General"
             };

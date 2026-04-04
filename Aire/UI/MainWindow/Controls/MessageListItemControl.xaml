@@ -47,6 +47,24 @@
                     Background="{DynamicResource AssistantMessageBrush}"
                     MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer}, Path=ActualWidth, Converter={StaticResource PercentageConverter}, ConverterParameter=0.7}">
                 <StackPanel>
+                    <ItemsControl x:Name="InlineImagesPanel"
+                                  ItemsSource="{Binding InlineImages}"
+                                  Visibility="Collapsed"
+                                  Margin="0 0 0 6">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}"
+                                       MaxWidth="280"
+                                       MaxHeight="220"
+                                       Stretch="Uniform"
+                                       Margin="0 0 0 6"
+                                       HorizontalAlignment="Left"
+                                       Cursor="Hand"
+                                       ToolTip="Click to open in image viewer"
+                                       MouseLeftButtonUp="InlineImage_MouseLeftButtonUp" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                     <Image x:Name="AttachedImageElement"
                            Source="{Binding AttachedImage, Mode=OneWay}"
                            Visibility="Collapsed"
@@ -58,6 +76,24 @@
                            Cursor="Hand"
                            ToolTip="Click to open in image viewer"
                            MouseLeftButtonUp="AttachedImageElement_MouseLeftButtonUp" />
+                    <ItemsControl x:Name="FileAttachmentsPanel"
+                                  ItemsSource="{Binding FileAttachments}"
+                                  Visibility="Collapsed"
+                                  Margin="0 0 0 6">
+                        <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding DisplayLabel}"
+                                        Margin="0 0 0 6"
+                                        Padding="10 4"
+                                        HorizontalAlignment="Left"
+                                        Focusable="True"
+                                        AutomationProperties.Name="{Binding DisplayLabel}"
+                                        AutomationProperties.HelpText="Open attached file"
+                                        ToolTip="{Binding FilePath}"
+                                        Click="FileAttachmentButton_Click" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     <RichTextBox x:Name="MessageText"
                                  ui:LinkedText.Text="{Binding Text}"
                                  Foreground="{DynamicResource AssistantMessageTextBrush}"
@@ -191,14 +227,16 @@
                         Visibility="Collapsed"
                         VerticalAlignment="Center"
                         Margin="6 0 0 0">
-                <Button Content="&#x2713;"
+                <Button x:Name="ApproveToolButton"
+                        Content="&#x2713;"
                         ToolTip="Allow"
                         Tag="{Binding}"
                         Click="ApproveToolButton_Click"
                         Width="34"
                         Height="34"
                         Margin="0 0 0 4" />
-                <Button Content="&#x2717;"
+                <Button x:Name="DenyToolButton"
+                        Content="&#x2717;"
                         ToolTip="Deny"
                         Tag="{Binding}"
                         Click="DenyToolButton_Click"

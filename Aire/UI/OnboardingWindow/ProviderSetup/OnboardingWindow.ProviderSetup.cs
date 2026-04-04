@@ -137,13 +137,14 @@ namespace Aire.UI
             CancelOllamaOps();
 
             var type = item.Tag as string ?? "OpenAI";
+            var descriptor = ProviderCatalog.GetDescriptor(type);
 
             ProviderNameBox.Text = ProviderDisplayName(type);
 
             bool isOllama = type == "Ollama";
             bool isClaudeWeb = type == "ClaudeWeb";
             bool isCodex = type == "Codex";
-            bool needsKey = !isOllama && !isClaudeWeb && !isCodex;
+            bool needsKey = descriptor.RequiresApiKey;
 
             ApiKeyPanel.Visibility = needsKey ? Visibility.Visible : Visibility.Collapsed;
             BaseUrlPanel.Visibility = type is "OpenAI" or "Zai" ? Visibility.Visible : Visibility.Collapsed;

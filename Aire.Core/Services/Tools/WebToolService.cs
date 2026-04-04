@@ -37,9 +37,9 @@ namespace Aire.Services.Tools
                 var result = await _webFetchService.FetchAsync(url, maxChars);
                 return new ToolExecutionResult { TextResult = result.ToToolResponseString() };
             }
-            catch (Exception ex)
+            catch
             {
-                return new ToolExecutionResult { TextResult = $"Error fetching URL: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Error fetching URL." };
             }
         }
 
@@ -90,9 +90,9 @@ namespace Aire.Services.Tools
                     TextResult = $"HTTP {(int)response.StatusCode} {response.ReasonPhrase}\n\n{responseBody}"
                 };
             }
-            catch (Exception ex)
+            catch
             {
-                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Web operation failed." };
             }
         }
     }

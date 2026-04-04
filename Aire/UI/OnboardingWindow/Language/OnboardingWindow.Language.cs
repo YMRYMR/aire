@@ -134,7 +134,9 @@ namespace Aire.UI
         {
             if (ProviderTypeCombo.SelectedItem is not WpfComboBoxItem typeItem) return;
             var type = typeItem.Tag as string ?? "OpenAI";
-            if (ApiKeyUrls.TryGetValue(type, out var url) && !string.IsNullOrEmpty(url))
+            var descriptor = ProviderCatalog.TryGetDescriptor(type, out var resolved) ? resolved : null;
+            var url = descriptor?.ApiKeyUrl;
+            if (!string.IsNullOrEmpty(url))
             {
                 ApiKeyLink.Text = S("onboarding.whereApiKey", "Where do I get an API key?");
                 ApiKeyLink.Tag = url;
@@ -150,9 +152,9 @@ namespace Aire.UI
         {
             if (ProviderTypeCombo.SelectedItem is not WpfComboBoxItem typeItem) return;
             var type = typeItem.Tag as string ?? "OpenAI";
-
-            ApiKeyUrls.TryGetValue(type, out var apiKeyUrl);
-            SignUpUrls.TryGetValue(type, out var signUpUrl);
+            var descriptor = ProviderCatalog.TryGetDescriptor(type, out var resolved) ? resolved : null;
+            var apiKeyUrl = descriptor?.ApiKeyUrl;
+            var signUpUrl = descriptor?.SignUpUrl;
 
             string? url = !string.IsNullOrEmpty(apiKeyUrl) ? apiKeyUrl
                 : !string.IsNullOrEmpty(signUpUrl) ? signUpUrl

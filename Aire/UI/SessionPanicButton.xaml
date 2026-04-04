@@ -19,7 +19,8 @@
             MouseDown="DragBorder_MouseDown"
             Cursor="SizeAll"
             ToolTip="Click to stop the active keyboard/mouse session immediately.&#x0a;Drag to reposition.">
-        <Button Content="&#x23F9; STOP SESSION"
+        <Button x:Name="StopButton"
+                Content="&#x23F9; STOP SESSION"
                 FontSize="12"
                 FontWeight="Bold"
                 Foreground="White"

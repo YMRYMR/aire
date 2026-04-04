@@ -55,9 +55,9 @@ namespace Aire.Providers
 
                 return new AiResponse { Content = sb.ToString(), IsSuccess = true, Duration = sw.Elapsed };
             }
-            catch (Exception ex)
+            catch
             {
-                return new AiResponse { IsSuccess = false, ErrorMessage = ex.Message, Duration = sw.Elapsed };
+            return new AiResponse { IsSuccess = false, ErrorMessage = "Claude web request failed.", Duration = sw.Elapsed };
             }
         }
 

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Aire.Data;
 using Aire.Services;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
@@ -75,6 +77,22 @@ public class ChatMessage : INotifyPropertyChanged
         set { _attachedImage = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasAttachedImage)); }
     }
     public bool HasAttachedImage => _attachedImage != null;
+
+    private ObservableCollection<MessageAttachment>? _fileAttachments;
+    public ObservableCollection<MessageAttachment>? FileAttachments
+    {
+        get => _fileAttachments;
+        set { _fileAttachments = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasFileAttachments)); }
+    }
+    public bool HasFileAttachments => _fileAttachments?.Count > 0;
+
+    private ObservableCollection<ImageSource>? _inlineImages;
+    public ObservableCollection<ImageSource>? InlineImages
+    {
+        get => _inlineImages;
+        set { _inlineImages = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasInlineImages)); }
+    }
+    public bool HasInlineImages => _inlineImages?.Count > 0;
 
     private System.Collections.ObjectModel.ObservableCollection<TodoItem>? _todoItems;
     public System.Collections.ObjectModel.ObservableCollection<TodoItem>? TodoItems

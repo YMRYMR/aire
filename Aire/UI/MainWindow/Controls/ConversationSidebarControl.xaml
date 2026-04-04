@@ -107,10 +107,11 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Border Grid.Column="0"
-                                    Width="4"
-                                    CornerRadius="2"
+                                    Width="6"
+                                    CornerRadius="3"
                                     Margin="0 0 8 0"
-                                    Background="{Binding ProviderColor}" />
+                                    Background="{Binding ProviderColor}"
+                                    Opacity="0.95" />
                             <StackPanel Grid.Column="1">
                                 <Grid>
                                     <TextBlock x:Name="TitleDisplay"

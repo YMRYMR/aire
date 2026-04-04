@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text;
 using System.Net;
@@ -157,6 +158,42 @@ public class GoogleAiProviderTests
         var validation = await provider.ValidateConfigurationAsync(CancellationToken.None);
 
         Assert.True(validation.IsValid);
+    }
+
+    [Fact]
+    public async Task SendChatAsync_NetworkFailure_ReturnsSanitizedError()
+    {
+        GoogleAiProvider provider = new GoogleAiProvider();
+        provider.Initialize(new ProviderConfig
+        {
+            ApiKey = "test-key",
+            BaseUrl = "http://127.0.0.1:1/",
+            Model = "gemini-2.0-flash"
+        });
+
+        var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal("Google AI request failed.", response.ErrorMessage);
+        Assert.DoesNotContain("127.0.0.1", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task ValidateConfigurationAsync_NetworkFailure_ReturnsSanitizedError()
+    {
+        GoogleAiProvider provider = new GoogleAiProvider();
+        provider.Initialize(new ProviderConfig
+        {
+            ApiKey = "test-key",
+            BaseUrl = "http://127.0.0.1:1/",
+            Model = "gemini-2.0-flash"
+        });
+
+        var validation = await provider.ValidateConfigurationAsync(CancellationToken.None);
+
+        Assert.False(validation.IsValid);
+        Assert.Equal("Google AI configuration validation failed.", validation.Error);
+        Assert.DoesNotContain("127.0.0.1", validation.Error, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -378,7 +415,116 @@ public class GoogleAiProviderTests
         var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
 
         Assert.False(response.IsSuccess);
-        Assert.Contains("Gemini API 500", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("Google AI request failed.", response.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_ReturnsInlineImageBytes_ForImageGenerationModel()
+    {
+        using var server = new GoogleAiTestServer((method, path, _) =>
+        {
+            if (method == "POST" && path == "/v1beta/models/gemini-2.5-flash-image:generateContent")
+            {
+                return GoogleAiTestServer.Json(200,
+                    """
+                    {
+                      "candidates": [
+                        {
+                          "content": {
+                            "parts": [
+                              { "text": "Bright neon skyline" },
+                              {
+                                "inlineData": {
+                                  "mimeType": "image/png",
+                                  "data": "AQIDBA=="
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                    """);
+            }
+
+            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+        });
+
+        GoogleAiProvider provider = new GoogleAiProvider();
+        provider.Initialize(new ProviderConfig
+        {
+            ApiKey = "test-key",
+            BaseUrl = server.BaseUrl,
+            Model = "gemini-2.5-flash-image",
+            ModelCapabilities = ["vision", "imagegeneration"]
+        });
+
+        var result = await provider.GenerateImageAsync("Draw a neon skyline", CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(new byte[] { 1, 2, 3, 4 }, result.ImageBytes);
+        Assert.Equal("image/png", result.ImageMimeType);
+        Assert.Equal("Bright neon skyline", result.RevisedPrompt);
+        Assert.True(provider.SupportsImageGeneration);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_Fails_WhenImageGenerationModelReturnsNoInlineData()
+    {
+        using var server = new GoogleAiTestServer((method, path, _) =>
+        {
+            if (method == "POST" && path == "/v1beta/models/gemini-2.5-flash-image:generateContent")
+            {
+                return GoogleAiTestServer.Json(200,
+                    """
+                    {
+                      "candidates": [
+                        {
+                          "content": {
+                            "parts": [
+                              { "text": "Only text" }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                    """);
+            }
+
+            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+        });
+
+        GoogleAiProvider provider = new GoogleAiProvider();
+        provider.Initialize(new ProviderConfig
+        {
+            ApiKey = "test-key",
+            BaseUrl = server.BaseUrl,
+            Model = "gemini-2.5-flash-image",
+            ModelCapabilities = ["vision", "imagegeneration"]
+        });
+
+        var result = await provider.GenerateImageAsync("Draw a neon skyline", CancellationToken.None);
+
+        Assert.False(result.IsSuccess);
+        Assert.Contains("no image data", result.ErrorMessage, System.StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task GenerateImageAsync_ReturnsSanitizedError_OnTransportFailure()
+    {
+        var provider = new GoogleAiProvider();
+        provider.Initialize(new ProviderConfig
+        {
+            ApiKey = "test-key",
+            BaseUrl = "http://127.0.0.1:1/",
+            Model = "gemini-2.5-flash-image",
+            ModelCapabilities = ["imagegeneration"]
+        });
+
+        var result = await provider.GenerateImageAsync("Draw a neon skyline", CancellationToken.None);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Google AI image generation failed.", result.ErrorMessage);
     }
 
     private sealed class GoogleAiTestServer : IDisposable

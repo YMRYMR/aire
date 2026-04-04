@@ -42,6 +42,7 @@ namespace Aire.UI
             var L = LocalizationService.S;
 
             TitleText.Text = L("settings.title", "Settings — Aire");
+            CloseButton.ToolTip = L("tooltip.close", "Close");
             TabProviders.Header = L("settings.aiProviders", "AI Providers");
             TabAppearance.Header = L("settings.appearance", "Appearance");
             TabVoice.Header = L("settings.voiceOutput", "Voice");
@@ -74,13 +75,17 @@ namespace Aire.UI
             BaseUrlLabel.Text = L("settings.baseUrl", "Base URL (optional)");
             EnabledCheckBox.Content = L("settings.enabled", "Enabled");
             AddProviderButton.Content = L("settings.addProvider", "+ Add");
+            SetupWizardButton.Content = L("settings.setupWizard", "Setup Wizard");
             AnthropicKeyHint.Text = L("settings.anthropicHint",
                 "Tip: leave empty to use the ANTHROPIC_API_KEY environment variable.");
+            ApiAccessEnabledCheckBox.ToolTip = L("settings.apiAccessEnabledTooltip",
+                "Lets other local apps control Aire. Leave off unless you trust the caller.");
 
             VoiceLocalOnlyCheckBox.Content = L("settings.voiceLocalOnly", "Use local voices only (no internet required)");
             DownloadVoicesButton.Content = L("settings.downloadVoices", "Download Windows voices...");
             VoiceVoiceLabel.Text = L("settings.voice", "Voice");
             VoiceSpeedLabel.Text = L("settings.voiceSpeed", "Speed");
+            TestVoiceButton.ToolTip = L("settings.testSelectedVoice", "Test selected voice");
             ContextDescriptionText.Text = L("settings.contextDescription", "Control how much conversation history Aire sends to providers and whether stable prompt prefixes can be marked cache-friendly.");
             EnablePromptCachingCheckBox.Content = L("settings.contextEnableCaching", "Prefer prompt caching when the provider supports it");
             EnableConversationSummariesCheckBox.Content = L("settings.contextEnableSummaries", "Summarize older trimmed conversation context");

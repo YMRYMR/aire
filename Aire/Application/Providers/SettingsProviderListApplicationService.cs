@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Aire.AppLayer.Abstractions;
 using Aire.Data;
+using Aire.Providers;
 
 namespace Aire.AppLayer.Providers
 {
@@ -57,11 +58,13 @@ namespace Aire.AppLayer.Providers
         /// <returns>The inserted provider, including its generated identifier.</returns>
         public async Task<Provider> CreateDefaultProviderAsync(IProviderRepository providers)
         {
+            var descriptor = ProviderCatalog.GetDescriptor("OpenAI");
+            var defaultModel = ModelCatalog.GetDefaults(descriptor.Type).FirstOrDefault()?.Id ?? "gpt-4o";
             var provider = new Provider
             {
-                Name = "New Provider",
-                Type = "OpenAI",
-                Model = "gpt-4o",
+                Name = descriptor.DefaultName,
+                Type = descriptor.Type,
+                Model = defaultModel,
                 IsEnabled = true,
                 Color = "#888888"
             };
@@ -76,6 +79,28 @@ namespace Aire.AppLayer.Providers
         /// <param name="providerId">Identifier of the provider to remove.</param>
         public Task DeleteProviderAsync(IProviderRepository providers, int providerId)
             => providers.DeleteProviderAsync(providerId);
+
+        /// <summary>
+        /// Toggles one provider's enabled state and persists the updated record.
+        /// </summary>
+        /// <param name="providers">Repository used to persist the updated provider.</param>
+        /// <param name="provider">Provider whose enabled state should be toggled.</param>
+        /// <returns>The provider after the toggle has been persisted.</returns>
+        public async Task<Provider> ToggleEnabledAsync(IProviderRepository providers, Provider provider)
+        {
+            var previous = provider.IsEnabled;
+            provider.IsEnabled = !provider.IsEnabled;
+            try
+            {
+                await providers.UpdateProviderAsync(provider);
+                return provider;
+            }
+            catch
+            {
+                provider.IsEnabled = previous;
+                throw;
+            }
+        }
 
         /// <summary>
         /// Reorders providers according to a drag-and-drop move and returns the updated selection state.

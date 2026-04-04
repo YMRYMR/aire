@@ -51,7 +51,7 @@ namespace Aire.Services.Mcp
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"McpManager: failed to start '{config.Name}': {ex.Message}");
+                    Debug.WriteLine($"McpManager: failed to start '{config.Name}': {ex.GetType().Name}");
                 }
             }
 
@@ -95,7 +95,7 @@ namespace Aire.Services.Mcp
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"McpManager.StartSingleAsync '{config.Name}': {ex.Message}");
+                Debug.WriteLine($"McpManager.StartSingleAsync '{config.Name}': {ex.GetType().Name}");
                 throw;
             }
         }

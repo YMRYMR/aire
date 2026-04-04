@@ -7,12 +7,9 @@ namespace Aire.Tests.Providers;
 public class ProviderRegistryCoverageTests
 {
     [Fact]
-    public void GetMetadata_UnknownTypeFallsBackToOpenAiAndCachesByKey()
+    public void GetMetadata_UnknownTypeThrows()
     {
-        IProviderMetadata metadata = ProviderRegistry.GetMetadata("Something-Else");
-        IProviderMetadata metadata2 = ProviderRegistry.GetMetadata("Something-Else");
-        Assert.IsType<OpenAiProvider>(metadata);
-        Assert.Same(metadata, metadata2);
+        Assert.Throws<NotSupportedException>(() => ProviderRegistry.GetMetadata("Something-Else"));
     }
 
     [Fact]
@@ -39,5 +36,25 @@ public class ProviderRegistryCoverageTests
         Assert.Null(providerConfig.ModelCapabilities);
         Assert.Equal(35791, providerConfig2.TimeoutMinutes);
         Assert.Null(providerConfig2.ModelCapabilities);
+    }
+
+    [Fact]
+    public void GetMetadata_AndCreateProvider_SupportGoogleAiImage()
+    {
+        var metadata = ProviderRegistry.GetMetadata("GoogleAIImage");
+        Assert.IsType<GoogleAiImageProvider>(metadata);
+
+        var provider = ProviderRegistry.CreateProvider(new Provider
+        {
+            Id = 999,
+            Name = "Gemini Images",
+            Type = "GoogleAIImage",
+            ApiKey = "test-key",
+            Model = "gemini-2.5-flash-image",
+            IsEnabled = true
+        });
+
+        Assert.IsType<GoogleAiImageProvider>(provider);
+        Assert.Equal("GoogleAIImage", provider.ProviderType);
     }
 }

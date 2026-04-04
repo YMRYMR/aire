@@ -35,9 +35,9 @@ namespace Aire.AppLayer.Providers
                 await _client.InstallAsync(progress, cancellationToken);
                 return new OllamaActionResult(true, "Ollama installed. Please restart the application.");
             }
-            catch (Exception ex)
+            catch
             {
-                return new OllamaActionResult(false, $"Could not install Ollama: {ex.Message}");
+            return new OllamaActionResult(false, "Could not install Ollama.");
             }
         }
 
@@ -60,9 +60,9 @@ namespace Aire.AppLayer.Providers
                 await _client.PullModelAsync(modelName, baseUrl, progress, cancellationToken);
                 return new OllamaActionResult(true, $"'{modelName}' downloaded successfully.");
             }
-            catch (Exception ex)
+            catch
             {
-                return new OllamaActionResult(false, $"Could not download model: {ex.Message}");
+            return new OllamaActionResult(false, "Could not download model.");
             }
         }
 
@@ -80,9 +80,9 @@ namespace Aire.AppLayer.Providers
                 await _client.DeleteModelAsync(modelName, baseUrl, cancellationToken);
                 return new OllamaActionResult(true, $"'{modelName}' uninstalled successfully.");
             }
-            catch (Exception ex)
+            catch
             {
-                return new OllamaActionResult(false, $"Could not uninstall model: {ex.Message}");
+            return new OllamaActionResult(false, "Could not uninstall model.");
             }
         }
     }

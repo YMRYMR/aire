@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Aire.AppLayer.Providers;
 using Aire.Domain.Providers;
+using Aire.Data;
 using Aire.Providers;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
 
@@ -139,13 +140,14 @@ namespace Aire.Services
 
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _errorOccurred?.Invoke(this, ex.Message);
+                const string message = "An unexpected error occurred. Please try again.";
+                _errorOccurred?.Invoke(this, message);
                 return new AiResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = ex.Message
+                    ErrorMessage = message
                 };
             }
         }
@@ -199,7 +201,12 @@ namespace Aire.Services
         /// <param name="role">Unused legacy message role.</param>
         /// <param name="content">Unused legacy message text.</param>
         /// <param name="imagePath">Unused legacy image path.</param>
-        public async Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null)
+        public async Task SaveMessageAsync(
+            int conversationId,
+            string role,
+            string content,
+            string? imagePath = null,
+            IEnumerable<MessageAttachment>? attachments = null)
         {
             await Task.CompletedTask;
         }

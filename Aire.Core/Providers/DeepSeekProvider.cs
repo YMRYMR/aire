@@ -64,7 +64,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"DeepSeek live model fetch failed: {ex.Message}");
+                Debug.WriteLine($"DeepSeek live model fetch failed: {ex.GetType().Name}");
                 return null;
             }
         }

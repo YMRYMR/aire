@@ -1,0 +1,197 @@
+using System.Text.Json;
+using System.IO;
+
+namespace Aire.Screenshots;
+
+internal static class ScreenshotCli
+{
+    public static async Task<int> RunAsync(string[] args)
+    {
+        if (args.Length == 0 || HasHelpFlag(args))
+        {
+            PrintUsage();
+            return 1;
+        }
+
+        try
+        {
+            switch (args[0].ToLowerInvariant())
+            {
+                case "list-windows":
+                    ListWindows();
+                    return 0;
+
+                case "capture-window":
+                    await CaptureWindowAsync(ParseWindowRequest(args[1..]));
+                    return 0;
+
+                case "capture-active":
+                    await CaptureWindowAsync(ParseActiveRequest(args[1..]));
+                    return 0;
+
+                case "run-plan":
+                    await RunPlanAsync(ParseRequiredValue(args[1..], "--plan"));
+                    return 0;
+
+                default:
+                    Console.Error.WriteLine($"Unknown command '{args[0]}'.");
+                    PrintUsage();
+                    return 1;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            return 2;
+        }
+    }
+
+    private static void ListWindows()
+    {
+        foreach (var window in NativeWindowFinder.ListWindows())
+            Console.WriteLine($"{window.ProcessName}\t{window.Title}");
+    }
+
+    private static async Task RunPlanAsync(string planPath)
+    {
+        if (!File.Exists(planPath))
+            throw new FileNotFoundException("Plan file not found.", planPath);
+
+        await using var stream = File.OpenRead(planPath);
+        var plan = await JsonSerializer.DeserializeAsync<ScreenshotPlan>(stream, JsonOptions.Default)
+            ?? throw new InvalidOperationException("Failed to deserialize screenshot plan.");
+
+        await UiAutomationRunner.RunActionsAsync(plan.SetupActions);
+
+        foreach (var request in plan.Screenshots)
+            await CaptureWindowAsync(request);
+    }
+
+    private static async Task CaptureWindowAsync(ScreenshotRequest request)
+    {
+        await UiAutomationRunner.RunActionsAsync(request.Actions, request);
+
+        if (request.DelayMs > 0)
+            await Task.Delay(request.DelayMs);
+
+        using var bitmap = WindowCaptureService.Capture(request);
+        var outputPath = Path.GetFullPath(request.OutputPath);
+        Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+        bitmap.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);
+        Console.WriteLine(outputPath);
+    }
+
+    private static ScreenshotRequest ParseWindowRequest(string[] args)
+    {
+        var titleContains = ParseOptionalValue(args, "--title-contains");
+        var exactTitle = ParseOptionalValue(args, "--exact-title");
+        var processName = ParseOptionalValue(args, "--process");
+        var output = ParseRequiredValue(args, "--output");
+        var delayMs = ParseIntValue(args, "--delay-ms", 0);
+        var padding = ParseIntValue(args, "--padding", 16);
+        var activate = HasFlag(args, "--activate");
+
+        if (string.IsNullOrWhiteSpace(titleContains) && string.IsNullOrWhiteSpace(exactTitle))
+            throw new InvalidOperationException("capture-window requires --title-contains or --exact-title.");
+
+        return new ScreenshotRequest(
+            output,
+            exactTitle,
+            titleContains,
+            processName,
+            delayMs,
+            padding,
+            activate,
+            UseActiveWindow: false,
+            Actions: null);
+    }
+
+    private static ScreenshotRequest ParseActiveRequest(string[] args)
+    {
+        var output = ParseRequiredValue(args, "--output");
+        var delayMs = ParseIntValue(args, "--delay-ms", 0);
+        var padding = ParseIntValue(args, "--padding", 16);
+
+        return new ScreenshotRequest(
+            output,
+            ExactTitle: null,
+            TitleContains: null,
+            ProcessName: null,
+            delayMs,
+            padding,
+            ActivateWindow: false,
+            UseActiveWindow: true,
+            Actions: null);
+    }
+
+    private static bool HasHelpFlag(string[] args)
+        => args.Any(arg => string.Equals(arg, "--help", StringComparison.OrdinalIgnoreCase) ||
+                           string.Equals(arg, "-h", StringComparison.OrdinalIgnoreCase));
+
+    private static bool HasFlag(string[] args, string flag)
+        => args.Any(arg => string.Equals(arg, flag, StringComparison.OrdinalIgnoreCase));
+
+    private static string ParseRequiredValue(string[] args, string key)
+        => ParseOptionalValue(args, key)
+           ?? throw new InvalidOperationException($"Missing required argument {key}.");
+
+    private static string? ParseOptionalValue(string[] args, string key)
+    {
+        for (var i = 0; i < args.Length - 1; i++)
+        {
+            if (string.Equals(args[i], key, StringComparison.OrdinalIgnoreCase))
+                return args[i + 1];
+        }
+
+        return null;
+    }
+
+    private static int ParseIntValue(string[] args, string key, int defaultValue)
+    {
+        var value = ParseOptionalValue(args, key);
+        return int.TryParse(value, out var parsed) ? parsed : defaultValue;
+    }
+
+    private static void PrintUsage()
+    {
+        Console.WriteLine(
+            """
+            Aire.Screenshots
+
+            Commands:
+              list-windows
+              capture-window --title-contains "<text>" --output "<path>" [--process Aire] [--delay-ms 500] [--padding 16] [--activate]
+              capture-window --exact-title "<text>" --output "<path>" [--delay-ms 500] [--padding 16] [--activate]
+              capture-active --output "<path>" [--delay-ms 500] [--padding 16]
+              run-plan --plan "<path-to-json>"
+
+            Plan JSON shape:
+              {
+                "setupActions": [
+                  {
+                    "kind": "start-process",
+                    "executablePath": "C:/dev/aire/Aire/bin/Debug/net10.0-windows10.0.17763.0/Aire.exe",
+                    "delayMs": 1500
+                  }
+                ],
+                "screenshots": [
+                  {
+                    "outputPath": "Assets/Help/main-window.png",
+                    "titleContains": "Aire",
+                    "processName": "Aire",
+                    "delayMs": 750,
+                    "padding": 12,
+                    "activateWindow": true,
+                    "actions": [
+                      {
+                        "kind": "invoke",
+                        "automationId": "PART_ModeButton",
+                        "delayMs": 250
+                      }
+                    ]
+                  }
+                ]
+              }
+            """);
+    }
+}

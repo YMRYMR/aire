@@ -100,7 +100,37 @@ public sealed class ClaudeAiProviderTests
         var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
 
         Assert.False(response.IsSuccess);
-        Assert.Contains("Anthropic API 500", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("Anthropic request failed.", response.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task SendChatAsync_ReturnsSanitizedError_OnHttpException()
+    {
+        var handler = new RecordingClaudeHandler(request =>
+            throw new HttpRequestException("secret://internal-host"));
+
+        var provider = CreateProvider(handler);
+
+        var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal("Anthropic request failed.", response.ErrorMessage);
+        Assert.DoesNotContain("internal-host", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task ValidateConfigurationAsync_ReturnsSanitizedError_OnHttpException()
+    {
+        var handler = new RecordingClaudeHandler(request =>
+            throw new HttpRequestException("secret://internal-host"));
+
+        var provider = CreateProvider(handler);
+
+        var validation = await provider.ValidateConfigurationAsync(CancellationToken.None);
+
+        Assert.False(validation.IsValid);
+        Assert.Equal("Anthropic configuration validation failed.", validation.Error);
+        Assert.DoesNotContain("internal-host", validation.Error, StringComparison.OrdinalIgnoreCase);
     }
 
     private static ClaudeAiProvider CreateProvider(RecordingClaudeHandler handler)

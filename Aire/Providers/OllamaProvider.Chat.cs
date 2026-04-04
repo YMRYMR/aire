@@ -94,7 +94,8 @@ namespace Aire.Providers
             }
             catch (HttpRequestException ex)
             {
-                return Fail($"Network error: {ex.Message}. Make sure Ollama is running at {_baseUrl}", startTime);
+                    System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
+                return Fail($"Network error while contacting Ollama. Make sure Ollama is running at {_baseUrl}.", startTime);
             }
             catch (TaskCanceledException)
             {
@@ -102,7 +103,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message, startTime);
+                    System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
+                return Fail("Ollama request failed.", startTime);
             }
         }
 

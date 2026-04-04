@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Windows;
+using Aire.Bootstrap;
 using Aire.Services;
 using WinFormsScreen = System.Windows.Forms.Screen;
 
@@ -12,17 +13,23 @@ namespace Aire
     {
         private void LoadWindowSize()
         {
+            SetupPreferences setupPreferences = SetupPreferencesStore.Load();
+
             try
             {
-                if (!File.Exists(_windowStatePath)) return;
-                var json = File.ReadAllText(_windowStatePath);
-                using var doc = JsonDocument.Parse(json);
-                var root = doc.RootElement;
+                JsonElement? root = null;
+                if (File.Exists(_windowStatePath))
+                {
+                    var json = File.ReadAllText(_windowStatePath);
+                    using var doc = JsonDocument.Parse(json);
+                    root = doc.RootElement.Clone();
+                }
+
                 var workArea = SystemParameters.WorkArea;
-                double? savedWidth = root.TryGetProperty("width", out var w) && w.TryGetDouble(out var widthVal) ? widthVal : null;
-                double? savedHeight = root.TryGetProperty("height", out var h) && h.TryGetDouble(out var heightVal) ? heightVal : null;
-                double? savedLeft = root.TryGetProperty("left", out var l) && l.ValueKind != JsonValueKind.Null && l.TryGetDouble(out var leftVal) ? leftVal : null;
-                double? savedTop = root.TryGetProperty("top", out var topJson) && topJson.ValueKind != JsonValueKind.Null && topJson.TryGetDouble(out var topVal) ? topVal : null;
+                double? savedWidth = root.HasValue && root.Value.TryGetProperty("width", out var w) && w.TryGetDouble(out var widthVal) ? widthVal : null;
+                double? savedHeight = root.HasValue && root.Value.TryGetProperty("height", out var h) && h.TryGetDouble(out var heightVal) ? heightVal : null;
+                double? savedLeft = root.HasValue && root.Value.TryGetProperty("left", out var l) && l.ValueKind != JsonValueKind.Null && l.TryGetDouble(out var leftVal) ? leftVal : null;
+                double? savedTop = root.HasValue && root.Value.TryGetProperty("top", out var topJson) && topJson.ValueKind != JsonValueKind.Null && topJson.TryGetDouble(out var topVal) ? topVal : null;
 
                 if (savedWidth.HasValue && savedHeight.HasValue &&
                     savedLeft.HasValue && savedTop.HasValue)
@@ -51,46 +58,59 @@ namespace Aire
                     if (savedHeight.HasValue && savedHeight.Value >= MinHeight)
                         Height = Math.Min(savedHeight.Value, workArea.Height);
                 }
-                if (root.TryGetProperty("fontSize", out var f) && f.GetDouble() is >= 8 and <= 24)
+                if (root.HasValue && root.Value.TryGetProperty("fontSize", out var f) && f.GetDouble() is >= 8 and <= 24)
                     AppearanceService.SetFontSize(f.GetDouble());
-                if (root.TryGetProperty("sidebarWidth", out var sw) && sw.GetDouble() is >= 80 and <= 800)
+                if (root.HasValue && root.Value.TryGetProperty("sidebarWidth", out var sw) && sw.GetDouble() is >= 80 and <= 800)
                     _sidebarWidth = sw.GetDouble();
 
                 double brightness = AppearanceService.Brightness;
                 double tintPosition = AppearanceService.TintPosition;
                 double accentBrightness = AppearanceService.AccentBrightness;
                 double accentTintPosition = AppearanceService.AccentTintPosition;
-                if (root.TryGetProperty("brightness", out var b) && b.GetDouble() is >= 0 and <= 1)
+                if (root.HasValue && root.Value.TryGetProperty("brightness", out var b) && b.GetDouble() is >= 0 and <= 1)
                     brightness = b.GetDouble();
-                else if (root.TryGetProperty("usesDarkPalette", out var udp))
+                else if (root.HasValue && root.Value.TryGetProperty("usesDarkPalette", out var udp))
                     brightness = udp.GetBoolean() ? 0.0 : 1.0;
-                else if (root.TryGetProperty("isDark", out var d))
+                else if (root.HasValue && root.Value.TryGetProperty("isDark", out var d))
                     brightness = d.GetBoolean() ? 0.0 : 1.0;
-                if (root.TryGetProperty("tintPosition", out var t) && t.GetDouble() is >= 0 and <= 1)
+                if (root.HasValue && root.Value.TryGetProperty("tintPosition", out var t) && t.GetDouble() is >= 0 and <= 1)
                     tintPosition = t.GetDouble();
-                if (root.TryGetProperty("accentBrightness", out var ab) && ab.GetDouble() is >= 0 and <= 1)
+                if (root.HasValue && root.Value.TryGetProperty("accentBrightness", out var ab) && ab.GetDouble() is >= 0 and <= 1)
                     accentBrightness = ab.GetDouble();
-                if (root.TryGetProperty("accentTintPosition", out var at) && at.GetDouble() is >= 0 and <= 1)
+                if (root.HasValue && root.Value.TryGetProperty("accentTintPosition", out var at) && at.GetDouble() is >= 0 and <= 1)
                     accentTintPosition = at.GetDouble();
                 AppearanceService.Apply(brightness, tintPosition);
                 AppearanceService.ApplyAccent(accentBrightness, accentTintPosition);
 
-                if (root.TryGetProperty("isAttached", out var ia))
+                if (root.HasValue && root.Value.TryGetProperty("isAttached", out var ia))
                     _isAttached = ia.GetBoolean();
 
-                string language = "en";
-                if (root.TryGetProperty("language", out var lang) && !string.IsNullOrEmpty(lang.GetString()))
+                string language = string.IsNullOrWhiteSpace(setupPreferences.LanguageCode)
+                    ? "en"
+                    : setupPreferences.LanguageCode;
+                if (root.HasValue && root.Value.TryGetProperty("language", out var lang) && !string.IsNullOrEmpty(lang.GetString()))
                     language = lang.GetString()!;
                 LocalizationService.SetLanguage(language);
 
-                if (root.TryGetProperty("voiceEnabled", out var ve))
-                    _ttsService.SetVoiceEnabled(ve.GetBoolean(), notify: false);
-                if (root.TryGetProperty("useLocalOnly", out var ulo))
-                    _ttsService.SetUseLocalOnly(ulo.GetBoolean(), notify: false);
-                if (root.TryGetProperty("voiceName", out var vn) && !string.IsNullOrEmpty(vn.GetString()))
-                    _ttsService.SetVoice(vn.GetString(), notify: false);
-                if (root.TryGetProperty("voiceRate", out var vr) && vr.TryGetInt32(out var rate))
-                    _ttsService.SetRate(rate, notify: false);
+                bool voiceEnabled = setupPreferences.VoiceOutputEnabled;
+                bool useLocalOnly = setupPreferences.UseLocalVoicesOnly;
+                string? voiceName = setupPreferences.SelectedVoice;
+                int voiceRate = setupPreferences.VoiceRate;
+
+                if (root.HasValue && root.Value.TryGetProperty("voiceEnabled", out var ve))
+                    voiceEnabled = ve.GetBoolean();
+                if (root.HasValue && root.Value.TryGetProperty("useLocalOnly", out var ulo))
+                    useLocalOnly = ulo.GetBoolean();
+                if (root.HasValue && root.Value.TryGetProperty("voiceName", out var vn) && !string.IsNullOrEmpty(vn.GetString()))
+                    voiceName = vn.GetString();
+                if (root.HasValue && root.Value.TryGetProperty("voiceRate", out var vr) && vr.TryGetInt32(out var rate))
+                    voiceRate = rate;
+
+                _ttsService.SetVoiceEnabled(voiceEnabled, notify: false);
+                _ttsService.SetUseLocalOnly(useLocalOnly, notify: false);
+                if (!string.IsNullOrWhiteSpace(voiceName))
+                    _ttsService.SetVoice(voiceName, notify: false);
+                _ttsService.SetRate(voiceRate, notify: false);
             }
             catch (Exception ex) { AppLogger.Warn("MainWindow.LoadWindowState", "Failed to restore window state", ex); }
 

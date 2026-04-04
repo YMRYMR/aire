@@ -115,7 +115,12 @@ public sealed class ToolExecutionWorkflowServiceTests
         public Task DeleteConversationAsync(int conversationId) => throw new NotSupportedException();
         public Task DeleteAllConversationsAsync() => throw new NotSupportedException();
 
-        public Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null)
+        public Task SaveMessageAsync(
+            int conversationId,
+            string role,
+            string content,
+            string? imagePath = null,
+            IEnumerable<Aire.Data.MessageAttachment>? attachments = null)
         {
             SavedMessages.Add((conversationId, role, content));
             return Task.CompletedTask;

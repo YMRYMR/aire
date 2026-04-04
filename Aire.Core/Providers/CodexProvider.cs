@@ -19,6 +19,10 @@ namespace Aire.Providers
     public class CodexProvider : BaseAiProvider
     {
         private const int DefaultTimeoutMs = 120000;
+        private const int ToolOnlySystemMessageLimit = 2500;
+        private const int ToolOnlyConversationMessageLimit = 900;
+        private const int NormalSystemMessageLimit = 6000;
+        private const int NormalConversationMessageLimit = 2000;
 
         public override string ProviderType => "Codex";
         public override string DisplayName => "Codex (Local CLI bridge)";
@@ -112,10 +116,11 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
+            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
                 return new AiResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = ex.Message,
+                    ErrorMessage = "Codex request failed.",
                     Duration = DateTime.UtcNow - startTime
                 };
             }
@@ -155,7 +160,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                return ProviderValidationResult.Fail($"{ex.GetType().Name}: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                return ProviderValidationResult.Fail("Codex validation failed.");
             }
         }
 
@@ -171,7 +177,11 @@ namespace Aire.Providers
             var latestUserMessage = conversationMessages
                 .LastOrDefault(message => string.Equals(message.Role, "user", StringComparison.OrdinalIgnoreCase))
                 ?.Content;
+            var isRetryFollowUp = IsRetryFollowUp(latestUserMessage);
             var requiresToolOnlyResponse = RequiresForcedToolOnlyResponse(latestUserMessage);
+            var systemMessageLimit = requiresToolOnlyResponse ? ToolOnlySystemMessageLimit : NormalSystemMessageLimit;
+            var conversationMessageLimit = requiresToolOnlyResponse ? ToolOnlyConversationMessageLimit : NormalConversationMessageLimit;
+            var conversationWindow = SelectConversationWindow(conversationMessages, requiresToolOnlyResponse, isRetryFollowUp);
 
             var sb = new StringBuilder();
             sb.AppendLine("You are Codex, answering inside Aire.");
@@ -180,6 +190,8 @@ namespace Aire.Providers
             sb.AppendLine("Never use Codex CLI's own file, search, shell, or browser actions when Aire tools are available.");
             sb.AppendLine("Never answer a file, system, browser, or search request from memory when Aire tools are available.");
             sb.AppendLine("When a task requires an Aire tool, your entire final answer must be exactly one Aire <tool_call> block.");
+            if (isRetryFollowUp)
+                sb.AppendLine("If the latest user message is a retry request like 'try again', infer they mean the most recent unfinished user task from the conversation context.");
             sb.AppendLine();
 
             if (systemMessages.Count > 0)
@@ -190,7 +202,7 @@ namespace Aire.Providers
                 foreach (var message in systemMessages.TakeLast(2))
                 {
                     sb.AppendLine("<system_instruction>");
-                    sb.AppendLine(TrimForPrompt(message.Content, 6000));
+                    sb.AppendLine(TrimForPrompt(message.Content, systemMessageLimit));
                     if (!string.IsNullOrWhiteSpace(message.ImagePath))
                         sb.AppendLine($"[Attached image path: {message.ImagePath}]");
                     sb.AppendLine("</system_instruction>");
@@ -201,12 +213,12 @@ namespace Aire.Providers
             sb.AppendLine("CONVERSATION:");
             sb.AppendLine();
 
-            foreach (var message in conversationMessages.TakeLast(8))
+            foreach (var message in conversationWindow)
             {
                 var role = string.IsNullOrWhiteSpace(message.Role) ? "user" : message.Role;
                 sb.Append(role.ToUpperInvariant());
                 sb.AppendLine(":");
-                sb.AppendLine(TrimForPrompt(message.Content, 2000));
+                sb.AppendLine(TrimForPrompt(message.Content, conversationMessageLimit));
                 if (!string.IsNullOrWhiteSpace(message.ImagePath))
                     sb.AppendLine($"[Attached image path: {message.ImagePath}]");
                 sb.AppendLine();
@@ -225,6 +237,102 @@ namespace Aire.Providers
             }
 
             return sb.ToString();
+        }
+
+        internal static IReadOnlyList<ChatMessage> SelectConversationWindow(
+            IReadOnlyList<ChatMessage> conversationMessages,
+            bool requiresToolOnlyResponse,
+            bool isRetryFollowUp)
+        {
+            if (requiresToolOnlyResponse)
+                return SelectToolFocusedConversationWindow(conversationMessages, isRetryFollowUp);
+
+            if (isRetryFollowUp)
+                return SelectRetryConversationWindow(conversationMessages);
+
+            return conversationMessages.TakeLast(8).ToList();
+        }
+
+        internal static IReadOnlyList<ChatMessage> SelectToolFocusedConversationWindow(IReadOnlyList<ChatMessage> conversationMessages, bool isRetryFollowUp = false)
+        {
+            if (conversationMessages.Count <= 4)
+                return conversationMessages.ToList();
+
+            var selected = new List<ChatMessage>();
+            var latestUserIndex = -1;
+            var previousUserIndex = -1;
+
+            for (var i = conversationMessages.Count - 1; i >= 0; i--)
+            {
+                if (string.Equals(conversationMessages[i].Role, "user", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (latestUserIndex < 0)
+                    {
+                        latestUserIndex = i;
+                    }
+                    else
+                    {
+                        previousUserIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            if (latestUserIndex > 0)
+            {
+                var immediateContextStart = Math.Max(0, latestUserIndex - 2);
+                for (var i = immediateContextStart; i <= latestUserIndex; i++)
+                    selected.Add(conversationMessages[i]);
+            }
+
+            if (isRetryFollowUp && previousUserIndex >= 0)
+            {
+                var previousContextStart = Math.Max(0, previousUserIndex - 1);
+                for (var i = previousContextStart; i <= previousUserIndex; i++)
+                {
+                    if (!selected.Contains(conversationMessages[i]))
+                        selected.Add(conversationMessages[i]);
+                }
+            }
+
+            foreach (var message in conversationMessages.TakeLast(3))
+            {
+                if (!selected.Contains(message))
+                    selected.Add(message);
+            }
+
+            return selected;
+        }
+
+        internal static IReadOnlyList<ChatMessage> SelectRetryConversationWindow(IReadOnlyList<ChatMessage> conversationMessages)
+        {
+            if (conversationMessages.Count <= 8)
+                return conversationMessages.ToList();
+
+            var selected = new List<ChatMessage>();
+            var userMessages = conversationMessages
+                .Select((message, index) => new { message, index })
+                .Where(x => string.Equals(x.message.Role, "user", StringComparison.OrdinalIgnoreCase))
+                .TakeLast(2)
+                .ToList();
+
+            foreach (var userMessage in userMessages)
+            {
+                var start = Math.Max(0, userMessage.index - 1);
+                for (var i = start; i <= userMessage.index; i++)
+                {
+                    if (!selected.Contains(conversationMessages[i]))
+                        selected.Add(conversationMessages[i]);
+                }
+            }
+
+            foreach (var message in conversationMessages.TakeLast(4))
+            {
+                if (!selected.Contains(message))
+                    selected.Add(message);
+            }
+
+            return selected;
         }
 
         internal static bool RequiresForcedToolOnlyResponse(string? content)
@@ -262,6 +370,26 @@ namespace Aire.Providers
             ];
 
             return triggers.Any(normalized.Contains);
+        }
+
+        internal static bool IsRetryFollowUp(string? content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+                return false;
+
+            var normalized = content.Trim().ToLowerInvariant();
+            string[] retryPhrases =
+            [
+                "try again",
+                "retry",
+                "again",
+                "do it again",
+                "continue",
+                "please continue",
+                "try that again"
+            ];
+
+            return retryPhrases.Contains(normalized, StringComparer.Ordinal);
         }
 
         private static string TrimForPrompt(string? content, int maxChars)

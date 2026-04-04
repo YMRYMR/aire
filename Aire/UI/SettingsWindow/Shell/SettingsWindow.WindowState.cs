@@ -79,9 +79,9 @@ namespace Aire.UI
                     _savedEditPanelWidth = epv;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                AppLogger.Warn("SettingsWindow.LoadWindowState", "Failed to restore window state", ex);
+                AppLogger.Warn("SettingsWindow.LoadWindowState", "Failed to restore window state");
             }
         }
 
@@ -101,9 +101,9 @@ namespace Aire.UI
                 });
                 File.WriteAllText(StatePath, json);
             }
-            catch (Exception ex)
+            catch
             {
-                AppLogger.Warn("SettingsWindow.SaveWindowState", "Failed to persist window state", ex);
+                AppLogger.Warn("SettingsWindow.SaveWindowState", "Failed to persist window state");
             }
         }
 

@@ -41,7 +41,8 @@
                                Foreground="{DynamicResource TextBrush}"
                                FontWeight="SemiBold"
                                VerticalAlignment="Center" />
-                    <Button Grid.Column="1"
+                    <Button x:Name="CloseButton"
+                            Grid.Column="1"
                             Content="&#x2715;"
                             ToolTip="Close"
                             Width="34" Height="34"

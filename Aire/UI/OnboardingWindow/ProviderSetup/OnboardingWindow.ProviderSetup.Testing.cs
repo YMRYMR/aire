@@ -36,18 +36,8 @@ namespace Aire.UI
                     return;
                 }
 
-                var runtimeService = new ProviderSetupApplicationService();
-                var validation = await runtimeService.ValidateDetailedAsync(provider, ct);
-                if (!validation.IsValid)
-                {
-                    var message = validation.ErrorMessage ?? "Provider configuration is invalid.";
-                    if (!string.IsNullOrWhiteSpace(validation.RemediationHint))
-                        message = $"{message} {validation.RemediationHint}";
-                    SetTestResult($"{S("onboarding.testFail", "Failed")}: {message}", false);
-                    return;
-                }
-
-                var response = await runtimeService.RunSmokeTestAsync(provider, ct);
+                var connectionTestService = new ProviderConnectionTestApplicationService();
+                var response = await connectionTestService.RunAsync(provider, ct);
 
                 if (ct.IsCancellationRequested)
                     return;
@@ -55,16 +45,16 @@ namespace Aire.UI
                 SetTestResult(
                     response.Success
                         ? S("onboarding.testOk", "Connected!")
-                        : $"{S("onboarding.testFail", "Failed")}: {response.ErrorMessage}",
+                        : $"{S("onboarding.testFail", "Failed")}: {response.Message}",
                     response.Success);
             }
             catch (OperationCanceledException)
             {
             }
-            catch (Exception ex)
+                catch
             {
                 if (!ct.IsCancellationRequested)
-                    SetTestResult($"{S("onboarding.testFail", "Failed")}: {ex.Message}", false);
+                    SetTestResult($"{S("onboarding.testFail", "Failed")}: provider test failed.", false);
             }
             finally
             {

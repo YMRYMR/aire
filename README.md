@@ -1,57 +1,63 @@
 # Aire
 
-Aire is a Windows desktop AI assistant built with WPF and .NET. It provides a chat interface for multiple model providers, local tool execution, browser-assisted workflows, speech input/output, email integrations, and a loopback local API for controlled automation.
+Aire is a Windows desktop AI workspace. It lets you talk to different AI providers from one chat window, keep local conversation history, approve or deny tool use, connect MCP servers, use voice features, and expose a loopback local API for trusted local automation.
 
-## Status
+## What Aire does
 
-The repository is under active cleanup and refactoring, but it currently builds and tests successfully.
+- Connects one desktop app to multiple providers and models
+- Keeps conversations, settings, and local state on your computer
+- Lets the AI request tools for files, commands, browser work, screenshots, system inspection, and more
+- Supports assistant modes such as `Developer`, `Architect`, `Teacher`, and `Painter`
+- Supports provider-returned images and provider-dependent image generation
+- Includes onboarding, provider capability tests, MCP discovery, and auto-accept profiles
 
-## Features
+## Important limits
 
-- Multi-provider chat with OpenAI-compatible, Anthropic, Google, Ollama, Codex, Groq, OpenRouter, DeepSeek, and related providers
-- Local tool execution for commands, files, input automation, web fetch, memory, and agent-style workflows
-- Embedded browser workflows via WebView2
-- Speech recognition and text-to-speech support
-- Email account integration and MCP server integration
-- Loopback-only local API for external automation
-- Onboarding and settings UI for configuring providers and local behavior
+- Aire is Windows-only today
+- Some features depend on the selected provider and model
+- Image generation, tool use, and vision support are not available on every provider
+- The local API is intentionally loopback-only and meant for trusted local use
 
-## Supported Providers
+## Providers
 
-| Provider type | Notes |
-|---|---|
-| `OpenAI` | Native OpenAI support; also the base for OpenAI-compatible services |
-| `Anthropic` | API-key mode and Claude.ai session flow |
-| `GoogleAI` | Gemini models |
-| `Ollama` | Local models via the Ollama API |
-| `DeepSeek` | OpenAI-compatible |
-| `Inception` | OpenAI-compatible |
+Aire currently supports first-class integrations for:
 
-Any OpenAI-compatible service (Groq, OpenRouter, custom endpoints) can be configured using the `OpenAI` provider type with a custom base URL.
+- `OpenAI`
+- `Anthropic`
+- `Claude.ai`
+- `Google AI`
+- `Google AI Images`
+- `Ollama`
+- `Codex`
+- `Groq`
+- `OpenRouter`
+- `DeepSeek`
+- `Inception`
+- `z.ai`
 
-## Repository Layout
+Some providers are direct integrations, while others use OpenAI-compatible APIs or local runtimes. Capability tests in the app are the best way to confirm what a specific provider and model can actually do in your setup.
 
-- `Aire/`: WPF desktop application
-- `Aire.Core/`: shared provider and tool logic
-- `Aire.Tests/`: automated test suite
-- `docs/`: refactor notes and project documentation
+## First run
 
-## Architecture
+1. Launch Aire.
+2. Use the setup wizard to add a provider.
+3. Choose a model.
+4. Open the main chat window and send your first message.
 
-- [docs/architecture/overview.md](./docs/architecture/overview.md)
-- [docs/architecture/developer-map.md](./docs/architecture/developer-map.md)
-- [docs/architecture/adding-features.md](./docs/architecture/adding-features.md)
-- [docs/providers/how-to-add-a-provider.md](./docs/providers/how-to-add-a-provider.md)
-- [docs/testing/strategy.md](./docs/testing/strategy.md)
-- [docs/testing/manual-smoke-checklist.md](./docs/testing/manual-smoke-checklist.md)
-- [docs/security/model.md](./docs/security/model.md)
-- [docs/release/public-repo-checklist.md](./docs/release/public-repo-checklist.md)
+If you are not sure where to start:
 
-## Requirements
+- easiest cloud path: `OpenAI`, `Anthropic`, or `Google AI`
+- easiest local path: `Ollama`
+- image-focused path: a provider/model that passes Aire's image-generation capability test
 
-- Windows 10 version 1809 or later
-- .NET 10 SDK
-- WebView2 Runtime
+## Repository layout
+
+- `Aire/`: WPF desktop app
+- `Aire.Core/`: shared domain, provider, and tool logic
+- `Aire.Setup/`: first-run accessibility and preference bootstrapper
+- `Aire.Tests/`: automated tests
+- `Aire.Screenshots/`: repeatable help/documentation screenshot automation
+- `docs/development/`: architecture, testing, release, and contributor notes
 
 ## Build
 
@@ -65,48 +71,53 @@ dotnet build .\aire.sln -m:1
 dotnet test .\Aire.Tests\Aire.Tests.csproj --no-build
 ```
 
-The default run is stable on any development machine. Live provider tests are opt-in:
+Optional live test gates:
 
 | Variable | Effect |
 |---|---|
-| `AIRE_RUN_LIVE_PROVIDER_TESTS=1` | Enables integration tests using real configured providers from the local Aire database |
+| `AIRE_RUN_LIVE_PROVIDER_TESTS=1` | Enables tests that use real configured providers from the local Aire database |
 | `AIRE_RUN_CONNECTIVITY_TESTS=1` | Enables connectivity validation against enabled providers |
-| `AIRE_TEST_DEEPSEEK_API_KEY=...` | Enables the DeepSeek token-usage test with an explicit API key |
+| `AIRE_TEST_DEEPSEEK_API_KEY=...` | Enables the DeepSeek token-usage integration test |
 
-Live tests depend on your local `%LOCALAPPDATA%\Aire\aire.db` and external provider availability. For normal development, plain `dotnet test` is the recommended path.
+For normal development, plain `dotnet test` is the recommended path.
 
-## Coverage
+## Configuration and storage
 
-```powershell
-dotnet test .\Aire.Tests\Aire.Tests.csproj --collect:"XPlat Code Coverage"
-```
+- User state is stored under `%LOCALAPPDATA%\Aire`
+- Sensitive stored values use Windows DPAPI where possible
+- The local API listens on `127.0.0.1:51234`
+- Provider setup, MCP servers, context settings, voice, and appearance are configured from the app UI
 
-Latest measured baseline:
-- line coverage: `46.43%`
-- branch coverage: `37.22%`
-- passing tests: `323`
+Do not commit local databases, generated help screenshots, or user-specific runtime files unless they are intentional documentation assets.
 
-## Configuration
+## Docs
 
-Most end-user configuration is done through the app UI.
+- [Development docs](./docs/development/README.md)
 
-- Provider credentials are configured in `Settings`
-- Sensitive stored values use Windows DPAPI where supported
-- Local app state is stored under `%LOCALAPPDATA%\Aire`
-- The local API binds to loopback and uses a local token
+User-facing help currently lives in the app itself and in the checked-in help assets under `Aire/Assets/Help/`.
 
-Do not commit local databases, generated WebView2 data, or user-specific config files.
+## Security
 
-## Security Notes
-
-- The local API is intended for trusted local use only
-- Tool execution features are powerful by design and should be reviewed before exposing them to broader automation
-- See [SECURITY.md](./SECURITY.md) for reporting guidance and security scope
-
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+- Tool execution is powerful by design and should be reviewed carefully
+- Auto-accept should be used conservatively
+- The local API should only be enabled for trusted local workflows
+- See [SECURITY.md](./SECURITY.md) for reporting guidance and scope
 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE).
+
+## Credits
+
+Creator:
+
+- Angeruroth
+
+Initial contributors:
+
+- Claude 4.6
+- GPT 5.4
+- DeepSeek 3.2
+- GLM 5.1
+- Mercury 2
+- Granite 4

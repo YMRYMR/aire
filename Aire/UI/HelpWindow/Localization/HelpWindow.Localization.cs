@@ -14,6 +14,7 @@ namespace Aire.UI
         private void ApplyLocalization()
         {
             TitleText.Text = LocalizationService.S("help.title", "Help — Aire");
+            CloseButton.ToolTip = LocalizationService.S("tooltip.close", "Close");
             SearchPlaceholder.Text = LocalizationService.S("help.search", "Search help\u2026");
             _allSections = LocalizationService.HelpSections.ToList();
             SearchBox.Text = "";

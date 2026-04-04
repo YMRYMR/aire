@@ -133,7 +133,8 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                await WriteResponseAsync(writer, LocalApiResponse.Error($"Invalid JSON: {ex.Message}")).ConfigureAwait(false);
+                ApiTraceLog.Record("error", "invalid_json", $"Invalid JSON payload: {ex.GetType().Name}", false);
+                await WriteResponseAsync(writer, LocalApiResponse.Error("Invalid JSON payload.")).ConfigureAwait(false);
                 return;
             }
 
@@ -206,6 +207,16 @@ namespace Aire.Services
                     "open_settings" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.ShowSettingsWindowAsync()).ConfigureAwait(false)),
                     "open_browser" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.ShowBrowserWindowAsync()).ConfigureAwait(false)),
                     "list_providers" => LocalApiResponse.OkResult(await InvokeOnUiAsync<List<ApiProviderSnapshot>>(() => _mainWindow.ApiListProvidersAsync()).ConfigureAwait(false)),
+                    "create_provider" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiProviderSnapshot>(() => _mainWindow.ApiCreateProviderAsync(
+                        GetNullableString(request.Parameters, "name"),
+                        GetString(request.Parameters, "type"),
+                        GetNullableString(request.Parameters, "apiKey"),
+                        GetNullableString(request.Parameters, "baseUrl"),
+                        GetString(request.Parameters, "model"),
+                        GetBoolOrDefault(request.Parameters, "isEnabled", true),
+                        GetNullableString(request.Parameters, "color"),
+                        GetBoolOrDefault(request.Parameters, "selectAfterCreate", false),
+                        GetNullableInt(request.Parameters, "inheritCredentialsFromProviderId"))).ConfigureAwait(false)),
                     "list_conversations" => LocalApiResponse.OkResult(await InvokeOnUiAsync<List<ConversationSummary>>(() => _mainWindow.ApiListConversationsAsync(GetString(request.Parameters, "search"))).ConfigureAwait(false)),
                     "create_conversation" => LocalApiResponse.OkResult(await InvokeOnUiAsync<int>(() => _mainWindow.ApiCreateConversationAsync(GetString(request.Parameters, "title"))).ConfigureAwait(false)),
                     "select_conversation" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSelectConversationAsync(GetInt(request.Parameters, "conversationId"))).ConfigureAwait(false)),
@@ -214,6 +225,10 @@ namespace Aire.Services
                     "set_provider_model" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetProviderModelAsync(GetInt(request.Parameters, "providerId"), GetString(request.Parameters, "model"))).ConfigureAwait(false)),
                     "send_message" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSendMessageAsync(GetString(request.Parameters, "text"))).ConfigureAwait(false)),
                     "list_pending_approvals" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiPendingApproval[]>(() => _mainWindow.ApiListPendingApprovalsAsync()).ConfigureAwait(false)),
+                    "wait_for_pending_approval" => LocalApiResponse.OkResult(await WaitForPendingApprovalAsync(
+                        () => InvokeOnUiAsync<ApiPendingApproval?>(() => _mainWindow.ApiGetFirstPendingApprovalAsync()),
+                        GetIntOrDefault(request.Parameters, "timeout_seconds", 30),
+                        token).ConfigureAwait(false)),
                     "approve_tool_call" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetPendingApprovalAsync(GetInt(request.Parameters, "index"), true)).ConfigureAwait(false)),
                     "deny_tool_call" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetPendingApprovalAsync(GetInt(request.Parameters, "index"), false)).ConfigureAwait(false)),
                     "execute_tool" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiToolExecutionResult>(() => _mainWindow.ApiExecuteToolAsync(
@@ -226,9 +241,14 @@ namespace Aire.Services
                     _ => LocalApiResponse.Error($"Unknown method: {request.Method}")
                 };
             }
+            catch (InvalidOperationException)
+            {
+                return LocalApiResponse.Error("Invalid local API request.");
+            }
             catch (Exception ex)
             {
-                return LocalApiResponse.Error(ex.Message);
+                ApiTraceLog.Record("error", request.Method, $"Unexpected local API failure: {ex.GetType().Name}", false);
+                return LocalApiResponse.Error("An internal error occurred.");
             }
         }
 
@@ -258,6 +278,37 @@ namespace Aire.Services
             return true;
         }
 
+        internal static async Task<ApiPendingApproval?> WaitForPendingApprovalAsync(
+            Func<Task<ApiPendingApproval?>> getPendingApprovalAsync,
+            int timeoutSeconds,
+            CancellationToken token,
+            int pollIntervalMs = 200)
+        {
+            timeoutSeconds = Math.Clamp(timeoutSeconds, 1, 3600);
+            pollIntervalMs = Math.Clamp(pollIntervalMs, 50, 5000);
+
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(token);
+            timeoutCts.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+
+            while (!timeoutCts.IsCancellationRequested)
+            {
+                var pending = await getPendingApprovalAsync().ConfigureAwait(false);
+                if (pending != null)
+                    return pending;
+
+                try
+                {
+                    await Task.Delay(pollIntervalMs, timeoutCts.Token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+            }
+
+            return null;
+        }
+
         internal static int GetInt(JsonElement? element, string name)
         {
             if (element.HasValue &&
@@ -276,6 +327,20 @@ namespace Aire.Services
                 prop.TryGetInt32(out var value))
                 return value;
             return defaultValue;
+        }
+
+        internal static int? GetNullableInt(JsonElement? element, string name)
+        {
+            if (element.HasValue &&
+                element.Value.ValueKind == JsonValueKind.Object &&
+                element.Value.TryGetProperty(name, out var prop))
+            {
+                if (prop.ValueKind == JsonValueKind.Number && prop.TryGetInt32(out var value))
+                    return value;
+                if (prop.ValueKind == JsonValueKind.String && int.TryParse(prop.GetString(), out var parsed))
+                    return parsed;
+            }
+            return null;
         }
 
         internal static bool GetBoolOrDefault(JsonElement? element, string name, bool defaultValue)
@@ -314,6 +379,12 @@ namespace Aire.Services
                     return value!;
             }
             return string.Empty;
+        }
+
+        internal static string? GetNullableString(JsonElement? element, string name)
+        {
+            var value = GetString(element, name);
+            return string.IsNullOrWhiteSpace(value) ? null : value;
         }
 
         internal static JsonElement GetObject(JsonElement? element, string name)

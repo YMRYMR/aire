@@ -94,4 +94,43 @@ public class ToolCallParserCoverageTests
         Assert.Equal("read_file", parsedAiResponse.ToolCall.Tool);
         Assert.Equal("Reading demo.txt", parsedAiResponse.ToolCall.Description);
     }
+
+    [Fact]
+    public void Parse_DetailsToolCall_WithIntegerAndUnderscoreKeys_IsRecognized()
+    {
+        string response = """
+The browser tab is open. Now let me read the page to find the logo image URLs.
+<details>
+<summary>🎯 Tool call: show_image</summary>
+Path_or_url: https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/1200px-OpenAI_Logo.svg.png
+Caption: OpenAI Logo
+</details>
+""";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+        Assert.NotNull(parsedAiResponse.ToolCall);
+        Assert.Equal("show_image", parsedAiResponse.ToolCall.Tool);
+        Assert.Equal("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/1200px-OpenAI_Logo.svg.png", parsedAiResponse.ToolCall.Parameters.GetProperty("path_or_url").GetString());
+        Assert.Equal("OpenAI Logo", parsedAiResponse.ToolCall.Parameters.GetProperty("caption").GetString());
+    }
+
+    [Fact]
+    public void Parse_ArrayWrappedToolCalls_PreservesEveryRecognizedEntry()
+    {
+        string response = """
+<tool_call>[
+  {"tool":"open_browser_tab","url":"https://example.com"},
+  {"tool":"read_browser_tab","index":-1},
+  {"tool":"show_image","path_or_url":"https://example.com/logo.png","caption":"Logo"}
+]</tool_call>
+""";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+        Assert.Equal(3, parsedAiResponse.ToolCalls.Count);
+        Assert.Equal("open_browser_tab", parsedAiResponse.ToolCalls[0].Tool);
+        Assert.Equal("read_browser_tab", parsedAiResponse.ToolCalls[1].Tool);
+        Assert.Equal("show_image", parsedAiResponse.ToolCalls[2].Tool);
+        Assert.Equal(-1, parsedAiResponse.ToolCalls[1].Parameters.GetProperty("index").GetInt32());
+        Assert.Equal("Logo", parsedAiResponse.ToolCalls[2].Parameters.GetProperty("caption").GetString());
+    }
 }

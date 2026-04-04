@@ -1,0 +1,275 @@
+<Window x:Class="Aire.Setup.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Aire - Setup"
+        Width="920"
+        Height="760"
+        MinWidth="860"
+        MinHeight="680"
+        Background="{DynamicResource BackgroundBrush}"
+        FontSize="13"
+        Icon="/aire.ico"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"
+                      GlassFrameThickness="0"
+                      ResizeBorderThickness="4"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Border Background="{DynamicResource BackgroundBrush}"
+            BorderBrush="{DynamicResource AccentBorderBrush}"
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Padding="12,10"
+                    Background="{DynamicResource AccentSurfaceBrush}"
+                    BorderBrush="{DynamicResource AccentBorderBrush}"
+                    BorderThickness="0,0,0,1"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               x:Name="WindowTitleTextBlock"
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextBrush}"
+                               Text="Aire - Setup" />
+                    <Button Grid.Column="1"
+                            x:Name="CloseButton"
+                            Width="34"
+                            Height="34"
+                            Padding="0"
+                            Click="CloseButton_Click"
+                            Content="&#x2715;"
+                            ToolTip="Close" />
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" Margin="24,20,24,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,0,0,20">
+                    <TextBlock x:Name="HeroTitleTextBlock"
+                               FontSize="28"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextBrush}"
+                               Text="First-Run Setup"/>
+                    <TextBlock x:Name="HeroDescriptionTextBlock"
+                               Margin="0,10,0,0"
+                               FontSize="15"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               Text="Choose the initial accessibility and assistant defaults before Aire opens its normal onboarding wizard."/>
+                </StackPanel>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <Border Padding="18"
+                                    Margin="0,0,0,16"
+                                    Background="{DynamicResource SurfaceBrush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                <StackPanel>
+                                    <TextBlock x:Name="LanguageSectionTitleTextBlock"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               Text="1. Language"/>
+                                    <TextBlock x:Name="LanguageSectionDescriptionTextBlock"
+                                               Margin="0,8,0,10"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"
+                                               Text="Pick the language Aire should use on first launch."/>
+                                    <ComboBox x:Name="LanguageComboBox"
+                                              Width="240"
+                                              HorizontalAlignment="Left"
+                                              SelectionChanged="LanguageComboBox_SelectionChanged"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Padding="18"
+                                    Margin="0,0,0,16"
+                                    Background="{DynamicResource SurfaceBrush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                <StackPanel>
+                                    <TextBlock x:Name="AssistantModeSectionTitleTextBlock"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               Text="2. Default Assistant Mode"/>
+                                    <TextBlock x:Name="AssistantModeSectionDescriptionTextBlock"
+                                               Margin="0,8,0,10"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"
+                                               Text="This will be the starting mode for new conversations until you change it."/>
+                                    <ComboBox x:Name="AssistantModeComboBox"
+                                              Width="280"
+                                              HorizontalAlignment="Left"
+                                              SelectionChanged="AssistantModeComboBox_SelectionChanged"/>
+                                    <TextBlock x:Name="AssistantModeDescriptionTextBlock"
+                                               Margin="0,10,0,0"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Padding="18"
+                                    Margin="0,0,0,16"
+                                    Background="{DynamicResource SurfaceBrush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                <StackPanel>
+                                    <TextBlock x:Name="AccessibilitySectionTitleTextBlock"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               Text="3. Accessibility Defaults"/>
+                                    <CheckBox x:Name="VoiceOutputCheckBox"
+                                              Margin="0,12,0,0"
+                                              Content="Enable voice output in Aire from the start"
+                                              Checked="PreferenceControl_Changed"
+                                              Unchecked="PreferenceControl_Changed"/>
+                                    <TextBlock x:Name="VoiceOutputDescriptionTextBlock"
+                                               Margin="28,4,0,0"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"
+                                               Text="Aire can read responses aloud after the main app opens."/>
+                                    <CheckBox x:Name="VoiceInputCheckBox"
+                                              Margin="0,14,0,0"
+                                              Content="Enable voice input from the start"
+                                              Checked="PreferenceControl_Changed"
+                                              Unchecked="PreferenceControl_Changed"/>
+                                    <TextBlock x:Name="VoiceInputDescriptionTextBlock"
+                                               Margin="28,4,0,0"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"
+                                               Text="If the local speech model is available, Aire will start listening automatically on launch."/>
+                                    <CheckBox x:Name="UseLocalVoicesOnlyCheckBox"
+                                              Margin="0,14,0,0"
+                                              Content="Use only local Windows voices"
+                                              Checked="PreferenceControl_Changed"
+                                              Unchecked="PreferenceControl_Changed"/>
+                                    <TextBlock x:Name="UseLocalVoicesOnlyDescriptionTextBlock"
+                                               Margin="28,4,0,0"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"
+                                               Text="Useful when you want setup and voice output to work offline."/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Padding="18"
+                                    Background="{DynamicResource SurfaceBrush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                <StackPanel>
+                                    <TextBlock x:Name="VoiceGuidedSetupSectionTitleTextBlock"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               Text="4. Voice-Guided Setup"/>
+                                    <CheckBox x:Name="VoiceGuidanceCheckBox"
+                                              Margin="0,12,0,0"
+                                              Content="Read setup instructions aloud"
+                                              Checked="PreferenceControl_Changed"
+                                              Unchecked="PreferenceControl_Changed"/>
+                                    <CheckBox x:Name="VoiceCommandsCheckBox"
+                                              Margin="0,12,0,0"
+                                              Content="Allow spoken setup commands"
+                                              Checked="PreferenceControl_Changed"
+                                              Unchecked="PreferenceControl_Changed"/>
+                                    <TextBlock x:Name="VoiceCommandsDescriptionTextBlock"
+                                               Margin="0,10,0,0"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"
+                                               Text="Recognized commands include: English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire."/>
+                                    <StackPanel Margin="0,16,0,0"
+                                                Orientation="Horizontal">
+                                        <Button x:Name="StartVoiceButton"
+                                                Width="150"
+                                                Margin="0,0,10,0"
+                                                Click="StartVoiceButton_Click"
+                                                Content="Start Voice Setup"/>
+                                        <Button x:Name="StopVoiceButton"
+                                                Width="130"
+                                                Click="StopVoiceButton_Click"
+                                                Content="Stop Voice Setup"/>
+                                    </StackPanel>
+                                    <TextBlock x:Name="VoiceStatusTextBlock"
+                                               Margin="0,10,0,0"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <Border Grid.Column="2"
+                            Padding="18"
+                            Background="{DynamicResource SurfaceBrush}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                        <DockPanel>
+                            <TextBlock x:Name="SummarySectionTitleTextBlock"
+                                       DockPanel.Dock="Top"
+                                       FontSize="20"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       Text="Summary"/>
+                            <TextBlock x:Name="SummaryTextBlock"
+                                       Margin="0,12,0,0"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap"/>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <Border Grid.Row="2"
+                    Padding="16"
+                    Background="{DynamicResource AccentSurfaceBrush}"
+                    BorderBrush="{DynamicResource AccentBorderBrush}"
+                    BorderThickness="0,1,0,0">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Width="140"
+                            x:Name="SaveButton"
+                            Margin="0,0,10,0"
+                            Click="SaveButton_Click"
+                            Content="Save Preferences"/>
+                    <Button x:Name="SaveAndOpenButton"
+                            Width="170"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="SaveAndOpenButton_Click"
+                            Content="Save And Open Aire"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

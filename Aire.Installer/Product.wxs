@@ -1,0 +1,53 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package
+    Id="Aire.Desktop"
+    Name="Aire"
+    Manufacturer="Aire"
+    Version="1.0.0"
+    Language="1033"
+    Scope="perMachine"
+    InstallerVersion="500">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Aire is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="AireIcon.ico" SourceFile="..\aire.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AireIcon.ico" />
+
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Aire" />
+    </StandardDirectory>
+
+    <Files Directory="INSTALLFOLDER" Include="!(bindpath.AirePublish)\**">
+      <Exclude Files="!(bindpath.AirePublish)\Aire.Setup.exe" />
+    </Files>
+
+    <Files Directory="INSTALLFOLDER" Subdirectory="Setup" Include="!(bindpath.SetupPublish)\**" />
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ProgramMenuAireFolder" Name="Aire">
+        <Component Id="ProgramMenuShortcuts">
+          <Shortcut
+            Id="AireSetupShortcut"
+            Name="Aire Setup"
+            Description="Configure Aire"
+            Target="[INSTALLFOLDER]Setup\Aire.Setup.exe"
+            WorkingDirectory="INSTALLFOLDER"
+            Icon="AireIcon.ico" />
+          <Shortcut
+            Id="AireMainShortcut"
+            Name="Aire"
+            Description="Open Aire"
+            Target="[INSTALLFOLDER]Aire.exe"
+            WorkingDirectory="INSTALLFOLDER"
+            Icon="AireIcon.ico" />
+          <RemoveFolder Id="RemoveProgramMenuAireFolder" On="uninstall" />
+          <RegistryValue Root="HKCU" Key="Software\Aire" Name="ProgramMenuShortcuts" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+  </Package>
+</Wix>

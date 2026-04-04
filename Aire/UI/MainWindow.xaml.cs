@@ -42,6 +42,7 @@ namespace Aire
         internal readonly ChatService _chatService;
         private readonly LocalApiApplicationService _localApiApplicationService;
         private readonly AssistantModeApplicationService _assistantModeApplicationService;
+        private readonly GeneratedImageApplicationService _generatedImageApplicationService;
         internal ChatSessionApplicationService _chatSessionApplicationService;
         private readonly ContextSettingsApplicationService _contextSettingsApplicationService;
         internal ConversationApplicationService _conversationApplicationService;

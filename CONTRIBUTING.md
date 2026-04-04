@@ -48,13 +48,14 @@ Do **not** commit these values.
 - Prefer adding tests for service-layer and provider-layer changes.
 - For UI refactors, keep WPF `x:Class` and partial class wiring stable unless a larger migration is intentional.
 - Read the architecture guides before adding a new feature:
-  - [docs/architecture/overview.md](./docs/architecture/overview.md)
-  - [docs/architecture/developer-map.md](./docs/architecture/developer-map.md)
-  - [docs/architecture/adding-features.md](./docs/architecture/adding-features.md)
-  - [docs/providers/how-to-add-a-provider.md](./docs/providers/how-to-add-a-provider.md)
-  - [docs/testing/strategy.md](./docs/testing/strategy.md)
-  - [docs/testing/manual-smoke-checklist.md](./docs/testing/manual-smoke-checklist.md)
-  - [docs/security/model.md](./docs/security/model.md)
+  - [docs/development/architecture/overview.md](./docs/development/architecture/overview.md)
+  - [docs/development/architecture/developer-map.md](./docs/development/architecture/developer-map.md)
+  - [docs/development/architecture/adding-features.md](./docs/development/architecture/adding-features.md)
+  - [docs/development/providers/how-to-add-a-provider.md](./docs/development/providers/how-to-add-a-provider.md)
+  - [docs/development/testing/strategy.md](./docs/development/testing/strategy.md)
+  - [docs/development/testing/manual-smoke-checklist.md](./docs/development/testing/manual-smoke-checklist.md)
+  - [docs/development/security/model.md](./docs/development/security/model.md)
+- Before preparing a public GitHub release, review [docs/development/release/public-repo-checklist.md](./docs/development/release/public-repo-checklist.md).
 
 ## Pull Requests
 

@@ -36,9 +36,9 @@ namespace Aire.Services.Tools
                     _ => new ToolExecutionResult { TextResult = $"Unknown email tool: {request.Tool}" }
                 };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Email error: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Email operation failed." };
             }
         }
 

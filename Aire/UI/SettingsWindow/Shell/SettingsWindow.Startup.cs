@@ -104,9 +104,9 @@ namespace Aire.UI
                         await PopulateModelsFromMetadataAsync(meta);
                         EditableComboBoxFilterHelper.FocusEditableTextBox(ModelComboBox, selectAll: false);
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        Debug.WriteLine($"Live model fetch on dropdown open failed: {ex.Message}");
+                        Debug.WriteLine("Live model fetch on dropdown open failed.");
                     }
                 }
             };
@@ -123,9 +123,9 @@ namespace Aire.UI
                 await LoadAutoAcceptSettings();
                 HookAutoAcceptEvents();
             }
-            catch (Exception ex)
+            catch
             {
-                ShowToast($"Database error: {ex.Message}", isError: true);
+                ShowToast("Database error.", isError: true);
             }
         }
     }

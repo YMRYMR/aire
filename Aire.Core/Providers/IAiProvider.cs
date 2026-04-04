@@ -15,6 +15,7 @@ namespace Aire.Providers
         public string? ImagePath { get; set; }
         public byte[]? ImageBytes { get; set; }
         public string? ImageMimeType { get; set; }
+        public List<MessageAttachment>? Attachments { get; set; }
         public bool PreferPromptCache { get; set; }
     }
 
@@ -275,8 +276,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] Validation failed: {ex.GetType().Name}: {ex.Message}");
-                return ProviderValidationResult.Fail($"{ex.GetType().Name}: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] Validation failed: {ex.GetType().Name}");
+                return ProviderValidationResult.Fail("Configuration validation failed.");
             }
         }
 
@@ -306,6 +307,8 @@ namespace Aire.Providers
                 ".jpg" or ".jpeg" => "image/jpeg",
                 ".bmp"            => "image/bmp",
                 ".gif"            => "image/gif",
+                ".webp"           => "image/webp",
+                ".svg"            => "image/svg+xml",
                 _                 => "application/octet-stream"
             };
         }

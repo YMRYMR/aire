@@ -10,11 +10,15 @@ namespace Aire
     public partial class MainWindow
     {
         private async Task HandleSwitchModelAsync(ParsedAiResponse parsed)
+            => await HandleSwitchModelAsync(parsed.TextContent, parsed.ToolCall!);
+
+        private async Task HandleSwitchModelAsync(string assistantText, ToolCallRequest toolCall)
         {
             var switchService = _switchModelApplicationService
                 ?? new SwitchModelApplicationService(_providerFactory, _chatService, _chatSessionApplicationService);
             var result = await switchService.ExecuteAsync(
-                parsed,
+                assistantText,
+                toolCall,
                 ProviderComboBox.Items.OfType<Aire.Data.Provider>(),
                 id => _availabilityTracker.IsOnCooldown(id),
                 _currentConversationId);

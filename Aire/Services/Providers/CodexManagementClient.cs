@@ -100,7 +100,7 @@ namespace Aire.Services.Providers
             }
             catch (Exception ex)
             {
-                AppLogger.Warn("CodexManagement.FindNpm", $"'where.exe npm' probe failed: {ex.Message}");
+                AppLogger.Warn("CodexManagement.FindNpm", $"'where.exe npm' probe failed: {ex.GetType().Name}");
             }
 
             var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);

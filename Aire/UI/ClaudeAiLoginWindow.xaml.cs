@@ -33,12 +33,12 @@ namespace Aire.UI
                 _webView.CoreWebView2.NavigationCompleted += OnNavigationCompleted;
                 _webView.CoreWebView2.Navigate("https://claude.ai/login");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ConfirmationDialog.ShowAlert(this, "WebView2 Required",
                     "The WebView2 runtime is required but not installed.\n\n" +
                     "Download it from: https://developer.microsoft.com/en-us/microsoft-edge/webview2/\n\n" +
-                    $"Error: {ex.Message}");
+                    "Unable to initialize the login window. Please try again or restart the application.");
                 Close();
             }
         }

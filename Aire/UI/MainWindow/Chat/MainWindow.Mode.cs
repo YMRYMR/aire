@@ -6,6 +6,7 @@ using System.Windows;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Aire.AppLayer.Chat;
+using Aire.Services;
 
 namespace Aire
 {
@@ -26,7 +27,9 @@ namespace Aire
                 return;
 
             ModeButton.Content = _assistantModeDisplayName;
-            ModeButton.ToolTip = $"Assistant mode: {_assistantModeDisplayName}";
+            ModeButton.ToolTip = string.Format(
+                LocalizationService.S("tooltip.modeCurrent", "Assistant mode: {0}"),
+                _assistantModeDisplayName);
         }
 
         internal string BuildAssistantModePrompt()
@@ -43,13 +46,10 @@ namespace Aire
 
         private void EnsureModeMenu()
         {
-            if (_modeMenu != null)
-            {
-                SyncModeMenuChecks();
-                return;
-            }
+            if (_modeMenu == null)
+                _modeMenu = new ContextMenu();
 
-            _modeMenu = new ContextMenu();
+            _modeMenu.Items.Clear();
             foreach (var mode in _assistantModeApplicationService.GetModes())
             {
                 var item = new MenuItem
@@ -82,7 +82,9 @@ namespace Aire
             if (_currentConversationId.HasValue)
             {
                 await _conversationApplicationService.UpdateConversationAssistantModeAsync(_currentConversationId.Value, mode.Key);
-                AddSystemMessage($"Assistant mode switched to {mode.DisplayName}.");
+                AddSystemMessage(string.Format(
+                    LocalizationService.S("main.assistantModeSwitched", "Assistant mode switched to {0}."),
+                    mode.DisplayName));
                 if (_sidebarOpen)
                     await RefreshSidebarAsync();
             }

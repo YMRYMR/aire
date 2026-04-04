@@ -45,9 +45,9 @@ namespace Aire.Services.Tools
                 SaveMemory(dict);
                 return new ToolExecutionResult { TextResult = $"Remembered: {key} = {value}" };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Memory operation failed." };
             }
         }
 
@@ -71,9 +71,9 @@ namespace Aire.Services.Tools
                         : $"No memory found for key: {key}"
                 };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Memory operation failed." };
             }
         }
 

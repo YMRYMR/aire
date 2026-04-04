@@ -149,8 +149,8 @@ public class ToolExecutionServiceDescriptionTests
         });
         Assert.Contains("OS:", systemInfo.TextResult);
         Assert.Contains("Process", processes.TextResult);
-        Assert.Contains("path parameter is required", openFile.TextResult);
-        Assert.True(readEmails.TextResult.Contains("No email account configured", StringComparison.OrdinalIgnoreCase) || readEmails.TextResult.Contains("Email error", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal("Error: path parameter is required.", openFile.TextResult);
+        Assert.Equal("Email operation failed.", readEmails.TextResult);
     }
 
     private static ToolCallRequest BuildRequest(string tool, string json)

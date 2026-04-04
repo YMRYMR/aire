@@ -24,6 +24,7 @@ public class AssistantModeApplicationServiceTests
         var service = new AssistantModeApplicationService();
 
         Assert.Equal("general", service.ResolveMode("missing").Key);
+        Assert.Equal("painter", service.ResolveMode("painter").Key);
         Assert.Equal("security", service.ResolveMode("security").Key);
         Assert.Equal("scientist", service.ResolveMode("scientist").Key);
         Assert.Equal("psicologist", service.ResolveMode("psicologist").Key);
@@ -48,9 +49,14 @@ public class AssistantModeApplicationServiceTests
 
         var displayNames = service.GetModes().Select(mode => mode.DisplayName).ToArray();
 
+        Assert.Contains("Painter", displayNames);
         Assert.Contains("Security", displayNames);
         Assert.Contains("Scientist", displayNames);
-        Assert.Contains("Psicologist", displayNames);
+        Assert.Contains("Psychologist", displayNames);
         Assert.Contains("Philosopher", displayNames);
+        Assert.Equal("General", displayNames[0]);
+        Assert.Equal(
+            displayNames.Skip(1).OrderBy(name => name, StringComparer.Ordinal).ToArray(),
+            displayNames.Skip(1).ToArray());
     }
 }

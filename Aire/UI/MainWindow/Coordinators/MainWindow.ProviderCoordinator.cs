@@ -152,9 +152,9 @@ namespace Aire
                     if (_owner._sidebarOpen)
                         await _owner.RefreshSidebarAsync();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    _owner.AddErrorMessage($"Failed to initialize provider '{sel.Name}': {ex.Message}");
+                    _owner.AddErrorMessage($"Failed to initialize provider '{sel.Name}'.");
                 }
             }
 

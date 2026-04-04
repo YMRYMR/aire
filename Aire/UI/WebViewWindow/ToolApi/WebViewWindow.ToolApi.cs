@@ -37,7 +37,10 @@ public partial class WebViewWindow
             if (text.Length > max) text = text[..max] + "\n[…content truncated…]";
             return $"URL: {tab.Url}\nTitle: {tab.Title}\n\n{text}";
         }
-        catch (Exception ex) { return $"Error reading tab: {ex.Message}"; }
+        catch (Exception)
+        {
+            return "Error reading tab.";
+        }
     }
 
     /// <summary>
@@ -84,7 +87,10 @@ public partial class WebViewWindow
             if (html.Length > max) html = html[..max] + "\n<!-- [truncated] -->";
             return $"URL: {tab.Url}\nTitle: {tab.Title}\n\n{html}";
         }
-        catch (Exception ex) { return $"Error reading HTML: {ex.Message}"; }
+        catch (Exception)
+        {
+            return "Error reading HTML.";
+        }
     }
 
     /// <summary>
@@ -109,7 +115,10 @@ public partial class WebViewWindow
             }
             return resultJson == "null" ? "(no return value)" : resultJson;
         }
-        catch (Exception ex) { return $"Script error: {ex.Message}"; }
+        catch (Exception)
+        {
+            return "Script error.";
+        }
     }
 
     /// <summary>
@@ -133,6 +142,9 @@ public partial class WebViewWindow
                 sb.AppendLine($"  {c.Name}={c.Value}  [domain={c.Domain}, path={c.Path}, secure={c.IsSecure}, httpOnly={c.IsHttpOnly}]");
             return sb.ToString().TrimEnd();
         }
-        catch (Exception ex) { return $"Error reading cookies: {ex.Message}"; }
+        catch (Exception)
+        {
+            return "Error reading cookies.";
+        }
     }
 }

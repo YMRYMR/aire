@@ -35,7 +35,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Could not set Windows GPU preference: {ex.Message}");
+                Debug.WriteLine($"Could not set Windows GPU preference: {ex.GetType().Name}");
             }
         }
 
@@ -58,7 +58,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Could not set WebView2 GPU hint: {ex.Message}");
+                Debug.WriteLine($"Could not set WebView2 GPU hint: {ex.GetType().Name}");
             }
         }
     }

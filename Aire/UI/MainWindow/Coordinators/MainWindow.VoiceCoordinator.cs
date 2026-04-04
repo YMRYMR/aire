@@ -165,6 +165,25 @@ namespace Aire
                 _owner.SaveWindowSize();
             }
 
+            public Task<bool> TryStartAccessibilityVoiceInputAsync()
+            {
+                if (_isMicActive || !_owner.IsVisible || !_owner._speechService.ModelExists)
+                {
+                    return Task.FromResult(false);
+                }
+
+                string? startError = _owner._speechService.StartListening();
+                if (startError != null)
+                {
+                    return Task.FromResult(false);
+                }
+
+                _isMicActive = true;
+                _isMicPaused = false;
+                _owner.SetMicButtonState(MicState.Recording);
+                return Task.FromResult(true);
+            }
+
             public void SpeakResponseIfNeeded(string text, bool wasVoice)
             {
                 if (!_owner._ttsService.IsAvailable || !_owner._ttsService.VoiceEnabled)

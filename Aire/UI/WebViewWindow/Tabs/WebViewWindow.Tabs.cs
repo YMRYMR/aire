@@ -95,12 +95,12 @@ public partial class WebViewWindow
             tab.WebView.CoreWebView2.NavigationCompleted += (_, _) => Dispatcher.Invoke(() => OnTabNavigated(tab));
             tab.WebView.CoreWebView2.Navigate(tab.Url);
         }
-        catch (Exception ex)
+            catch
         {
             tab.TitleBlock.Text = "Error";
             tab.Url = url;
             if (BrowserTabs.SelectedItem == tab.TabItem)
-                UrlBar.Text = $"Error: {ex.Message}";
+            UrlBar.Text = "Error loading page.";
         }
     }
 

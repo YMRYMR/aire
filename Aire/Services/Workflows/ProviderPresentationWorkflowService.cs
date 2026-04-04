@@ -69,7 +69,7 @@ namespace Aire.Services.Workflows
                 }
                 catch (Exception ex)
                 {
-                    AppLogger.Warn("ProviderPresentation.BuildList", $"Failed to read capabilities for provider type '{provider.Type}': {ex.Message}");
+                AppLogger.Warn("ProviderPresentation.BuildList", $"Failed to read capabilities for provider type '{provider.Type}': {ex.GetType().Name}");
                 }
 
                 string status = isOnCooldown(provider.Id)

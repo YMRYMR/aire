@@ -106,7 +106,7 @@ public sealed class WebToolServiceTests
             Parameters = missingSchemeDoc.RootElement.Clone()
         });
 
-        Assert.Contains("Error:", failure.TextResult, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("Web operation failed.", failure.TextResult);
     }
 
     private sealed class TestHttpServer : IDisposable

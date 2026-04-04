@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using Aire.Data;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
 
@@ -10,6 +13,8 @@ namespace Aire.AppLayer.Chat
     /// </summary>
     public sealed class ConversationTranscriptApplicationService
     {
+        private readonly AssistantImageResponseApplicationService _assistantImageResponse = new();
+
         /// <summary>
         /// Logical transcript role used by the UI to choose styling and rendering behavior.
         /// </summary>
@@ -29,7 +34,8 @@ namespace Aire.AppLayer.Chat
             string Sender,
             string Text,
             DateTime CreatedAt,
-            string? ImagePath,
+            IReadOnlyList<string> ImageReferences,
+            IReadOnlyList<MessageAttachment> FileAttachments,
             bool StartsNewDateSection);
 
         /// <summary>
@@ -78,7 +84,8 @@ namespace Aire.AppLayer.Chat
                 }
                 else if (role == TranscriptRole.Assistant)
                 {
-                    history.Add(new ProviderChatMessage { Role = "assistant", Content = msg.Content });
+                    var parsedAssistant = _assistantImageResponse.Parse(msg.Content);
+                    history.Add(new ProviderChatMessage { Role = "assistant", Content = parsedAssistant.Text });
                 }
 
                 bool startsNewDateSection =
@@ -87,16 +94,62 @@ namespace Aire.AppLayer.Chat
                 if (startsNewDateSection)
                     lastDate = msg.CreatedAt;
 
+                var entryText = msg.Content;
+                var attachments = msg.Attachments?.Count > 0
+                    ? msg.Attachments
+                    : DeserializeAttachments(msg.AttachmentsJson);
+
+                IReadOnlyList<string> imageReferences = attachments
+                    .Where(attachment => attachment.IsImage && !string.IsNullOrWhiteSpace(attachment.FilePath))
+                    .Select(attachment => attachment.FilePath)
+                    .ToList();
+                if (imageReferences.Count == 0 &&
+                    attachments.Count == 0 &&
+                    msg.ImagePath != null &&
+                    Path.GetExtension(msg.ImagePath).Equals(".png", StringComparison.OrdinalIgnoreCase))
+                    imageReferences = new[] { msg.ImagePath };
+
+                var fileAttachments = attachments
+                    .Where(attachment => !attachment.IsImage)
+                    .ToList();
+
+                if (role == TranscriptRole.Assistant)
+                {
+                    var parsedAssistant = _assistantImageResponse.Parse(msg.Content);
+                    entryText = parsedAssistant.Text;
+                    if (parsedAssistant.ImageReferences.Count > 0)
+                        imageReferences = parsedAssistant.ImageReferences;
+                }
+
                 entries.Add(new TranscriptEntry(
                     role,
                     sender,
-                    msg.Content,
+                    entryText,
                     msg.CreatedAt,
-                    msg.ImagePath,
+                    imageReferences,
+                    fileAttachments,
                     startsNewDateSection));
             }
 
             return new ConversationTranscriptPlan(entries, history, inputHistory);
+        }
+
+        private static List<MessageAttachment> DeserializeAttachments(string? json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return new List<MessageAttachment>();
+
+            try
+            {
+                return JsonSerializer.Deserialize<List<MessageAttachment>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<MessageAttachment>();
+            }
+            catch
+            {
+                return new List<MessageAttachment>();
+            }
         }
     }
 }

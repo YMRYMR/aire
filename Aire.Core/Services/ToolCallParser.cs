@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -15,13 +17,46 @@ namespace Aire.Services
     }
 
     /// <summary>
-    /// Result of parsing one AI response into plain text and an optional tool-call payload.
+    /// Result of parsing one AI response into visible text and any normalized tool calls found in order.
     /// </summary>
     public class ParsedAiResponse
     {
+        private ToolCallRequest? _toolCall;
+        private IReadOnlyList<ToolCallRequest> _toolCalls = Array.Empty<ToolCallRequest>();
+
         public string TextContent { get; set; } = string.Empty;
-        public ToolCallRequest? ToolCall { get; set; }
-        public bool HasToolCall => ToolCall != null;
+
+        /// <summary>
+        /// First parsed tool call for compatibility with older single-tool call sites.
+        /// Setting this also updates <see cref="ToolCalls"/> to a single-item list.
+        /// </summary>
+        public ToolCallRequest? ToolCall
+        {
+            get => _toolCall;
+            set
+            {
+                _toolCall = value;
+                _toolCalls = value == null
+                    ? Array.Empty<ToolCallRequest>()
+                    : new[] { value };
+            }
+        }
+
+        /// <summary>
+        /// All parsed tool calls in the order they appeared in the response.
+        /// Setting this also updates <see cref="ToolCall"/> to the first item.
+        /// </summary>
+        public IReadOnlyList<ToolCallRequest> ToolCalls
+        {
+            get => _toolCalls;
+            set
+            {
+                _toolCalls = value ?? Array.Empty<ToolCallRequest>();
+                _toolCall = _toolCalls.Count > 0 ? _toolCalls[0] : null;
+            }
+        }
+
+        public bool HasToolCall => ToolCalls.Count > 0;
     }
 
     public static partial class ToolCallParser
@@ -35,23 +70,26 @@ namespace Aire.Services
         public static ParsedAiResponse Parse(string response)
         {
             response = NormalizeBareJsonToolCalls(response);
+            var cleaned = ThinkBlockRegex.Replace(ToolCallRegex.Replace(response, string.Empty), string.Empty).Trim();
 
             var allMatches = ToolCallRegex.Matches(response);
+            var toolCalls = new List<ToolCallRequest>();
             foreach (Match match in allMatches)
             {
                 var rawJson = match.Groups[2].Value.Trim();
-                if (TryParseToolCallJson(rawJson, out var toolCall))
+                foreach (var toolCall in ParseToolCallJson(rawJson))
                 {
-                    var textBefore = ThinkBlockRegex
-                        .Replace(response[..match.Index], string.Empty)
-                        .Trim();
-
-                    return new ParsedAiResponse
-                    {
-                        TextContent = textBefore,
-                        ToolCall = toolCall
-                    };
+                    toolCalls.Add(toolCall);
                 }
+            }
+
+            if (toolCalls.Count > 0)
+            {
+                return new ParsedAiResponse
+                {
+                    TextContent = cleaned,
+                    ToolCalls = toolCalls
+                };
             }
 
             if (response.Contains("<tool_call", StringComparison.OrdinalIgnoreCase) &&
@@ -63,9 +101,6 @@ namespace Aire.Services
                                   "Try asking the model to break the task into smaller steps, or increase max_tokens in Settings."
                 };
             }
-
-            var stripped = ToolCallRegex.Replace(response, string.Empty);
-            var cleaned = ThinkBlockRegex.Replace(stripped, string.Empty).Trim();
 
             return new ParsedAiResponse { TextContent = cleaned };
         }

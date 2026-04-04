@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
@@ -14,7 +15,7 @@ using Aire.Data;
 
 namespace Aire.Providers
 {
-    public class GoogleAiProvider : BaseAiProvider
+    public class GoogleAiProvider : BaseAiProvider, IImageGenerationProvider
     {
         private static readonly HttpClient _http = new();
         private readonly Dictionary<string, string> _cachedContentNames = new(StringComparer.Ordinal);
@@ -42,6 +43,12 @@ namespace Aire.Providers
 
         private string StreamUrl =>
             $"{ApiBase}/v1beta/models/{Config.Model}:streamGenerateContent?key={Config.ApiKey}&alt=sse";
+
+        private string GenerateContentUrl =>
+            $"{ApiBase}/v1beta/models/{Config.Model}:generateContent";
+
+        public bool SupportsImageGeneration =>
+            Config.ModelCapabilities?.Contains("imagegeneration", StringComparer.OrdinalIgnoreCase) == true;
 
         private string BuildBody(
             IEnumerable<ChatMessage> messages,
@@ -238,7 +245,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                return new AiResponse { IsSuccess = false, ErrorMessage = ex.Message, Duration = sw.Elapsed };
+            Debug.WriteLine($"{ProviderType} chat failed: {ex.GetType().Name}");
+                return new AiResponse { IsSuccess = false, ErrorMessage = "Google AI request failed.", Duration = sw.Elapsed };
             }
         }
 
@@ -362,8 +370,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}: {ex.Message}");
-                return ProviderValidationResult.Fail($"{ex.GetType().Name}: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                return ProviderValidationResult.Fail("Google AI configuration validation failed.");
             }
         }
 
@@ -416,6 +424,169 @@ namespace Aire.Providers
                 return models.Count > 0 ? models : null;
             }
             catch { return null; }
+        }
+
+        public async Task<ImageGenerationResult> GenerateImageAsync(string prompt, CancellationToken cancellationToken = default)
+        {
+            if (!SupportsImageGeneration)
+            {
+                return new ImageGenerationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "The selected model does not support image generation."
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(Config.ApiKey))
+            {
+                return new ImageGenerationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "API key is required."
+                };
+            }
+
+            var payload = JsonSerializer.Serialize(new
+            {
+                contents = new[]
+                {
+                    new
+                    {
+                        parts = new[]
+                        {
+                            new { text = prompt }
+                        }
+                    }
+                },
+                generationConfig = new
+                {
+                    responseModalities = new[] { "IMAGE" }
+                }
+            });
+
+            try
+            {
+                using var req = new HttpRequestMessage(HttpMethod.Post, GenerateContentUrl)
+                {
+                    Content = new StringContent(payload, Encoding.UTF8, "application/json")
+                };
+                req.Headers.Add("x-goog-api-key", Config.ApiKey);
+                req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
+                var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new ImageGenerationResult
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = $"HTTP {(int)response.StatusCode} {response.ReasonPhrase}: {body}"
+                    };
+                }
+
+                using var doc = JsonDocument.Parse(body);
+                if (!TryExtractGeneratedImage(doc.RootElement, out var imageResult))
+                {
+                    return new ImageGenerationResult
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Image generation returned no image data."
+                    };
+                }
+
+                return imageResult;
+            }
+            catch (Exception ex)
+            {
+            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.GenerateImage] {ex.GetType().Name}");
+                return new ImageGenerationResult
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Google AI image generation failed."
+                };
+            }
+        }
+
+        private static bool TryExtractGeneratedImage(JsonElement root, out ImageGenerationResult result)
+        {
+            result = new ImageGenerationResult();
+
+            if (!root.TryGetProperty("candidates", out var candidates) || candidates.GetArrayLength() == 0)
+                return false;
+
+            foreach (var candidate in candidates.EnumerateArray())
+            {
+                if (!candidate.TryGetProperty("content", out var content) ||
+                    !content.TryGetProperty("parts", out var parts))
+                {
+                    continue;
+                }
+
+                string? revisedPrompt = null;
+                foreach (var part in parts.EnumerateArray())
+                {
+                    if (part.TryGetProperty("text", out var textProp) && string.IsNullOrWhiteSpace(revisedPrompt))
+                        revisedPrompt = textProp.GetString();
+
+                    if (!TryGetInlineData(part, out var imageBytes, out var imageMimeType))
+                        continue;
+
+                    result = new ImageGenerationResult
+                    {
+                        IsSuccess = true,
+                        ImageBytes = imageBytes,
+                        ImageMimeType = imageMimeType ?? "image/png",
+                        RevisedPrompt = revisedPrompt
+                    };
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TryGetInlineData(JsonElement part, out byte[] imageBytes, out string? imageMimeType)
+        {
+            imageBytes = Array.Empty<byte>();
+            imageMimeType = null;
+
+            if (!TryGetProperty(part, "inlineData", out var inlineData) &&
+                !TryGetProperty(part, "inline_data", out inlineData))
+            {
+                return false;
+            }
+
+            if (!TryGetProperty(inlineData, "data", out var dataProp))
+                return false;
+
+            var base64 = dataProp.GetString();
+            if (string.IsNullOrWhiteSpace(base64))
+                return false;
+
+            imageBytes = Convert.FromBase64String(base64);
+
+            if (TryGetProperty(inlineData, "mimeType", out var mimeTypeProp) ||
+                TryGetProperty(inlineData, "mime_type", out mimeTypeProp))
+            {
+                imageMimeType = mimeTypeProp.GetString();
+            }
+
+            return imageBytes.Length > 0;
+        }
+
+        private static bool TryGetProperty(JsonElement element, string propertyName, out JsonElement value)
+        {
+            foreach (var property in element.EnumerateObject())
+            {
+                if (string.Equals(property.Name, propertyName, StringComparison.OrdinalIgnoreCase))
+                {
+                    value = property.Value;
+                    return true;
+                }
+            }
+
+            value = default;
+            return false;
         }
     }
 }

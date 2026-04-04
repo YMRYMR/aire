@@ -1,0 +1,165 @@
+{
+  "setupActions": [
+    {
+      "kind": "wait-for-window",
+      "titleContains": "Aire",
+      "processName": "Aire",
+      "delayMs": 6000
+    }
+  ],
+  "screenshots": [
+    {
+      "outputPath": "Aire/Assets/Help/main-chat.png",
+      "exactTitle": "Aire",
+      "processName": "Aire",
+      "delayMs": 750,
+      "padding": 0,
+      "activateWindow": true
+    },
+    {
+      "outputPath": "Aire/Assets/Help/main-chat-modes.png",
+      "exactTitle": "Aire",
+      "processName": "Aire",
+      "delayMs": 300,
+      "padding": 20,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "invoke",
+          "automationId": "PART_ModeButton",
+          "delayMs": 250
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/main-chat-tools.png",
+      "exactTitle": "Aire",
+      "processName": "Aire",
+      "delayMs": 300,
+      "padding": 24,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "set-active-provider-by-name",
+          "name": "Codex",
+          "delayMs": 350
+        },
+        {
+          "kind": "invoke",
+          "automationId": "PART_ToolsButton",
+          "delayMs": 250
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/settings-providers.png",
+      "exactTitle": "Settings",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "invoke",
+          "exactTitle": "Aire",
+          "processName": "Aire",
+          "automationId": "PART_SettingsButton",
+          "delayMs": 400
+        },
+        {
+          "kind": "wait-for-window",
+          "exactTitle": "Settings",
+          "processName": "Aire",
+          "delayMs": 3000
+        },
+        {
+          "kind": "select",
+          "automationId": "TabProviders",
+          "controlType": "tabitem",
+          "delayMs": 200
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/settings-connections.png",
+      "exactTitle": "Settings",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "invoke",
+          "exactTitle": "Aire",
+          "processName": "Aire",
+          "automationId": "PART_SettingsButton",
+          "delayMs": 400
+        },
+        {
+          "kind": "wait-for-window",
+          "exactTitle": "Settings",
+          "processName": "Aire",
+          "delayMs": 3000
+        },
+        {
+          "kind": "select",
+          "automationId": "TabConnections",
+          "controlType": "tabitem",
+          "delayMs": 200
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/onboarding-provider-picker.png",
+      "exactTitle": "Welcome to Aire",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "select",
+          "exactTitle": "Settings",
+          "processName": "Aire",
+          "automationId": "TabProviders",
+          "controlType": "tabitem",
+          "delayMs": 200
+        },
+        {
+          "kind": "invoke",
+          "exactTitle": "Settings",
+          "processName": "Aire",
+          "automationId": "PART_SetupWizardButton",
+          "delayMs": 400
+        },
+        {
+          "kind": "wait-for-window",
+          "exactTitle": "Welcome to Aire",
+          "processName": "Aire",
+          "delayMs": 3000
+        },
+        {
+          "kind": "invoke",
+          "automationId": "Step1NextButton",
+          "delayMs": 350
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/onboarding-provider-setup.png",
+      "exactTitle": "Welcome to Aire",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "invoke",
+          "name": "OpenAI",
+          "controlType": "text",
+          "delayMs": 350
+        }
+      ]
+    }
+  ]
+}

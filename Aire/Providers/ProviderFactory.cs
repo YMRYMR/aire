@@ -11,16 +11,6 @@ namespace Aire.Providers
     /// </summary>
     public class ProviderFactory
     {
-        // Single registration point for WPF-only providers (Anthropic, ClaudeWeb, Ollama).
-        // All other types are delegated to ProviderRegistry.
-        // Add a new entry here when introducing a WPF-specific provider.
-        private static readonly Dictionary<string, Func<IAiProvider>> _wpfProviderFactories = new()
-        {
-            ["Anthropic"] = () => new ClaudeAiProvider(),
-            ["ClaudeWeb"]  = () => new ClaudeWebProvider(),
-            ["Ollama"]     = () => new OllamaProvider(),
-        };
-
         private readonly IProviderRepository _providerRepository;
         private readonly Dictionary<string, IAiProvider> _providerCache = new();
 
@@ -55,12 +45,8 @@ namespace Aire.Providers
             if (_providerCache.TryGetValue(cacheKey, out var cached))
                 return cached;
 
-            IAiProvider provider = _wpfProviderFactories.TryGetValue(providerConfig.Type, out var factory)
-                ? factory()
-                : ProviderRegistry.CreateProvider(providerConfig);
-
-            if (_wpfProviderFactories.ContainsKey(providerConfig.Type))
-                provider.Initialize(ProviderRegistry.BuildProviderConfig(providerConfig));
+            IAiProvider provider = ProviderCatalog.CreateRuntimeProvider(providerConfig.Type);
+            provider.Initialize(ProviderRegistry.BuildProviderConfig(providerConfig));
 
             _providerCache[cacheKey] = provider;
             return provider;
@@ -102,8 +88,6 @@ namespace Aire.Providers
         /// <param name="providerType">Provider type identifier, such as OpenAI or Ollama.</param>
         /// <returns>A metadata implementation for the requested provider type.</returns>
         public static IProviderMetadata GetMetadata(string providerType)
-            => _wpfProviderFactories.TryGetValue(providerType, out var factory)
-                ? (IProviderMetadata)factory()   // all WPF providers extend BaseAiProvider which implements IProviderMetadata
-                : ProviderRegistry.GetMetadata(providerType);
+            => ProviderCatalog.CreateMetadataProvider(providerType);
     }
 }

@@ -60,8 +60,18 @@ namespace Aire.AppLayer.Providers
             IEnumerable<Provider> availableProviders,
             Func<int, bool> onCooldown,
             int? currentConversationId)
+            => await ExecuteAsync(parsed.TextContent, parsed.ToolCall!, availableProviders, onCooldown, currentConversationId);
+
+        /// <summary>
+        /// Applies a <c>switch_model</c> request against the available provider list and persists the selected provider when successful.
+        /// </summary>
+        public async Task<SwitchModelResult> ExecuteAsync(
+            string assistantText,
+            ToolCallRequest toolCall,
+            IEnumerable<Provider> availableProviders,
+            Func<int, bool> onCooldown,
+            int? currentConversationId)
         {
-            var toolCall = parsed.ToolCall!;
             var parameters = toolCall.Parameters;
             var modelName = parameters.TryGetProperty("model_name", out var mn)
                 ? mn.GetString() ?? string.Empty
@@ -73,7 +83,7 @@ namespace Aire.AppLayer.Providers
             var assistantHistoryMessage = new ProviderChatMessage
             {
                 Role = "assistant",
-                Content = _toolWorkflow.BuildAssistantToolCallContent(parsed.TextContent, toolCall.RawJson)
+                Content = _toolWorkflow.BuildAssistantToolCallContent(assistantText, toolCall.RawJson)
             };
 
             if (string.IsNullOrWhiteSpace(modelName))

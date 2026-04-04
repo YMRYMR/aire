@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aire.AppLayer.Abstractions;
+using Aire.Data;
 
 namespace Aire.AppLayer.Chat
 {
@@ -33,7 +35,23 @@ namespace Aire.AppLayer.Chat
             var filename = $"{now:yyyyMMdd_HHmmss_fff}.png";
             var persistedPath = Path.Combine(folder, filename);
             File.Copy(screenshotPath, persistedPath, overwrite: true);
-            await _conversations.SaveMessageAsync(conversationId.Value, "assistant", string.Empty, persistedPath);
+            await _conversations.SaveMessageAsync(
+                conversationId.Value,
+                "assistant",
+                string.Empty,
+                persistedPath,
+                new[]
+                {
+                    new MessageAttachment
+                    {
+                        FilePath = persistedPath,
+                        FileName = filename,
+                        MimeType = "image/png",
+                        SizeBytes = new FileInfo(persistedPath).Length,
+                        IsImage = true,
+                        IsInlinePreview = true
+                    }
+                });
             return persistedPath;
         }
     }

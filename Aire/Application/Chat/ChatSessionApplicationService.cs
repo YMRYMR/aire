@@ -1,5 +1,6 @@
 using Aire.AppLayer.Abstractions;
 using Aire.Data;
+using System.Collections.Generic;
 
 namespace Aire.AppLayer.Chat
 {
@@ -53,9 +54,14 @@ namespace Aire.AppLayer.Chat
         /// <summary>
         /// Persists a user turn and optionally applies the generated first-message title for the conversation.
         /// </summary>
-        public async Task PersistUserMessageAsync(int conversationId, string content, string? imagePath, string? suggestedConversationTitle)
+        public async Task PersistUserMessageAsync(
+            int conversationId,
+            string content,
+            string? imagePath,
+            IEnumerable<MessageAttachment>? attachments,
+            string? suggestedConversationTitle)
         {
-            await _conversations.SaveMessageAsync(conversationId, "user", content, imagePath);
+            await _conversations.SaveMessageAsync(conversationId, "user", content, imagePath, attachments);
             if (!string.IsNullOrWhiteSpace(suggestedConversationTitle))
                 await _conversations.UpdateConversationTitleAsync(conversationId, suggestedConversationTitle);
         }
@@ -63,8 +69,12 @@ namespace Aire.AppLayer.Chat
         /// <summary>
         /// Persists an assistant text turn.
         /// </summary>
-        public Task PersistAssistantMessageAsync(int conversationId, string content, string? imagePath = null)
-            => _conversations.SaveMessageAsync(conversationId, "assistant", content, imagePath);
+        public Task PersistAssistantMessageAsync(
+            int conversationId,
+            string content,
+            string? imagePath = null,
+            IEnumerable<MessageAttachment>? attachments = null)
+            => _conversations.SaveMessageAsync(conversationId, "assistant", content, imagePath, attachments);
 
         /// <summary>
         /// Persists a tool status line such as approval or denial.

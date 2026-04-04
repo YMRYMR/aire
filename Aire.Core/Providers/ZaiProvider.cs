@@ -69,6 +69,18 @@ namespace Aire.Providers
 
         protected override string BuildChatCompletionsUrl(string baseUrl) => $"{baseUrl}/chat/completions";
 
+        protected override string BuildImageGenerationUrl(string baseUrl)
+        {
+            var normalized = baseUrl.TrimEnd('/');
+            const string codingPath = "/api/coding/paas/v4";
+            const string imagePath = "/api/paas/v4";
+
+            if (normalized.Contains(codingPath, StringComparison.OrdinalIgnoreCase))
+                return normalized.Replace(codingPath, imagePath, StringComparison.OrdinalIgnoreCase) + "/images/generations";
+
+            return $"{normalized}/images/generations";
+        }
+
         public override async Task<AiResponse> SendChatAsync(
             IEnumerable<ChatMessage> messages,
             CancellationToken cancellationToken = default)
@@ -95,10 +107,10 @@ namespace Aire.Providers
             if (message.Contains("Insufficient balance or no resource package", StringComparison.OrdinalIgnoreCase))
             {
                 return "z.ai rejected the request because this account does not currently have access to that model. " +
-                       "If your account only has a GLM Coding Plan, use the coding base URL https://api.z.ai/api/coding/paas/v4 and a coding-plan model such as GLM-4.7 or GLM-4.5 Air instead of GLM-5. Otherwise add normal z.ai balance/resource access for GLM-5.";
+                       "If your account only has a GLM Coding Plan, use the coding base URL https://api.z.ai/api/coding/paas/v4 and a coding-plan model such as GLM-5.1, GLM-4.7, or GLM-4.5 Air. Otherwise add normal z.ai balance/resource access for GLM-5.1.";
             }
 
-            return message;
+            return "An unexpected error occurred while processing your request through z.ai.";
         }
     }
 }

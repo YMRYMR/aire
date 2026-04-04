@@ -49,7 +49,7 @@ namespace Aire.UI
             catch (Exception ex)
             {
                 AppLogger.Warn("InitializationWindow", "Startup loading failed", ex);
-                AppendStatus($"Startup warning: {ex.Message}");
+                AppendStatus("Startup warning.");
             }
             finally
             {

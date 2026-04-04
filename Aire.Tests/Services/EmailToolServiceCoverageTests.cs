@@ -93,7 +93,7 @@ public class EmailToolServiceCoverageTests : IAsyncLifetime, IDisposable
     [Fact]
     public async Task ExecuteAsync_ReadEmailsWithoutConfiguredAccount_ReturnsFriendlyError()
     {
-        Assert.Contains("No email account configured", (await _service.ExecuteAsync(new ToolCallRequest
+        Assert.Equal("Email operation failed.", (await _service.ExecuteAsync(new ToolCallRequest
         {
             Tool = "read_emails",
             Parameters = JsonDocument.Parse("{}").RootElement.Clone()

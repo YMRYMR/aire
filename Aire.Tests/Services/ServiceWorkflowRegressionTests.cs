@@ -561,7 +561,10 @@ public class ServiceWorkflowRegressionTests
             (int, string) tuple = chatSubmissionWorkflowService.UpdateInputHistory(new List<string> { "old" }, "new");
             Assert.Equal(-1, tuple.Item1);
             Assert.Equal(string.Empty, tuple.Item2);
-            ChatMessage chatMessage = chatSubmissionWorkflowService.BuildProviderHistoryMessage("hello", "C:\\temp\\capture.png");
+            ChatMessage chatMessage = chatSubmissionWorkflowService.BuildProviderHistoryMessage(
+                "hello",
+                "C:\\temp\\capture.png",
+                null);
             Assert.Equal("user", chatMessage.Role);
             Assert.Equal("hello", chatMessage.Content);
             Assert.Equal("C:\\temp\\capture.png", chatMessage.ImagePath);
@@ -669,7 +672,8 @@ public class ServiceWorkflowRegressionTests
             var result = await service.HandleSuccessTextAsync("![chart](https://example.com/chart.png)", conversationId, isWindowVisible: true);
 
             Assert.Equal(string.Empty, result.FinalText);
-            Assert.Equal("https://example.com/chart.png", result.ImageReference);
+            Assert.Single(result.ImageReferences);
+            Assert.Equal("https://example.com/chart.png", result.ImageReferences[0]);
             Assert.Contains(await db.GetMessagesAsync(conversationId), message => message.Role == "assistant" && message.ImagePath == "https://example.com/chart.png");
         }
         finally
@@ -811,7 +815,7 @@ public class ServiceWorkflowRegressionTests
             int? expected = 5;
             Assert.Equal(expected, await service.GetSelectedProviderIdAsync());
             int conversationId = await db.CreateConversationAsync(1, "Untitled");
-            await service.PersistUserMessageAsync(conversationId, "hello", null, "Greeting");
+            await service.PersistUserMessageAsync(conversationId, "hello", null, null, "Greeting");
             await service.PersistAssistantMessageAsync(conversationId, "hi there");
             await service.PersistAssistantMessageAsync(conversationId, "diagram", "https://example.com/diagram.png");
             await service.PersistToolStatusAsync(conversationId, "Ã¢Å“ Read file");
@@ -1438,7 +1442,7 @@ public class ServiceWorkflowRegressionTests
         Assert.Equal(2, initial.Providers.Count);
         Assert.Equal(2, initial.SelectedProvider?.Id);
         Provider created = await service.CreateDefaultProviderAsync(repository);
-        Assert.Equal("New Provider", created.Name);
+        Assert.Equal("OpenAI", created.Name);
         Assert.Equal("OpenAI", created.Type);
         SettingsProviderListApplicationService.ProviderListState refreshed = await service.LoadAsync(repository, created.Id);
         Assert.Equal(created.Id, refreshed.SelectedProvider?.Id);
@@ -1970,13 +1974,13 @@ public class ServiceWorkflowRegressionTests
         OllamaActionApplicationService service = new OllamaActionApplicationService(client);
         OllamaActionResult install = await service.InstallAsync();
         Assert.False(install.Succeeded);
-        Assert.Contains("install failed", install.UserMessage, StringComparison.Ordinal);
+        Assert.Equal("Could not install Ollama.", install.UserMessage);
         OllamaActionResult download = await service.DownloadModelAsync("broken");
         Assert.False(download.Succeeded);
-        Assert.Contains("pull failed", download.UserMessage, StringComparison.Ordinal);
+        Assert.Equal("Could not download model.", download.UserMessage);
         OllamaActionResult uninstall = await service.UninstallModelAsync("broken");
         Assert.False(uninstall.Succeeded);
-        Assert.Contains("delete failed", uninstall.UserMessage, StringComparison.Ordinal);
+        Assert.Equal("Could not uninstall model.", uninstall.UserMessage);
     }
 
     [Fact]
@@ -2005,7 +2009,7 @@ public class ServiceWorkflowRegressionTests
         CodexActionApplicationService service = new CodexActionApplicationService(client);
         CodexActionResult result = await service.InstallAsync();
         Assert.False(result.Succeeded);
-        Assert.Contains("npm failed", result.UserMessage, StringComparison.Ordinal);
+        Assert.Equal("Could not install Codex CLI.", result.UserMessage);
     }
 
     [Fact]

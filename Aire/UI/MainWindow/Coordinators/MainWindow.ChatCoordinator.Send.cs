@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Aire.Data;
 using Aire.Services.Workflows;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
@@ -49,6 +50,7 @@ namespace Aire
                         _owner._currentConversationId.Value,
                         messageContent,
                         _owner._attachedImagePath ?? _owner._attachedFilePath,
+                        prepared.Attachments,
                         prepared.SuggestedConversationTitle);
                     if (!string.IsNullOrWhiteSpace(prepared.SuggestedConversationTitle))
                         _ = _owner.RefreshSidebarAsync();
@@ -64,7 +66,10 @@ namespace Aire
                     MessageDate = now,
                     BackgroundBrush = MainWindow.UserBgBrush,
                     SenderForeground = MainWindow.UserFgBrush,
-                    AttachedImage = attachedImageSource
+                    AttachedImage = attachedImageSource,
+                    FileAttachments = prepared.Attachments.Count > 0
+                        ? new System.Collections.ObjectModel.ObservableCollection<MessageAttachment>(prepared.Attachments)
+                        : null
                 });
 
                 _owner._attachedImagePath = null;
@@ -80,7 +85,8 @@ namespace Aire
                 _owner._conversationHistory.Add(
                     _submissionWorkflow.BuildProviderHistoryMessage(
                         prepared.PersistedContent,
-                        prepared.HistoryImagePath));
+                        prepared.HistoryImagePath,
+                        prepared.Attachments));
 
                 _owner._isProcessing = true;
                 _owner._aiCancellationTokenSource?.Cancel();
@@ -91,7 +97,15 @@ namespace Aire
 
                 try
                 {
-                    await RunAiTurnAsync(wasVoice: wasVoice, cancellationToken: cancellationToken);
+                    if (_owner._assistantModeKey.Equals("painter", StringComparison.OrdinalIgnoreCase) &&
+                        _owner._currentProvider is Providers.IImageGenerationProvider { SupportsImageGeneration: true } imageGenerationProvider)
+                    {
+                        await RunImageGenerationTurnAsync(text, imageGenerationProvider, wasVoice, cancellationToken);
+                    }
+                    else
+                    {
+                        await RunAiTurnAsync(wasVoice: wasVoice, cancellationToken: cancellationToken);
+                    }
                 }
                 finally
                 {

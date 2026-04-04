@@ -44,19 +44,19 @@ namespace Aire.UI
                 }
                 else if (action.Id == "codex-install")
                 {
-                    var codexStatus = CodexProvider.GetCliStatus();
-                    if (codexStatus.IsInstalled)
+                    var codexStatus = _providerFormActions.GetProviderToolStatus(meta.ProviderType);
+                    if (codexStatus?.IsInstalled == true)
                     {
                         btn.Visibility = Visibility.Collapsed;
                         CodexInstallProgressBar.Visibility = Visibility.Collapsed;
                         CodexInstallStatusText.Visibility = Visibility.Visible;
-                        CodexInstallStatusText.Text = "Codex CLI detected. You can test the connection now.";
+                        CodexInstallStatusText.Text = codexStatus.StatusMessage;
                         continue;
                     }
 
-                    btn.Content = "Install Codex CLI";
+                    btn.Content = codexStatus?.ActionLabel ?? "Install Codex CLI";
                     CodexInstallStatusText.Visibility = Visibility.Visible;
-                    CodexInstallStatusText.Text = codexStatus.UserMessage;
+                    CodexInstallStatusText.Text = codexStatus?.StatusMessage ?? string.Empty;
                     if (!_isRefreshing)
                         btn.IsEnabled = true;
                 }

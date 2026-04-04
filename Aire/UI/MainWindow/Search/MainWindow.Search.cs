@@ -146,9 +146,9 @@ namespace Aire
             {
                 File.WriteAllText(dlg.FileName, BuildChatText());
             }
-            catch (Exception ex)
+            catch
             {
-                UI.ConfirmationDialog.ShowAlert(this, "Error", $"Failed to save: {ex.Message}");
+                UI.ConfirmationDialog.ShowAlert(this, "Error", "Failed to save.");
             }
         }
 

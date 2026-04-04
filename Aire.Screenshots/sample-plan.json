@@ -1,0 +1,26 @@
+{
+  "setupActions": [
+    {
+      "kind": "start-process",
+      "executablePath": "C:/dev/aire/Aire/bin/Debug/net10.0-windows10.0.17763.0/Aire.exe",
+      "delayMs": 1500
+    }
+  ],
+  "screenshots": [
+    {
+      "outputPath": "Aire/Assets/Help/main-window.png",
+      "exactTitle": "Aire",
+      "processName": "Aire",
+      "delayMs": 750,
+      "padding": 12,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "invoke",
+          "automationId": "PART_ModeButton",
+          "delayMs": 250
+        }
+      ]
+    }
+  ]
+}

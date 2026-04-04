@@ -41,9 +41,9 @@ namespace Aire.UI
                     Top = Math.Min(tv, workArea.Bottom - Height);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                AppLogger.Warn("HelpWindow.LoadWindowState", "Failed to restore window state", ex);
+                AppLogger.Warn("HelpWindow.LoadWindowState", "Failed to restore window state");
             }
         }
 
@@ -61,9 +61,9 @@ namespace Aire.UI
                 });
                 File.WriteAllText(StatePath, json);
             }
-            catch (Exception ex)
+            catch
             {
-                AppLogger.Warn("HelpWindow.SaveWindowState", "Failed to persist window state", ex);
+                AppLogger.Warn("HelpWindow.SaveWindowState", "Failed to persist window state");
             }
         }
 
@@ -115,4 +115,3 @@ namespace Aire.UI
         private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
     }
 }
-

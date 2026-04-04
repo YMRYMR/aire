@@ -20,10 +20,11 @@ namespace Aire.Providers
         {
             ArgumentNullException.ThrowIfNull(providerConfig);
 
-            IAiProvider provider = providerConfig.Type switch
+            IAiProvider provider = ProviderIdentityCatalog.NormalizeType(providerConfig.Type) switch
             {
                 "OpenAI"      => new OpenAiProvider(),
                 "GoogleAI"    => new GoogleAiProvider(),
+                "GoogleAIImage" => new GoogleAiImageProvider(),
                 "DeepSeek"    => new DeepSeekProvider(),
                 "Inception"   => new InceptionProvider(),
                 "Codex"       => new CodexProvider(),
@@ -68,13 +69,15 @@ namespace Aire.Providers
         /// <returns>A provider metadata implementation suitable for settings and onboarding.</returns>
         public static IProviderMetadata GetMetadata(string providerType)
         {
-            if (MetadataCache.TryGetValue(providerType, out var cached))
+            var normalizedType = ProviderIdentityCatalog.NormalizeType(providerType);
+            if (MetadataCache.TryGetValue(normalizedType, out var cached))
                 return cached;
 
-            IProviderMetadata meta = providerType switch
+            IProviderMetadata meta = normalizedType switch
             {
                 "OpenAI"     => new OpenAiProvider(),
                 "GoogleAI"   => new GoogleAiProvider(),
+                "GoogleAIImage" => new GoogleAiImageProvider(),
                 "DeepSeek"   => new DeepSeekProvider(),
                 "Inception"  => new InceptionProvider(),
                 "Codex"      => new CodexProvider(),
@@ -82,10 +85,10 @@ namespace Aire.Providers
                 "OpenRouter" => new OpenRouterProvider(),
                 "Ollama"     => new PortableOllamaProvider(),
                 "Zai"        => new ZaiProvider(),
-                _            => new OpenAiProvider(),
+                _            => throw new NotSupportedException($"Provider type '{providerType}' is not supported."),
             };
 
-            MetadataCache[providerType] = meta;
+            MetadataCache[normalizedType] = meta;
             return meta;
         }
     }

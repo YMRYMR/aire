@@ -71,6 +71,19 @@ public sealed class OllamaProviderTests
     }
 
     [Fact]
+    public async Task SendChatAsync_ReturnsGenericError_WhenTransportThrows()
+    {
+        var provider = CreateProvider("http://127.0.0.1:1");
+
+        var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal(
+            "Network error while contacting Ollama. Make sure Ollama is running at http://127.0.0.1:1.",
+            response.ErrorMessage);
+    }
+
+    [Fact]
     public async Task StreamChatAsync_YieldsTextAndFinalToolCall()
     {
         using var server = new OllamaTestServer((_, _, _) =>
@@ -109,6 +122,17 @@ public sealed class OllamaProviderTests
 
         Assert.False(validation.IsValid);
         Assert.Contains("not found", validation.Error, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task ValidateConfigurationAsync_ReturnsGenericError_WhenTransportThrows()
+    {
+        var provider = CreateProvider("http://127.0.0.1:1");
+
+        var validation = await provider.ValidateConfigurationAsync(CancellationToken.None);
+
+        Assert.False(validation.IsValid);
+        Assert.Equal("Ollama connection failed.", validation.Error);
     }
 
     [Fact]

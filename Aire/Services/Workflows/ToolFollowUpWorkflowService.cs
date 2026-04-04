@@ -32,6 +32,23 @@ namespace Aire.Services.Workflows
                 : $"{textContent}\n<tool_call>{rawJson}</tool_call>";
 
         /// <summary>
+        /// Builds one assistant-history entry for a response that emitted multiple tool calls.
+        /// </summary>
+        /// <param name="textContent">Visible assistant text emitted alongside the tool calls.</param>
+        /// <param name="rawJsonPayloads">Raw tool-call JSON bodies in response order.</param>
+        /// <returns>Conversation-history text stored for the assistant turn.</returns>
+        public string BuildAssistantToolCallContent(string textContent, IEnumerable<string> rawJsonPayloads)
+        {
+            string toolBlocks = string.Join("\n", rawJsonPayloads.Select(rawJson => $"<tool_call>{rawJson}</tool_call>"));
+            if (string.IsNullOrEmpty(toolBlocks))
+                return textContent;
+
+            return string.IsNullOrEmpty(textContent)
+                ? toolBlocks
+                : $"{textContent}\n{toolBlocks}";
+        }
+
+        /// <summary>
         /// Builds the synthetic history message fed back to the provider after a tool executes.
         /// </summary>
         /// <param name="toolName">Tool that was executed or denied.</param>

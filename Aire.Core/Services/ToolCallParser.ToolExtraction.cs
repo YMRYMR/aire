@@ -6,43 +6,57 @@ namespace Aire.Services
 {
     public static partial class ToolCallParser
     {
-        private static bool TryParseToolCallJson(string raw, out ToolCallRequest result)
+        private static IReadOnlyList<ToolCallRequest> ParseToolCallJson(string raw)
         {
-            result = new ToolCallRequest();
+            var results = new List<ToolCallRequest>();
 
-            if (TryExtractTool(NormalizeJson(raw), out result))
-                return true;
+            if (TryExtractTool(NormalizeJson(raw), out var normalizedResult))
+            {
+                results.Add(normalizedResult);
+                return results;
+            }
 
             var trimmed = raw.TrimEnd();
             int lastBrace = trimmed.LastIndexOf('}');
             if (lastBrace >= 0 && lastBrace < trimmed.Length - 1)
             {
                 var candidate = NormalizeJson(trimmed[..(lastBrace + 1)]);
-                if (TryExtractTool(candidate, out result))
-                    return true;
+                if (TryExtractTool(candidate, out var trailingResult))
+                {
+                    results.Add(trailingResult);
+                    return results;
+                }
             }
 
             var normalized = NormalizeJson(raw);
-            if (normalized.StartsWith('['))
+            if (!normalized.StartsWith('['))
+                return results;
+
+            try
             {
-                try
+                using var arr = JsonDocument.Parse(normalized);
+                if (arr.RootElement.ValueKind != JsonValueKind.Array)
+                    return results;
+
+                foreach (var element in arr.RootElement.EnumerateArray())
                 {
-                    using var arr = JsonDocument.Parse(normalized);
-                    if (arr.RootElement.ValueKind == JsonValueKind.Array &&
-                        arr.RootElement.GetArrayLength() > 0)
-                    {
-                        var first = arr.RootElement[0].GetRawText();
-                        if (TryExtractTool(first, out result))
-                            return true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[ToolCallParser] Failed to parse tool‑call JSON: {ex.Message}\nRaw input: {raw}");
+                    if (TryExtractTool(element.GetRawText(), out var arrayResult))
+                        results.Add(arrayResult);
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ToolCallParser] Failed to parse tool‑call JSON: {ex.GetType().Name}\nRaw input: {raw}");
+            }
 
-            return false;
+            return results;
+        }
+
+        private static bool TryParseToolCallJson(string raw, out ToolCallRequest result)
+        {
+            var results = ParseToolCallJson(raw);
+            result = results.Count > 0 ? results[0] : new ToolCallRequest();
+            return results.Count > 0;
         }
 
         private static bool TryExtractTool(string json, out ToolCallRequest result)
@@ -164,7 +178,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ToolCallParser] Failed to extract tool from JSON: {ex.Message}\nJSON input: {json}");
+                Debug.WriteLine($"[ToolCallParser] Failed to extract tool from JSON: {ex.GetType().Name}\nJSON input: {json}");
                 return false;
             }
         }
@@ -197,7 +211,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ToolCallParser] Failed to flatten OpenAI-style tool call '{toolName}': {ex.Message}");
+                Debug.WriteLine($"[ToolCallParser] Failed to flatten OpenAI-style tool call '{toolName}': {ex.GetType().Name}");
                 return null;
             }
         }

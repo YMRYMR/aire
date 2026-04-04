@@ -1,0 +1,36 @@
+{
+  "setupActions": [
+    {
+      "kind": "wait-for-window",
+      "exactTitle": "Welcome to Aire",
+      "processName": "Aire",
+      "delayMs": 2000
+    }
+  ],
+  "screenshots": [
+    {
+      "outputPath": "C:/dev/aire/Aire/Assets/Help/onboarding-provider-picker.png",
+      "exactTitle": "Welcome to Aire",
+      "processName": "Aire",
+      "delayMs": 400,
+      "padding": 0,
+      "activateWindow": true
+    },
+    {
+      "outputPath": "C:/dev/aire/Aire/Assets/Help/onboarding-provider-setup.png",
+      "exactTitle": "Welcome to Aire",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "invoke",
+          "name": "OpenAI",
+          "controlType": "text",
+          "delayMs": 350
+        }
+      ]
+    }
+  ]
+}

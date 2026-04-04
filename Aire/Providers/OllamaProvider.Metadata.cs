@@ -63,7 +63,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Ollama live model fetch failed: {ex.Message}");
+            Debug.WriteLine($"Ollama live model fetch failed: {ex.GetType().Name}");
                 return null;
             }
         }
@@ -107,7 +107,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                return ProviderValidationResult.Fail($"Ollama connection failed: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                return ProviderValidationResult.Fail("Ollama connection failed.");
             }
         }
     }

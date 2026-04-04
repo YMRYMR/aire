@@ -120,7 +120,8 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                return new ToolExecutionResult { TextResult = $"Error getting system info: {ex.Message}" };
+                Debug.WriteLine($"System info retrieval failed: {ex.GetType().Name}");
+                return new ToolExecutionResult { TextResult = "Error getting system info." };
             }
         }
 
@@ -159,7 +160,8 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                return new ToolExecutionResult { TextResult = $"Error listing processes: {ex.Message}" };
+                Debug.WriteLine($"Process listing failed: {ex.GetType().Name}");
+                return new ToolExecutionResult { TextResult = "Error listing processes." };
             }
         }
 
@@ -183,7 +185,8 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+                Debug.WriteLine($"Active window lookup failed: {ex.GetType().Name}");
+                return new ToolExecutionResult { TextResult = "Error getting active window." };
             }
         }
 
@@ -236,7 +239,8 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+                Debug.WriteLine($"Selected text retrieval failed: {ex.GetType().Name}");
+                return new ToolExecutionResult { TextResult = "Error reading selected text." };
             }
         }
 
@@ -272,7 +276,8 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                return new ToolExecutionResult { TextResult = $"Error opening file: {ex.Message}" };
+                Debug.WriteLine($"Open file failed: {ex.GetType().Name}");
+                return new ToolExecutionResult { TextResult = "Error opening file." };
             }
         }
 

@@ -140,11 +140,11 @@ namespace Aire.Services
                     result.StandardError = TruncateString(errorBuilder.ToString(), MaxOutputLength);
                 result.DurationMs = stopwatch.ElapsedMilliseconds;
             }
-            catch (Exception ex)
+            catch
             {
                 stopwatch.Stop();
                 result.ExitCode      = -1;
-                result.StandardError = $"Execution error: {ex.Message}";
+                result.StandardError = "Execution error: command failed.";
                 result.DurationMs    = stopwatch.ElapsedMilliseconds;
             }
 

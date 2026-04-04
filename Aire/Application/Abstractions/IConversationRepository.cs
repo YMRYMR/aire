@@ -1,4 +1,5 @@
 using Aire.Data;
+using System.Collections.Generic;
 
 namespace Aire.AppLayer.Abstractions
 {
@@ -14,7 +15,12 @@ namespace Aire.AppLayer.Abstractions
         Task UpdateConversationTitleAsync(int conversationId, string title);
         Task UpdateConversationProviderAsync(int conversationId, int providerId);
         Task UpdateConversationAssistantModeAsync(int conversationId, string assistantModeKey);
-        Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null);
+        Task SaveMessageAsync(
+            int conversationId,
+            string role,
+            string content,
+            string? imagePath = null,
+            IEnumerable<MessageAttachment>? attachments = null);
         Task<List<Aire.Data.Message>> GetMessagesAsync(int conversationId);
         Task DeleteMessagesByConversationIdAsync(int conversationId);
         Task DeleteConversationAsync(int conversationId);

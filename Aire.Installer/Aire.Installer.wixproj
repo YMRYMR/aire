@@ -1,0 +1,35 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+
+  <PropertyGroup>
+    <OutputName>Aire</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <AireVersion>1.0.0</AireVersion>
+    <AirePublishDir>$(MSBuildProjectDirectory)\..\Aire\obj\publish\Aire\</AirePublishDir>
+    <SetupPublishDir>$(MSBuildProjectDirectory)\..\Aire.Setup\obj\publish\Aire.Setup\</SetupPublishDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BindPath Include="$(AirePublishDir)" BindName="AirePublish" />
+    <BindPath Include="$(SetupPublishDir)" BindName="SetupPublish" />
+  </ItemGroup>
+
+  <Target Name="PublishInstallerPayloads" BeforeTargets="BeforeBuild">
+    <RemoveDir Directories="$(AirePublishDir);$(SetupPublishDir)" />
+    <MakeDir Directories="$(AirePublishDir);$(SetupPublishDir)" />
+
+    <MSBuild
+      Projects="..\Aire\Aire.csproj"
+      Targets="Restore;Publish"
+      Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;PublishSingleFile=false;PublishDir=$(AirePublishDir)" />
+
+    <MSBuild
+      Projects="..\Aire.Setup\Aire.Setup.csproj"
+      Targets="Restore;Publish"
+      Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;PublishSingleFile=true;IncludeNativeLibrariesForSelfExtract=true;PublishDir=$(SetupPublishDir)" />
+  </Target>
+
+</Project>

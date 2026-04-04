@@ -28,10 +28,10 @@ namespace Aire.Services
                 _isPaused = false;
                 return null;
             }
-            catch (Exception ex)
+            catch
             {
                 CleanupWaveIn();
-                return ex.Message;
+                return "Speech recognition failed.";
             }
         }
 

@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using Aire.Services;
+using System.Diagnostics;
 using WpfRichTextBox = System.Windows.Controls.RichTextBox;
 using WpfColor       = System.Windows.Media.Color;
 using WpfFontFamily  = System.Windows.Media.FontFamily;
@@ -32,7 +33,7 @@ public static partial class LinkedText
         @"\*\*(?<b>[^*\n]+?)\*\*"              +   // **bold**
         @"|\*(?<i>[^*\n]+)\*"                  +   // *italic*
         @"|`(?<c>[^`\n]+)`"                    +   // `inline code`
-        @"|(?<u>https?://[^\s<>""'\]\[)(]+)",       // bare URL
+        @"|(?<u>(?:https?|file):///[^\s<>""'\]\[)(]+|https?://[^\s<>""'\]\[)(]+)", // bare URL / file URL
         RegexOptions.Compiled);
 
     private static readonly Regex HeadingRegex  = new(@"^(#{1,6})\s+(.+)$");
@@ -217,5 +218,20 @@ public static partial class LinkedText
         return result;
     }
 
-    private static void OpenUrl(string url) => WebViewWindow.OpenInNewTab(url);
+    private static void OpenUrl(string url)
+    {
+        if (Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
+            uri.IsFile &&
+            !string.IsNullOrWhiteSpace(uri.LocalPath))
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = uri.LocalPath,
+                UseShellExecute = true
+            });
+            return;
+        }
+
+        WebViewWindow.OpenInNewTab(url);
+    }
 }

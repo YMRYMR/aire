@@ -31,31 +31,20 @@ namespace Aire.Services.Providers
             var type = string.IsNullOrWhiteSpace(request.Type) ? "OpenAI" : request.Type;
             var apiKey = request.ApiKey?.Trim();
             var baseUrl = string.IsNullOrWhiteSpace(request.BaseUrl) ? null : request.BaseUrl.Trim();
+            var descriptor = ProviderCatalog.TryGetDescriptor(type, out var resolved)
+                ? resolved
+                : ProviderCatalog.GetDescriptor("OpenAI");
 
-            if (type != "Ollama" && type != "ClaudeWeb" && type != "Codex" && string.IsNullOrWhiteSpace(apiKey))
+            if (descriptor.RequiresApiKey && string.IsNullOrWhiteSpace(apiKey))
                 return null;
 
-            if (type == "ClaudeWeb" && !request.ClaudeWebSessionReady)
+            if (descriptor.SupportsSessionCredential && descriptor.Type == "ClaudeWeb" && !request.ClaudeWebSessionReady)
                 return null;
 
-            if (string.IsNullOrWhiteSpace(apiKey) && request.ClaudeWebSessionReady && type == "ClaudeWeb")
+            if (descriptor.SupportsSessionCredential && string.IsNullOrWhiteSpace(apiKey) && request.ClaudeWebSessionReady && descriptor.Type == "ClaudeWeb")
                 apiKey = "claude.ai-session";
 
-            IAiProvider provider = type switch
-            {
-                "OpenAI" => new OpenAiProvider(),
-                "Groq" => new GroqProvider(),
-                "OpenRouter" => new OpenRouterProvider(),
-                "Anthropic" => new ClaudeAiProvider(),
-                "ClaudeWeb" => new ClaudeWebProvider(),
-                "Codex" => new CodexProvider(),
-                "GoogleAI" => new GoogleAiProvider(),
-                "Ollama" => new OllamaProvider(),
-                "DeepSeek" => new DeepSeekProvider(),
-                "Inception" => new InceptionProvider(),
-                "Zai" => new ZaiProvider(),
-                _ => new OpenAiProvider()
-            };
+            IAiProvider provider = descriptor.CreateRuntimeProvider();
 
             provider.Initialize(new ProviderConfig
             {

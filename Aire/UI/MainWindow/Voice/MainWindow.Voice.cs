@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using Aire.Services;
 using Color = System.Windows.Media.Color;
@@ -81,28 +82,30 @@ namespace Aire
                     MicButton.Content = "\u23F9";
                     MicButton.FontSize = 16;
                     MicButton.Background = new SolidColorBrush(Color.FromRgb(0x7A, 0x1A, 0x1A));
-                    MicButton.ToolTip = "Stop recording  (say 'AIRE PAUSE' to pause)";
+                    MicButton.ToolTip = LocalizationService.S("tooltip.stopRecording", "Stop recording  (say 'AIRE PAUSE' to pause)");
                     MicButton.IsEnabled = true;
                     break;
                 case MicState.Paused:
                     MicButton.Content = "\u23F8";
                     MicButton.FontSize = 16;
                     MicButton.Background = new SolidColorBrush(Color.FromRgb(0x1A, 0x2A, 0x3A));
-                    MicButton.ToolTip = "Voice paused  (say 'AIRE RESUME' to continue)";
+                    MicButton.ToolTip = LocalizationService.S("tooltip.voicePaused", "Voice paused  (say 'AIRE RESUME' to continue)");
                     MicButton.IsEnabled = true;
                     break;
                 case MicState.Downloading:
                     MicButton.Content = "…";
                     MicButton.FontSize = 16;
                     MicButton.Background = new SolidColorBrush(Color.FromRgb(0x1A, 0x2A, 0x1A));
-                    MicButton.ToolTip = "Downloading Whisper model…";
+                    MicButton.ToolTip = LocalizationService.S("tooltip.downloadingWhisper", "Downloading Whisper model…");
                     MicButton.IsEnabled = false;
                     break;
                 default:
                     MicButton.Content = "\uD83C\uDFA4";
                     MicButton.FontSize = 13;
                     MicButton.ClearValue(System.Windows.Controls.Control.BackgroundProperty);
-                    MicButton.ToolTip = _speechService.ModelExists ? "Start voice input" : "Click to download Whisper model (~150 MB)";
+                    MicButton.ToolTip = _speechService.ModelExists
+                        ? LocalizationService.S("tooltip.mic", "Start voice input")
+                        : LocalizationService.S("tooltip.downloadWhisper", "Click to download Whisper model (~150 MB)");
                     MicButton.IsEnabled = _speechService.HasMic;
                     break;
             }
@@ -135,5 +138,8 @@ namespace Aire
         private void OnTtsSpeakingCompleted()
         {
         }
+
+        internal Task<bool> TryEnableStartupVoiceInputAsync()
+            => VoiceFlow.TryStartAccessibilityVoiceInputAsync();
     }
 }

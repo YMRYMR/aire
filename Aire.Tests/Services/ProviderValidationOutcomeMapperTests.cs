@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.AppLayer.Abstractions;
@@ -60,6 +61,30 @@ public sealed class ProviderValidationOutcomeMapperTests
         Assert.Contains("credits", outcome.RemediationHint ?? string.Empty, System.StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public async Task BaseProviderValidation_ReturnsGenericError_OnUnexpectedException()
+    {
+        var provider = new ThrowingValidationProvider();
+        provider.Initialize(new ProviderConfig { ApiKey = "test-key" });
+
+        var result = await provider.ValidateConfigurationAsync(CancellationToken.None);
+
+        Assert.False(result.IsValid);
+        Assert.Equal("Configuration validation failed.", result.Error);
+    }
+
+    [Fact]
+    public void FromLegacyResult_MapsGenericValidationFailure_ToUnknown()
+    {
+        var outcome = ProviderValidationOutcomeMapper.FromLegacyResult(
+            ProviderValidationResult.Fail("Configuration validation failed."));
+
+        Assert.False(outcome.IsValid);
+        Assert.Equal("Configuration validation failed.", outcome.ErrorMessage);
+        Assert.Equal(ProviderValidationFailureKind.Unknown, outcome.FailureKind);
+        Assert.Null(outcome.RemediationHint);
+    }
+
     private sealed class ValidationOnlyAdapter : IProviderAdapter
     {
         public string ProviderType => "Codex";
@@ -113,5 +138,16 @@ public sealed class ProviderValidationOutcomeMapperTests
             => Task.FromResult(_validationResult);
         public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default)
             => Task.FromResult<TokenUsage?>(null);
+    }
+
+    private sealed class ThrowingValidationProvider : BaseAiProvider
+    {
+        public override string ProviderType => "Throwing";
+        public override string DisplayName => "Throwing";
+
+        protected override ProviderCapabilities GetBaseCapabilities() => ProviderCapabilities.TextChat;
+
+        public override Task<AiResponse> SendChatAsync(System.Collections.Generic.IEnumerable<ChatMessage> messages, CancellationToken cancellationToken = default)
+            => throw new InvalidOperationException("sensitive internal details");
     }
 }

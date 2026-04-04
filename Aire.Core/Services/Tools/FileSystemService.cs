@@ -34,9 +34,9 @@ namespace Aire.Services
                 };
                 return new ToolExecutionResult { TextResult = text };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "File system operation failed." };
             }
         }
 
@@ -301,9 +301,9 @@ namespace Aire.Services
                 if (matches >= maxResults) sb.AppendLine($"\n[Limit of {maxResults} results reached]");
                 return sb.ToString().TrimEnd();
             }
-            catch (Exception ex)
+        catch
             {
-                return $"Error: {ex.Message}";
+            return "File system operation failed.";
             }
         }
 

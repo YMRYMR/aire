@@ -78,9 +78,9 @@ public sealed class WebFetchService : IDisposable
         {
             return WebFetchResult.Error("Request timed out after 25 seconds.", url);
         }
-        catch (Exception ex)
+        catch
         {
-            return WebFetchResult.Error($"Network error: {ex.Message}", url);
+            return WebFetchResult.Error("Network error fetching page.", url);
         }
 
         // ── Dispatch by content type ──────────────────────────────────────
@@ -104,9 +104,9 @@ public sealed class WebFetchService : IDisposable
                 text  = HtmlToText(body);
             }
         }
-        catch (Exception ex)
+        catch
         {
-            return WebFetchResult.Error($"Failed to parse page content: {ex.Message}", finalUrl);
+            return WebFetchResult.Error("Failed to parse page content.", finalUrl);
         }
 
         // ── Truncate ──────────────────────────────────────────────────────

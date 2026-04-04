@@ -182,10 +182,10 @@ namespace Aire.UI.Controls
                     }
                 }
                 catch (OperationCanceledException) { }
-                catch (Exception ex)
+                catch
                 {
                     if (!ct.IsCancellationRequested)
-                        Dispatcher.Invoke(() => InstallStatusText.Text = $"Error: {ex.Message}");
+                        Dispatcher.Invoke(() => InstallStatusText.Text = "Error checking Ollama status.");
                 }
                 return;
             }
@@ -234,11 +234,11 @@ namespace Aire.UI.Controls
                 await LoadModelsAsync(svc, ct);
             }
             catch (OperationCanceledException) { }
-            catch (Exception ex)
-            {
-                if (!ct.IsCancellationRequested)
-                    Dispatcher.Invoke(() => InstallStatusText.Text = $"Error: {ex.Message}");
-            }
+                catch
+                {
+                    if (!ct.IsCancellationRequested)
+                        Dispatcher.Invoke(() => InstallStatusText.Text = "Error checking Ollama status.");
+                }
         }
 
         private void ShowState(string state)
@@ -355,9 +355,9 @@ namespace Aire.UI.Controls
                 });
             }
             catch (OperationCanceledException) { }
-            catch (Exception ex)
+            catch
             {
-                Dispatcher.Invoke(() => ModelHint.Text = $"Could not load models: {ex.Message}");
+                Dispatcher.Invoke(() => ModelHint.Text = "Could not load models.");
             }
             finally
             {
@@ -526,10 +526,10 @@ namespace Aire.UI.Controls
                 await Task.Delay(3000);
                 await RunCheckAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 InstallBar.Visibility  = Visibility.Collapsed;
-                InstallStatusText.Text = $"Installation failed: {ex.Message}";
+                InstallStatusText.Text = "Installation failed.";
                 InstallBtn.IsEnabled   = true;
             }
         }
@@ -612,10 +612,10 @@ namespace Aire.UI.Controls
                 ModelHint.Text        = "Download cancelled.";
                 DownloadBtn.IsEnabled = true;
             }
-            catch (Exception ex)
+            catch
             {
                 DownloadProgressBorder.Visibility = Visibility.Collapsed;
-                ModelHint.Text        = $"Download failed: {ex.Message}";
+                ModelHint.Text        = "Download failed.";
                 DownloadBtn.IsEnabled = true;
             }
             finally
@@ -658,9 +658,9 @@ namespace Aire.UI.Controls
                 ModelHint.Text = result.UserMessage;
                 await LoadModelsAsync(null, _cts?.Token ?? CancellationToken.None);
             }
-            catch (Exception ex)
+            catch
             {
-                ModelHint.Text         = $"Uninstall failed: {ex.Message}";
+                ModelHint.Text         = "Uninstall failed.";
                 UninstallBtn.IsEnabled = true;
             }
         }
@@ -681,9 +681,9 @@ namespace Aire.UI.Controls
                 ModelCatalog.ImportFile(dialog.FileName);
                 await LoadModelsAsync(null, _cts?.Token ?? CancellationToken.None);
             }
-            catch (Exception ex)
+            catch
             {
-                ModelHint.Text = $"Import failed: {ex.Message}";
+                ModelHint.Text = "Import failed.";
             }
         }
 

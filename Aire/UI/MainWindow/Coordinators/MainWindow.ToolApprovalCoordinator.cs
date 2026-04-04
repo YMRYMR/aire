@@ -45,6 +45,15 @@ namespace Aire
             /// <param name="autoApprove">Whether the tool can run immediately without waiting for the user.</param>
             /// <returns>The approval decision together with the chat message that tracks its UI state.</returns>
             public async Task<(bool approved, ChatMessage approvalMsg)> RequestApprovalAsync(ParsedAiResponse parsed, bool autoApprove)
+                => await RequestApprovalAsync(parsed.ToolCall!, autoApprove);
+
+            /// <summary>
+            /// Creates the approval message shown in chat and waits for a user decision when auto-approval is not allowed.
+            /// </summary>
+            /// <param name="toolCall">Pending tool call.</param>
+            /// <param name="autoApprove">Whether the tool can run immediately without waiting for the user.</param>
+            /// <returns>The approval decision together with the chat message that tracks its UI state.</returns>
+            public async Task<(bool approved, ChatMessage approvalMsg)> RequestApprovalAsync(ToolCallRequest toolCall, bool autoApprove)
             {
                 var promptPlan = _owner._toolApprovalPromptApplicationService.BuildPromptPlan(autoApprove, _owner.IsVisible);
                 var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -56,7 +65,7 @@ namespace Aire
                     MessageDate = DateTime.Now,
                     BackgroundBrush = MainWindow.AiBgBrush,
                     SenderForeground = MainWindow.AiFgBrush,
-                    PendingToolCall = parsed.ToolCall,
+                    PendingToolCall = toolCall,
                     IsApprovalPending = promptPlan.IsApprovalPending,
                     ApprovalTcs = tcs
                 };

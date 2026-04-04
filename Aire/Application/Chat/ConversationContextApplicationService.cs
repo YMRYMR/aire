@@ -84,6 +84,9 @@ namespace Aire.AppLayer.Chat
                 if (!string.IsNullOrWhiteSpace(copy.ImagePath) || copy.ImageBytes?.Length > 0)
                     copy.PreferPromptCache = false;
 
+                if (copy.Attachments?.Count > 0)
+                    copy.PreferPromptCache = false;
+
                 result.Add(copy);
             }
 
@@ -98,6 +101,7 @@ namespace Aire.AppLayer.Chat
                 ImagePath = message.ImagePath,
                 ImageBytes = message.ImageBytes,
                 ImageMimeType = message.ImageMimeType,
+                Attachments = message.Attachments?.ToList(),
                 PreferPromptCache = message.PreferPromptCache
             };
     }

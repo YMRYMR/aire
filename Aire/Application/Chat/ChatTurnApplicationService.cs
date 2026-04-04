@@ -19,7 +19,7 @@ namespace Aire.AppLayer.Chat
             string FinalText,
             string? TrayPreview,
             ProviderChatMessage AssistantHistoryMessage,
-            string? ImageReference);
+            IReadOnlyList<string> ImageReferences);
 
         /// <summary>
         /// Result of an <c>attempt_completion</c> tool call.
@@ -66,18 +66,32 @@ namespace Aire.AppLayer.Chat
             int trayPreviewLength = 80)
         {
             var parsed = _imageResponseWorkflow.Parse(textContent);
-            var finalText = string.IsNullOrWhiteSpace(parsed.Text) && parsed.ImageReference != null
+            var finalText = string.IsNullOrWhiteSpace(parsed.Text) && parsed.ImageReferences.Count > 0
                 ? string.Empty
                 : _responseWorkflow.NormalizeFinalText(parsed.Text);
 
             if (conversationId.HasValue)
-                await _chatSessionService.PersistAssistantMessageAsync(conversationId.Value, finalText, parsed.ImageReference);
+            {
+                if (parsed.ImageReferences.Count <= 1)
+                {
+                    await _chatSessionService.PersistAssistantMessageAsync(
+                        conversationId.Value,
+                        finalText,
+                        parsed.ImageReferences.Count == 1 ? parsed.ImageReferences[0] : null);
+                }
+                else
+                {
+                    await _chatSessionService.PersistAssistantMessageAsync(
+                        conversationId.Value,
+                        _imageResponseWorkflow.BuildPersistedContent(finalText, parsed.ImageReferences));
+                }
+            }
 
             return new SuccessTextResult(
                 finalText,
                 isWindowVisible ? null : _responseWorkflow.BuildTrayPreview(string.IsNullOrWhiteSpace(finalText) ? parsed.Text : finalText, trayPreviewLength),
                 new ProviderChatMessage { Role = "assistant", Content = string.IsNullOrWhiteSpace(finalText) ? parsed.Text : finalText },
-                parsed.ImageReference);
+                parsed.ImageReferences);
         }
 
         /// <summary>
@@ -102,10 +116,20 @@ namespace Aire.AppLayer.Chat
             bool approved,
             int? conversationId,
             bool includeScreenshotImageInHistory)
+            => await HandleToolExecutionAsync(parsed.TextContent, parsed.ToolCall!, approved, conversationId, includeScreenshotImageInHistory);
+
+        /// <summary>
+        /// Executes or denies one tool turn and prepares the provider-history entries that follow.
+        /// </summary>
+        public async Task<ToolExecutionTurnResult> HandleToolExecutionAsync(
+            string assistantText,
+            ToolCallRequest toolCall,
+            bool approved,
+            int? conversationId,
+            bool includeScreenshotImageInHistory)
         {
-            var toolCall = parsed.ToolCall!;
             var executionOutcome = await _toolExecutionWorkflow.ExecuteAsync(toolCall, approved, conversationId);
-            var assistantToolCallContent = _toolFollowUpWorkflow.BuildAssistantToolCallContent(parsed.TextContent, toolCall.RawJson);
+            var assistantToolCallContent = _toolFollowUpWorkflow.BuildAssistantToolCallContent(assistantText, toolCall.RawJson);
 
             var toolHistoryMessage = new ProviderChatMessage
             {

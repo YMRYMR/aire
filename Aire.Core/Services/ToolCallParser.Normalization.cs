@@ -19,8 +19,17 @@ namespace Aire.Services
             @"```(?:json)?\r?\n([\s\S]*?)\r?\n[ \t]*```",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex DetailsToolCallRegex = new(
+            @"<details>\s*<summary>\s*.*?Tool call:\s*(?<tool>[^<\r\n]+?)\s*</summary>\s*(?<body>[\s\S]*?)</details>",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static string NormalizeBareJsonToolCalls(string response)
         {
+            if (response.Contains("<tool_call", StringComparison.OrdinalIgnoreCase))
+                return response;
+
+            response = NormalizeDetailsToolCalls(response);
+
             if (response.Contains("<tool_call", StringComparison.OrdinalIgnoreCase))
                 return response;
 
@@ -31,7 +40,7 @@ namespace Aire.Services
                 try { JsonDocument.Parse(inner); return $"\n<tool_call>{inner}</tool_call>"; }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[ToolCallParser] Failed to parse bare JSON tool call in code fence: {ex.Message}\nInner JSON: {inner}");
+                Debug.WriteLine($"[ToolCallParser] Failed to parse bare JSON tool call in code fence: {ex.GetType().Name}\nInner JSON: {inner}");
                     return m.Value;
                 }
             });
@@ -66,11 +75,105 @@ namespace Aire.Services
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[ToolCallParser] Failed to parse bare JSON tool call in line: {ex.Message}\nJSON: {json}");
+                Debug.WriteLine($"[ToolCallParser] Failed to parse bare JSON tool call in line: {ex.GetType().Name}\nJSON: {json}");
                 }
             }
 
             return result;
+        }
+
+        private static string NormalizeDetailsToolCalls(string response)
+        {
+            return DetailsToolCallRegex.Replace(response, match =>
+            {
+                string tool = match.Groups["tool"].Value.Trim();
+                string body = match.Groups["body"].Value;
+
+                if (string.IsNullOrWhiteSpace(tool))
+                {
+                    return match.Value;
+                }
+
+                var parameters = new Dictionary<string, object?>(StringComparer.Ordinal);
+                foreach (string rawLine in body.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string line = rawLine.Trim();
+                    if (string.IsNullOrWhiteSpace(line) ||
+                        line.Equals("<br>", StringComparison.OrdinalIgnoreCase) ||
+                        line.Equals("<br/>", StringComparison.OrdinalIgnoreCase) ||
+                        line.Equals("<br />", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    int colonIndex = line.IndexOf(':');
+                    if (colonIndex <= 0)
+                    {
+                        continue;
+                    }
+
+                    string key = NormalizeDetailsParameterName(line[..colonIndex]);
+                    string value = line[(colonIndex + 1)..].Trim();
+                    if (string.IsNullOrWhiteSpace(key))
+                    {
+                        continue;
+                    }
+
+                    parameters[key] = ParseDetailsParameterValue(value);
+                }
+
+                var payload = new Dictionary<string, object?>(StringComparer.Ordinal)
+                {
+                    ["tool"] = tool
+                };
+
+                foreach ((string key, object? value) in parameters)
+                {
+                    payload[key] = value;
+                }
+
+                return $"\n<tool_call>{JsonSerializer.Serialize(payload)}</tool_call>";
+            });
+        }
+
+        private static string NormalizeDetailsParameterName(string rawKey)
+        {
+            return rawKey
+                .Trim()
+                .Replace(' ', '_')
+                .Replace('-', '_')
+                .ToLowerInvariant();
+        }
+
+        private static object? ParseDetailsParameterValue(string rawValue)
+        {
+            string value = rawValue.Trim();
+
+            if (int.TryParse(value, out int intValue))
+            {
+                return intValue;
+            }
+
+            if (bool.TryParse(value, out bool boolValue))
+            {
+                return boolValue;
+            }
+
+            if ((value.StartsWith("{") && value.EndsWith("}")) ||
+                (value.StartsWith("[") && value.EndsWith("]")))
+            {
+                try
+                {
+                    using JsonDocument doc = JsonDocument.Parse(value);
+                    return JsonSerializer.Deserialize<object>(doc.RootElement.GetRawText());
+                }
+                catch
+                {
+                    // Fall back to plain string if the inline JSON is malformed.
+                }
+            }
+
+            return value;
         }
 
         private static bool HasToolKey(string s) =>

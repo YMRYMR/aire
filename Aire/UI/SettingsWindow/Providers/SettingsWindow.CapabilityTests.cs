@@ -37,9 +37,9 @@ namespace Aire.UI
                     ModelComboBox.SelectedValue as string ?? ModelComboBox.Text.Trim(),
                     type == "ClaudeWeb" && ClaudeAiSession.Instance.IsReady));
             }
-            catch (Exception ex)
+            catch
             {
-                ShowToast($"Could not create provider: {ex.Message}", isError: true);
+                ShowToast("Could not create provider.", isError: true);
                 return null;
             }
         }
@@ -61,9 +61,9 @@ namespace Aire.UI
 
                 DisplayTestResults(session.Results, session.TestedAt);
             }
-            catch (Exception ex)
+            catch
             {
-                AppLogger.Warn("CapabilityTests.LoadSavedResults", "Failed to load previous test results", ex);
+                AppLogger.Warn("CapabilityTests.LoadSavedResults", "Failed to load previous test results");
             }
         }
 
@@ -96,44 +96,6 @@ namespace Aire.UI
             var results = new List<CapabilityTestResult>();
             try
             {
-                var runtimeService = new ProviderSetupApplicationService();
-                var validation = await runtimeService.ValidateDetailedAsync(provider, ct);
-                if (!validation.IsValid)
-                {
-                    var reason = validation.ErrorMessage ?? "Provider configuration is invalid.";
-                    if (!string.IsNullOrWhiteSpace(validation.RemediationHint))
-                        reason = $"{reason} {validation.RemediationHint}";
-                    ShowToast($"Validation failed: {reason}", isError: true);
-                    CapTestStatusText.Text = "Validation failed.";
-                    CapTestResultsBorder.Visibility = Visibility.Collapsed;
-                    return;
-                }
-
-                var smokeTest = await runtimeService.RunSmokeTestAsync(provider, ct);
-                if (!smokeTest.Success)
-                {
-                    // Smoke test failures from non-auth causes (billing limits, rate limits,
-                    // model-specific constraints, etc.) should not block capability tests —
-                    // the individual tests will surface real failures themselves.
-                    // Only hard-stop on authentication errors.
-                    var err = smokeTest.ErrorMessage ?? "";
-                    bool isAuthError = validation.FailureKind == ProviderValidationFailureKind.InvalidCredentials
-                                    || err.Contains("auth", StringComparison.OrdinalIgnoreCase)
-                                    || err.Contains("api key", StringComparison.OrdinalIgnoreCase)
-                                    || err.Contains("unauthorized", StringComparison.OrdinalIgnoreCase)
-                                    || err.Contains("forbidden", StringComparison.OrdinalIgnoreCase)
-                                    || err.Contains("invalid key", StringComparison.OrdinalIgnoreCase);
-                    if (isAuthError)
-                    {
-                        ShowToast($"Test run failed: {err}", isError: true);
-                        CapTestStatusText.Text = "Test run failed.";
-                        CapTestResultsBorder.Visibility = Visibility.Collapsed;
-                        return;
-                    }
-                    // Non-auth failure: warn but proceed — the capability tests are the real check.
-                    ShowToast($"Smoke test warning: {err}", isError: false);
-                }
-
                 var progress = new Progress<ProviderCapabilityTestApplicationService.ProgressUpdate>(update =>
                 {
                     CapTestProgressText.Text =
@@ -143,7 +105,7 @@ namespace Aire.UI
                     AppendTestResultRow(update.Result);
                 });
 
-                var runResult = await (_capabilityTestApplicationService ?? new ProviderCapabilityTestApplicationService()).RunAndPersistAsync(
+                var executionResult = await (_capabilityTestApplicationService ?? new ProviderCapabilityTestApplicationService()).ValidateRunAndPersistAsync(
                     provider,
                     _selectedProvider?.Id,
                     _selectedProvider?.Model ?? string.Empty,
@@ -152,17 +114,30 @@ namespace Aire.UI
                     progress,
                     ct);
 
-                results = runResult.Results.ToList();
+                if (!executionResult.Started)
+                {
+                    ShowToast(executionResult.BlockingMessage ?? "Test run failed.", isError: true);
+                    CapTestStatusText.Text = executionResult.BlockingMessage?.StartsWith("Validation failed:", StringComparison.Ordinal) == true
+                        ? "Validation failed."
+                        : "Test run failed.";
+                    CapTestResultsBorder.Visibility = Visibility.Collapsed;
+                    return;
+                }
+
+                if (!string.IsNullOrWhiteSpace(executionResult.WarningMessage))
+                    ShowToast(executionResult.WarningMessage, isError: false);
+
+                results = executionResult.Results.ToList();
                 // Results are already rendered row by row; just update the timestamp label.
-                UpdateTestedAtLabel(runResult.TestedAt);
+                UpdateTestedAtLabel(executionResult.TestedAt ?? DateTime.Now);
             }
             catch (OperationCanceledException)
             {
                 CapTestStatusText.Text = "Tests cancelled.";
             }
-            catch (Exception ex)
+            catch
             {
-                ShowToast($"Test run failed: {ex.Message}", isError: true);
+                ShowToast("Test run failed.", isError: true);
                 CapTestStatusText.Text = "Test run failed.";
             }
             finally
@@ -186,6 +161,10 @@ namespace Aire.UI
         internal static string ShortenErrorMessage(string error)
         {
             const int maxLen = 60;
+            var readable = ProviderErrorClassifier.ExtractReadableMessage(error);
+            if (!string.IsNullOrWhiteSpace(readable))
+                error = readable;
+
             try
             {
                 var jsonStart = error.IndexOf('{');
@@ -322,9 +301,9 @@ namespace Aire.UI
                     testedAt,
                     _databaseService);
             }
-            catch (Exception ex)
+            catch
             {
-                AppLogger.Warn("CapabilityTests.SaveResults", "Failed to persist capability test results", ex);
+                AppLogger.Warn("CapabilityTests.SaveResults", "Failed to persist capability test results");
             }
         }
     }

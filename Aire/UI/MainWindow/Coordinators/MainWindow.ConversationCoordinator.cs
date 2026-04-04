@@ -85,23 +85,33 @@ namespace Aire
                         SenderForeground = fgBrush
                     };
 
-                    if (entry.ImagePath != null)
+                    if (entry.ImageReferences.Count > 0)
                     {
                         try
                         {
-                            var bitmap = MainWindow.LoadChatImageSource(entry.ImagePath);
-                            if (bitmap != null)
+                            var bitmaps = MainWindow.LoadChatImageSources(entry.ImageReferences);
+                            if (bitmaps != null)
                             {
                                 if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.User)
-                                    chatMsg.AttachedImage = bitmap;
+                                    chatMsg.AttachedImage = bitmaps[0];
                                 else
-                                    chatMsg.ScreenshotImage = bitmap;
+                                    chatMsg.InlineImages = bitmaps;
+                            }
+                            else
+                            {
+                                chatMsg.Text = MainWindow.AppendImageFallbackLinks(chatMsg.Text, entry.ImageReferences);
                             }
                         }
-                        catch (Exception ex)
+                        catch
                         {
-                            AppLogger.Warn("ConversationCoordinator.LoadHistory", "Failed to load image for history message", ex);
+                            AppLogger.Warn("ConversationCoordinator.LoadHistory", "Failed to load images for history message");
+                            chatMsg.Text = MainWindow.AppendImageFallbackLinks(chatMsg.Text, entry.ImageReferences);
                         }
+                    }
+
+                    if (entry.FileAttachments.Count > 0)
+                    {
+                        chatMsg.FileAttachments = new System.Collections.ObjectModel.ObservableCollection<MessageAttachment>(entry.FileAttachments);
                     }
 
                     _owner.Messages.Add(chatMsg);
@@ -125,9 +135,9 @@ namespace Aire
                         await _owner._conversationApplicationService.DeleteConversationAsync(_owner._currentConversationId.Value);
                         _owner._currentConversationId = null;
                 }
-                    catch (Exception ex)
+                    catch
                     {
-                        UI.ConfirmationDialog.ShowAlert(_owner, "Error", $"Failed to delete conversation: {ex.Message}");
+                        UI.ConfirmationDialog.ShowAlert(_owner, "Error", "Failed to delete conversation.");
                         return;
                     }
                 }

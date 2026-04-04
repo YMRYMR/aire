@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Aire.Data;
+using Aire.Domain.Providers;
+using Aire.Providers;
 using Aire.Services;
 
 namespace Aire.AppLayer.Api
@@ -73,6 +75,14 @@ namespace Aire.AppLayer.Api
             var trimmed = model?.Trim() ?? string.Empty;
             return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
         }
+
+        /// <summary>
+        /// Normalizes a provider type string supplied by an API caller.
+        /// </summary>
+        /// <param name="type">Raw provider type text.</param>
+        /// <returns>The canonical provider type identifier used by persistence and activation.</returns>
+        public string NormalizeProviderType(string? type)
+            => ProviderCatalog.NormalizeType(type);
 
         /// <summary>
         /// Builds a normalized tool-call request from the raw local API payload.
@@ -169,5 +179,6 @@ namespace Aire.AppLayer.Api
                 CurrentProviderModel = provider?.Model,
                 PendingApprovals = pendingApprovals
             };
+
     }
 }

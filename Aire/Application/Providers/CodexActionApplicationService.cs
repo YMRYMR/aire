@@ -39,9 +39,9 @@ namespace Aire.AppLayer.Providers
                     true,
                     "Codex CLI installed. If this is your first time, run 'codex login' in a terminal, then restart Aire.");
             }
-            catch (Exception ex)
+            catch
             {
-                return new CodexActionResult(false, $"Could not install Codex CLI: {ex.Message}");
+            return new CodexActionResult(false, "Could not install Codex CLI.");
             }
         }
     }

@@ -48,9 +48,9 @@ namespace Aire.Services.Tools
 
                 return new ToolExecutionResult { TextResult = result.ToDisplayString() };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error executing command: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Error executing command." };
             }
         }
 

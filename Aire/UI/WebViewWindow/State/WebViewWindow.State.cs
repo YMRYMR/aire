@@ -65,9 +65,9 @@ public partial class WebViewWindow
                 Top = Math.Min(tv, workArea.Bottom - Height);
             }
         }
-        catch (Exception ex)
+        catch
         {
-            AppLogger.Warn("WebViewWindow.LoadWindowState", "Failed to restore window position from state file", ex);
+            AppLogger.Warn("WebViewWindow.LoadWindowState", "Failed to restore window position from state file");
         }
     }
 
@@ -111,9 +111,9 @@ public partial class WebViewWindow
 
             return (tabs, activeIdx);
         }
-        catch (Exception ex)
+        catch
         {
-            AppLogger.Warn("WebViewWindow.LoadSavedTabUrls", "Failed to restore saved tabs from state file", ex);
+            AppLogger.Warn("WebViewWindow.LoadSavedTabUrls", "Failed to restore saved tabs from state file");
         }
         return ([], -1);
     }
@@ -137,9 +137,9 @@ public partial class WebViewWindow
             });
             File.WriteAllText(StatePath, json);
         }
-        catch (Exception ex)
+        catch
         {
-            AppLogger.Warn("WebViewWindow.SaveWindowState", "Failed to persist window state", ex);
+            AppLogger.Warn("WebViewWindow.SaveWindowState", "Failed to persist window state");
         }
     }
 }

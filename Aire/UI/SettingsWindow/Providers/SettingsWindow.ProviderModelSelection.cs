@@ -31,7 +31,7 @@ namespace Aire.UI
                 return subset.All(item => supersetIds.Contains(item.ModelName));
             }
 
-            var catalog = await new ProviderModelCatalogApplicationService().LoadModelsAsync(
+            var catalog = await _providerFormActions.LoadModelsAsync(
                 meta,
                 ApiKeyPasswordBox.Password,
                 _selectedProvider.BaseUrl,

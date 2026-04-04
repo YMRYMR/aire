@@ -5,6 +5,7 @@ using Aire.AppLayer.Chat;
 using Aire.AppLayer.Mcp;
 using Aire.AppLayer.Providers;
 using Aire.AppLayer.Tools;
+using Aire.Bootstrap;
 using Aire.Data;
 using Aire.Providers;
 using Aire.Services;
@@ -31,6 +32,7 @@ namespace Aire
             _localApiApplicationService = new LocalApiApplicationService();
             _assistantModeApplicationService = new AssistantModeApplicationService();
             _chatSessionApplicationService = new ChatSessionApplicationService(_databaseService, _databaseService);
+            _generatedImageApplicationService = new GeneratedImageApplicationService(_chatSessionApplicationService);
             _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
             _conversationApplicationService = new ConversationApplicationService(_databaseService);
             _conversationAssetApplicationService = new ConversationAssetApplicationService(_databaseService);
@@ -119,6 +121,8 @@ namespace Aire
         {
             try
             {
+                SetupPreferences setupPreferences = SetupPreferencesStore.Load();
+
                 progress?.Report("Opening local data store…");
                 await _databaseService.InitializeAsync();
 
@@ -134,7 +138,10 @@ namespace Aire
 
                 progress?.Report("Loading context settings…");
                 _contextWindowSettings = await _contextSettingsApplicationService.LoadAsync();
-                ApplyAssistantModeState(_assistantModeApplicationService.GetDefaultMode().Key);
+                string defaultAssistantMode = string.IsNullOrWhiteSpace(setupPreferences.DefaultAssistantMode)
+                    ? _assistantModeApplicationService.GetDefaultMode().Key
+                    : setupPreferences.DefaultAssistantMode;
+                ApplyAssistantModeState(defaultAssistantMode);
 
                 progress?.Report("Loading providers…");
                 int? savedProviderId = await _chatSessionApplicationService.GetSelectedProviderIdAsync();

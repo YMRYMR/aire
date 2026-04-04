@@ -18,11 +18,11 @@ namespace Aire.Services
         // â”€â”€ Current state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         public static bool   UsesDarkPalette { get; private set; } = false;
-        public static double Brightness   { get; private set; } = 0.9276; // 0 = full dark, 1 = full light
-        public static double TintPosition { get; private set; } = 0.6277;
-        public static double AccentBrightness   { get; private set; } = 0.10;
-        public static double AccentTintPosition { get; private set; } = 0.58;
-        public static double FontSize     { get; private set; } = 16.0;
+        public static double Brightness   { get; private set; } = 0.9311106847612285; // default first-run palette
+        public static double TintPosition { get; private set; } = 0.6277344324385377;
+        public static double AccentBrightness   { get; private set; } = 0.6255924170616112;
+        public static double AccentTintPosition { get; private set; } = 0.5817535545023695;
+        public static double FontSize     { get; private set; } = 15.0;
 
         /// <summary>Raised on the UI thread after appearance or font-size updates complete.</summary>
         public static event Action? AppearanceChanged;

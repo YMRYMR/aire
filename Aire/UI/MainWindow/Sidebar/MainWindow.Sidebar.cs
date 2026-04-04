@@ -85,6 +85,7 @@ namespace Aire
             if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
             if (summary.Id == _currentConversationId) return;
             _currentConversationId = summary.Id;
+            await SyncConversationSelectionStateAsync(summary.Id);
             await LoadConversationMessages(summary.Id);
         }
 

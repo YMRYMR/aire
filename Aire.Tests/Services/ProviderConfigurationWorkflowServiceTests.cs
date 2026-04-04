@@ -59,6 +59,22 @@ public sealed class ProviderConfigurationWorkflowServiceTests
     }
 
     [Fact]
+    public void CreateRuntimeProvider_CreatesGoogleAiImageProvider()
+    {
+        var service = new ProviderConfigurationWorkflowService();
+
+        var provider = service.CreateRuntimeProvider(new ProviderRuntimeRequest(
+            "GoogleAIImage",
+            "google-key",
+            null,
+            "gemini-2.5-flash-image",
+            ClaudeWebSessionReady: false));
+
+        Assert.NotNull(provider);
+        Assert.IsType<GoogleAiImageProvider>(provider);
+    }
+
+    [Fact]
     public void CreateRuntimeProvider_CreatesClaudeWeb_WithSyntheticSessionCredential()
     {
         var service = new ProviderConfigurationWorkflowService();

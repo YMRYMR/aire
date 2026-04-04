@@ -49,7 +49,10 @@ public sealed class AgentToolServiceTests : IDisposable
         var result = await service.ExecuteShowImageAsync(CreateRequest(new { path_or_url = imagePath }));
 
         Assert.Equal("Showing: local-image.png", result.TextResult);
-        Assert.Equal(imagePath, result.ScreenshotPath);
+        Assert.NotEqual(imagePath, result.ScreenshotPath);
+        Assert.NotNull(result.ScreenshotPath);
+        Assert.True(File.Exists(result.ScreenshotPath));
+        Assert.Contains($"{Path.DirectorySeparatorChar}Aire{Path.DirectorySeparatorChar}ChatImages{Path.DirectorySeparatorChar}", result.ScreenshotPath, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -62,7 +65,9 @@ public sealed class AgentToolServiceTests : IDisposable
         var result = await service.ExecuteShowImageAsync(CreateRequest(new { path_or_url = imagePath, caption = "Shown in chat" }));
 
         Assert.Equal("Shown in chat", result.TextResult);
-        Assert.Equal(imagePath, result.ScreenshotPath);
+        Assert.NotEqual(imagePath, result.ScreenshotPath);
+        Assert.NotNull(result.ScreenshotPath);
+        Assert.True(File.Exists(result.ScreenshotPath));
     }
 
     [Fact]
@@ -93,6 +98,23 @@ public sealed class AgentToolServiceTests : IDisposable
         Assert.EndsWith(".jpg", result.ScreenshotPath, StringComparison.OrdinalIgnoreCase);
         Assert.True(File.Exists(result.ScreenshotPath));
         Assert.Equal("image-bytes", await File.ReadAllTextAsync(result.ScreenshotPath));
+        Assert.Contains($"{Path.DirectorySeparatorChar}Aire{Path.DirectorySeparatorChar}ChatImages{Path.DirectorySeparatorChar}", result.ScreenshotPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task ExecuteShowImageAsync_DownloadsSvgImage_WithSvgExtension()
+    {
+        using var server = await TestHttpServer.StartAsync(
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\"></svg>",
+            statusCode: 200,
+            contentType: "image/svg+xml");
+        var service = new AgentToolService();
+
+        var result = await service.ExecuteShowImageAsync(CreateRequest(new { path_or_url = server.Url }));
+
+        Assert.NotNull(result.ScreenshotPath);
+        Assert.EndsWith(".svg", result.ScreenshotPath, StringComparison.OrdinalIgnoreCase);
+        Assert.True(File.Exists(result.ScreenshotPath));
     }
 
     [Fact]

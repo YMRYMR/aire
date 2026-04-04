@@ -16,17 +16,6 @@ namespace Aire.Data
         public int SortOrder { get; set; }
         public int TimeoutMinutes { get; set; } = DefaultTimeoutMinutes;
 
-        public string DisplayType => Type switch
-        {
-            "OpenAI" => "OpenAI",
-            "Codex" => "Codex",
-            "Anthropic" => "Anthropic API",
-            "ClaudeWeb" => "Claude.ai",
-            "GoogleAI" => "Google AI",
-            "DeepSeek" => "DeepSeek",
-            "Inception" => "Inception",
-            "Ollama" => "Ollama",
-            _ => Type
-        };
+        public string DisplayType => Providers.ProviderIdentityCatalog.GetDisplayName(Type);
     }
 }

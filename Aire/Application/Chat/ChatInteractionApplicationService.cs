@@ -38,8 +38,16 @@ namespace Aire.AppLayer.Chat
         /// <param name="parsed">Provider response containing the tool call.</param>
         /// <returns>The normalized todo items and summary text.</returns>
         public TodoUpdateResult BuildTodoUpdate(ParsedAiResponse parsed)
+            => BuildTodoUpdate(parsed.ToolCall!);
+
+        /// <summary>
+        /// Parses a todo-list tool call into view-neutral items and a short status summary.
+        /// </summary>
+        /// <param name="toolCall">Tool request to parse.</param>
+        /// <returns>The normalized todo items and summary text.</returns>
+        public TodoUpdateResult BuildTodoUpdate(ToolCallRequest toolCall)
         {
-            var tasks = _toolFollowUpWorkflow.ParseTodoTasks(parsed.ToolCall!.Parameters);
+            var tasks = _toolFollowUpWorkflow.ParseTodoTasks(toolCall.Parameters);
             var items = tasks
                 .Select(task => new TodoItemState(task.Id, task.Description, task.Status))
                 .ToList();
@@ -55,8 +63,16 @@ namespace Aire.AppLayer.Chat
         /// <param name="parsed">Provider response containing the tool call.</param>
         /// <returns>The prompt information, or <see langword="null"/> when no valid question was present.</returns>
         public FollowUpPromptResult? BuildFollowUpPrompt(ParsedAiResponse parsed)
+            => BuildFollowUpPrompt(parsed.ToolCall!);
+
+        /// <summary>
+        /// Parses a follow-up question tool call into a view-neutral prompt.
+        /// </summary>
+        /// <param name="toolCall">Tool request to parse.</param>
+        /// <returns>The prompt information, or <see langword="null"/> when no valid question was present.</returns>
+        public FollowUpPromptResult? BuildFollowUpPrompt(ToolCallRequest toolCall)
         {
-            var request = _toolFollowUpWorkflow.ParseFollowUpQuestion(parsed.ToolCall!.Parameters);
+            var request = _toolFollowUpWorkflow.ParseFollowUpQuestion(toolCall.Parameters);
             if (request == null)
                 return null;
 

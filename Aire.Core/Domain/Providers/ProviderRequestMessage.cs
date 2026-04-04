@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Aire.Data;
+
 namespace Aire.Domain.Providers
 {
     /// <summary>
@@ -31,6 +34,12 @@ namespace Aire.Domain.Providers
         /// MIME type for <see cref="ImageBytes"/> when binary image content is supplied.
         /// </summary>
         public string? ImageMimeType { get; init; }
+
+        /// <summary>
+        /// Optional generic file attachments associated with the message.
+        /// Providers may ignore this when they only support text and images.
+        /// </summary>
+        public IReadOnlyList<MessageAttachment>? Attachments { get; init; }
 
         /// <summary>
         /// Whether this message is part of a stable prefix that a provider may cache when supported.

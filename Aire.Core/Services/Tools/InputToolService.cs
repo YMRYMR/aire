@@ -222,9 +222,9 @@ namespace Aire.Services.Tools
                         return new ToolExecutionResult { TextResult = $"Unknown input tool: {request.Tool}" };
                 }
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error executing {request.Tool}: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = $"Error executing {request.Tool}." };
             }
         }
     }

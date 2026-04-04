@@ -13,7 +13,8 @@ public class AssistantImageResponseApplicationServiceTests
 
         var parsed = service.Parse("Here is the diagram.\n\n![architecture](https://example.com/diagram.png)");
 
-        Assert.Equal("https://example.com/diagram.png", parsed.ImageReference);
+        Assert.Single(parsed.ImageReferences);
+        Assert.Equal("https://example.com/diagram.png", parsed.ImageReferences[0]);
         Assert.Contains("Here is the diagram.", parsed.Text, StringComparison.Ordinal);
     }
 
@@ -24,7 +25,28 @@ public class AssistantImageResponseApplicationServiceTests
 
         var parsed = service.Parse("https://example.com/render.webp");
 
-        Assert.Equal("https://example.com/render.webp", parsed.ImageReference);
+        Assert.Single(parsed.ImageReferences);
+        Assert.Equal("https://example.com/render.webp", parsed.ImageReferences[0]);
         Assert.Equal(string.Empty, parsed.Text);
+    }
+
+    [Fact]
+    public void Parse_ExtractsMultipleMarkdownImages_AndBuildPersistedContentRoundTrips()
+    {
+        var service = new AssistantImageResponseApplicationService();
+        var persisted = service.BuildPersistedContent(
+            "Two renders",
+            new[]
+            {
+                "https://example.com/a.png",
+                "https://example.com/b.png"
+            });
+
+        var parsed = service.Parse(persisted);
+
+        Assert.Equal("Two renders", parsed.Text);
+        Assert.Equal(2, parsed.ImageReferences.Count);
+        Assert.Equal("https://example.com/a.png", parsed.ImageReferences[0]);
+        Assert.Equal("https://example.com/b.png", parsed.ImageReferences[1]);
     }
 }

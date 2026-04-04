@@ -44,6 +44,13 @@ namespace Aire.AppLayer.Providers
             bool EnableDownloadButton);
 
         /// <summary>
+        /// View-neutral state for handling a provider-type change in the settings editor.
+        /// </summary>
+        public sealed record ProviderTypeChangePlan(
+            IProviderMetadata Metadata,
+            ModelLoadAction ModelAction);
+
+        /// <summary>
         /// Builds the editor state for a selected provider and indicates which model-loading path the UI should take.
         /// </summary>
         /// <param name="provider">Selected provider record.</param>
@@ -90,6 +97,25 @@ namespace Aire.AppLayer.Providers
             return new OllamaSelectionPlan(
                 match,
                 match == null);
+        }
+
+        /// <summary>
+        /// Resolves metadata and model-loading behavior after the selected provider type changes in the editor.
+        /// </summary>
+        /// <param name="providerType">Canonical provider type selected in the editor.</param>
+        /// <param name="hasSelectedProvider">Whether the editor is currently bound to a persisted provider record.</param>
+        /// <param name="isRefreshing">Whether the settings provider list is in a refresh cycle and should avoid extra model reloads.</param>
+        public ProviderTypeChangePlan BuildTypeChangePlan(string providerType, bool hasSelectedProvider, bool isRefreshing)
+        {
+            var metadata = ProviderFactory.GetMetadata(providerType);
+            var action = providerType switch
+            {
+                "Ollama" => ModelLoadAction.None,
+                _ when hasSelectedProvider && !isRefreshing => ModelLoadAction.LoadMetadataModels,
+                _ => ModelLoadAction.None
+            };
+
+            return new ProviderTypeChangePlan(metadata, action);
         }
     }
 }

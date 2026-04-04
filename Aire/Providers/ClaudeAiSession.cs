@@ -114,10 +114,10 @@ namespace Aire.Providers
                             {{bodyJs}}
                         });
                         const t = await r.text();
-                        if (!r.ok) { window.chrome.webview.postMessage('[ERR]' + r.status + ' ' + t); return; }
+                        if (!r.ok) { window.chrome.webview.postMessage('[ERR]Claude session request failed.'); return; }
                         window.chrome.webview.postMessage(t);
                     } catch(e) {
-                        window.chrome.webview.postMessage('[ERR]' + e.message);
+                        window.chrome.webview.postMessage('[ERR]Claude session request failed.');
                     }
                 })(); null
                 """;
@@ -125,13 +125,17 @@ namespace Aire.Providers
             _ = Application.Current.Dispatcher.InvokeAsync(async () =>
             {
                 try { await _view!.CoreWebView2.ExecuteScriptAsync(js); }
-                catch (Exception ex) { ch.Writer.TryWrite("[ERR]" + ex.Message); }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Claude session script execution failed: {ex.GetType().Name}");
+                    ch.Writer.TryWrite("[ERR]Claude session request failed.");
+                }
             });
 
             try
             {
                 var msg = await ch.Reader.ReadAsync(ct);
-                if (msg.StartsWith("[ERR]")) throw new Exception(msg[5..]);
+                if (msg.StartsWith("[ERR]")) throw new Exception("Claude session request failed.");
                 return msg;
             }
             finally
@@ -160,7 +164,7 @@ namespace Aire.Providers
                         });
                         if (!r.ok) {
                             const t = await r.text();
-                            window.chrome.webview.postMessage('[ERR]' + r.status + ' ' + t);
+                            window.chrome.webview.postMessage('[ERR]Claude session streaming failed.');
                             return;
                         }
                         const reader = r.body.getReader();
@@ -187,7 +191,7 @@ namespace Aire.Providers
                         }
                         window.chrome.webview.postMessage('[DONE]');
                     } catch(e) {
-                        window.chrome.webview.postMessage('[ERR]' + e.message);
+                        window.chrome.webview.postMessage('[ERR]Claude session streaming failed.');
                     }
                 })(); null
                 """;
@@ -195,7 +199,11 @@ namespace Aire.Providers
             _ = Application.Current.Dispatcher.InvokeAsync(async () =>
             {
                 try { await _view!.CoreWebView2.ExecuteScriptAsync(js); }
-                catch (Exception ex) { ch.Writer.TryWrite("[ERR]" + ex.Message); }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Claude session streaming script failed: {ex.GetType().Name}");
+                    ch.Writer.TryWrite("[ERR]Claude session streaming failed.");
+                }
             });
 
             try
@@ -203,7 +211,7 @@ namespace Aire.Providers
                 await foreach (var msg in ch.Reader.ReadAllAsync(ct))
                 {
                     if (msg == "[DONE]") break;
-                    if (msg.StartsWith("[ERR]")) throw new Exception(msg[5..]);
+                    if (msg.StartsWith("[ERR]")) throw new Exception("Claude session streaming failed.");
                     yield return msg;
                 }
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Aire.Services;
 
@@ -7,6 +8,26 @@ namespace Aire.Data
 {
     public partial class DatabaseService
     {
+        private static readonly string[] ConversationPalette =
+        {
+            "#E6B800",
+            "#2FBF71",
+            "#3B82F6",
+            "#EC4899",
+            "#F97316",
+            "#8B5CF6",
+            "#14B8A6",
+            "#EF4444",
+            "#06B6D4",
+            "#A3A948",
+        };
+
+        private static string PickConversationColor(long seed)
+        {
+            var index = (int)(Math.Abs(seed) % ConversationPalette.Length);
+            return ConversationPalette[index];
+        }
+
         /// <summary>
         /// Deletes all message rows that belong to one conversation.
         /// </summary>
@@ -54,13 +75,15 @@ namespace Aire.Data
         /// <returns>The new conversation id.</returns>
         public async Task<int> CreateConversationAsync(int providerId, string title = "New Chat")
         {
+            var color = PickConversationColor(DateTime.UtcNow.Ticks ^ providerId ^ (title?.GetHashCode() ?? 0));
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO Conversations (ProviderId, Title, AssistantModeKey, CreatedAt, UpdatedAt)
-                VALUES (@providerId, @title, 'general', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+                INSERT INTO Conversations (ProviderId, Title, AssistantModeKey, Color, CreatedAt, UpdatedAt)
+                VALUES (@providerId, @title, 'general', @color, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
                 SELECT last_insert_rowid();";
             cmd.Parameters.AddWithValue("@providerId", providerId);
             cmd.Parameters.AddWithValue("@title", title);
+            cmd.Parameters.AddWithValue("@color", color);
             var result = await cmd.ExecuteScalarAsync();
             return Convert.ToInt32(result);
         }
@@ -109,7 +132,7 @@ namespace Aire.Data
             if (string.IsNullOrWhiteSpace(search))
             {
                 cmd.CommandText = @"
-                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, p.Color, c.AssistantModeKey
+                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     ORDER BY c.UpdatedAt DESC
@@ -118,7 +141,7 @@ namespace Aire.Data
             else
             {
                 cmd.CommandText = @"
-                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, p.Color, c.AssistantModeKey
+                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     LEFT JOIN Messages  m ON m.ConversationId = c.Id
@@ -220,16 +243,27 @@ namespace Aire.Data
         /// <param name="role">Role stored with the message, such as user, assistant, or tool.</param>
         /// <param name="content">Message text payload.</param>
         /// <param name="imagePath">Optional persisted image path associated with the message.</param>
-        public async Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null)
+        /// <param name="attachments">Optional persisted file attachments associated with the message.</param>
+        public async Task SaveMessageAsync(
+            int conversationId,
+            string role,
+            string content,
+            string? imagePath = null,
+            IEnumerable<MessageAttachment>? attachments = null)
         {
+            var attachmentsJson = attachments == null
+                ? null
+                : JsonSerializer.Serialize(attachments);
+
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO Messages (ConversationId, Role, Content, ImagePath, CreatedAt)
-                VALUES (@conversationId, @role, @content, @imagePath, CURRENT_TIMESTAMP)";
+                INSERT INTO Messages (ConversationId, Role, Content, ImagePath, AttachmentsJson, CreatedAt)
+                VALUES (@conversationId, @role, @content, @imagePath, @attachmentsJson, CURRENT_TIMESTAMP)";
             cmd.Parameters.AddWithValue("@conversationId", conversationId);
             cmd.Parameters.AddWithValue("@role", role);
             cmd.Parameters.AddWithValue("@content", content);
             cmd.Parameters.AddWithValue("@imagePath", (object?)imagePath ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@attachmentsJson", (object?)attachmentsJson ?? DBNull.Value);
             await cmd.ExecuteNonQueryAsync();
 
             using var updateCmd = _connection.CreateCommand();
@@ -251,7 +285,7 @@ namespace Aire.Data
             var messages = new List<Message>();
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                SELECT Id, ConversationId, Role, Content, ImagePath, CreatedAt
+                SELECT Id, ConversationId, Role, Content, ImagePath, AttachmentsJson, CreatedAt
                 FROM Messages
                 WHERE ConversationId = @conversationId
                 ORDER BY CreatedAt ASC";
@@ -266,10 +300,27 @@ namespace Aire.Data
                     Role = reader.GetString(2),
                     Content = reader.GetString(3),
                     ImagePath = reader.IsDBNull(4) ? null : reader.GetString(4),
-                    CreatedAt = reader.GetDateTime(5)
+                    AttachmentsJson = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    Attachments = DeserializeAttachments(reader.IsDBNull(5) ? null : reader.GetString(5)),
+                    CreatedAt = reader.GetDateTime(6)
                 });
             }
             return messages;
+        }
+
+        private static List<MessageAttachment> DeserializeAttachments(string? json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return new List<MessageAttachment>();
+
+            try
+            {
+                return JsonSerializer.Deserialize<List<MessageAttachment>>(json) ?? new List<MessageAttachment>();
+            }
+            catch
+            {
+                return new List<MessageAttachment>();
+            }
         }
     }
 }

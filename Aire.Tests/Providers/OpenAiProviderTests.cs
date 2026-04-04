@@ -98,6 +98,63 @@ namespace Aire.Tests.Providers
         }
 
         [Fact]
+        public async Task GenerateImageAsync_ReturnsBytes_ForImageGenerationModel()
+        {
+            using var server = new OpenAiTestServer((method, path, _) =>
+            {
+                if (method == "POST" && path == "/v1/images/generations")
+                {
+                    return OpenAiTestServer.Json(200,
+                        """
+                        {
+                          "data": [
+                            {
+                              "b64_json": "AQIDBA==",
+                              "revised_prompt": "A calm watercolor fox"
+                            }
+                          ]
+                        }
+                        """);
+                }
+
+                return OpenAiTestServer.Json(404, """{"error":{"message":"missing"}}""");
+            });
+
+            var provider = new OpenAiProvider();
+            provider.Initialize(new ProviderConfig
+            {
+                ApiKey = "sk-test",
+                BaseUrl = server.BaseUrl,
+                Model = "gpt-image-1",
+                ModelCapabilities = new List<string> { "imagegeneration" }
+            });
+
+            var result = await provider.GenerateImageAsync("Paint a fox", CancellationToken.None);
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(new byte[] { 1, 2, 3, 4 }, result.ImageBytes);
+            Assert.Equal("A calm watercolor fox", result.RevisedPrompt);
+        }
+
+        [Fact]
+        public async Task GenerateImageAsync_ReturnsSanitizedError_OnTransportFailure()
+        {
+            var provider = new OpenAiProvider();
+            provider.Initialize(new ProviderConfig
+            {
+                ApiKey = "sk-test",
+                BaseUrl = "http://127.0.0.1:1",
+                Model = "gpt-image-1",
+                ModelCapabilities = new List<string> { "imagegeneration" }
+            });
+
+            var result = await provider.GenerateImageAsync("Paint a fox", CancellationToken.None);
+
+            Assert.False(result.IsSuccess);
+            Assert.Equal("OpenAI image generation failed.", result.ErrorMessage);
+        }
+
+        [Fact]
         public void SplitSdkUrl_DefaultsToV1_WhenBaseUrlHasNoPathPrefix()
         {
             var (host, version) = OpenAiProvider.SplitSdkUrl("https://api.openai.com/");
@@ -121,6 +178,42 @@ namespace Aire.Tests.Providers
                 {
                 }
             });
+        }
+
+        [Fact]
+        public async Task SendChatAsync_ReturnsGenericError_WhenTransportThrows()
+        {
+            var provider = new OpenAiProvider();
+            provider.Initialize(new ProviderConfig
+            {
+                ApiKey = "sk-test",
+                BaseUrl = "http://127.0.0.1:1",
+                Model = "gpt-4o-mini"
+            });
+
+            var response = await provider.SendChatAsync(
+                [new Aire.Providers.ChatMessage { Role = "user", Content = "Hello" }],
+                CancellationToken.None);
+
+            Assert.False(response.IsSuccess);
+            Assert.Equal("OpenAI request failed.", response.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task ValidateConfigurationAsync_ReturnsGenericError_WhenTransportThrows()
+        {
+            var provider = new OpenAiProvider();
+            provider.Initialize(new ProviderConfig
+            {
+                ApiKey = "sk-test",
+                BaseUrl = "http://127.0.0.1:1",
+                Model = "gpt-4o-mini"
+            });
+
+            var validation = await provider.ValidateConfigurationAsync(CancellationToken.None);
+
+            Assert.False(validation.IsValid);
+            Assert.Equal("OpenAI configuration validation failed.", validation.Error);
         }
 
         [Fact]

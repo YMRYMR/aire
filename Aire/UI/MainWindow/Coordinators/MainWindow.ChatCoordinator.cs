@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,6 +27,47 @@ namespace Aire
             public ChatCoordinator(MainWindow owner)
             {
                 _owner = owner;
+            }
+
+            private async Task RunImageGenerationTurnAsync(
+                string prompt,
+                Providers.IImageGenerationProvider provider,
+                bool wasVoice,
+                CancellationToken cancellationToken)
+            {
+                _owner.IsThinking = true;
+                try
+                {
+                    var generated = await _owner._generatedImageApplicationService.GenerateAsync(
+                        provider,
+                        prompt,
+                        _owner._currentConversationId,
+                        cancellationToken);
+
+                    _owner._conversationHistory.Add(generated.AssistantHistoryMessage);
+
+                    var now = DateTime.Now;
+                    _owner.AddToUI(new ChatMessage
+                    {
+                        Sender = "AI",
+                        Text = MainWindow.AppendImageFallbackLinks(generated.FinalText, new[] { generated.ImagePath }),
+                        Timestamp = now.ToString("HH:mm"),
+                        MessageDate = now,
+                        BackgroundBrush = MainWindow.AiBgBrush,
+                        SenderForeground = MainWindow.AiFgBrush,
+                        InlineImages = MainWindow.LoadChatImageSources(new[] { generated.ImagePath })
+                    });
+
+                    _owner.SpeakResponseIfNeeded(generated.FinalText, wasVoice);
+                }
+                catch (OperationCanceledException)
+                {
+                    _owner.AddSystemMessage("Image generation stopped.");
+                }
+                catch
+                {
+                    _owner.AddErrorMessage("Image generation failed.");
+                }
             }
 
             /// <summary>
@@ -81,10 +123,10 @@ namespace Aire
                     _owner.AddSystemMessage("AI operation stopped.");
                     return;
                 }
-                catch (Exception ex)
+                catch
                 {
                     _owner.IsThinking = false;
-                    HandleErrorOutcome(_workflow.BuildErrorOutcome(ex));
+                    HandleErrorOutcome(_workflow.BuildErrorOutcome(new InvalidOperationException("AI operation failed.")));
                     return;
                 }
 
@@ -109,24 +151,27 @@ namespace Aire
 
                     if (streamedMessage != null)
                     {
-                        streamedMessage.Text = finalText;
-                        if (success.ImageReference != null)
-                            streamedMessage.ScreenshotImage = MainWindow.LoadChatImageSource(success.ImageReference);
+                        var images = MainWindow.LoadChatImageSources(success.ImageReferences);
+                        streamedMessage.Text = images == null
+                            ? MainWindow.AppendImageFallbackLinks(finalText, success.ImageReferences)
+                            : finalText;
+                        streamedMessage.InlineImages = images;
                     }
                     else
                     {
+                        var images = MainWindow.LoadChatImageSources(success.ImageReferences);
                         var now = DateTime.Now;
                         _owner.AddToUI(new ChatMessage
                         {
                             Sender = "AI",
-                            Text = finalText,
+                            Text = images == null
+                                ? MainWindow.AppendImageFallbackLinks(finalText, success.ImageReferences)
+                                : finalText,
                             Timestamp = now.ToString("HH:mm"),
                             MessageDate = now,
                             BackgroundBrush = MainWindow.AiBgBrush,
                             SenderForeground = MainWindow.AiFgBrush,
-                            ScreenshotImage = success.ImageReference != null
-                                ? MainWindow.LoadChatImageSource(success.ImageReference)
-                                : null
+                            InlineImages = images
                         });
                     }
 
@@ -168,79 +213,84 @@ namespace Aire
                         }
                     }
 
-                    if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.SwitchModel)
+                    bool includeAssistantTextWithNextToolCall = !string.IsNullOrEmpty(parsed.TextContent);
+                    foreach (var toolCall in parsed.ToolCalls)
                     {
-                        await _owner.HandleSwitchModelAsync(parsed);
-                        await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken);
-                        return;
-                    }
+                        string assistantTextForCurrentTool = includeAssistantTextWithNextToolCall ? parsed.TextContent : string.Empty;
+                        includeAssistantTextWithNextToolCall = false;
 
-                    if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.UpdateTodoList)
-                    {
-                        var todoResult = HandleUpdateTodoList(parsed);
-                        _owner._conversationHistory.Add(new ProviderChatMessage { Role = "tool", Content = todoResult });
-                        await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken);
-                        return;
-                    }
-
-                    if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.AskFollowUpQuestion)
-                    {
-                        var answer = await HandleAskFollowUpQuestion(parsed);
-                        if (answer == null)
-                            return;
-
-                        _owner._conversationHistory.Add(new ProviderChatMessage { Role = "user", Content = answer });
-                        await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken);
-                        return;
-                    }
-
-                    var toolCall = parsed.ToolCall!;
-
-                    if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.AttemptCompletion)
-                    {
-                        var completion = _owner._chatTurnApplicationService.HandleAttemptCompletion(toolCall);
-                        if (completion != null)
+                        if (toolCall.Tool == "switch_model")
                         {
-                            _owner._conversationHistory.Add(completion.AssistantHistoryMessage);
-                            var now = DateTime.Now;
-                            _owner.AddToUI(new ChatMessage
-                            {
-                                Sender = "AI",
-                                Text = completion.FinalText,
-                                Timestamp = now.ToString("HH:mm"),
-                                MessageDate = now,
-                                BackgroundBrush = MainWindow.AiBgBrush,
-                                SenderForeground = MainWindow.AiFgBrush,
-                            });
+                            await _owner.HandleSwitchModelAsync(assistantTextForCurrentTool, toolCall);
+                            continue;
                         }
-                        return;
+
+                        if (toolCall.Tool == "update_todo_list")
+                        {
+                            var todoResult = HandleUpdateTodoList(toolCall);
+                            _owner._conversationHistory.Add(new ProviderChatMessage { Role = "tool", Content = todoResult });
+                            continue;
+                        }
+
+                        if (toolCall.Tool == "ask_followup_question")
+                        {
+                            var answer = await HandleAskFollowUpQuestion(toolCall);
+                            if (answer == null)
+                                return;
+
+                            _owner._conversationHistory.Add(new ProviderChatMessage { Role = "user", Content = answer });
+                            await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken);
+                            return;
+                        }
+
+                        if (toolCall.Tool == "attempt_completion")
+                        {
+                            var completion = _owner._chatTurnApplicationService.HandleAttemptCompletion(toolCall);
+                            if (completion != null)
+                            {
+                                _owner._conversationHistory.Add(completion.AssistantHistoryMessage);
+                                var now = DateTime.Now;
+                                _owner.AddToUI(new ChatMessage
+                                {
+                                    Sender = "AI",
+                                    Text = completion.FinalText,
+                                    Timestamp = now.ToString("HH:mm"),
+                                    MessageDate = now,
+                                    BackgroundBrush = MainWindow.AiBgBrush,
+                                    SenderForeground = MainWindow.AiFgBrush,
+                                });
+                            }
+
+                            return;
+                        }
+
+                        var toolName = toolCall.Tool;
+                        bool autoApprove = await _owner.ToolApprovals.DetermineAutoApproveAsync(toolName);
+                        var (approved, approvalMsg) = await _owner.ToolApprovals.RequestApprovalAsync(toolCall, autoApprove);
+                        var toolTurn = await _owner._chatTurnApplicationService.HandleToolExecutionAsync(
+                            assistantTextForCurrentTool,
+                            toolCall,
+                            approved,
+                            _owner._currentConversationId,
+                            _owner._currentProvider?.Has(Providers.ProviderCapabilities.ImageInput) == true);
+
+                        _owner._conversationHistory.Add(toolTurn.AssistantHistoryMessage);
+                        approvalMsg.ToolCallStatus = toolTurn.ToolCallStatus;
+                        if (approved)
+                        {
+                            _owner.ToolApprovals.ApplySessionState(toolCall);
+                            if (toolTurn.ExecutionOutcome.ExecutionResult != null)
+                                await _owner.ToolApprovals.PersistScreenshotAsync(toolTurn.ExecutionOutcome.ExecutionResult);
+                        }
+
+                        _owner._conversationHistory.Add(toolTurn.ToolHistoryMessage);
+
+                        _owner.ScrollToBottom();
                     }
-
-                    var toolName = toolCall.Tool;
-                    bool autoApprove = await _owner.ToolApprovals.DetermineAutoApproveAsync(toolName);
-                    var (approved, approvalMsg) = await _owner.ToolApprovals.RequestApprovalAsync(parsed, autoApprove);
-                    var toolTurn = await _owner._chatTurnApplicationService.HandleToolExecutionAsync(
-                        parsed,
-                        approved,
-                        _owner._currentConversationId,
-                        _owner._currentProvider?.Has(Providers.ProviderCapabilities.ImageInput) == true);
-
-                    _owner._conversationHistory.Add(toolTurn.AssistantHistoryMessage);
-                    approvalMsg.ToolCallStatus = toolTurn.ToolCallStatus;
-                    if (approved)
-                    {
-                        _owner.ToolApprovals.ApplySessionState(toolCall);
-                        if (toolTurn.ExecutionOutcome.ExecutionResult != null)
-                            await _owner.ToolApprovals.PersistScreenshotAsync(toolTurn.ExecutionOutcome.ExecutionResult);
-                    }
-
-                    _owner._conversationHistory.Add(toolTurn.ToolHistoryMessage);
-
-                    _owner.ScrollToBottom();
                 }
-                catch (Exception toolEx)
+                catch
                 {
-                    _owner.AddErrorMessage($"Tool execution error: {toolEx.Message}");
+                    _owner.AddErrorMessage("Tool execution error.");
                     return;
                 }
 

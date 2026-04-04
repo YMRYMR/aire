@@ -88,7 +88,7 @@ public sealed class PortableOllamaProvider : BaseAiProvider
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Ollama local fetch failed: {ex.Message}");
+            Debug.WriteLine($"Ollama local fetch failed: {ex.GetType().Name}");
             return null;
         }
 
@@ -203,12 +203,12 @@ public sealed class PortableOllamaProvider : BaseAiProvider
                 IsSuccess = true
             };
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             return new AiResponse
             {
                 IsSuccess = false,
-                ErrorMessage = $"Network error: {ex.Message}. Make sure Ollama is running at {EffectiveBaseUrl}",
+                ErrorMessage = $"Network error contacting Ollama. Make sure Ollama is running at {EffectiveBaseUrl}",
                 Duration = DateTime.UtcNow - startedAt
             };
         }
@@ -221,12 +221,12 @@ public sealed class PortableOllamaProvider : BaseAiProvider
                 Duration = DateTime.UtcNow - startedAt
             };
         }
-        catch (Exception ex)
+            catch
         {
             return new AiResponse
             {
                 IsSuccess = false,
-                ErrorMessage = ex.Message,
+                ErrorMessage = "Ollama request failed.",
                 Duration = DateTime.UtcNow - startedAt
             };
         }

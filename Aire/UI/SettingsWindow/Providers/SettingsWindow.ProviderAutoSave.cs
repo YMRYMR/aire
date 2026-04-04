@@ -16,9 +16,9 @@ namespace Aire.UI
             {
                 await ProviderWorkflow.PerformAutoSaveAsync();
             }
-            catch (Exception ex)
+            catch
             {
-                ShowToast($"Could not save provider: {ex.Message}", isError: true);
+                ShowToast("Could not save provider.", isError: true);
             }
         }
 

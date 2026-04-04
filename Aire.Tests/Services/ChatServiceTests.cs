@@ -179,6 +179,33 @@ public class ChatServiceTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
+    public async Task SendMessageWithHistoryAsync_ReturnsGenericError_OnUnexpectedException()
+    {
+        var adapter = new ThrowingAdapter();
+        var runtimeWorkflow = new ProviderRuntimeApplicationService(new ProviderAdapterApplicationService([adapter]));
+        var service = new ChatService(_factory, runtimeWorkflow, new ChatOrchestrator());
+        typeof(ChatService)
+            .GetField("_currentProvider", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(service, new FakeProvider());
+
+        string? error = null;
+        service.ErrorOccurred += (_, message) => error = message;
+
+        var response = await service.SendMessageWithHistoryAsync(
+        [
+            new ChatMessage
+            {
+                Role = "user",
+                Content = "hello"
+            }
+        ]);
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal("An unexpected error occurred. Please try again.", response.ErrorMessage);
+        Assert.Equal("An unexpected error occurred. Please try again.", error);
+    }
+
+    [Fact]
     public async Task StreamMessageAsync_ForwardsStreamingEventsFromOrchestrator()
     {
         var orchestrator = new ChatOrchestrator();
@@ -261,6 +288,25 @@ public class ChatServiceTests : IAsyncLifetime, IDisposable
 
         public Task<ProviderExecutionResult> ExecuteAsync(IAiProvider provider, ProviderRequestContext requestContext)
             => Task.FromResult(ProviderExecutionResult.Failed("boom"));
+
+        public Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
+            => Task.FromResult(new ProviderSmokeTestResult(false, "boom"));
+
+        public Task<ProviderValidationOutcome> ValidateAsync(IAiProvider provider, CancellationToken cancellationToken)
+            => Task.FromResult(ProviderValidationOutcome.Invalid("boom"));
+    }
+
+    private sealed class ThrowingAdapter : IProviderAdapter
+    {
+        public string ProviderType => "Fake";
+
+        public bool CanHandle(string providerType)
+            => string.Equals(providerType, ProviderType, StringComparison.OrdinalIgnoreCase);
+
+        public IAiProvider? BuildProvider(ProviderRuntimeRequest request) => null;
+
+        public Task<ProviderExecutionResult> ExecuteAsync(IAiProvider provider, ProviderRequestContext requestContext)
+            => throw new InvalidOperationException("sensitive internal details");
 
         public Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
             => Task.FromResult(new ProviderSmokeTestResult(false, "boom"));

@@ -32,8 +32,11 @@ namespace Aire
             }
 
             private string HandleUpdateTodoList(ParsedAiResponse parsed)
+                => HandleUpdateTodoList(parsed.ToolCall!);
+
+            private string HandleUpdateTodoList(ToolCallRequest toolCall)
             {
-                var update = _owner._chatInteractionApplicationService.BuildTodoUpdate(parsed);
+                var update = _owner._chatInteractionApplicationService.BuildTodoUpdate(toolCall);
                 var items = new System.Collections.ObjectModel.ObservableCollection<TodoItem>(
                     update.Items.Select(task => new TodoItem
                     {
@@ -66,8 +69,11 @@ namespace Aire
             }
 
             private async Task<string?> HandleAskFollowUpQuestion(ParsedAiResponse parsed)
+                => await HandleAskFollowUpQuestion(parsed.ToolCall!);
+
+            private async Task<string?> HandleAskFollowUpQuestion(ToolCallRequest toolCall)
             {
-                var prompt = _owner._chatInteractionApplicationService.BuildFollowUpPrompt(parsed);
+                var prompt = _owner._chatInteractionApplicationService.BuildFollowUpPrompt(toolCall);
                 if (prompt == null)
                     return null;
 

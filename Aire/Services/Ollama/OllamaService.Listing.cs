@@ -52,8 +52,8 @@ namespace Aire.Services
                     }
                     catch (JsonException ex)
                     {
-                        Debug.WriteLine($"JSON deserialization error: {ex.Message}");
-                        Log($"JSON deserialization error: {ex.Message}");
+                        Debug.WriteLine($"JSON deserialization error: {ex.GetType().Name}");
+                        Log($"JSON deserialization error: {ex.GetType().Name}");
                     }
                 }
                 else
@@ -64,8 +64,8 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"HTTP request exception: {ex.Message}");
-                Log($"HTTP request exception: {ex.Message}");
+                Debug.WriteLine($"HTTP request exception: {ex.GetType().Name}");
+                Log($"HTTP request exception: {ex.GetType().Name}");
             }
 
             if (httpSuccess && httpModels != null && httpModels.Count > 0)
@@ -124,7 +124,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Ollama CLI fallback failed: {ex.Message}");
+                Debug.WriteLine($"Ollama CLI fallback failed: {ex.GetType().Name}");
                 return new List<OllamaModel>();
             }
         }

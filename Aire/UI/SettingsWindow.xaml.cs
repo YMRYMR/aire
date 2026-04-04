@@ -101,6 +101,9 @@ namespace Aire.UI
         public event Action? ProvidersChanged;
         public event Action? AppearanceChanged;
 
+        public Task RefreshProvidersForExternalChangeAsync(int? reSelectId = null)
+            => RefreshProvidersList(reSelectId);
+
         // ── Auto‑accept ───────────────────────────────────────────────────────
 
         // ── Providers ─────────────────────────────────────────────────────────

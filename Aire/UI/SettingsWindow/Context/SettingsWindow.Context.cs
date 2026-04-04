@@ -17,9 +17,9 @@ namespace Aire.UI
                 var settings = await _contextSettingsApplicationService.LoadAsync();
                 ApplyContextSettingsToControls(settings);
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"Failed to load context settings: {ex}");
+                Debug.WriteLine("Failed to load context settings.");
             }
             finally
             {
@@ -41,9 +41,9 @@ namespace Aire.UI
                 ApplyContextSettingsToControls(settings);
                 (Owner as Aire.MainWindow)?.ApplyContextWindowSettings(settings);
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"Failed to save context settings: {ex}");
+                Debug.WriteLine("Failed to save context settings.");
             }
         }
 

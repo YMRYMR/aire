@@ -49,13 +49,13 @@ namespace Aire.Services
 
                 return response;
             }
-            catch (Exception ex)
+            catch
             {
-                ErrorOccurred?.Invoke(this, ex.Message);
+                ErrorOccurred?.Invoke(this, "An unexpected error occurred.");
                 return new AiResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = ex.Message
+                    ErrorMessage = "An unexpected error occurred."
                 };
             }
         }
@@ -95,9 +95,9 @@ namespace Aire.Services
                     IsSuccess = true
                 });
             }
-            catch (Exception ex)
+            catch
             {
-                ErrorOccurred?.Invoke(this, ex.Message);
+                ErrorOccurred?.Invoke(this, "An unexpected error occurred.");
             }
         }
 
@@ -127,13 +127,13 @@ namespace Aire.Services
                 ResponseCompleted?.Invoke(this, response);
                 return response;
             }
-            catch (Exception ex)
+            catch
             {
-                ErrorOccurred?.Invoke(this, ex.Message);
+                ErrorOccurred?.Invoke(this, "An unexpected error occurred.");
                 return new AiResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = ex.Message
+                    ErrorMessage = "An unexpected error occurred."
                 };
             }
         }

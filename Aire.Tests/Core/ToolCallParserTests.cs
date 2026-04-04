@@ -92,4 +92,52 @@ public class ToolCallParserTests
         Assert.True(parsedAiResponse.HasToolCall);
         Assert.Equal("Moving a.txt → b.txt", parsedAiResponse.ToolCall.Description);
     }
+
+    [Fact]
+    public void Parse_MarkdownDetailsToolCall_NormalizesIntoToolCall()
+    {
+        string response = """
+Let me find the OpenAI Codex logo online and show it to you.
+<details>
+<summary>🎯 Tool call: open_browser_tab</summary>
+Url: https://www.google.com/search?q=OpenAI+Codex+logo&tbm=isch
+</details>
+""";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("Let me find the OpenAI Codex logo online and show it to you.", parsedAiResponse.TextContent);
+        Assert.Equal("open_browser_tab", parsedAiResponse.ToolCall.Tool);
+        Assert.Equal("https://www.google.com/search?q=OpenAI+Codex+logo&tbm=isch", parsedAiResponse.ToolCall.Parameters.GetProperty("url").GetString());
+    }
+
+    [Fact]
+    public void Parse_MultipleMarkdownDetailsToolCalls_PreservesAllCallsInOrder()
+    {
+        string response = """
+Let me find the OpenAI Codex logo online and show it to you.
+<details>
+<summary>🎯 Tool call: open_browser_tab</summary>
+Url: https://www.google.com/search?q=OpenAI+Codex+logo&tbm=isch
+</details>
+The browser tab is open. Now let me read the page to find the logo image URLs.
+<details>
+<summary>🎯 Tool call: read_browser_tab</summary>
+Index: -1
+</details>
+<details>
+<summary>🎯 Tool call: execute_browser_script</summary>
+Script: JSON.stringify(Array.from(document.querySelectorAll('img')).slice(0,10).map(i=>({src:i.src,alt:i.alt})))
+</details>
+""";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal(3, parsedAiResponse.ToolCalls.Count);
+        Assert.Equal("open_browser_tab", parsedAiResponse.ToolCalls[0].Tool);
+        Assert.Equal("read_browser_tab", parsedAiResponse.ToolCalls[1].Tool);
+        Assert.Equal("execute_browser_script", parsedAiResponse.ToolCalls[2].Tool);
+        Assert.Contains("The browser tab is open. Now let me read the page to find the logo image URLs.", parsedAiResponse.TextContent);
+        Assert.Equal(-1, parsedAiResponse.ToolCalls[1].Parameters.GetProperty("index").GetInt32());
+    }
 }

@@ -46,9 +46,9 @@ namespace Aire.Services.Tools
 
                 return new ToolExecutionResult { TextResult = sb.ToString().TrimEnd() };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error getting system info: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Error getting system info." };
             }
         }
 
@@ -82,9 +82,9 @@ namespace Aire.Services.Tools
 
                 return new ToolExecutionResult { TextResult = sb.ToString().TrimEnd() };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error listing processes: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Error listing processes." };
             }
         }
 
@@ -102,9 +102,9 @@ namespace Aire.Services.Tools
                 Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
                 return new ToolExecutionResult { TextResult = $"Opened: {path}" };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error opening file: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "Error opening file." };
             }
         }
 
@@ -128,9 +128,9 @@ namespace Aire.Services.Tools
                     TextResult = $"Active window: \"{title}\"\nProcess: {procName} (PID {pid})"
                 };
             }
-            catch (Exception ex)
+        catch
             {
-                return new ToolExecutionResult { TextResult = $"Error: {ex.Message}" };
+            return new ToolExecutionResult { TextResult = "System operation failed." };
             }
         }
 

@@ -146,7 +146,7 @@ public class CoreServiceExtractionTests
 
         await orchestrator.StreamMessageAsync("hello");
 
-        Assert.Equal("stream failed", error);
+        Assert.Equal("An unexpected error occurred.", error);
     }
 
     [Fact]

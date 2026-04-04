@@ -1,6 +1,7 @@
 using System.Linq;
 using Aire.AppLayer.Providers;
 using Aire.Domain.Providers;
+using Aire.Data;
 using Aire.Providers;
 using Xunit;
 
@@ -24,7 +25,17 @@ public class ProviderRequestContextMapperTests
                 Content = "Describe this image.",
                 ImagePath = "C:/Temp/example.png",
                 ImageBytes = [1, 2, 3],
-                ImageMimeType = "image/png"
+                ImageMimeType = "image/png",
+                Attachments =
+                [
+                    new MessageAttachment
+                    {
+                        FileName = "notes.txt",
+                        FilePath = "C:/Temp/notes.txt",
+                        MimeType = "text/plain",
+                        IsImage = false
+                    }
+                ]
             }
         ];
 
@@ -38,6 +49,10 @@ public class ProviderRequestContextMapperTests
         Assert.Equal("C:/Temp/example.png", requestMessages[1].ImagePath);
         Assert.Equal([1, 2, 3], requestMessages[1].ImageBytes);
         Assert.Equal("image/png", requestMessages[1].ImageMimeType);
+        Assert.Single(requestMessages[1].Attachments);
+        Assert.Equal("notes.txt", requestMessages[1].Attachments![0].FileName);
+        Assert.Equal("C:/Temp/notes.txt", requestMessages[1].Attachments![0].FilePath);
+        Assert.Equal("text/plain", requestMessages[1].Attachments![0].MimeType);
     }
 
     [Fact]
@@ -65,7 +80,17 @@ public class ProviderRequestContextMapperTests
                 Content = "Describe this image.",
                 ImagePath = "C:/Temp/example.png",
                 ImageBytes = [1, 2, 3],
-                ImageMimeType = "image/png"
+                ImageMimeType = "image/png",
+                Attachments =
+                [
+                    new MessageAttachment
+                    {
+                        FileName = "notes.txt",
+                        FilePath = "C:/Temp/notes.txt",
+                        MimeType = "text/plain",
+                        IsImage = false
+                    }
+                ]
             }
         ];
 
@@ -79,6 +104,10 @@ public class ProviderRequestContextMapperTests
         Assert.Equal("C:/Temp/example.png", legacy[1].ImagePath);
         Assert.Equal([1, 2, 3], legacy[1].ImageBytes);
         Assert.Equal("image/png", legacy[1].ImageMimeType);
+        Assert.Single(legacy[1].Attachments!);
+        Assert.Equal("notes.txt", legacy[1].Attachments![0].FileName);
+        Assert.Equal("C:/Temp/notes.txt", legacy[1].Attachments![0].FilePath);
+        Assert.Equal("text/plain", legacy[1].Attachments![0].MimeType);
     }
 
     [Fact]

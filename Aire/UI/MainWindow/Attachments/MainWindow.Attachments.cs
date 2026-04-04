@@ -101,9 +101,9 @@ namespace Aire
                 AttachedImagePreview.Source = bitmap;
                 ShowImageChip();
             }
-            catch (Exception ex)
+            catch
             {
-                UI.ConfirmationDialog.ShowAlert(this, "Error", $"Failed to load image: {ex.Message}");
+                UI.ConfirmationDialog.ShowAlert(this, "Error", "Failed to load image.");
                 _attachedImagePath = null;
             }
         }
@@ -128,9 +128,9 @@ namespace Aire
                 AttachedImagePreview.Source = bitmap;
                 ShowImageChip();
             }
-            catch (Exception ex)
+            catch
             {
-                UI.ConfirmationDialog.ShowAlert(this, "Error", $"Failed to paste image: {ex.Message}");
+                UI.ConfirmationDialog.ShowAlert(this, "Error", "Failed to paste image.");
             }
         }
 

@@ -208,9 +208,9 @@ namespace Aire.UI
                 client.Stop();
                 McpTestResult.Text = $"\u2713 Connected \u2014 {tools.Count} tool{(tools.Count == 1 ? "" : "s")} available";
             }
-            catch (Exception ex)
+            catch
             {
-                McpTestResult.Text = $"\u2717 {ex.Message}";
+            McpTestResult.Text = "\u2717 Connection failed.";
             }
         }
 

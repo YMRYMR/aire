@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <RootNamespace>Aire.Setup</RootNamespace>
+    <AssemblyName>Aire.Setup</AssemblyName>
+    <ApplicationIcon>..\aire.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aire.Core\Aire.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Aire\Application\Chat\AssistantModeApplicationService.cs" Link="Application\Chat\AssistantModeApplicationService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.3.0" />
+    <PackageReference Include="Whisper.net" Version="1.9.0" />
+    <PackageReference Include="Whisper.net.Runtime" Version="1.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="..\Aire\UI\AppTheme.xaml" Link="UI\AppTheme.xaml" />
+    <Compile Include="..\Aire\Services\AppearanceService.cs" Link="Services\AppearanceService.cs" />
+    <Compile Include="..\Aire\Services\EdgeTtsService.cs" Link="Services\EdgeTtsService.cs" />
+    <Compile Include="..\Aire\Services\SpeechSynthesisService.cs" Link="Services\SpeechSynthesisService.cs" />
+    <Compile Include="..\Aire\Services\SpeechRecognitionService.cs" Link="Services\SpeechRecognitionService.cs" />
+    <Compile Include="..\Aire\Services\SpeechRecognition\SpeechRecognitionService.Audio.cs" Link="Services\SpeechRecognition\SpeechRecognitionService.Audio.cs" />
+    <Compile Include="..\Aire\Services\SpeechRecognition\SpeechRecognitionService.Countdowns.cs" Link="Services\SpeechRecognition\SpeechRecognitionService.Countdowns.cs" />
+    <Compile Include="..\Aire\Services\SpeechRecognition\SpeechRecognitionService.Model.cs" Link="Services\SpeechRecognition\SpeechRecognitionService.Model.cs" />
+    <Compile Include="..\Aire\Services\SpeechRecognition\SpeechRecognitionService.Transcription.cs" Link="Services\SpeechRecognition\SpeechRecognitionService.Transcription.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\aire.ico">
+      <Link>aire.ico</Link>
+    </Resource>
+    <Content Include="..\aire.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Aire\Translations\*.json">
+      <Link>Translations\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

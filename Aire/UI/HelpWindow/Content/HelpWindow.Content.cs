@@ -165,7 +165,11 @@ namespace Aire.UI
         {
             if (section.Links == null || section.Links.Length == 0) return;
 
-            var panel = new WrapPanel { Margin = new Thickness(0, -8, 0, 24) };
+            var panel = new WrapPanel
+            {
+                Margin = new Thickness(0, -8, 0, 24),
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+            };
             foreach (var link in section.Links)
             {
                 var action = link.Action;
@@ -188,6 +192,7 @@ namespace Aire.UI
             target.Children.Add(new Border
             {
                 Background = Brushes.Transparent,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 Child = panel
             });
         }
@@ -420,22 +425,15 @@ namespace Aire.UI
             var panel = new StackPanel
             {
                 Margin = new Thickness(0, 0, 0, section.Links is { Length: > 0 } ? 12 : 24),
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
             };
 
-            panel.Children.Add(new Border
+            panel.Children.Add(new System.Windows.Controls.Image
             {
-                Background = GetBrush("Surface2Brush"),
-                BorderBrush = GetBrush("BorderBrush"),
-                BorderThickness = new Thickness(1),
-                CornerRadius = new CornerRadius(8),
-                Padding = new Thickness(8),
-                Child = new System.Windows.Controls.Image
-                {
-                    Source = bitmap,
-                    Stretch = Stretch.Uniform,
-                    MaxWidth = 520,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                }
+                Source = bitmap,
+                Stretch = Stretch.Uniform,
+                MaxWidth = 520,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
             });
 
             if (!string.IsNullOrWhiteSpace(section.ImageCaption))
@@ -447,6 +445,9 @@ namespace Aire.UI
                     FontSize = 11,
                     Margin = new Thickness(2, 8, 2, 0),
                     TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    MaxWidth = 520,
                 });
             }
 

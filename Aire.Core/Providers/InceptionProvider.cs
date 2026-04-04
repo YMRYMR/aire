@@ -60,7 +60,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Inception live model fetch failed: {ex.Message}");
+                Debug.WriteLine($"Inception live model fetch failed: {ex.GetType().Name}");
                 return null;
             }
         }

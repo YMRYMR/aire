@@ -122,9 +122,9 @@ namespace Aire.UI
                 OAuthStatusText.Text = "\u2713 Authorized";
                 OAuthStatusText.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(60, 179, 113));
             }
-            catch (Exception ex)
+            catch
             {
-                OAuthStatusText.Text = $"\u2717 {ex.Message}";
+            OAuthStatusText.Text = "\u2717 Connection failed.";
                 OAuthStatusText.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(204, 51, 51));
             }
         }

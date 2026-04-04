@@ -16,6 +16,8 @@ namespace Aire.UI
 {
     public partial class SettingsWindow
     {
+        private readonly ProviderEditorApplicationService _providerEditorService = new();
+
         private async void SetupWizardButton_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = Owner;
@@ -40,9 +42,9 @@ namespace Aire.UI
                 ProvidersChanged?.Invoke();
                 await RefreshProvidersList(reSelectId: newProvider.Id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ShowToast($"Could not add provider: {ex.Message}", isError: true);
+                ShowToast("Could not add provider. Please try again.", isError: true);
             }
         }
 
@@ -52,16 +54,12 @@ namespace Aire.UI
         private async void TypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var type = (TypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "OpenAI";
+            var plan = _providerEditorService.BuildTypeChangePlan(type, _selectedProvider != null && !_suppressAutoSave, _isRefreshing);
 
-            var meta = ProviderFactory.GetMetadata(type);
+            if (plan.ModelAction == ProviderEditorApplicationService.ModelLoadAction.LoadMetadataModels)
+                await PopulateModelsFromMetadataAsync(plan.Metadata);
 
-            if (_selectedProvider != null && !_suppressAutoSave)
-            {
-                if (type != "Ollama")
-                    await PopulateModelsFromMetadataAsync(meta);
-            }
-
-            ApplyProviderMetadata(meta, hasKey: !string.IsNullOrEmpty(_selectedProvider?.ApiKey));
+            ApplyProviderMetadata(plan.Metadata, hasKey: !string.IsNullOrEmpty(_selectedProvider?.ApiKey));
             UpdateTimeoutSliderEnabledState(_selectedProvider != null);
             await PerformAutoSave();
         }
@@ -84,9 +82,9 @@ namespace Aire.UI
                     ProvidersChanged?.Invoke();
                     await RefreshProvidersList();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    ShowToast($"Could not delete provider: {ex.Message}", isError: true);
+                    ShowToast("Could not delete provider. Please try again.", isError: true);
                 }
             }
         }
@@ -97,19 +95,16 @@ namespace Aire.UI
             var provider = border?.Tag as Provider;
             if (provider == null) return;
 
-            provider.IsEnabled = !provider.IsEnabled;
             try
             {
-                await _databaseService.UpdateProviderAsync(provider);
+                await ProviderListWorkflow.ToggleEnabledAsync(_databaseService, provider);
                 ProvidersChanged?.Invoke();
                 await RefreshProvidersList(reSelectId: provider.Id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                provider.IsEnabled = !provider.IsEnabled;
-                ShowToast($"Could not toggle provider: {ex.Message}", isError: true);
+                ShowToast("Could not toggle provider. Please try again.", isError: true);
             }
         }
     }
 }
-

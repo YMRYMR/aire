@@ -130,8 +130,8 @@ namespace Aire
             bool attached = TrayService?.IsAttachedToTray ?? _isAttached;
             PinButton.Content = attached ? "\U0001F4CC" : "\U0001F4CD";
             PinButton.ToolTip = attached
-                ? "Pinned to tray — click to re-snap above system tray"
-                : "Unpinned — click to snap back above system tray";
+                ? LocalizationService.S("tooltip.pinAttached", "Pinned to tray — click to re-snap above system tray")
+                : LocalizationService.S("tooltip.pinDetached", "Unpinned — click to snap back above system tray");
         }
 
         private void BrowserButton_Click(object sender, RoutedEventArgs e)
@@ -187,12 +187,14 @@ namespace Aire
             HelpButton.ToolTip = L("tooltip.help", "Help");
             SettingsButton.ToolTip = L("tooltip.settings", "Settings");
             BrowserButton.ToolTip = L("tooltip.browser", "Open browser  (AI can read open tabs)");
+            SearchButton.ToolTip = L("tooltip.searchChat", "Find in chat  (Ctrl+F)");
             ModeButton.ToolTip = L("tooltip.mode", "Assistant mode");
-            MicButton.ToolTip = L("tooltip.mic", "Start voice input");
             MouseSessionLabel.Text = L("main.sessionActive", "Session active");
             EndSessionButton.Content = L("main.endSession", "End session");
             ThinkingText.Text = L("main.thinking", "Thinking\u2026");
             RemoveImageButton.Content = L("main.remove", "Remove");
+            RemoveImageButton.ToolTip = L("tooltip.removeAttachment", "Remove attachment");
+            StopAiButton.ToolTip = L("tooltip.stopThinking", "Stop AI thinking");
             SidebarToggleButton.ToolTip = L("tooltip.sidebar", "Conversation history");
             CheckAgainButton.ToolTip = L("tooltip.checkAvailability", "Check if provider is available again");
             ConversationSidebar.ToolTip = null;
@@ -201,6 +203,7 @@ namespace Aire
             SearchNextButton.ToolTip = L("tooltip.nextMatch", "Next match");
             CloseSearchButton.ToolTip = L("tooltip.close", "Close");
             FileChipBorder.ToolTip = L("tooltip.openFile", "Click to open file");
+            UpdatePinButton();
 
             var warningText = LargeFileWarning.Child as System.Windows.Controls.TextBlock;
             if (warningText != null)
@@ -209,6 +212,9 @@ namespace Aire
             Resources["PlaceholderSearchText"] = L("placeholder.search", "Search…");
             UpdateModeButtonState();
             UpdateVoiceOutputButton();
+            SetMicButtonState(_speechService.IsListening ? MicState.Recording : MicState.Idle);
+            RefreshToolsCategoryMenuLocalization();
+            UpdateToolsButtonState();
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

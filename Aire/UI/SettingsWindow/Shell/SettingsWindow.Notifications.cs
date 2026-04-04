@@ -13,6 +13,7 @@ namespace Aire.UI
             var cts = _toastCts;
 
             ToastText.Text = message;
+            ToastText.ToolTip = message.Length > 120 ? message : null;
 
             if (isError)
             {
@@ -31,7 +32,10 @@ namespace Aire.UI
 
             try
             {
-                await Task.Delay(4000, cts.Token);
+                var delayMs = isError
+                    ? (message.Length > 120 ? 12000 : 8000)
+                    : 4000;
+                await Task.Delay(delayMs, cts.Token);
                 ToastBorder.Visibility = Visibility.Collapsed;
             }
             catch (OperationCanceledException)

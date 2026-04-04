@@ -58,6 +58,7 @@
                         Foreground="{DynamicResource TextBrush}"
                         Text="Settings — Aire" />
                     <Button
+                        x:Name="CloseButton"
                         Grid.Column="1"
                         Width="34"
                         Height="34"
@@ -202,6 +203,7 @@
                                             <ComboBoxItem Content="OpenRouter (100+ models, free tier)" Tag="OpenRouter" />
                                             <ComboBoxItem Content="Codex (local CLI bridge)" Tag="Codex" />
                                             <ComboBoxItem Content="Google AI" Tag="GoogleAI" />
+                                            <ComboBoxItem Content="Google AI Images" Tag="GoogleAIImage" />
                                             <ComboBoxItem Content="Anthropic API" Tag="Anthropic" />
                                             <ComboBoxItem Content="Claude.ai" Tag="ClaudeWeb" />
                                             <ComboBoxItem Content="Ollama" Tag="Ollama" />
@@ -557,10 +559,16 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock
+                    <TextBox
                         x:Name="ToastText"
                         Grid.Column="0"
                         VerticalAlignment="Center"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        Focusable="True"
                         Foreground="{DynamicResource TextBrush}"
                         TextWrapping="Wrap" />
                     <Button

@@ -38,7 +38,7 @@ namespace Aire.Tests.UI
                 
                 ComboBox comboBox = new ComboBox();
                 settingsWindow.ModelComboBox = comboBox;
-                settingsWindow.ToastText = new TextBlock();
+                settingsWindow.ToastText = new TextBox();
                 settingsWindow.ToastBorder = new Border();
                 settingsWindow._suppressModelFilter = false;
                 
@@ -78,7 +78,7 @@ namespace Aire.Tests.UI
                 SettingsWindow settingsWindow = (SettingsWindow)RuntimeHelpers.GetUninitializedObject(typeof(SettingsWindow));
                 
                 Assert.Equal("test", SettingsWindow.ShortenErrorMessage("test"));
-                Assert.Equal("prefix test", SettingsWindow.ShortenErrorMessage("prefix {\"error\":{\"message\":\"test\"}}"));
+                Assert.Equal("test", SettingsWindow.ShortenErrorMessage("prefix {\"error\":{\"message\":\"test\"}}"));
                 Assert.Equal("error message", SettingsWindow.ShortenErrorMessage("{\"error\":{\"message\":\"error message\"}}"));
                 
                 StackPanel stackPanel = new StackPanel();

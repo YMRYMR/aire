@@ -43,7 +43,11 @@ Thumbs.db
 *.sqlite3
 *.exe.WebView2/
 
+# Local development artifacts
+.worktrees/
+task-briefs/
+docs/development/
+
 # Publish artifacts
 *.pdb
 *.apphost.exe
-

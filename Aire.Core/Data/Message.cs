@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Aire.Data
 {
     /// <summary>
@@ -10,6 +12,9 @@ namespace Aire.Data
         public string Role { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? ImagePath { get; set; }
+        public string? AttachmentsJson { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public List<MessageAttachment> Attachments { get; set; } = new();
         public DateTime CreatedAt { get; set; }
     }
 }

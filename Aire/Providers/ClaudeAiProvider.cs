@@ -80,7 +80,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Anthropic live model fetch failed: {ex.Message}");
+                Debug.WriteLine($"Anthropic live model fetch failed: {ex.GetType().Name}");
                 return null;
             }
         }
@@ -154,7 +154,8 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                return new AiResponse { IsSuccess = false, ErrorMessage = ex.Message, Duration = sw.Elapsed };
+                Debug.WriteLine($"{GetType().Name} chat failed: {ex.GetType().Name}");
+                return new AiResponse { IsSuccess = false, ErrorMessage = "Anthropic request failed.", Duration = sw.Elapsed };
             }
         }
 
@@ -246,8 +247,7 @@ namespace Aire.Providers
 
             if (!response.IsSuccessStatusCode)
             {
-                var err = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-                throw new Exception($"Anthropic API {(int)response.StatusCode}: {err}");
+                throw new HttpRequestException("Anthropic request failed.");
             }
 
             await using var stream = await response.Content
@@ -295,7 +295,11 @@ namespace Aire.Providers
                         ? ProviderValidationResult.Ok()
                         : ProviderValidationResult.Fail($"HTTP {(int)res.StatusCode} {res.ReasonPhrase}");
                 }
-                catch (Exception ex) { return ProviderValidationResult.Fail($"{ex.GetType().Name}: {ex.Message}"); }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"{GetType().Name} validation failed: {ex.GetType().Name}");
+                    return ProviderValidationResult.Fail("Anthropic configuration validation failed.");
+                }
             }
             return ProviderValidationResult.Fail("API key is required.");
         }

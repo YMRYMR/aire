@@ -57,7 +57,7 @@ public class AppProviderCoverageTests
 
         Assert.Equal(TimeSpan.FromMinutes(7), provider.ConfiguredTimeout);
         Assert.False(response.IsSuccess);
-        Assert.Contains("Anthropic API is not configured", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("Anthropic request failed.", response.ErrorMessage);
     }
 
     [Fact]
