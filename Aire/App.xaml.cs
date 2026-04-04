@@ -7,7 +7,6 @@ using Aire.AppLayer.Startup;
 using Aire.Providers;
 using Aire.Services;
 using Aire.UI;
-using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using WebViewWin  = Aire.UI.WebViewWindow;
 
@@ -44,7 +43,11 @@ namespace Aire
                     using var ev = EventWaitHandle.OpenExisting("Aire_Activate_v1");
                     ev.Set();
                 }
-                catch { /* existing instance may not have created the event yet */ }
+                catch (Exception ex)
+                {
+                    // The existing instance may still be starting up, but log other failures.
+                    AppLogger.Warn("App.SingleInstance", "Failed to signal the existing instance", ex);
+                }
                 Shutdown(0);
                 return;
             }
@@ -85,7 +88,7 @@ namespace Aire
 
             if (AppStartupState.StartupError != null)
             {
-                MessageBox.Show($"Failed to initialize Aire: {AppStartupState.StartupError.Message}", "Aire", MessageBoxButton.OK, MessageBoxImage.Error);
+                ConfirmationDialog.ShowAlert(_mainWindow, "Aire startup failed", $"Failed to initialize Aire: {AppStartupState.StartupError.Message}");
             }
 
             _trayService = new TrayIconService(_mainWindow);
@@ -129,9 +132,10 @@ namespace Aire
                 db.InitializeAsync().GetAwaiter().GetResult();
                 showWizard = await _startupDecisionService.ShouldShowOnboardingAsync(db, AppState.GetHasCompletedOnboarding());
             }
-            catch
+            catch (Exception ex)
             {
                 // Non-fatal: if the startup inspection fails, continue without onboarding.
+                AppLogger.Warn("App.Startup", "Failed to inspect onboarding state", ex);
                 showWizard = false;
             }
             if (showWizard)
@@ -220,12 +224,7 @@ namespace Aire
                 var shouldInstall = false;
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    var result = MessageBox.Show(
-                        $"Aire {update.LatestVersion} is available.\n\nDownload and install it now?",
-                        "Aire Update",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Information);
-                    shouldInstall = result == MessageBoxResult.Yes;
+                    shouldInstall = UpdateAvailableDialog.ShowDialog(_mainWindow, update) == true;
                 });
 
                 if (!shouldInstall)
