@@ -1,16 +1,43 @@
 extern alias AireCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Aire.Data;
 using Aire.Providers;
 using Xunit;
 
 namespace Aire.Tests.Providers;
 
+[Collection("AppProviderCoverage")]
 public class AppProviderCoverageTests
 {
+    private static string SeedModelsFolder()
+    {
+        var folder = Path.Combine(Path.GetTempPath(), $"aire_app_provider_{Guid.NewGuid():N}");
+        Environment.SetEnvironmentVariable("AIRE_MODELS_FOLDER", folder);
+        ModelCatalog.EnsureDefaults();
+        return folder;
+    }
+
+    private static void ClearModelsFolder(string? folder)
+    {
+        Environment.SetEnvironmentVariable("AIRE_MODELS_FOLDER", null);
+        if (string.IsNullOrWhiteSpace(folder))
+            return;
+
+        try
+        {
+            if (Directory.Exists(folder))
+                Directory.Delete(folder, recursive: true);
+        }
+        catch
+        {
+        }
+    }
+
     private sealed class InspectableZaiProvider : ZaiProvider
     {
         public string[] ExposeModelPrefixes()
@@ -63,14 +90,17 @@ public class AppProviderCoverageTests
     [Fact]
     public async Task ClaudeWebProvider_MetadataAndSessionDependentPaths_Work()
     {
+        var seededFolder = SeedModelsFolder();
         var provider = new AireCore::Aire.Providers.ClaudeWebProvider();
-        provider.Initialize(new ProviderConfig { Model = "claude-sonnet-4-5" });
-
-        var session       = ClaudeAiSession.Instance;
-        bool originalReady  = session.IsReady;
-        var  originalPrompt = ClaudeAiSession.PromptLogin;
         try
         {
+            provider.Initialize(new ProviderConfig { Model = "claude-sonnet-4-5" });
+
+            var session        = ClaudeAiSession.Instance;
+            bool originalReady = session.IsReady;
+            var originalPrompt  = ClaudeAiSession.PromptLogin;
+            try
+            {
             session.IsReady           = false;
             ClaudeAiSession.PromptLogin = null;
 
@@ -78,20 +108,25 @@ public class AppProviderCoverageTests
             Assert.Equal("Claude.ai",  provider.DisplayName);
             Assert.False(provider.FieldHints.ShowApiKey);
             Assert.False(provider.FieldHints.ApiKeyRequired);
-        var webValidation = await provider.ValidateConfigurationAsync(CancellationToken.None);
-        Assert.False(webValidation.IsValid);
-        Assert.NotNull(webValidation.Error);
+                var webValidation = await provider.ValidateConfigurationAsync(CancellationToken.None);
+                Assert.False(webValidation.IsValid);
+                Assert.NotNull(webValidation.Error);
 
-            var response = await provider.SendChatAsync(new[] { new ChatMessage { Role = "user", Content = "hello" } });
+                var response = await provider.SendChatAsync(new[] { new ChatMessage { Role = "user", Content = "hello" } });
 
-            Assert.False(response.IsSuccess);
-            Assert.NotNull(response.ErrorMessage);
-            Assert.NotEmpty(provider.GetDefaultModels());
+                Assert.False(response.IsSuccess);
+                Assert.NotNull(response.ErrorMessage);
+                Assert.NotEmpty(provider.GetDefaultModels());
+            }
+            finally
+            {
+                session.IsReady = originalReady;
+                ClaudeAiSession.PromptLogin = originalPrompt;
+            }
         }
         finally
         {
-            session.IsReady           = originalReady;
-            ClaudeAiSession.PromptLogin = originalPrompt;
+            ClearModelsFolder(seededFolder);
         }
     }
 
@@ -138,23 +173,31 @@ public class AppProviderCoverageTests
     [Fact]
     public async Task ZaiProvider_MetadataAndEndpointShape_Work()
     {
-        var provider = new InspectableZaiProvider();
-        provider.Initialize(new ProviderConfig
+        var seededFolder = SeedModelsFolder();
+        try
         {
-            ApiKey = "zai-test-key",
-            BaseUrl = "https://api.z.ai/api/paas/v4/",
-            Model = "glm-5"
-        });
+            var provider = new InspectableZaiProvider();
+            provider.Initialize(new ProviderConfig
+            {
+                ApiKey = "zai-test-key",
+                BaseUrl = "https://api.z.ai/api/paas/v4/",
+                Model = "glm-5"
+            });
 
-        Assert.Equal("Zai", provider.ProviderType);
-        Assert.Equal("Zhipu AI (z.ai)", provider.DisplayName);
-        Assert.True(provider.FieldHints.ShowBaseUrl);
-        Assert.Contains("glm-", provider.ExposeModelPrefixes());
-        Assert.Equal("https://api.z.ai/api/paas/v4/models", provider.ExposeBuildModelsUrl("https://api.z.ai/api/paas/v4"));
-        Assert.Equal("https://api.z.ai/api/paas/v4/chat/completions", provider.ExposeBuildChatCompletionsUrl("https://api.z.ai/api/paas/v4"));
-        Assert.Null(await provider.GetTokenUsageAsync(CancellationToken.None));
-        Assert.NotEmpty(provider.GetDefaultModels());
-        Assert.Contains(provider.GetDefaultModels(), m => m.Id.StartsWith("glm-", StringComparison.OrdinalIgnoreCase));
+            Assert.Equal("Zai", provider.ProviderType);
+            Assert.Equal("Zhipu AI (z.ai)", provider.DisplayName);
+            Assert.True(provider.FieldHints.ShowBaseUrl);
+            Assert.Contains("glm-", provider.ExposeModelPrefixes());
+            Assert.Equal("https://api.z.ai/api/paas/v4/models", provider.ExposeBuildModelsUrl("https://api.z.ai/api/paas/v4"));
+            Assert.Equal("https://api.z.ai/api/paas/v4/chat/completions", provider.ExposeBuildChatCompletionsUrl("https://api.z.ai/api/paas/v4"));
+            Assert.Null(await provider.GetTokenUsageAsync(CancellationToken.None));
+            Assert.NotEmpty(provider.GetDefaultModels());
+            Assert.Contains(provider.GetDefaultModels(), m => m.Id.StartsWith("glm-", StringComparison.OrdinalIgnoreCase));
+        }
+        finally
+        {
+            ClearModelsFolder(seededFolder);
+        }
     }
 
     [Fact]
