@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Aire.Bootstrap;
+using Aire.AppLayer.Startup;
 using Aire.Providers;
 using Aire.Services;
 using Aire.UI;
@@ -23,10 +24,8 @@ namespace Aire
         private MainWindow? _mainWindow;
         private SettingsWindow? _settingsWindow;
         private LocalApiService? _localApiService;
-
-        // Track which satellite windows were visible before main window was hidden
-        private bool _settingsWasVisible;
-        private bool _browserWasVisible;
+        private readonly StartupDecisionApplicationService _startupDecisionService = new();
+        private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -120,19 +119,18 @@ namespace Aire
                 return tcs.Task;
             };
 
-            // Show onboarding wizard on first run OR when no providers are configured
-            bool showWizard = !AppState.GetHasCompletedOnboarding();
-            if (!showWizard)
+            // Show onboarding wizard on first run OR when no providers are configured.
+            bool showWizard;
+            try
             {
-                try
-                {
-                    var db = new Aire.Data.DatabaseService();
-                    db.InitializeAsync().GetAwaiter().GetResult();
-                    var providers = db.GetProvidersAsync().GetAwaiter().GetResult();
-                    showWizard = providers.Count == 0;
-                    db.Dispose();
-                }
-                catch { /* non-fatal — proceed without wizard if DB check fails */ }
+                using var db = new Aire.Data.DatabaseService();
+                db.InitializeAsync().GetAwaiter().GetResult();
+                showWizard = await _startupDecisionService.ShouldShowOnboardingAsync(db, AppState.GetHasCompletedOnboarding());
+            }
+            catch
+            {
+                // Non-fatal: if the startup inspection fails, continue without onboarding.
+                showWizard = false;
             }
             if (showWizard)
             {
@@ -193,21 +191,7 @@ namespace Aire
 
         private void OnMainWindowVisibilityChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            bool nowVisible = (bool)e.NewValue;
-            if (nowVisible)
-            {
-                // Restore windows that were visible before main window was hidden
-                if (_settingsWasVisible) _settingsWindow?.Show();
-                if (_browserWasVisible)  WebViewWin.Current?.Show();
-            }
-            else
-            {
-                // Record which satellite windows are open, then hide them
-                _settingsWasVisible = _settingsWindow?.IsVisible == true;
-                _browserWasVisible  = WebViewWin.Current?.IsVisible == true;
-                _settingsWindow?.Hide();
-                WebViewWin.Current?.Hide();
-            }
+            _windowVisibilityCoordinator.HandleMainWindowVisibilityChanged((bool)e.NewValue, _settingsWindow, WebViewWin.Current);
         }
 
         private void OnSettingsRequested(object? sender, EventArgs e)

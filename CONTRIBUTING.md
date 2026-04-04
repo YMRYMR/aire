@@ -47,6 +47,7 @@ Do **not** commit these values.
 - Do not commit machine-local state, generated binaries, local databases, or WebView2 runtime data.
 - Prefer adding tests for service-layer and provider-layer changes.
 - For UI refactors, keep WPF `x:Class` and partial class wiring stable unless a larger migration is intentional.
+- When changing `Aire.Setup`, `Aire.Screenshots`, or `Aire.Installer`, run the release-helper smoke items in [docs/development/testing/manual-smoke-checklist.md](./docs/development/testing/manual-smoke-checklist.md).
 - Read the architecture guides before adding a new feature:
   - [docs/development/architecture/overview.md](./docs/development/architecture/overview.md)
   - [docs/development/architecture/developer-map.md](./docs/development/architecture/developer-map.md)
