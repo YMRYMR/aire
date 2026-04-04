@@ -121,11 +121,11 @@
                     <CheckBox x:Name="PART_AutoAcceptRememberCheckBox" Content="Remember" ToolTip="Saves a key-value pair to the AI's persistent memory store. Safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptRecallCheckBox" Content="Recall" ToolTip="Reads a value from the AI's persistent memory store. Read-only and safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptSetReminderCheckBox" Content="Set reminder" ToolTip="Schedules a reminder notification to appear after a delay. Safe." Margin="0 4 0 0" />
-                    <TextBlock Text="Email" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
-                    <CheckBox x:Name="PART_AutoAcceptReadEmailsCheckBox" Content="Read emails" ToolTip="Reads emails from your connected mail account. Can expose private correspondence." Margin="0 4 0 0" />
-                    <CheckBox x:Name="PART_AutoAcceptSearchEmailsCheckBox" Content="Search emails" ToolTip="Searches your mailbox for matching messages. Read-only." Margin="0 4 0 0" />
-                    <CheckBox x:Name="PART_AutoAcceptSendEmailCheckBox" Content="Send email" ToolTip="Composes and sends an email on your behalf. High risk — emails are delivered immediately and may be irreversible." Margin="0 4 0 0" />
-                    <CheckBox x:Name="PART_AutoAcceptReplyToEmailCheckBox" Content="Reply to email" ToolTip="Sends a reply to an existing email thread. High risk — same as send email." Margin="0 4 0 0" />
+                    <TextBlock Text="Email" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" Visibility="Collapsed" />
+                    <CheckBox x:Name="PART_AutoAcceptReadEmailsCheckBox" Content="Read emails" ToolTip="Reads emails from your connected mail account. Can expose private correspondence." Margin="0 4 0 0" Visibility="Collapsed" />
+                    <CheckBox x:Name="PART_AutoAcceptSearchEmailsCheckBox" Content="Search emails" ToolTip="Searches your mailbox for matching messages. Read-only." Margin="0 4 0 0" Visibility="Collapsed" />
+                    <CheckBox x:Name="PART_AutoAcceptSendEmailCheckBox" Content="Send email" ToolTip="Composes and sends an email on your behalf. High risk — emails are delivered immediately and may be irreversible." Margin="0 4 0 0" Visibility="Collapsed" />
+                    <CheckBox x:Name="PART_AutoAcceptReplyToEmailCheckBox" Content="Reply to email" ToolTip="Sends a reply to an existing email thread. High risk — same as send email." Margin="0 4 0 0" Visibility="Collapsed" />
                     <TextBlock Text="AI / Task flow" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptNewTaskCheckBox" Content="Create new task" ToolTip="Starts a new sub-task. The AI may chain many tool calls inside it without further prompts." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptAskFollowupQuestionCheckBox" Content="Ask follow-up question" ToolTip="The AI pauses to ask you a clarifying question before continuing. Generally safe." Margin="0 4 0 0" />
