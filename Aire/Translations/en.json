@@ -212,13 +212,19 @@
     {
       "tab": "Setup Wizard",
       "type": "text",
+      "title": "Welcome and Language Selection",
+      "imagePath": "Assets/Help/onboarding-welcome.png",
+      "imageCaption": "Welcome screen with language selection — the first step of the Setup Wizard.",
+      "content": "The first screen of the Setup Wizard appears when Aire has no AI providers configured. It introduces the app and lets you pick your preferred language before anything else.\n\nWhat you see on this screen:\n• A short description of what Aire is and what it can do.\n• A language selector — pick your preferred language and the app updates immediately.\n• A 'Let's get started' button that takes you to the provider picker.\n\nYou can change the language at any time later in Settings → Appearance."
+    },
+    {
+      "tab": "Setup Wizard",
+      "type": "text",
       "title": "How the Setup Wizard Works",
       "links": [
         { "label": "Open the Setup Wizard", "action": "onboarding" },
         { "label": "Open AI setup", "action": "settings:providers" }
       ],
-      "imagePath": "Assets/Help/onboarding-provider-picker.png",
-      "imageCaption": "The setup wizard helps you choose a provider before you start chatting.",
       "content": "The Setup Wizard appears the first time you run Aire, or when no AI providers are configured yet. Its job is to get you from a fresh install to a working chat as quickly as possible.\n\nWhat the wizard does, step by step:\n• Welcome: explains what Aire is and lets you choose the app language.\n• Provider picker: shows common ways to connect Aire to AI services.\n• Provider setup: asks for the details needed for the provider you picked.\n• Finish: confirms Aire is ready and takes you to the main app.\n\nIf you are new to AI, the wizard is the best place to start. It uses the simplest path first and hides advanced settings until you need them.\n\nYou can skip setup and come back later, but you will need at least one configured provider before Aire can answer chat messages."
     },
     {
@@ -231,6 +237,8 @@
         { "label": "console.anthropic.com", "action": "https://console.anthropic.com" },
         { "label": "aistudio.google.com", "action": "https://aistudio.google.com" }
       ],
+      "imagePath": "Assets/Help/onboarding-provider-picker.png",
+      "imageCaption": "Provider picker — choose which AI service Aire will connect to.",
       "content": "The provider picker is where you decide which AI service Aire will talk to on your behalf.\n\nWhat the main options mean:\n• OpenAI: a common starting point if you want a simple cloud setup and wide model support.\n• Anthropic API: another strong cloud option, known for Claude models.\n• Claude.ai: uses browser sign-in instead of an API key.\n• Google AI: connects to Gemini chat models through Google AI Studio.\n• Google AI Images: a dedicated Gemini image-generation setup.\n• Ollama: runs models locally on your computer. Good for privacy and offline use, but it depends on your hardware.\n• Codex: uses the local Codex CLI bridge instead of a normal API key.\n• Groq, OpenRouter, DeepSeek, Inception, and z.ai: other providers or OpenAI-compatible endpoints, often useful if you already have an account there.\n\nWhich one should you choose?\n• If you want the easiest cloud setup for chat: start with OpenAI, Anthropic, or Google AI.\n• If you want local and private: choose Ollama.\n• If you specifically want image generation from Gemini: choose Google AI Images.\n• If you already pay for or use a specific provider elsewhere: choose that same provider here.\n\nYou are not locked in. The wizard helps you add one provider first, and you can add more later in Settings."
     },
     {
@@ -452,6 +460,8 @@
       "links": [
         { "label": "Open appearance settings", "action": "settings:appearance" }
       ],
+      "imagePath": "Assets/Help/settings-appearance.png",
+      "imageCaption": "Appearance settings with theme, color tint, accent color, and font size controls.",
       "content": "Open Settings (\u2699) \u2192 Appearance to change the look of the app.\n\n\u2022 Theme: switch between Dark and Light (Beige).\n\u2022 Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint \u2014 the slider is pure grayscale by default.\n\u2022 Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.\n\nAll appearance settings are saved and restored on next launch."
     },
     {

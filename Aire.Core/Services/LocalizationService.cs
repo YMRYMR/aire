@@ -168,7 +168,13 @@ namespace Aire.Services
             }
             CurrentCode  = code;
             _strings     = data.strings;
-            HelpSections = data.help;
+
+            // Fall back to English help sections when the selected language has none.
+            var help = data.help;
+            if (help.Count == 0 && code != "en" && _cache.TryGetValue("en", out var enData))
+                help = enData.help;
+            HelpSections = help;
+
             LanguageChanged?.Invoke();
         }
 
