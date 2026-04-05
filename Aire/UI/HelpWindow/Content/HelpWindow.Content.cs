@@ -458,7 +458,18 @@ namespace Aire.UI
         {
             if (string.IsNullOrWhiteSpace(relativePath)) return null;
             if (Path.IsPathRooted(relativePath)) return relativePath;
-            return Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, relativePath));
+
+            var baseDir  = AppContext.BaseDirectory;
+
+            // Prefer a language-specific variant, e.g. Assets/Help/es/main-chat.png
+            var dir      = Path.GetDirectoryName(relativePath) ?? string.Empty;
+            var fileName = Path.GetFileName(relativePath);
+            var langCode = LocalizationService.CurrentCode;
+            var langPath = Path.GetFullPath(Path.Combine(baseDir, dir, langCode, fileName));
+            if (File.Exists(langPath))
+                return langPath;
+
+            return Path.GetFullPath(Path.Combine(baseDir, relativePath));
         }
 
         private static Brush GetBrush(string key)

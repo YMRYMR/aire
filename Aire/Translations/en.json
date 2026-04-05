@@ -110,6 +110,9 @@
     "warning.largeFile": "\u26a0 Large file \u2014 provider may reject",
     "menu.copyChat": "Copy chat as text",
     "menu.restoreWindowSizes": "Restore original window sizes",
+    "menu.rename": "Rename",
+    "menu.delete": "Delete",
+    "menu.deleteAllConversations": "Delete all conversations",
     "settings.setupWizard": "Setup Wizard",
     "settings.apiAccessEnabledTooltip": "Lets other local apps control Aire. Leave off unless you trust the caller.",
     "settings.testSelectedVoice": "Test selected voice",
@@ -205,7 +208,10 @@
     "setup.enabledSpoken": "enabled",
     "setup.disabledSpoken": "disabled",
     "panic.title": "Aire Stop",
-    "panic.tooltip": "Click to stop the active keyboard/mouse session immediately.\nDrag to reposition.",
+    "panic.tooltip": "Click to stop the active keyboard/mouse session immediately. Drag to reposition.",
+    "menu.rename": "Rename",
+    "menu.delete": "Delete",
+    "menu.deleteAllConversations": "Delete all conversations",
     "panic.stopButton": "⏹ STOP SESSION"
   },
   "help": [
@@ -453,6 +459,17 @@
         { "label": "Open appearance settings", "action": "settings:appearance" }
       ],
       "content": "Open Settings (\u2699) \u2192 Appearance to change the look of the app.\n\n\u2022 Theme: switch between Dark and Light (Beige).\n\u2022 Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint \u2014 the slider is pure grayscale by default.\n\u2022 Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.\n\nAll appearance settings are saved and restored on next launch."
+    },
+    {
+      "tab": "Appearance",
+      "type": "text",
+      "title": "Language",
+      "links": [
+        { "label": "Open appearance settings", "action": "settings:appearance" }
+      ],
+      "imagePath": "Assets/Help/settings-language.png",
+      "imageCaption": "The Language selector in Settings \u2192 Appearance.",
+      "content": "Open Settings (\u2699) \u2192 Appearance and scroll to the Language section.\n\nClick the drop-down and pick any of the available languages. The app updates immediately \u2014 no restart needed.\n\nThe language is saved automatically and restored on the next launch. You can also change it from the first step of the Setup Wizard."
     },
     {
       "tab": "Local API",

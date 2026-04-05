@@ -13,6 +13,14 @@ internal sealed class LocalApiClient
     private static readonly byte[] Entropy = Encoding.UTF8.GetBytes("Aire-SecureStorage-v1");
     private static readonly JsonSerializerOptions CompactJson = new() { PropertyNameCaseInsensitive = true };
 
+    public async Task SetLanguageAsync(string languageCode)
+    {
+        await SendAsync("set_language", new Dictionary<string, object?>
+        {
+            ["languageCode"] = languageCode
+        });
+    }
+
     public async Task SetActiveProviderByNameAsync(string providerName)
     {
         var providers = await ListProvidersAsync();

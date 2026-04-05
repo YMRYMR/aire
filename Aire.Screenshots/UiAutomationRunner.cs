@@ -48,6 +48,11 @@ internal static class UiAutomationRunner
                 await DelayIfNeededAsync(action);
                 return;
 
+            case "tryinvoke":
+                TryInvokeElement(action, defaultWindow);
+                await DelayIfNeededAsync(action);
+                return;
+
             case "select":
                 SelectElement(action, defaultWindow);
                 await DelayIfNeededAsync(action);
@@ -55,6 +60,22 @@ internal static class UiAutomationRunner
 
             case "selectcomboitem":
                 SelectComboItem(action, defaultWindow);
+                await DelayIfNeededAsync(action);
+                return;
+
+            case "closewindow":
+                CloseWindow(BuildWindowSelector(action, defaultWindow));
+                await DelayIfNeededAsync(action);
+                return;
+
+            case "tryclosewindow":
+                TryCloseWindow(BuildWindowSelector(action, defaultWindow));
+                await DelayIfNeededAsync(action);
+                return;
+
+            case "setlanguage":
+                await SetLanguageAsync(action.LanguageCode
+                    ?? throw new InvalidOperationException("set-language action requires languageCode."));
                 await DelayIfNeededAsync(action);
                 return;
 
@@ -110,6 +131,12 @@ internal static class UiAutomationRunner
     {
         var window = NativeWindowFinder.GetWindow(selector);
         NativeWindowFinder.ActivateWindow(window.Handle);
+    }
+
+    private static void TryInvokeElement(UiAutomationAction action, ScreenshotRequest? defaultWindow)
+    {
+        try { InvokeElement(action, defaultWindow); }
+        catch { /* silently skip if window or element is not present */ }
     }
 
     private static void InvokeElement(UiAutomationAction action, ScreenshotRequest? defaultWindow)
@@ -225,6 +252,21 @@ internal static class UiAutomationRunner
         throw new InvalidOperationException($"ComboBox item '{action.Name}' is not selectable.");
     }
 
+    public static async Task SetLanguageAsync(string languageCode)
+        => await LocalApiClient.SetLanguageAsync(languageCode);
+
+    private static void CloseWindow(ScreenshotRequest selector)
+    {
+        var window = NativeWindowFinder.GetWindow(selector);
+        NativeWindowFinder.CloseWindow(window.Handle);
+    }
+
+    private static void TryCloseWindow(ScreenshotRequest selector)
+    {
+        try { CloseWindow(selector); }
+        catch { /* window not found — silently skip */ }
+    }
+
     private static async Task SetActiveProviderByNameAsync(UiAutomationAction action)
     {
         if (string.IsNullOrWhiteSpace(action.Name))
@@ -302,16 +344,23 @@ internal static class UiAutomationRunner
         };
 
     private static ScreenshotRequest BuildWindowSelector(UiAutomationAction action, ScreenshotRequest? defaultWindow)
-        => new(
+    {
+        // ExactTitle and TitleContains are mutually exclusive: if the action supplies one,
+        // do not inherit the other from the default window (they would conflict).
+        var exactTitle     = action.ExactTitle     ?? (action.TitleContains == null ? defaultWindow?.ExactTitle     : null);
+        var titleContains  = action.TitleContains  ?? (action.ExactTitle    == null ? defaultWindow?.TitleContains  : null);
+
+        return new(
             OutputPath: defaultWindow?.OutputPath ?? string.Empty,
-            ExactTitle: action.ExactTitle ?? defaultWindow?.ExactTitle,
-            TitleContains: action.TitleContains ?? defaultWindow?.TitleContains,
+            ExactTitle: exactTitle,
+            TitleContains: titleContains,
             ProcessName: action.ProcessName ?? defaultWindow?.ProcessName,
             DelayMs: 0,
             Padding: defaultWindow?.Padding ?? 0,
             ActivateWindow: true,
             UseActiveWindow: false,
             Actions: null);
+    }
 
     private static async Task DelayIfNeededAsync(UiAutomationAction action)
     {
