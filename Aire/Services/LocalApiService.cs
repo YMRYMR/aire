@@ -223,6 +223,7 @@ namespace Aire.Services
                     "get_messages" => LocalApiResponse.OkResult(await InvokeOnUiAsync<List<Aire.Data.Message>>(() => _mainWindow.ApiGetMessagesAsync(GetInt(request.Parameters, "conversationId"))).ConfigureAwait(false)),
                     "set_provider" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetProviderAsync(GetInt(request.Parameters, "providerId"))).ConfigureAwait(false)),
                     "set_provider_model" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetProviderModelAsync(GetInt(request.Parameters, "providerId"), GetString(request.Parameters, "model"))).ConfigureAwait(false)),
+                    "set_language" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => { LocalizationService.SetLanguage(GetString(request.Parameters, "languageCode")); return Task.CompletedTask; }).ConfigureAwait(false)),
                     "send_message" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSendMessageAsync(GetString(request.Parameters, "text"))).ConfigureAwait(false)),
                     "list_pending_approvals" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiPendingApproval[]>(() => _mainWindow.ApiListPendingApprovalsAsync()).ConfigureAwait(false)),
                     "wait_for_pending_approval" => LocalApiResponse.OkResult(await WaitForPendingApprovalAsync(

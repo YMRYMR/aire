@@ -85,8 +85,16 @@ namespace Aire
             if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
             if (summary.Id == _currentConversationId) return;
             _currentConversationId = summary.Id;
-            await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
-            await LoadConversationMessages(summary.Id);
+            try
+            {
+                await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
+                await LoadConversationMessages(summary.Id);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error("ConversationListBox_SelectionChanged", "Failed to switch chat", ex);
+                AddErrorMessage("Failed to load conversation. The chat history may be unavailable.");
+            }
         }
 
         private async void NewChatButton_Click(object sender, RoutedEventArgs e)
@@ -110,10 +118,10 @@ namespace Aire
                 return;
 
             var menu = new System.Windows.Controls.ContextMenu();
-            var rename = new System.Windows.Controls.MenuItem { Header = "Rename" };
-            var delete = new System.Windows.Controls.MenuItem { Header = "Delete" };
+            var rename = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.rename", "Rename") };
+            var delete = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.delete", "Delete") };
             var sep = new Separator();
-            var deleteAll = new System.Windows.Controls.MenuItem { Header = "Delete all conversations" };
+            var deleteAll = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.deleteAllConversations", "Delete all conversations") };
             rename.Click += RenameConversation_Click;
             delete.Click += DeleteConversation_Click;
             deleteAll.Click += DeleteAllConversations_Click;
