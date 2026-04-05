@@ -4,6 +4,22 @@
 
 Aire is a Windows desktop AI workspace designed to be easy to use from day one. It lets you talk to different AI providers from one chat window, keep local conversation history, approve or deny tool use, connect MCP servers, use voice features, and expose a loopback local API for trusted local automation.
 
+<p align="center">
+  <img src="Aire/Assets/Help/main-chat.png" width="48%" alt="Chat window" />
+  &nbsp;&nbsp;
+  <img src="Aire/Assets/Help/main-chat-sidebar.png" width="48%" alt="Chat with conversation history" />
+</p>
+<p align="center">
+  <img src="Aire/Assets/Help/main-chat-modes.png" width="48%" alt="Assistant modes" />
+  &nbsp;&nbsp;
+  <img src="Aire/Assets/Help/main-chat-tools.png" width="48%" alt="Tools panel" />
+</p>
+<p align="center">
+  <img src="Aire/Assets/Help/settings-providers.png" width="48%" alt="Provider settings" />
+  &nbsp;&nbsp;
+  <img src="Aire/Assets/Help/settings-appearance.png" width="48%" alt="Appearance settings" />
+</p>
+
 ## What Aire does
 
 - Connects one desktop app to multiple providers and models

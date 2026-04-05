@@ -52,6 +52,52 @@ internal static class NativeWindowFinder
         Thread.Sleep(150);
     }
 
+    /// <summary>
+    /// Finds any window belonging to <paramref name="processName"/> — including hidden ones —
+    /// and makes it visible. Used to surface tray apps before running automation.
+    /// </summary>
+    public static void ShowProcessWindow(string processName)
+    {
+        // Fast path: .NET already tracks the main window handle for most processes.
+        foreach (var proc in Process.GetProcessesByName(processName))
+        {
+            if (proc.MainWindowHandle != IntPtr.Zero)
+            {
+                ShowWindow(proc.MainWindowHandle, SwRestore);
+                SetForegroundWindow(proc.MainWindowHandle);
+                Thread.Sleep(400);
+                return;
+            }
+        }
+
+        // Slow path: walk every top-level window (visible or hidden) and match by PID.
+        var targetPids = Process.GetProcessesByName(processName)
+            .Select(p => (uint)p.Id)
+            .ToHashSet();
+
+        if (targetPids.Count == 0)
+            throw new InvalidOperationException($"No running process found with name '{processName}'.");
+
+        IntPtr found = IntPtr.Zero;
+        EnumWindows((hwnd, lp) =>
+        {
+            uint unused = GetWindowThreadProcessId(hwnd, out var procId);
+            if (targetPids.Contains(procId))
+            {
+                found = hwnd;
+                return false; // stop enumeration
+            }
+            return true;
+        }, IntPtr.Zero);
+
+        if (found == IntPtr.Zero)
+            throw new InvalidOperationException($"No window handle found for process '{processName}'.");
+
+        ShowWindow(found, SwRestore);
+        SetForegroundWindow(found);
+        Thread.Sleep(400);
+    }
+
     private static NativeWindow GetActiveWindow()
     {
         var handle = GetForegroundWindow();
