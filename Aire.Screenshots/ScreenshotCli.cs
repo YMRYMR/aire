@@ -63,8 +63,37 @@ internal static class ScreenshotCli
 
         await UiAutomationRunner.RunActionsAsync(plan.SetupActions);
 
-        foreach (var request in plan.Screenshots)
-            await CaptureWindowAsync(request);
+        if (plan.LanguageBatch is { } batch && batch.Languages.Count > 0)
+        {
+            foreach (var lang in batch.Languages)
+            {
+                Console.WriteLine($"--- Language: {lang} ---");
+
+                // Close any windows left open from the previous batch
+                await UiAutomationRunner.RunActionsAsync(batch.PreBatchActions);
+
+                // Switch language via Local API
+                await UiAutomationRunner.SetLanguageAsync(lang);
+                if (batch.SwitchDelayMs > 0)
+                    await Task.Delay(batch.SwitchDelayMs);
+
+                // Capture every screenshot, routing output into the lang sub-folder
+                foreach (var request in plan.Screenshots)
+                {
+                    var outputPath = Path.Combine(
+                        batch.OutputFolder,
+                        lang,
+                        Path.GetFileName(request.OutputPath));
+
+                    await CaptureWindowAsync(request with { OutputPath = outputPath });
+                }
+            }
+        }
+        else
+        {
+            foreach (var request in plan.Screenshots)
+                await CaptureWindowAsync(request);
+        }
     }
 
     private static async Task CaptureWindowAsync(ScreenshotRequest request)

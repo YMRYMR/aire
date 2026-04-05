@@ -63,6 +63,22 @@ internal static class UiAutomationRunner
                 await DelayIfNeededAsync(action);
                 return;
 
+            case "closewindow":
+                CloseWindow(BuildWindowSelector(action, defaultWindow));
+                await DelayIfNeededAsync(action);
+                return;
+
+            case "tryclosewindow":
+                TryCloseWindow(BuildWindowSelector(action, defaultWindow));
+                await DelayIfNeededAsync(action);
+                return;
+
+            case "setlanguage":
+                await SetLanguageAsync(action.LanguageCode
+                    ?? throw new InvalidOperationException("set-language action requires languageCode."));
+                await DelayIfNeededAsync(action);
+                return;
+
             case "setactiveproviderbyname":
                 await SetActiveProviderByNameAsync(action);
                 await DelayIfNeededAsync(action);
@@ -234,6 +250,21 @@ internal static class UiAutomationRunner
         }
 
         throw new InvalidOperationException($"ComboBox item '{action.Name}' is not selectable.");
+    }
+
+    public static async Task SetLanguageAsync(string languageCode)
+        => await LocalApiClient.SetLanguageAsync(languageCode);
+
+    private static void CloseWindow(ScreenshotRequest selector)
+    {
+        var window = NativeWindowFinder.GetWindow(selector);
+        NativeWindowFinder.CloseWindow(window.Handle);
+    }
+
+    private static void TryCloseWindow(ScreenshotRequest selector)
+    {
+        try { CloseWindow(selector); }
+        catch { /* window not found — silently skip */ }
     }
 
     private static async Task SetActiveProviderByNameAsync(UiAutomationAction action)
