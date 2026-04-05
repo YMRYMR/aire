@@ -1,20 +1,17 @@
 {
   "setupActions": [
     {
-      "kind": "start-process",
-      "executablePath": "C:\\dev\\aire\\Aire\\bin\\Release\\net10.0-windows10.0.17763.0\\Aire.exe",
-      "delayMs": 5000
-    },
-    {
-      "kind": "show-window",
-      "processName": "Aire",
-      "delayMs": 1500
-    },
-    {
       "kind": "wait-for-window",
       "titleContains": "Aire",
       "processName": "Aire",
       "delayMs": 4000
+    },
+    {
+      "kind": "try-invoke",
+      "titleContains": "Aire Update",
+      "processName": "Aire",
+      "automationId": "LaterButton",
+      "delayMs": 500
     }
   ],
   "screenshots": [
@@ -30,7 +27,7 @@
       "outputPath": "Aire/Assets/Help/main-chat-sidebar.png",
       "exactTitle": "Aire",
       "processName": "Aire",
-      "delayMs": 400,
+      "delayMs": 450,
       "padding": 0,
       "activateWindow": true,
       "actions": [
@@ -45,7 +42,7 @@
       "outputPath": "Aire/Assets/Help/main-chat-modes.png",
       "exactTitle": "Aire",
       "processName": "Aire",
-      "delayMs": 350,
+      "delayMs": 400,
       "padding": 0,
       "activateWindow": true,
       "actions": [
@@ -57,7 +54,7 @@
         {
           "kind": "invoke",
           "automationId": "PART_ModeButton",
-          "delayMs": 300
+          "delayMs": 350
         }
       ]
     },
@@ -65,10 +62,15 @@
       "outputPath": "Aire/Assets/Help/main-chat-tools.png",
       "exactTitle": "Aire",
       "processName": "Aire",
-      "delayMs": 350,
+      "delayMs": 400,
       "padding": 0,
       "activateWindow": true,
       "actions": [
+        {
+          "kind": "invoke",
+          "automationId": "PART_ModeButton",
+          "delayMs": 300
+        },
         {
           "kind": "set-active-provider-by-name",
           "name": "Codex",
@@ -77,15 +79,15 @@
         {
           "kind": "invoke",
           "automationId": "PART_ToolsButton",
-          "delayMs": 300
+          "delayMs": 350
         }
       ]
     },
     {
       "outputPath": "Aire/Assets/Help/settings-providers.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
-      "delayMs": 600,
+      "delayMs": 800,
       "padding": 0,
       "activateWindow": true,
       "actions": [
@@ -94,32 +96,34 @@
           "exactTitle": "Aire",
           "processName": "Aire",
           "automationId": "PART_ToolsButton",
-          "delayMs": 400
+          "delayMs": 350
         },
         {
           "kind": "invoke",
           "exactTitle": "Aire",
           "processName": "Aire",
           "automationId": "PART_SettingsButton",
-          "delayMs": 500
+          "delayMs": 600
         },
         {
           "kind": "wait-for-window",
-          "exactTitle": "Settings \u2014 Aire",
+          "titleContains": "Settings",
           "processName": "Aire",
-          "delayMs": 6000
+          "delayMs": 8000
         },
         {
           "kind": "select",
+          "titleContains": "Settings",
+          "processName": "Aire",
           "automationId": "TabProviders",
           "controlType": "tabitem",
-          "delayMs": 300
+          "delayMs": 400
         }
       ]
     },
     {
       "outputPath": "Aire/Assets/Help/settings-appearance.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -127,63 +131,17 @@
       "actions": [
         {
           "kind": "select",
+          "titleContains": "Settings",
+          "processName": "Aire",
           "automationId": "TabAppearance",
           "controlType": "tabitem",
-          "delayMs": 300
-        }
-      ]
-    },
-    {
-      "outputPath": "Aire/Assets/Help/settings-voice.png",
-      "exactTitle": "Settings \u2014 Aire",
-      "processName": "Aire",
-      "delayMs": 500,
-      "padding": 0,
-      "activateWindow": true,
-      "actions": [
-        {
-          "kind": "select",
-          "automationId": "TabVoice",
-          "controlType": "tabitem",
-          "delayMs": 300
-        }
-      ]
-    },
-    {
-      "outputPath": "Aire/Assets/Help/settings-context.png",
-      "exactTitle": "Settings \u2014 Aire",
-      "processName": "Aire",
-      "delayMs": 500,
-      "padding": 0,
-      "activateWindow": true,
-      "actions": [
-        {
-          "kind": "select",
-          "automationId": "TabContext",
-          "controlType": "tabitem",
-          "delayMs": 300
-        }
-      ]
-    },
-    {
-      "outputPath": "Aire/Assets/Help/settings-auto-accept.png",
-      "exactTitle": "Settings \u2014 Aire",
-      "processName": "Aire",
-      "delayMs": 500,
-      "padding": 0,
-      "activateWindow": true,
-      "actions": [
-        {
-          "kind": "select",
-          "automationId": "TabAutoAccept",
-          "controlType": "tabitem",
-          "delayMs": 300
+          "delayMs": 400
         }
       ]
     },
     {
       "outputPath": "Aire/Assets/Help/settings-connections.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -191,9 +149,11 @@
       "actions": [
         {
           "kind": "select",
+          "titleContains": "Settings",
+          "processName": "Aire",
           "automationId": "TabConnections",
           "controlType": "tabitem",
-          "delayMs": 300
+          "delayMs": 400
         }
       ]
     },
@@ -207,15 +167,15 @@
       "actions": [
         {
           "kind": "select",
-          "exactTitle": "Settings \u2014 Aire",
+          "titleContains": "Settings",
           "processName": "Aire",
           "automationId": "TabProviders",
           "controlType": "tabitem",
-          "delayMs": 300
+          "delayMs": 400
         },
         {
           "kind": "invoke",
-          "exactTitle": "Settings \u2014 Aire",
+          "titleContains": "Settings",
           "processName": "Aire",
           "automationId": "PART_SetupWizardButton",
           "delayMs": 500
