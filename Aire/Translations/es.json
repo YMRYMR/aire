@@ -207,10 +207,10 @@
     "setup.enabledSpoken": "activada",
     "setup.disabledSpoken": "desactivada",
     "panic.title": "Detener Aire",
-    "panic.tooltip": "Haz clic para detener de inmediato la sesión activa de teclado/ratón.    "menu.rename": "Renombrar",
+    "panic.tooltip": "Haz clic para detener de inmediato la sesión activa de teclado/ratón. Arrastra para recolocar.",
+    "menu.rename": "Renombrar",
     "menu.delete": "Eliminar",
     "menu.deleteAllConversations": "Eliminar todas las conversaciones",
-Arrastra para recolocar.",
     "panic.stopButton": "⏹ DETENER SESIÓN"
   },
   "help": [

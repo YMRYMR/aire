@@ -208,10 +208,10 @@
     "setup.enabledSpoken": "enabled",
     "setup.disabledSpoken": "disabled",
     "panic.title": "Aire Stop",
-    "panic.tooltip": "Click to stop the active keyboard/mouse session immediately.    "menu.rename": "Rename",
+    "panic.tooltip": "Click to stop the active keyboard/mouse session immediately. Drag to reposition.",
+    "menu.rename": "Rename",
     "menu.delete": "Delete",
     "menu.deleteAllConversations": "Delete all conversations",
-Drag to reposition.",
     "panic.stopButton": "⏹ STOP SESSION"
   },
   "help": [
