@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -82,11 +83,36 @@ namespace Aire
 
         private async void ConversationListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
-            if (summary.Id == _currentConversationId) return;
-            _currentConversationId = summary.Id;
-            await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
-            await LoadConversationMessages(summary.Id);
+            if (_isSwitchingChat) return;
+            _isSwitchingChat = true;
+
+            // Cancel any previous selection operation
+            _selectionCancellationTokenSource?.Cancel();
+            _selectionCancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _selectionCancellationTokenSource.Token;
+
+            try
+            {
+                if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
+                if (summary.Id == _currentConversationId) return;
+                _currentConversationId = summary.Id;
+
+                await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
+                await LoadConversationMessages(summary.Id);
+            }
+            catch (OperationCanceledException)
+            {
+                // Selection was cancelled, ignore
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error("ConversationListBox_SelectionChanged", $"Failed to switch chat: {ex.Message}", ex);
+                // Optionally show a user-friendly message
+            }
+            finally
+            {
+                _isSwitchingChat = false;
+            }
         }
 
         private async void NewChatButton_Click(object sender, RoutedEventArgs e)

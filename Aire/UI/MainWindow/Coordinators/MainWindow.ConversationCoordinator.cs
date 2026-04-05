@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Aire.AppLayer.Chat;
 using Aire.Data;
 using Aire.Services;
@@ -29,7 +30,16 @@ namespace Aire
                 var messages = await _owner._conversationApplicationService.GetMessagesAsync(conversationId);
                 var transcriptService = _owner._conversationTranscriptApplicationService ?? new ConversationTranscriptApplicationService();
                 var transcript = transcriptService.BuildTranscript(messages);
-                _owner.Messages.Clear();
+
+                void InvokeOnUiThread(Action action)
+                {
+                    if (_owner.Dispatcher.CheckAccess())
+                        action();
+                    else
+                        _owner.Dispatcher.Invoke(action);
+                }
+
+                InvokeOnUiThread(() => _owner.Messages.Clear());
                 _owner._conversationHistory.Clear();
                 _owner._inputHistory.Clear();
                 _owner._historyIndex = -1;
@@ -59,11 +69,11 @@ namespace Aire
                     };
 
                     if (entry.StartsNewDateSection)
-                        _owner.Messages.Add(_owner.CreateDateSeparator(entry.CreatedAt));
+                        InvokeOnUiThread(() => _owner.Messages.Add(_owner.CreateDateSeparator(entry.CreatedAt)));
 
                     if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Tool)
                     {
-                        _owner.Messages.Add(new ChatMessage
+                        InvokeOnUiThread(() => _owner.Messages.Add(new ChatMessage
                         {
                             Sender = "AI",
                             Text = string.Empty,
@@ -72,7 +82,7 @@ namespace Aire
                             MessageDate = entry.CreatedAt,
                             BackgroundBrush = bgBrush,
                             SenderForeground = fgBrush,
-                        });
+                        }));
                         continue;
                     }
 
@@ -115,13 +125,13 @@ namespace Aire
                         chatMsg.FileAttachments = new System.Collections.ObjectModel.ObservableCollection<MessageAttachment>(entry.FileAttachments);
                     }
 
-                    _owner.Messages.Add(chatMsg);
+                    InvokeOnUiThread(() => _owner.Messages.Add(chatMsg));
                 }
 
                 if (_owner.Messages.Count == 0)
                     _owner.LoadWelcomeMessage();
 
-                _owner.ScrollToBottom();
+                InvokeOnUiThread(() => _owner.ScrollToBottom());
             }
 
             public async Task SyncConversationSelectionStateAsync(int conversationId)

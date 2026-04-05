@@ -70,12 +70,13 @@ namespace Aire
         private string? _attachedFilePath;    // set when a non-image file is attached
         private string? _attachedFileName;    // display name for the file chip
         private bool _isProcessing;
+        private bool _isSwitchingChat = false;
         private Aire.UI.SessionPanicButton? _panicButton;
         internal UI.SettingsWindow?          _settingsWindow;
         private UI.HelpWindow?              _helpWindow;
         private readonly SpeechSynthesisService _ttsService;
         private CancellationTokenSource? _aiCancellationTokenSource; // for stopping AI operations
-
+        private CancellationTokenSource? _selectionCancellationTokenSource;
         // Current provider instance — updated when the ComboBox selection changes.
         private IAiProvider? _currentProvider;
         internal int?         _currentProviderId;          // tracks last-active provider ID
