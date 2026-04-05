@@ -109,6 +109,9 @@
     "warning.largeFile": "⚠ Archivo grande — el proveedor puede rechazarlo",
     "menu.copyChat": "Copiar chat como texto",
     "menu.restoreWindowSizes": "Restaurar tamaños originales de ventana",
+    "menu.rename": "Renombrar",
+    "menu.delete": "Eliminar",
+    "menu.deleteAllConversations": "Eliminar todas las conversaciones",
     "settings.setupWizard": "Asistente de configuración",
     "settings.apiAccessEnabledTooltip": "Permite que otras aplicaciones locales controlen Aire. Déjalo desactivado salvo que confíes en quien llama.",
     "settings.testSelectedVoice": "Probar la voz seleccionada",
@@ -204,7 +207,10 @@
     "setup.enabledSpoken": "activada",
     "setup.disabledSpoken": "desactivada",
     "panic.title": "Detener Aire",
-    "panic.tooltip": "Haz clic para detener de inmediato la sesión activa de teclado/ratón.\nArrastra para recolocar.",
+    "panic.tooltip": "Haz clic para detener de inmediato la sesión activa de teclado/ratón.    "menu.rename": "Renombrar",
+    "menu.delete": "Eliminar",
+    "menu.deleteAllConversations": "Eliminar todas las conversaciones",
+Arrastra para recolocar.",
     "panic.stopButton": "⏹ DETENER SESIÓN"
   },
   "help": [

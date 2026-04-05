@@ -16,7 +16,7 @@
   ],
   "languageBatch": {
     "outputFolder": "Aire/Assets/Help",
-    "languages": ["en", "es", "fr", "de", "it", "pt-br", "ja", "zh", "ko", "ar", "hi", "uk"],
+    "languages": ["en", "es", "fr", "de", "it", "pt", "ja", "zh", "ko", "ar", "hi", "uk"],
     "switchDelayMs": 1200,
     "preBatchActions": [
       {

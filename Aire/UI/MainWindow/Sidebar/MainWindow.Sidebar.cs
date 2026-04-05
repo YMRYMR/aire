@@ -118,10 +118,10 @@ namespace Aire
                 return;
 
             var menu = new System.Windows.Controls.ContextMenu();
-            var rename = new System.Windows.Controls.MenuItem { Header = "Rename" };
-            var delete = new System.Windows.Controls.MenuItem { Header = "Delete" };
+            var rename = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.rename", "Rename") };
+            var delete = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.delete", "Delete") };
             var sep = new Separator();
-            var deleteAll = new System.Windows.Controls.MenuItem { Header = "Delete all conversations" };
+            var deleteAll = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.deleteAllConversations", "Delete all conversations") };
             rename.Click += RenameConversation_Click;
             delete.Click += DeleteConversation_Click;
             deleteAll.Click += DeleteAllConversations_Click;

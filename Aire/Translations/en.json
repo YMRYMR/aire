@@ -110,6 +110,9 @@
     "warning.largeFile": "\u26a0 Large file \u2014 provider may reject",
     "menu.copyChat": "Copy chat as text",
     "menu.restoreWindowSizes": "Restore original window sizes",
+    "menu.rename": "Rename",
+    "menu.delete": "Delete",
+    "menu.deleteAllConversations": "Delete all conversations",
     "settings.setupWizard": "Setup Wizard",
     "settings.apiAccessEnabledTooltip": "Lets other local apps control Aire. Leave off unless you trust the caller.",
     "settings.testSelectedVoice": "Test selected voice",
@@ -205,7 +208,10 @@
     "setup.enabledSpoken": "enabled",
     "setup.disabledSpoken": "disabled",
     "panic.title": "Aire Stop",
-    "panic.tooltip": "Click to stop the active keyboard/mouse session immediately.\nDrag to reposition.",
+    "panic.tooltip": "Click to stop the active keyboard/mouse session immediately.    "menu.rename": "Rename",
+    "menu.delete": "Delete",
+    "menu.deleteAllConversations": "Delete all conversations",
+Drag to reposition.",
     "panic.stopButton": "⏹ STOP SESSION"
   },
   "help": [
