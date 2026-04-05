@@ -46,7 +46,7 @@
       "exactTitle": "Aire",
       "processName": "Aire",
       "delayMs": 350,
-      "padding": 0,
+      "padding": 20,
       "activateWindow": true,
       "actions": [
         {
@@ -66,7 +66,7 @@
       "exactTitle": "Aire",
       "processName": "Aire",
       "delayMs": 350,
-      "padding": 0,
+      "padding": 24,
       "activateWindow": true,
       "actions": [
         {
@@ -83,7 +83,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-providers.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "exactTitle": "Settings — Aire",
       "processName": "Aire",
       "delayMs": 600,
       "padding": 0,
@@ -105,7 +105,7 @@
         },
         {
           "kind": "wait-for-window",
-          "exactTitle": "Settings \u2014 Aire",
+          "exactTitle": "Settings — Aire",
           "processName": "Aire",
           "delayMs": 6000
         },
@@ -119,7 +119,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-appearance.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "exactTitle": "Settings — Aire",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -135,7 +135,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-voice.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "exactTitle": "Settings — Aire",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -151,7 +151,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-context.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "exactTitle": "Settings — Aire",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -167,7 +167,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-auto-accept.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "exactTitle": "Settings — Aire",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -183,7 +183,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-connections.png",
-      "exactTitle": "Settings \u2014 Aire",
+      "exactTitle": "Settings — Aire",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -198,7 +198,7 @@
       ]
     },
     {
-      "outputPath": "Aire/Assets/Help/onboarding-welcome.png",
+      "outputPath": "Aire/Assets/Help/onboarding-provider-picker.png",
       "exactTitle": "Welcome to Aire",
       "processName": "Aire",
       "delayMs": 600,
@@ -207,7 +207,7 @@
       "actions": [
         {
           "kind": "select",
-          "exactTitle": "Settings \u2014 Aire",
+          "exactTitle": "Settings — Aire",
           "processName": "Aire",
           "automationId": "TabProviders",
           "controlType": "tabitem",
@@ -215,7 +215,7 @@
         },
         {
           "kind": "invoke",
-          "exactTitle": "Settings \u2014 Aire",
+          "exactTitle": "Settings — Aire",
           "processName": "Aire",
           "automationId": "PART_SetupWizardButton",
           "delayMs": 500
@@ -225,17 +225,7 @@
           "exactTitle": "Welcome to Aire",
           "processName": "Aire",
           "delayMs": 6000
-        }
-      ]
-    },
-    {
-      "outputPath": "Aire/Assets/Help/onboarding-provider-picker.png",
-      "exactTitle": "Welcome to Aire",
-      "processName": "Aire",
-      "delayMs": 500,
-      "padding": 0,
-      "activateWindow": true,
-      "actions": [
+        },
         {
           "kind": "invoke",
           "automationId": "Step1NextButton",

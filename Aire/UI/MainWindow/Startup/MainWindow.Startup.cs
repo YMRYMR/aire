@@ -100,6 +100,8 @@ namespace Aire
             FontSize = AppearanceService.FontSize;
             _speechService.Language = LocalizationService.CurrentCode;
             UpdateVoiceOutputButton();
+            if (LocalizationService.HelpSections.Count == 0)
+                LocalizationService.SetLanguage("en");
             SizeChanged += (s, e) => SaveWindowSize();
             LocationChanged += (s, e) => SaveWindowSize();
             _ttsService.SettingsChanged += SaveWindowSize;
