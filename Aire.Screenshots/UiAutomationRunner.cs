@@ -33,6 +33,11 @@ internal static class UiAutomationRunner
                 await WaitForWindowAsync(BuildWindowSelector(action, defaultWindow), action.DelayMs);
                 return;
 
+            case "showwindow":
+                ShowProcessWindow(action);
+                await DelayIfNeededAsync(action);
+                return;
+
             case "focuswindow":
                 FocusWindow(BuildWindowSelector(action, defaultWindow));
                 await DelayIfNeededAsync(action);
@@ -61,6 +66,13 @@ internal static class UiAutomationRunner
             default:
                 throw new InvalidOperationException($"Unsupported automation action kind '{action.Kind}'.");
         }
+    }
+
+    private static void ShowProcessWindow(UiAutomationAction action)
+    {
+        var processName = action.ProcessName
+            ?? throw new InvalidOperationException("show-window action requires processName.");
+        NativeWindowFinder.ShowProcessWindow(processName);
     }
 
     private static void StartProcess(UiAutomationAction action)
