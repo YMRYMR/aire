@@ -189,6 +189,9 @@
     "setup.voiceStatusCommandsOff": "Comandos de configuração falados estão desativados.",
     "setup.voiceStatusModelNeeded": "Comandos de voz precisam do modelo de fala local. Inicie a Configuração por Voz para baixá-lo.",
     "setup.voiceStatusReady": "Comandos de voz estão prontos. Inicie a Configuração por Voz para começar a ouvir.",
+    "setup.launchNotFoundMessage": "Aire não pôde ser encontrado. Certifique-se de que o aplicativo está instalado e tente novamente.",
+    "setup.preferencesSaved": "Preferências do Aire salvas",
+    "setup.preferencesSavedSpoken": "Preferências do Aire salvas com sucesso",
     "setup.voiceStatusDownloading": "Baixando o modelo de fala local para configuração por voz...",
     "setup.voiceStatusDownloadFailed": "Falha no download do modelo de voz. Verifique a conexão com a internet e tente novamente.",
     "setup.voiceStatusStartFailed": "A configuração por voz não pôde iniciar: {0}",
@@ -203,9 +206,631 @@
     "setup.disabledSpoken": "desativado",
     "panic.title": "Parada do Aire",
     "panic.tooltip": "Clique para parar a sessão ativa de teclado/mouse imediatamente.\nArraste para reposicionar.",
-    "panic.stopButton": "⏹ PARAR SESSÃO",
-    "setup.launchNotFoundMessage": "Aire não pôde ser encontrado. Certifique-se de que o aplicativo está instalado e tente novamente.",
-    "setup.preferencesSaved": "Preferências do Aire salvas",
-    "setup.preferencesSavedSpoken": "Preferências do Aire salvas com sucesso"
-  }
+    "panic.stopButton": "⏹ PARAR SESSÃO"
+  },
+  "help": [
+    {
+      "tab": "Setup Wizard",
+      "type": "text",
+      "title": "How the Setup Wizard Works",
+      "links": [
+        {
+          "label": "Open the Setup Wizard",
+          "action": "onboarding"
+        },
+        {
+          "label": "Open AI setup",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-picker.png",
+      "imageCaption": "The setup wizard helps you choose a provider before you start chatting.",
+      "content": "The Setup Wizard appears the first time you run Aire, or when no AI providers are configured yet. Its job is to get you from a fresh install to a working chat as quickly as possible.\n\nWhat the wizard does, step by step:\n• Welcome: explains what Aire is and lets you choose the app language.\n• Provider picker: shows common ways to connect Aire to AI services.\n• Provider setup: asks for the details needed for the provider you picked.\n• Finish: confirms Aire is ready and takes you to the main app.\n\nIf you are new to AI, the wizard is the best place to start. It uses the simplest path first and hides advanced settings until you need them.\n\nYou can skip setup and come back later, but you will need at least one configured provider before Aire can answer chat messages."
+    },
+    {
+      "tab": "Setup Wizard",
+      "type": "text",
+      "title": "Choosing a Provider",
+      "links": [
+        {
+          "label": "Open the Setup Wizard",
+          "action": "onboarding"
+        },
+        {
+          "label": "platform.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "The provider picker is where you decide which AI service Aire will talk to on your behalf.\n\nWhat the main options mean:\n• OpenAI: a common starting point if you want a simple cloud setup and wide model support.\n• Anthropic API: another strong cloud option, known for Claude models.\n• Claude.ai: uses browser sign-in instead of an API key.\n• Google AI: connects to Gemini chat models through Google AI Studio.\n• Google AI Images: a dedicated Gemini image-generation setup.\n• Ollama: runs models locally on your computer. Good for privacy and offline use, but it depends on your hardware.\n• Codex: uses the local Codex CLI bridge instead of a normal API key.\n• Groq, OpenRouter, DeepSeek, Inception, and z.ai: other providers or OpenAI-compatible endpoints, often useful if you already have an account there.\n\nWhich one should you choose?\n• If you want the easiest cloud setup for chat: start with OpenAI, Anthropic, or Google AI.\n• If you want local and private: choose Ollama.\n• If you specifically want image generation from Gemini: choose Google AI Images.\n• If you already pay for or use a specific provider elsewhere: choose that same provider here.\n\nYou are not locked in. The wizard helps you add one provider first, and you can add more later in Settings."
+    },
+    {
+      "tab": "Setup Wizard",
+      "type": "text",
+      "title": "Filling in Provider Details",
+      "links": [
+        {
+          "label": "Open the Setup Wizard",
+          "action": "onboarding"
+        },
+        {
+          "label": "Open AI setup",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-setup.png",
+      "imageCaption": "Provider setup step with the provider type, name, credentials, model, and connection test.",
+      "content": "After you pick a provider, the wizard asks only for the details that provider needs.\n\nTypical fields:\n• Provider type: the service you want to use.\n• Name: the label Aire will show in the chat window.\n• API key: the secret token that lets Aire talk to the provider. Some providers use browser sign-in instead, and some local providers do not need an API key at all.\n• Base URL: only needed for certain OpenAI-compatible services or self-hosted setups.\n• Model: the specific AI model you want to use.\n\nProvider-specific notes:\n• Claude.ai uses browser sign-in instead of a normal API key.\n• Ollama is local and usually works without an API key.\n• Codex uses the local Codex CLI bridge, so the wizard can offer CLI installation instead of asking for a normal API key.\n• Google AI Images is for image generation rather than normal chat.\n\nThe Test connection button is there to help you confirm the configuration before you finish. If the test succeeds, Aire can usually use that provider immediately.\n\nPractical advice:\n• If you are unsure which model to pick, start with the default suggestion.\n• If you see an API-key field, paste the key exactly as provided by the service.\n• If a provider offers both API access and browser sign-in, prefer API access if you want the most stable automation and integration behavior.\n\nAfter you finish the wizard, you can still change any of these settings later in the AI Providers tab."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Overview",
+      "links": [
+        {
+          "label": "Set up your first AI",
+          "action": "settings:providers"
+        },
+        {
+          "label": "Change the look of Aire",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "Aire is a desktop chat app that stays in your system tray until you need it. You can think of it as one chat window that can connect to many AI services.\n\nIf you are new to AI, the usual starting point is simple:\n• Open AI setup.\n• Add one provider, such as OpenAI, Anthropic, Google AI, or Ollama.\n• Choose a model.\n• Type a question in the chat box and press Enter.\n\nWhat Aire can do:\n• Talk to different AI services from one app.\n• Save your conversations on your computer.\n• Let the AI use tools, with your approval, to read files, run commands, browse pages, and more.\n• Use voice input and voice output with Windows speech features.\n• Let other local apps talk to Aire through the Local API."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Tray Icon",
+      "content": "Aire runs in the system tray (bottom-right corner of the taskbar).\n\n• Left-click or right-click the tray icon to open the chat window.\n• Right-click the tray icon for options: Open, Settings, Exit.\n• Closing the window hides it — Aire keeps running in the background.\n• To quit completely, right-click the tray icon and choose Exit."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Chat",
+      "links": [
+        {
+          "label": "Open Providers",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/main-chat.png",
+      "imageCaption": "Main chat window with the provider selector, conversation area, search, and composer.",
+      "content": "• Type your message in the input box at the bottom and press Enter to send.\n• Press Shift+Enter to add a new line without sending.\n• Press ↑ / ↓ to navigate through previous messages you’ve sent (only works when the cursor is on the first or last line of the input box).\n• Drag and drop an image into the input box to attach it to your message (requires a vision-capable model).\n• Press Ctrl+F to search within the conversation. Use ↑ / ↓ or the arrow buttons to jump between matches. Press Escape to close the search bar.\n• Right-click the chat area to copy or save the conversation as a text file.\n• The 🗑 button clears the current conversation (asks for confirmation first).\n• The 💬 button in the sidebar opens your conversation history."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "table",
+      "title": "Keyboard Shortcuts",
+      "cols": [
+        "Shortcut",
+        "Action"
+      ],
+      "rows": [
+        [
+          "Enter",
+          "Send message"
+        ],
+        [
+          "Shift+Enter",
+          "New line in the input box"
+        ],
+        [
+          "↑ / ↓",
+          "Navigate message history (when cursor is on first/last line)"
+        ],
+        [
+          "Ctrl+F",
+          "Search conversation"
+        ],
+        [
+          "Ctrl+Scroll",
+          "Adjust font size"
+        ],
+        [
+          "Escape",
+          "Close search bar / dismiss dialog"
+        ]
+      ]
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Tips",
+      "content": "• You can have multiple AI providers configured and switch between them at the top of the chat window. Each conversation remembers its provider and assistant mode.\n• Resize the window by dragging any edge, including the top.\n• Conversations and settings are stored locally under %LOCALAPPDATA%\\Aire.\n• The AI can request tools for files, commands, browser actions, and more, but Aire still asks for approval unless an auto-accept rule applies.\n• If an AI response is cut off, the model may have hit its token or output limit. Ask it to continue, reduce the size of the task, or use a model with a larger context window."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Assistant Modes",
+      "imagePath": "Assets/Help/main-chat-modes.png",
+      "imageCaption": "Assistant mode menu opened from the main header. Each conversation keeps its own mode.",
+      "content": "The mode button in the main header changes how Aire frames your request before it sends it to the provider.\n\nCurrent modes include Architect, Creative writer, Developer, General, Painter, Philosopher, Psychologist, Scientist, Security, and Teacher.\n\nWhat modes do:\n• They adjust the style and priorities of the assistant.\n• The selected mode is saved per conversation, so different chats can keep different roles.\n• General is the default for new conversations.\n• Different providers still keep their own quirks, but Aire passes the selected mode consistently as shared guidance.\n\nPractical examples:\n• Developer: better for code, debugging, and terminal tasks.\n• Architect: better for structure, trade-offs, and planning.\n• Teacher: better for explanations and step-by-step guidance.\n• Painter: best for image-oriented prompting and generation when the current provider supports it."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Tool Categories",
+      "imagePath": "Assets/Help/main-chat-tools.png",
+      "imageCaption": "Tools menu opened from the composer. You can enable all categories, disable all, or choose only the categories you want.",
+      "content": "The wrench button near the chat box controls which categories of tools the current provider is allowed to use.\n\nHow it works:\n• Click the wrench button to open the categories menu.\n• Turn on only the categories you want the AI to be able to request.\n• Choose No tools if you want a text-only conversation.\n• Aire remembers your selected tool categories and uses them as part of the current tool policy.\n\nWhy this matters:\n• Fewer enabled categories make tool use easier to understand.\n• Restricting categories can reduce risk and accidental side effects.\n• If a provider does not support tools, the wrench button is hidden."
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "AI Providers",
+      "imagePath": "Assets/Help/settings-providers.png",
+      "imageCaption": "Provider settings with the provider list on the left and the selected provider form on the right.",
+      "links": [
+        {
+          "label": "Open AI setup",
+          "action": "settings:providers"
+        },
+        {
+          "label": "platform.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "A provider is the AI service Aire talks to on your behalf. Most users only need to set up one provider to get started.\n\nEach provider entry has four main parts:\n• Name: the label you will see inside Aire.\n• Type: which AI service to use.\n• Model: the specific model you want that service to run.\n• Credentials: usually an API key, or for Claude.ai a browser sign-in.\n\nCommon choices:\n• OpenAI: paste your API key from platform.openai.com.\n• Anthropic: sign in with Claude.ai in the browser, or paste an Anthropic API key.\n• Google AI: paste your Gemini API key from aistudio.google.com.\n• Ollama: use a local Ollama server on your own machine. No API key is needed.\n• OpenAI-compatible endpoints: services like Groq, Mistral, OpenRouter, DeepSeek, or LM Studio can often work by setting the Base URL.\n\nIf you are unsure which one to use, OpenAI or Anthropic are usually the easiest cloud options, while Ollama is the usual local option.\n\nProviders can be enabled or disabled without deleting them. Changes save automatically."
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "Tool Calling Modes",
+      "intro": "Aire supports two methods for giving an AI model access to tools. The mode is chosen automatically based on the provider type, but can be overridden per model in a custom JSON file (see Custom Models).",
+      "cols": [
+        "Mode",
+        "How it works"
+      ],
+      "rows": [
+        [
+          "Text-based\n(default: OpenAI, Anthropic)",
+          "Tool descriptions are embedded in the system prompt. The AI responds with a <tool_call> XML block. Works with any model that follows instructions reliably."
+        ],
+        [
+          "Native function calling\n(default: Ollama, Google AI)",
+          "Structured tool schemas are sent via the provider API. The AI returns structured function-call objects. More accurate. Requires explicit API support."
+        ],
+        [
+          "Unsupported",
+          "The model cannot use tools. Set this in a custom model file to skip tool prompts for models that get confused by them."
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "Provider & Model Compatibility",
+      "intro": "Use the Capability Tests button to verify your specific provider and model combination.",
+      "cols": [
+        "Provider / Endpoint",
+        "Mode",
+        "Notes"
+      ],
+      "rows": [
+        [
+          "OpenAI",
+          "Native",
+          "GPT-4o, GPT-4.1, GPT-4o-mini — reliable tool support"
+        ],
+        [
+          "Anthropic",
+          "Text-based",
+          "Claude 3.5 Sonnet and newer — excellent instruction following"
+        ],
+        [
+          "Google AI (Gemini)",
+          "Native",
+          "Gemini 2.0 Flash and newer recommended"
+        ],
+        [
+          "Ollama (local)",
+          "Native",
+          "qwen2.5-coder, llama3.1, mistral-nemo work well; small models vary"
+        ],
+        [
+          "Groq (OpenAI + Base URL)",
+          "Native",
+          "Base URL: https://api.groq.com/openai/v1 — very fast"
+        ],
+        [
+          "Mistral (OpenAI + Base URL)",
+          "Native",
+          "Base URL: https://api.mistral.ai/v1"
+        ],
+        [
+          "OpenRouter (OpenAI + Base URL)",
+          "Native",
+          "Base URL: https://openrouter.ai/api/v1 — 100+ models"
+        ],
+        [
+          "DeepSeek (OpenAI + Base URL)",
+          "Native",
+          "Base URL: https://api.deepseek.com/v1"
+        ],
+        [
+          "LM Studio (OpenAI + Base URL)",
+          "Native",
+          "Base URL: http://localhost:1234/v1 — enable function calling in LM Studio settings"
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "Capability Tests",
+      "links": [
+        {
+          "label": "Open AI setup",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "The Run Tests button checks what the selected provider and model can really do.\n\nWhat is tested:\n• Tool-call capability tests check whether the model asks for the expected Aire tool. No real file, browser, or system action is executed.\n• Image-generation capability tests call the provider's image-generation path directly. These tests can consume provider quota and may fail if your account or model does not support image generation.\n\nHow to use it:\n• Open Settings ⚙ → select a provider → click Run Tests.\n• The provider form is locked during the run to avoid configuration changes mid-test.\n• Results are cached per provider/model combination and reload quickly next time.\n\nReading results:\n• ✓ (green) — the provider handled the capability correctly.\n• ✗ (red) — the provider or model failed that capability.\n• If the message mentions quota, balance, or rate limits, the failure is coming from the provider account rather than from Aire itself.\n\nIf a model fails many tool tests, try another model or adjust its custom model metadata. If image generation fails, verify that the provider account, model, and quota actually allow it."
+    },
+    {
+      "tab": "Providers",
+      "type": "code",
+      "title": "Custom Models",
+      "intro": "Create a JSON file in the app’s Data\\Models directory to customise the model list for any provider type. Use the capabilities array to declare what a model supports.\n\nCapability flags:\n• \"vision\" — model accepts image attachments\n• \"tools\" — model can use tools\n• \"toolcallmode:native\" — force native function calling\n• \"toolcallmode:text\" — force text-based tool calling\n• \"toolcallmode:unsupported\" — disable tool prompts entirely\n\nTool output format flags (for models that embed tool calls in their text response):\n• \"toolformat:hermes\" — Hermes/Qwen format: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain format: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — OpenAI native tool_calls schema embedded in content\n• \"toolformat:text\" — Aire’s default text format: {\"tool\":\"...\", ...}",
+      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"models\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"vision\", \"tools\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (no tools)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"my-fine-tuned-model\",\n      \"displayName\": \"My Fine-tune\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "AI Tools",
+      "links": [
+        {
+          "label": "Review AI action approvals",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Some AI models can ask Aire to perform actions for them. Aire calls these actions tools.\n\nImportant: tools do not run silently. Aire shows you what the AI wants to do, and you approve or deny it.\n\nExamples of what tools can do:\n• Read or write files.\n• Run shell commands.\n• Open and read web pages.\n• Inspect browser tabs.\n• Take screenshots.\n• Type, click, or move the mouse.\n• Read or send email.\n\nIf you are new to this feature, the safest habit is simple: read the action request before approving it. Approve read-only actions when they make sense, and be more careful with actions that change files, send messages, or control the keyboard and mouse."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Auto-accept Profiles",
+      "links": [
+        {
+          "label": "Review AI action approvals",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Auto-accept profiles let you define which actions Aire can approve automatically without interrupting you each time.\n\nBuilt-in examples include Developer, News browser, and Conservative.\n\nWhat to keep in mind:\n• Profiles are a convenience, not a security replacement.\n• Start conservatively and only auto-accept actions you really trust.\n• File writes, input control, and external side effects are usually worth keeping manual.\n\nIf you are unsure, leave auto-accept restrictive and review actions one by one."
+    },
+    {
+      "tab": "Connections",
+      "type": "text",
+      "title": "MCP Servers",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "Connections settings with the MCP catalog and installed server list.",
+      "links": [
+        {
+          "label": "Open connections settings",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "MCP servers are external helper services that give Aire more tools and data sources. MCP stands for Model Context Protocol.\n\nIn plain language, an MCP server is a bridge between Aire and another system, such as:\n• your file system,\n• GitHub,\n• SQLite,\n• web fetch tools,\n• memory tools,\n• Slack, Gmail, or Notion.\n\nHow Aire handles them:\n• The Connections tab includes a curated catalog of common MCP servers.\n• You can install, remove, enable, disable, and edit them from the app.\n• Some servers need extra credentials or Node.js/npm on the machine.\n\nGood beginner advice:\n• Start with one simple server, such as Filesystem or Web Fetch.\n• Read the description before installing it.\n• Treat an MCP server like any other integration: useful, but something you should trust before enabling."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Keyboard & Mouse Sessions",
+      "links": [
+        {
+          "label": "Review AI action approvals",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Some tasks require the AI to control the keyboard and mouse. When a session is active:\n\n• A banner appears at the bottom of the chat window showing the session is active.\n• A floating ⏹ STOP SESSION button appears at the top-right of your screen — click it at any time to cancel immediately.\n• Say “AIRE STOP” to cancel by voice.\n• Click “End session” in the banner to cancel.\n\nThe AI will request approval for each individual action (key press, mouse click, etc.) before performing it."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Voice Input",
+      "links": [
+        {
+          "label": "Open voice settings",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "Click the 🎤 button to start voice recognition. Aire uses Windows built-in speech recognition — no API key or internet connection required.\n\n• Speak normally. Your words appear in the input box as you talk.\n• When you stop talking, a countdown (5 → 1) appears on the button. If you stay silent, the message sends automatically at 0.\n• Start talking again at any time to reset the countdown.\n• Click the button again (shows ⏹) to stop without sending.\n\nVoice recognition accuracy depends on your Windows language and microphone quality. You can train Windows Speech Recognition via Windows Settings → Time & Language → Speech."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "table",
+      "title": "Voice Commands",
+      "intro": "Say “AIRE” followed by any of these words while the microphone is active:",
+      "cols": [
+        "Command",
+        "What it does"
+      ],
+      "rows": [
+        [
+          "AIRE SEND",
+          "Send the current message immediately"
+        ],
+        [
+          "AIRE PAUSE",
+          "Freeze the silence countdown"
+        ],
+        [
+          "AIRE RESUME",
+          "Resume the countdown"
+        ],
+        [
+          "AIRE CLEAR",
+          "Clear the input box"
+        ],
+        [
+          "AIRE UNDO",
+          "Clear the input box"
+        ],
+        [
+          "AIRE CANCEL",
+          "Stop listening without sending"
+        ],
+        [
+          "AIRE NEW",
+          "Start a new conversation"
+        ],
+        [
+          "AIRE SETTINGS",
+          "Open the Settings window"
+        ],
+        [
+          "AIRE OPEN/SHOW",
+          "Show the main chat window"
+        ],
+        [
+          "AIRE CLOSE/HIDE",
+          "Hide the main chat window"
+        ],
+        [
+          "AIRE YES/NO",
+          "Approve or deny a pending AI action"
+        ],
+        [
+          "AIRE STOP",
+          "Emergency stop — end any active keyboard/mouse session immediately"
+        ]
+      ]
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Voice Output",
+      "links": [
+        {
+          "label": "Open voice settings",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "Aire can read AI responses aloud using Windows text-to-speech. Enable this in Settings (⚙) → Voice Output.\n\n• Choose to speak all responses, or only when you use the microphone.\n• Select a voice and adjust the reading speed.\n• Toggle voice output on/off quickly with the speaker icon near the microphone button."
+    },
+    {
+      "tab": "Appearance",
+      "type": "text",
+      "title": "Appearance",
+      "links": [
+        {
+          "label": "Open appearance settings",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "Open Settings (⚙) → Appearance to change the look of the app.\n\n• Theme: switch between Dark and Light (Beige).\n• Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint — the slider is pure grayscale by default.\n• Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.\n\nAll appearance settings are saved and restored on next launch."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "What is the Local API?",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "Connections settings where local API access, email accounts, and MCP servers are configured.",
+      "links": [
+        {
+          "label": "Open connections settings",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "The Local API is how another program on the same computer can talk to Aire.\n\nFor non-developers: you usually do not need this feature.\n\nFor developers and advanced users: this is the easiest way to connect your own script, tool, automation, or desktop app to Aire. A local program can:\n• ask Aire to show or hide its main window,\n• list conversations and read messages,\n• send a message to the active conversation,\n• switch provider or conversation,\n• inspect pending tool approvals,\n• and call Aire tools directly.\n\nHow it works:\n• Aire listens on TCP port 51234.\n• It only listens on 127.0.0.1, so other computers cannot reach it directly.\n• Each request is one JSON object sent as one line.\n• Each response is one JSON object returned as one line.\n\nTo use it, first open Connections settings and enable local API access."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Local API Quick Start",
+      "links": [
+        {
+          "label": "Open connections settings",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "To connect another app to Aire, use this checklist:\n\n1. Open Connections settings.\n2. Turn on local API access.\n3. Copy the auth token.\n4. From your app or script, open a TCP connection to 127.0.0.1:51234.\n5. Send one JSON line with method, token, and optional parameters.\n6. Read one JSON line back.\n7. Close the connection.\n\nA good first test is the ping method. If ping works, then try show_main_window, list_providers, and create_conversation.\n\nRecommended first integration order:\n• ping\n• show_main_window\n• list_providers\n• create_conversation\n• list_conversations\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval if you want to cooperate with tool approvals\n• execute_tool only after you are comfortable with the approval flow and security model"
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Authentication",
+      "links": [
+        {
+          "label": "Open connections settings",
+          "action": "settings:connections"
+        },
+        {
+          "label": "Review AI action approvals",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Every Local API request must include the auth token.\n\nWhere to get it:\n• Open Connections settings.\n• Find the Local API section.\n• Click Copy to copy the token.\n• Paste that token into your app or script configuration.\n\nWhat to know:\n• If you click Regenerate, old integrations will stop working until they use the new token.\n• The API must be enabled, not just configured.\n• Any process on your computer that knows the token can control Aire.\n\nPractical advice for developers:\n• Keep the token in a local config file or environment variable, not hard-coded in source control.\n• Treat it like a local secret.\n• If you suspect it leaked, regenerate it."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Protocol",
+      "intro": "The Local API is line-based JSON over TCP.\n\nConnection pattern:\n• connect to 127.0.0.1:51234\n• write exactly one compact JSON request followed by a newline\n• read exactly one JSON response line\n• close the connection\n\nRequest shape:\n{ \"method\": \"METHOD\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nResponse shape:\n{ \"ok\": true, \"result\": ... }\nor\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nIf you are writing a client library, build around that simple request-response pattern first. You do not need HTTP or WebSockets to get started.",
+      "content": "{ \"method\": \"ping\", \"token\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ok\": true, \"result\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"Hello!\" } }\n{ \"ok\": true, \"result\": true }"
+    },
+    {
+      "tab": "Local API",
+      "type": "table",
+      "title": "Available Methods",
+      "cols": [
+        "Method",
+        "Parameters",
+        "Description"
+      ],
+      "rows": [
+        [
+          "ping",
+          "—",
+          "Check if Aire is running. Returns the same state snapshot as get_state."
+        ],
+        [
+          "get_state",
+          "—",
+          "Current provider, model, active conversation ID, and local API status."
+        ],
+        [
+          "show_main_window",
+          "—",
+          "Bring the Aire chat window to the front."
+        ],
+        [
+          "hide_main_window",
+          "—",
+          "Hide the chat window to the tray."
+        ],
+        [
+          "open_settings",
+          "—",
+          "Open the Settings window."
+        ],
+        [
+          "open_browser",
+          "—",
+          "Open the Aire browser window."
+        ],
+        [
+          "list_providers",
+          "—",
+          "All configured AI providers with IDs and names."
+        ],
+        [
+          "create_provider",
+          "name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritCredentialsFromProviderId?",
+          "Create a new provider from the local API."
+        ],
+        [
+          "list_conversations",
+          "—",
+          "All saved conversations (ID, title, date)."
+        ],
+        [
+          "create_conversation",
+          "title?",
+          "Create a new conversation and switch to it."
+        ],
+        [
+          "select_conversation",
+          "conversationId",
+          "Switch to an existing conversation."
+        ],
+        [
+          "get_messages",
+          "conversationId",
+          "All messages in a conversation."
+        ],
+        [
+          "set_provider",
+          "providerId",
+          "Switch the active AI provider."
+        ],
+        [
+          "set_provider_model",
+          "providerId, model",
+          "Change the model for a provider."
+        ],
+        [
+          "send_message",
+          "text",
+          "Send a message to the active conversation. Returns true when accepted."
+        ],
+        [
+          "list_pending_approvals",
+          "—",
+          "Tool calls currently waiting for approval."
+        ],
+        [
+          "wait_for_pending_approval",
+          "timeout_seconds?",
+          "Wait for the next pending tool approval or return null on timeout."
+        ],
+        [
+          "approve_tool_call",
+          "index",
+          "Approve a pending tool call by its current list index."
+        ],
+        [
+          "deny_tool_call",
+          "index",
+          "Deny a pending tool call by its current list index."
+        ],
+        [
+          "execute_tool",
+          "tool, parameters, wait_for_approval?, approval_timeout_seconds?",
+          "Run an Aire tool directly and optionally wait for approval."
+        ],
+        [
+          "get_trace",
+          "afterId?, limit?",
+          "Read tool execution trace entries for debugging."
+        ],
+        [
+          "clear_trace",
+          "—",
+          "Clear the tool execution trace."
+        ]
+      ]
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Which methods should I start with?",
+      "content": "If you are building another app that connects to Aire, start with the simpler methods first.\n\nRecommended learning order:\n• ping: confirm Aire is running and your token is valid.\n• show_main_window: confirm you can trigger a visible app action.\n• get_state: inspect the current conversation and provider state.\n• list_conversations and get_messages: read data safely.\n• send_message: perform a full request-reply round trip.\n• list_pending_approvals, approve_tool_call, deny_tool_call: integrate with Aire's approval model.\n• execute_tool: only after you understand the security implications and approval behavior.\n\nIn most integrations, send_message and the read-only methods are enough."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "PowerShell Example",
+      "intro": "This example shows the simplest useful shape for a Local API client in PowerShell. Save your token from Connections settings, paste it below, and then try ping before anything else.",
+      "content": "$TOKEN = \"paste-your-token-here\"\n$PORT  = 51234\n\nfunction Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; token = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    return $resp | ConvertFrom-Json\n}\n\n# Check Aire is running and inspect state\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Create and select a conversation\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).result\nInvoke-Aire \"select_conversation\" @{ conversationId = $id }\n\n# Send a message (returns true when accepted)\nInvoke-Aire \"send_message\" @{ text = \"Hello from PowerShell\" }\n\n# Read the conversation messages after the turn completes\n(Invoke-Aire \"get_messages\" @{ conversationId = $id }).result\n\n# Execute a tool directly\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; parameters = @{ path = \"C:/Temp/notes.txt\" } }"
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Python Example",
+      "intro": "This example uses only the Python standard library. It is a good starting point if you want to add Aire support to another local tool.",
+      "content": "import socket, json\n\nTOKEN = \"paste-your-token-here\"\n\ndef aire(method, **params):\n    req = {\"method\": method, \"token\": TOKEN}\n    if params:\n        req[\"parameters\"] = params\n    with socket.create_connection((\"127.0.0.1\", 51234)) as s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(state[\"result\"])\n\nconversation_id = aire(\"create_conversation\", title=\"API test\")[\"result\"]\naire(\"select_conversation\", conversationId=conversation_id)\naire(\"send_message\", text=\"Hello from Python\")\n\nmessages = aire(\"get_messages\", conversationId=conversation_id)[\"result\"]\nprint(messages)\n\nresult = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    parameters={\"path\": \"C:/Temp/notes.txt\"}\n)\nprint(result)"
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Integration Tips",
+      "content": "• Always check ok before using result. If ok is false, read the error message and handle it.\n• send_message only confirms that Aire accepted the message into the active conversation. If your integration needs the final answer, follow up with get_messages or watch for approvals and trace output.\n• Keep one method call per TCP connection. Connect, send, read, close.\n• Start with read-only and visibility actions before using execute_tool.\n• If your integration wants to cooperate with Aire's safety model, use list_pending_approvals, wait_for_pending_approval, approve_tool_call, and deny_tool_call instead of assuming every action runs immediately.\n• execute_tool is powerful because it lets your code call Aire tools directly. Use it carefully.\n• The API is intentionally local-only. Do not expose port 51234 to your network or the internet.\n• For production-like internal tools, store the token outside source code and make ping part of your startup health check."
+    }
+  ]
 }
