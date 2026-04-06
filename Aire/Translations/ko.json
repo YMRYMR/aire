@@ -206,7 +206,10 @@
     "setup.disabledSpoken": "비활성화됨",
     "panic.title": "Aire 중지",
     "panic.tooltip": "클릭하여 활성 키보드/마우스 세션을 즉시 중지합니다.\n드래그하여 위치를 변경합니다.",
-    "panic.stopButton": "⏹ 세션 중지"
+    "panic.stopButton": "⏹ 세션 중지",
+    "menu.rename": "이름 바꾸기",
+    "menu.delete": "삭제",
+    "menu.deleteAllConversations": "모든 대화 삭제"
   },
   "help": [
     {

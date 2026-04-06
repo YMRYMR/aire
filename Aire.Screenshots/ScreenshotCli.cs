@@ -61,10 +61,8 @@ internal static class ScreenshotCli
 
     private static string AdjustOutputPathForLanguage(string outputPath, string language)
     {
-        if (string.Equals(language, "en", StringComparison.OrdinalIgnoreCase))
-            return outputPath;
-
-        var directory = Path.GetDirectoryName(outputPath);
+        // Always place screenshots in a per-language subfolder (including English).
+        var directory = Path.GetDirectoryName(outputPath) ?? string.Empty;
         var fileName = Path.GetFileName(outputPath);
         return Path.Combine(directory, language, fileName);
     }
@@ -74,7 +72,7 @@ internal static class ScreenshotCli
         if (!File.Exists(planPath))
             throw new FileNotFoundException("Plan file not found.", planPath);
 
-        // Set the application language before any UI actions
+        // Persist language so Aire picks it up on (re)start.
         LanguageHelper.SetAppStateLanguage(language);
 
         await using var stream = File.OpenRead(planPath);
@@ -82,6 +80,10 @@ internal static class ScreenshotCli
             ?? throw new InvalidOperationException("Failed to deserialize screenshot plan.");
 
         await UiAutomationRunner.RunActionsAsync(plan.SetupActions);
+
+        // Switch language in the running app via Local API, then wait for the UI to redraw.
+        await UiAutomationRunner.SetLanguageAsync(language);
+        await Task.Delay(1500);
 
         foreach (var request in plan.Screenshots)
         {
@@ -95,11 +97,43 @@ internal static class ScreenshotCli
 
     private static async Task RunPlanAllAsync(string planPath)
     {
-        var availableLanguages = LanguageHelper.GetAvailableLanguageCodes();
-        foreach (var lang in availableLanguages)
+        if (!File.Exists(planPath))
+            throw new FileNotFoundException("Plan file not found.", planPath);
+
+        await using var stream = File.OpenRead(planPath);
+        var plan = await JsonSerializer.DeserializeAsync<ScreenshotPlan>(stream, JsonOptions.Default)
+            ?? throw new InvalidOperationException("Failed to deserialize screenshot plan.");
+
+        // Run setup actions once (start app, close update dialog, show main window).
+        await UiAutomationRunner.RunActionsAsync(plan.SetupActions);
+
+        var languages = plan.LanguageBatch?.Languages.Count > 0
+            ? plan.LanguageBatch.Languages
+            : LanguageHelper.GetAvailableLanguageCodes();
+
+        var switchDelay = plan.LanguageBatch?.SwitchDelayMs ?? 1500;
+
+        foreach (var lang in languages)
         {
-            Console.WriteLine($"Running plan for language: {lang}");
-            await RunPlanAsync(planPath, lang);
+            Console.WriteLine($"--- Language: {lang} ---");
+
+            // Close any windows left open by the previous batch.
+            if (plan.LanguageBatch?.PreBatchActions is { Count: > 0 } preBatch)
+                await UiAutomationRunner.RunActionsAsync(preBatch);
+
+            // Switch language in the running app via Local API and wait for UI redraw.
+            LanguageHelper.SetAppStateLanguage(lang);
+            await UiAutomationRunner.SetLanguageAsync(lang);
+            await Task.Delay(switchDelay);
+
+            foreach (var request in plan.Screenshots)
+            {
+                var adjusted = request with
+                {
+                    OutputPath = AdjustOutputPathForLanguage(request.OutputPath, lang)
+                };
+                await CaptureWindowAsync(adjusted);
+            }
         }
     }
 

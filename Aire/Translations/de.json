@@ -206,7 +206,10 @@
     "setup.disabledSpoken": "deaktiviert",
     "panic.title": "Aire Stop",
     "panic.tooltip": "Klicken Sie hier, um die aktive Tastatur-/Maussitzung sofort zu beenden.\nZum Neupositionieren ziehen.",
-    "panic.stopButton": "⏹ SITZUNG STOPPEN"
+    "panic.stopButton": "⏹ SITZUNG STOPPEN",
+    "menu.rename": "Umbenennen",
+    "menu.delete": "Löschen",
+    "menu.deleteAllConversations": "Alle Gespräche löschen"
   },
   "help": [
     {

@@ -21,6 +21,34 @@
       "delayMs": 4000
     }
   ],
+  "languageBatch": {
+    "outputFolder": "Aire/Assets/Help",
+    "languages": ["en", "es", "fr", "de", "it", "pt", "ja", "zh", "ko", "ar", "hi", "uk"],
+    "switchDelayMs": 1500,
+    "preBatchActions": [
+      {
+        "kind": "close-update-window",
+        "delayMs": 300
+      },
+      {
+        "kind": "try-close-window",
+        "titleContains": "Welcome",
+        "processName": "Aire",
+        "delayMs": 300
+      },
+      {
+        "kind": "try-close-window",
+        "titleContains": "Settings",
+        "processName": "Aire",
+        "delayMs": 300
+      },
+      {
+        "kind": "show-window",
+        "processName": "Aire",
+        "delayMs": 500
+      }
+    ]
+  },
   "screenshots": [
     {
       "outputPath": "Aire/Assets/Help/main-chat.png",
@@ -109,7 +137,7 @@
         },
         {
           "kind": "wait-for-window",
-          "titleContains": "Aire",
+          "titleContains": "Settings",
           "processName": "Aire",
           "delayMs": 6000
         },
@@ -123,7 +151,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-appearance.png",
-      "titleContains": "Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -139,7 +167,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-voice.png",
-      "titleContains": "Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -155,7 +183,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-context.png",
-      "titleContains": "Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -171,7 +199,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-auto-accept.png",
-      "titleContains": "Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -187,7 +215,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/settings-connections.png",
-      "titleContains": "Aire",
+      "titleContains": "Settings",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,
@@ -203,7 +231,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/onboarding-provider-picker.png",
-      "titleContains": "Aire",
+      "titleContains": "Welcome",
       "processName": "Aire",
       "delayMs": 600,
       "padding": 0,
@@ -211,7 +239,7 @@
       "actions": [
         {
           "kind": "select",
-          "titleContains": "Aire",
+          "titleContains": "Settings",
           "processName": "Aire",
           "automationId": "TabProviders",
           "controlType": "tabitem",
@@ -219,14 +247,14 @@
         },
         {
           "kind": "invoke",
-          "titleContains": "Aire",
+          "titleContains": "Settings",
           "processName": "Aire",
           "automationId": "PART_SetupWizardButton",
           "delayMs": 500
         },
         {
           "kind": "wait-for-window",
-          "titleContains": "Aire",
+          "titleContains": "Welcome",
           "processName": "Aire",
           "delayMs": 6000
         },
@@ -239,7 +267,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/onboarding-provider-setup.png",
-      "titleContains": "Aire",
+      "titleContains": "Welcome",
       "processName": "Aire",
       "delayMs": 500,
       "padding": 0,

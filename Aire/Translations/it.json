@@ -206,7 +206,10 @@
     "setup.disabledSpoken": "disabilitato",
     "panic.title": "Fermata dell'Aire",
     "panic.tooltip": "Fare clic per interrompere immediatamente la sessione attiva di tastiera/mouse.\nTrascina per riposizionare.",
-    "panic.stopButton": "⏹STOP SESSIONE"
+    "panic.stopButton": "⏹STOP SESSIONE",
+    "menu.rename": "Rinomina",
+    "menu.delete": "Elimina",
+    "menu.deleteAllConversations": "Elimina tutte le conversazioni"
   },
   "help": [
     {

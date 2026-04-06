@@ -46,9 +46,9 @@ public sealed class GitHubReleaseUpdateServiceTests
         {
             Content = new StringContent("""
             {
-              "tag_name": "v1.0.1",
-              "name": "Aire 1.0.1",
-              "html_url": "https://github.com/YMRYMR/aire/releases/tag/v1.0.1",
+              "tag_name": "v2.0.0",
+              "name": "Aire 2.0.0",
+              "html_url": "https://github.com/YMRYMR/aire/releases/tag/v2.0.0",
               "body": "Bug fixes",
               "assets": [
                 {
@@ -70,7 +70,7 @@ public sealed class GitHubReleaseUpdateServiceTests
         var update = await service.CheckLatestReleaseAsync();
 
         Assert.NotNull(update);
-        Assert.Equal(new Version(1, 0, 1), update!.LatestVersion);
+        Assert.Equal(new Version(2, 0, 0), update!.LatestVersion);
         Assert.Equal("Aire.msi", update.InstallerAsset.Name);
         Assert.Equal("Bug fixes", update.ReleaseNotes);
     }
