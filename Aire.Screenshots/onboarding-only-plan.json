@@ -1,6 +1,10 @@
 {
   "setupActions": [
     {
+      "kind": "close-update-window",
+      "delayMs": 500
+    },
+    {
       "kind": "wait-for-window",
       "exactTitle": "Welcome to Aire",
       "processName": "Aire",

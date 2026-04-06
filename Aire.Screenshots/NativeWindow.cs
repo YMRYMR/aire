@@ -26,7 +26,13 @@ internal static class NativeWindowFinder
         if (matches.Count == 0)
             throw new InvalidOperationException("No window matched the requested filters.");
 
-        return matches
+        // Prefer windows that don't contain "Update" in the title
+        var nonUpdateMatches = matches
+            .Where(window => !window.Title.Contains("Update", StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        var candidates = nonUpdateMatches.Count > 0 ? nonUpdateMatches : matches;
+
+        return candidates
             .OrderByDescending(window => window.Title.Length)
             .First();
     }
