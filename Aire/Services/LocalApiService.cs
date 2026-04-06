@@ -37,6 +37,9 @@ namespace Aire.Services
         public void Start()
         {
             if (_disposed || IsRunning) return;
+            // Guarantee a token exists so the screenshots tool can authenticate immediately after
+            // the window appears — even if a previous run wiped the persisted token.
+            AppState.EnsureApiAccessToken();
             ApiTraceLog.Record("service", "start", $"Local API listener started on 127.0.0.1:{Port}", true);
             _listenerCts = new CancellationTokenSource();
             _listenerTask = Task.Run(() => ListenAsync(_listenerCts.Token));

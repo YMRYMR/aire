@@ -206,7 +206,10 @@
     "setup.disabledSpoken": "вимкнено",
     "panic.title": "Зупинка Aire",
     "panic.tooltip": "Натисніть, щоб негайно зупинити активну сесію клавіатури/миші.\nПеретягніть, щоб змінити положення.",
-    "panic.stopButton": "⏹ ЗУПИНИТИ СЕСІЮ"
+    "panic.stopButton": "⏹ ЗУПИНИТИ СЕСІЮ",
+    "menu.rename": "Перейменувати",
+    "menu.delete": "Видалити",
+    "menu.deleteAllConversations": "Видалити всі розмови"
   },
   "help": [
     {

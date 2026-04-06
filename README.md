@@ -5,19 +5,14 @@
 Aire is a Windows desktop AI workspace designed to be easy to use from day one. It lets you talk to different AI providers from one chat window, keep local conversation history, approve or deny tool use, connect MCP servers, use voice features, and expose a loopback local API for trusted local automation.
 
 <p align="center">
-  <img src="Aire/Assets/Help/main-chat.png" width="48%" alt="Chat window" />
+  <img src="Aire/Assets/Help/en/main-chat.png" width="48%" alt="Chat window" />
   &nbsp;&nbsp;
-  <img src="Aire/Assets/Help/main-chat-sidebar.png" width="48%" alt="Chat with conversation history" />
+  <img src="Aire/Assets/Help/en/settings-providers.png" width="48%" alt="Provider settings" />
 </p>
 <p align="center">
-  <img src="Aire/Assets/Help/main-chat-modes.png" width="48%" alt="Assistant modes" />
+  <img src="Aire/Assets/Help/en/settings-appearance.png" width="48%" alt="Appearance settings" />
   &nbsp;&nbsp;
-  <img src="Aire/Assets/Help/main-chat-tools.png" width="48%" alt="Tools panel" />
-</p>
-<p align="center">
-  <img src="Aire/Assets/Help/settings-providers.png" width="48%" alt="Provider settings" />
-  &nbsp;&nbsp;
-  <img src="Aire/Assets/Help/settings-appearance.png" width="48%" alt="Appearance settings" />
+  <img src="Aire/Assets/Help/en/onboarding-provider-picker.png" width="48%" alt="Setup wizard — provider selection" />
 </p>
 
 ## What Aire does
@@ -64,11 +59,9 @@ Some providers are direct integrations, while others use OpenAI-compatible APIs 
 
 ## Install
 
-The easiest way to install Aire is to download the latest release from [GitHub Releases](https://github.com/YMRYMR/aire/releases/latest) and run `Aire.msi`.
+Download and run `Aire.msi` from the [latest GitHub release](https://github.com/YMRYMR/aire/releases/latest/download/Aire.msi).
 
-If you want the setup app directly, download [Aire.Setup.exe](https://github.com/YMRYMR/aire/releases/latest/download/Aire.Setup.exe).
-
-For a portable build, the release page also includes a zip archive of the compiled app.
+The release page also includes a portable zip archive of the compiled app.
 
 Update checks are built into the app and compare against the latest GitHub release.
 
