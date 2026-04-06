@@ -201,7 +201,14 @@ internal static class NativeWindowFinder
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+    [DllImport("user32.dll")]
+    private static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
     private const int SwRestore = 9;
+    private const uint WmClose = 0x0010;
+
+    public static void CloseWindow(IntPtr handle)
+        => PostMessage(handle, WmClose, IntPtr.Zero, IntPtr.Zero);
 
     private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 }

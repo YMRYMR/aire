@@ -91,6 +91,17 @@ namespace Aire.Data
             }
         }
 
+        private async Task MigrateMessagesAttachmentsJsonAsync()
+        {
+            try
+            {
+                using var cmd = _connection!.CreateCommand();
+                cmd.CommandText = "ALTER TABLE Messages ADD COLUMN AttachmentsJson TEXT";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch { /* column already exists — SQLite does not support IF NOT EXISTS on ALTER TABLE */ }
+        }
+
         private async Task MigrateEmailOAuthAsync()
         {
             foreach (var col in new[] { "UseOAuth INTEGER DEFAULT 0", "OAuthRefreshToken TEXT DEFAULT ''" })

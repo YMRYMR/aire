@@ -110,6 +110,9 @@
     "warning.largeFile": "⚠ Archivo grande — el proveedor puede rechazarlo",
     "menu.copyChat": "Copiar chat como texto",
     "menu.restoreWindowSizes": "Restaurar tamaños originales de ventana",
+    "menu.rename": "Renombrar",
+    "menu.delete": "Eliminar",
+    "menu.deleteAllConversations": "Eliminar todas las conversaciones",
     "settings.setupWizard": "Asistente de configuración",
     "settings.apiAccessEnabledTooltip": "Permite que otras aplicaciones locales controlen Aire. Déjalo desactivado salvo que confíes en quien llama.",
     "settings.testSelectedVoice": "Probar la voz seleccionada",
@@ -205,7 +208,10 @@
     "setup.enabledSpoken": "activada",
     "setup.disabledSpoken": "desactivada",
     "panic.title": "Detener Aire",
-    "panic.tooltip": "Haz clic para detener de inmediato la sesión activa de teclado/ratón.\nArrastra para recolocar.",
+    "panic.tooltip": "Haz clic para detener de inmediato la sesión activa de teclado/ratón. Arrastra para recolocar.",
+    "menu.rename": "Renombrar",
+    "menu.delete": "Eliminar",
+    "menu.deleteAllConversations": "Eliminar todas las conversaciones",
     "panic.stopButton": "⏹ DETENER SESIÓN"
   },
   "help": [
@@ -619,7 +625,20 @@
           "action": "settings:appearance"
         }
       ],
+      "imagePath": "Assets/Help/settings-appearance.png",
+      "imageCaption": "Ajustes de apariencia con controles de tema, tinte de color, color de acento y tamaño de letra.",
       "content": "Abre la configuración de apariencia para cambiar el aspecto de la aplicación.\n\n• Tema: cambia entre oscuro y claro.\n• Tinte de color: mueve el deslizador para aplicar un matiz al conjunto de la interfaz.\n• Tamaño de letra: mantén pulsado Ctrl y mueve la rueda del ratón sobre el chat o la caja de entrada.\n\nTodos estos ajustes se guardan automáticamente."
+    },
+    {
+      "tab": "Apariencia",
+      "type": "text",
+      "title": "Idioma",
+      "links": [
+        { "label": "Abrir ajustes de apariencia", "action": "settings:appearance" }
+      ],
+      "imagePath": "Assets/Help/settings-language.png",
+      "imageCaption": "El selector de idioma en Configuración \u2192 Apariencia.",
+      "content": "Abre Configuración (\u2699) \u2192 Apariencia y despl\u00e1zate hasta la secci\u00f3n Idioma.\n\nHaz clic en el desplegable y elige cualquiera de los idiomas disponibles. La aplicaci\u00f3n se actualiza al instante, sin necesidad de reiniciarla.\n\nEl idioma se guarda autom\u00e1ticamente y se restaura la pr\u00f3xima vez que abras Aire. Tambi\u00e9n puedes cambiarlo desde el primer paso del Asistente de configuraci\u00f3n."
     },
     {
       "tab": "API local",

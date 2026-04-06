@@ -11,5 +11,6 @@ internal sealed class UiAutomationAction
     public string? ControlType { get; init; }
     public string? ExecutablePath { get; init; }
     public string? Arguments { get; init; }
+    public string? LanguageCode { get; init; }
     public int DelayMs { get; init; }
 }

@@ -1,7 +1,7 @@
 {
-  "code": "pt-br",
-  "nativeName": "Português (Brasil)",
-  "flag": "🇧🇷",
+  "code": "pt",
+  "nativeName": "Português",
+  "flag": "🇵🇹",
   "strings": {
     "settings.title": "Configurações — Aire",
     "settings.aiProviders": "Provedores de IA",
@@ -110,6 +110,9 @@
     "warning.largeFile": "⚠ Arquivo grande — provedor pode rejeitar",
     "menu.copyChat": "Copiar chat como texto",
     "menu.restoreWindowSizes": "Restaurar tamanhos originais das janelas",
+    "menu.rename": "Renomear",
+    "menu.delete": "Eliminar",
+    "menu.deleteAllConversations": "Eliminar todas as conversas",
     "settings.setupWizard": "Assistente de Configuração",
     "settings.apiAccessEnabledTooltip": "Permite que outros aplicativos locais controlem o Aire. Mantenha desativado a menos que confie no chamador.",
     "settings.testSelectedVoice": "Testar voz selecionada",
