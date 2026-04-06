@@ -67,7 +67,7 @@
     "confirm.deleteMsg": "这将永久移除该提供商及其配置。",
     "onboarding.welcomeTitle": "欢迎使用 Aire",
     "onboarding.welcomeSubtitle": "人人可用的 AI",
-    "onboarding.welcomeDesc": "一款基于托盘的 AI 聊天应用，让您在一个地方与任何 AI 提供商对话 — OpenAI、Anthropic Claude、Google AI、Ollama。",
+    "onboarding.welcomeDesc": "一款基于托盘的 AI 聊天应用，让您在一个地方与任何 AI 提供商对话 — OpenAI、Anthropic Claude、Google AI、Ollama 。",
     "onboarding.getStarted": "开始使用 →",
     "onboarding.pickerTitle": "选择您的 AI 提供商",
     "onboarding.pickerSubtitle": "选择一个开始。您可以随时添加更多。",
@@ -111,7 +111,7 @@
     "menu.copyChat": "将聊天复制为文本",
     "menu.restoreWindowSizes": "恢复原始窗口大小",
     "settings.setupWizard": "设置向导",
-    "settings.apiAccessEnabledTooltip": "允许其他本地应用控制 Aire。除非您信任调用方，否则请保持关闭。",
+    "settings.apiAccessEnabledTooltip": "允许其他本地应用控制 Aire 。除非您信任调用方，否则请保持关闭。",
     "settings.testSelectedVoice": "测试选中的语音",
     "tooltip.dragReorder": "拖拽重新排序",
     "tooltip.runTests": "运行测试",
@@ -184,12 +184,12 @@
     "setup.summaryReadAloud": "大声朗读设置",
     "setup.summaryVoiceCommands": "语音设置命令",
     "setup.summaryNextStep": "当您打开 Aire 时，它将进入正常的设置向导，以便您配置提供商。",
-    "setup.summarySpoken": "语言 {0}。助手模式 {1}。语音输出 {2}。语音输入 {3}。说保存，或者说打开 Aire。",
+    "setup.summarySpoken": "语言 {0}。助手模式 {1}。语音输出 {2}。语音输入 {3}。说保存，或者说打开 Aire 。",
     "setup.voiceStatusListening": "语音设置正在监听。说出命令，然后暂停。",
     "setup.voiceStatusCommandsOff": "语音设置命令已关闭。",
     "setup.voiceStatusModelNeeded": "语音命令需要本地语音模型。开始语音设置以下载它。",
     "setup.voiceStatusReady": "语音命令已就绪。开始语音设置以开始监听。",
-    "setup.launchNotFoundMessage": "偏好设置已保存，但在设置应用旁边未找到 Aire.exe。请手动启动 Aire 以继续设置。",
+    "setup.launchNotFoundMessage": "偏好设置已保存，但在设置应用旁边未找到 Aire.exe 。请手动启动 Aire 以继续设置。",
     "setup.preferencesSaved": "偏好设置已保存。",
     "setup.preferencesSavedSpoken": "偏好设置已保存。Aire 已准备好打开其设置向导。",
     "setup.voiceStatusDownloading": "正在为语音设置下载本地语音模型...",
@@ -212,32 +212,32 @@
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "How the Setup Wizard Works",
+      "title": "设置向导的工作原理",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "打开设置向导",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "打开AI设置",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-picker.png",
-      "imageCaption": "The setup wizard helps you choose a provider before you start chatting.",
-      "content": "The Setup Wizard appears the first time you run Aire, or when no AI providers are configured yet. Its job is to get you from a fresh install to a working chat as quickly as possible.\n\nWhat the wizard does, step by step:\n• Welcome: explains what Aire is and lets you choose the app language.\n• Provider picker: shows common ways to connect Aire to AI services.\n• Provider setup: asks for the details needed for the provider you picked.\n• Finish: confirms Aire is ready and takes you to the main app.\n\nIf you are new to AI, the wizard is the best place to start. It uses the simplest path first and hides advanced settings until you need them.\n\nYou can skip setup and come back later, but you will need at least one configured provider before Aire can answer chat messages."
+      "imageCaption": "设置向导可帮助您在开始聊天之前选择提供商。",
+      "content": "首次运行 Aire 或尚未配置 AI 提供商时，会出现设置向导。它的工作是让您尽快从全新安装进入正常聊天。\n\n向导的步骤如下：\n• 欢迎：解释Aire 是什么并让您选择应用程序语言。\n• 提供商选择器：显示将Aire 连接到AI 服务的常见方法。\n• 提供商设置：询问您选择的提供商所需的详细信息。\n• 完成：确认Aire 已准备好并带您进入主应用程序。\n\n如果您是 AI 新手，向导是最好的起点。它首先使用最简单的路径，并隐藏高级设置，直到您需要它们为止。\n\n您可以跳过设置并稍后返回，但在 Aire 可以回复聊天消息之前，您至少需要一个已配置的提供商。"
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Choosing a Provider",
+      "title": "选择提供商",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "打开设置向导",
           "action": "onboarding"
         },
         {
-          "label": "platform.openai.com",
+          "label": "平台.openai.com",
           "action": "https://platform.openai.com"
         },
         {
@@ -249,132 +249,132 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "The provider picker is where you decide which AI service Aire will talk to on your behalf.\n\nWhat the main options mean:\n• OpenAI: a common starting point if you want a simple cloud setup and wide model support.\n• Anthropic API: another strong cloud option, known for Claude models.\n• Claude.ai: uses browser sign-in instead of an API key.\n• Google AI: connects to Gemini chat models through Google AI Studio.\n• Google AI Images: a dedicated Gemini image-generation setup.\n• Ollama: runs models locally on your computer. Good for privacy and offline use, but it depends on your hardware.\n• Codex: uses the local Codex CLI bridge instead of a normal API key.\n• Groq, OpenRouter, DeepSeek, Inception, and z.ai: other providers or OpenAI-compatible endpoints, often useful if you already have an account there.\n\nWhich one should you choose?\n• If you want the easiest cloud setup for chat: start with OpenAI, Anthropic, or Google AI.\n• If you want local and private: choose Ollama.\n• If you specifically want image generation from Gemini: choose Google AI Images.\n• If you already pay for or use a specific provider elsewhere: choose that same provider here.\n\nYou are not locked in. The wizard helps you add one provider first, and you can add more later in Settings."
+      "content": "您可以在提供商选择器中决定 Aire 将代表您与哪个 AI 服务进行对话。\n\n主要选项的含义：\n• OpenAI ：如果您想要简单的云设置和广泛的模型支持，这是一个常见的起点。\n• Anthropic API ：另一个强大的云选项，以克劳德模型而闻名。\n• Claude.ai ：使用浏览器登录而不是API 密钥。\n• Google AI ：通过Google AI Studio 连接到Gemini 聊天模型。\n• Google AI Images ：专用的Gemini 图像生成设置。\n• Ollama ：在您的计算机上本地运行模型。有利于隐私和离线使用，但这取决于您的硬件。\n• Codex ：使用本地Codex CLI 桥而不是普通的API 密钥。\n• Groq、OpenRouter、DeepSeek、Inception 和 z.ai ：其他提供商或 OpenAI 兼容端点，如果您已经在那里拥有帐户，通常很有用。\n\n你应该选择哪一个？\n• 如果您想要最简单的云聊天设置：从 OpenAI、Anthropic 或 Google AI 开始。\n• 如果您想要本地和私密：选择Ollama 。\n• 如果您特别想要从 Gemini 生成图像：选择 Google AI Images 。\n• 如果您已在其他地方付费或使用特定提供商：请在此处选择同一提供商。\n\n您没有被锁定。向导会帮助您首先添加一个提供商，稍后您可以在“设置”中添加更多提供商。"
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Filling in Provider Details",
+      "title": "填写提供商详细信息",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "打开设置向导",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "打开AI设置",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-setup.png",
-      "imageCaption": "Provider setup step with the provider type, name, credentials, model, and connection test.",
-      "content": "After you pick a provider, the wizard asks only for the details that provider needs.\n\nTypical fields:\n• Provider type: the service you want to use.\n• Name: the label Aire will show in the chat window.\n• API key: the secret token that lets Aire talk to the provider. Some providers use browser sign-in instead, and some local providers do not need an API key at all.\n• Base URL: only needed for certain OpenAI-compatible services or self-hosted setups.\n• Model: the specific AI model you want to use.\n\nProvider-specific notes:\n• Claude.ai uses browser sign-in instead of a normal API key.\n• Ollama is local and usually works without an API key.\n• Codex uses the local Codex CLI bridge, so the wizard can offer CLI installation instead of asking for a normal API key.\n• Google AI Images is for image generation rather than normal chat.\n\nThe Test connection button is there to help you confirm the configuration before you finish. If the test succeeds, Aire can usually use that provider immediately.\n\nPractical advice:\n• If you are unsure which model to pick, start with the default suggestion.\n• If you see an API-key field, paste the key exactly as provided by the service.\n• If a provider offers both API access and browser sign-in, prefer API access if you want the most stable automation and integration behavior.\n\nAfter you finish the wizard, you can still change any of these settings later in the AI Providers tab."
+      "imageCaption": "提供商设置步骤，包括提供商类型、名称、凭据、模型和连接测试。",
+      "content": "选择提供商后，向导仅询问提供商所需的详细信息。\n\n典型字段：\n• 提供商类型：您要使用的服务。\n• 名称：Aire 将在聊天窗口中显示的标签。\n• API 密钥：让Aire 与提供商对话的秘密令牌。有些提供商使用浏览器登录，而有些本地提供商根本不需要 API 密钥。\n• 基本URL ：仅某些OpenAI 兼容服务或自托管设置需要。\n• 模型：您要使用的特定AI 模型。\n\n提供商特定说明：\n• Claude.ai 使用浏览器登录而不是普通的 API 密钥。\n• Ollama 是本地的，通常无需 API 密钥即可工作。\n• Codex 使用本地Codex CLI 桥，因此向导可以提供CLI 安装，而不是要求普通的API 密钥。\n• Google AI Images 用于图像生成而不是普通聊天。\n\n测试连接按钮可帮助您在完成之前确认配置。如果测试成功，Aire 通常可以立即使用该提供商。\n\n实用建议：\n• 如果您不确定选择哪个模型，请从默认建议开始。\n• 如果您看到API 密钥字段，请准确粘贴服务提供的密钥。\n• 如果提供商同时提供API 访问和浏览器登录，并且您希望获得最稳定的自动化和集成行为，则首选API 访问。\n\n完成向导后，您仍然可以稍后在 AI Providers 选项卡中更改任何这些设置。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Overview",
+      "title": "概述",
       "links": [
         {
-          "label": "Set up your first AI",
+          "label": "设置你的第一个人工智能",
           "action": "settings:providers"
         },
         {
-          "label": "Change the look of Aire",
+          "label": "改变Aire的外观",
           "action": "settings:appearance"
         }
       ],
-      "content": "Aire is a desktop chat app that stays in your system tray until you need it. You can think of it as one chat window that can connect to many AI services.\n\nIf you are new to AI, the usual starting point is simple:\n• Open AI setup.\n• Add one provider, such as OpenAI, Anthropic, Google AI, or Ollama.\n• Choose a model.\n• Type a question in the chat box and press Enter.\n\nWhat Aire can do:\n• Talk to different AI services from one app.\n• Save your conversations on your computer.\n• Let the AI use tools, with your approval, to read files, run commands, browse pages, and more.\n• Use voice input and voice output with Windows speech features.\n• Let other local apps talk to Aire through the Local API."
+      "content": "Aire 是一款桌面聊天应用程序，它会保留在您的系统托盘中，直到您需要为止。你可以将其视为一个可以连接到许多人工智能服务的聊天窗口。\n\n如果您是人工智能新手，通常的起点很简单：\n• 打开AI 设置。\n• 添加一个提供商，例如OpenAI、Anthropic、Google AI 或Ollama 。\n• 选择模型。\n• 在聊天框中键入问题并按Enter 键。\n\nAire可以做什么：\n• 通过一个应用程序与不同的人工智能服务对话。\n• 将对话保存在计算机上。\n• 在您的批准下，让人工智能使用工具来读取文件、运行命令、浏览页面等。\n• 通过Windows 语音功能使用语音输入和语音输出。\n• 让其他本地应用程序通过本地API 与Aire 通信。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tray Icon",
-      "content": "Aire runs in the system tray (bottom-right corner of the taskbar).\n\n• Left-click or right-click the tray icon to open the chat window.\n• Right-click the tray icon for options: Open, Settings, Exit.\n• Closing the window hides it — Aire keeps running in the background.\n• To quit completely, right-click the tray icon and choose Exit."
+      "title": "托盘图标",
+      "content": "Aire 在系统托盘（任务栏右下角）中运行。\n\n• 左键单击或右键单击托盘图标可打开聊天窗口。\n• 右键单击​​托盘图标可以选择以下选项：打开、设置、退出。\n• 关闭窗口将其隐藏——Aire 继续在后台运行。\n• 要完全退出，请右键单击托盘图标并选择退出。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Chat",
+      "title": "聊天",
       "links": [
         {
-          "label": "Open Providers",
+          "label": "开放提供商",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/main-chat.png",
-      "imageCaption": "Main chat window with the provider selector, conversation area, search, and composer.",
-      "content": "• Type your message in the input box at the bottom and press Enter to send.\n• Press Shift+Enter to add a new line without sending.\n• Press ↑ / ↓ to navigate through previous messages you’ve sent (only works when the cursor is on the first or last line of the input box).\n• Drag and drop an image into the input box to attach it to your message (requires a vision-capable model).\n• Press Ctrl+F to search within the conversation. Use ↑ / ↓ or the arrow buttons to jump between matches. Press Escape to close the search bar.\n• Right-click the chat area to copy or save the conversation as a text file.\n• The 🗑 button clears the current conversation (asks for confirmation first).\n• The 💬 button in the sidebar opens your conversation history."
+      "imageCaption": "主聊天窗口，包含提供商选择器、对话区域、搜索和编辑器。",
+      "content": "• 在底部的输入框中输入您的消息，然后按 Enter 发送。\n• 按Shift+Enter 添加新行而不发送。\n• 按 ↑ / ↓ 浏览您之前发送的消息（仅当光标位于输入框的第一行或最后一行时有效）。\n• 将图像拖放到输入框中，将其附加到您的消息中（需要具有视觉功能的模型）。\n• 按Ctrl+F 在对话中搜索。使用 ↑ / ↓ 或箭头按钮在匹配项之间跳转。按 Esc 键关闭搜索栏。\n• 右键单击​​聊天区域可将对话复制或保存为文本文件。\n• 🗑 按钮清除当前对话（首先要求确认）。\n• 侧边栏中的💬 按钮可打开您的对话历史记录。"
     },
     {
       "tab": "Getting Started",
       "type": "table",
-      "title": "Keyboard Shortcuts",
+      "title": "键盘快捷键",
       "cols": [
-        "Shortcut",
-        "Action"
+        "捷径",
+        "行动"
       ],
       "rows": [
         [
           "Enter",
-          "Send message"
+          "发送消息"
         ],
         [
           "Shift+Enter",
-          "New line in the input box"
+          "输入框中的新行"
         ],
         [
           "↑ / ↓",
-          "Navigate message history (when cursor is on first/last line)"
+          "导航消息历史记录（当光标位于第一行/最后一行时）"
         ],
         [
           "Ctrl+F",
-          "Search conversation"
+          "搜索对话"
         ],
         [
-          "Ctrl+Scroll",
-          "Adjust font size"
+          "Ctrl+滚动",
+          "调整字体大小"
         ],
         [
-          "Escape",
-          "Close search bar / dismiss dialog"
+          "Esc",
+          "关闭搜索栏/关闭对话框"
         ]
       ]
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tips",
-      "content": "• You can have multiple AI providers configured and switch between them at the top of the chat window. Each conversation remembers its provider and assistant mode.\n• Resize the window by dragging any edge, including the top.\n• Conversations and settings are stored locally under %LOCALAPPDATA%\\Aire.\n• The AI can request tools for files, commands, browser actions, and more, but Aire still asks for approval unless an auto-accept rule applies.\n• If an AI response is cut off, the model may have hit its token or output limit. Ask it to continue, reduce the size of the task, or use a model with a larger context window."
+      "title": "尖端",
+      "content": "• 您可以配置多个AI 提供商，并在聊天窗口顶部在它们之间切换。每个对话都会记住其提供者和助手模式。\n• 通过拖动任何边缘（包括顶部）来调整窗口大小。\n• 对话和设置本地存储在%LOCALAPPDATA%\\Aire 下。\n• AI 可以请求文件、命令、浏览器操作等工具，但 Aire 仍会请求批准，除非适用自动接受规则。\n• 如果AI 响应被切断，则模型可能已达到其令牌或输出限制。要求它继续，减小任务的大小，或者使用具有更大上下文窗口的模型。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Assistant Modes",
+      "title": "辅助模式",
       "imagePath": "Assets/Help/main-chat-modes.png",
-      "imageCaption": "Assistant mode menu opened from the main header. Each conversation keeps its own mode.",
-      "content": "The mode button in the main header changes how Aire frames your request before it sends it to the provider.\n\nCurrent modes include Architect, Creative writer, Developer, General, Painter, Philosopher, Psychologist, Scientist, Security, and Teacher.\n\nWhat modes do:\n• They adjust the style and priorities of the assistant.\n• The selected mode is saved per conversation, so different chats can keep different roles.\n• General is the default for new conversations.\n• Different providers still keep their own quirks, but Aire passes the selected mode consistently as shared guidance.\n\nPractical examples:\n• Developer: better for code, debugging, and terminal tasks.\n• Architect: better for structure, trade-offs, and planning.\n• Teacher: better for explanations and step-by-step guidance.\n• Painter: best for image-oriented prompting and generation when the current provider supports it."
+      "imageCaption": "从主标题打开的助手模式菜单。每个对话都有自己的模式。",
+      "content": "主标头中的模式按钮会更改 Aire 在将请求发送给提供商之前构建请求的方式。\n\n当前模式包括建筑师、创意作家、开发人员、将军、画家、哲学家、心理学家、科学家、安全和教师。\n\n什么模式有什么作用：\n• 他们调整助理的风格和优先级。\n• 所选模式会按对话保存，因此不同的聊天可以保留不同的角色。\n• 常规是新对话的默认设置。\n• 不同的提供商仍然保留自己的怪癖，但 Aire 始终将所选模式作为共享指导。\n\n实际例子：\n• 开发人员：更适合代码、调试和终端任务。\n• 架构师：更好地进行结构、权衡和规划。\n• 老师：更好的解释和逐步指导。\n• Painter ：当当前提供商支持时，最适合面向图像的提示和生成。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Tool Categories",
+      "title": "工具类别",
       "imagePath": "Assets/Help/main-chat-tools.png",
-      "imageCaption": "Tools menu opened from the composer. You can enable all categories, disable all, or choose only the categories you want.",
-      "content": "The wrench button near the chat box controls which categories of tools the current provider is allowed to use.\n\nHow it works:\n• Click the wrench button to open the categories menu.\n• Turn on only the categories you want the AI to be able to request.\n• Choose No tools if you want a text-only conversation.\n• Aire remembers your selected tool categories and uses them as part of the current tool policy.\n\nWhy this matters:\n• Fewer enabled categories make tool use easier to understand.\n• Restricting categories can reduce risk and accidental side effects.\n• If a provider does not support tools, the wrench button is hidden."
+      "imageCaption": "从作曲家打开的工具菜单。您可以启用所有类别、禁用所有类别或仅选择所需的类别。",
+      "content": "聊天框附近的扳手按钮控制当前提供者可以使用哪些类别的工具。\n\n工作原理：\n• 单击扳手按钮打开类别菜单。\n• 仅打开您希望AI 能够请求的类别。\n• 如果您想要纯文本对话，请选择“无工具”。\n• Aire 会记住您选择的工具类别并将其用作当前工具策略的一部分。\n\n为什么这很重要：\n• 较少的启用类别使工具的使用更容易理解。\n• 限制类别可以降低风险和意外副作用。\n• 如果提供商不支持工具，则扳手按钮将被隐藏。"
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "AI Providers",
+      "title": "人工智能提供商",
       "imagePath": "Assets/Help/settings-providers.png",
-      "imageCaption": "Provider settings with the provider list on the left and the selected provider form on the right.",
+      "imageCaption": "提供商设置，左侧为提供商列表，右侧为所选提供商表单。",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "打开AI设置",
           "action": "settings:providers"
         },
         {
-          "label": "platform.openai.com",
+          "label": "平台.openai.com",
           "action": "https://platform.openai.com"
         },
         {
@@ -386,451 +386,451 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "A provider is the AI service Aire talks to on your behalf. Most users only need to set up one provider to get started.\n\nEach provider entry has four main parts:\n• Name: the label you will see inside Aire.\n• Type: which AI service to use.\n• Model: the specific model you want that service to run.\n• Credentials: usually an API key, or for Claude.ai a browser sign-in.\n\nCommon choices:\n• OpenAI: paste your API key from platform.openai.com.\n• Anthropic: sign in with Claude.ai in the browser, or paste an Anthropic API key.\n• Google AI: paste your Gemini API key from aistudio.google.com.\n• Ollama: use a local Ollama server on your own machine. No API key is needed.\n• OpenAI-compatible endpoints: services like Groq, Mistral, OpenRouter, DeepSeek, or LM Studio can often work by setting the Base URL.\n\nIf you are unsure which one to use, OpenAI or Anthropic are usually the easiest cloud options, while Ollama is the usual local option.\n\nProviders can be enabled or disabled without deleting them. Changes save automatically."
+      "content": "提供商是代表您与 Aire 对话的 AI 服务。大多数用户只需要设置一个提供商即可开始。\n\n每个提供商条目都有四个主要部分：\n• 名称：您将在Aire 内看到的标签。\n• 类型：使用哪种人工智能服务。\n• 模型：您希望该服务运行的特定模型。\n• 凭证：通常是API 密钥，或者对于Claude.ai 来说是浏览器登录。\n\n常见选择：\n• OpenAI ：粘贴来自platform.openai.com 的API 密钥。\n• Anthropic ：在浏览器中使用Claude.ai 登录，或粘贴Anthropic API 密钥。\n• Google AI ：粘贴来自 aistudio.google.com 的 Gemini API 密钥。\n• Ollama ：在您自己的计算机上使用本地Ollama 服务器。不需要 API 密钥。\n• OpenAI 兼容端点：Groq、Mistral、OpenRouter、DeepSeek 或LM Studio 等服务通常可以通过设置基本URL 来工作。\n\n如果您不确定使用哪一个，OpenAI 或 Anthropic 通常是最简单的云选项，而 Ollama 是通常的本地选项。\n\n可以启用或禁用提供商而不删除它们。更改自动保存。"
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Tool Calling Modes",
-      "intro": "Aire supports two methods for giving an AI model access to tools. The mode is chosen automatically based on the provider type, but can be overridden per model in a custom JSON file (see Custom Models).",
+      "title": "工具调用方式",
+      "intro": "Aire 支持两种让 AI 模型访问工具的方法。该模式是根据提供商类型自动选择的，但可以在自定义 JSON 文件中按模型覆盖（请参阅自定义模型）。",
       "cols": [
-        "Mode",
-        "How it works"
+        "模式",
+        "它是如何运作的"
       ],
       "rows": [
         [
-          "Text-based\n(default: OpenAI, Anthropic)",
-          "Tool descriptions are embedded in the system prompt. The AI responds with a <tool_call> XML block. Works with any model that follows instructions reliably."
+          "基于文本\n（默认：OpenAI、Anthropic）",
+          "工具说明嵌入在系统提示中。 AI 使用 <tool_call> XML 块进行响应。适用于任何可靠地遵循说明的模型。"
         ],
         [
-          "Native function calling\n(default: Ollama, Google AI)",
-          "Structured tool schemas are sent via the provider API. The AI returns structured function-call objects. More accurate. Requires explicit API support."
+          "原生函数调用\n（默认：Ollama、Google AI）",
+          "结构化工具模式通过提供商 API 发送。 AI 返回结构化函数调用对象。更准确。需要明确的 API 支持。"
         ],
         [
-          "Unsupported",
-          "The model cannot use tools. Set this in a custom model file to skip tool prompts for models that get confused by them."
+          "不支持",
+          "模型不能使用工具。在自定义模型文件中设置此项，可以跳过那些容易被工具提示混淆的模型。"
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Provider & Model Compatibility",
-      "intro": "Use the Capability Tests button to verify your specific provider and model combination.",
+      "title": "提供商和模型兼容性",
+      "intro": "使用“功能测试”按钮验证您的特定提供商和模型组合。",
       "cols": [
-        "Provider / Endpoint",
-        "Mode",
-        "Notes"
+        "提供者/端点",
+        "模式",
+        "笔记"
       ],
       "rows": [
         [
-          "OpenAI",
-          "Native",
-          "GPT-4o, GPT-4.1, GPT-4o-mini — reliable tool support"
+          "开放人工智能",
+          "本国的",
+          "GPT-4o、GPT-4.1、GPT-4o-mini — 可靠的工具支持"
         ],
         [
-          "Anthropic",
-          "Text-based",
-          "Claude 3.5 Sonnet and newer — excellent instruction following"
+          "人择",
+          "基于文本",
+          "Claude 3.5 Sonnet 及更新版本 — 出色的指导"
         ],
         [
-          "Google AI (Gemini)",
-          "Native",
-          "Gemini 2.0 Flash and newer recommended"
+          "谷歌人工智能（双子座）",
+          "本国的",
+          "建议使用 Gemini 2.0 Flash 及更新版本"
         ],
         [
-          "Ollama (local)",
-          "Native",
-          "qwen2.5-coder, llama3.1, mistral-nemo work well; small models vary"
+          "奥拉马（当地）",
+          "本国的",
+          "qwen2.5-coder、llama3.1、mistral-nemo 运行良好；小模型有所不同"
         ],
         [
-          "Groq (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.groq.com/openai/v1 — very fast"
+          "Groq（OpenAI + 基本 URL）",
+          "本国的",
+          "基本 URL ：https://api.groq.com/openai/v1 — 非常快"
         ],
         [
-          "Mistral (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.mistral.ai/v1"
+          "米斯特拉尔（OpenAI + 基本 URL）",
+          "本国的",
+          "基本网址：https://api.mistral.ai/v1"
         ],
         [
-          "OpenRouter (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://openrouter.ai/api/v1 — 100+ models"
+          "OpenRouter（OpenAI + 基本 URL）",
+          "本国的",
+          "基本 URL ：https://openrouter.ai/api/v1 — 100 多个模型"
         ],
         [
-          "DeepSeek (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.deepseek.com/v1"
+          "DeepSeek（OpenAI + 基本 URL）",
+          "本国的",
+          "基本网址：https://api.deepseek.com/v1"
         ],
         [
-          "LM Studio (OpenAI + Base URL)",
-          "Native",
-          "Base URL: http://localhost:1234/v1 — enable function calling in LM Studio settings"
+          "LM Studio（OpenAI + 基本 URL）",
+          "本国的",
+          "基本 URL ：http://localhost:1234/v1 — 在 LM Studio 设置中启用函数调用"
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "Capability Tests",
+      "title": "能力测试",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "打开AI设置",
           "action": "settings:providers"
         }
       ],
-      "content": "The Run Tests button checks what the selected provider and model can really do.\n\nWhat is tested:\n• Tool-call capability tests check whether the model asks for the expected Aire tool. No real file, browser, or system action is executed.\n• Image-generation capability tests call the provider's image-generation path directly. These tests can consume provider quota and may fail if your account or model does not support image generation.\n\nHow to use it:\n• Open Settings ⚙ → select a provider → click Run Tests.\n• The provider form is locked during the run to avoid configuration changes mid-test.\n• Results are cached per provider/model combination and reload quickly next time.\n\nReading results:\n• ✓ (green) — the provider handled the capability correctly.\n• ✗ (red) — the provider or model failed that capability.\n• If the message mentions quota, balance, or rate limits, the failure is coming from the provider account rather than from Aire itself.\n\nIf a model fails many tool tests, try another model or adjust its custom model metadata. If image generation fails, verify that the provider account, model, and quota actually allow it."
+      "content": "“运行测试”按钮检查所选提供商和模型的实际功能。\n\n测试什么：\n• 工具调用能力测试检查模型是否需要预期的Aire 工具。不执行任何实际的文件、浏览器或系统操作。\n• 图像生成能力测试直接调用提供商的图像生成路径。这些测试可能会消耗提供商配额，并且如果您的帐户或模型不支持图像生成，则可能会失败。\n\n使用方法：\n• 打开设置⚙ → 选择提供商→ 单击运行测试。\n• 提供商表单在运行期间被锁定，以避免在测试过程中配置发生更改。\n• 结果按提供商/模型组合进行缓存，并在下次快速重新加载。\n\n阅读结果：\n• ✓（绿色）— 提供商正确处理了该功能。\n• ✗（红色）— 提供商或模型未达到该功能。\n• 如果消息提到配额、余额或速率限制，则故障来自提供商帐户而不是 Aire 本身。\n\n如果模型未能通过许多工具测试，请尝试另一个模型或调整其自定义模型元数据。如果映像生成失败，请验证提供商帐户、模型和配额是否确实允许。"
     },
     {
       "tab": "Providers",
       "type": "code",
-      "title": "Custom Models",
-      "intro": "Create a JSON file in the app’s Data\\Models directory to customise the model list for any provider type. Use the capabilities array to declare what a model supports.\n\nCapability flags:\n• \"vision\" — model accepts image attachments\n• \"tools\" — model can use tools\n• \"toolcallmode:native\" — force native function calling\n• \"toolcallmode:text\" — force text-based tool calling\n• \"toolcallmode:unsupported\" — disable tool prompts entirely\n\nTool output format flags (for models that embed tool calls in their text response):\n• \"toolformat:hermes\" — Hermes/Qwen format: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain format: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — OpenAI native tool_calls schema embedded in content\n• \"toolformat:text\" — Aire’s default text format: {\"tool\":\"...\", ...}",
-      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"models\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"vision\", \"tools\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (no tools)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"my-fine-tuned-model\",\n      \"displayName\": \"My Fine-tune\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
+      "title": "定制模型",
+      "intro": "在应用程序的 Data\\Models 目录中创建一个 JSON 文件，以自定义任何提供商类型的模型列表。使用功能数组来声明模型支持的内容。\n\n能力标志：\n•“vision”——模型接受图像附件\n•“工具”——模型可以使用工具\n• \"toolcallmode:native\" — 强制调用本机函数\n• \"toolcallmode:text\" — 强制基于文本的工具调用\n• “toolcallmode:unsupported” — 完全禁用工具提示\n\n工具输出格式标志（对于在文本响应中嵌入工具调用的模型）：\n• \"toolformat:hermes\" — Hermes/Qwen 格式：<tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain 格式：{\"action\":\"...\",\"action_input\":{...}}\n• “toolformat:native” — 内容中嵌入的 OpenAI 本机 tool_calls 模式\n• \"toolformat:text\" — Aire 的默认文本格式：{\"tool\":\"...\", ...}",
+      "content": "{\n  “providerType”：“OpenAI”，\n  “模型”：[\n    {\n      “id”：“gpt-4o”，\n      “显示名称”：“GPT-4o”，\n      “能力”：[“愿景”、“工具”]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini（无工具）\",\n      “功能”：[“工具调用模式：不支持”]\n    },\n    {\n      “id”：“我的微调模型”，\n      \"displayName\": \"我的微调\",\n      “功能”：[“工具”，“工具调用模式：文本”]\n    }\n  ]\n}"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "AI Tools",
+      "title": "人工智能工具",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "审查 AI 行动批准",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some AI models can ask Aire to perform actions for them. Aire calls these actions tools.\n\nImportant: tools do not run silently. Aire shows you what the AI wants to do, and you approve or deny it.\n\nExamples of what tools can do:\n• Read or write files.\n• Run shell commands.\n• Open and read web pages.\n• Inspect browser tabs.\n• Take screenshots.\n• Type, click, or move the mouse.\n• Read or send email.\n\nIf you are new to this feature, the safest habit is simple: read the action request before approving it. Approve read-only actions when they make sense, and be more careful with actions that change files, send messages, or control the keyboard and mouse."
+      "content": "一些人工智能模型可以要求 Aire 为他们执行操作。Aire将这些行动称为工具。\n\n重要提示：工具不会静默运行。Aire向你展示人工智能想要做什么，你可以批准或拒绝它。\n\n工具可以做什么的示例：\n• 读取或写入文件。\n• 运行shell 命令。\n• 打开并阅读网页。\n• 检查浏览器选项卡。\n• 截取屏幕截图。\n• 键入、单击或移动鼠标。\n• 阅读或发送电子邮件。\n\n如果您不熟悉此功能，最安全的习惯很简单：在批准操作请求之前阅读操作请求。在有意义的情况下批准只读操作，并对更改文件、发送消息或控制键盘和鼠标的操作更加小心。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Auto-accept Profiles",
+      "title": "自动接受配置文件",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "审查 AI 行动批准",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Auto-accept profiles let you define which actions Aire can approve automatically without interrupting you each time.\n\nBuilt-in examples include Developer, News browser, and Conservative.\n\nWhat to keep in mind:\n• Profiles are a convenience, not a security replacement.\n• Start conservatively and only auto-accept actions you really trust.\n• File writes, input control, and external side effects are usually worth keeping manual.\n\nIf you are unsure, leave auto-accept restrictive and review actions one by one."
+      "content": "自动接受配置文件可让您定义 Aire 可以自动批准哪些操作，而无需每次都打扰您。\n\n内置示例包括 Developer、News browser 和 Conservative 。\n\n要记住什么：\n• 配置文件只是一种便利，而不是安全性的替代品。\n• 谨慎开始，仅自动接受您真正信任的操作。\n• 文件写入、输入控制和外部副作用通常值得手动保存。\n\n如果您不确定，请保留自动接受限制并一一检查操作。"
     },
     {
       "tab": "Connections",
       "type": "text",
-      "title": "MCP Servers",
+      "title": "MCP服务器",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings with the MCP catalog and installed server list.",
+      "imageCaption": "与 MCP 目录和已安装服务器列表的连接设置。",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "打开连接设置",
           "action": "settings:connections"
         }
       ],
-      "content": "MCP servers are external helper services that give Aire more tools and data sources. MCP stands for Model Context Protocol.\n\nIn plain language, an MCP server is a bridge between Aire and another system, such as:\n• your file system,\n• GitHub,\n• SQLite,\n• web fetch tools,\n• memory tools,\n• Slack, Gmail, or Notion.\n\nHow Aire handles them:\n• The Connections tab includes a curated catalog of common MCP servers.\n• You can install, remove, enable, disable, and edit them from the app.\n• Some servers need extra credentials or Node.js/npm on the machine.\n\nGood beginner advice:\n• Start with one simple server, such as Filesystem or Web Fetch.\n• Read the description before installing it.\n• Treat an MCP server like any other integration: useful, but something you should trust before enabling."
+      "content": "MCP 服务器是外部辅助服务，为 Aire 提供更多工具和数据源。 MCP 代表模型上下文协议。\n\n用通俗的语言来说，MCP 服务器是 Aire 和另一个系统之间的桥梁，例如：\n• 您的文件系统，\n• GitHub ，\n• SQLite ，\n• 网络获取工具，\n• 记忆工具，\n• Slack、Gmail 或Notion 。\n\nAire如何处理它们：\n• 连接选项卡包括常见MCP 服务器的精选目录。\n• 您可以从应用程序安装、删除、启用、禁用和编辑它们。\n• 某些服务器需要额外的凭据或计算机上的Node.js/npm 。\n\n好的初学者建议：\n• 从一台简单的服务器开始，例如文件系统或Web Fetch 。\n• 安装前请阅读说明。\n• 像任何其他集成一样对待MCP 服务器：有用，但在启用之前您应该信任它。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Keyboard & Mouse Sessions",
+      "title": "键盘和鼠标会话",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "审查 AI 行动批准",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some tasks require the AI to control the keyboard and mouse. When a session is active:\n\n• A banner appears at the bottom of the chat window showing the session is active.\n• A floating ⏹ STOP SESSION button appears at the top-right of your screen — click it at any time to cancel immediately.\n• Say “AIRE STOP” to cancel by voice.\n• Click “End session” in the banner to cancel.\n\nThe AI will request approval for each individual action (key press, mouse click, etc.) before performing it."
+      "content": "有些任务需要人工智能控制键盘和鼠标。当会话处于活动状态时：\n\n• 聊天窗口底部会出现一个横幅，显示会话处于活动状态。\n• 浮动的⏹ 停止会话按钮出现在屏幕的右上角——随时单击它即可立即取消。\n• 说“AIRE STOP”即可通过语音取消。\n• 单击横幅中的“结束会话”即可取消。\n\n在执行每个单独的操作（按键、鼠标单击等）之前，人工智能将请求批准。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Input",
+      "title": "语音输入",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "打开语音设置",
           "action": "settings:voice"
         }
       ],
-      "content": "Click the 🎤 button to start voice recognition. Aire uses Windows built-in speech recognition — no API key or internet connection required.\n\n• Speak normally. Your words appear in the input box as you talk.\n• When you stop talking, a countdown (5 → 1) appears on the button. If you stay silent, the message sends automatically at 0.\n• Start talking again at any time to reset the countdown.\n• Click the button again (shows ⏹) to stop without sending.\n\nVoice recognition accuracy depends on your Windows language and microphone quality. You can train Windows Speech Recognition via Windows Settings → Time & Language → Speech."
+      "content": "单击 🎤 按钮开始语音识别。 Aire 使用 Windows 内置语音识别 - 无需 API 密钥或互联网连接。\n\n• 正常说话。当您说话时，您的话会出现在输入框中。\n• 当您停止讲话时，按钮上会出现倒计时(5 → 1)。如果您保持沉默，消息会在 0 点自动发送。\n• 随时重新开始讲话以重置倒计时。\n• 再次单击该按钮（显示⏹）即可停止而不发送。\n\n语音识别准确性取决于您的 Windows 语言和麦克风质量。您可以通过 Windows 设置 → 时间和语言 → 语音来训练 Windows 语音识别。"
     },
     {
       "tab": "Tools & Voice",
       "type": "table",
-      "title": "Voice Commands",
-      "intro": "Say “AIRE” followed by any of these words while the microphone is active:",
+      "title": "语音命令",
+      "intro": "当麦克风处于活动状态时，说“AIRE”，然后说出以下任意单词：",
       "cols": [
-        "Command",
-        "What it does"
+        "命令",
+        "它的作用"
       ],
       "rows": [
         [
-          "AIRE SEND",
-          "Send the current message immediately"
+          "空中发送",
+          "立即发送当前消息"
         ],
         [
-          "AIRE PAUSE",
-          "Freeze the silence countdown"
+          "空气暂停",
+          "冻结倒计时的沉默"
         ],
         [
-          "AIRE RESUME",
-          "Resume the countdown"
+          "空气简历",
+          "继续倒计时"
         ],
         [
-          "AIRE CLEAR",
-          "Clear the input box"
+          "艾尔清",
+          "清空输入框"
         ],
         [
-          "AIRE UNDO",
-          "Clear the input box"
+          "艾尔撤消",
+          "清空输入框"
         ],
         [
-          "AIRE CANCEL",
-          "Stop listening without sending"
+          "空中取消",
+          "停止监听而不发送"
         ],
         [
-          "AIRE NEW",
-          "Start a new conversation"
+          "艾尔新",
+          "开始新的对话"
         ],
         [
-          "AIRE SETTINGS",
-          "Open the Settings window"
+          "空气设置",
+          "打开设置窗口"
         ],
         [
-          "AIRE OPEN/SHOW",
-          "Show the main chat window"
+          "艾尔公开赛/表演赛",
+          "显示主聊天窗口"
         ],
         [
-          "AIRE CLOSE/HIDE",
-          "Hide the main chat window"
+          "空中关闭/隐藏",
+          "隐藏主聊天窗口"
         ],
         [
-          "AIRE YES/NO",
-          "Approve or deny a pending AI action"
+          "空气 是/否",
+          "批准或拒绝待处理的 AI 操作"
         ],
         [
-          "AIRE STOP",
-          "Emergency stop — end any active keyboard/mouse session immediately"
+          "空气停止",
+          "紧急停止 — 立即结束任何活动的键盘/鼠标会话"
         ]
       ]
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Output",
+      "title": "语音输出",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "打开语音设置",
           "action": "settings:voice"
         }
       ],
-      "content": "Aire can read AI responses aloud using Windows text-to-speech. Enable this in Settings (⚙) → Voice Output.\n\n• Choose to speak all responses, or only when you use the microphone.\n• Select a voice and adjust the reading speed.\n• Toggle voice output on/off quickly with the speaker icon near the microphone button."
+      "content": "Aire 可以使用 Windows 文本转语音功能大声朗读 AI 的回答。在设置 (⚙) → 语音输出中启用此功能。\n\n• 选择说出所有答复，或仅在使用麦克风时发言。\n• 选择声音并调整阅读速度。\n• 使用麦克风按钮附近的扬声器图标快速打开/关闭语音输出。"
     },
     {
       "tab": "Appearance",
       "type": "text",
-      "title": "Appearance",
+      "title": "外貌",
       "links": [
         {
-          "label": "Open appearance settings",
+          "label": "打开外观设置",
           "action": "settings:appearance"
         }
       ],
-      "content": "Open Settings (⚙) → Appearance to change the look of the app.\n\n• Theme: switch between Dark and Light (Beige).\n• Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint — the slider is pure grayscale by default.\n• Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.\n\nAll appearance settings are saved and restored on next launch."
+      "content": "打开设置 (⚙) → 外观以更改应用程序的外观。\n\n• 主题：在深色和浅色（米色）之间切换。\n• 色调：拖动滑块以在整个UI 上应用色调色调。左端（黑色）和右端（白色）表示无色调 - 滑块默认为纯灰度。\n• 字体大小：按住Ctrl 键并在聊天或输入区域上滚动鼠标滚轮可增大或减小字体大小。设置会自动保存。\n\n所有外观设置都会保存并在下次启动时恢复。"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "What is the Local API?",
+      "title": "什么是本地API ？",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings where local API access, email accounts, and MCP servers are configured.",
+      "imageCaption": "配置本地 API 访问、电子邮件帐户和 MCP 服务器的连接设置。",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "打开连接设置",
           "action": "settings:connections"
         }
       ],
-      "content": "The Local API is how another program on the same computer can talk to Aire.\n\nFor non-developers: you usually do not need this feature.\n\nFor developers and advanced users: this is the easiest way to connect your own script, tool, automation, or desktop app to Aire. A local program can:\n• ask Aire to show or hide its main window,\n• list conversations and read messages,\n• send a message to the active conversation,\n• switch provider or conversation,\n• inspect pending tool approvals,\n• and call Aire tools directly.\n\nHow it works:\n• Aire listens on TCP port 51234.\n• It only listens on 127.0.0.1, so other computers cannot reach it directly.\n• Each request is one JSON object sent as one line.\n• Each response is one JSON object returned as one line.\n\nTo use it, first open Connections settings and enable local API access."
+      "content": "本地 API 是同一台计算机上的另一个程序与 Aire 通信的方式。\n\n对于非开发人员：您通常不需要此功能。\n\n对于开发人员和高级用户：这是将您自己的脚本、工具、自动化或桌面应用程序连接到 Aire 的最简单方法。本地程序可以：\n• 要求 Aire 显示或隐藏其主窗口，\n• 列出对话并阅读消息，\n• 向活动对话发送消息，\n• 切换提供商或对话，\n• 检查待批准的工具，\n• 并直接调用Aire 工具。\n\n工作原理：\n• Aire 侦听 TCP 端口 51234 。\n• 它仅侦听127.0.0.1 ，因此其他计算机无法直接访问它。\n• 每个请求都是作为一行发送的一个JSON 对象。\n• 每个响应都是作为一行返回的一个JSON 对象。\n\n要使用它，首先打开 Connections 设置并启用本地 API 访问。"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Local API Quick Start",
+      "title": "本地API快速入门",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "打开连接设置",
           "action": "settings:connections"
         }
       ],
-      "content": "To connect another app to Aire, use this checklist:\n\n1. Open Connections settings.\n2. Turn on local API access.\n3. Copy the auth token.\n4. From your app or script, open a TCP connection to 127.0.0.1:51234.\n5. Send one JSON line with method, token, and optional parameters.\n6. Read one JSON line back.\n7. Close the connection.\n\nA good first test is the ping method. If ping works, then try show_main_window, list_providers, and create_conversation.\n\nRecommended first integration order:\n• ping\n• show_main_window\n• list_providers\n• create_conversation\n• list_conversations\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval if you want to cooperate with tool approvals\n• execute_tool only after you are comfortable with the approval flow and security model"
+      "content": "要将另一个应用程序连接到 Aire ，请使用此清单：\n\n1. 打开连接设置。\n2. 开启本地API访问。\n3. 复制身份验证令牌。\n4. 从您的应用程序或脚本中，打开到 127.0.0.1:51234 的 TCP 连接。\n5. 发送一行 JSON 数据，其中包含方法、令牌和可选参数。\n6. 读回一行 JSON 。\n7. 关闭连接。\n\n最好的第一个测试是 ping 方法。如果 ping 有效，则尝试 show_main_window、list_providers 和 create_conversation 。\n\n建议的第一个集成顺序：\n• 平\n• 显示主窗口\n• 列表提供者\n• 创建对话\n• 列表对话\n• 获取消息\n• 发送消息\n• 获取状态\n• wait_for_pending_approval 如果您想配合工具审批\n• 仅当您熟悉审批流程和安全模型后才执行execute_tool"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Authentication",
+      "title": "验证",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "打开连接设置",
           "action": "settings:connections"
         },
         {
-          "label": "Review AI action approvals",
+          "label": "审查 AI 行动批准",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Every Local API request must include the auth token.\n\nWhere to get it:\n• Open Connections settings.\n• Find the Local API section.\n• Click Copy to copy the token.\n• Paste that token into your app or script configuration.\n\nWhat to know:\n• If you click Regenerate, old integrations will stop working until they use the new token.\n• The API must be enabled, not just configured.\n• Any process on your computer that knows the token can control Aire.\n\nPractical advice for developers:\n• Keep the token in a local config file or environment variable, not hard-coded in source control.\n• Treat it like a local secret.\n• If you suspect it leaked, regenerate it."
+      "content": "每个本地 API 请求都必须包含身份验证令牌。\n\n哪里可以获得：\n• 打开连接设置。\n• 找到本地API 部分。\n• 单击“复制”以复制令牌。\n• 将该令牌粘贴到您的应用程序或脚本配置中。\n\n要知道什么：\n• 如果您单击“重新生成”，旧集成将停止工作，直到使用新令牌。\n• API 必须启用，而不仅仅是配置。\n• 计算机上任何知道令牌的进程都可以控制Aire 。\n\n给开发者的实用建议：\n• 将令牌保存在本地配置文件或环境变量中，而不是硬编码在源代码管理中。\n• 将其视为当地秘密。\n• 如果您怀疑其泄漏，请重新生成。"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Protocol",
-      "intro": "The Local API is line-based JSON over TCP.\n\nConnection pattern:\n• connect to 127.0.0.1:51234\n• write exactly one compact JSON request followed by a newline\n• read exactly one JSON response line\n• close the connection\n\nRequest shape:\n{ \"method\": \"METHOD\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nResponse shape:\n{ \"ok\": true, \"result\": ... }\nor\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nIf you are writing a client library, build around that simple request-response pattern first. You do not need HTTP or WebSockets to get started.",
-      "content": "{ \"method\": \"ping\", \"token\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ok\": true, \"result\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"Hello!\" } }\n{ \"ok\": true, \"result\": true }"
+      "title": "协议",
+      "intro": "本地 API 是基于 TCP 的基于行的 JSON 。\n\n连接方式：\n• 连接到127.0.0.1:51234\n• 准确写入一个紧凑的 JSON 请求，后跟换行符\n• 准确读取一个 JSON 响应行\n• 关闭连接\n\n要求形状：\n{ “方法”：“方法”，“令牌”：“令牌”，“参数”：{ ... } }\n\n响应形状：\n{“确定”：正确，“结果”：... }\n或\n{ \"ok\": false, \"errorMessage\": \"消息\" }\n\n如果您正在编写客户端库，请首先围绕简单的请求响应模式进行构建。您不需要 HTTP 或 WebSockets 即可开始。",
+      "content": "{“方法”：“ping”，“令牌”：“YOUR_TOKEN”}\n{“ok”：true ，“结果”：{“providerName”：“Codex”，“providerType”：“Codex”，“providerModel”：“gpt-5.4-mini”，“activeConversationId”：12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API 测试\" } }\n{“确定”：正确，“结果”：73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"你好！\" } }\n{ “确定”：正确，“结果”：正确 }"
     },
     {
       "tab": "Local API",
       "type": "table",
-      "title": "Available Methods",
+      "title": "可用方法",
       "cols": [
-        "Method",
-        "Parameters",
-        "Description"
+        "方法",
+        "参数",
+        "描述"
       ],
       "rows": [
         [
-          "ping",
+          "平",
           "—",
-          "Check if Aire is running. Returns the same state snapshot as get_state."
+          "检查 Aire 是否正在运行。返回与 get_state 相同的状态快照。"
         ],
         [
-          "get_state",
+          "获取状态",
           "—",
-          "Current provider, model, active conversation ID, and local API status."
+          "当前提供商、模型、活动对话 ID 和本地 API 状态。"
         ],
         [
-          "show_main_window",
+          "显示主窗口",
           "—",
-          "Bring the Aire chat window to the front."
+          "将 Aire 聊天窗口置于最前面。"
         ],
         [
-          "hide_main_window",
+          "隐藏主窗口",
           "—",
-          "Hide the chat window to the tray."
+          "将聊天窗口隐藏到托盘中。"
         ],
         [
-          "open_settings",
+          "打开设置",
           "—",
-          "Open the Settings window."
+          "打开“设置”窗口。"
         ],
         [
-          "open_browser",
+          "打开浏览器",
           "—",
-          "Open the Aire browser window."
+          "打开 Aire 浏览器窗口。"
         ],
         [
-          "list_providers",
+          "供应商列表",
           "—",
-          "All configured AI providers with IDs and names."
+          "所有已配置的 AI 提供商均具有 ID 和名称。"
         ],
         [
-          "create_provider",
-          "name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritCredentialsFromProviderId?",
-          "Create a new provider from the local API."
+          "创建提供者",
+          "名称？、类型、apiKey ？、baseUrl ？、模型、isEnabled ？、颜色？、selectAfterCreate ？、inheritCredentialsFromProviderId ？",
+          "从本地 API 创建一个新的提供商。"
         ],
         [
-          "list_conversations",
+          "列表对话",
           "—",
-          "All saved conversations (ID, title, date)."
+          "所有已保存的对话（ID、标题、日期）。"
         ],
         [
-          "create_conversation",
-          "title?",
-          "Create a new conversation and switch to it."
+          "创建对话",
+          "标题？",
+          "创建一个新对话并切换到它。"
         ],
         [
-          "select_conversation",
-          "conversationId",
-          "Switch to an existing conversation."
+          "选择对话",
+          "对话ID",
+          "切换到现有对话。"
         ],
         [
-          "get_messages",
-          "conversationId",
-          "All messages in a conversation."
+          "获取消息",
+          "对话ID",
+          "对话中的所有消息。"
         ],
         [
-          "set_provider",
-          "providerId",
-          "Switch the active AI provider."
+          "设置提供者",
+          "提供者ID",
+          "切换活跃的 AI 提供商。"
         ],
         [
-          "set_provider_model",
-          "providerId, model",
-          "Change the model for a provider."
+          "设置提供者模型",
+          "提供商 ID、模型",
+          "更改提供商的模型。"
         ],
         [
-          "send_message",
-          "text",
-          "Send a message to the active conversation. Returns true when accepted."
+          "发送消息",
+          "文本",
+          "向活动对话发送消息。接受时返回 true 。"
         ],
         [
-          "list_pending_approvals",
+          "待批准列表",
           "—",
-          "Tool calls currently waiting for approval."
+          "工具调用当前正在等待批准。"
         ],
         [
-          "wait_for_pending_approval",
-          "timeout_seconds?",
-          "Wait for the next pending tool approval or return null on timeout."
+          "等待待批准",
+          "超时_秒？",
+          "等待下一个待处理的工具批准或超时返回 null 。"
         ],
         [
-          "approve_tool_call",
-          "index",
-          "Approve a pending tool call by its current list index."
+          "批准工具调用",
+          "指数",
+          "按当前列表索引批准待处理的工具调用。"
         ],
         [
-          "deny_tool_call",
-          "index",
-          "Deny a pending tool call by its current list index."
+          "拒绝工具调用",
+          "指数",
+          "通过当前列表索引拒绝待处理的工具调用。"
         ],
         [
-          "execute_tool",
-          "tool, parameters, wait_for_approval?, approval_timeout_seconds?",
-          "Run an Aire tool directly and optionally wait for approval."
+          "执行工具",
+          "工具、参数、wait_for_approval ？、approval_timeout_seconds ？",
+          "直接运行 Aire 工具并可选择等待批准。"
         ],
         [
-          "get_trace",
-          "afterId?, limit?",
-          "Read tool execution trace entries for debugging."
+          "获取跟踪",
+          "afterId ？，限制？",
+          "读取工具执行跟踪条目以进行调试。"
         ],
         [
-          "clear_trace",
+          "清除跟踪",
           "—",
-          "Clear the tool execution trace."
+          "清除工具执行轨迹。"
         ]
       ]
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Which methods should I start with?",
-      "content": "If you are building another app that connects to Aire, start with the simpler methods first.\n\nRecommended learning order:\n• ping: confirm Aire is running and your token is valid.\n• show_main_window: confirm you can trigger a visible app action.\n• get_state: inspect the current conversation and provider state.\n• list_conversations and get_messages: read data safely.\n• send_message: perform a full request-reply round trip.\n• list_pending_approvals, approve_tool_call, deny_tool_call: integrate with Aire's approval model.\n• execute_tool: only after you understand the security implications and approval behavior.\n\nIn most integrations, send_message and the read-only methods are enough."
+      "title": "我应该从哪些方法入手？",
+      "content": "如果您正在构建另一个连接到 Aire 的应用程序，请首先从更简单的方法开始。\n\n推荐学习顺序：\n• ping ：确认Aire 正在运行并且您的令牌有效。\n• show_main_window ：确认您可以触发可见的应用程序操作。\n• get_state ：检查当前对话和提供者状态。\n• list_conversations 和get_messages ：安全地读取数据。\n• send_message ：执行完整的请求-回复往返过程。\n• list_pending_approvals、approve_tool_call、deny_tool_call ：与Aire 的批准模型集成。\n•execute_tool ：仅在您了解安全含义和批准行为之后。\n\n在大多数集成中，send_message 和只读方法就足够了。"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "PowerShell Example",
-      "intro": "This example shows the simplest useful shape for a Local API client in PowerShell. Save your token from Connections settings, paste it below, and then try ping before anything else.",
-      "content": "$TOKEN = \"paste-your-token-here\"\n$PORT  = 51234\n\nfunction Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; token = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    return $resp | ConvertFrom-Json\n}\n\n# Check Aire is running and inspect state\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Create and select a conversation\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).result\nInvoke-Aire \"select_conversation\" @{ conversationId = $id }\n\n# Send a message (returns true when accepted)\nInvoke-Aire \"send_message\" @{ text = \"Hello from PowerShell\" }\n\n# Read the conversation messages after the turn completes\n(Invoke-Aire \"get_messages\" @{ conversationId = $id }).result\n\n# Execute a tool directly\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; parameters = @{ path = \"C:/Temp/notes.txt\" } }"
+      "title": "PowerShell 示例",
+      "intro": "此示例显示了 PowerShell 中本地 API 客户端最简单有用的形状。从“连接”设置中保存您的令牌，将其粘贴到下面，然后在执行其他操作之前尝试 ping 。",
+      "content": "$TOKEN =“在此处粘贴您的令牌”\n$端口 = 51234\n\n函数调用-Aire {\n    param([字符串]$方法, [哈希表]$参数 = @{})\n    $req = @{ 方法 = $Method;代币 = $TOKEN }\n    if ($Params.Count) { $req[\"参数\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -压缩))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    返回 $resp |从 Json 转换\n}\n\n# 检查 Aire 是否正在运行并检查状态\n$state = 调用-Aire“ping”\n$状态.结果\n\n# 创建并选择一个对话\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API 测试\" }).result\n调用-Aire“select_conversation”@{conversationId = $id}\n\n# 发送消息（接受时返回true）\nInvoke-Aire \"send_message\" @{ text = \"Hello from PowerShell\" }\n\n# 回合结束后读取对话消息\n(调用-Aire“get_messages”@{conversationId = $id}).result\n\n# 直接执行工具\n调用-Aire“execute_tool”@{tool =“read_file”;参数 = @{ 路径 = \"C:/Temp/notes.txt\" } }"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Python Example",
-      "intro": "This example uses only the Python standard library. It is a good starting point if you want to add Aire support to another local tool.",
-      "content": "import socket, json\n\nTOKEN = \"paste-your-token-here\"\n\ndef aire(method, **params):\n    req = {\"method\": method, \"token\": TOKEN}\n    if params:\n        req[\"parameters\"] = params\n    with socket.create_connection((\"127.0.0.1\", 51234)) as s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(state[\"result\"])\n\nconversation_id = aire(\"create_conversation\", title=\"API test\")[\"result\"]\naire(\"select_conversation\", conversationId=conversation_id)\naire(\"send_message\", text=\"Hello from Python\")\n\nmessages = aire(\"get_messages\", conversationId=conversation_id)[\"result\"]\nprint(messages)\n\nresult = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    parameters={\"path\": \"C:/Temp/notes.txt\"}\n)\nprint(result)"
+      "title": "Python 示例",
+      "intro": "此示例仅使用 Python 标准库。如果您想将 Aire 支持添加到另一个本地工具，这是一个很好的起点。",
+      "content": "导入套接字，json\n\nTOKEN =“在此处粘贴您的令牌”\n\ndef aire(方法, **参数):\n    req = {“方法”：方法，“令牌”：TOKEN}\n    如果参数：\n        req[\"参数\"] = 参数\n    使用 socket.create_connection((\"127.0.0.1\", 51234)) 作为 s ：\n        s.sendall((json.dumps(req, 分隔符=(\",\", \":\")) + \"\\n\").encode())\n        返回 json.loads(s.makefile().readline())\n\n状态 = aire(\"ping\")\n打印（状态[“结果”]）\n\nconversation_id = aire(\"create_conversation\", title=\"API 测试\")[\"结果\"]\naire(“select_conversation”，conversationId=conversation_id)\naire(\"send_message\", text=\"来自 Python 的问候\")\n\n消息= aire（“get_messages”，conversationId=conversation_id）[“结果”]\n打印（消息）\n\n结果=Aire（\n    “执行工具”，\n    工具=“读取文件”，\n    参数={“路径”：“C ：/Temp/notes.txt”}\n）\n打印（结果）"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Integration Tips",
-      "content": "• Always check ok before using result. If ok is false, read the error message and handle it.\n• send_message only confirms that Aire accepted the message into the active conversation. If your integration needs the final answer, follow up with get_messages or watch for approvals and trace output.\n• Keep one method call per TCP connection. Connect, send, read, close.\n• Start with read-only and visibility actions before using execute_tool.\n• If your integration wants to cooperate with Aire's safety model, use list_pending_approvals, wait_for_pending_approval, approve_tool_call, and deny_tool_call instead of assuming every action runs immediately.\n• execute_tool is powerful because it lets your code call Aire tools directly. Use it carefully.\n• The API is intentionally local-only. Do not expose port 51234 to your network or the internet.\n• For production-like internal tools, store the token outside source code and make ping part of your startup health check."
+      "title": "集成技巧",
+      "content": "• 在使用结果之前始终检查是否正确。如果ok为false ，则读取错误信息并处理。\n• send_message 仅确认Aire 已将消息接受到活动对话中。如果您的集成需要最终答案，请跟进 get_messages 或观察批准和跟踪输出。\n• 每个TCP 连接保留一个方法调用。连接、发送、阅读、关闭。\n• 在使用execute_tool 之前从只读和可见性操作开始。\n• 如果您的集成想要与Aire 的安全模型配合，请使用list_pending_approvals、wait_for_pending_approval、approve_tool_call 和deny_tool_call ，而不是假设每个操作都立即运行。\n•execute_tool 功能强大，因为它允许您的代码直接调用Aire 工具。请小心使用。\n• API 特意仅限于本地。不要将端口 51234 暴露给您的网络或 Internet 。\n• 对于类似生产的内部工具，将令牌存储在源代码外部，并使 ping 成为启动运行状况检查的一部分。"
     }
   ]
 }

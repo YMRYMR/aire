@@ -212,28 +212,28 @@
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "How the Setup Wizard Works",
+      "title": "सेटअप विज़ार्ड कैसे काम करता है",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "सेटअप विज़ार्ड खोलें",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "AI सेटअप खोलें",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-picker.png",
-      "imageCaption": "The setup wizard helps you choose a provider before you start chatting.",
-      "content": "The Setup Wizard appears the first time you run Aire, or when no AI providers are configured yet. Its job is to get you from a fresh install to a working chat as quickly as possible.\n\nWhat the wizard does, step by step:\n• Welcome: explains what Aire is and lets you choose the app language.\n• Provider picker: shows common ways to connect Aire to AI services.\n• Provider setup: asks for the details needed for the provider you picked.\n• Finish: confirms Aire is ready and takes you to the main app.\n\nIf you are new to AI, the wizard is the best place to start. It uses the simplest path first and hides advanced settings until you need them.\n\nYou can skip setup and come back later, but you will need at least one configured provider before Aire can answer chat messages."
+      "imageCaption": "चैटिंग शुरू करने से पहले सेटअप विज़ार्ड आपको प्रदाता चुनने में मदद करता है।",
+      "content": "जब आप पहली बार Aire चलाते हैं तो सेटअप विज़ार्ड प्रकट होता है, या जब कोई AI प्रदाता अभी तक कॉन्फ़िगर नहीं किया गया है। इसका काम आपको यथाशीघ्र एक नए इंस्टाल से कार्यशील चैट पर ले जाना है।\n\nविज़ार्ड चरण दर चरण क्या करता है:\n• स्वागत है: बताता है कि ऐरे क्या है और आपको ऐप की भाषा चुनने देता है।\n• प्रदाता पिकर: ऐयर को एआई सेवाओं से जोड़ने के सामान्य तरीके दिखाता है।\n• प्रदाता सेटअप: आपके द्वारा चुने गए प्रदाता के लिए आवश्यक विवरण मांगता है।\n• समाप्त: पुष्टि करता है कि ऐयर तैयार है और आपको मुख्य ऐप पर ले जाता है।\n\nयदि आप AI में नए हैं, तो विज़ार्ड शुरुआत करने के लिए सबसे अच्छी जगह है। यह पहले सबसे सरल पथ का उपयोग करता है और उन्नत सेटिंग्स को तब तक छुपाता है जब तक आपको उनकी आवश्यकता न हो।\n\nआप सेटअप छोड़ सकते हैं और बाद में वापस आ सकते हैं, लेकिन ऐयर चैट संदेशों का उत्तर देने से पहले आपको कम से कम एक कॉन्फ़िगर प्रदाता की आवश्यकता होगी।"
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Choosing a Provider",
+      "title": "एक प्रदाता चुनना",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "सेटअप विज़ार्ड खोलें",
           "action": "onboarding"
         },
         {
@@ -249,128 +249,128 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "The provider picker is where you decide which AI service Aire will talk to on your behalf.\n\nWhat the main options mean:\n• OpenAI: a common starting point if you want a simple cloud setup and wide model support.\n• Anthropic API: another strong cloud option, known for Claude models.\n• Claude.ai: uses browser sign-in instead of an API key.\n• Google AI: connects to Gemini chat models through Google AI Studio.\n• Google AI Images: a dedicated Gemini image-generation setup.\n• Ollama: runs models locally on your computer. Good for privacy and offline use, but it depends on your hardware.\n• Codex: uses the local Codex CLI bridge instead of a normal API key.\n• Groq, OpenRouter, DeepSeek, Inception, and z.ai: other providers or OpenAI-compatible endpoints, often useful if you already have an account there.\n\nWhich one should you choose?\n• If you want the easiest cloud setup for chat: start with OpenAI, Anthropic, or Google AI.\n• If you want local and private: choose Ollama.\n• If you specifically want image generation from Gemini: choose Google AI Images.\n• If you already pay for or use a specific provider elsewhere: choose that same provider here.\n\nYou are not locked in. The wizard helps you add one provider first, and you can add more later in Settings."
+      "content": "प्रदाता पिकर वह जगह है जहां आप तय करते हैं कि Aire आपकी ओर से किस AI सेवा से बात करेगा।\n\nमुख्य विकल्पों का क्या अर्थ है:\n• OpenAI: यदि आप एक साधारण क्लाउड सेटअप और विस्तृत मॉडल समर्थन चाहते हैं तो एक सामान्य प्रारंभिक बिंदु।\n• एंथ्रोपिक एपीआई: एक और मजबूत क्लाउड विकल्प, जो क्लाउड मॉडल के लिए जाना जाता है।\n• Claude.ai: एपीआई कुंजी के बजाय ब्राउज़र साइन-इन का उपयोग करता है।\n• Google AI: Google AI स्टूडियो के माध्यम से जेमिनी चैट मॉडल से जुड़ता है।\n• Google AI Images: एक समर्पित जेमिनी इमेज-जेनरेशन सेटअप।\n• ओलामा: आपके कंप्यूटर पर स्थानीय रूप से मॉडल चलाता है। गोपनीयता और ऑफ़लाइन उपयोग के लिए अच्छा है, लेकिन यह आपके हार्डवेयर पर निर्भर करता है।\n• कोडेक्स: सामान्य एपीआई कुंजी के बजाय स्थानीय कोडेक्स सीएलआई ब्रिज का उपयोग करता है।\n• ग्रोक, ओपनराउटर, डीपसीक, इंसेप्शन, और z.ai: अन्य प्रदाता या ओपनएआई-संगत एंडपॉइंट, अक्सर उपयोगी होते हैं यदि आपके पास पहले से ही वहां एक खाता है।\n\nआपको किसे चुनना चाहिए?\n• यदि आप चैट के लिए सबसे आसान क्लाउड सेटअप चाहते हैं: OpenAI, Anthropic, या Google AI से शुरुआत करें।\n• यदि आप स्थानीय और निजी चाहते हैं: ओलामा चुनें।\n• यदि आप विशेष रूप से जेमिनी से छवि निर्माण चाहते हैं: Google AI छवियाँ चुनें।\n• यदि आप पहले से ही किसी विशिष्ट प्रदाता के लिए भुगतान कर रहे हैं या कहीं और उसका उपयोग कर रहे हैं: यहां उसी प्रदाता को चुनें।\n\nआप लॉक इन नहीं हैं। विज़ार्ड आपको पहले एक प्रदाता जोड़ने में मदद करता है, और आप बाद में सेटिंग्स में और जोड़ सकते हैं।"
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Filling in Provider Details",
+      "title": "प्रदाता विवरण भरना",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "सेटअप विज़ार्ड खोलें",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "AI सेटअप खोलें",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-setup.png",
-      "imageCaption": "Provider setup step with the provider type, name, credentials, model, and connection test.",
-      "content": "After you pick a provider, the wizard asks only for the details that provider needs.\n\nTypical fields:\n• Provider type: the service you want to use.\n• Name: the label Aire will show in the chat window.\n• API key: the secret token that lets Aire talk to the provider. Some providers use browser sign-in instead, and some local providers do not need an API key at all.\n• Base URL: only needed for certain OpenAI-compatible services or self-hosted setups.\n• Model: the specific AI model you want to use.\n\nProvider-specific notes:\n• Claude.ai uses browser sign-in instead of a normal API key.\n• Ollama is local and usually works without an API key.\n• Codex uses the local Codex CLI bridge, so the wizard can offer CLI installation instead of asking for a normal API key.\n• Google AI Images is for image generation rather than normal chat.\n\nThe Test connection button is there to help you confirm the configuration before you finish. If the test succeeds, Aire can usually use that provider immediately.\n\nPractical advice:\n• If you are unsure which model to pick, start with the default suggestion.\n• If you see an API-key field, paste the key exactly as provided by the service.\n• If a provider offers both API access and browser sign-in, prefer API access if you want the most stable automation and integration behavior.\n\nAfter you finish the wizard, you can still change any of these settings later in the AI Providers tab."
+      "imageCaption": "प्रदाता प्रकार, नाम, क्रेडेंशियल्स, मॉडल और कनेक्शन परीक्षण के साथ प्रदाता सेटअप चरण।",
+      "content": "आपके द्वारा प्रदाता चुनने के बाद, विज़ार्ड केवल वही विवरण मांगता है जो प्रदाता को चाहिए।\n\nविशिष्ट फ़ील्ड:\n• प्रदाता प्रकार: वह सेवा जिसका आप उपयोग करना चाहते हैं।\n• नाम: चैट विंडो में ऐयर लेबल दिखाई देगा।\n• एपीआई कुंजी: गुप्त टोकन जो ऐयर को प्रदाता से बात करने देता है। कुछ प्रदाता इसके बजाय ब्राउज़र साइन-इन का उपयोग करते हैं, और कुछ स्थानीय प्रदाताओं को एपीआई कुंजी की बिल्कुल भी आवश्यकता नहीं होती है।\n• बेस यूआरएल: केवल कुछ ओपनएआई-संगत सेवाओं या स्वयं-होस्ट किए गए सेटअप के लिए आवश्यक है।\n• मॉडल: वह विशिष्ट AI मॉडल जिसका आप उपयोग करना चाहते हैं।\n\nप्रदाता-विशिष्ट नोट्स:\n• Claude.ai सामान्य एपीआई कुंजी के बजाय ब्राउज़र साइन-इन का उपयोग करता है।\n• ओलामा स्थानीय है और आमतौर पर एपीआई कुंजी के बिना काम करता है।\n• कोडेक्स स्थानीय कोडेक्स सीएलआई ब्रिज का उपयोग करता है, इसलिए विज़ार्ड सामान्य एपीआई कुंजी मांगने के बजाय सीएलआई इंस्टॉलेशन की पेशकश कर सकता है।\n• Google AI Images सामान्य चैट के बजाय छवि निर्माण के लिए है।\n\nपरीक्षण कनेक्शन बटन आपके समाप्त होने से पहले कॉन्फ़िगरेशन की पुष्टि करने में आपकी सहायता के लिए है। यदि परीक्षण सफल होता है, तो ऐयर आमतौर पर तुरंत उस प्रदाता का उपयोग कर सकता है।\n\nव्यावहारिक सलाह:\n• यदि आप अनिश्चित हैं कि कौन सा मॉडल चुनना है, तो डिफ़ॉल्ट सुझाव से शुरुआत करें।\n• यदि आपको कोई एपीआई-कुंजी फ़ील्ड दिखाई देती है, तो कुंजी को ठीक उसी प्रकार चिपकाएं, जैसा सेवा द्वारा प्रदान किया गया है।\n• यदि कोई प्रदाता एपीआई एक्सेस और ब्राउज़र साइन-इन दोनों प्रदान करता है, तो यदि आप सबसे स्थिर स्वचालन और एकीकरण व्यवहार चाहते हैं तो एपीआई एक्सेस को प्राथमिकता दें।\n\nविज़ार्ड समाप्त करने के बाद, आप बाद में भी AI प्रदाता टैब में इनमें से कोई भी सेटिंग बदल सकते हैं।"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Overview",
+      "title": "सिंहावलोकन",
       "links": [
         {
-          "label": "Set up your first AI",
+          "label": "अपना पहला AI सेट करें",
           "action": "settings:providers"
         },
         {
-          "label": "Change the look of Aire",
+          "label": "ऐरे का लुक बदलो",
           "action": "settings:appearance"
         }
       ],
-      "content": "Aire is a desktop chat app that stays in your system tray until you need it. You can think of it as one chat window that can connect to many AI services.\n\nIf you are new to AI, the usual starting point is simple:\n• Open AI setup.\n• Add one provider, such as OpenAI, Anthropic, Google AI, or Ollama.\n• Choose a model.\n• Type a question in the chat box and press Enter.\n\nWhat Aire can do:\n• Talk to different AI services from one app.\n• Save your conversations on your computer.\n• Let the AI use tools, with your approval, to read files, run commands, browse pages, and more.\n• Use voice input and voice output with Windows speech features.\n• Let other local apps talk to Aire through the Local API."
+      "content": "Aire एक डेस्कटॉप चैट ऐप है जो आपके सिस्टम ट्रे में तब तक रहता है जब तक आपको इसकी आवश्यकता न हो। आप इसे एक चैट विंडो के रूप में सोच सकते हैं जो कई AI सेवाओं से जुड़ सकती है।\n\nयदि आप AI में नए हैं, तो सामान्य शुरुआती बिंदु सरल है:\n• AI सेटअप खोलें.\n• एक प्रदाता जोड़ें, जैसे ओपनएआई, एंथ्रोपिक, गूगल एआई, या ओलामा।\n• एक मॉडल चुनें.\n• चैट बॉक्स में एक प्रश्न टाइप करें और Enter दबाएँ।\n\nऐरे क्या कर सकता है:\n• एक ऐप से विभिन्न एआई सेवाओं से बात करें।\n• अपनी बातचीत को अपने कंप्यूटर पर सहेजें.\n• फ़ाइलों को पढ़ने, कमांड चलाने, पेज ब्राउज़ करने और बहुत कुछ करने के लिए AI को आपकी अनुमति से टूल का उपयोग करने दें।\n• विंडोज़ स्पीच सुविधाओं के साथ वॉयस इनपुट और वॉयस आउटपुट का उपयोग करें।\n• अन्य स्थानीय ऐप्स को स्थानीय API के माध्यम से Aire से बात करने दें।"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tray Icon",
-      "content": "Aire runs in the system tray (bottom-right corner of the taskbar).\n\n• Left-click or right-click the tray icon to open the chat window.\n• Right-click the tray icon for options: Open, Settings, Exit.\n• Closing the window hides it — Aire keeps running in the background.\n• To quit completely, right-click the tray icon and choose Exit."
+      "title": "ट्रे चिह्न",
+      "content": "Aire सिस्टम ट्रे (टास्कबार के निचले-दाएँ कोने) में चलता है।\n\n• चैट विंडो खोलने के लिए ट्रे आइकन पर बायाँ-क्लिक करें या दाएँ-क्लिक करें।\n• विकल्पों के लिए ट्रे आइकन पर राइट-क्लिक करें: खोलें, सेटिंग्स, बाहर निकलें।\n• विंडो बंद करने से वह छिप जाती है - ऐरे पृष्ठभूमि में चलता रहता है।\n• पूरी तरह से बाहर निकलने के लिए, ट्रे आइकन पर राइट-क्लिक करें और बाहर निकलें चुनें।"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Chat",
+      "title": "बात करना",
       "links": [
         {
-          "label": "Open Providers",
+          "label": "प्रदाता खोलें",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/main-chat.png",
-      "imageCaption": "Main chat window with the provider selector, conversation area, search, and composer.",
-      "content": "• Type your message in the input box at the bottom and press Enter to send.\n• Press Shift+Enter to add a new line without sending.\n• Press ↑ / ↓ to navigate through previous messages you’ve sent (only works when the cursor is on the first or last line of the input box).\n• Drag and drop an image into the input box to attach it to your message (requires a vision-capable model).\n• Press Ctrl+F to search within the conversation. Use ↑ / ↓ or the arrow buttons to jump between matches. Press Escape to close the search bar.\n• Right-click the chat area to copy or save the conversation as a text file.\n• The 🗑 button clears the current conversation (asks for confirmation first).\n• The 💬 button in the sidebar opens your conversation history."
+      "imageCaption": "प्रदाता चयनकर्ता, वार्तालाप क्षेत्र, खोज और संगीतकार के साथ मुख्य चैट विंडो।",
+      "content": "• अपना संदेश नीचे इनपुट बॉक्स में टाइप करें और भेजने के लिए Enter दबाएँ।\n• बिना भेजे नई लाइन जोड़ने के लिए Shift+Enter दबाएँ।\n• आपके द्वारा भेजे गए पिछले संदेशों पर नेविगेट करने के लिए ↑ / ↓ दबाएँ (केवल तभी काम करता है जब कर्सर इनपुट बॉक्स की पहली या आखिरी पंक्ति पर हो)।\n• किसी छवि को अपने संदेश के साथ संलग्न करने के लिए उसे इनपुट बॉक्स में खींचें और छोड़ें (एक दृष्टि-सक्षम मॉडल की आवश्यकता है)।\n• बातचीत में खोजने के लिए Ctrl+F दबाएँ। मैचों के बीच कूदने के लिए ↑ / ↓ या तीर बटन का उपयोग करें। खोज बार बंद करने के लिए एस्केप दबाएँ।\n• बातचीत को टेक्स्ट फ़ाइल के रूप में कॉपी करने या सहेजने के लिए चैट क्षेत्र पर राइट-क्लिक करें।\n• 🗑 बटन वर्तमान वार्तालाप को साफ़ करता है (पहले पुष्टि मांगता है)।\n• साइडबार में 💬 बटन आपकी बातचीत का इतिहास खोलता है।"
     },
     {
       "tab": "Getting Started",
       "type": "table",
-      "title": "Keyboard Shortcuts",
+      "title": "कुंजीपटल अल्प मार्ग",
       "cols": [
-        "Shortcut",
-        "Action"
+        "शॉर्टकट",
+        "कार्रवाई"
       ],
       "rows": [
         [
-          "Enter",
-          "Send message"
+          "प्रवेश करना",
+          "मेसेज भेजें"
         ],
         [
-          "Shift+Enter",
-          "New line in the input box"
+          "शिफ्ट+एंटर",
+          "इनपुट बॉक्स में नई लाइन"
         ],
         [
           "↑ / ↓",
-          "Navigate message history (when cursor is on first/last line)"
+          "संदेश इतिहास नेविगेट करें (जब कर्सर पहली/अंतिम पंक्ति पर हो)"
         ],
         [
           "Ctrl+F",
-          "Search conversation"
+          "वार्तालाप खोजें"
         ],
         [
-          "Ctrl+Scroll",
-          "Adjust font size"
+          "Ctrl+स्क्रॉल",
+          "फ़ॉन्ट आकार समायोजित करें"
         ],
         [
-          "Escape",
-          "Close search bar / dismiss dialog"
+          "पलायन",
+          "खोज बार बंद करें/संवाद ख़ारिज करें"
         ]
       ]
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tips",
-      "content": "• You can have multiple AI providers configured and switch between them at the top of the chat window. Each conversation remembers its provider and assistant mode.\n• Resize the window by dragging any edge, including the top.\n• Conversations and settings are stored locally under %LOCALAPPDATA%\\Aire.\n• The AI can request tools for files, commands, browser actions, and more, but Aire still asks for approval unless an auto-accept rule applies.\n• If an AI response is cut off, the model may have hit its token or output limit. Ask it to continue, reduce the size of the task, or use a model with a larger context window."
+      "title": "सुझावों",
+      "content": "• आप कई AI प्रदाताओं को कॉन्फ़िगर कर सकते हैं और चैट विंडो के शीर्ष पर उनके बीच स्विच कर सकते हैं। प्रत्येक वार्तालाप अपने प्रदाता और सहायक मोड को याद रखता है।\n• शीर्ष सहित किसी भी किनारे को खींचकर विंडो का आकार बदलें।\n• वार्तालाप और सेटिंग्स स्थानीय रूप से %LOCALAPPDATA%\\Aire के अंतर्गत संग्रहीत की जाती हैं।\n• AI फ़ाइलों, कमांडों, ब्राउज़र क्रियाओं और बहुत कुछ के लिए टूल का अनुरोध कर सकता है, लेकिन Aire तब भी अनुमोदन मांगता है जब तक कि कोई ऑटो-स्वीकृति नियम लागू न हो।\n• यदि एआई प्रतिक्रिया कट जाती है, तो मॉडल अपनी टोकन या आउटपुट सीमा तक पहुंच सकता है। इसे जारी रखने के लिए कहें, कार्य का आकार कम करें, या बड़े संदर्भ विंडो वाले मॉडल का उपयोग करें।"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Assistant Modes",
+      "title": "सहायक मोड",
       "imagePath": "Assets/Help/main-chat-modes.png",
-      "imageCaption": "Assistant mode menu opened from the main header. Each conversation keeps its own mode.",
-      "content": "The mode button in the main header changes how Aire frames your request before it sends it to the provider.\n\nCurrent modes include Architect, Creative writer, Developer, General, Painter, Philosopher, Psychologist, Scientist, Security, and Teacher.\n\nWhat modes do:\n• They adjust the style and priorities of the assistant.\n• The selected mode is saved per conversation, so different chats can keep different roles.\n• General is the default for new conversations.\n• Different providers still keep their own quirks, but Aire passes the selected mode consistently as shared guidance.\n\nPractical examples:\n• Developer: better for code, debugging, and terminal tasks.\n• Architect: better for structure, trade-offs, and planning.\n• Teacher: better for explanations and step-by-step guidance.\n• Painter: best for image-oriented prompting and generation when the current provider supports it."
+      "imageCaption": "मुख्य हेडर से सहायक मोड मेनू खोला गया। प्रत्येक वार्तालाप का अपना ढंग होता है।",
+      "content": "मुख्य हेडर में मोड बटन यह बदलता है कि Aire प्रदाता को भेजने से पहले आपके अनुरोध को कैसे फ्रेम करता है।\n\nवर्तमान विधाओं में वास्तुकार, रचनात्मक लेखक, डेवलपर, सामान्य, चित्रकार, दार्शनिक, मनोवैज्ञानिक, वैज्ञानिक, सुरक्षा और शिक्षक शामिल हैं।\n\nकौन से तरीके करते हैं:\n• वे सहायक की शैली और प्राथमिकताओं को समायोजित करते हैं।\n• चयनित मोड प्रति वार्तालाप सहेजा जाता है, इसलिए अलग-अलग चैट अलग-अलग भूमिकाएँ रख सकते हैं।\n• नई बातचीत के लिए सामान्य डिफ़ॉल्ट है।\n• विभिन्न प्रदाता अभी भी अपनी-अपनी विशिष्टताएँ रखते हैं, लेकिन Aire साझा मार्गदर्शन के रूप में चयनित मोड को लगातार पास करता है।\n\nव्यावहारिक उदाहरण:\n• डेवलपर: कोड, डिबगिंग और टर्मिनल कार्यों के लिए बेहतर।\n• वास्तुकार: संरचना, व्यापार-बंद और योजना के लिए बेहतर।\n• शिक्षक: स्पष्टीकरण और चरण-दर-चरण मार्गदर्शन के लिए बेहतर है।\n• पेंटर: छवि-उन्मुख संकेत और पीढ़ी के लिए सर्वोत्तम जब वर्तमान प्रदाता इसका समर्थन करता है।"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Tool Categories",
+      "title": "उपकरण श्रेणियाँ",
       "imagePath": "Assets/Help/main-chat-tools.png",
-      "imageCaption": "Tools menu opened from the composer. You can enable all categories, disable all, or choose only the categories you want.",
-      "content": "The wrench button near the chat box controls which categories of tools the current provider is allowed to use.\n\nHow it works:\n• Click the wrench button to open the categories menu.\n• Turn on only the categories you want the AI to be able to request.\n• Choose No tools if you want a text-only conversation.\n• Aire remembers your selected tool categories and uses them as part of the current tool policy.\n\nWhy this matters:\n• Fewer enabled categories make tool use easier to understand.\n• Restricting categories can reduce risk and accidental side effects.\n• If a provider does not support tools, the wrench button is hidden."
+      "imageCaption": "कंपोज़र से टूल मेनू खोला गया. आप सभी श्रेणियां सक्षम कर सकते हैं, सभी अक्षम कर सकते हैं, या केवल अपनी इच्छित श्रेणियां चुन सकते हैं।",
+      "content": "चैट बॉक्स के पास रिंच बटन नियंत्रित करता है कि वर्तमान प्रदाता को किस श्रेणी के टूल का उपयोग करने की अनुमति है।\n\nयह कैसे काम करता है:\n• श्रेणियाँ मेनू खोलने के लिए रिंच बटन पर क्लिक करें।\n• केवल उन्हीं श्रेणियों को चालू करें जिनके लिए आप AI से अनुरोध करना चाहते हैं।\n• यदि आप केवल टेक्स्ट वार्तालाप चाहते हैं तो कोई टूल नहीं चुनें।\n• ऐयर आपकी चयनित टूल श्रेणियों को याद रखता है और उन्हें वर्तमान टूल नीति के हिस्से के रूप में उपयोग करता है।\n\nयह क्यों मायने रखता है:\n• कम सक्षम श्रेणियां टूल के उपयोग को समझना आसान बनाती हैं।\n• श्रेणियों को प्रतिबंधित करने से जोखिम और आकस्मिक दुष्प्रभावों को कम किया जा सकता है।\n• यदि कोई प्रदाता टूल का समर्थन नहीं करता है, तो रिंच बटन छिपा हुआ है।"
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "AI Providers",
+      "title": "एआई प्रदाता",
       "imagePath": "Assets/Help/settings-providers.png",
-      "imageCaption": "Provider settings with the provider list on the left and the selected provider form on the right.",
+      "imageCaption": "बाईं ओर प्रदाता सूची और दाईं ओर चयनित प्रदाता प्रपत्र के साथ प्रदाता सेटिंग्स।",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "AI सेटअप खोलें",
           "action": "settings:providers"
         },
         {
@@ -386,451 +386,451 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "A provider is the AI service Aire talks to on your behalf. Most users only need to set up one provider to get started.\n\nEach provider entry has four main parts:\n• Name: the label you will see inside Aire.\n• Type: which AI service to use.\n• Model: the specific model you want that service to run.\n• Credentials: usually an API key, or for Claude.ai a browser sign-in.\n\nCommon choices:\n• OpenAI: paste your API key from platform.openai.com.\n• Anthropic: sign in with Claude.ai in the browser, or paste an Anthropic API key.\n• Google AI: paste your Gemini API key from aistudio.google.com.\n• Ollama: use a local Ollama server on your own machine. No API key is needed.\n• OpenAI-compatible endpoints: services like Groq, Mistral, OpenRouter, DeepSeek, or LM Studio can often work by setting the Base URL.\n\nIf you are unsure which one to use, OpenAI or Anthropic are usually the easiest cloud options, while Ollama is the usual local option.\n\nProviders can be enabled or disabled without deleting them. Changes save automatically."
+      "content": "प्रदाता वह AI सेवा है जिससे Aire आपकी ओर से बात करता है। अधिकांश उपयोगकर्ताओं को आरंभ करने के लिए केवल एक प्रदाता स्थापित करने की आवश्यकता होती है।\n\nप्रत्येक प्रदाता प्रविष्टि के चार मुख्य भाग होते हैं:\n• नाम: लेबल आप ऐरे के अंदर देखेंगे।\n• प्रकार: कौन सी एआई सेवा का उपयोग करना है।\n• मॉडल: वह विशिष्ट मॉडल जिसे आप उस सेवा को चलाना चाहते हैं।\n• क्रेडेंशियल: आमतौर पर एक एपीआई कुंजी, या क्लाउड.एआई के लिए एक ब्राउज़र साइन-इन।\n\nसामान्य विकल्प:\n• OpenAI: अपनी API कुंजी कोplatform.openai.com से पेस्ट करें।\n• एंथ्रोपिक: ब्राउज़र में Claude.ai के साथ साइन इन करें, या एंथ्रोपिक एपीआई कुंजी पेस्ट करें।\n• Google AI: aistudio.google.com से अपनी जेमिनी एपीआई कुंजी पेस्ट करें।\n• ओलामा: अपनी मशीन पर स्थानीय ओलामा सर्वर का उपयोग करें। किसी API कुंजी की आवश्यकता नहीं है.\n• ओपनएआई-संगत एंडपॉइंट: ग्रोक, मिस्ट्रल, ओपनराउटर, डीपसीक या एलएम स्टूडियो जैसी सेवाएं अक्सर बेस यूआरएल सेट करके काम कर सकती हैं।\n\nयदि आप निश्चित नहीं हैं कि किसका उपयोग करना है, तो ओपनएआई या एंथ्रोपिक आमतौर पर सबसे आसान क्लाउड विकल्प हैं, जबकि ओलामा सामान्य स्थानीय विकल्प है।\n\nप्रदाताओं को हटाए बिना सक्षम या अक्षम किया जा सकता है। परिवर्तन स्वचालित रूप से सहेजे जाते हैं."
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Tool Calling Modes",
-      "intro": "Aire supports two methods for giving an AI model access to tools. The mode is chosen automatically based on the provider type, but can be overridden per model in a custom JSON file (see Custom Models).",
+      "title": "टूल कॉलिंग मोड",
+      "intro": "AI मॉडल को टूल तक पहुंच प्रदान करने के लिए Aire दो तरीकों का समर्थन करता है। प्रदाता प्रकार के आधार पर मोड स्वचालित रूप से चुना जाता है, लेकिन कस्टम JSON फ़ाइल में प्रति मॉडल ओवरराइड किया जा सकता है (कस्टम मॉडल देखें)।",
       "cols": [
-        "Mode",
-        "How it works"
+        "तरीका",
+        "यह काम किस प्रकार करता है"
       ],
       "rows": [
         [
-          "Text-based\n(default: OpenAI, Anthropic)",
-          "Tool descriptions are embedded in the system prompt. The AI responds with a <tool_call> XML block. Works with any model that follows instructions reliably."
+          "पाठ आधारित\n(डिफ़ॉल्ट: ओपनएआई, एंथ्रोपिक)",
+          "टूल विवरण सिस्टम प्रॉम्प्ट में एम्बेडेड हैं। AI <tool_call> XML ब्लॉक के साथ प्रतिक्रिया करता है। निर्देशों का विश्वसनीय ढंग से पालन करने वाले किसी भी मॉडल के साथ काम करता है।"
         ],
         [
-          "Native function calling\n(default: Ollama, Google AI)",
-          "Structured tool schemas are sent via the provider API. The AI returns structured function-call objects. More accurate. Requires explicit API support."
+          "मूल फ़ंक्शन कॉलिंग\n(डिफ़ॉल्ट: ओलामा, Google AI)",
+          "संरचित टूल स्कीमा प्रदाता एपीआई के माध्यम से भेजे जाते हैं। एआई संरचित फ़ंक्शन-कॉल ऑब्जेक्ट लौटाता है। अधिक सटीक। स्पष्ट एपीआई समर्थन की आवश्यकता है।"
         ],
         [
-          "Unsupported",
-          "The model cannot use tools. Set this in a custom model file to skip tool prompts for models that get confused by them."
+          "असमर्थित",
+          "मॉडल टूल का उपयोग नहीं कर सकता. उन मॉडलों के लिए टूल प्रॉम्प्ट को छोड़ने के लिए इसे एक कस्टम मॉडल फ़ाइल में सेट करें जो उनसे भ्रमित हो जाते हैं।"
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Provider & Model Compatibility",
-      "intro": "Use the Capability Tests button to verify your specific provider and model combination.",
+      "title": "प्रदाता और मॉडल संगतता",
+      "intro": "अपने विशिष्ट प्रदाता और मॉडल संयोजन को सत्यापित करने के लिए क्षमता परीक्षण बटन का उपयोग करें।",
       "cols": [
-        "Provider / Endpoint",
-        "Mode",
-        "Notes"
+        "प्रदाता/समाप्ति बिंदु",
+        "तरीका",
+        "टिप्पणियाँ"
       ],
       "rows": [
         [
-          "OpenAI",
-          "Native",
-          "GPT-4o, GPT-4.1, GPT-4o-mini — reliable tool support"
+          "ओपनएआई",
+          "देशी",
+          "GPT-4o, GPT-4.1, GPT-4o-मिनी - विश्वसनीय उपकरण समर्थन"
         ],
         [
-          "Anthropic",
-          "Text-based",
-          "Claude 3.5 Sonnet and newer — excellent instruction following"
+          "anthropic",
+          "टेक्स्ट आधारित",
+          "क्लाउड 3.5 सॉनेट और नया - उत्कृष्ट अनुदेशन"
         ],
         [
-          "Google AI (Gemini)",
-          "Native",
-          "Gemini 2.0 Flash and newer recommended"
+          "Google AI (मिथुन)",
+          "देशी",
+          "जेमिनी 2.0 फ़्लैश और नया अनुशंसित"
         ],
         [
-          "Ollama (local)",
-          "Native",
-          "qwen2.5-coder, llama3.1, mistral-nemo work well; small models vary"
+          "ओलामा (स्थानीय)",
+          "देशी",
+          "क्वेन2.5-कोडर, लामा3.1, मिस्ट्रल-निमो अच्छा काम करते हैं; छोटे मॉडल अलग-अलग होते हैं"
         ],
         [
-          "Groq (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.groq.com/openai/v1 — very fast"
+          "ग्रोक (ओपनएआई + बेस यूआरएल)",
+          "देशी",
+          "बेस यूआरएल: https://api.groq.com/openai/v1 - बहुत तेज़"
         ],
         [
-          "Mistral (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.mistral.ai/v1"
+          "मिस्ट्रल (ओपनएआई + बेस यूआरएल)",
+          "देशी",
+          "बेस यूआरएल: https://api.mistral.ai/v1"
         ],
         [
-          "OpenRouter (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://openrouter.ai/api/v1 — 100+ models"
+          "ओपनराउटर (ओपनएआई + बेस यूआरएल)",
+          "देशी",
+          "बेस यूआरएल: https://openrouter.ai/api/v1 - 100+ मॉडल"
         ],
         [
-          "DeepSeek (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.deepseek.com/v1"
+          "डीपसीक (ओपनएआई + बेस यूआरएल)",
+          "देशी",
+          "बेस यूआरएल: https://api.depseek.com/v1"
         ],
         [
-          "LM Studio (OpenAI + Base URL)",
-          "Native",
-          "Base URL: http://localhost:1234/v1 — enable function calling in LM Studio settings"
+          "एलएम स्टूडियो (ओपनएआई + बेस यूआरएल)",
+          "देशी",
+          "बेस यूआरएल: http://localhost:1234/v1 - एलएम स्टूडियो सेटिंग्स में फ़ंक्शन कॉलिंग सक्षम करें"
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "Capability Tests",
+      "title": "क्षमता परीक्षण",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "AI सेटअप खोलें",
           "action": "settings:providers"
         }
       ],
-      "content": "The Run Tests button checks what the selected provider and model can really do.\n\nWhat is tested:\n• Tool-call capability tests check whether the model asks for the expected Aire tool. No real file, browser, or system action is executed.\n• Image-generation capability tests call the provider's image-generation path directly. These tests can consume provider quota and may fail if your account or model does not support image generation.\n\nHow to use it:\n• Open Settings ⚙ → select a provider → click Run Tests.\n• The provider form is locked during the run to avoid configuration changes mid-test.\n• Results are cached per provider/model combination and reload quickly next time.\n\nReading results:\n• ✓ (green) — the provider handled the capability correctly.\n• ✗ (red) — the provider or model failed that capability.\n• If the message mentions quota, balance, or rate limits, the failure is coming from the provider account rather than from Aire itself.\n\nIf a model fails many tool tests, try another model or adjust its custom model metadata. If image generation fails, verify that the provider account, model, and quota actually allow it."
+      "content": "रन टेस्ट बटन जाँचता है कि चयनित प्रदाता और मॉडल वास्तव में क्या कर सकते हैं।\n\nक्या परीक्षण किया जाता है:\n• टूल-कॉल क्षमता परीक्षण यह जांचता है कि मॉडल अपेक्षित ऐयर टूल मांगता है या नहीं। कोई वास्तविक फ़ाइल, ब्राउज़र या सिस्टम क्रिया निष्पादित नहीं होती है।\n• छवि-निर्माण क्षमता परीक्षण सीधे प्रदाता के छवि-उत्पादन पथ को कॉल करते हैं। ये परीक्षण प्रदाता कोटा का उपभोग कर सकते हैं और विफल हो सकते हैं यदि आपका खाता या मॉडल छवि निर्माण का समर्थन नहीं करता है।\n\nइसका उपयोग कैसे करें:\n• सेटिंग्स खोलें ⚙ → एक प्रदाता चुनें → परीक्षण चलाएँ पर क्लिक करें।\n• परीक्षण के मध्य में कॉन्फ़िगरेशन परिवर्तन से बचने के लिए प्रदाता फॉर्म को रन के दौरान लॉक कर दिया जाता है।\n• परिणाम प्रति प्रदाता/मॉडल संयोजन के अनुसार कैश किए जाते हैं और अगली बार तुरंत पुनः लोड किए जाते हैं।\n\nपढ़ने के परिणाम:\n• ✓ (हरा) - प्रदाता ने क्षमता को सही ढंग से संभाला।\n• ✗ (लाल) - प्रदाता या मॉडल उस क्षमता में विफल रहा।\n• यदि संदेश में कोटा, शेष राशि या दर सीमा का उल्लेख है, तो विफलता एअर के बजाय प्रदाता खाते से आ रही है।\n\nयदि कोई मॉडल कई टूल परीक्षणों में विफल रहता है, तो दूसरा मॉडल आज़माएं या उसके कस्टम मॉडल मेटाडेटा को समायोजित करें। यदि छवि निर्माण विफल हो जाता है, तो सत्यापित करें कि प्रदाता खाता, मॉडल और कोटा वास्तव में इसकी अनुमति देता है।"
     },
     {
       "tab": "Providers",
       "type": "code",
-      "title": "Custom Models",
-      "intro": "Create a JSON file in the app’s Data\\Models directory to customise the model list for any provider type. Use the capabilities array to declare what a model supports.\n\nCapability flags:\n• \"vision\" — model accepts image attachments\n• \"tools\" — model can use tools\n• \"toolcallmode:native\" — force native function calling\n• \"toolcallmode:text\" — force text-based tool calling\n• \"toolcallmode:unsupported\" — disable tool prompts entirely\n\nTool output format flags (for models that embed tool calls in their text response):\n• \"toolformat:hermes\" — Hermes/Qwen format: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain format: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — OpenAI native tool_calls schema embedded in content\n• \"toolformat:text\" — Aire’s default text format: {\"tool\":\"...\", ...}",
-      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"models\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"vision\", \"tools\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (no tools)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"my-fine-tuned-model\",\n      \"displayName\": \"My Fine-tune\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
+      "title": "कस्टम मॉडल",
+      "intro": "किसी भी प्रदाता प्रकार के लिए मॉडल सूची को अनुकूलित करने के लिए ऐप की डेटा मॉडल निर्देशिका में एक JSON फ़ाइल बनाएं। यह घोषित करने के लिए कि कोई मॉडल किस चीज़ का समर्थन करता है, क्षमता सारणी का उपयोग करें।\n\nक्षमता झंडे:\n• \"विज़न\" - मॉडल छवि अनुलग्नकों को स्वीकार करता है\n• \"उपकरण\" - मॉडल उपकरण का उपयोग कर सकता है\n• \"टूलकॉलमोड:नेटिव\" - नेटिव फ़ंक्शन कॉलिंग को बाध्य करें\n• \"टूलकॉलमोड: टेक्स्ट\" - टेक्स्ट-आधारित टूल कॉलिंग को बाध्य करें\n• \"टूलकॉलमोड:असमर्थित\" - टूल प्रॉम्प्ट को पूरी तरह से अक्षम करें\n\nटूल आउटपुट प्रारूप फ़्लैग (उन मॉडलों के लिए जो अपने टेक्स्ट प्रतिक्रिया में टूल कॉल एम्बेड करते हैं):\n• \"टूलफॉर्मेट:हर्मीस\" - हर्मीस/क्वेन प्रारूप: <टूल_कॉल>{\"नाम\":\"...\",\"तर्क\":{...}}</टूल_कॉल>\n• \"टूलफॉर्मेट:रिएक्ट\" - रिएक्ट/लैंगचेन फॉर्मेट: {\"एक्शन\":\"...\",\"एक्शन_इनपुट\":{...}}\n• \"टूलफॉर्मेट:नेटिव\" - ओपनएआई नेटिव टूल_कॉल स्कीमा सामग्री में एम्बेडेड है\n• \"टूलफॉर्मेट: टेक्स्ट\" - ऐरे का डिफ़ॉल्ट टेक्स्ट फॉर्मेट: {\"टूल\":\"...\", ...}",
+      "content": "{\n  \"प्रदाता प्रकार\": \"ओपनएआई\",\n  \"मॉडल\": [\n    {\n      \"आईडी\": \"जीपीटी-4ओ\",\n      \"प्रदर्शननाम\": \"GPT-4o\",\n      \"क्षमताएं\": [\"दृष्टि\", \"उपकरण\"]\n    },\n    {\n      \"आईडी\": \"ओ1-मिनी\",\n      \"displayName\": \"o1-मिनी (कोई उपकरण नहीं)\",\n      \"क्षमताएँ\": [\"टूलकॉलमोड:असमर्थित\"]\n    },\n    {\n      \"आईडी\": \"मेरा-फाइन-ट्यून्ड-मॉडल\",\n      \"displayName\": \"माई फ़ाइन-ट्यून\",\n      \"क्षमताएं\": [\"टूल्स\", \"टूलकॉलमोड: टेक्स्ट\"]\n    }\n  ]\n}"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "AI Tools",
+      "title": "एआई उपकरण",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some AI models can ask Aire to perform actions for them. Aire calls these actions tools.\n\nImportant: tools do not run silently. Aire shows you what the AI wants to do, and you approve or deny it.\n\nExamples of what tools can do:\n• Read or write files.\n• Run shell commands.\n• Open and read web pages.\n• Inspect browser tabs.\n• Take screenshots.\n• Type, click, or move the mouse.\n• Read or send email.\n\nIf you are new to this feature, the safest habit is simple: read the action request before approving it. Approve read-only actions when they make sense, and be more careful with actions that change files, send messages, or control the keyboard and mouse."
+      "content": "कुछ AI मॉडल Aire को उनके लिए कार्य करने के लिए कह सकते हैं। ऐरे इन क्रियाओं को टूल कहते हैं।\n\nमहत्वपूर्ण: उपकरण चुपचाप नहीं चलते। ऐयर आपको दिखाता है कि एआई क्या करना चाहता है, और आप इसे स्वीकार या अस्वीकार करते हैं।\n\nउपकरण क्या कर सकते हैं इसके उदाहरण:\n• फ़ाइलें पढ़ें या लिखें.\n• शेल कमांड चलाएँ।\n• वेब पेज खोलें और पढ़ें।\n• ब्राउज़र टैब का निरीक्षण करें.\n• स्क्रीनशॉट लें.\n• टाइप करें, क्लिक करें या माउस घुमाएँ।\n• ईमेल पढ़ें या भेजें.\n\nयदि आप इस सुविधा के लिए नए हैं, तो सबसे सुरक्षित आदत सरल है: इसे स्वीकृत करने से पहले कार्रवाई अनुरोध पढ़ें। केवल पढ़ने योग्य कार्रवाइयों को तभी स्वीकृत करें जब वे समझ में आएँ, और उन कार्रवाइयों से अधिक सावधान रहें जो फ़ाइलें बदलती हैं, संदेश भेजती हैं, या कीबोर्ड और माउस को नियंत्रित करती हैं।"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Auto-accept Profiles",
+      "title": "प्रोफ़ाइल स्वतः स्वीकार करें",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Auto-accept profiles let you define which actions Aire can approve automatically without interrupting you each time.\n\nBuilt-in examples include Developer, News browser, and Conservative.\n\nWhat to keep in mind:\n• Profiles are a convenience, not a security replacement.\n• Start conservatively and only auto-accept actions you really trust.\n• File writes, input control, and external side effects are usually worth keeping manual.\n\nIf you are unsure, leave auto-accept restrictive and review actions one by one."
+      "content": "स्वतः-स्वीकार प्रोफ़ाइल आपको यह परिभाषित करने देती है कि ऐयर हर बार आपको बाधित किए बिना किन कार्यों को स्वचालित रूप से स्वीकृत कर सकता है।\n\nअंतर्निहित उदाहरणों में डेवलपर, समाचार ब्राउज़र और कंज़र्वेटिव शामिल हैं।\n\nक्या ध्यान रखें:\n• प्रोफ़ाइल एक सुविधा है, सुरक्षा प्रतिस्थापन नहीं।\n• रूढ़िवादी ढंग से शुरुआत करें और केवल उन्हीं कार्यों को स्वतः स्वीकार करें जिन पर आप वास्तव में भरोसा करते हैं।\n• फ़ाइल लेखन, इनपुट नियंत्रण और बाहरी दुष्प्रभाव आमतौर पर मैनुअल रखने लायक होते हैं।\n\nयदि आप अनिश्चित हैं, तो स्वतः-स्वीकृति प्रतिबंधात्मक छोड़ दें और एक-एक करके कार्रवाइयों की समीक्षा करें।"
     },
     {
       "tab": "Connections",
       "type": "text",
-      "title": "MCP Servers",
+      "title": "एमसीपी सर्वर",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings with the MCP catalog and installed server list.",
+      "imageCaption": "एमसीपी कैटलॉग और स्थापित सर्वर सूची के साथ कनेक्शन सेटिंग्स।",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "कनेक्शन सेटिंग खोलें",
           "action": "settings:connections"
         }
       ],
-      "content": "MCP servers are external helper services that give Aire more tools and data sources. MCP stands for Model Context Protocol.\n\nIn plain language, an MCP server is a bridge between Aire and another system, such as:\n• your file system,\n• GitHub,\n• SQLite,\n• web fetch tools,\n• memory tools,\n• Slack, Gmail, or Notion.\n\nHow Aire handles them:\n• The Connections tab includes a curated catalog of common MCP servers.\n• You can install, remove, enable, disable, and edit them from the app.\n• Some servers need extra credentials or Node.js/npm on the machine.\n\nGood beginner advice:\n• Start with one simple server, such as Filesystem or Web Fetch.\n• Read the description before installing it.\n• Treat an MCP server like any other integration: useful, but something you should trust before enabling."
+      "content": "एमसीपी सर्वर बाहरी सहायक सेवाएँ हैं जो ऐयर को अधिक उपकरण और डेटा स्रोत देते हैं। MCP का मतलब मॉडल कॉन्टेक्स्ट प्रोटोकॉल है।\n\nसरल भाषा में, एक MCP सर्वर Aire और अन्य सिस्टम के बीच एक पुल है, जैसे:\n• आपका फ़ाइल सिस्टम,\n• गिटहब,\n• SQLite,\n• वेब लाने के उपकरण,\n• मेमोरी उपकरण,\n• स्लैक, जीमेल, या नोशन।\n\nऐरे उन्हें कैसे संभालता है:\n• कनेक्शंस टैब में सामान्य एमसीपी सर्वरों की एक क्यूरेटेड कैटलॉग शामिल है।\n• आप ऐप से उन्हें इंस्टॉल, हटा, सक्षम, अक्षम और संपादित कर सकते हैं।\n• कुछ सर्वरों को मशीन पर अतिरिक्त क्रेडेंशियल या Node.js/npm की आवश्यकता होती है।\n\nअच्छी शुरुआती सलाह:\n• एक साधारण सर्वर से प्रारंभ करें, जैसे फ़ाइल सिस्टम या वेब फ़ेच।\n• इसे स्थापित करने से पहले विवरण पढ़ें।\n• MCP सर्वर को किसी भी अन्य एकीकरण की तरह समझें: उपयोगी, लेकिन सक्षम करने से पहले आपको इस पर भरोसा करना चाहिए।"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Keyboard & Mouse Sessions",
+      "title": "कीबोर्ड और माउस सत्र",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some tasks require the AI to control the keyboard and mouse. When a session is active:\n\n• A banner appears at the bottom of the chat window showing the session is active.\n• A floating ⏹ STOP SESSION button appears at the top-right of your screen — click it at any time to cancel immediately.\n• Say “AIRE STOP” to cancel by voice.\n• Click “End session” in the banner to cancel.\n\nThe AI will request approval for each individual action (key press, mouse click, etc.) before performing it."
+      "content": "कुछ कार्यों के लिए कीबोर्ड और माउस को नियंत्रित करने के लिए AI की आवश्यकता होती है। जब कोई सत्र सक्रिय हो:\n\n• चैट विंडो के नीचे एक बैनर दिखाई देता है जो दर्शाता है कि सत्र सक्रिय है।\n• आपकी स्क्रीन के ऊपर दाईं ओर एक फ्लोटिंग ⏹ स्टॉप सेशन बटन दिखाई देता है - इसे तुरंत रद्द करने के लिए किसी भी समय क्लिक करें।\n• आवाज से रद्द करने के लिए \"एयर स्टॉप\" कहें।\n• रद्द करने के लिए बैनर में \"सत्र समाप्त करें\" पर क्लिक करें।\n\nएआई प्रत्येक व्यक्तिगत कार्रवाई (कुंजी प्रेस, माउस क्लिक, आदि) को निष्पादित करने से पहले उसके लिए अनुमोदन का अनुरोध करेगा।"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Input",
+      "title": "ध्वनि इनपुट",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "ध्वनि सेटिंग खोलें",
           "action": "settings:voice"
         }
       ],
-      "content": "Click the 🎤 button to start voice recognition. Aire uses Windows built-in speech recognition — no API key or internet connection required.\n\n• Speak normally. Your words appear in the input box as you talk.\n• When you stop talking, a countdown (5 → 1) appears on the button. If you stay silent, the message sends automatically at 0.\n• Start talking again at any time to reset the countdown.\n• Click the button again (shows ⏹) to stop without sending.\n\nVoice recognition accuracy depends on your Windows language and microphone quality. You can train Windows Speech Recognition via Windows Settings → Time & Language → Speech."
+      "content": "ध्वनि पहचान प्रारंभ करने के लिए 🎤 बटन पर क्लिक करें। Aire Windows अंतर्निहित वाक् पहचान का उपयोग करता है - किसी API कुंजी या इंटरनेट कनेक्शन की आवश्यकता नहीं है।\n\n• सामान्य रूप से बोलें. जैसे ही आप बात करते हैं आपके शब्द इनपुट बॉक्स में दिखाई देते हैं।\n• जब आप बात करना बंद करते हैं, तो बटन पर उलटी गिनती (5 → 1) दिखाई देती है। यदि आप चुप रहते हैं, तो संदेश स्वचालित रूप से 0 पर भेजता है।\n• उलटी गिनती रीसेट करने के लिए किसी भी समय फिर से बात करना शुरू करें।\n• बिना भेजे रुकने के लिए बटन पर फिर से क्लिक करें (⏹ दिखाता है)।\n\nध्वनि पहचान सटीकता आपकी विंडोज़ भाषा और माइक्रोफ़ोन गुणवत्ता पर निर्भर करती है। आप विंडोज़ सेटिंग्स → समय और भाषा → स्पीच के माध्यम से विंडोज़ स्पीच रिकग्निशन को प्रशिक्षित कर सकते हैं।"
     },
     {
       "tab": "Tools & Voice",
       "type": "table",
-      "title": "Voice Commands",
-      "intro": "Say “AIRE” followed by any of these words while the microphone is active:",
+      "title": "ध्वनि आदेश",
+      "intro": "जब माइक्रोफ़ोन सक्रिय हो तो \"AIRE\" बोलें और उसके बाद इनमें से कोई भी शब्द बोलें:",
       "cols": [
-        "Command",
-        "What it does"
+        "आज्ञा",
+        "यह क्या करता है"
       ],
       "rows": [
         [
-          "AIRE SEND",
-          "Send the current message immediately"
+          "एयर भेजें",
+          "वर्तमान संदेश तुरंत भेजें"
         ],
         [
-          "AIRE PAUSE",
-          "Freeze the silence countdown"
+          "वायु विराम",
+          "मौन उलटी गिनती रोकें"
         ],
         [
-          "AIRE RESUME",
-          "Resume the countdown"
+          "एयर बायोडाटा",
+          "उलटी गिनती फिर से शुरू करें"
         ],
         [
-          "AIRE CLEAR",
-          "Clear the input box"
+          "हवा साफ़",
+          "इनपुट बॉक्स साफ़ करें"
         ],
         [
-          "AIRE UNDO",
-          "Clear the input box"
+          "एयर पूर्ववत करें",
+          "इनपुट बॉक्स साफ़ करें"
         ],
         [
-          "AIRE CANCEL",
-          "Stop listening without sending"
+          "प्रसारण रद्द",
+          "बिना भेजे सुनना बंद करें"
         ],
         [
-          "AIRE NEW",
-          "Start a new conversation"
+          "एयर नया",
+          "एक नई बातचीत शुरू करें"
         ],
         [
-          "AIRE SETTINGS",
-          "Open the Settings window"
+          "एयर सेटिंग्स",
+          "सेटिंग्स विंडो खोलें"
         ],
         [
-          "AIRE OPEN/SHOW",
-          "Show the main chat window"
+          "एयर ओपन/शो",
+          "मुख्य चैट विंडो दिखाएँ"
         ],
         [
-          "AIRE CLOSE/HIDE",
-          "Hide the main chat window"
+          "हवा बंद करो/छिपाओ",
+          "मुख्य चैट विंडो छिपाएँ"
         ],
         [
-          "AIRE YES/NO",
-          "Approve or deny a pending AI action"
+          "हाँ/नहीं",
+          "किसी लंबित AI कार्रवाई को स्वीकृत या अस्वीकार करें"
         ],
         [
-          "AIRE STOP",
-          "Emergency stop — end any active keyboard/mouse session immediately"
+          "एयर स्टॉप",
+          "आपातकालीन रोक - किसी भी सक्रिय कीबोर्ड/माउस सत्र को तुरंत समाप्त करें"
         ]
       ]
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Output",
+      "title": "आवाज आउटपुट",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "ध्वनि सेटिंग खोलें",
           "action": "settings:voice"
         }
       ],
-      "content": "Aire can read AI responses aloud using Windows text-to-speech. Enable this in Settings (⚙) → Voice Output.\n\n• Choose to speak all responses, or only when you use the microphone.\n• Select a voice and adjust the reading speed.\n• Toggle voice output on/off quickly with the speaker icon near the microphone button."
+      "content": "Aire विंडोज़ टेक्स्ट-टू-स्पीच का उपयोग करके AI प्रतिक्रियाओं को ज़ोर से पढ़ सकता है। इसे सेटिंग्स (⚙) → वॉयस आउटपुट में सक्षम करें।\n\n• सभी प्रत्युत्तरों में बोलना चुनें, या केवल तब बोलें जब आप माइक्रोफ़ोन का उपयोग करें।\n• एक आवाज़ चुनें और पढ़ने की गति समायोजित करें।\n• माइक्रोफ़ोन बटन के पास स्पीकर आइकन के साथ ध्वनि आउटपुट को तुरंत चालू/बंद करें।"
     },
     {
       "tab": "Appearance",
       "type": "text",
-      "title": "Appearance",
+      "title": "उपस्थिति",
       "links": [
         {
-          "label": "Open appearance settings",
+          "label": "उपस्थिति सेटिंग खोलें",
           "action": "settings:appearance"
         }
       ],
-      "content": "Open Settings (⚙) → Appearance to change the look of the app.\n\n• Theme: switch between Dark and Light (Beige).\n• Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint — the slider is pure grayscale by default.\n• Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.\n\nAll appearance settings are saved and restored on next launch."
+      "content": "ऐप का स्वरूप बदलने के लिए सेटिंग्स (⚙) → उपस्थिति खोलें।\n\n• थीम: डार्क और लाइट (बेज) के बीच स्विच करें।\n• रंग टिंट: संपूर्ण यूआई पर रंग टिंट लागू करने के लिए स्लाइडर को खींचें। बायां सिरा (काला) और दायां सिरा (सफेद) का मतलब कोई रंग नहीं है - स्लाइडर डिफ़ॉल्ट रूप से शुद्ध ग्रेस्केल है।\n• फ़ॉन्ट आकार: फ़ॉन्ट आकार बढ़ाने या घटाने के लिए Ctrl दबाए रखें और चैट या इनपुट क्षेत्र पर माउस व्हील को स्क्रॉल करें। सेटिंग स्वचालित रूप से सहेजी जाती है.\n\nसभी उपस्थिति सेटिंग्स सहेजी जाती हैं और अगले लॉन्च पर पुनर्स्थापित की जाती हैं।"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "What is the Local API?",
+      "title": "स्थानीय एपीआई क्या है?",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings where local API access, email accounts, and MCP servers are configured.",
+      "imageCaption": "कनेक्शन सेटिंग्स जहां स्थानीय एपीआई एक्सेस, ईमेल खाते और एमसीपी सर्वर कॉन्फ़िगर किए गए हैं।",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "कनेक्शन सेटिंग खोलें",
           "action": "settings:connections"
         }
       ],
-      "content": "The Local API is how another program on the same computer can talk to Aire.\n\nFor non-developers: you usually do not need this feature.\n\nFor developers and advanced users: this is the easiest way to connect your own script, tool, automation, or desktop app to Aire. A local program can:\n• ask Aire to show or hide its main window,\n• list conversations and read messages,\n• send a message to the active conversation,\n• switch provider or conversation,\n• inspect pending tool approvals,\n• and call Aire tools directly.\n\nHow it works:\n• Aire listens on TCP port 51234.\n• It only listens on 127.0.0.1, so other computers cannot reach it directly.\n• Each request is one JSON object sent as one line.\n• Each response is one JSON object returned as one line.\n\nTo use it, first open Connections settings and enable local API access."
+      "content": "लोकल एपीआई यह है कि उसी कंप्यूटर पर दूसरा प्रोग्राम ऐयर से कैसे बात कर सकता है।\n\nगैर-डेवलपर्स के लिए: आपको आमतौर पर इस सुविधा की आवश्यकता नहीं होती है।\n\nडेवलपर्स और उन्नत उपयोगकर्ताओं के लिए: यह अपनी स्क्रिप्ट, टूल, ऑटोमेशन या डेस्कटॉप ऐप को Aire से कनेक्ट करने का सबसे आसान तरीका है। एक स्थानीय कार्यक्रम यह कर सकता है:\n• ऐयर को इसकी मुख्य विंडो दिखाने या छिपाने के लिए कहें,\n• बातचीत सूचीबद्ध करें और संदेश पढ़ें,\n• सक्रिय वार्तालाप के लिए एक संदेश भेजें,\n• प्रदाता या वार्तालाप स्विच करें,\n• लंबित टूल अनुमोदनों का निरीक्षण करें,\n• और सीधे ऐयर टूल्स को कॉल करें।\n\nयह कैसे काम करता है:\n• ऐयर टीसीपी पोर्ट 51234 पर सुनता है।\n• यह केवल 127.0.0.1 पर सुनता है, इसलिए अन्य कंप्यूटर सीधे इस तक नहीं पहुंच सकते।\n• प्रत्येक अनुरोध एक JSON ऑब्जेक्ट है जिसे एक पंक्ति के रूप में भेजा जाता है।\n• प्रत्येक प्रतिक्रिया एक JSON ऑब्जेक्ट है जो एक पंक्ति के रूप में लौटाई जाती है।\n\nइसका उपयोग करने के लिए, पहले कनेक्शंस सेटिंग्स खोलें और स्थानीय एपीआई एक्सेस सक्षम करें।"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Local API Quick Start",
+      "title": "स्थानीय एपीआई त्वरित प्रारंभ",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "कनेक्शन सेटिंग खोलें",
           "action": "settings:connections"
         }
       ],
-      "content": "To connect another app to Aire, use this checklist:\n\n1. Open Connections settings.\n2. Turn on local API access.\n3. Copy the auth token.\n4. From your app or script, open a TCP connection to 127.0.0.1:51234.\n5. Send one JSON line with method, token, and optional parameters.\n6. Read one JSON line back.\n7. Close the connection.\n\nA good first test is the ping method. If ping works, then try show_main_window, list_providers, and create_conversation.\n\nRecommended first integration order:\n• ping\n• show_main_window\n• list_providers\n• create_conversation\n• list_conversations\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval if you want to cooperate with tool approvals\n• execute_tool only after you are comfortable with the approval flow and security model"
+      "content": "किसी अन्य ऐप को Aire से कनेक्ट करने के लिए, इस चेकलिस्ट का उपयोग करें:\n\n1. कनेक्शंस सेटिंग्स खोलें।\n2. स्थानीय एपीआई एक्सेस चालू करें।\n3. प्रमाणीकरण टोकन की प्रतिलिपि बनाएँ।\n4. अपने ऐप या स्क्रिप्ट से, 127.0.0.1:51234 पर एक टीसीपी कनेक्शन खोलें।\n5. विधि, टोकन और वैकल्पिक पैरामीटर के साथ एक JSON लाइन भेजें।\n6. एक JSON लाइन को वापस पढ़ें।\n7. कनेक्शन बंद करें.\n\nएक अच्छा पहला परीक्षण पिंग विधि है। यदि पिंग काम करता है, तो show_main_window, list_providers, और create_conversation आज़माएँ।\n\nअनुशंसित पहला एकीकरण क्रम:\n• पिंग\n• शो_मेन_विंडो\n• सूची_प्रदाता\n• बातचीत बनाएँ\n• सूची_बातचीत\n•संदेश प्राप्त करें\n• संदेश भेजें\n• राज्य प्राप्त करें\n• यदि आप टूल अनुमोदन में सहयोग करना चाहते हैं तो लंबित अनुमोदन की प्रतीक्षा करें\n• निष्पादन_टूल केवल तभी जब आप अनुमोदन प्रवाह और सुरक्षा मॉडल के साथ सहज हों"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Authentication",
+      "title": "प्रमाणीकरण",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "कनेक्शन सेटिंग खोलें",
           "action": "settings:connections"
         },
         {
-          "label": "Review AI action approvals",
+          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Every Local API request must include the auth token.\n\nWhere to get it:\n• Open Connections settings.\n• Find the Local API section.\n• Click Copy to copy the token.\n• Paste that token into your app or script configuration.\n\nWhat to know:\n• If you click Regenerate, old integrations will stop working until they use the new token.\n• The API must be enabled, not just configured.\n• Any process on your computer that knows the token can control Aire.\n\nPractical advice for developers:\n• Keep the token in a local config file or environment variable, not hard-coded in source control.\n• Treat it like a local secret.\n• If you suspect it leaked, regenerate it."
+      "content": "प्रत्येक स्थानीय एपीआई अनुरोध में प्रमाणीकरण टोकन शामिल होना चाहिए।\n\nइसे कहां से प्राप्त करें:\n• कनेक्शंस सेटिंग खोलें.\n• स्थानीय एपीआई अनुभाग ढूंढें.\n• टोकन कॉपी करने के लिए कॉपी पर क्लिक करें।\n• उस टोकन को अपने ऐप या स्क्रिप्ट कॉन्फ़िगरेशन में पेस्ट करें।\n\nक्या जानना है:\n• यदि आप रीजेनरेट पर क्लिक करते हैं, तो पुराने एकीकरण तब तक काम करना बंद कर देंगे जब तक वे नए टोकन का उपयोग नहीं करते।\n• एपीआई सक्षम होना चाहिए, न कि केवल कॉन्फ़िगर किया जाना चाहिए।\n• आपके कंप्यूटर पर कोई भी प्रक्रिया जो टोकन जानती है, ऐयर को नियंत्रित कर सकती है।\n\nडेवलपर्स के लिए व्यावहारिक सलाह:\n• टोकन को स्थानीय कॉन्फ़िगरेशन फ़ाइल या पर्यावरण चर में रखें, स्रोत नियंत्रण में हार्ड-कोडित नहीं।\n• इसे एक स्थानीय रहस्य की तरह समझें।\n• यदि आपको संदेह है कि यह लीक हो गया है, तो इसे पुन: उत्पन्न करें।"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Protocol",
-      "intro": "The Local API is line-based JSON over TCP.\n\nConnection pattern:\n• connect to 127.0.0.1:51234\n• write exactly one compact JSON request followed by a newline\n• read exactly one JSON response line\n• close the connection\n\nRequest shape:\n{ \"method\": \"METHOD\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nResponse shape:\n{ \"ok\": true, \"result\": ... }\nor\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nIf you are writing a client library, build around that simple request-response pattern first. You do not need HTTP or WebSockets to get started.",
-      "content": "{ \"method\": \"ping\", \"token\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ok\": true, \"result\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"Hello!\" } }\n{ \"ok\": true, \"result\": true }"
+      "title": "शिष्टाचार",
+      "intro": "स्थानीय एपीआई टीसीपी पर लाइन-आधारित JSON है।\n\nकनेक्शन पैटर्न:\n• 127.0.0.1:51234 से कनेक्ट करें\n• बिल्कुल एक कॉम्पैक्ट JSON अनुरोध लिखें और उसके बाद एक नई पंक्ति लिखें\n• बिल्कुल एक JSON प्रतिक्रिया पंक्ति पढ़ें\n• कनेक्शन बंद करें\n\nअनुरोध आकार:\n{ \"विधि\": \"विधि\", \"टोकन\": \"टोकन\", \"पैरामीटर\": { ... } }\n\nप्रतिक्रिया आकार:\n{ \"ठीक है\": सत्य, \"परिणाम\":... }\nया\n{ \"ठीक\": गलत, \"त्रुटि संदेश\": \"संदेश\" }\n\nयदि आप क्लाइंट लाइब्रेरी लिख रहे हैं, तो पहले उस सरल अनुरोध-प्रतिक्रिया पैटर्न का निर्माण करें। आरंभ करने के लिए आपको HTTP या WebSockets की आवश्यकता नहीं है।",
+      "content": "{ \"विधि\": \"पिंग\", \"टोकन\": \"आपका_टोकन\" }\n{ \"ठीक\": सत्य, \"परिणाम\": { \"प्रदाता नाम\": \"कोडेक्स\", \"प्रदाता प्रकार\": \"कोडेक्स\", \"प्रदाता मॉडल\": \"जीपीटी-5.4-मिनी\", \"सक्रिय वार्तालाप आईडी\": 12 } }\n\n{ \"विधि\": \"create_conversation\", \"टोकन\": \"आपका_टोकन\", \"पैरामीटर\": { \"शीर्षक\": \"एपीआई परीक्षण\" } }\n{ \"ठीक है\": सत्य, \"परिणाम\": 73 }\n\n{ \"विधि\": \"send_message\", \"टोकन\": \"आपका_टोकन\", \"पैरामीटर\": { \"पाठ\": \"हैलो!\" } }\n{ \"ठीक है\": सत्य, \"परिणाम\": सत्य }"
     },
     {
       "tab": "Local API",
       "type": "table",
-      "title": "Available Methods",
+      "title": "उपलब्ध विधियाँ",
       "cols": [
-        "Method",
-        "Parameters",
-        "Description"
+        "तरीका",
+        "पैरामीटर",
+        "विवरण"
       ],
       "rows": [
         [
-          "ping",
+          "गुनगुनाहट",
           "—",
-          "Check if Aire is running. Returns the same state snapshot as get_state."
+          "जांचें कि क्या ऐरे चल रहा है। get_state जैसा ही स्टेट स्नैपशॉट लौटाता है।"
         ],
         [
           "get_state",
           "—",
-          "Current provider, model, active conversation ID, and local API status."
+          "वर्तमान प्रदाता, मॉडल, सक्रिय वार्तालाप आईडी और स्थानीय एपीआई स्थिति।"
         ],
         [
           "show_main_window",
           "—",
-          "Bring the Aire chat window to the front."
+          "ऐरे चैट विंडो को सामने लाएँ।"
         ],
         [
-          "hide_main_window",
+          "Hide_main_window",
           "—",
-          "Hide the chat window to the tray."
+          "चैट विंडो को ट्रे में छिपाएँ।"
         ],
         [
-          "open_settings",
+          "खुली सेटिंग",
           "—",
-          "Open the Settings window."
+          "सेटिंग्स विंडो खोलें."
         ],
         [
-          "open_browser",
+          "खुला ब्राउज़र",
           "—",
-          "Open the Aire browser window."
+          "ऐयर ब्राउज़र विंडो खोलें."
         ],
         [
-          "list_providers",
+          "सूची_प्रदाता",
           "—",
-          "All configured AI providers with IDs and names."
+          "आईडी और नामों के साथ सभी कॉन्फ़िगर किए गए एआई प्रदाता।"
         ],
         [
           "create_provider",
-          "name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritCredentialsFromProviderId?",
-          "Create a new provider from the local API."
+          "नाम?, प्रकार, apiKey?, बेसयूआरएल?, मॉडल, सक्षम है?, रंग?, चयन के बाद बनाएं?, inheritCredentialsFromProviderId?",
+          "स्थानीय एपीआई से एक नया प्रदाता बनाएं।"
         ],
         [
-          "list_conversations",
+          "सूची_बातचीत",
           "—",
-          "All saved conversations (ID, title, date)."
+          "सभी सहेजे गए वार्तालाप (आईडी, शीर्षक, दिनांक)।"
         ],
         [
           "create_conversation",
-          "title?",
-          "Create a new conversation and switch to it."
+          "शीर्षक?",
+          "एक नई बातचीत बनाएं और उस पर स्विच करें."
         ],
         [
-          "select_conversation",
-          "conversationId",
-          "Switch to an existing conversation."
+          "चयन_वार्तालाप",
+          "बातचीतआईडी",
+          "किसी मौजूदा वार्तालाप पर स्विच करें."
         ],
         [
-          "get_messages",
-          "conversationId",
-          "All messages in a conversation."
+          "संदेश प्राप्त करें",
+          "बातचीतआईडी",
+          "बातचीत के सभी संदेश."
         ],
         [
           "set_provider",
-          "providerId",
-          "Switch the active AI provider."
+          "प्रदाताआईडी",
+          "सक्रिय AI प्रदाता को स्विच करें।"
         ],
         [
           "set_provider_model",
-          "providerId, model",
-          "Change the model for a provider."
+          "प्रदाताआईडी, मॉडल",
+          "प्रदाता के लिए मॉडल बदलें."
         ],
         [
-          "send_message",
-          "text",
-          "Send a message to the active conversation. Returns true when accepted."
+          "मेसेज भेजें",
+          "मूलपाठ",
+          "सक्रिय वार्तालाप के लिए एक संदेश भेजें. स्वीकार किए जाने पर सत्य लौटाता है।"
         ],
         [
-          "list_pending_approvals",
+          "सूची_लंबित_अनुमोदन",
           "—",
-          "Tool calls currently waiting for approval."
+          "टूल कॉल फिलहाल अनुमोदन की प्रतीक्षा में हैं।"
         ],
         [
-          "wait_for_pending_approval",
-          "timeout_seconds?",
-          "Wait for the next pending tool approval or return null on timeout."
+          "लंबित_अनुमोदन के लिए प्रतीक्षा करें",
+          "टाइमआउट_सेकंड?",
+          "अगले लंबित टूल अनुमोदन की प्रतीक्षा करें या टाइमआउट पर शून्य वापस लौटें।"
         ],
         [
-          "approve_tool_call",
-          "index",
-          "Approve a pending tool call by its current list index."
+          "स्वीकृत_टूल_कॉल",
+          "अनुक्रमणिका",
+          "किसी लंबित टूल कॉल को उसकी वर्तमान सूची अनुक्रमणिका द्वारा स्वीकृत करें।"
         ],
         [
-          "deny_tool_call",
-          "index",
-          "Deny a pending tool call by its current list index."
+          "इनकार_टूल_कॉल",
+          "अनुक्रमणिका",
+          "किसी लंबित टूल कॉल को उसकी वर्तमान सूची अनुक्रमणिका द्वारा अस्वीकार करें।"
         ],
         [
-          "execute_tool",
-          "tool, parameters, wait_for_approval?, approval_timeout_seconds?",
-          "Run an Aire tool directly and optionally wait for approval."
+          "निष्पादन_उपकरण",
+          "उपकरण, पैरामीटर, अनुमोदन के लिए प्रतीक्षा करें?, अनुमोदन समय समाप्त_सेकंड?",
+          "सीधे ऐयर टूल चलाएँ और वैकल्पिक रूप से अनुमोदन की प्रतीक्षा करें।"
         ],
         [
           "get_trace",
-          "afterId?, limit?",
-          "Read tool execution trace entries for debugging."
+          "AfterId?, सीमा?",
+          "डिबगिंग के लिए टूल निष्पादन ट्रेस प्रविष्टियाँ पढ़ें।"
         ],
         [
-          "clear_trace",
+          "क्लियर_ट्रेस",
           "—",
-          "Clear the tool execution trace."
+          "टूल निष्पादन ट्रेस साफ़ करें."
         ]
       ]
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Which methods should I start with?",
-      "content": "If you are building another app that connects to Aire, start with the simpler methods first.\n\nRecommended learning order:\n• ping: confirm Aire is running and your token is valid.\n• show_main_window: confirm you can trigger a visible app action.\n• get_state: inspect the current conversation and provider state.\n• list_conversations and get_messages: read data safely.\n• send_message: perform a full request-reply round trip.\n• list_pending_approvals, approve_tool_call, deny_tool_call: integrate with Aire's approval model.\n• execute_tool: only after you understand the security implications and approval behavior.\n\nIn most integrations, send_message and the read-only methods are enough."
+      "title": "मुझे किन तरीकों से शुरुआत करनी चाहिए?",
+      "content": "यदि आप कोई अन्य ऐप बना रहे हैं जो Aire से कनेक्ट होता है, तो पहले सरल तरीकों से शुरुआत करें।\n\nअनुशंसित सीखने का क्रम:\n• पिंग: पुष्टि करें कि ऐयर चल रहा है और आपका टोकन वैध है।\n• show_main_window: पुष्टि करें कि आप एक दृश्यमान ऐप कार्रवाई ट्रिगर कर सकते हैं।\n• get_state: वर्तमान वार्तालाप और प्रदाता स्थिति का निरीक्षण करें।\n• सूची_बातचीत और संदेश प्राप्त करें: डेटा को सुरक्षित रूप से पढ़ें।\n• संदेश भेजें: पूर्ण अनुरोध-उत्तर दौर की यात्रा करें।\n• सूची_लंबित_अनुमोदन, अनुमोदन_टूल_कॉल, अस्वीकार_टूल_कॉल: ऐयर के अनुमोदन मॉडल के साथ एकीकृत करें।\n•execute_tool: सुरक्षा निहितार्थ और अनुमोदन व्यवहार को समझने के बाद ही।\n\nअधिकांश एकीकरणों में, सेंड_मैसेज और रीड-ओनली विधियाँ ही पर्याप्त हैं।"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "PowerShell Example",
-      "intro": "This example shows the simplest useful shape for a Local API client in PowerShell. Save your token from Connections settings, paste it below, and then try ping before anything else.",
-      "content": "$TOKEN = \"paste-your-token-here\"\n$PORT  = 51234\n\nfunction Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; token = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    return $resp | ConvertFrom-Json\n}\n\n# Check Aire is running and inspect state\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Create and select a conversation\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).result\nInvoke-Aire \"select_conversation\" @{ conversationId = $id }\n\n# Send a message (returns true when accepted)\nInvoke-Aire \"send_message\" @{ text = \"Hello from PowerShell\" }\n\n# Read the conversation messages after the turn completes\n(Invoke-Aire \"get_messages\" @{ conversationId = $id }).result\n\n# Execute a tool directly\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; parameters = @{ path = \"C:/Temp/notes.txt\" } }"
+      "title": "पॉवरशेल उदाहरण",
+      "intro": "यह उदाहरण PowerShell में स्थानीय API क्लाइंट के लिए सबसे सरल उपयोगी आकार दिखाता है। कनेक्शंस सेटिंग्स से अपना टोकन सहेजें, इसे नीचे पेस्ट करें, और फिर किसी भी चीज़ से पहले पिंग का प्रयास करें।",
+      "content": "$टोकन = \"अपना टोकन यहां चिपकाएं\"\n$पोर्ट = 51234\n\nफ़ंक्शन इनवोक-एयर {\n    परम([स्ट्रिंग]$विधि, [हैशटेबल]$पैराम्स = @{})\n    $req = @{विधि = $विधि; टोकन = $टोकन }\n    यदि ($Params.Count) { $req[\"parameters\"] = $Params }\n    $क्लाइंट = न्यू-ऑब्जेक्ट नेट.सॉकेट.टीसीपीक्लाइंट('127.0.0.1', $पोर्ट)\n    $लेखक = [IO.StreamWriter]::नया($client.GetStream())\n    $लेखक.ऑटोफ्लश = $सत्य\n    $रीडर = [आईओ.स्ट्रीमरीडर]::नया($क्लाइंट.गेटस्ट्रीम())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $सम्मान = $पाठक.रीडलाइन()\n    $ग्राहक.बंद करें()\n    वापसी $सम्मान | ConvertFrom-Json\n}\n\n# जांचें कि ऐयर चल रहा है और स्थिति का निरीक्षण करें\n$state = इनवोक-एयर \"पिंग\"\n$राज्य.परिणाम\n\n# वार्तालाप बनाएं और चुनें\n$आईडी = (आह्वान-एयर \"create_conversation\" @{ शीर्षक = \"एपीआई परीक्षण\" }).परिणाम\nइनवोक-एयर \"select_conversation\" @{ बातचीत आईडी = $ आईडी }\n\n# एक संदेश भेजें (स्वीकार किए जाने पर सत्य लौटाता है)\nइनवोक-एयर \"send_message\" @{ टेक्स्ट = \"पावरशेल की ओर से नमस्ते\" }\n\n# बारी पूरी होने के बाद वार्तालाप संदेश पढ़ें\n(आह्वान-एयर \"get_messages\" @{बातचीतआईडी = $आईडी}).परिणाम\n\n# किसी टूल को सीधे निष्पादित करें\nInvoke-Aire \"execute_tool\" @{ टूल = \"read_file\"; पैरामीटर = @{ पथ = \"C:/Temp/notes.txt\" } }"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Python Example",
-      "intro": "This example uses only the Python standard library. It is a good starting point if you want to add Aire support to another local tool.",
-      "content": "import socket, json\n\nTOKEN = \"paste-your-token-here\"\n\ndef aire(method, **params):\n    req = {\"method\": method, \"token\": TOKEN}\n    if params:\n        req[\"parameters\"] = params\n    with socket.create_connection((\"127.0.0.1\", 51234)) as s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(state[\"result\"])\n\nconversation_id = aire(\"create_conversation\", title=\"API test\")[\"result\"]\naire(\"select_conversation\", conversationId=conversation_id)\naire(\"send_message\", text=\"Hello from Python\")\n\nmessages = aire(\"get_messages\", conversationId=conversation_id)[\"result\"]\nprint(messages)\n\nresult = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    parameters={\"path\": \"C:/Temp/notes.txt\"}\n)\nprint(result)"
+      "title": "पायथन उदाहरण",
+      "intro": "यह उदाहरण केवल पायथन मानक लाइब्रेरी का उपयोग करता है। यदि आप किसी अन्य स्थानीय टूल में ऐयर समर्थन जोड़ना चाहते हैं तो यह एक अच्छा प्रारंभिक बिंदु है।",
+      "content": "आयात सॉकेट, json\n\nटोकन = \"अपना टोकन यहां चिपकाएं\"\n\nनिश्चित आय(विधि, **पैरामीटर):\n    req = {\"विधि\": विधि, \"टोकन\": टोकन}\n    यदि पैरामीटर:\n        req[\"पैरामीटर\"] = पैरामीटर\n    सॉकेट.क्रिएट_कनेक्शन(('127.0.0.1', 51234)) के साथ एस:\n        s.sendall((json.dumps(req, विभाजक=(\",\", \":\")) + \"\\n\").encode())\n        वापसी json.loads(s.makefile().readline())\n\nराज्य = एयर (\"पिंग\")\nप्रिंट (राज्य[\"परिणाम\"])\n\nवार्तालाप_आईडी = एरे (\"create_conversation\", शीर्षक = \"एपीआई परीक्षण\") [\"परिणाम\"]\nऐयर(\"select_conversation\", बातचीतआईडी=conversation_id)\naire('send_message', text='पायथन से नमस्ते')\n\nसंदेश = aire(\"get_messages\", बातचीतआईडी=बातचीत_आईडी)[\"परिणाम\"]\nप्रिंट(संदेश)\n\nपरिणाम = वायु(\n    \"निष्पादित_टूल\",\n    टूल = \"read_file\",\n    पैरामीटर={\"पथ\": \"C:/Temp/notes.txt\"}\n)\nप्रिंट(परिणाम)"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Integration Tips",
-      "content": "• Always check ok before using result. If ok is false, read the error message and handle it.\n• send_message only confirms that Aire accepted the message into the active conversation. If your integration needs the final answer, follow up with get_messages or watch for approvals and trace output.\n• Keep one method call per TCP connection. Connect, send, read, close.\n• Start with read-only and visibility actions before using execute_tool.\n• If your integration wants to cooperate with Aire's safety model, use list_pending_approvals, wait_for_pending_approval, approve_tool_call, and deny_tool_call instead of assuming every action runs immediately.\n• execute_tool is powerful because it lets your code call Aire tools directly. Use it carefully.\n• The API is intentionally local-only. Do not expose port 51234 to your network or the internet.\n• For production-like internal tools, store the token outside source code and make ping part of your startup health check."
+      "title": "एकीकरण युक्तियाँ",
+      "content": "• परिणाम का उपयोग करने से पहले हमेशा ठीक जांचें। यदि ठीक गलत है, तो त्रुटि संदेश पढ़ें और उसे संभालें।\n• sent_message केवल पुष्टि करता है कि Aire ने सक्रिय वार्तालाप में संदेश स्वीकार कर लिया है। यदि आपके एकीकरण को अंतिम उत्तर की आवश्यकता है, तो get_messages का पालन करें या अनुमोदन और ट्रेस आउटपुट पर नज़र रखें।\n• प्रति टीसीपी कनेक्शन एक विधि कॉल रखें। कनेक्ट करें, भेजें, पढ़ें, बंद करें।\n•execute_tool का उपयोग करने से पहले केवल पढ़ने योग्य और दृश्यता क्रियाओं से प्रारंभ करें।\n• यदि आपका एकीकरण ऐरे के सुरक्षा मॉडल के साथ सहयोग करना चाहता है, तो यह मानने के बजाय कि प्रत्येक कार्रवाई तुरंत चलती है, list_pending_approvals, wait_for_pending_approval, Approve_tool_call, और Deny_tool_call का उपयोग करें।\n•execute_tool शक्तिशाली है क्योंकि यह आपके कोड को सीधे Aire टूल्स को कॉल करने देता है। इसका प्रयोग सावधानी से करें.\n• एपीआई जानबूझकर केवल स्थानीय है। पोर्ट 51234 को अपने नेटवर्क या इंटरनेट पर उजागर न करें।\n• उत्पादन जैसे आंतरिक उपकरणों के लिए, टोकन को स्रोत कोड के बाहर संग्रहीत करें और पिंग को अपने स्टार्टअप स्वास्थ्य जांच का हिस्सा बनाएं।"
     }
   ]
 }

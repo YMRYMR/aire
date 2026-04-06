@@ -212,28 +212,28 @@
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "How the Setup Wizard Works",
+      "title": "セットアップ ウィザードの仕組み",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "セットアップウィザードを開く",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "AI セットアップを開く",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-picker.png",
-      "imageCaption": "The setup wizard helps you choose a provider before you start chatting.",
-      "content": "The Setup Wizard appears the first time you run Aire, or when no AI providers are configured yet. Its job is to get you from a fresh install to a working chat as quickly as possible.\n\nWhat the wizard does, step by step:\n• Welcome: explains what Aire is and lets you choose the app language.\n• Provider picker: shows common ways to connect Aire to AI services.\n• Provider setup: asks for the details needed for the provider you picked.\n• Finish: confirms Aire is ready and takes you to the main app.\n\nIf you are new to AI, the wizard is the best place to start. It uses the simplest path first and hides advanced settings until you need them.\n\nYou can skip setup and come back later, but you will need at least one configured provider before Aire can answer chat messages."
+      "imageCaption": "セットアップ ウィザードは、チャットを開始する前にプロバイダーを選択するのに役立ちます。",
+      "content": "セットアップ ウィザードは、Aire を初めて実行するとき、または AI プロバイダーがまだ構成されていないときに表示されます。その役割は、新規インストールからできるだけ早くチャットが使える状態にすることです。\n\nウィザードの実行内容は次のとおりです。\n• ようこそ: Aire とは何かを説明し、アプリの言語を選択できるようにします。\n• プロバイダー ピッカー: Aire を AI サービスに接続する一般的な方法を示します。\n• プロバイダーのセットアップ: 選択したプロバイダーに必要な詳細を尋ねます。\n• 完了: Aire の準備が完了したことを確認し、メイン アプリに移動します。\n\nAI を初めて使用する場合は、ウィザードから始めるのが最適です。最初に最も単純なパスが使用され、必要になるまで詳細設定は非表示になります。\n\nセットアップをスキップして、後で戻ってくることもできますが、Aire がチャット メッセージに応答できるようにするには、少なくとも 1 つの構成済みプロバイダーが必要です。"
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Choosing a Provider",
+      "title": "プロバイダーの選択",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "セットアップウィザードを開く",
           "action": "onboarding"
         },
         {
@@ -249,128 +249,128 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "The provider picker is where you decide which AI service Aire will talk to on your behalf.\n\nWhat the main options mean:\n• OpenAI: a common starting point if you want a simple cloud setup and wide model support.\n• Anthropic API: another strong cloud option, known for Claude models.\n• Claude.ai: uses browser sign-in instead of an API key.\n• Google AI: connects to Gemini chat models through Google AI Studio.\n• Google AI Images: a dedicated Gemini image-generation setup.\n• Ollama: runs models locally on your computer. Good for privacy and offline use, but it depends on your hardware.\n• Codex: uses the local Codex CLI bridge instead of a normal API key.\n• Groq, OpenRouter, DeepSeek, Inception, and z.ai: other providers or OpenAI-compatible endpoints, often useful if you already have an account there.\n\nWhich one should you choose?\n• If you want the easiest cloud setup for chat: start with OpenAI, Anthropic, or Google AI.\n• If you want local and private: choose Ollama.\n• If you specifically want image generation from Gemini: choose Google AI Images.\n• If you already pay for or use a specific provider elsewhere: choose that same provider here.\n\nYou are not locked in. The wizard helps you add one provider first, and you can add more later in Settings."
+      "content": "プロバイダー ピッカーでは、Aire がユーザーに代わってどの AI サービスと通信するかを決定します。\n\n主なオプションの意味:\n• OpenAI: シンプルなクラウド設定と広範なモデルのサポートが必要な場合の一般的な開始点です。\n• Anthropic API: クロード モデルで知られるもう 1 つの強力なクラウド オプション。\n• Claude.ai: API キーの代わりにブラウザーのサインインを使用します。\n• Google AI: Google AI Studio を通じて Gemini チャット モデルに接続します。\n• Google AI イメージ: 専用の Gemini イメージ生成セットアップ。\n• Ollama: モデルをコンピュータ上でローカルに実行します。プライバシーとオフラインでの使用には適していますが、ハードウェアによって異なります。\n• Codex: 通常の API キーの代わりにローカル Codex CLI ブリッジを使用します。\n• Groq、OpenRouter、DeepSeek、Inception、および z.ai: 他のプロバイダーまたは OpenAI 互換エンドポイント。すでにアカウントを持っている場合に便利です。\n\nどれを選ぶべきですか?\n• チャット用のクラウド設定を最も簡単にしたい場合は、OpenAI、Anthropic、または Google AI から始めてください。\n• ローカルでプライベートな場合: Ollama を選択します。\n• 特に Gemini から画像を生成したい場合: Google AI 画像を選択します。\n• すでに別の場所で特定のプロバイダーの料金を支払っている場合、または特定のプロバイダーを使用している場合: ここで同じプロバイダーを選択します。\n\nロックインされていません。ウィザードを使用すると、最初にプロバイダーを 1 つ追加でき、後で [設定] でさらにプロバイダーを追加できます。"
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Filling in Provider Details",
+      "title": "プロバイダーの詳細を入力する",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "セットアップウィザードを開く",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "AI セットアップを開く",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-setup.png",
-      "imageCaption": "Provider setup step with the provider type, name, credentials, model, and connection test.",
-      "content": "After you pick a provider, the wizard asks only for the details that provider needs.\n\nTypical fields:\n• Provider type: the service you want to use.\n• Name: the label Aire will show in the chat window.\n• API key: the secret token that lets Aire talk to the provider. Some providers use browser sign-in instead, and some local providers do not need an API key at all.\n• Base URL: only needed for certain OpenAI-compatible services or self-hosted setups.\n• Model: the specific AI model you want to use.\n\nProvider-specific notes:\n• Claude.ai uses browser sign-in instead of a normal API key.\n• Ollama is local and usually works without an API key.\n• Codex uses the local Codex CLI bridge, so the wizard can offer CLI installation instead of asking for a normal API key.\n• Google AI Images is for image generation rather than normal chat.\n\nThe Test connection button is there to help you confirm the configuration before you finish. If the test succeeds, Aire can usually use that provider immediately.\n\nPractical advice:\n• If you are unsure which model to pick, start with the default suggestion.\n• If you see an API-key field, paste the key exactly as provided by the service.\n• If a provider offers both API access and browser sign-in, prefer API access if you want the most stable automation and integration behavior.\n\nAfter you finish the wizard, you can still change any of these settings later in the AI Providers tab."
+      "imageCaption": "プロバイダーのタイプ、名前、資格情報、モデル、接続テストを含むプロバイダーのセットアップ手順。",
+      "content": "プロバイダーを選択すると、ウィザードはプロバイダーに必要な詳細のみを要求します。\n\n代表的なフィールド:\n• プロバイダーの種類: 使用するサービス。\n• 名前: Aire がチャット ウィンドウに表示するラベル。\n• API キー: Aire がプロバイダーと通信できるようにする秘密のトークン。一部のプロバイダーは代わりにブラウザー サインインを使用し、一部のローカル プロバイダーは API キーをまったく必要としません。\n• ベース URL: 特定の OpenAI 互換サービスまたはセルフホスト型セットアップにのみ必要です。\n• モデル: 使用する特定の AI モデル。\n\nプロバイダー固有の注意事項:\n• Claude.ai は、通常の API キーの代わりにブラウザーのサインインを使用します。\n• Ollama はローカルであり、通常は API キーなしで動作します。\n• Codex はローカル Codex CLI ブリッジを使用するため、ウィザードは通常の API キーを要求する代わりに CLI インストールを提供できます。\n• Google AI Images は、通常のチャットではなく画像生成を目的としています。\n\n[接続のテスト] ボタンは、終了する前に構成を確認するのに役立ちます。テストが成功すると、通常、Aire はそのプロバイダーをすぐに使用できるようになります。\n\n実践的なアドバイス:\n• どのモデルを選択すればよいかわからない場合は、デフォルトの提案から始めてください。\n• API キー フィールドが表示された場合は、サービスによって提供されたキーを正確に貼り付けます。\n• プロバイダーが API アクセスとブラウザー サインインの両方を提供している場合、最も安定した自動化と統合の動作が必要な場合は API アクセスを優先します。\n\nウィザードの終了後も、後から [AI プロバイダー] タブでこれらの設定を変更できます。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Overview",
+      "title": "概要",
       "links": [
         {
-          "label": "Set up your first AI",
+          "label": "最初の AI をセットアップする",
           "action": "settings:providers"
         },
         {
-          "label": "Change the look of Aire",
+          "label": "Aireの外観を変更する",
           "action": "settings:appearance"
         }
       ],
-      "content": "Aire is a desktop chat app that stays in your system tray until you need it. You can think of it as one chat window that can connect to many AI services.\n\nIf you are new to AI, the usual starting point is simple:\n• Open AI setup.\n• Add one provider, such as OpenAI, Anthropic, Google AI, or Ollama.\n• Choose a model.\n• Type a question in the chat box and press Enter.\n\nWhat Aire can do:\n• Talk to different AI services from one app.\n• Save your conversations on your computer.\n• Let the AI use tools, with your approval, to read files, run commands, browse pages, and more.\n• Use voice input and voice output with Windows speech features.\n• Let other local apps talk to Aire through the Local API."
+      "content": "Aire は、必要になるまでシステム トレイに常駐するデスクトップ チャット アプリです。これは、多くの AI サービスに接続できる 1 つのチャット ウィンドウと考えることができます。\n\nAI を初めて使用する場合、通常の出発点は単純です。\n• AI セットアップを開きます。\n• OpenAI、Anthropic、Google AI、Ollama などのプロバイダーを 1 つ追加します。\n• モデルを選択します。\n• チャット ボックスに質問を入力し、Enter キーを押します。\n\nAire でできること:\n• 1 つのアプリからさまざまな AI サービスと通信します。\n• 会話をコンピュータに保存します。\n• ユーザーの承認を得て、AI にファイルの読み取り、コマンドの実行、ページの閲覧などを行うツールを使用させます。\n• Windows の音声機能を使用して音声入力と音声出力を使用します。\n• 他のローカル アプリがローカル API を通じて Aire と通信できるようにします。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tray Icon",
-      "content": "Aire runs in the system tray (bottom-right corner of the taskbar).\n\n• Left-click or right-click the tray icon to open the chat window.\n• Right-click the tray icon for options: Open, Settings, Exit.\n• Closing the window hides it — Aire keeps running in the background.\n• To quit completely, right-click the tray icon and choose Exit."
+      "title": "トレイアイコン",
+      "content": "Aire はシステム トレイ (タスクバーの右下隅) で実行されます。\n\n• トレイ アイコンを左クリックまたは右クリックして、チャット ウィンドウを開きます。\n• トレイ アイコンを右クリックして、[開く]、[設定]、[終了] のオプションを表示します。\n• ウィンドウを閉じると非表示になります - Aire はバックグラウンドで実行され続けます。\n• 完全に終了するには、トレイ アイコンを右クリックし、[終了] を選択します。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Chat",
+      "title": "チャット",
       "links": [
         {
-          "label": "Open Providers",
+          "label": "オープンプロバイダー",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/main-chat.png",
-      "imageCaption": "Main chat window with the provider selector, conversation area, search, and composer.",
-      "content": "• Type your message in the input box at the bottom and press Enter to send.\n• Press Shift+Enter to add a new line without sending.\n• Press ↑ / ↓ to navigate through previous messages you’ve sent (only works when the cursor is on the first or last line of the input box).\n• Drag and drop an image into the input box to attach it to your message (requires a vision-capable model).\n• Press Ctrl+F to search within the conversation. Use ↑ / ↓ or the arrow buttons to jump between matches. Press Escape to close the search bar.\n• Right-click the chat area to copy or save the conversation as a text file.\n• The 🗑 button clears the current conversation (asks for confirmation first).\n• The 💬 button in the sidebar opens your conversation history."
+      "imageCaption": "プロバイダー セレクター、会話エリア、検索、およびコンポーザーを備えたメイン チャット ウィンドウ。",
+      "content": "• 下部の入力ボックスにメッセージを入力し、Enter キーを押して送信します。\n• 送信せずに新しい行を追加するには、Shift+Enter を押します。\n• ↑ / ↓ を押して、以前に送信したメッセージ間を移動します (カーソルが入力ボックスの最初または最後の行にある場合にのみ機能します)。\n• 画像を入力ボックスにドラッグ アンド ドロップして、メッセージに添付します (ビジョン対応モデルが必要です)。\n• Ctrl+F を押して会話内を検索します。 ↑ / ↓ または矢印ボタンを使用して、一致の間を移動します。 Esc キーを押して検索バーを閉じます。\n• チャット領域を右クリックして、会話をコピーまたはテキスト ファイルとして保存します。\n• 🗑 ボタンは現在の会話をクリアします (最初に確認を求めます)。\n• サイドバーの 💬 ボタンをクリックすると、会話履歴が開きます。"
     },
     {
       "tab": "Getting Started",
       "type": "table",
-      "title": "Keyboard Shortcuts",
+      "title": "キーボードショートカット",
       "cols": [
-        "Shortcut",
-        "Action"
+        "ショートカット",
+        "アクション"
       ],
       "rows": [
         [
-          "Enter",
-          "Send message"
+          "入力",
+          "メッセージを送信する"
         ],
         [
           "Shift+Enter",
-          "New line in the input box"
+          "入力ボックスの改行"
         ],
         [
           "↑ / ↓",
-          "Navigate message history (when cursor is on first/last line)"
+          "メッセージ履歴の移動 (カーソルが最初/最後の行にある場合)"
         ],
         [
           "Ctrl+F",
-          "Search conversation"
+          "会話を検索する"
         ],
         [
-          "Ctrl+Scroll",
-          "Adjust font size"
+          "Ctrl+スクロール",
+          "フォントサイズを調整する"
         ],
         [
-          "Escape",
-          "Close search bar / dismiss dialog"
+          "逃げる",
+          "検索バーを閉じる/ダイアログを閉じる"
         ]
       ]
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tips",
-      "content": "• You can have multiple AI providers configured and switch between them at the top of the chat window. Each conversation remembers its provider and assistant mode.\n• Resize the window by dragging any edge, including the top.\n• Conversations and settings are stored locally under %LOCALAPPDATA%\\Aire.\n• The AI can request tools for files, commands, browser actions, and more, but Aire still asks for approval unless an auto-accept rule applies.\n• If an AI response is cut off, the model may have hit its token or output limit. Ask it to continue, reduce the size of the task, or use a model with a larger context window."
+      "title": "ヒント",
+      "content": "• 複数の AI プロバイダーを構成し、チャット ウィンドウの上部でそれらを切り替えることができます。各会話は、そのプロバイダー モードとアシスタント モードを記憶します。\n• 上部を含む任意の端をドラッグして、ウィンドウのサイズを変更します。\n• 会話と設定はローカルの %LOCALAPPDATA%\\Aire に保存されます。\n• AI はファイル、コマンド、ブラウザーアクションなどのツールを要求できますが、自動受け入れルールが適用されない限り、Aire は引き続き承認を求めます。\n• AI 応答が遮断された場合、モデルはトークンまたは出力制限に達している可能性があります。続行するか、タスクのサイズを減らすか、より大きなコンテキスト ウィンドウを持つモデルを使用するかを依頼してください。"
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Assistant Modes",
+      "title": "アシスタントモード",
       "imagePath": "Assets/Help/main-chat-modes.png",
-      "imageCaption": "Assistant mode menu opened from the main header. Each conversation keeps its own mode.",
-      "content": "The mode button in the main header changes how Aire frames your request before it sends it to the provider.\n\nCurrent modes include Architect, Creative writer, Developer, General, Painter, Philosopher, Psychologist, Scientist, Security, and Teacher.\n\nWhat modes do:\n• They adjust the style and priorities of the assistant.\n• The selected mode is saved per conversation, so different chats can keep different roles.\n• General is the default for new conversations.\n• Different providers still keep their own quirks, but Aire passes the selected mode consistently as shared guidance.\n\nPractical examples:\n• Developer: better for code, debugging, and terminal tasks.\n• Architect: better for structure, trade-offs, and planning.\n• Teacher: better for explanations and step-by-step guidance.\n• Painter: best for image-oriented prompting and generation when the current provider supports it."
+      "imageCaption": "アシスタント モード メニューはメイン ヘッダーから開きます。各会話は独自のモードを保持します。",
+      "content": "メインヘッダーのモードボタンは、Aire がプロバイダーに送信する前にリクエストをフレーム化する方法を変更します。\n\n現在のモードには、建築家、クリエイティブ ライター、開発者、一般、画家、哲学者、心理学者、科学者、セキュリティ、教師が含まれます。\n\nモードの機能:\n• アシスタントのスタイルと優先順位を調整します。\n• 選択したモードは会話ごとに保存されるため、異なるチャットで異なる役割を維持できます。\n• 新しい会話のデフォルトは「全般」です。\n• さまざまなプロバイダーは依然として独自の癖を持っていますが、Aire は選択されたモードを共通のガイダンスとして一貫して渡します。\n\n実際の例:\n• 開発者: コード、デバッグ、ターミナル タスクに適しています。\n• アーキテクト: 構造、トレードオフ、計画に優れています。\n• 教師: 説明と段階的な指導の方が適しています。\n• ペインタ: 現在のプロバイダがサポートしている場合、画像指向のプロンプトおよび生成に最適です。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Tool Categories",
+      "title": "ツールのカテゴリ",
       "imagePath": "Assets/Help/main-chat-tools.png",
-      "imageCaption": "Tools menu opened from the composer. You can enable all categories, disable all, or choose only the categories you want.",
-      "content": "The wrench button near the chat box controls which categories of tools the current provider is allowed to use.\n\nHow it works:\n• Click the wrench button to open the categories menu.\n• Turn on only the categories you want the AI to be able to request.\n• Choose No tools if you want a text-only conversation.\n• Aire remembers your selected tool categories and uses them as part of the current tool policy.\n\nWhy this matters:\n• Fewer enabled categories make tool use easier to understand.\n• Restricting categories can reduce risk and accidental side effects.\n• If a provider does not support tools, the wrench button is hidden."
+      "imageCaption": "Composer から [ツール] メニューが開きます。すべてのカテゴリを有効にすることも、すべて無効にすることも、必要なカテゴリのみを選択することもできます。",
+      "content": "チャット ボックスの近くにあるレンチ ボタンは、現在のプロバイダーが使用できるツールのカテゴリを制御します。\n\n仕組み:\n• レンチ ボタンをクリックしてカテゴリ メニューを開きます。\n• AI にリクエストできるようにしたいカテゴリのみをオンにします。\n• テキストのみの会話が必要な場合は、[ツールなし] を選択します。\n• Aire は選択したツール カテゴリを記憶し、現在のツール ポリシーの一部として使用します。\n\nこれが重要な理由:\n• 有効なカテゴリが少ないため、ツールの使用法が理解しやすくなります。\n• カテゴリを制限すると、リスクと偶発的な副作用を軽減できます。\n• プロバイダーがツールをサポートしていない場合、レンチ ボタンは非表示になります。"
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "AI Providers",
+      "title": "AIプロバイダー",
       "imagePath": "Assets/Help/settings-providers.png",
-      "imageCaption": "Provider settings with the provider list on the left and the selected provider form on the right.",
+      "imageCaption": "左側にプロバイダー リストが表示され、右側に選択したプロバイダー フォームが表示されるプロバイダー設定。",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "AI セットアップを開く",
           "action": "settings:providers"
         },
         {
@@ -386,451 +386,451 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "A provider is the AI service Aire talks to on your behalf. Most users only need to set up one provider to get started.\n\nEach provider entry has four main parts:\n• Name: the label you will see inside Aire.\n• Type: which AI service to use.\n• Model: the specific model you want that service to run.\n• Credentials: usually an API key, or for Claude.ai a browser sign-in.\n\nCommon choices:\n• OpenAI: paste your API key from platform.openai.com.\n• Anthropic: sign in with Claude.ai in the browser, or paste an Anthropic API key.\n• Google AI: paste your Gemini API key from aistudio.google.com.\n• Ollama: use a local Ollama server on your own machine. No API key is needed.\n• OpenAI-compatible endpoints: services like Groq, Mistral, OpenRouter, DeepSeek, or LM Studio can often work by setting the Base URL.\n\nIf you are unsure which one to use, OpenAI or Anthropic are usually the easiest cloud options, while Ollama is the usual local option.\n\nProviders can be enabled or disabled without deleting them. Changes save automatically."
+      "content": "プロバイダーは、Aire がユーザーに代わって通信する AI サービスです。ほとんどのユーザーは、プロバイダーを 1 つ設定するだけで開始できます。\n\n各プロバイダー エントリには、次の 4 つの主要な部分があります。\n• 名前: Aire 内に表示されるラベル。\n• タイプ: どの AI サービスを使用するか。\n• モデル: そのサービスを実行する特定のモデル。\n• 資格情報: 通常は API キー、または Claude.ai の場合はブラウザーのサインインです。\n\n一般的な選択肢:\n• OpenAI: platform.openai.com から API キーを貼り付けます。\n• Anthropic: ブラウザーで Claude.ai を使用してサインインするか、Anthropic API キーを貼り付けます。\n• Google AI: aistudio.google.com から Gemini API キーを貼り付けます。\n• Ollama: 自分のマシン上でローカルの Ollama サーバーを使用します。 API キーは必要ありません。\n• OpenAI 互換エンドポイント: Groq、Mistral、OpenRouter、DeepSeek、LM Studio などのサービスは、多くの場合、ベース URL を設定することで機能します。\n\nどちらを使用すればよいかわからない場合は、通常、OpenAI または Anthropic が最も簡単なクラウド オプションであり、通常のローカル オプションは Ollama です。\n\nプロバイダーは、削除せずに有効または無効にすることができます。変更は自動的に保存されます。"
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Tool Calling Modes",
-      "intro": "Aire supports two methods for giving an AI model access to tools. The mode is chosen automatically based on the provider type, but can be overridden per model in a custom JSON file (see Custom Models).",
+      "title": "ツール呼び出しモード",
+      "intro": "Aire は、AI モデルにツールへのアクセスを許可する 2 つの方法をサポートしています。モードはプロバイダーの種類に基づいて自動的に選択されますが、カスタム JSON ファイル内のモデルごとにオーバーライドできます (「カスタム モデル」を参照)。",
       "cols": [
-        "Mode",
-        "How it works"
+        "モード",
+        "仕組み"
       ],
       "rows": [
         [
-          "Text-based\n(default: OpenAI, Anthropic)",
-          "Tool descriptions are embedded in the system prompt. The AI responds with a <tool_call> XML block. Works with any model that follows instructions reliably."
+          "テキストベース\n(デフォルト: OpenAI、Anthropic)",
+          "ツールの説明はシステム プロンプトに埋め込まれています。 AI は <tool_call> XML ブロックで応答します。指示に確実に従えば、どのモデルでも動作します。"
         ],
         [
-          "Native function calling\n(default: Ollama, Google AI)",
-          "Structured tool schemas are sent via the provider API. The AI returns structured function-call objects. More accurate. Requires explicit API support."
+          "ネイティブ関数呼び出し\n(デフォルト: Ollama、Google AI)",
+          "構造化されたツール スキーマは、プロバイダー API 経由で送信されます。 AI は構造化された関数呼び出しオブジェクトを返します。より正確に。明示的な API サポートが必要です。"
         ],
         [
-          "Unsupported",
-          "The model cannot use tools. Set this in a custom model file to skip tool prompts for models that get confused by them."
+          "サポートされていません",
+          "モデルは工具を使用できません。これをカスタム モデル ファイルで設定すると、ツール プロンプトによって混乱するモデルのプロンプトがスキップされます。"
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Provider & Model Compatibility",
-      "intro": "Use the Capability Tests button to verify your specific provider and model combination.",
+      "title": "プロバイダーとモデルの互換性",
+      "intro": "[機能テスト] ボタンを使用して、特定のプロバイダーとモデルの組み合わせを確認します。",
       "cols": [
-        "Provider / Endpoint",
-        "Mode",
-        "Notes"
+        "プロバイダー/エンドポイント",
+        "モード",
+        "注意事項"
       ],
       "rows": [
         [
           "OpenAI",
-          "Native",
-          "GPT-4o, GPT-4.1, GPT-4o-mini — reliable tool support"
+          "ネイティブ",
+          "GPT-4o、GPT-4.1、GPT-4o-mini — 信頼できるツールのサポート"
         ],
         [
-          "Anthropic",
-          "Text-based",
-          "Claude 3.5 Sonnet and newer — excellent instruction following"
+          "人間的",
+          "テキストベース",
+          "Claude 3.5 Sonnet 以降 — 優れた指示に従ってください"
         ],
         [
-          "Google AI (Gemini)",
-          "Native",
-          "Gemini 2.0 Flash and newer recommended"
+          "Google AI (ジェミニ)",
+          "ネイティブ",
+          "Gemini 2.0 Flash 以降を推奨"
         ],
         [
-          "Ollama (local)",
-          "Native",
-          "qwen2.5-coder, llama3.1, mistral-nemo work well; small models vary"
+          "オラマ (地元)",
+          "ネイティブ",
+          "qwen2.5-coder、llama3.1、mistral-nemo はうまく動作します。小型モデルはさまざまです"
         ],
         [
-          "Groq (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.groq.com/openai/v1 — very fast"
+          "Groq (Op​​enAI + ベース URL)",
+          "ネイティブ",
+          "ベース URL: https://api.groq.com/openai/v1 — 非常に高速"
         ],
         [
-          "Mistral (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.mistral.ai/v1"
+          "ミストラル (OpenAI + ベース URL)",
+          "ネイティブ",
+          "ベース URL: https://api.mistral.ai/v1"
         ],
         [
-          "OpenRouter (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://openrouter.ai/api/v1 — 100+ models"
+          "OpenRouter (OpenAI + ベース URL)",
+          "ネイティブ",
+          "ベース URL: https://openrouter.ai/api/v1 — 100 以上のモデル"
         ],
         [
-          "DeepSeek (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.deepseek.com/v1"
+          "DeepSeek (OpenAI + ベース URL)",
+          "ネイティブ",
+          "ベース URL: https://api.deepseek.com/v1"
         ],
         [
-          "LM Studio (OpenAI + Base URL)",
-          "Native",
-          "Base URL: http://localhost:1234/v1 — enable function calling in LM Studio settings"
+          "LM Studio (OpenAI + ベース URL)",
+          "ネイティブ",
+          "ベース URL: http://localhost:1234/v1 — LM Studio 設定で関数呼び出しを有効にする"
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "Capability Tests",
+      "title": "能力テスト",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "AI セットアップを開く",
           "action": "settings:providers"
         }
       ],
-      "content": "The Run Tests button checks what the selected provider and model can really do.\n\nWhat is tested:\n• Tool-call capability tests check whether the model asks for the expected Aire tool. No real file, browser, or system action is executed.\n• Image-generation capability tests call the provider's image-generation path directly. These tests can consume provider quota and may fail if your account or model does not support image generation.\n\nHow to use it:\n• Open Settings ⚙ → select a provider → click Run Tests.\n• The provider form is locked during the run to avoid configuration changes mid-test.\n• Results are cached per provider/model combination and reload quickly next time.\n\nReading results:\n• ✓ (green) — the provider handled the capability correctly.\n• ✗ (red) — the provider or model failed that capability.\n• If the message mentions quota, balance, or rate limits, the failure is coming from the provider account rather than from Aire itself.\n\nIf a model fails many tool tests, try another model or adjust its custom model metadata. If image generation fails, verify that the provider account, model, and quota actually allow it."
+      "content": "[テストの実行] ボタンでは、選択したプロバイダーとモデルが実際に何ができるかを確認します。\n\nテストされる内容:\n• ツール呼び出し機能テストは、モデルが予想される Aire ツールを要求するかどうかをチェックします。実際のファイル、ブラウザ、システムアクションは実行されません。\n• イメージ生成機能のテストは、プロバイダーのイメージ生成パスを直接呼び出します。これらのテストはプロバイダーの割り当てを消費する可能性があり、アカウントまたはモデルがイメージ生成をサポートしていない場合は失敗する可能性があります。\n\n使用方法:\n• [設定] ⚙ を開き、プロバイダーを選択し、[テストの実行] をクリックします。\n• テスト中の構成変更を避けるため、プロバイダー フォームは実行中はロックされます。\n• 結果はプロバイダーとモデルの組み合わせごとにキャッシュされ、次回すぐにリロードされます。\n\n読み取り結果:\n• ✓ (緑) — プロバイダーは機能を正しく処理しました。\n• ✗ (赤) — プロバイダーまたはモデルがその機能に失敗しました。\n• メッセージにクォータ、残高、またはレート制限について言及されている場合、エラーは Aire 自体からではなくプロバイダー アカウントから発生しています。\n\nモデルが多くのツール テストに失敗した場合は、別のモデルを試すか、そのカスタム モデル メタデータを調整してください。イメージの生成が失敗した場合は、プロバイダーのアカウント、モデル、クォータが実際にイメージの生成を許可していることを確認してください。"
     },
     {
       "tab": "Providers",
       "type": "code",
-      "title": "Custom Models",
-      "intro": "Create a JSON file in the app’s Data\\Models directory to customise the model list for any provider type. Use the capabilities array to declare what a model supports.\n\nCapability flags:\n• \"vision\" — model accepts image attachments\n• \"tools\" — model can use tools\n• \"toolcallmode:native\" — force native function calling\n• \"toolcallmode:text\" — force text-based tool calling\n• \"toolcallmode:unsupported\" — disable tool prompts entirely\n\nTool output format flags (for models that embed tool calls in their text response):\n• \"toolformat:hermes\" — Hermes/Qwen format: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain format: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — OpenAI native tool_calls schema embedded in content\n• \"toolformat:text\" — Aire’s default text format: {\"tool\":\"...\", ...}",
-      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"models\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"vision\", \"tools\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (no tools)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"my-fine-tuned-model\",\n      \"displayName\": \"My Fine-tune\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
+      "title": "カスタムモデル",
+      "intro": "アプリの Data\\Models ディレクトリに JSON ファイルを作成して、任意のプロバイダー タイプのモデル リストをカスタマイズします。機能配列を使用して、モデルがサポートするものを宣言します。\n\n機能フラグ:\n• \"vision\" — モデルは画像の添付ファイルを受け入れます\n• 「ツール」 - モデルはツールを使用できます。\n• \"toolcallmode:native\" — ネイティブ関数の呼び出しを強制する\n• \"toolcallmode:text\" — テキストベースのツール呼び出しを強制します。\n• \"toolcallmode:unsupported\" — ツール プロンプトを完全に無効にします。\n\nツール出力形式フラグ (テキスト応答にツール呼び出しを埋め込むモデルの場合):\n• \"toolformat:hermes\" — ヘルメス/クウェン形式: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain 形式: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — コンテンツに埋め込まれた OpenAI ネイティブの tool_calls スキーマ\n• \"toolformat:text\" — Aire のデフォルトのテキスト形式: {\"tool\":\"...\", ...}",
+      "content": "{\n  \"providerType\": \"OpenAI\",\n  「モデル」: [\n    {\n      \"id\": \"gpt-4o\",\n      \"表示名\": \"GPT-4o\",\n      \"能力\": [\"ビジョン\", \"ツール\"]\n    }、\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (ツールなし)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    }、\n    {\n      \"id\": \"私の微調整モデル\",\n      \"displayName\": \"私の微調整\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  】\n}"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "AI Tools",
+      "title": "AIツール",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "AI アクションの承認を確認する",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some AI models can ask Aire to perform actions for them. Aire calls these actions tools.\n\nImportant: tools do not run silently. Aire shows you what the AI wants to do, and you approve or deny it.\n\nExamples of what tools can do:\n• Read or write files.\n• Run shell commands.\n• Open and read web pages.\n• Inspect browser tabs.\n• Take screenshots.\n• Type, click, or move the mouse.\n• Read or send email.\n\nIf you are new to this feature, the safest habit is simple: read the action request before approving it. Approve read-only actions when they make sense, and be more careful with actions that change files, send messages, or control the keyboard and mouse."
+      "content": "一部の AI モデルは、Aire にアクションの実行を依頼できます。 Aire はこれらのアクション ツールを「ツール」と呼んでいます。\n\n重要: ツールはサイレントに実行されません。 Aire は AI が何をしたいのかを示し、あなたはそれを承認または拒否します。\n\nツールでできることの例:\n• ファイルの読み取りまたは書き込み。\n• シェルコマンドを実行します。\n• Web ページを開いて読みます。\n• ブラウザのタブを検査します。\n• スクリーンショットを撮ります。\n• マウスを入力、クリック、または移動します。\n• 電子メールを読んだり、送信したりできます。\n\nこの機能を初めて使用する場合、最も安全な習慣はシンプルです。承認する前にアクション リクエストを読むことです。意味がある場合は読み取り専用のアクションを承認し、ファイルの変更、メッセージの送信、またはキーボードとマウスの制御を行うアクションにはより注意してください。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Auto-accept Profiles",
+      "title": "プロファイルの自動承認",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "AI アクションの承認を確認する",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Auto-accept profiles let you define which actions Aire can approve automatically without interrupting you each time.\n\nBuilt-in examples include Developer, News browser, and Conservative.\n\nWhat to keep in mind:\n• Profiles are a convenience, not a security replacement.\n• Start conservatively and only auto-accept actions you really trust.\n• File writes, input control, and external side effects are usually worth keeping manual.\n\nIf you are unsure, leave auto-accept restrictive and review actions one by one."
+      "content": "自動承認プロファイルを使用すると、Aire が毎回中断することなく自動的に承認できるアクションを定義できます。\n\n組み込みの例には、Developer、News Browser、および Conservative が含まれます。\n\n注意すべきこと:\n• プロファイルは利便性を高めるためのものであり、セキュリティの代替品ではありません。\n• 慎重に開始し、本当に信頼できるアクションのみを自動的に受け入れます。\n• ファイルの書き込み、入力制御、および外部の副作用は通常、手動にしておく価値があります。\n\n不明な場合は、制限付きの自動受け入れをそのままにして、アクションを 1 つずつ確認してください。"
     },
     {
       "tab": "Connections",
       "type": "text",
-      "title": "MCP Servers",
+      "title": "MCPサーバー",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings with the MCP catalog and installed server list.",
+      "imageCaption": "MCP カタログとインストールされているサーバーのリストを使用した接続設定。",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "接続設定を開く",
           "action": "settings:connections"
         }
       ],
-      "content": "MCP servers are external helper services that give Aire more tools and data sources. MCP stands for Model Context Protocol.\n\nIn plain language, an MCP server is a bridge between Aire and another system, such as:\n• your file system,\n• GitHub,\n• SQLite,\n• web fetch tools,\n• memory tools,\n• Slack, Gmail, or Notion.\n\nHow Aire handles them:\n• The Connections tab includes a curated catalog of common MCP servers.\n• You can install, remove, enable, disable, and edit them from the app.\n• Some servers need extra credentials or Node.js/npm on the machine.\n\nGood beginner advice:\n• Start with one simple server, such as Filesystem or Web Fetch.\n• Read the description before installing it.\n• Treat an MCP server like any other integration: useful, but something you should trust before enabling."
+      "content": "MCP サーバーは、Aire にさらに多くのツールとデータ ソースを提供する外部ヘルパー サービスです。 MCP はモデル コンテキスト プロトコルの略です。\n\nわかりやすく言うと、MCP サーバーは Aire と次のような別のシステムの間のブリッジです。\n• ファイルシステム、\n• GitHub、\n• SQLite、\n• Web フェッチツール、\n• 記憶ツール、\n• Slack、Gmail、または Notion。\n\nAire がそれらをどのように処理するか:\n• [接続] タブには、一般的な MCP サーバーの厳選されたカタログが含まれています。\n• アプリからインストール、削除、有効化、無効化、編集できます。\n• 一部のサーバーでは、マシン上に追加の認証情報または Node.js/npm が必要です。\n\n初心者向けの良いアドバイス:\n• ファイルシステムや Web フェッチなどの 1 つの単純なサーバーから始めます。\n• インストールする前に説明をお読みください。\n• MCP サーバーを他の統合と同様に扱います。便利ですが、有効にする前に信頼する必要があります。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Keyboard & Mouse Sessions",
+      "title": "キーボードとマウスのセッション",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "AI アクションの承認を確認する",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some tasks require the AI to control the keyboard and mouse. When a session is active:\n\n• A banner appears at the bottom of the chat window showing the session is active.\n• A floating ⏹ STOP SESSION button appears at the top-right of your screen — click it at any time to cancel immediately.\n• Say “AIRE STOP” to cancel by voice.\n• Click “End session” in the banner to cancel.\n\nThe AI will request approval for each individual action (key press, mouse click, etc.) before performing it."
+      "content": "一部のタスクでは、AI がキーボードとマウスを制御する必要があります。セッションがアクティブな場合:\n\n• セッションがアクティブであることを示すバナーがチャット ウィンドウの下部に表示されます。\n• フローティング ⏹ STOP SESSION ボタンが画面の右上に表示されます。これをクリックすると、いつでもすぐにキャンセルできます。\n• 音声で解除する場合は「AIRE STOP」と発声してください。\n• キャンセルするには、バナーの「セッションを終了」をクリックします。\n\nAI は、個々のアクション (キーを押す、マウスのクリックなど) を実行する前に、そのアクションに対する承認を要求します。"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Input",
+      "title": "音声入力",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "音声設定を開く",
           "action": "settings:voice"
         }
       ],
-      "content": "Click the 🎤 button to start voice recognition. Aire uses Windows built-in speech recognition — no API key or internet connection required.\n\n• Speak normally. Your words appear in the input box as you talk.\n• When you stop talking, a countdown (5 → 1) appears on the button. If you stay silent, the message sends automatically at 0.\n• Start talking again at any time to reset the countdown.\n• Click the button again (shows ⏹) to stop without sending.\n\nVoice recognition accuracy depends on your Windows language and microphone quality. You can train Windows Speech Recognition via Windows Settings → Time & Language → Speech."
+      "content": "🎤 ボタンをクリックして音声認識を開始します。 Aire は Windows 組み込みの音声認識を使用します。API キーやインターネット接続は必要ありません。\n\n• 普通に話してください。話すと言葉が入力ボックスに表示されます。\n• 会話を終えると、ボタンにカウントダウン（5→1）が表示されます。沈黙していると、メッセージは自動的に 0 に送信されます。\n• カウントダウンをリセットするには、いつでももう一度話し始めてください。\n• もう一度ボタンをクリックすると（⏹が表示）、送信せずに停止します。\n\n音声認識の精度は、Windows の言語とマイクの品質によって異なります。 Windows 音声認識は、[Windows の設定] → [時刻と言語] → [音声] でトレーニングできます。"
     },
     {
       "tab": "Tools & Voice",
       "type": "table",
-      "title": "Voice Commands",
-      "intro": "Say “AIRE” followed by any of these words while the microphone is active:",
+      "title": "音声コマンド",
+      "intro": "マイクがアクティブになっているときに、「AIRE」と続けて次のいずれかの単語を言います。",
       "cols": [
-        "Command",
-        "What it does"
+        "指示",
+        "何をするのか"
       ],
       "rows": [
         [
-          "AIRE SEND",
-          "Send the current message immediately"
+          "エアセンド",
+          "現在のメッセージをすぐに送信します"
         ],
         [
-          "AIRE PAUSE",
-          "Freeze the silence countdown"
+          "アイレポーズ",
+          "沈黙のカウントダウンをフリーズする"
         ],
         [
-          "AIRE RESUME",
-          "Resume the countdown"
+          "エア履歴書",
+          "カウントダウンを再開する"
         ],
         [
-          "AIRE CLEAR",
-          "Clear the input box"
+          "アイレクリア",
+          "入力ボックスをクリアします"
         ],
         [
-          "AIRE UNDO",
-          "Clear the input box"
+          "アイレアンドゥ",
+          "入力ボックスをクリアします"
         ],
         [
-          "AIRE CANCEL",
-          "Stop listening without sending"
+          "エアキャンセル",
+          "送信せずに聞くのをやめる"
         ],
         [
-          "AIRE NEW",
-          "Start a new conversation"
+          "アイレニュー",
+          "新しい会話を開始する"
         ],
         [
-          "AIRE SETTINGS",
-          "Open the Settings window"
+          "エア設定",
+          "設定ウィンドウを開きます"
         ],
         [
-          "AIRE OPEN/SHOW",
-          "Show the main chat window"
+          "エアオープン/ショー",
+          "メインチャットウィンドウを表示する"
         ],
         [
-          "AIRE CLOSE/HIDE",
-          "Hide the main chat window"
+          "エア閉じる/隠す",
+          "メインチャットウィンドウを非表示にする"
         ],
         [
-          "AIRE YES/NO",
-          "Approve or deny a pending AI action"
+          "アイレはい/いいえ",
+          "保留中の AI アクションを承認または拒否する"
         ],
         [
-          "AIRE STOP",
-          "Emergency stop — end any active keyboard/mouse session immediately"
+          "エアストップ",
+          "緊急停止 - アクティブなキーボード/マウス セッションを直ちに終了します。"
         ]
       ]
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Output",
+      "title": "音声出力",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "音声設定を開く",
           "action": "settings:voice"
         }
       ],
-      "content": "Aire can read AI responses aloud using Windows text-to-speech. Enable this in Settings (⚙) → Voice Output.\n\n• Choose to speak all responses, or only when you use the microphone.\n• Select a voice and adjust the reading speed.\n• Toggle voice output on/off quickly with the speaker icon near the microphone button."
+      "content": "Aire は、Windows の音声合成を使用して AI の応答を読み上げることができます。 [設定] (⚙) → [音声出力] でこれを有効にします。\n\n• すべての応答を話すか、マイクを使用するときのみ話すかを選択します。\n• 音声を選択し、読み上げ速度を調整します。\n• マイク ボタンの近くにあるスピーカー アイコンを使用して、音声出力のオン/オフをすばやく切り替えます。"
     },
     {
       "tab": "Appearance",
       "type": "text",
-      "title": "Appearance",
+      "title": "外観",
       "links": [
         {
-          "label": "Open appearance settings",
+          "label": "外観設定を開く",
           "action": "settings:appearance"
         }
       ],
-      "content": "Open Settings (⚙) → Appearance to change the look of the app.\n\n• Theme: switch between Dark and Light (Beige).\n• Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint — the slider is pure grayscale by default.\n• Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.\n\nAll appearance settings are saved and restored on next launch."
+      "content": "設定 (⚙) → 外観を開き、アプリの外観を変更します。\n\n• テーマ: ダークとライト (ベージュ) を切り替えます。\n• 色合い: スライダーをドラッグして、UI 全体に色合いを適用します。左端 (黒) と右端 (白) は色合いがないことを意味します。スライダーはデフォルトで純粋なグレースケールです。\n• フォント サイズ: Ctrl キーを押したまま、チャットまたは入力領域上でマウス ホイールをスクロールして、フォント サイズを拡大または縮小します。設定は自動的に保存されます。\n\nすべての外観設定は保存され、次回の起動時に復元されます。"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "What is the Local API?",
+      "title": "ローカルAPIとは何ですか?",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings where local API access, email accounts, and MCP servers are configured.",
+      "imageCaption": "ローカル API アクセス、電子メール アカウント、および MCP サーバーが構成される接続設定。",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "接続設定を開く",
           "action": "settings:connections"
         }
       ],
-      "content": "The Local API is how another program on the same computer can talk to Aire.\n\nFor non-developers: you usually do not need this feature.\n\nFor developers and advanced users: this is the easiest way to connect your own script, tool, automation, or desktop app to Aire. A local program can:\n• ask Aire to show or hide its main window,\n• list conversations and read messages,\n• send a message to the active conversation,\n• switch provider or conversation,\n• inspect pending tool approvals,\n• and call Aire tools directly.\n\nHow it works:\n• Aire listens on TCP port 51234.\n• It only listens on 127.0.0.1, so other computers cannot reach it directly.\n• Each request is one JSON object sent as one line.\n• Each response is one JSON object returned as one line.\n\nTo use it, first open Connections settings and enable local API access."
+      "content": "ローカル API は、同じコンピュータ上の別のプログラムが Aire と通信する方法です。\n\n開発者以外の場合: 通常、この機能は必要ありません。\n\n開発者および上級ユーザー向け: これは、独自のスクリプト、ツール、自動化、またはデスクトップ アプリを Aire に接続する最も簡単な方法です。ローカル プログラムでは次のことができます。\n• Aire にメイン ウィンドウを表示または非表示にするよう依頼します。\n• 会話をリストし、メッセージを読む、\n• アクティブな会話にメッセージを送信します。\n• プロバイダーまたは会話を切り替える、\n• 保留中のツールの承認を検査します。\n• Aire ツールを直接呼び出します。\n\n仕組み:\n• Aire は TCP ポート 51234 をリッスンします。\n• 127.0.0.1 でのみリッスンするため、他のコンピュータは 127.0.0.1 に直接アクセスできません。\n• 各リクエストは 1 行で送信される 1 つの JSON オブジェクトです。\n• 各応答は 1 行で返される 1 つの JSON オブジェクトです。\n\nこれを使用するには、まず接続設定を開き、ローカル API アクセスを有効にします。"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Local API Quick Start",
+      "title": "ローカル API クイック スタート",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "接続設定を開く",
           "action": "settings:connections"
         }
       ],
-      "content": "To connect another app to Aire, use this checklist:\n\n1. Open Connections settings.\n2. Turn on local API access.\n3. Copy the auth token.\n4. From your app or script, open a TCP connection to 127.0.0.1:51234.\n5. Send one JSON line with method, token, and optional parameters.\n6. Read one JSON line back.\n7. Close the connection.\n\nA good first test is the ping method. If ping works, then try show_main_window, list_providers, and create_conversation.\n\nRecommended first integration order:\n• ping\n• show_main_window\n• list_providers\n• create_conversation\n• list_conversations\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval if you want to cooperate with tool approvals\n• execute_tool only after you are comfortable with the approval flow and security model"
+      "content": "別のアプリを Aire に接続するには、次のチェックリストを使用します。\n\n1. 接続設定を開きます。\n2. ローカル API アクセスをオンにします。\n3. 認証トークンをコピーします。\n4. アプリまたはスクリプトから、127.0.0.1:51234 への TCP 接続を開きます。\n5. メソッド、トークン、およびオプションのパラメーターを含む 1 つの JSON 行を送信します。\n6. JSON を 1 行戻します。\n7. 接続を閉じます。\n\n最初のテストとしては、ping メソッドが適しています。 ping が機能する場合は、show_main_window、list_providers、および create_conversation を試してください。\n\n推奨される最初の統合順序:\n• ピング\n• show_main_window\n• list_providers\n• 会話の作成\n• リスト_会話\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval ツールの承認に協力したい場合\n• 承認フローとセキュリティ モデルに慣れた後でのみ、execute_tool を実行してください。"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Authentication",
+      "title": "認証",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "接続設定を開く",
           "action": "settings:connections"
         },
         {
-          "label": "Review AI action approvals",
+          "label": "AI アクションの承認を確認する",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Every Local API request must include the auth token.\n\nWhere to get it:\n• Open Connections settings.\n• Find the Local API section.\n• Click Copy to copy the token.\n• Paste that token into your app or script configuration.\n\nWhat to know:\n• If you click Regenerate, old integrations will stop working until they use the new token.\n• The API must be enabled, not just configured.\n• Any process on your computer that knows the token can control Aire.\n\nPractical advice for developers:\n• Keep the token in a local config file or environment variable, not hard-coded in source control.\n• Treat it like a local secret.\n• If you suspect it leaked, regenerate it."
+      "content": "すべてのローカル API リクエストには認証トークンが含まれている必要があります。\n\n入手場所:\n• [接続設定]を開きます。\n• [ローカル API] セクションを見つけます。\n• [コピー] をクリックしてトークンをコピーします。\n• そのトークンをアプリまたはスクリプトの設定に貼り付けます。\n\n知っておくべきこと:\n• [再生成] をクリックすると、古い統合は新しいトークンを使用するまで動作を停止します。\n• API は構成するだけでなく、有効にする必要があります。\n• トークンを認識しているコンピュータ上のプロセスは、Aire を制御できます。\n\n開発者向けの実践的なアドバイス:\n• トークンは、ソース管理にハードコードせずに、ローカル構成ファイルまたは環境変数に保持します。\n• ローカル秘密のように扱います。\n• 漏れが疑われる場合は、再生成してください。"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Protocol",
-      "intro": "The Local API is line-based JSON over TCP.\n\nConnection pattern:\n• connect to 127.0.0.1:51234\n• write exactly one compact JSON request followed by a newline\n• read exactly one JSON response line\n• close the connection\n\nRequest shape:\n{ \"method\": \"METHOD\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nResponse shape:\n{ \"ok\": true, \"result\": ... }\nor\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nIf you are writing a client library, build around that simple request-response pattern first. You do not need HTTP or WebSockets to get started.",
-      "content": "{ \"method\": \"ping\", \"token\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ok\": true, \"result\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"Hello!\" } }\n{ \"ok\": true, \"result\": true }"
+      "title": "プロトコル",
+      "intro": "ローカル API は、TCP 上の行ベースの JSON です。\n\n接続パターン：\n• 127.0.0.1:51234 に接続します\n• コンパクトな JSON リクエストを 1 つだけ記述し、その後に改行を追加します。\n• JSON 応答行を 1 行だけ読み取ります\n• 接続を閉じる\n\nリクエストの形状:\n{ \"メソッド\": \"メソッド\"、\"トークン\": \"トークン\"、\"パラメータ\": { ... } }\n\n応答形状:\n{ \"ok\": true、\"結果\": ... }\nまたは\n{ \"ok\": false、\"errorMessage\": \"メッセージ\" }\n\nクライアント ライブラリを作成している場合は、最初にその単純な要求と応答のパターンを中心に構築します。開始するのに HTTP や WebSocket は必要ありません。",
+      "content": "{ \"メソッド\": \"ping\"、\"トークン\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"メソッド\": \"create_conversation\", \"トークン\": \"YOUR_TOKEN\", \"パラメータ\": { \"タイトル\": \"API テスト\" } }\n{ \"ok\": true、\"結果\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"こんにちは!\" } }\n{ \"ok\": true、\"result\": true }"
     },
     {
       "tab": "Local API",
       "type": "table",
-      "title": "Available Methods",
+      "title": "利用可能な方法",
       "cols": [
-        "Method",
-        "Parameters",
-        "Description"
+        "方法",
+        "パラメータ",
+        "説明"
       ],
       "rows": [
         [
-          "ping",
+          "ピング",
           "—",
-          "Check if Aire is running. Returns the same state snapshot as get_state."
+          "Aireが動作しているか確認してください。 get_state と同じ状態のスナップショットを返します。"
         ],
         [
-          "get_state",
+          "状態の取得",
           "—",
-          "Current provider, model, active conversation ID, and local API status."
+          "現在のプロバイダー、モデル、アクティブな会話 ID、およびローカル API ステータス。"
         ],
         [
           "show_main_window",
           "—",
-          "Bring the Aire chat window to the front."
+          "Aire チャット ウィンドウを前面に表示します。"
         ],
         [
-          "hide_main_window",
+          "メインウィンドウを隠す",
           "—",
-          "Hide the chat window to the tray."
+          "チャット ウィンドウをトレイに非表示にします。"
         ],
         [
-          "open_settings",
+          "オープン設定",
           "—",
-          "Open the Settings window."
+          "設定ウィンドウを開きます。"
         ],
         [
-          "open_browser",
+          "ブラウザを開く",
           "—",
-          "Open the Aire browser window."
+          "Aire ブラウザ ウィンドウを開きます。"
         ],
         [
-          "list_providers",
+          "リストプロバイダー",
           "—",
-          "All configured AI providers with IDs and names."
+          "ID と名前を持つすべての構成済み AI プロバイダー。"
         ],
         [
-          "create_provider",
-          "name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritCredentialsFromProviderId?",
-          "Create a new provider from the local API."
+          "プロバイダーの作成",
+          "name?、type、apiKey?、baseUrl?、model、isEnabled?、color?、selectAfterCreate?、inheritCredentialsFromProviderId?",
+          "ローカル API から新しいプロバイダーを作成します。"
         ],
         [
-          "list_conversations",
+          "リスト_会話",
           "—",
-          "All saved conversations (ID, title, date)."
+          "保存されたすべての会話 (ID、タイトル、日付)。"
         ],
         [
-          "create_conversation",
-          "title?",
-          "Create a new conversation and switch to it."
+          "会話の作成",
+          "タイトル？",
+          "新しい会話を作成し、それに切り替えます。"
         ],
         [
-          "select_conversation",
-          "conversationId",
-          "Switch to an existing conversation."
+          "選択_会話",
+          "会話ID",
+          "既存の会話に切り替えます。"
         ],
         [
           "get_messages",
-          "conversationId",
-          "All messages in a conversation."
+          "会話ID",
+          "会話内のすべてのメッセージ。"
         ],
         [
-          "set_provider",
-          "providerId",
-          "Switch the active AI provider."
+          "セットプロバイダー",
+          "プロバイダーID",
+          "アクティブな AI プロバイダーを切り替えます。"
         ],
         [
           "set_provider_model",
-          "providerId, model",
-          "Change the model for a provider."
+          "プロバイダーID、モデル",
+          "プロバイダーのモデルを変更します。"
         ],
         [
           "send_message",
-          "text",
-          "Send a message to the active conversation. Returns true when accepted."
+          "文章",
+          "アクティブな会話にメッセージを送信します。受け入れられた場合は true を返します。"
         ],
         [
           "list_pending_approvals",
           "—",
-          "Tool calls currently waiting for approval."
+          "ツール呼び出しは現在承認を待っています。"
         ],
         [
-          "wait_for_pending_approval",
-          "timeout_seconds?",
-          "Wait for the next pending tool approval or return null on timeout."
+          "保留中の承認を待つ",
+          "timeout_秒?",
+          "次の保留中のツールの承認を待つか、タイムアウト時に null を返します。"
         ],
         [
           "approve_tool_call",
-          "index",
-          "Approve a pending tool call by its current list index."
+          "索引",
+          "現在のリスト インデックスに基づいて保留中のツール呼び出しを承認します。"
         ],
         [
-          "deny_tool_call",
-          "index",
-          "Deny a pending tool call by its current list index."
+          "拒否ツール呼び出し",
+          "索引",
+          "現在のリスト インデックスに基づいて保留中のツール呼び出しを拒否します。"
         ],
         [
-          "execute_tool",
-          "tool, parameters, wait_for_approval?, approval_timeout_seconds?",
-          "Run an Aire tool directly and optionally wait for approval."
+          "実行ツール",
+          "ツール、パラメータ、wait_for_approval?、approval_timeout_秒?",
+          "Aire ツールを直接実行し、必要に応じて承認を待ちます。"
         ],
         [
           "get_trace",
-          "afterId?, limit?",
-          "Read tool execution trace entries for debugging."
+          "afterID?、制限?",
+          "デバッグのためにツール実行トレース エントリを読み取ります。"
         ],
         [
-          "clear_trace",
+          "クリアトレース",
           "—",
-          "Clear the tool execution trace."
+          "ツール実行トレースをクリアします。"
         ]
       ]
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Which methods should I start with?",
-      "content": "If you are building another app that connects to Aire, start with the simpler methods first.\n\nRecommended learning order:\n• ping: confirm Aire is running and your token is valid.\n• show_main_window: confirm you can trigger a visible app action.\n• get_state: inspect the current conversation and provider state.\n• list_conversations and get_messages: read data safely.\n• send_message: perform a full request-reply round trip.\n• list_pending_approvals, approve_tool_call, deny_tool_call: integrate with Aire's approval model.\n• execute_tool: only after you understand the security implications and approval behavior.\n\nIn most integrations, send_message and the read-only methods are enough."
+      "title": "どの方法から始めればよいでしょうか?",
+      "content": "Aire に接続する別のアプリを構築している場合は、まず簡単な方法から始めてください。\n\n推奨される学習順序:\n• ping: Aire が実行中であり、トークンが有効であることを確認します。\n• show_main_window: 表示されるアプリ アクションをトリガーできることを確認します。\n• get_state: 現在の会話とプロバイダーの状態を検査します。\n• list_conversations と get_messages: データを安全に読み取ります。\n• send_message: 完全な要求と応答の往復を実行します。\n• list_pending_approvals、approve_tool_call、deny_tool_call: Aire の承認モデルと統合します。\n•execute_tool: セキュリティへの影響と承認動作を理解した後でのみ。\n\nほとんどの統合では、send_message と読み取り専用メソッドで十分です。"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "PowerShell Example",
-      "intro": "This example shows the simplest useful shape for a Local API client in PowerShell. Save your token from Connections settings, paste it below, and then try ping before anything else.",
-      "content": "$TOKEN = \"paste-your-token-here\"\n$PORT  = 51234\n\nfunction Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; token = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    return $resp | ConvertFrom-Json\n}\n\n# Check Aire is running and inspect state\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Create and select a conversation\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).result\nInvoke-Aire \"select_conversation\" @{ conversationId = $id }\n\n# Send a message (returns true when accepted)\nInvoke-Aire \"send_message\" @{ text = \"Hello from PowerShell\" }\n\n# Read the conversation messages after the turn completes\n(Invoke-Aire \"get_messages\" @{ conversationId = $id }).result\n\n# Execute a tool directly\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; parameters = @{ path = \"C:/Temp/notes.txt\" } }"
+      "title": "PowerShell の例",
+      "intro": "この例は、PowerShell のローカル API クライアントの最も単純で便利な形状を示しています。接続設定からトークンを保存し、それを下に貼り付けてから、何よりも先に ping を試してください。",
+      "content": "$TOKEN = \"ここにトークンを貼り付け\"\n$ポート = 51234\n\n関数 Invoke-Aire {\n    param([文字列]$Method, [ハッシュテーブル]$Params = @{})\n    $req = @{メソッド = $Method;トークン = $TOKEN }\n    if ($Params.Count) { $req[\"パラメータ\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    $resp を返す | ConvertFrom-Json\n}\n\n# Aire が実行中であることを確認し、状態を検査する\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# 会話を作成して選択する\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API テスト\" }).result\nInvoke-Aire「select_conversation」@{conversationId = $id }\n\n# メッセージを送信します (受け入れられた場合は true を返します)\nInvoke-Aire \"send_message\" @{ text = \"PowerShell からこんにちは\" }\n\n# ターン完了後に会話メッセージを読む\n(Invoke-Aire \"get_messages\" @{conversationId = $id }).result\n\n# ツールを直接実行する\nInvoke-Aire \"execute_tool\" @{ tools = \"read_file\";パラメータ = @{ パス = \"C:/Temp/notes.txt\" } }"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Python Example",
-      "intro": "This example uses only the Python standard library. It is a good starting point if you want to add Aire support to another local tool.",
-      "content": "import socket, json\n\nTOKEN = \"paste-your-token-here\"\n\ndef aire(method, **params):\n    req = {\"method\": method, \"token\": TOKEN}\n    if params:\n        req[\"parameters\"] = params\n    with socket.create_connection((\"127.0.0.1\", 51234)) as s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(state[\"result\"])\n\nconversation_id = aire(\"create_conversation\", title=\"API test\")[\"result\"]\naire(\"select_conversation\", conversationId=conversation_id)\naire(\"send_message\", text=\"Hello from Python\")\n\nmessages = aire(\"get_messages\", conversationId=conversation_id)[\"result\"]\nprint(messages)\n\nresult = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    parameters={\"path\": \"C:/Temp/notes.txt\"}\n)\nprint(result)"
+      "title": "Python の例",
+      "intro": "この例では、Python 標準ライブラリのみを使用します。 Aire サポートを別のローカル ツールに追加する場合は、これが良い出発点になります。",
+      "content": "インポートソケット、JSON\n\nTOKEN = \"ここにトークンを貼り付け\"\n\nデフォルト(メソッド、**パラメータ):\n    req = {\"メソッド\": メソッド、\"トークン\": トークン}\n    パラメータの場合:\n        req[\"パラメータ\"] = パラメータ\n    sとしてsocket.create_connection((\"127.0.0.1\", 51234))を使用します:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(状態[\"結果\"])\n\ncommunication_id = aire(\"create_conversation\", title=\"API テスト\")[\"結果\"]\naire(\"select_conversation\"、conversationId=conversation_id)\naire(\"send_message\", text=\"Python からこんにちは\")\n\nメッセージ = aire(\"get_messages\",conversationId=conversation_id)[\"result\"]\nprint(メッセージ)\n\n結果 = エア(\n    \"ツールの実行\",\n    ツール=\"読み取りファイル\",\n    パラメータ={\"パス\": \"C:/Temp/notes.txt\"}\n)\n印刷(結果)"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Integration Tips",
-      "content": "• Always check ok before using result. If ok is false, read the error message and handle it.\n• send_message only confirms that Aire accepted the message into the active conversation. If your integration needs the final answer, follow up with get_messages or watch for approvals and trace output.\n• Keep one method call per TCP connection. Connect, send, read, close.\n• Start with read-only and visibility actions before using execute_tool.\n• If your integration wants to cooperate with Aire's safety model, use list_pending_approvals, wait_for_pending_approval, approve_tool_call, and deny_tool_call instead of assuming every action runs immediately.\n• execute_tool is powerful because it lets your code call Aire tools directly. Use it carefully.\n• The API is intentionally local-only. Do not expose port 51234 to your network or the internet.\n• For production-like internal tools, store the token outside source code and make ping part of your startup health check."
+      "title": "統合のヒント",
+      "content": "• 結果を使用する前に、必ず [ok] をチェックしてください。 ok が false の場合は、エラー メッセージを読んで対処してください。\n• send_message は、Aire がアクティブな会話にメッセージを受け入れたことを確認するだけです。統合に最終的な答えが必要な場合は、get_messages でフォローアップするか、承認を監視して出力をトレースします。\n• TCP 接続ごとに 1 つのメソッド呼び出しを保持します。接続、送信、読み取り、閉じる。\n•execute_tool を使用する前に、読み取り専用アクションと可視アクションから始めます。\n• 統合が Aire の安全モデルと連携したい場合は、すべてのアクションがすぐに実行されると仮定するのではなく、list_pending_approvals、wait_for_pending_approval、approve_tool_call、およびdeny_tool_call を使用します。\n•execute_tool は、コードから Aire ツールを直接呼び出すことができるため、強力です。慎重に使用してください。\n• API は意図的にローカル専用です。ポート 51234 をネットワークまたはインターネットに公開しないでください。\n• 運用環境に似た内部ツールの場合は、トークンをソース コードの外部に保存し、ping を起動時のヘルス チェックの一部にします。"
     }
   ]
 }

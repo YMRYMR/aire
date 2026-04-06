@@ -212,28 +212,28 @@
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "How the Setup Wizard Works",
+      "title": "Як працює майстер налаштування",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "Відкрийте майстер налаштування",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "Відкрийте налаштування AI",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-picker.png",
-      "imageCaption": "The setup wizard helps you choose a provider before you start chatting.",
-      "content": "The Setup Wizard appears the first time you run Aire, or when no AI providers are configured yet. Its job is to get you from a fresh install to a working chat as quickly as possible.\n\nWhat the wizard does, step by step:\n• Welcome: explains what Aire is and lets you choose the app language.\n• Provider picker: shows common ways to connect Aire to AI services.\n• Provider setup: asks for the details needed for the provider you picked.\n• Finish: confirms Aire is ready and takes you to the main app.\n\nIf you are new to AI, the wizard is the best place to start. It uses the simplest path first and hides advanced settings until you need them.\n\nYou can skip setup and come back later, but you will need at least one configured provider before Aire can answer chat messages."
+      "imageCaption": "Майстер налаштування допоможе вибрати постачальника послуг перед початком спілкування.",
+      "content": "Майстер налаштування з’являється під час першого запуску Aire або якщо ще не налаштовано жодного постачальника AI. Його завдання полягає в тому, щоб якомога швидше перевести вас із нової інсталяції до робочого чату.\n\nЩо робить майстер крок за кроком:\n• Ласкаво просимо: пояснює, що таке Aire, і дозволяє вибрати мову програми.\n• Вибір постачальника: показує поширені способи підключення Aire до служб ШІ.\n• Налаштування постачальника: запитує деталі, необхідні для вибраного вами постачальника.\n• Завершити: підтверджує, що Aire готовий, і передає вас до основної програми.\n\nЯкщо ви новачок у штучному інтелекті, найкраще почати з майстра. Він спочатку використовує найпростіший шлях і приховує додаткові параметри, доки вони вам не знадобляться.\n\nВи можете пропустити налаштування та повернутися пізніше, але вам знадобиться принаймні один налаштований постачальник, перш ніж Aire зможе відповідати на повідомлення чату."
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Choosing a Provider",
+      "title": "Вибір постачальника",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "Відкрийте майстер налаштування",
           "action": "onboarding"
         },
         {
@@ -249,128 +249,128 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "The provider picker is where you decide which AI service Aire will talk to on your behalf.\n\nWhat the main options mean:\n• OpenAI: a common starting point if you want a simple cloud setup and wide model support.\n• Anthropic API: another strong cloud option, known for Claude models.\n• Claude.ai: uses browser sign-in instead of an API key.\n• Google AI: connects to Gemini chat models through Google AI Studio.\n• Google AI Images: a dedicated Gemini image-generation setup.\n• Ollama: runs models locally on your computer. Good for privacy and offline use, but it depends on your hardware.\n• Codex: uses the local Codex CLI bridge instead of a normal API key.\n• Groq, OpenRouter, DeepSeek, Inception, and z.ai: other providers or OpenAI-compatible endpoints, often useful if you already have an account there.\n\nWhich one should you choose?\n• If you want the easiest cloud setup for chat: start with OpenAI, Anthropic, or Google AI.\n• If you want local and private: choose Ollama.\n• If you specifically want image generation from Gemini: choose Google AI Images.\n• If you already pay for or use a specific provider elsewhere: choose that same provider here.\n\nYou are not locked in. The wizard helps you add one provider first, and you can add more later in Settings."
+      "content": "Засіб вибору постачальника – це місце, де ви вирішуєте, з якою AI службою Aire спілкуватиметься від вашого імені.\n\nЩо означають основні параметри:\n• OpenAI: загальна відправна точка, якщо вам потрібна проста хмарна установка та широка підтримка моделі.\n• Anthropic API: ще один потужний хмарний варіант, відомий моделями Claude.\n• Claude.ai: використовує вхід у браузері замість ключа API.\n• Google AI: підключається до моделей чату Gemini через Google AI Studio.\n• Google AI Images: спеціальне налаштування для створення зображень Gemini.\n• Ollama: запускає моделі локально на вашому комп’ютері. Добре підходить для конфіденційності та використання в автономному режимі, але це залежить від вашого обладнання.\n• Codex: використовує локальний міст Codex CLI замість звичайного ключа API.\n• Groq, OpenRouter, DeepSeek, Inception і z.ai: інші постачальники або кінцеві точки, сумісні з OpenAI, часто корисні, якщо у вас уже є там обліковий запис.\n\nЯкий вибрати?\n• Якщо вам потрібна найпростіша хмарна настройка для чату: почніть із OpenAI, Anthropic або Google AI.\n• Якщо ви хочете локально та приватно: виберіть Ollama.\n• Якщо вам потрібна генерація зображень спеціально від Gemini: виберіть Google AI Images.\n• Якщо ви вже платите або використовуєте певного постачальника в іншому місці: виберіть цього самого постачальника тут.\n\nВи не заблоковані. Майстер допоможе вам спочатку додати одного постачальника, а пізніше ви зможете додати інших у налаштуваннях."
     },
     {
       "tab": "Setup Wizard",
       "type": "text",
-      "title": "Filling in Provider Details",
+      "title": "Заповнення реквізитів провайдера",
       "links": [
         {
-          "label": "Open the Setup Wizard",
+          "label": "Відкрийте майстер налаштування",
           "action": "onboarding"
         },
         {
-          "label": "Open AI setup",
+          "label": "Відкрийте налаштування AI",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/onboarding-provider-setup.png",
-      "imageCaption": "Provider setup step with the provider type, name, credentials, model, and connection test.",
-      "content": "After you pick a provider, the wizard asks only for the details that provider needs.\n\nTypical fields:\n• Provider type: the service you want to use.\n• Name: the label Aire will show in the chat window.\n• API key: the secret token that lets Aire talk to the provider. Some providers use browser sign-in instead, and some local providers do not need an API key at all.\n• Base URL: only needed for certain OpenAI-compatible services or self-hosted setups.\n• Model: the specific AI model you want to use.\n\nProvider-specific notes:\n• Claude.ai uses browser sign-in instead of a normal API key.\n• Ollama is local and usually works without an API key.\n• Codex uses the local Codex CLI bridge, so the wizard can offer CLI installation instead of asking for a normal API key.\n• Google AI Images is for image generation rather than normal chat.\n\nThe Test connection button is there to help you confirm the configuration before you finish. If the test succeeds, Aire can usually use that provider immediately.\n\nPractical advice:\n• If you are unsure which model to pick, start with the default suggestion.\n• If you see an API-key field, paste the key exactly as provided by the service.\n• If a provider offers both API access and browser sign-in, prefer API access if you want the most stable automation and integration behavior.\n\nAfter you finish the wizard, you can still change any of these settings later in the AI Providers tab."
+      "imageCaption": "Крок налаштування постачальника з типом постачальника, ім’ям, обліковими даними, моделлю та перевіркою підключення.",
+      "content": "Після того як ви виберете постачальника, майстер запитає лише ті деталі, які потрібні постачальнику.\n\nTypical fields:\n• Тип постачальника: послуга, якою ви бажаєте скористатися.\n• Ім'я: у вікні чату відображатиметься мітка Aire.\n• Ключ API: секретний маркер, який дозволяє Aire спілкуватися з постачальником. Деякі постачальники замість цього використовують вхід у веб-переглядачі, а деяким місцевим постачальникам взагалі не потрібен ключ API.\n• Основна URL-адреса: необхідна лише для певних служб, сумісних з OpenAI, або налаштувань, які розміщені на власному хості.\n• Модель: конкретна модель ШІ, яку ви хочете використовувати.\n\nProvider-specific notes:\n• Claude.ai використовує вхід у браузері замість звичайного ключа API.\n• Ollama є локальним і зазвичай працює без ключа API.\n• Codex використовує локальний міст Codex CLI, тому майстер може запропонувати встановлення CLI замість запиту звичайного ключа API.\n• Google AI Images призначений для створення зображень, а не для звичайного чату.\n\nКнопка Перевірити з’єднання допоможе вам підтвердити конфігурацію перед завершенням. Якщо тест пройшов успішно, Aire зазвичай може негайно скористатися цим постачальником.\n\nПрактичні поради:\n• Якщо ви не впевнені, яку модель обрати, почніть із запропонованої за умовчанням.\n• Якщо ви бачите поле ключа API, вставте ключ точно так, як надає служба.\n• Якщо постачальник пропонує як доступ до API, так і вхід у веб-переглядач, віддайте перевагу доступу через API, якщо вам потрібна найбільш стабільна автоматизація та інтеграція.\n\nПісля завершення роботи майстра ви все одно зможете змінити будь-які з цих налаштувань пізніше на вкладці «Постачальники AI»."
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Overview",
+      "title": "Огляд",
       "links": [
         {
-          "label": "Set up your first AI",
+          "label": "Налаштуйте свій перший ШІ",
           "action": "settings:providers"
         },
         {
-          "label": "Change the look of Aire",
+          "label": "Змініть вигляд Aire",
           "action": "settings:appearance"
         }
       ],
-      "content": "Aire is a desktop chat app that stays in your system tray until you need it. You can think of it as one chat window that can connect to many AI services.\n\nIf you are new to AI, the usual starting point is simple:\n• Open AI setup.\n• Add one provider, such as OpenAI, Anthropic, Google AI, or Ollama.\n• Choose a model.\n• Type a question in the chat box and press Enter.\n\nWhat Aire can do:\n• Talk to different AI services from one app.\n• Save your conversations on your computer.\n• Let the AI use tools, with your approval, to read files, run commands, browse pages, and more.\n• Use voice input and voice output with Windows speech features.\n• Let other local apps talk to Aire through the Local API."
+      "content": "Aire — це програма для настільного чату, яка залишається в панелі завдань, доки вона вам не знадобиться. Ви можете розглядати це як одне вікно чату, яке може підключитися до багатьох служб ШІ.\n\nЯкщо ви новачок у ШІ, звичайна початкова точка проста:\n• Відкрийте налаштування AI.\n• Додайте одного постачальника, наприклад OpenAI, Anthropic, Google AI або Ollama.\n• Виберіть модель.\n• Введіть запитання у вікні чату та натисніть Enter.\n\nЩо Aire може зробити:\n• Спілкуйтеся з різними службами ШІ з однієї програми.\n• Збережіть свої розмови на комп'ютері.\n• Дозвольте ШІ використовувати інструменти, з вашого дозволу, для читання файлів, виконання команд, перегляду сторінок тощо.\n• Використовуйте голосовий ввід і голосовий вихід із функціями мовлення Windows.\n• Дозвольте іншим локальним програмам спілкуватися з Aire через локальний API."
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tray Icon",
-      "content": "Aire runs in the system tray (bottom-right corner of the taskbar).\n\n• Left-click or right-click the tray icon to open the chat window.\n• Right-click the tray icon for options: Open, Settings, Exit.\n• Closing the window hides it — Aire keeps running in the background.\n• To quit completely, right-click the tray icon and choose Exit."
+      "title": "Значок у треї",
+      "content": "Aire запускається в системному лотку (нижній правий кут панелі завдань).\n\n• Клацніть лівою або правою кнопкою миші піктограму в треї, щоб відкрити вікно чату.\n• Клацніть правою кнопкою миші піктограму в треї, щоб переглянути параметри: Відкрити, Налаштування, Вийти.\n• Закриття вікна приховує його — Aire продовжує працювати у фоновому режимі.\n• Щоб повністю вийти, клацніть правою кнопкою миші піктограму на панелі задач і виберіть Вихід."
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Chat",
+      "title": "Чат",
       "links": [
         {
-          "label": "Open Providers",
+          "label": "Відкрийте Провайдери",
           "action": "settings:providers"
         }
       ],
       "imagePath": "Assets/Help/main-chat.png",
-      "imageCaption": "Main chat window with the provider selector, conversation area, search, and composer.",
-      "content": "• Type your message in the input box at the bottom and press Enter to send.\n• Press Shift+Enter to add a new line without sending.\n• Press ↑ / ↓ to navigate through previous messages you’ve sent (only works when the cursor is on the first or last line of the input box).\n• Drag and drop an image into the input box to attach it to your message (requires a vision-capable model).\n• Press Ctrl+F to search within the conversation. Use ↑ / ↓ or the arrow buttons to jump between matches. Press Escape to close the search bar.\n• Right-click the chat area to copy or save the conversation as a text file.\n• The 🗑 button clears the current conversation (asks for confirmation first).\n• The 💬 button in the sidebar opens your conversation history."
+      "imageCaption": "Головне вікно чату з вибором провайдера, областю розмови, пошуком і композитором.",
+      "content": "• Введіть своє повідомлення у полі введення внизу та натисніть Enter, щоб надіслати.\n• Натисніть Shift+Enter, щоб додати новий рядок без надсилання.\n• Натискайте ↑ / ↓, щоб переходити між попередніми надісланими повідомленнями (працює, лише коли курсор знаходиться на першому чи останньому рядку поля введення).\n• Перетягніть зображення в поле введення, щоб прикріпити його до свого повідомлення (потрібна модель, яка підтримує зоровий вигляд).\n• Натисніть Ctrl+F для пошуку в розмові. Використовуйте ↑ / ↓ або кнопки зі стрілками, щоб переходити між збігами. Натисніть Escape, щоб закрити панель пошуку.\n• Клацніть правою кнопкою миші область чату, щоб скопіювати або зберегти розмову як текстовий файл.\n• Кнопка 🗑 очищає поточну розмову (спочатку запитує підтвердження).\n• Кнопка 💬 на бічній панелі відкриває вашу історію розмов."
     },
     {
       "tab": "Getting Started",
       "type": "table",
-      "title": "Keyboard Shortcuts",
+      "title": "Комбінації клавіш",
       "cols": [
-        "Shortcut",
-        "Action"
+        "ярлик",
+        "Дія"
       ],
       "rows": [
         [
-          "Enter",
-          "Send message"
+          "Введіть",
+          "Надіслати повідомлення"
         ],
         [
           "Shift+Enter",
-          "New line in the input box"
+          "Новий рядок у полі введення"
         ],
         [
           "↑ / ↓",
-          "Navigate message history (when cursor is on first/last line)"
+          "Навігація в історії повідомлень (коли курсор знаходиться в першому/останньому рядку)"
         ],
         [
           "Ctrl+F",
-          "Search conversation"
+          "Пошукова розмова"
         ],
         [
-          "Ctrl+Scroll",
-          "Adjust font size"
+          "Ctrl+прокручування",
+          "Відрегулюйте розмір шрифту"
         ],
         [
-          "Escape",
-          "Close search bar / dismiss dialog"
+          "Втеча",
+          "Закрити панель пошуку / закрити діалогове вікно"
         ]
       ]
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Tips",
-      "content": "• You can have multiple AI providers configured and switch between them at the top of the chat window. Each conversation remembers its provider and assistant mode.\n• Resize the window by dragging any edge, including the top.\n• Conversations and settings are stored locally under %LOCALAPPDATA%\\Aire.\n• The AI can request tools for files, commands, browser actions, and more, but Aire still asks for approval unless an auto-accept rule applies.\n• If an AI response is cut off, the model may have hit its token or output limit. Ask it to continue, reduce the size of the task, or use a model with a larger context window."
+      "title": "Поради",
+      "content": "• Ви можете налаштувати кілька постачальників штучного інтелекту та перемикатися між ними у верхній частині вікна чату. Кожна розмова запам'ятовує свій провайдер і режим помічника.\n• Змініть розмір вікна, перетягнувши будь-який край, включаючи верх.\n• Розмови та налаштування зберігаються локально в %LOCALAPPDATA%\\Aire.\n• ШІ може запитувати інструменти для файлів, команд, дій браузера тощо, але Aire все одно запитує схвалення, якщо не застосовується правило автоматичного прийняття.\n• Якщо відповідь штучного інтелекту обрізано, можливо, модель досягла ліміту маркерів або вихідних даних. Попросіть його продовжити, зменшіть розмір завдання або скористайтеся моделлю з більшим контекстним вікном."
     },
     {
       "tab": "Getting Started",
       "type": "text",
-      "title": "Assistant Modes",
+      "title": "Режими помічника",
       "imagePath": "Assets/Help/main-chat-modes.png",
-      "imageCaption": "Assistant mode menu opened from the main header. Each conversation keeps its own mode.",
-      "content": "The mode button in the main header changes how Aire frames your request before it sends it to the provider.\n\nCurrent modes include Architect, Creative writer, Developer, General, Painter, Philosopher, Psychologist, Scientist, Security, and Teacher.\n\nWhat modes do:\n• They adjust the style and priorities of the assistant.\n• The selected mode is saved per conversation, so different chats can keep different roles.\n• General is the default for new conversations.\n• Different providers still keep their own quirks, but Aire passes the selected mode consistently as shared guidance.\n\nPractical examples:\n• Developer: better for code, debugging, and terminal tasks.\n• Architect: better for structure, trade-offs, and planning.\n• Teacher: better for explanations and step-by-step guidance.\n• Painter: best for image-oriented prompting and generation when the current provider supports it."
+      "imageCaption": "Меню режиму помічника відкрито з головного заголовка. Кожна розмова зберігає свій режим.",
+      "content": "Кнопка режиму в головному заголовку змінює спосіб формування вашого запиту Aire перед тим, як надсилати його постачальнику.\n\nПоточні режими включають архітектора, творчого автора, розробника, генерала, художника, філософа, психолога, вченого, безпеки та вчителя.\n\nЩо роблять режими:\n• Вони коригують стиль і пріоритети помічника.\n• Вибраний режим зберігається для кожної розмови, тому різні чати можуть мати різні ролі.\n• Загальні є типовими для нових розмов.\n• Різні постачальники все ще зберігають свої власні особливості, але Aire постійно передає вибраний режим як спільні вказівки.\n\nПрактичні приклади:\n• Розробник: краще для коду, налагодження та завдань терміналу.\n• Архітектор: краще для структури, компромісів і планування.\n• Учитель: краще для пояснень і покрокових інструкцій.\n• Painter: найкраще підходить для орієнтованих на зображення підказок і створення, якщо поточний постачальник підтримує це."
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Tool Categories",
+      "title": "Категорії інструментів",
       "imagePath": "Assets/Help/main-chat-tools.png",
-      "imageCaption": "Tools menu opened from the composer. You can enable all categories, disable all, or choose only the categories you want.",
-      "content": "The wrench button near the chat box controls which categories of tools the current provider is allowed to use.\n\nHow it works:\n• Click the wrench button to open the categories menu.\n• Turn on only the categories you want the AI to be able to request.\n• Choose No tools if you want a text-only conversation.\n• Aire remembers your selected tool categories and uses them as part of the current tool policy.\n\nWhy this matters:\n• Fewer enabled categories make tool use easier to understand.\n• Restricting categories can reduce risk and accidental side effects.\n• If a provider does not support tools, the wrench button is hidden."
+      "imageCaption": "Меню інструментів відкрито з композитора. Ви можете ввімкнути всі категорії, вимкнути всі або вибрати лише потрібні категорії.",
+      "content": "Кнопка гайкового ключа біля вікна чату визначає, які категорії інструментів дозволено використовувати поточному постачальнику.\n\nЯк це працює:\n• Натисніть кнопку гайкового ключа, щоб відкрити меню категорій.\n• Увімкніть лише ті категорії, які потрібно, щоб AI міг запитувати.\n• Виберіть «Без інструментів», якщо вам потрібна лише текстова розмова.\n• Aire запам'ятовує вибрані категорії інструментів і використовує їх як частину поточної політики інструментів.\n\nЧому це важливо:\n• Менша кількість увімкнених категорій полегшує розуміння використання інструменту.\n• Обмеження категорій може зменшити ризик і випадкові побічні ефекти.\n• Якщо провайдер не підтримує інструменти, кнопка гайкового ключа прихована."
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "AI Providers",
+      "title": "Постачальники AI",
       "imagePath": "Assets/Help/settings-providers.png",
-      "imageCaption": "Provider settings with the provider list on the left and the selected provider form on the right.",
+      "imageCaption": "Параметри постачальника зі списком постачальників ліворуч і формою вибраного постачальника праворуч.",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "Відкрийте налаштування AI",
           "action": "settings:providers"
         },
         {
@@ -386,451 +386,451 @@
           "action": "https://aistudio.google.com"
         }
       ],
-      "content": "A provider is the AI service Aire talks to on your behalf. Most users only need to set up one provider to get started.\n\nEach provider entry has four main parts:\n• Name: the label you will see inside Aire.\n• Type: which AI service to use.\n• Model: the specific model you want that service to run.\n• Credentials: usually an API key, or for Claude.ai a browser sign-in.\n\nCommon choices:\n• OpenAI: paste your API key from platform.openai.com.\n• Anthropic: sign in with Claude.ai in the browser, or paste an Anthropic API key.\n• Google AI: paste your Gemini API key from aistudio.google.com.\n• Ollama: use a local Ollama server on your own machine. No API key is needed.\n• OpenAI-compatible endpoints: services like Groq, Mistral, OpenRouter, DeepSeek, or LM Studio can often work by setting the Base URL.\n\nIf you are unsure which one to use, OpenAI or Anthropic are usually the easiest cloud options, while Ollama is the usual local option.\n\nProviders can be enabled or disabled without deleting them. Changes save automatically."
+      "content": "Постачальник — це служба ШІ, з якою Aire спілкується від вашого імені. Більшості користувачів потрібно налаштувати лише одного постачальника, щоб розпочати роботу.\n\nКожен запис постачальника складається з чотирьох основних частин:\n• Назва: мітка, яку ви побачите в Aire.\n• Тип: який сервіс ШІ використовувати.\n• Модель: конкретна модель, яку ви хочете запустити в службі.\n• Облікові дані: зазвичай ключ API або для Claude.ai вхід у браузер.\n\nПоширені варіанти:\n• OpenAI: вставте свій ключ API з platform.openai.com.\n• Anthropic: увійдіть за допомогою Claude.ai у браузері або вставте ключ API Anthropic.\n• Google AI: вставте ключ API Gemini з aistudio.google.com.\n• Ollama: використовуйте локальний сервер Ollama на своїй машині. Ключ API не потрібен.\n• Кінцеві точки, сумісні з OpenAI: такі служби, як Groq, Mistral, OpenRouter, DeepSeek або LM Studio, часто можуть працювати, встановивши базову URL-адресу.\n\nЯкщо ви не впевнені, який з них використовувати, OpenAI або Anthropic зазвичай є найпростішими хмарними варіантами, тоді як Ollama є звичайним локальним варіантом.\n\nПостачальники можна ввімкнути або вимкнути, не видаляючи їх. Зміни зберігаються автоматично."
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Tool Calling Modes",
-      "intro": "Aire supports two methods for giving an AI model access to tools. The mode is chosen automatically based on the provider type, but can be overridden per model in a custom JSON file (see Custom Models).",
+      "title": "Режими виклику інструментів",
+      "intro": "Aire підтримує два методи надання доступу моделі ШІ до інструментів. Режим вибирається автоматично на основі типу постачальника, але його можна замінити для кожної моделі у спеціальному файлі JSON (див. Спеціальні моделі).",
       "cols": [
-        "Mode",
-        "How it works"
+        "Режим",
+        "Як це працює"
       ],
       "rows": [
         [
-          "Text-based\n(default: OpenAI, Anthropic)",
-          "Tool descriptions are embedded in the system prompt. The AI responds with a <tool_call> XML block. Works with any model that follows instructions reliably."
+          "На основі тексту\n(за замовчуванням: OpenAI, Anthropic)",
+          "Опис інструментів вбудовано в системну підказку. ШІ відповідає блоком XML <tool_call>. Працює з будь-якою моделлю, яка надійно дотримується інструкцій."
         ],
         [
-          "Native function calling\n(default: Ollama, Google AI)",
-          "Structured tool schemas are sent via the provider API. The AI returns structured function-call objects. More accurate. Requires explicit API support."
+          "Виклик рідної функції\n(за замовчуванням: Ollama, Google AI)",
+          "Структуровані схеми інструментів надсилаються через API постачальника. ШІ повертає структуровані об’єкти виклику функцій. Точніше. Потрібна явна підтримка API."
         ],
         [
-          "Unsupported",
-          "The model cannot use tools. Set this in a custom model file to skip tool prompts for models that get confused by them."
+          "Не підтримується",
+          "Модель не може використовувати інструменти. Встановіть це у файлі спеціальної моделі, щоб пропускати підказки інструментів для моделей, які вони плутають."
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "table",
-      "title": "Provider & Model Compatibility",
-      "intro": "Use the Capability Tests button to verify your specific provider and model combination.",
+      "title": "Сумісність постачальника та моделі",
+      "intro": "Використовуйте кнопку «Тестування можливостей», щоб перевірити певну комбінацію постачальника та моделі.",
       "cols": [
-        "Provider / Endpoint",
-        "Mode",
-        "Notes"
+        "Постачальник / кінцева точка",
+        "Режим",
+        "Примітки"
       ],
       "rows": [
         [
           "OpenAI",
-          "Native",
-          "GPT-4o, GPT-4.1, GPT-4o-mini — reliable tool support"
+          "Рідна",
+          "GPT-4o, GPT-4.1, GPT-4o-mini — надійна підтримка інструментів"
         ],
         [
-          "Anthropic",
-          "Text-based",
-          "Claude 3.5 Sonnet and newer — excellent instruction following"
+          "Антропний",
+          "На основі тексту",
+          "Клод 3.5 Сонет і новіші — чудова інструкція далі"
         ],
         [
-          "Google AI (Gemini)",
-          "Native",
-          "Gemini 2.0 Flash and newer recommended"
+          "ШІ Google (Близнюки)",
+          "Рідна",
+          "Рекомендується Gemini 2.0 Flash і новіша версія"
         ],
         [
-          "Ollama (local)",
-          "Native",
-          "qwen2.5-coder, llama3.1, mistral-nemo work well; small models vary"
+          "Оллама (місцевий)",
+          "Рідна",
+          "qwen2.5-coder, llama3.1, mistral-nemo працюють добре; маленькі моделі відрізняються"
         ],
         [
-          "Groq (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.groq.com/openai/v1 — very fast"
+          "Groq (OpenAI + базова URL-адреса)",
+          "Рідна",
+          "Базовий URL: https://api.groq.com/openai/v1 — дуже швидко"
         ],
         [
-          "Mistral (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.mistral.ai/v1"
+          "Mistral (OpenAI + базова URL-адреса)",
+          "Рідна",
+          "Базовий URL: https://api.mistral.ai/v1"
         ],
         [
-          "OpenRouter (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://openrouter.ai/api/v1 — 100+ models"
+          "OpenRouter (OpenAI + базова URL-адреса)",
+          "Рідна",
+          "Базовий URL: https://openrouter.ai/api/v1 — 100+ моделей"
         ],
         [
-          "DeepSeek (OpenAI + Base URL)",
-          "Native",
-          "Base URL: https://api.deepseek.com/v1"
+          "DeepSeek (OpenAI + базова URL-адреса)",
+          "Рідна",
+          "Базовий URL: https://api.deepseek.com/v1"
         ],
         [
-          "LM Studio (OpenAI + Base URL)",
-          "Native",
-          "Base URL: http://localhost:1234/v1 — enable function calling in LM Studio settings"
+          "LM Studio (OpenAI + базова URL-адреса)",
+          "Рідна",
+          "Базовий URL: http://localhost:1234/v1 — увімкнути виклик функцій у налаштуваннях LM Studio"
         ]
       ]
     },
     {
       "tab": "Providers",
       "type": "text",
-      "title": "Capability Tests",
+      "title": "Тести можливостей",
       "links": [
         {
-          "label": "Open AI setup",
+          "label": "Відкрийте налаштування AI",
           "action": "settings:providers"
         }
       ],
-      "content": "The Run Tests button checks what the selected provider and model can really do.\n\nWhat is tested:\n• Tool-call capability tests check whether the model asks for the expected Aire tool. No real file, browser, or system action is executed.\n• Image-generation capability tests call the provider's image-generation path directly. These tests can consume provider quota and may fail if your account or model does not support image generation.\n\nHow to use it:\n• Open Settings ⚙ → select a provider → click Run Tests.\n• The provider form is locked during the run to avoid configuration changes mid-test.\n• Results are cached per provider/model combination and reload quickly next time.\n\nReading results:\n• ✓ (green) — the provider handled the capability correctly.\n• ✗ (red) — the provider or model failed that capability.\n• If the message mentions quota, balance, or rate limits, the failure is coming from the provider account rather than from Aire itself.\n\nIf a model fails many tool tests, try another model or adjust its custom model metadata. If image generation fails, verify that the provider account, model, and quota actually allow it."
+      "content": "Кнопка «Запустити тести» перевіряє, що справді можуть вибраний постачальник і модель.\n\nЩо тестується:\n• Тести можливостей виклику інструментів перевіряють, чи запитує модель очікуваний інструмент Aire. Жодна реальна дія щодо файлу, браузера чи системи не виконується.\n• Тести можливостей генерації зображень безпосередньо викликають шлях генерації зображень постачальника. Ці тести можуть використовувати квоту постачальника та не вдатися, якщо ваш обліковий запис або модель не підтримує створення зображень.\n\nЯк ним користуватися:\n• Відкрийте «Налаштування» ⚙ → виберіть постачальника → натисніть «Запустити тести».\n• Форма постачальника заблокована під час запуску, щоб уникнути змін конфігурації під час тестування.\n• Результати кешуються для кожної комбінації постачальник/модель і швидко перезавантажуються наступного разу.\n\nРезультати читання:\n• ✓ (зелений) — провайдер правильно обробив можливість.\n• ✗ (червоний) — постачальник або модель не надали цю можливість.\n• Якщо в повідомленні згадуються обмеження квоти, балансу або тарифу, це означає, що збій виник через обліковий запис постачальника, а не сам Aire.\n\nЯкщо модель не пройшла багато тестів інструментів, спробуйте іншу модель або відкоригуйте її власні метадані моделі. Якщо створення зображення не вдається, переконайтеся, що обліковий запис, модель і квота постачальника дійсно це дозволяють."
     },
     {
       "tab": "Providers",
       "type": "code",
-      "title": "Custom Models",
-      "intro": "Create a JSON file in the app’s Data\\Models directory to customise the model list for any provider type. Use the capabilities array to declare what a model supports.\n\nCapability flags:\n• \"vision\" — model accepts image attachments\n• \"tools\" — model can use tools\n• \"toolcallmode:native\" — force native function calling\n• \"toolcallmode:text\" — force text-based tool calling\n• \"toolcallmode:unsupported\" — disable tool prompts entirely\n\nTool output format flags (for models that embed tool calls in their text response):\n• \"toolformat:hermes\" — Hermes/Qwen format: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain format: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — OpenAI native tool_calls schema embedded in content\n• \"toolformat:text\" — Aire’s default text format: {\"tool\":\"...\", ...}",
-      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"models\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"vision\", \"tools\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (no tools)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"my-fine-tuned-model\",\n      \"displayName\": \"My Fine-tune\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
+      "title": "Спеціальні моделі",
+      "intro": "Створіть файл JSON у каталозі програми Data\\Models, щоб налаштувати список моделей для будь-якого типу постачальника. Використовуйте масив можливостей, щоб оголосити, що підтримує модель.\n\nПрапори можливостей:\n• «vision» — модель допускає вкладення зображень\n• «інструменти» — модель може використовувати інструменти\n• \"toolcallmode:native\" — примусовий виклик нативної функції\n• \"toolcallmode:text\" — примусовий текстовий виклик інструменту\n• \"toolcallmode:unsupported\" — повністю вимкнути підказки інструментів\n\nПрапорці формату виведення інструменту (для моделей, які вбудовують виклики інструментів у текстову відповідь):\n• \"toolformat:hermes\" — формат Hermes/Qwen: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — формат ReAct/LangChain: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — рідна схема openAI tool_calls, вбудована у вміст\n• \"toolformat:text\" — стандартний текстовий формат Aire: {\"tool\":\"...\", ...}",
+      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"моделі\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"бачення\", \"інструменти\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (без інструментів)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"моя-налаштована-модель\",\n      \"displayName\": \"Моє тонке налаштування\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "AI Tools",
+      "title": "Інструменти ШІ",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "Перегляньте схвалення дій ШІ",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some AI models can ask Aire to perform actions for them. Aire calls these actions tools.\n\nImportant: tools do not run silently. Aire shows you what the AI wants to do, and you approve or deny it.\n\nExamples of what tools can do:\n• Read or write files.\n• Run shell commands.\n• Open and read web pages.\n• Inspect browser tabs.\n• Take screenshots.\n• Type, click, or move the mouse.\n• Read or send email.\n\nIf you are new to this feature, the safest habit is simple: read the action request before approving it. Approve read-only actions when they make sense, and be more careful with actions that change files, send messages, or control the keyboard and mouse."
+      "content": "Деякі моделі штучного інтелекту можуть просити Aire виконувати дії за них. Ейр називає ці дії інструментами.\n\nВажливо: інструменти не працюють безшумно. Aire показує вам, що ШІ хоче зробити, а ви схвалюєте або відхиляєте це.\n\nПриклади можливостей інструментів:\n• Читати або записувати файли.\n• Виконувати команди оболонки.\n• Відкривати та читати веб-сторінки.\n• Перегляньте вкладки браузера.\n• Робити скріншоти.\n• Введіть, клацніть або перемістіть мишу.\n• Читати або надсилати електронні листи.\n\nЯкщо ви вперше користуєтеся цією функцією, найбезпечніша звичка проста: прочитайте запит на дію, перш ніж його схвалити. Схвалюйте дії лише для читання, коли вони мають сенс, і будьте обережнішими з діями, які змінюють файли, надсилають повідомлення або керують клавіатурою та мишею."
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Auto-accept Profiles",
+      "title": "Автоматично приймати профілі",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "Перегляньте схвалення дій ШІ",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Auto-accept profiles let you define which actions Aire can approve automatically without interrupting you each time.\n\nBuilt-in examples include Developer, News browser, and Conservative.\n\nWhat to keep in mind:\n• Profiles are a convenience, not a security replacement.\n• Start conservatively and only auto-accept actions you really trust.\n• File writes, input control, and external side effects are usually worth keeping manual.\n\nIf you are unsure, leave auto-accept restrictive and review actions one by one."
+      "content": "Профілі автоматичного прийняття дозволяють визначати, які дії Aire може автоматично схвалювати, не перебиваючи вас кожного разу.\n\nВбудовані приклади включають Developer, News browser і Conservative.\n\nЩо потрібно мати на увазі:\n• Профілі є зручністю, а не заміною безпеки.\n• Почніть консервативно й автоматично приймайте лише дії, яким ви дійсно довіряєте.\n• Запис файлів, керування введенням і зовнішні побічні ефекти зазвичай варто тримати вручну.\n\nЯкщо ви не впевнені, залиште автоматичне прийняття обмежень і переглядайте дії одну за одною."
     },
     {
       "tab": "Connections",
       "type": "text",
-      "title": "MCP Servers",
+      "title": "Сервери MCP",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings with the MCP catalog and installed server list.",
+      "imageCaption": "Параметри з'єднань з каталогом MCP і списком встановлених серверів.",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "Відкрийте налаштування підключень",
           "action": "settings:connections"
         }
       ],
-      "content": "MCP servers are external helper services that give Aire more tools and data sources. MCP stands for Model Context Protocol.\n\nIn plain language, an MCP server is a bridge between Aire and another system, such as:\n• your file system,\n• GitHub,\n• SQLite,\n• web fetch tools,\n• memory tools,\n• Slack, Gmail, or Notion.\n\nHow Aire handles them:\n• The Connections tab includes a curated catalog of common MCP servers.\n• You can install, remove, enable, disable, and edit them from the app.\n• Some servers need extra credentials or Node.js/npm on the machine.\n\nGood beginner advice:\n• Start with one simple server, such as Filesystem or Web Fetch.\n• Read the description before installing it.\n• Treat an MCP server like any other integration: useful, but something you should trust before enabling."
+      "content": "Сервери MCP — це зовнішні допоміжні служби, які надають Aire більше інструментів і джерел даних. MCP означає протокол моделі контексту.\n\nЯкщо говорити простою мовою, сервер MCP є мостом між Aire та іншою системою, наприклад:\n• ваша файлова система,\n• GitHub,\n• SQLite,\n• інструменти веб-завантаження,\n• засоби пам'яті,\n• Slack, Gmail або Notion.\n\nЯк Aire з ними справляється:\n• Вкладка «Підключення» містить підібраний каталог типових серверів MCP.\n• Ви можете встановлювати, видаляти, увімкнути, вимикати та редагувати їх із програми.\n• Для деяких серверів потрібні додаткові облікові дані або Node.js/npm на машині.\n\nГарна порада для початківців:\n• Почніть з одного простого сервера, такого як Filesystem або Web Fetch.\n• Перед встановленням прочитайте опис.\n• Ставтеся до сервера MCP як до будь-якої іншої інтеграції: це корисно, але вам слід довіряти перед увімкненням."
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Keyboard & Mouse Sessions",
+      "title": "Сеанси клавіатури та миші",
       "links": [
         {
-          "label": "Review AI action approvals",
+          "label": "Перегляньте схвалення дій ШІ",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Some tasks require the AI to control the keyboard and mouse. When a session is active:\n\n• A banner appears at the bottom of the chat window showing the session is active.\n• A floating ⏹ STOP SESSION button appears at the top-right of your screen — click it at any time to cancel immediately.\n• Say “AIRE STOP” to cancel by voice.\n• Click “End session” in the banner to cancel.\n\nThe AI will request approval for each individual action (key press, mouse click, etc.) before performing it."
+      "content": "Деякі завдання потребують ШІ для керування клавіатурою та мишею. Коли сеанс активний:\n\n• Унизу вікна чату з’являється банер, який показує, що сеанс активний.\n• У верхньому правому куті екрана з’являється плаваюча кнопка ⏹ ЗУПИНИТИ СЕСІЙ — натисніть її будь-коли, щоб негайно скасувати.\n• Скажіть «AIRE STOP», щоб скасувати голосом.\n• Натисніть «Завершити сеанс» на банері, щоб скасувати.\n\nШІ запитуватиме схвалення для кожної окремої дії (натискання клавіші, клацання миші тощо) перед її виконанням."
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Input",
+      "title": "Голосовий ввід",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "Відкрийте налаштування голосу",
           "action": "settings:voice"
         }
       ],
-      "content": "Click the 🎤 button to start voice recognition. Aire uses Windows built-in speech recognition — no API key or internet connection required.\n\n• Speak normally. Your words appear in the input box as you talk.\n• When you stop talking, a countdown (5 → 1) appears on the button. If you stay silent, the message sends automatically at 0.\n• Start talking again at any time to reset the countdown.\n• Click the button again (shows ⏹) to stop without sending.\n\nVoice recognition accuracy depends on your Windows language and microphone quality. You can train Windows Speech Recognition via Windows Settings → Time & Language → Speech."
+      "content": "Натисніть кнопку 🎤, щоб розпочати розпізнавання голосу. Aire використовує вбудовану систему розпізнавання мовлення Windows — ключ API чи підключення до Інтернету не потрібні.\n\n• Розмовляйте нормально. Під час розмови ваші слова з’являються у полі введення.\n• Коли ви припиняєте говорити, на кнопці з'являється зворотний відлік (5 → 1). Якщо ви мовчите, повідомлення автоматично надсилається в 0.\n• Почніть говорити знову в будь-який момент, щоб скинути зворотний відлік.\n• Натисніть кнопку ще раз (показує ⏹), щоб зупинити без надсилання.\n\nТочність розпізнавання голосу залежить від вашої мови Windows і якості мікрофона. Ви можете навчити розпізнавання мовлення Windows через Параметри Windows → Час і мова → Мовлення."
     },
     {
       "tab": "Tools & Voice",
       "type": "table",
-      "title": "Voice Commands",
-      "intro": "Say “AIRE” followed by any of these words while the microphone is active:",
+      "title": "Голосові команди",
+      "intro": "Коли мікрофон увімкнено, скажіть «AIRE», а потім будь-яке з цих слів:",
       "cols": [
-        "Command",
-        "What it does"
+        "Команда",
+        "Що воно робить"
       ],
       "rows": [
         [
           "AIRE SEND",
-          "Send the current message immediately"
+          "Надіслати поточне повідомлення негайно"
         ],
         [
-          "AIRE PAUSE",
-          "Freeze the silence countdown"
+          "АЙР ПАУЗА",
+          "Заморозити зворотний відлік тиші"
         ],
         [
-          "AIRE RESUME",
-          "Resume the countdown"
+          "AIRE РЕЗЮМЕ",
+          "Відновіть зворотний відлік"
         ],
         [
-          "AIRE CLEAR",
-          "Clear the input box"
+          "ПОВІТРЯ ЧИСТО",
+          "Очистіть поле введення"
         ],
         [
           "AIRE UNDO",
-          "Clear the input box"
+          "Очистіть поле введення"
         ],
         [
-          "AIRE CANCEL",
-          "Stop listening without sending"
+          "ЕВІР СКАСУВАТИ",
+          "Припиніть слухати без надсилання"
         ],
         [
-          "AIRE NEW",
-          "Start a new conversation"
+          "AIRE НОВИЙ",
+          "Почніть нову розмову"
         ],
         [
-          "AIRE SETTINGS",
-          "Open the Settings window"
+          "НАЛАШТУВАННЯ AIRE",
+          "Відкрийте вікно налаштувань"
         ],
         [
-          "AIRE OPEN/SHOW",
-          "Show the main chat window"
+          "AIRE OPEN/ШОУ",
+          "Показати головне вікно чату"
         ],
         [
-          "AIRE CLOSE/HIDE",
-          "Hide the main chat window"
+          "AIRE ЗАКРИТИ/ХОВАТИ",
+          "Приховати головне вікно чату"
         ],
         [
-          "AIRE YES/NO",
-          "Approve or deny a pending AI action"
+          "AIRE ТАК/НІ",
+          "Схвалити або відхилити незавершену дію ШІ"
         ],
         [
-          "AIRE STOP",
-          "Emergency stop — end any active keyboard/mouse session immediately"
+          "AIRE СТОП",
+          "Аварійна зупинка — негайно завершити будь-який активний сеанс клавіатури/миші"
         ]
       ]
     },
     {
       "tab": "Tools & Voice",
       "type": "text",
-      "title": "Voice Output",
+      "title": "Голосовий вихід",
       "links": [
         {
-          "label": "Open voice settings",
+          "label": "Відкрийте налаштування голосу",
           "action": "settings:voice"
         }
       ],
-      "content": "Aire can read AI responses aloud using Windows text-to-speech. Enable this in Settings (⚙) → Voice Output.\n\n• Choose to speak all responses, or only when you use the microphone.\n• Select a voice and adjust the reading speed.\n• Toggle voice output on/off quickly with the speaker icon near the microphone button."
+      "content": "Aire може читати відповіді штучного інтелекту вголос за допомогою функції синтезу мовлення Windows. Увімкніть це в Налаштуваннях (⚙) → Голосовий вихід.\n\n• Виберіть, чи озвучувати всі відповіді, чи лише під час використання мікрофона.\n• Виберіть голос і налаштуйте швидкість читання.\n• Швидко вмикайте/вимикайте голосовий вихід за допомогою значка динаміка біля кнопки мікрофона."
     },
     {
       "tab": "Appearance",
       "type": "text",
-      "title": "Appearance",
+      "title": "Зовнішній вигляд",
       "links": [
         {
-          "label": "Open appearance settings",
+          "label": "Відкрийте налаштування зовнішнього вигляду",
           "action": "settings:appearance"
         }
       ],
-      "content": "Open Settings (⚙) → Appearance to change the look of the app.\n\n• Theme: switch between Dark and Light (Beige).\n• Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint — the slider is pure grayscale by default.\n• Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.\n\nAll appearance settings are saved and restored on next launch."
+      "content": "Відкрийте Налаштування (⚙) → Вигляд, щоб змінити вигляд програми.\n\n• Тема: переключення між темним і світлим (бежевим).\n• Відтінок кольору: перетягніть повзунок, щоб застосувати відтінок відтінку до всього інтерфейсу користувача. Лівий кінець (чорний) і правий кінець (білий) означають відсутність відтінку — за замовчуванням повзунок має лише градації сірого.\n• Розмір шрифту: утримуйте Ctrl і прокручуйте коліщатко миші над чатом або областю введення, щоб збільшити або зменшити розмір шрифту. Налаштування зберігається автоматично.\n\nУсі налаштування зовнішнього вигляду зберігаються та відновлюються під час наступного запуску."
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "What is the Local API?",
+      "title": "Що таке локальний API?",
       "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "Connections settings where local API access, email accounts, and MCP servers are configured.",
+      "imageCaption": "Параметри з’єднань, де налаштовано доступ до локального API, облікові записи електронної пошти та сервери MCP.",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "Відкрийте налаштування підключень",
           "action": "settings:connections"
         }
       ],
-      "content": "The Local API is how another program on the same computer can talk to Aire.\n\nFor non-developers: you usually do not need this feature.\n\nFor developers and advanced users: this is the easiest way to connect your own script, tool, automation, or desktop app to Aire. A local program can:\n• ask Aire to show or hide its main window,\n• list conversations and read messages,\n• send a message to the active conversation,\n• switch provider or conversation,\n• inspect pending tool approvals,\n• and call Aire tools directly.\n\nHow it works:\n• Aire listens on TCP port 51234.\n• It only listens on 127.0.0.1, so other computers cannot reach it directly.\n• Each request is one JSON object sent as one line.\n• Each response is one JSON object returned as one line.\n\nTo use it, first open Connections settings and enable local API access."
+      "content": "Локальний API — це те, як інша програма на тому ж комп’ютері може спілкуватися з Aire.\n\nДля нерозробників: ця функція зазвичай не потрібна.\n\nДля розробників і досвідчених користувачів: це найпростіший спосіб підключити власний сценарій, інструмент, автоматизацію або настільну програму до Aire. Місцева програма може:\n• попросити Aire показати або приховати головне вікно,\n• список розмов і читання повідомлень,\n• відправити повідомлення в активну бесіду,\n• змінити провайдера або розмову,\n• перевіряти інструменти, що очікують схвалення,\n• і зателефонуйте напряму в Aire tools.\n\nЯк це працює:\n• Aire слухає порт TCP 51234.\n• Він прослуховує лише 127.0.0.1, тому інші комп’ютери не можуть отримати до нього прямий доступ.\n• Кожен запит — це один об’єкт JSON, який надсилається одним рядком.\n• Кожна відповідь — це один об’єкт JSON, що повертається у вигляді одного рядка.\n\nЩоб використовувати його, спочатку відкрийте налаштування підключень і ввімкніть локальний доступ через API."
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Local API Quick Start",
+      "title": "Швидкий старт локального API",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "Відкрийте налаштування підключень",
           "action": "settings:connections"
         }
       ],
-      "content": "To connect another app to Aire, use this checklist:\n\n1. Open Connections settings.\n2. Turn on local API access.\n3. Copy the auth token.\n4. From your app or script, open a TCP connection to 127.0.0.1:51234.\n5. Send one JSON line with method, token, and optional parameters.\n6. Read one JSON line back.\n7. Close the connection.\n\nA good first test is the ping method. If ping works, then try show_main_window, list_providers, and create_conversation.\n\nRecommended first integration order:\n• ping\n• show_main_window\n• list_providers\n• create_conversation\n• list_conversations\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval if you want to cooperate with tool approvals\n• execute_tool only after you are comfortable with the approval flow and security model"
+      "content": "Щоб підключити іншу програму до Aire, скористайтеся цим контрольним списком:\n\n1. Відкрийте налаштування підключень.\n2. Увімкніть доступ до локального API.\n3. Скопіюйте маркер авторизації.\n4. У програмі або сценарії відкрийте TCP-з’єднання з адресою 127.0.0.1:51234.\n5. Надішліть один рядок JSON із методом, маркером і необов’язковими параметрами.\n6. Прочитайте один рядок JSON назад.\n7. Закрийте з'єднання.\n\nХорошим першим тестом є метод ping. Якщо ping працює, спробуйте show_main_window, list_providers і create_conversation.\n\nРекомендований перший порядок інтеграції:\n• пінг\n• show_main_window\n• list_providers\n• створити_бесіду\n• список_бесід\n• get_messages\n• відправити_повідомлення\n• get_state\n• wait_for_pending_approval, якщо ви хочете співпрацювати з інструментами схвалення\n• execute_tool лише після того, як ви звикнете до потоку затвердження та моделі безпеки"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Authentication",
+      "title": "Аутентифікація",
       "links": [
         {
-          "label": "Open connections settings",
+          "label": "Відкрийте налаштування підключень",
           "action": "settings:connections"
         },
         {
-          "label": "Review AI action approvals",
+          "label": "Перегляньте схвалення дій ШІ",
           "action": "settings:auto-accept"
         }
       ],
-      "content": "Every Local API request must include the auth token.\n\nWhere to get it:\n• Open Connections settings.\n• Find the Local API section.\n• Click Copy to copy the token.\n• Paste that token into your app or script configuration.\n\nWhat to know:\n• If you click Regenerate, old integrations will stop working until they use the new token.\n• The API must be enabled, not just configured.\n• Any process on your computer that knows the token can control Aire.\n\nPractical advice for developers:\n• Keep the token in a local config file or environment variable, not hard-coded in source control.\n• Treat it like a local secret.\n• If you suspect it leaked, regenerate it."
+      "content": "Кожен запит локального API повинен містити маркер автентифікації.\n\nДе взяти:\n• Відкрийте налаштування підключень.\n• Знайдіть розділ Local API.\n• Натисніть Копіювати, щоб скопіювати маркер.\n• Вставте цей маркер у свою програму або конфігурацію сценарію.\n\nЩо потрібно знати:\n• Якщо ви натиснете Regenerate, старі інтеграції перестануть працювати, доки не використають новий маркер.\n• API має бути ввімкнено, а не лише налаштовано.\n• Будь-який процес на вашому комп’ютері, який знає маркер, може контролювати Aire.\n\nПрактичні поради розробникам:\n• Зберігайте маркер у локальному конфігураційному файлі чи змінній середовища, а не жорстко закодований у системі керування джерелами.\n• Ставтеся до цього як до місцевої таємниці.\n• Якщо ви підозрюєте, що він витік, відновіть його."
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Protocol",
-      "intro": "The Local API is line-based JSON over TCP.\n\nConnection pattern:\n• connect to 127.0.0.1:51234\n• write exactly one compact JSON request followed by a newline\n• read exactly one JSON response line\n• close the connection\n\nRequest shape:\n{ \"method\": \"METHOD\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nResponse shape:\n{ \"ok\": true, \"result\": ... }\nor\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nIf you are writing a client library, build around that simple request-response pattern first. You do not need HTTP or WebSockets to get started.",
-      "content": "{ \"method\": \"ping\", \"token\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ok\": true, \"result\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"Hello!\" } }\n{ \"ok\": true, \"result\": true }"
+      "title": "Протокол",
+      "intro": "Локальний API — це рядковий JSON через TCP.\n\nСхема підключення:\n• підключитися до 127.0.0.1:51234\n• напишіть рівно один компактний JSON-запит із наступним символом нового рядка\n• прочитати рівно один рядок відповіді JSON\n• закрити з'єднання\n\nФорма запиту:\n{ \"method\": \"МЕТОД\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nФорма відповіді:\n{ \"ок\": правда, \"результат\": ... }\nабо\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nЯкщо ви пишете клієнтську бібліотеку, спочатку побудуйте цей простий шаблон запит-відповідь. Для початку вам не потрібні HTTP або WebSockets.",
+      "content": "{ \"method\": \"ping\", \"token\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ок\": вірно, \"результат\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"Привіт!\" }}\n{ \"ок\": вірно, \"результат\": вірно }"
     },
     {
       "tab": "Local API",
       "type": "table",
-      "title": "Available Methods",
+      "title": "Доступні методи",
       "cols": [
-        "Method",
-        "Parameters",
-        "Description"
+        "метод",
+        "Параметри",
+        "опис"
       ],
       "rows": [
         [
-          "ping",
+          "пінг",
           "—",
-          "Check if Aire is running. Returns the same state snapshot as get_state."
+          "Перевірте, чи працює Aire. Повертає той самий знімок стану, що й get_state."
         ],
         [
           "get_state",
           "—",
-          "Current provider, model, active conversation ID, and local API status."
+          "Поточний постачальник, модель, ідентифікатор активної розмови та статус локального API."
         ],
         [
           "show_main_window",
           "—",
-          "Bring the Aire chat window to the front."
+          "Перенесіть вікно чату Aire на передній план."
         ],
         [
-          "hide_main_window",
+          "приховати головне_вікно",
           "—",
-          "Hide the chat window to the tray."
+          "Сховайте вікно чату в трей."
         ],
         [
           "open_settings",
           "—",
-          "Open the Settings window."
+          "Відкрийте вікно налаштувань."
         ],
         [
           "open_browser",
           "—",
-          "Open the Aire browser window."
+          "Відкрийте вікно браузера Aire."
         ],
         [
           "list_providers",
           "—",
-          "All configured AI providers with IDs and names."
+          "Усі налаштовані постачальники AI з ідентифікаторами та іменами."
         ],
         [
           "create_provider",
           "name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritCredentialsFromProviderId?",
-          "Create a new provider from the local API."
+          "Створіть нового постачальника з локального API."
         ],
         [
           "list_conversations",
           "—",
-          "All saved conversations (ID, title, date)."
+          "Усі збережені розмови (ID, назва, дата)."
         ],
         [
           "create_conversation",
-          "title?",
-          "Create a new conversation and switch to it."
+          "назва?",
+          "Створіть нову розмову та перейдіть до неї."
         ],
         [
           "select_conversation",
-          "conversationId",
-          "Switch to an existing conversation."
+          "розмоваId",
+          "Перейти до наявної розмови."
         ],
         [
           "get_messages",
-          "conversationId",
-          "All messages in a conversation."
+          "розмоваId",
+          "Усі повідомлення в розмові."
         ],
         [
           "set_provider",
           "providerId",
-          "Switch the active AI provider."
+          "Змініть активного постачальника AI."
         ],
         [
           "set_provider_model",
-          "providerId, model",
-          "Change the model for a provider."
+          "providerId, модель",
+          "Змініть модель для провайдера."
         ],
         [
-          "send_message",
-          "text",
-          "Send a message to the active conversation. Returns true when accepted."
+          "відправити_повідомлення",
+          "текст",
+          "Надішліть повідомлення в активну розмову. Повертає true, коли приймається."
         ],
         [
           "list_pending_approvals",
           "—",
-          "Tool calls currently waiting for approval."
+          "Виклики інструментів наразі очікують на схвалення."
         ],
         [
           "wait_for_pending_approval",
           "timeout_seconds?",
-          "Wait for the next pending tool approval or return null on timeout."
+          "Зачекайте на наступне схвалення інструменту, що очікує на розгляд, або поверніть null після закінчення часу очікування."
         ],
         [
           "approve_tool_call",
-          "index",
-          "Approve a pending tool call by its current list index."
+          "індекс",
+          "Схвалити незавершений виклик інструмента за його поточним індексом списку."
         ],
         [
           "deny_tool_call",
-          "index",
-          "Deny a pending tool call by its current list index."
+          "індекс",
+          "Заборонити незавершений виклик інструменту за його поточним індексом списку."
         ],
         [
           "execute_tool",
-          "tool, parameters, wait_for_approval?, approval_timeout_seconds?",
-          "Run an Aire tool directly and optionally wait for approval."
+          "інструмент, параметри, wait_for_approval?, approval_timeout_seconds?",
+          "Запустіть безпосередньо інструмент Aire і за бажанням дочекайтеся підтвердження."
         ],
         [
           "get_trace",
-          "afterId?, limit?",
-          "Read tool execution trace entries for debugging."
+          "afterId?, обмеження?",
+          "Читання записів трасування виконання інструменту для налагодження."
         ],
         [
           "clear_trace",
           "—",
-          "Clear the tool execution trace."
+          "Очистити слід виконання інструменту."
         ]
       ]
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Which methods should I start with?",
-      "content": "If you are building another app that connects to Aire, start with the simpler methods first.\n\nRecommended learning order:\n• ping: confirm Aire is running and your token is valid.\n• show_main_window: confirm you can trigger a visible app action.\n• get_state: inspect the current conversation and provider state.\n• list_conversations and get_messages: read data safely.\n• send_message: perform a full request-reply round trip.\n• list_pending_approvals, approve_tool_call, deny_tool_call: integrate with Aire's approval model.\n• execute_tool: only after you understand the security implications and approval behavior.\n\nIn most integrations, send_message and the read-only methods are enough."
+      "title": "З яких методів почати?",
+      "content": "Якщо ви створюєте іншу програму, яка підключається до Aire, почніть спочатку з простіших методів.\n\nРекомендований порядок навчання:\n• ping: підтвердьте, що Aire працює, і ваш маркер дійсний.\n• show_main_window: підтвердити, що ви можете активувати видиму дію програми.\n• get_state: перевірити поточну розмову та стан провайдера.\n• list_conversations і get_messages: безпечне читання даних.\n• send_message: виконати повну передачу запиту-відповіді.\n• list_pending_approvals, approve_tool_call, deny_tool_call: інтеграція з моделлю затвердження Aire.\n• execute_tool: лише після того, як ви зрозумієте наслідки для безпеки та поведінку підтвердження.\n\nУ більшості інтеграцій достатньо методів send_message і тільки для читання."
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "PowerShell Example",
-      "intro": "This example shows the simplest useful shape for a Local API client in PowerShell. Save your token from Connections settings, paste it below, and then try ping before anything else.",
-      "content": "$TOKEN = \"paste-your-token-here\"\n$PORT  = 51234\n\nfunction Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; token = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    return $resp | ConvertFrom-Json\n}\n\n# Check Aire is running and inspect state\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Create and select a conversation\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).result\nInvoke-Aire \"select_conversation\" @{ conversationId = $id }\n\n# Send a message (returns true when accepted)\nInvoke-Aire \"send_message\" @{ text = \"Hello from PowerShell\" }\n\n# Read the conversation messages after the turn completes\n(Invoke-Aire \"get_messages\" @{ conversationId = $id }).result\n\n# Execute a tool directly\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; parameters = @{ path = \"C:/Temp/notes.txt\" } }"
+      "title": "Приклад PowerShell",
+      "intro": "У цьому прикладі показано найпростішу корисну форму клієнта локального API у PowerShell. Збережіть свій маркер із налаштувань Connections, вставте його нижче, а потім спробуйте виконати ping перед будь-чим іншим.",
+      "content": "$TOKEN = \"вставте-ваш-токен-тут\"\n$PORT = 51234\n\nфункція Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; маркер = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    повернути $resp | ConvertFrom-Json\n}\n\n# Перевірте, чи працює Aire, і перевірте стан\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Створіть і виберіть розмову\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).результат\nInvoke-Aire \"select_conversation\" @{ conversionId = $id }\n\n# Надіслати повідомлення (повертає true, якщо прийнято)\nInvoke-Aire \"send_message\" @{ text = \"Привіт від PowerShell\" }\n\n# Прочитайте повідомлення розмови після завершення ходу\n(Invoke-Aire \"get_messages\" @{ conversionId = $id }).результат\n\n# Безпосереднє виконання інструменту\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; параметри = @{ шлях = \"C:/Temp/notes.txt\" } }"
     },
     {
       "tab": "Local API",
       "type": "code",
-      "title": "Python Example",
-      "intro": "This example uses only the Python standard library. It is a good starting point if you want to add Aire support to another local tool.",
-      "content": "import socket, json\n\nTOKEN = \"paste-your-token-here\"\n\ndef aire(method, **params):\n    req = {\"method\": method, \"token\": TOKEN}\n    if params:\n        req[\"parameters\"] = params\n    with socket.create_connection((\"127.0.0.1\", 51234)) as s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(state[\"result\"])\n\nconversation_id = aire(\"create_conversation\", title=\"API test\")[\"result\"]\naire(\"select_conversation\", conversationId=conversation_id)\naire(\"send_message\", text=\"Hello from Python\")\n\nmessages = aire(\"get_messages\", conversationId=conversation_id)[\"result\"]\nprint(messages)\n\nresult = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    parameters={\"path\": \"C:/Temp/notes.txt\"}\n)\nprint(result)"
+      "title": "Приклад Python",
+      "intro": "У цьому прикладі використовується лише стандартна бібліотека Python. Це гарна відправна точка, якщо ви хочете додати підтримку Aire до іншого локального інструменту.",
+      "content": "сокет імпорту, json\n\nTOKEN = \"вставте-ваш-токен-тут\"\n\ndef aire(метод, **params):\n    req = {\"method\": метод, \"token\": TOKEN}\n    якщо параметри:\n        req[\"параметри\"] = параметри\n    із socket.create_connection((\"127.0.0.1\", 51234)) як s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        повернути json.loads(s.makefile().readline())\n\nстан = aire(\"ping\")\nprint(state[\"result\"])\n\nconversion_id = aire(\"create_conversation\", title=\"тест API\")[\"результат\"]\naire(\"select_conversation\", conversionId=conversation_id)\naire(\"send_message\", text=\"Привіт від Python\")\n\nmessages = aire(\"get_messages\", conversionId=conversation_id)[\"результат\"]\nдрукувати (повідомлення)\n\nрезультат = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    параметри={\"шлях\": \"C:/Temp/notes.txt\"}\n)\nдрук (результат)"
     },
     {
       "tab": "Local API",
       "type": "text",
-      "title": "Integration Tips",
-      "content": "• Always check ok before using result. If ok is false, read the error message and handle it.\n• send_message only confirms that Aire accepted the message into the active conversation. If your integration needs the final answer, follow up with get_messages or watch for approvals and trace output.\n• Keep one method call per TCP connection. Connect, send, read, close.\n• Start with read-only and visibility actions before using execute_tool.\n• If your integration wants to cooperate with Aire's safety model, use list_pending_approvals, wait_for_pending_approval, approve_tool_call, and deny_tool_call instead of assuming every action runs immediately.\n• execute_tool is powerful because it lets your code call Aire tools directly. Use it carefully.\n• The API is intentionally local-only. Do not expose port 51234 to your network or the internet.\n• For production-like internal tools, store the token outside source code and make ping part of your startup health check."
+      "title": "Поради щодо інтеграції",
+      "content": "• Завжди перевіряйте ОК перед використанням результату. Якщо ok має значення false, прочитайте повідомлення про помилку та обробіть його.\n• send_message лише підтверджує, що Aire прийняв повідомлення до активної розмови. Якщо ваша інтеграція потребує остаточної відповіді, зв’яжіться з get_messages або подивіться на схвалення та відстежте вихідні дані.\n• Зберігайте один виклик методу для кожного TCP-з'єднання. Підключити, відправити, прочитати, закрити.\n• Перш ніж використовувати execute_tool, почніть із дій лише для читання та видимості.\n• Якщо ваша інтеграція хоче співпрацювати з моделлю безпеки Aire, використовуйте list_pending_approvals, wait_for_pending_approval, approve_tool_call і deny_tool_call замість того, щоб припускати, що кожна дія виконується негайно.\n• execute_tool є потужним, оскільки дозволяє вашому коду безпосередньо викликати інструменти Aire. Використовуйте його обережно.\n• API навмисно лише локальний. Не відкривайте порт 51234 для вашої мережі чи Інтернету.\n• Для внутрішніх інструментів, схожих на виробництво, зберігайте маркер поза вихідним кодом і зробіть ping частиною перевірки працездатності під час запуску."
     }
   ]
 }
