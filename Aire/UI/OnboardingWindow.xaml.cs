@@ -169,20 +169,21 @@ namespace Aire.UI
 
         private static Dictionary<string, ProviderCardDefinition> GetProviderCardDefinitions()
         {
+            var L = LocalizationService.S;
             return new(StringComparer.Ordinal)
             {
-                ["OpenAI"] = new("OpenAI", "OpenAI", "GPT-4o, o3 & more", "#10A37F", CreateOpenAiLogo),
-                ["Codex"] = new("Codex", "Codex", "Local CLI bridge", "#0F172A", CreateCodexLogo),
-                ["Ollama"] = new("Ollama", "Ollama", "Local, free, private", "#5A5A5A", CreateOllamaLogo),
-                ["Anthropic"] = new("Anthropic", "Anthropic API", "Claude Sonnet, Haiku", "#D97757", CreateAnthropicLogo),
-                ["ClaudeWeb"] = new("ClaudeWeb", "Claude.ai", "Browser sign-in", "#111111", CreateClaudeLogo),
-                ["OpenRouter"] = new("OpenRouter", "OpenRouter", "100+ models, free tier", "#FFFFFF", CreateOpenRouterLogo),
-                ["DeepSeek"] = new("DeepSeek", "DeepSeek", "Chat, Reasoner, V3", "#FFFFFF", CreateDeepSeekLogo),
-                ["Zai"] = new("Zai", "Zhipu AI", "GLM models · z.ai", "#000000", CreateZaiLogo),
-                ["Inception"] = new("Inception", "Inception", "Mercury and Inception", "#001A18", CreateInceptionLogo),
-                ["GoogleAI"] = new("GoogleAI", "Google AI", "Gemini Pro & Flash", "#FFFFFF", CreateGoogleAiLogo),
-                ["GoogleAIImage"] = new("GoogleAIImage", "Google AI Images", "Gemini image generation", "#FFFFFF", CreateGoogleAiImageLogo),
-                ["Groq"] = new("Groq", "Groq", "Free tier, very fast", "#F55036", CreateGroqLogo)
+                ["OpenAI"]       = new("OpenAI",       "OpenAI",          L("onboarding.provider.openai.subtitle",      "GPT-4o, o3 & more"),        "#10A37F", CreateOpenAiLogo),
+                ["Codex"]        = new("Codex",        "Codex",           L("onboarding.provider.codex.subtitle",       "Local CLI bridge"),          "#0F172A", CreateCodexLogo),
+                ["Ollama"]       = new("Ollama",       "Ollama",          L("onboarding.provider.ollama.subtitle",      "Local, free, private"),      "#5A5A5A", CreateOllamaLogo),
+                ["Anthropic"]    = new("Anthropic",    "Anthropic API",   L("onboarding.provider.anthropic.subtitle",   "Claude Sonnet, Haiku"),      "#D97757", CreateAnthropicLogo),
+                ["ClaudeWeb"]    = new("ClaudeWeb",    "Claude.ai",       L("onboarding.provider.claudeweb.subtitle",   "Browser sign-in"),           "#111111", CreateClaudeLogo),
+                ["OpenRouter"]   = new("OpenRouter",   "OpenRouter",      L("onboarding.provider.openrouter.subtitle",  "100+ models, free tier"),    "#FFFFFF", CreateOpenRouterLogo),
+                ["DeepSeek"]     = new("DeepSeek",     "DeepSeek",        L("onboarding.provider.deepseek.subtitle",    "Chat, Reasoner, V3"),        "#FFFFFF", CreateDeepSeekLogo),
+                ["Zai"]          = new("Zai",          "Zhipu AI",        L("onboarding.provider.zai.subtitle",         "GLM models · z.ai"),         "#000000", CreateZaiLogo),
+                ["Inception"]    = new("Inception",    "Inception",       L("onboarding.provider.inception.subtitle",   "Mercury and Inception"),     "#001A18", CreateInceptionLogo),
+                ["GoogleAI"]     = new("GoogleAI",     "Google AI",       L("onboarding.provider.googleai.subtitle",    "Gemini Pro & Flash"),        "#FFFFFF", CreateGoogleAiLogo),
+                ["GoogleAIImage"]= new("GoogleAIImage","Google AI Images",L("onboarding.provider.googleaiimage.subtitle","Gemini image generation"),  "#FFFFFF", CreateGoogleAiImageLogo),
+                ["Groq"]         = new("Groq",         "Groq",            L("onboarding.provider.groq.subtitle",        "Free tier, very fast"),      "#F55036", CreateGroqLogo)
             };
         }
 

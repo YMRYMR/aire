@@ -67,7 +67,15 @@
       "activateWindow": true,
       "actions": [
         {
+          "kind": "wait-for-window",
+          "exactTitle": "Aire",
+          "processName": "Aire",
+          "delayMs": 1000
+        },
+        {
           "kind": "invoke",
+          "exactTitle": "Aire",
+          "processName": "Aire",
           "automationId": "PART_SidebarToggleButton",
           "delayMs": 450
         }
@@ -83,11 +91,15 @@
       "actions": [
         {
           "kind": "invoke",
+          "exactTitle": "Aire",
+          "processName": "Aire",
           "automationId": "PART_SidebarToggleButton",
           "delayMs": 350
         },
         {
           "kind": "invoke",
+          "exactTitle": "Aire",
+          "processName": "Aire",
           "automationId": "PART_ModeButton",
           "delayMs": 300
         }

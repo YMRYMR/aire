@@ -1,839 +1,1006 @@
 {
-  "code": "hi",
-  "nativeName": "हिन्दी",
-  "flag": "🇮🇳",
-  "strings": {
-    "settings.title": "सेटिंग्स — Aire",
-    "settings.aiProviders": "AI प्रदाता",
-    "settings.appearance": "रूप",
-    "settings.brightness": "चमक",
-    "settings.dark": "डार्क",
-    "settings.light": "लाइट (बेज)",
-    "settings.colorTint": "रंग टिंट",
-    "settings.accentTint": "एक्सेंट रंग",
-    "settings.accentBrightness": "एक्सेंट चमक",
-    "settings.neutralLeft": "← न्यूट्रल",
-    "settings.neutralRight": "न्यूट्रल →",
-    "settings.fontSize": "फ़ॉन्ट आकार",
-    "settings.language": "भाषा",
-    "settings.name": "नाम",
-    "settings.type": "प्रकार",
-    "settings.model": "मॉडल",
-    "settings.apiKey": "API कुंजी",
-    "settings.baseUrl": "बेस URL (वैकल्पिक)",
-    "settings.enabled": "सक्षम",
-    "settings.addProvider": "+ जोड़ें",
-    "settings.selectProvider": "एक प्रदाता चुनें",
-    "settings.loginClaude": "Claude.ai से लॉगिन करें",
-    "settings.reloginClaude": "Claude.ai से पुनः लॉगिन करें",
-    "settings.anthropicHint": "टिप: ANTHROPIC_API_KEY पर्यावरण चर का उपयोग करने के लिए खाली छोड़ दें।",
-    "help.title": "सहायता — Aire",
-    "help.search": "सहायता खोजें…",
-    "tooltip.help": "सहायता",
-    "tooltip.settings": "सेटिंग्स",
-    "tooltip.clear": "वार्तालाप साफ़ करें",
-    "tooltip.mic": "वॉइस इनपुट शुरू करें",
-    "tooltip.stopRecording": "रिकॉर्डिंग रोकें (रोकने के लिए 'AIRE PAUSE' कहें)",
-    "tooltip.voicePaused": "वॉइस रोकी गई है (जारी रखने के लिए 'AIRE RESUME' कहें)",
-    "tooltip.downloadingWhisper": "Whisper मॉडल डाउनलोड हो रहा है…",
-    "tooltip.downloadWhisper": "Whisper मॉडल डाउनलोड करने के लिए क्लिक करें (~150 MB)",
-    "tooltip.voiceOn": "वॉइस आउटपुट चालू — अक्षम करने के लिए क्लिक करें",
-    "tooltip.voiceOff": "वॉइस आउटपुट बंद — सक्षम करने के लिए क्लिक करें",
-    "tooltip.modeCurrent": "सहायक मोड: {0}",
-    "tooltip.searchChat": "चैट में खोजें (Ctrl+F)",
-    "tooltip.pinAttached": "ट्रे में पिन किया गया — सिस्टम ट्रे के ऊपर वापस स्नैप करने के लिए क्लिक करें",
-    "tooltip.pinDetached": "अनपिन — सिस्टम ट्रे के ऊपर वापस स्नैप करने के लिए क्लिक करें",
-    "settings.voiceOutput": "वॉइस आउटपुट",
-    "settings.connections": "कनेक्शन",
-    "settings.apiAccessTitle": "स्थानीय API पहुंच",
-    "settings.apiAccessDescription": "विश्वसनीय स्थानीय ऐप्स को Aire खोलने, चैट इतिहास पढ़ने और स्थानीय API के माध्यम से कार्रवाई अनुरोध करने की अनुमति दें।",
-    "settings.apiAccessEnabled": "स्थानीय API पहुंच सक्षम करें",
-    "settings.apiAccessTokenTitle": "प्रमाणीकरण टोकन",
-    "settings.apiAccessTokenDescription": "नियंत्रण अधिकृत करने के लिए स्थानीय API अनुरोधों में इस टोकन को पास करें।",
-    "settings.apiAccessTokenCopy": "कॉपी करें",
-    "settings.apiAccessTokenRegenerate": "पुनः उत्पन्न करें",
-    "settings.voiceOutputEnabled": "वॉइस आउटपुट सक्षम करें",
-    "settings.voiceMicOnly": "केवल माइक्रोफ़ोन का उपयोग करते समय बोलें",
-    "settings.voice": "आवाज़",
-    "settings.voiceSpeed": "गति",
-    "main.sessionActive": "सत्र सक्रिय",
-    "main.endSession": "सत्र समाप्त करें",
-    "main.thinking": "सोच रहा हूँ…",
-    "main.assistantModeSwitched": "सहायक मोड {0} में बदल गया।",
-    "main.remove": "हटाएं",
-    "menu.find": "खोजें... Ctrl+F",
-    "menu.saveChat": "चैट को टेक्स्ट के रूप में सहेजें...",
-    "confirm.deleteTitle": "'{0}' हटाएं?",
-    "confirm.deleteMsg": "यह प्रदाता और उसकी कॉन्फ़िगरेशन को स्थायी रूप से हटा देगा।",
-    "onboarding.welcomeTitle": "Aire में आपका स्वागत है",
-    "onboarding.welcomeSubtitle": "सभी के लिए AI",
-    "onboarding.welcomeDesc": "एक ट्रे-आधारित AI चैट ऐप जो आपको किसी भी AI प्रदाता — OpenAI, Anthropic Claude, Google AI, Ollama — से बात करने देता है, सभी एक ही स्थान पर।",
-    "onboarding.getStarted": "आइए शुरू करते हैं →",
-    "onboarding.pickerTitle": "अपना AI प्रदाता चुनें",
-    "onboarding.pickerSubtitle": "शुरू करने के लिए एक चुनें। आप कभी भी और जोड़ सकते हैं।",
-    "onboarding.addAiTitle": "अपना पहला AI जोड़ें",
-    "onboarding.addAiSubtitle": "चैटिंग शुरू करने के लिए एक AI प्रदाता से कनेक्ट करें।",
-    "onboarding.providerType": "प्रदाता प्रकार",
-    "onboarding.name": "नाम",
-    "onboarding.apiKey": "API कुंजी",
-    "onboarding.baseUrl": "बेस URL (वैकल्पिक — OpenAI के लिए खाली छोड़ दें)",
-    "onboarding.model": "मॉडल",
-    "onboarding.testConnection": "कनेक्शन परीक्षण करें",
-    "onboarding.skipForNow": "अभी के लिए छोड़ दें",
-    "onboarding.finish": "समाप्त करें →",
-    "onboarding.doneTitle": "आप तैयार हैं!",
-    "onboarding.doneDesc": "Aire आपकी सिस्टम ट्रे में चल रहा है। चैट खोलने के लिए किसी भी समय आइकन पर क्लिक करें।",
-    "onboarding.startChatting": "चैटिंग शुरू करें",
-    "onboarding.testing": "परीक्षण चल रहा है…",
-    "onboarding.testOk": "कनेक्ट हो गया!",
-    "onboarding.testFail": "विफल",
-    "onboarding.fillKeyFirst": "पहले API कुंजी भरें।",
-    "onboarding.whereApiKey": "मुझे API कुंजी कहाँ से मिलेगी?",
-    "onboarding.signUpPrefix": "खाता नहीं है? साइन अप करें",
-    "tooltip.sidebar": "वार्तालाप इतिहास",
-    "tooltip.providerCooldown": "प्रदाता कोल्डाउन पर है",
-    "tooltip.checkAvailability": "जांचें कि क्या प्रदाता फिर से उपलब्ध है",
-    "tooltip.browser": "ब्राउज़र खोलें (AI खुले टैब पढ़ सकता है)",
-    "placeholder.search": "खोजें…",
-    "tooltip.newConversation": "नया वार्तालाप",
-    "tooltip.openImageViewer": "छवि दर्शक में खोलने के लिए क्लिक करें",
-    "tooltip.allow": "अनुमति दें",
-    "tooltip.deny": "अस्वीकार करें",
-    "tooltip.previousMatch": "पिछला मिलान",
-    "tooltip.nextMatch": "अगला मिलान",
-    "tooltip.close": "बंद करें",
-    "tooltip.openFile": "फ़ाइल खोलने के लिए क्लिक करें",
-    "tooltip.removeAttachment": "अटैचमेंट हटाएं",
-    "tooltip.stopThinking": "AI सोचना रोकें",
-    "tooltip.toolsDisabled": "टूल अक्षम — टूल श्रेणियाँ चुनने के लिए क्लिक करें",
-    "tooltip.toolsEnabled": "सक्षम टूल श्रेणियाँ: {0}",
-    "warning.largeFile": "⚠ बड़ी फ़ाइल — प्रदाता अस्वीकार कर सकता है",
-    "menu.copyChat": "चैट को टेक्स्ट के रूप में कॉपी करें",
-    "menu.restoreWindowSizes": "मूल विंडो आकार पुनर्स्थापित करें",
-    "menu.rename": "नाम बदलें",
-    "menu.delete": "हटाएं",
-    "menu.deleteAllConversations": "सभी बातचीत हटाएं",
-    "settings.setupWizard": "सेटअप विज़ार्ड",
-    "settings.apiAccessEnabledTooltip": "अन्य स्थानीय ऐप्स को Aire को नियंत्रित करने देता है। जब तक आप कॉलर पर भरोसा न करें, इसे बंद रखें।",
-    "settings.testSelectedVoice": "चयनित आवाज़ का परीक्षण करें",
-    "tooltip.dragReorder": "पुनः क्रमित करने के लिए खींचें",
-    "tooltip.runTests": "टेस्ट चलाएं",
-    "cooldown.suffix": "कोल्डाउन साफ़ करने और पुनः प्रयास करने के लिए ↻ पर क्लिक करें।",
-    "settings.refreshModelsTooltip": "सर्वर से मॉडल सूची ताज़ा करें",
-    "tools.enableAllCategories": "सभी टूल श्रेणियाँ सक्षम करें",
-    "tools.noTools": "कोई टूल नहीं",
-    "toolCategory.filesystem.label": "फ़ाइलें",
-    "toolCategory.filesystem.description": "स्थानीय फ़ाइलों और फ़ोल्डरों को पढ़ें और संशोधित करें।",
-    "toolCategory.browser.label": "ब्राउज़र",
-    "toolCategory.browser.description": "ब्राउज़र टैब और पेजों का निरीक्षण और नियंत्रण करें।",
-    "toolCategory.agent.label": "एजेंट",
-    "toolCategory.agent.description": "योजना, अनुवर्ती और कार्य-प्रबंधन टूल का उपयोग करें।",
-    "toolCategory.mouse.label": "माउस",
-    "toolCategory.mouse.description": "माउस घुमाएं, क्लिक करें, खींचें, स्क्रॉल करें और स्क्रीनशॉट लें।",
-    "toolCategory.keyboard.label": "कीबोर्ड",
-    "toolCategory.keyboard.description": "टेक्स्ट टाइप करें और की प्रेस भेजें।",
-    "toolCategory.system.label": "सिस्टम",
-    "toolCategory.system.description": "प्रक्रियाओं का निरीक्षण करें, ऐप्स खोलें और स्थानीय सिस्टम कार्रवाइयाँ लॉन्च करें।",
-    "toolCategory.email.label": "ईमेल",
-    "toolCategory.email.description": "ईमेल पढ़ें, खोजें, भेजें और उत्तर दें।",
-    "assistantMode.architect.name": "आर्किटेक्ट",
-    "assistantMode.architect.description": "सिस्टम और डिज़ाइन ट्रेडऑफ़ मोड",
-    "assistantMode.creative-writer.name": "रचनात्मक लेखक",
-    "assistantMode.creative-writer.description": "विचार-समृद्ध अभिव्यंजक लेखन मोड",
-    "assistantMode.developer.name": "डेवलपर",
-    "assistantMode.developer.description": "कार्यान्वयन-प्रथम तकनीकी मोड",
-    "assistantMode.general.name": "सामान्य",
-    "assistantMode.general.description": "संतुलित डिफ़ॉल्ट व्यवहार",
-    "assistantMode.painter.name": "चित्रकार",
-    "assistantMode.painter.description": "चित्र निर्माण और दृश्य अवधारणा मोड",
-    "assistantMode.philosopher.name": "दार्शनिक",
-    "assistantMode.philosopher.description": "संकल्पनात्मक तर्क और विश्वदृष्टि मोड",
-    "assistantMode.psicologist.name": "मनोवैज्ञानिक",
-    "assistantMode.psicologist.description": "सहानुभूतिपूर्ण चिंतनशील मोड",
-    "assistantMode.scientist.name": "वैज्ञानिक",
-    "assistantMode.scientist.description": "साक्ष्य-संचालित विश्लेषणात्मक मोड",
-    "assistantMode.security.name": "सुरक्षा",
-    "assistantMode.security.description": "सुरक्षा-केंद्रित समीक्षा और खतरा विश्लेषण मोड",
-    "assistantMode.teacher.name": "शिक्षक",
-    "assistantMode.teacher.description": "व्याख्यात्मक शिक्षण-केंद्रित मोड",
-    "setup.title": "Aire - सेटअप",
-    "setup.heroTitle": "प्रथम-रन सेटअप",
-    "setup.heroDescription": "Aire के सामान्य ऑनबोर्डिंग विज़ार्ड खोलने से पहले प्रारंभिक पहुंच और सहायक डिफ़ॉल्ट चुनें।",
-    "setup.languageSectionTitle": "1. भाषा",
-    "setup.languageSectionDescription": "वह भाषा चुनें जो Aire को पहले लॉन्च पर उपयोग करनी चाहिए।",
-    "setup.assistantModeSectionTitle": "2. डिफ़ॉल्ट सहायक मोड",
-    "setup.assistantModeSectionDescription": "यह नए वार्तालापों के लिए शुरुआती मोड होगा जब तक आप इसे बदल नहीं देते।",
-    "setup.accessibilitySectionTitle": "3. पहुंच डिफ़ॉल्ट",
-    "setup.voiceOutputLabel": "शुरू से ही Aire में वॉइस आउटपुट सक्षम करें",
-    "setup.voiceOutputDescription": "मुख्य ऐप खुलने के बाद Aire जवाब ज़ोर से पढ़ सकता है।",
-    "setup.voiceInputLabel": "शुरू से ही वॉइस इनपुट सक्षम करें",
-    "setup.voiceInputDescription": "यदि स्थानीय स्पीच मॉडल उपलब्ध है, तो Aire लॉन्च पर स्वचालित रूप से सुनना शुरू कर देगा।",
-    "setup.localVoicesLabel": "केवल स्थानीय Windows आवाज़ों का उपयोग करें",
-    "setup.localVoicesDescription": "उपयोगी जब आप चाहते हैं कि सेटअप और वॉइस आउटपुट ऑफ़लाइन काम करें।",
-    "setup.voiceGuidedSectionTitle": "4. वॉइस-गाइडेड सेटअप",
-    "setup.voiceGuidanceLabel": "सेटअप निर्देश ज़ोर से पढ़ें",
-    "setup.voiceCommandsLabel": "बोले गए सेटअप कमांड की अनुमति दें",
-    "setup.voiceCommandsDescription": "मान्यता प्राप्त कमांड में शामिल हैं: English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
-    "setup.startVoice": "वॉइस सेटअप शुरू करें",
-    "setup.stopVoice": "वॉइस सेटअप रोकें",
-    "setup.summaryTitle": "सारांश",
-    "setup.savePreferences": "प्राथमिकताएँ सहेजें",
-    "setup.saveAndOpen": "सहेजें और Aire खोलें",
-    "setup.summaryLanguage": "भाषा",
-    "setup.summaryAssistantMode": "डिफ़ॉल्ट सहायक मोड",
-    "setup.summaryVoiceOutput": "Aire में वॉइस आउटपुट",
-    "setup.summaryVoiceInput": "Aire में वॉइस इनपुट",
-    "setup.summaryLocalVoices": "केवल स्थानीय आवाज़ों का उपयोग करें",
-    "setup.summaryReadAloud": "सेटअप ज़ोर से पढ़ें",
-    "setup.summaryVoiceCommands": "बोले गए सेटअप कमांड",
-    "setup.summaryNextStep": "जब आप Aire खोलेंगे, तो यह सामान्य ऑनबोर्डिंग विज़ार्ड में जारी रहेगा ताकि आप एक प्रदाता कॉन्फ़िगर कर सकें।",
-    "setup.summarySpoken": "भाषा {0}. सहायक मोड {1}. वॉइस आउटपुट {2}. वॉइस इनपुट {3}. सेव कहें, या ओपन Aire कहें।",
-    "setup.voiceStatusListening": "वॉइस सेटअप सुन रहा है। एक कमांड बोलें, फिर रुकें।",
-    "setup.voiceStatusCommandsOff": "बोले गए सेटअप कमांड बंद हैं।",
-    "setup.voiceStatusModelNeeded": "वॉइस कमांड के लिए स्थानीय स्पीच मॉडल की आवश्यकता है। इसे डाउनलोड करने के लिए वॉइस सेटअप शुरू करें।",
-    "setup.voiceStatusReady": "वॉइस कमांड तैयार हैं। सुनना शुरू करने के लिए वॉइस सेटअप शुरू करें।",
-    "setup.launchNotFoundMessage": "प्राथमिकताएँ सहेजी गईं, लेकिन सेटअप ऐप के बगल में Aire.exe नहीं मिला। ऑनबोर्डिंग जारी रखने के लिए मैन्युअल रूप से Aire लॉन्च करें।",
-    "setup.preferencesSaved": "प्राथमिकताएँ सहेजी गईं।",
-    "setup.preferencesSavedSpoken": "प्राथमिकताएँ सहेजी गईं। Aire अपना ऑनबोर्डिंग विज़ार्ड खोलने के लिए तैयार है।",
-    "setup.voiceStatusDownloading": "वॉइस सेटअप के लिए स्थानीय स्पीच मॉडल डाउनलोड हो रहा है...",
-    "setup.voiceStatusDownloadFailed": "वॉइस मॉडल डाउनलोड विफल। इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।",
-    "setup.voiceStatusStartFailed": "वॉइस सेटअप शुरू नहीं हो सका: {0}",
-    "setup.voiceStatusDownloadProgress": "वॉइस मॉडल डाउनलोड हो रहा है: {0}%",
-    "setup.voiceStatusCommandNotRecognized": "वॉइस कमांड मान्यता प्राप्त नहीं: {0}",
-    "setup.voiceStatusCommandApplied": "वॉइस कमांड लागू किया गया: {0}",
-    "setup.enabled": "सक्षम",
-    "setup.disabled": "अक्षम",
-    "setup.yes": "हाँ",
-    "setup.no": "नहीं",
-    "setup.enabledSpoken": "सक्षम",
-    "setup.disabledSpoken": "अक्षम",
-    "panic.title": "Aire रोकें",
-    "panic.tooltip": "सक्रिय कीबोर्ड/माउस सत्र को तुरंत रोकने के लिए क्लिक करें।\nस्थान बदलने के लिए खींचें।",
-    "panic.stopButton": "⏹ सत्र रोकें"
-  },
-  "help": [
-    {
-      "tab": "सेटअप विज़ार्ड",
-      "type": "text",
-      "title": "सेटअप विज़ार्ड कैसे काम करता है",
-      "links": [
+    "code": "hi",
+    "nativeName": "हिन्दी",
+    "flag": "🇮🇳",
+    "strings": {
+        "settings.title": "सेटिंग्स — Aire",
+        "settings.aiProviders": "AI प्रदाता",
+        "settings.appearance": "रूप",
+        "settings.brightness": "चमक",
+        "settings.dark": "डार्क",
+        "settings.light": "लाइट (बेज)",
+        "settings.colorTint": "रंग टिंट",
+        "settings.accentTint": "एक्सेंट रंग",
+        "settings.accentBrightness": "एक्सेंट चमक",
+        "settings.neutralLeft": "← न्यूट्रल",
+        "settings.neutralRight": "न्यूट्रल →",
+        "settings.fontSize": "फ़ॉन्ट आकार",
+        "settings.language": "भाषा",
+        "settings.name": "नाम",
+        "settings.type": "प्रकार",
+        "settings.model": "मॉडल",
+        "settings.apiKey": "API कुंजी",
+        "settings.baseUrl": "बेस URL (वैकल्पिक)",
+        "settings.enabled": "सक्षम",
+        "settings.addProvider": "+ जोड़ें",
+        "settings.selectProvider": "एक प्रदाता चुनें",
+        "settings.loginClaude": "Claude.ai से लॉगिन करें",
+        "settings.reloginClaude": "Claude.ai से पुनः लॉगिन करें",
+        "settings.anthropicHint": "टिप: ANTHROPIC_API_KEY पर्यावरण चर का उपयोग करने के लिए खाली छोड़ दें।",
+        "help.title": "सहायता — Aire",
+        "help.search": "सहायता खोजें…",
+        "tooltip.help": "सहायता",
+        "tooltip.settings": "सेटिंग्स",
+        "tooltip.clear": "वार्तालाप साफ़ करें",
+        "tooltip.mic": "वॉइस इनपुट शुरू करें",
+        "tooltip.stopRecording": "रिकॉर्डिंग रोकें (रोकने के लिए 'AIRE PAUSE' कहें)",
+        "tooltip.voicePaused": "वॉइस रोकी गई है (जारी रखने के लिए 'AIRE RESUME' कहें)",
+        "tooltip.downloadingWhisper": "Whisper मॉडल डाउनलोड हो रहा है…",
+        "tooltip.downloadWhisper": "Whisper मॉडल डाउनलोड करने के लिए क्लिक करें (~150 MB)",
+        "tooltip.voiceOn": "वॉइस आउटपुट चालू — अक्षम करने के लिए क्लिक करें",
+        "tooltip.voiceOff": "वॉइस आउटपुट बंद — सक्षम करने के लिए क्लिक करें",
+        "tooltip.modeCurrent": "सहायक मोड: {0}",
+        "tooltip.searchChat": "चैट में खोजें (Ctrl+F)",
+        "tooltip.pinAttached": "ट्रे में पिन किया गया — सिस्टम ट्रे के ऊपर वापस स्नैप करने के लिए क्लिक करें",
+        "tooltip.pinDetached": "अनपिन — सिस्टम ट्रे के ऊपर वापस स्नैप करने के लिए क्लिक करें",
+        "settings.voiceOutput": "वॉइस आउटपुट",
+        "settings.connections": "कनेक्शन",
+        "settings.apiAccessTitle": "स्थानीय API पहुंच",
+        "settings.apiAccessDescription": "विश्वसनीय स्थानीय ऐप्स को Aire खोलने, चैट इतिहास पढ़ने और स्थानीय API के माध्यम से कार्रवाई अनुरोध करने की अनुमति दें।",
+        "settings.apiAccessEnabled": "स्थानीय API पहुंच सक्षम करें",
+        "settings.apiAccessTokenTitle": "प्रमाणीकरण टोकन",
+        "settings.apiAccessTokenDescription": "नियंत्रण अधिकृत करने के लिए स्थानीय API अनुरोधों में इस टोकन को पास करें।",
+        "settings.apiAccessTokenCopy": "कॉपी करें",
+        "settings.apiAccessTokenRegenerate": "पुनः उत्पन्न करें",
+        "settings.voiceOutputEnabled": "वॉइस आउटपुट सक्षम करें",
+        "settings.voiceMicOnly": "केवल माइक्रोफ़ोन का उपयोग करते समय बोलें",
+        "settings.voice": "आवाज़",
+        "settings.voiceSpeed": "गति",
+        "main.sessionActive": "सत्र सक्रिय",
+        "main.endSession": "सत्र समाप्त करें",
+        "main.thinking": "सोच रहा हूँ…",
+        "main.assistantModeSwitched": "सहायक मोड {0} में बदल गया।",
+        "main.remove": "हटाएं",
+        "menu.find": "खोजें... Ctrl+F",
+        "menu.saveChat": "चैट को टेक्स्ट के रूप में सहेजें...",
+        "confirm.deleteTitle": "'{0}' हटाएं?",
+        "confirm.deleteMsg": "यह प्रदाता और उसकी कॉन्फ़िगरेशन को स्थायी रूप से हटा देगा।",
+        "onboarding.welcomeTitle": "Aire में आपका स्वागत है",
+        "onboarding.welcomeSubtitle": "सभी के लिए AI",
+        "onboarding.welcomeDesc": "एक ट्रे-आधारित AI चैट ऐप जो आपको किसी भी AI प्रदाता — OpenAI, Anthropic Claude, Google AI, Ollama — से बात करने देता है, सभी एक ही स्थान पर।",
+        "onboarding.getStarted": "आइए शुरू करते हैं →",
+        "onboarding.pickerTitle": "अपना AI प्रदाता चुनें",
+        "onboarding.pickerSubtitle": "शुरू करने के लिए एक चुनें। आप कभी भी और जोड़ सकते हैं।",
+        "onboarding.addAiTitle": "अपना पहला AI जोड़ें",
+        "onboarding.addAiSubtitle": "चैटिंग शुरू करने के लिए एक AI प्रदाता से कनेक्ट करें।",
+        "onboarding.providerType": "प्रदाता प्रकार",
+        "onboarding.name": "नाम",
+        "onboarding.apiKey": "API कुंजी",
+        "onboarding.baseUrl": "बेस URL (वैकल्पिक — OpenAI के लिए खाली छोड़ दें)",
+        "onboarding.model": "मॉडल",
+        "onboarding.testConnection": "कनेक्शन परीक्षण करें",
+        "onboarding.skipForNow": "अभी के लिए छोड़ दें",
+        "onboarding.finish": "समाप्त करें →",
+        "onboarding.doneTitle": "आप तैयार हैं!",
+        "onboarding.doneDesc": "Aire आपकी सिस्टम ट्रे में चल रहा है। चैट खोलने के लिए किसी भी समय आइकन पर क्लिक करें।",
+        "onboarding.startChatting": "चैटिंग शुरू करें",
+        "onboarding.testing": "परीक्षण चल रहा है…",
+        "onboarding.testOk": "कनेक्ट हो गया!",
+        "onboarding.testFail": "विफल",
+        "onboarding.fillKeyFirst": "पहले API कुंजी भरें।",
+        "onboarding.whereApiKey": "मुझे API कुंजी कहाँ से मिलेगी?",
+        "onboarding.signUpPrefix": "खाता नहीं है? साइन अप करें",
+        "tooltip.sidebar": "वार्तालाप इतिहास",
+        "tooltip.providerCooldown": "प्रदाता कोल्डाउन पर है",
+        "tooltip.checkAvailability": "जांचें कि क्या प्रदाता फिर से उपलब्ध है",
+        "tooltip.browser": "ब्राउज़र खोलें (AI खुले टैब पढ़ सकता है)",
+        "placeholder.search": "खोजें…",
+        "tooltip.newConversation": "नया वार्तालाप",
+        "tooltip.openImageViewer": "छवि दर्शक में खोलने के लिए क्लिक करें",
+        "tooltip.allow": "अनुमति दें",
+        "tooltip.deny": "अस्वीकार करें",
+        "tooltip.previousMatch": "पिछला मिलान",
+        "tooltip.nextMatch": "अगला मिलान",
+        "tooltip.close": "बंद करें",
+        "tooltip.openFile": "फ़ाइल खोलने के लिए क्लिक करें",
+        "tooltip.removeAttachment": "अटैचमेंट हटाएं",
+        "tooltip.stopThinking": "AI सोचना रोकें",
+        "tooltip.toolsDisabled": "टूल अक्षम — टूल श्रेणियाँ चुनने के लिए क्लिक करें",
+        "tooltip.toolsEnabled": "सक्षम टूल श्रेणियाँ: {0}",
+        "warning.largeFile": "⚠ बड़ी फ़ाइल — प्रदाता अस्वीकार कर सकता है",
+        "menu.copyChat": "चैट को टेक्स्ट के रूप में कॉपी करें",
+        "menu.restoreWindowSizes": "मूल विंडो आकार पुनर्स्थापित करें",
+        "menu.rename": "नाम बदलें",
+        "menu.delete": "हटाएं",
+        "menu.deleteAllConversations": "सभी बातचीत हटाएं",
+        "settings.setupWizard": "सेटअप विज़ार्ड",
+        "settings.apiAccessEnabledTooltip": "अन्य स्थानीय ऐप्स को Aire को नियंत्रित करने देता है। जब तक आप कॉलर पर भरोसा न करें, इसे बंद रखें।",
+        "settings.testSelectedVoice": "चयनित आवाज़ का परीक्षण करें",
+        "tooltip.dragReorder": "पुनः क्रमित करने के लिए खींचें",
+        "tooltip.runTests": "टेस्ट चलाएं",
+        "cooldown.suffix": "कोल्डाउन साफ़ करने और पुनः प्रयास करने के लिए ↻ पर क्लिक करें।",
+        "settings.refreshModelsTooltip": "सर्वर से मॉडल सूची ताज़ा करें",
+        "tools.enableAllCategories": "सभी टूल श्रेणियाँ सक्षम करें",
+        "tools.noTools": "कोई टूल नहीं",
+        "toolCategory.filesystem.label": "फ़ाइलें",
+        "toolCategory.filesystem.description": "स्थानीय फ़ाइलों और फ़ोल्डरों को पढ़ें और संशोधित करें।",
+        "toolCategory.browser.label": "ब्राउज़र",
+        "toolCategory.browser.description": "ब्राउज़र टैब और पेजों का निरीक्षण और नियंत्रण करें।",
+        "toolCategory.agent.label": "एजेंट",
+        "toolCategory.agent.description": "योजना, अनुवर्ती और कार्य-प्रबंधन टूल का उपयोग करें।",
+        "toolCategory.mouse.label": "माउस",
+        "toolCategory.mouse.description": "माउस घुमाएं, क्लिक करें, खींचें, स्क्रॉल करें और स्क्रीनशॉट लें।",
+        "toolCategory.keyboard.label": "कीबोर्ड",
+        "toolCategory.keyboard.description": "टेक्स्ट टाइप करें और की प्रेस भेजें।",
+        "toolCategory.system.label": "सिस्टम",
+        "toolCategory.system.description": "प्रक्रियाओं का निरीक्षण करें, ऐप्स खोलें और स्थानीय सिस्टम कार्रवाइयाँ लॉन्च करें।",
+        "toolCategory.email.label": "ईमेल",
+        "toolCategory.email.description": "ईमेल पढ़ें, खोजें, भेजें और उत्तर दें।",
+        "assistantMode.architect.name": "आर्किटेक्ट",
+        "assistantMode.architect.description": "सिस्टम और डिज़ाइन ट्रेडऑफ़ मोड",
+        "assistantMode.creative-writer.name": "रचनात्मक लेखक",
+        "assistantMode.creative-writer.description": "विचार-समृद्ध अभिव्यंजक लेखन मोड",
+        "assistantMode.developer.name": "डेवलपर",
+        "assistantMode.developer.description": "कार्यान्वयन-प्रथम तकनीकी मोड",
+        "assistantMode.general.name": "सामान्य",
+        "assistantMode.general.description": "संतुलित डिफ़ॉल्ट व्यवहार",
+        "assistantMode.painter.name": "चित्रकार",
+        "assistantMode.painter.description": "चित्र निर्माण और दृश्य अवधारणा मोड",
+        "assistantMode.philosopher.name": "दार्शनिक",
+        "assistantMode.philosopher.description": "संकल्पनात्मक तर्क और विश्वदृष्टि मोड",
+        "assistantMode.psicologist.name": "मनोवैज्ञानिक",
+        "assistantMode.psicologist.description": "सहानुभूतिपूर्ण चिंतनशील मोड",
+        "assistantMode.scientist.name": "वैज्ञानिक",
+        "assistantMode.scientist.description": "साक्ष्य-संचालित विश्लेषणात्मक मोड",
+        "assistantMode.security.name": "सुरक्षा",
+        "assistantMode.security.description": "सुरक्षा-केंद्रित समीक्षा और खतरा विश्लेषण मोड",
+        "assistantMode.teacher.name": "शिक्षक",
+        "assistantMode.teacher.description": "व्याख्यात्मक शिक्षण-केंद्रित मोड",
+        "setup.title": "Aire - सेटअप",
+        "setup.heroTitle": "प्रथम-रन सेटअप",
+        "setup.heroDescription": "Aire के सामान्य ऑनबोर्डिंग विज़ार्ड खोलने से पहले प्रारंभिक पहुंच और सहायक डिफ़ॉल्ट चुनें।",
+        "setup.languageSectionTitle": "1. भाषा",
+        "setup.languageSectionDescription": "वह भाषा चुनें जो Aire को पहले लॉन्च पर उपयोग करनी चाहिए।",
+        "setup.assistantModeSectionTitle": "2. डिफ़ॉल्ट सहायक मोड",
+        "setup.assistantModeSectionDescription": "यह नए वार्तालापों के लिए शुरुआती मोड होगा जब तक आप इसे बदल नहीं देते।",
+        "setup.accessibilitySectionTitle": "3. पहुंच डिफ़ॉल्ट",
+        "setup.voiceOutputLabel": "शुरू से ही Aire में वॉइस आउटपुट सक्षम करें",
+        "setup.voiceOutputDescription": "मुख्य ऐप खुलने के बाद Aire जवाब ज़ोर से पढ़ सकता है।",
+        "setup.voiceInputLabel": "शुरू से ही वॉइस इनपुट सक्षम करें",
+        "setup.voiceInputDescription": "यदि स्थानीय स्पीच मॉडल उपलब्ध है, तो Aire लॉन्च पर स्वचालित रूप से सुनना शुरू कर देगा।",
+        "setup.localVoicesLabel": "केवल स्थानीय Windows आवाज़ों का उपयोग करें",
+        "setup.localVoicesDescription": "उपयोगी जब आप चाहते हैं कि सेटअप और वॉइस आउटपुट ऑफ़लाइन काम करें।",
+        "setup.voiceGuidedSectionTitle": "4. वॉइस-गाइडेड सेटअप",
+        "setup.voiceGuidanceLabel": "सेटअप निर्देश ज़ोर से पढ़ें",
+        "setup.voiceCommandsLabel": "बोले गए सेटअप कमांड की अनुमति दें",
+        "setup.voiceCommandsDescription": "मान्यता प्राप्त कमांड में शामिल हैं: English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
+        "setup.startVoice": "वॉइस सेटअप शुरू करें",
+        "setup.stopVoice": "वॉइस सेटअप रोकें",
+        "setup.summaryTitle": "सारांश",
+        "setup.savePreferences": "प्राथमिकताएँ सहेजें",
+        "setup.saveAndOpen": "सहेजें और Aire खोलें",
+        "setup.summaryLanguage": "भाषा",
+        "setup.summaryAssistantMode": "डिफ़ॉल्ट सहायक मोड",
+        "setup.summaryVoiceOutput": "Aire में वॉइस आउटपुट",
+        "setup.summaryVoiceInput": "Aire में वॉइस इनपुट",
+        "setup.summaryLocalVoices": "केवल स्थानीय आवाज़ों का उपयोग करें",
+        "setup.summaryReadAloud": "सेटअप ज़ोर से पढ़ें",
+        "setup.summaryVoiceCommands": "बोले गए सेटअप कमांड",
+        "setup.summaryNextStep": "जब आप Aire खोलेंगे, तो यह सामान्य ऑनबोर्डिंग विज़ार्ड में जारी रहेगा ताकि आप एक प्रदाता कॉन्फ़िगर कर सकें।",
+        "setup.summarySpoken": "भाषा {0}. सहायक मोड {1}. वॉइस आउटपुट {2}. वॉइस इनपुट {3}. सेव कहें, या ओपन Aire कहें।",
+        "setup.voiceStatusListening": "वॉइस सेटअप सुन रहा है। एक कमांड बोलें, फिर रुकें।",
+        "setup.voiceStatusCommandsOff": "बोले गए सेटअप कमांड बंद हैं।",
+        "setup.voiceStatusModelNeeded": "वॉइस कमांड के लिए स्थानीय स्पीच मॉडल की आवश्यकता है। इसे डाउनलोड करने के लिए वॉइस सेटअप शुरू करें।",
+        "setup.voiceStatusReady": "वॉइस कमांड तैयार हैं। सुनना शुरू करने के लिए वॉइस सेटअप शुरू करें।",
+        "setup.launchNotFoundMessage": "प्राथमिकताएँ सहेजी गईं, लेकिन सेटअप ऐप के बगल में Aire.exe नहीं मिला। ऑनबोर्डिंग जारी रखने के लिए मैन्युअल रूप से Aire लॉन्च करें।",
+        "setup.preferencesSaved": "प्राथमिकताएँ सहेजी गईं।",
+        "setup.preferencesSavedSpoken": "प्राथमिकताएँ सहेजी गईं। Aire अपना ऑनबोर्डिंग विज़ार्ड खोलने के लिए तैयार है।",
+        "setup.voiceStatusDownloading": "वॉइस सेटअप के लिए स्थानीय स्पीच मॉडल डाउनलोड हो रहा है...",
+        "setup.voiceStatusDownloadFailed": "वॉइस मॉडल डाउनलोड विफल। इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।",
+        "setup.voiceStatusStartFailed": "वॉइस सेटअप शुरू नहीं हो सका: {0}",
+        "setup.voiceStatusDownloadProgress": "वॉइस मॉडल डाउनलोड हो रहा है: {0}%",
+        "setup.voiceStatusCommandNotRecognized": "वॉइस कमांड मान्यता प्राप्त नहीं: {0}",
+        "setup.voiceStatusCommandApplied": "वॉइस कमांड लागू किया गया: {0}",
+        "setup.enabled": "सक्षम",
+        "setup.disabled": "अक्षम",
+        "setup.yes": "हाँ",
+        "setup.no": "नहीं",
+        "setup.enabledSpoken": "सक्षम",
+        "setup.disabledSpoken": "अक्षम",
+        "panic.title": "Aire रोकें",
+        "panic.tooltip": "सक्रिय कीबोर्ड/माउस सत्र को तुरंत रोकने के लिए क्लिक करें।\nस्थान बदलने के लिए खींचें।",
+        "panic.stopButton": "⏹ सत्र रोकें",
+        "settings.context": "Context",
+        "settings.contextDescription": "Control how much conversation history Aire sends to the provider on each turn, and how caching and summarisation are applied.",
+        "settings.contextHistory": "HISTORY",
+        "settings.contextMaxMessages": "Window size",
+        "settings.contextMaxMessagesDescription": "Maximum messages sent to the provider per turn",
+        "settings.contextAnchorMessages": "Anchor messages",
+        "settings.contextAnchorMessagesDescription": "Early messages always kept, even when trimming older history",
+        "settings.contextCaching": "CACHING",
+        "settings.contextPromptCaching": "Prompt caching",
+        "settings.contextPromptCachingDescription": "Mark stable prefixes cache-friendly when the provider supports it",
+        "settings.contextUncachedRecentMessages": "Uncached tail",
+        "settings.contextUncachedRecentMessagesDescription": "Most recent messages always sent fresh, never cache-marked",
+        "settings.contextSummaries": "SUMMARIES",
+        "settings.contextAutoSummarise": "Auto-summarise",
+        "settings.contextAutoSummariseDescription": "Condense trimmed turns into a brief summary kept in context",
+        "settings.contextSummaryMaxCharacters": "Summary limit",
+        "settings.contextSummaryMaxCharactersDescription": "Maximum characters the condensed summary may occupy",
+        "settings.contextHint": "System messages and anchor turns are always kept. Cached prefixes only reduce cost on providers that explicitly support prompt caching.",
+        "settings.contextRestoreDefaults": "Restore defaults",
+        "settings.autoAccept": "Auto-accept",
+        "settings.profile": "Profile",
+        "settings.apply": "Apply",
+        "settings.saveAs": "Save as",
+        "settings.delete": "Delete",
+        "settings.autoAcceptEnabled": "Enable auto‑accept for selected tools",
+        "settings.autoAcceptCautionTitle": "⚠  Caution",
+        "settings.autoAcceptCaution": "Letting AIs act unsupervised can be dangerous. Only enable tools you fully understand.",
+        "settings.autoAcceptSelectTools": "Select which tools can be executed without confirmation:",
+        "autoAccept.category.webBrowser": "Web / Browser",
+        "autoAccept.category.commands": "Commands",
+        "autoAccept.category.fileSystem": "File System",
+        "autoAccept.category.systemClipboard": "System / Clipboard",
+        "autoAccept.category.memory": "Memory",
+        "autoAccept.category.email": "Email",
+        "autoAccept.category.aiTaskFlow": "AI / Task flow",
+        "autoAccept.category.mouseKeyboard": "Mouse / Keyboard",
+        "autoAccept.tool.browseWeb": "Browse web (fetch URL)",
+        "autoAccept.tool.httpRequest": "HTTP request",
+        "autoAccept.tool.openBrowserTab": "Open browser tab",
+        "autoAccept.tool.listBrowserTabs": "List browser tabs",
+        "autoAccept.tool.readBrowserTab": "Read browser tab",
+        "autoAccept.tool.switchBrowserTab": "Switch browser tab",
+        "autoAccept.tool.closeBrowserTab": "Close browser tab",
+        "autoAccept.tool.getBrowserHtml": "Get browser HTML",
+        "autoAccept.tool.executeBrowserScript": "Execute browser script",
+        "autoAccept.tool.getBrowserCookies": "Get browser cookies",
+        "autoAccept.tool.executeCommand": "Execute command",
+        "autoAccept.tool.readCommandOutput": "Read command output",
+        "autoAccept.tool.listFiles": "List files",
+        "autoAccept.tool.readFile": "Read file",
+        "autoAccept.tool.searchFiles": "Search files",
+        "autoAccept.tool.searchFileContent": "Search file content",
+        "autoAccept.tool.writeToFile": "Write to file",
+        "autoAccept.tool.applyDiff": "Apply code diff",
+        "autoAccept.tool.createDirectory": "Create directory",
+        "autoAccept.tool.deleteFile": "Delete file",
+        "autoAccept.tool.moveFile": "Move / rename file",
+        "autoAccept.tool.openFile": "Open file",
+        "autoAccept.tool.getClipboard": "Get clipboard",
+        "autoAccept.tool.setClipboard": "Set clipboard",
+        "autoAccept.tool.notify": "Show notification",
+        "autoAccept.tool.getSystemInfo": "Get system info",
+        "autoAccept.tool.getRunningProcesses": "List running processes",
+        "autoAccept.tool.getActiveWindow": "Get active window",
+        "autoAccept.tool.getSelectedText": "Get selected text",
+        "autoAccept.tool.remember": "Remember",
+        "autoAccept.tool.recall": "Recall",
+        "autoAccept.tool.setReminder": "Set reminder",
+        "autoAccept.tool.readEmails": "Read emails",
+        "autoAccept.tool.searchEmails": "Search emails",
+        "autoAccept.tool.sendEmail": "Send email",
+        "autoAccept.tool.replyToEmail": "Reply to email",
+        "autoAccept.tool.newTask": "Create new task",
+        "autoAccept.tool.askFollowupQuestion": "Ask follow-up question",
+        "autoAccept.tool.attemptCompletion": "Mark task as complete",
+        "autoAccept.tool.skill": "Run skill",
+        "autoAccept.tool.switchMode": "Switch mode",
+        "autoAccept.tool.switchModel": "Switch model",
+        "autoAccept.tool.updateTodoList": "Update to-do list",
+        "autoAccept.tool.showImage": "Show image",
+        "autoAccept.tool.mouseTools": "Mouse tools (move, click, scroll)",
+        "autoAccept.tool.keyboardTools": "Keyboard tools (type text, key combos)",
+        "autoAccept.tooltip.browseWeb": "Fetches a web page and returns its text to the AI. Read-only and generally safe.",
+        "autoAccept.tooltip.httpRequest": "Sends an arbitrary HTTP request (GET, POST, PUT, DELETE, etc.) to any URL. Can submit forms, call APIs, or trigger side effects on remote servers.",
+        "autoAccept.tooltip.openBrowserTab": "Opens a URL in the Aire browser window, which is visible to you. Generally safe.",
+        "autoAccept.tooltip.listBrowserTabs": "Lists the titles and URLs of all open tabs in the Aire browser. Read-only and safe.",
+        "autoAccept.tooltip.readBrowserTab": "Reads the rendered text content of an open browser tab. Read-only and safe.",
+        "autoAccept.tooltip.switchBrowserTab": "Changes which tab is active in the Aire browser. Safe.",
+        "autoAccept.tooltip.closeBrowserTab": "Closes one of the open tabs in the Aire browser. Safe, but closes content you may want to keep.",
+        "autoAccept.tooltip.getBrowserHtml": "Returns the raw HTML source of an open browser tab. Read-only and safe.",
+        "autoAccept.tooltip.executeBrowserScript": "Runs arbitrary JavaScript in an open browser tab. High risk — can read cookies, submit forms, or interact with any page element.",
+        "autoAccept.tooltip.getBrowserCookies": "Reads cookies from an open browser tab. Can expose session tokens and authentication credentials.",
+        "autoAccept.tooltip.executeCommand": "Runs a shell command or launches any installed application without asking you first. High risk — only enable if you trust the AI to run commands autonomously.",
+        "autoAccept.tooltip.readCommandOutput": "Reads the output of a previously started background process. Generally safe.",
+        "autoAccept.tooltip.listFiles": "Lists the contents of a folder. Read-only and safe.",
+        "autoAccept.tooltip.readFile": "Opens and reads the contents of a file. Read-only and safe.",
+        "autoAccept.tooltip.searchFiles": "Searches for files by name pattern inside a folder. Read-only and safe.",
+        "autoAccept.tooltip.searchFileContent": "Searches for text patterns inside file contents (like grep). Read-only and safe.",
+        "autoAccept.tooltip.writeToFile": "Creates or overwrites a file with new content. Can modify or delete existing data.",
+        "autoAccept.tooltip.applyDiff": "Applies a patch to modify lines in an existing file. Can silently change source code or config files.",
+        "autoAccept.tooltip.createDirectory": "Creates a new folder. Generally safe.",
+        "autoAccept.tooltip.deleteFile": "Permanently deletes a file. High risk — deleted files may not be recoverable.",
+        "autoAccept.tooltip.moveFile": "Moves or renames a file or folder. Can overwrite existing files at the destination.",
+        "autoAccept.tooltip.openFile": "Opens a file with its default application (e.g. opens a PDF in your PDF viewer). Safe.",
+        "autoAccept.tooltip.getClipboard": "Reads the current clipboard contents. Can expose sensitive data you have copied.",
+        "autoAccept.tooltip.setClipboard": "Overwrites your clipboard with AI-generated text. Safe, but replaces whatever you had copied.",
+        "autoAccept.tooltip.notify": "Displays a system notification. Safe.",
+        "autoAccept.tooltip.getSystemInfo": "Reads OS, hardware, and environment information. Read-only and safe.",
+        "autoAccept.tooltip.getRunningProcesses": "Returns a list of processes currently running on your machine. Read-only and safe.",
+        "autoAccept.tooltip.getActiveWindow": "Returns the title and process of the currently focused window. Read-only and safe.",
+        "autoAccept.tooltip.getSelectedText": "Reads whatever text is currently selected on screen. Read-only and safe.",
+        "autoAccept.tooltip.remember": "Saves a key-value pair to the AI's persistent memory store. Safe.",
+        "autoAccept.tooltip.recall": "Reads a value from the AI's persistent memory store. Read-only and safe.",
+        "autoAccept.tooltip.setReminder": "Schedules a reminder notification to appear after a delay. Safe.",
+        "autoAccept.tooltip.readEmails": "Reads emails from your connected mail account. Can expose private correspondence.",
+        "autoAccept.tooltip.searchEmails": "Searches your mailbox for matching messages. Read-only.",
+        "autoAccept.tooltip.sendEmail": "Composes and sends an email on your behalf. High risk — emails are delivered immediately and may be irreversible.",
+        "autoAccept.tooltip.replyToEmail": "Sends a reply to an existing email thread. High risk — same as send email.",
+        "autoAccept.tooltip.newTask": "Starts a new sub-task. The AI may chain many tool calls inside it without further prompts.",
+        "autoAccept.tooltip.askFollowupQuestion": "The AI pauses to ask you a clarifying question before continuing. Generally safe.",
+        "autoAccept.tooltip.attemptCompletion": "The AI signals it has finished the current task and presents a summary. Safe.",
+        "autoAccept.tooltip.skill": "Executes a built-in skill or macro. Risk depends on what the skill does.",
+        "autoAccept.tooltip.switchMode": "Changes the AI's operating mode (e.g. from chat to coding assistant). Generally safe.",
+        "autoAccept.tooltip.switchModel": "Switches to a different AI model or provider mid-conversation. Generally safe.",
+        "autoAccept.tooltip.updateTodoList": "Adds, updates, or checks off items in the task to-do list. Safe.",
+        "autoAccept.tooltip.showImage": "Displays an image from a file path or URL in the chat. Safe.",
+        "autoAccept.tooltip.mouseTools": "Moves the cursor and clicks anywhere on screen. High risk — can interact with any application or UI element without you seeing it first.",
+        "autoAccept.tooltip.keyboardTools": "Types text or presses key combinations into the focused window. High risk — can send input to any application.",
+        "mcp.servers": "MCP Servers",
+        "mcp.serversDescription": "Extend the AI with custom tools by connecting MCP servers. Changes take effect immediately.",
+        "mcp.tip": "Most servers require Node.js (npx). If a server fails to start, make sure Node.js is installed — nodejs.org",
+        "mcp.discover": "Discover",
+        "mcp.searchPlaceholder": "Search servers…",
+        "mcp.installed": "Installed",
+        "mcp.installedServers": "Installed Servers",
+        "mcp.addCustom": "+ Custom",
+        "mcp.edit": "Edit",
+        "mcp.remove": "Remove",
+        "mcp.enabled": "Enabled",
+        "mcp.disabled": "Disabled",
+        "settings.voiceLocalOnly": "Use local voices only (no internet required)",
+        "settings.voiceLocalOnlyDescription": "Use local voices only (no internet required)",
+        "settings.downloadVoices": "Download Windows voices...",
+        "menu.clearConversation": "Clear conversation",
+        "settings.tab.providers": "AI Providers",
+        "settings.tab.appearance": "Appearance",
+        "settings.tab.voice": "Voice",
+        "settings.tab.context": "Context",
+        "settings.tab.autoAccept": "AutoÔÇæaccept",
+        "settings.tab.connections": "Connections",
+        "mcp.nameLabel": "नाम",
+        "mcp.commandLabel": "कमांड",
+        "mcp.argsLabel": "तर्क",
+        "mcp.workDirLabel": "कार्य निर्देशिका (वैकल्पिक)",
+        "mcp.envVarsLabel": "पर्यावरण चर — प्रति पंक्ति एक:  KEY=value",
+        "onboarding.provider.openai.subtitle": "GPT-4o, o3 और अधिक",
+        "onboarding.provider.codex.subtitle": "स्थानीय CLI ब्रिज",
+        "onboarding.provider.ollama.subtitle": "स्थानीय, मुफ़्त, निजी",
+        "onboarding.provider.anthropic.subtitle": "Claude Sonnet, Haiku",
+        "onboarding.provider.claudeweb.subtitle": "ब्राउज़र से लॉग इन",
+        "onboarding.provider.openrouter.subtitle": "100+ मॉडल, मुफ़्त स्तर",
+        "onboarding.provider.deepseek.subtitle": "Chat, Reasoner, V3",
+        "onboarding.provider.zai.subtitle": "GLM मॉडल · z.ai",
+        "onboarding.provider.inception.subtitle": "Mercury और Inception",
+        "onboarding.provider.googleai.subtitle": "Gemini Pro और Flash",
+        "onboarding.provider.googleaiimage.subtitle": "Gemini छवि निर्माण",
+        "onboarding.provider.groq.subtitle": "मुफ़्त स्तर, बहुत तेज़"
+    },
+    "help": [
         {
-          "label": "सेटअप विज़ार्ड खोलें",
-          "action": "onboarding"
+            "tab": "सेटअप विज़ार्ड",
+            "type": "text",
+            "title": "सेटअप विज़ार्ड कैसे काम करता है",
+            "links": [
+                {
+                    "label": "सेटअप विज़ार्ड खोलें",
+                    "action": "onboarding"
+                },
+                {
+                    "label": "AI सेटअप खोलें",
+                    "action": "settings:providers"
+                }
+            ],
+            "imagePath": "Assets/Help/onboarding-provider-picker.png",
+            "imageCaption": "चैटिंग शुरू करने से पहले सेटअप विज़ार्ड आपको प्रदाता चुनने में मदद करता है।",
+            "content": "जब आप पहली बार Aire चलाते हैं तो सेटअप विज़ार्ड प्रकट होता है, या जब कोई AI प्रदाता अभी तक कॉन्फ़िगर नहीं किया गया है। इसका काम आपको यथाशीघ्र एक नए इंस्टाल से कार्यशील चैट पर ले जाना है।\n\nविज़ार्ड चरण दर चरण क्या करता है:\n• स्वागत है: बताता है कि ऐरे क्या है और आपको ऐप की भाषा चुनने देता है।\n• प्रदाता पिकर: ऐयर को एआई सेवाओं से जोड़ने के सामान्य तरीके दिखाता है।\n• प्रदाता सेटअप: आपके द्वारा चुने गए प्रदाता के लिए आवश्यक विवरण मांगता है।\n• समाप्त: पुष्टि करता है कि ऐयर तैयार है और आपको मुख्य ऐप पर ले जाता है।\n\nयदि आप AI में नए हैं, तो विज़ार्ड शुरुआत करने के लिए सबसे अच्छी जगह है। यह पहले सबसे सरल पथ का उपयोग करता है और उन्नत सेटिंग्स को तब तक छुपाता है जब तक आपको उनकी आवश्यकता न हो।\n\nआप सेटअप छोड़ सकते हैं और बाद में वापस आ सकते हैं, लेकिन ऐयर चैट संदेशों का उत्तर देने से पहले आपको कम से कम एक कॉन्फ़िगर प्रदाता की आवश्यकता होगी।"
         },
         {
-          "label": "AI सेटअप खोलें",
-          "action": "settings:providers"
-        }
-      ],
-      "imagePath": "Assets/Help/onboarding-provider-picker.png",
-      "imageCaption": "चैटिंग शुरू करने से पहले सेटअप विज़ार्ड आपको प्रदाता चुनने में मदद करता है।",
-      "content": "जब आप पहली बार Aire चलाते हैं तो सेटअप विज़ार्ड प्रकट होता है, या जब कोई AI प्रदाता अभी तक कॉन्फ़िगर नहीं किया गया है। इसका काम आपको यथाशीघ्र एक नए इंस्टाल से कार्यशील चैट पर ले जाना है।\n\nविज़ार्ड चरण दर चरण क्या करता है:\n• स्वागत है: बताता है कि ऐरे क्या है और आपको ऐप की भाषा चुनने देता है।\n• प्रदाता पिकर: ऐयर को एआई सेवाओं से जोड़ने के सामान्य तरीके दिखाता है।\n• प्रदाता सेटअप: आपके द्वारा चुने गए प्रदाता के लिए आवश्यक विवरण मांगता है।\n• समाप्त: पुष्टि करता है कि ऐयर तैयार है और आपको मुख्य ऐप पर ले जाता है।\n\nयदि आप AI में नए हैं, तो विज़ार्ड शुरुआत करने के लिए सबसे अच्छी जगह है। यह पहले सबसे सरल पथ का उपयोग करता है और उन्नत सेटिंग्स को तब तक छुपाता है जब तक आपको उनकी आवश्यकता न हो।\n\nआप सेटअप छोड़ सकते हैं और बाद में वापस आ सकते हैं, लेकिन ऐयर चैट संदेशों का उत्तर देने से पहले आपको कम से कम एक कॉन्फ़िगर प्रदाता की आवश्यकता होगी।"
-    },
-    {
-      "tab": "सेटअप विज़ार्ड",
-      "type": "text",
-      "title": "एक प्रदाता चुनना",
-      "links": [
-        {
-          "label": "सेटअप विज़ार्ड खोलें",
-          "action": "onboarding"
+            "tab": "सेटअप विज़ार्ड",
+            "type": "text",
+            "title": "एक प्रदाता चुनना",
+            "links": [
+                {
+                    "label": "सेटअप विज़ार्ड खोलें",
+                    "action": "onboarding"
+                },
+                {
+                    "label": "platform.openai.com",
+                    "action": "https://platform.openai.com"
+                },
+                {
+                    "label": "console.anthropic.com",
+                    "action": "https://console.anthropic.com"
+                },
+                {
+                    "label": "aistudio.google.com",
+                    "action": "https://aistudio.google.com"
+                }
+            ],
+            "content": "प्रदाता पिकर वह जगह है जहां आप तय करते हैं कि Aire आपकी ओर से किस AI सेवा से बात करेगा।\n\nमुख्य विकल्पों का क्या अर्थ है:\n• OpenAI: यदि आप एक साधारण क्लाउड सेटअप और विस्तृत मॉडल समर्थन चाहते हैं तो एक सामान्य प्रारंभिक बिंदु।\n• एंथ्रोपिक एपीआई: एक और मजबूत क्लाउड विकल्प, जो क्लाउड मॉडल के लिए जाना जाता है।\n• Claude.ai: एपीआई कुंजी के बजाय ब्राउज़र साइन-इन का उपयोग करता है।\n• Google AI: Google AI स्टूडियो के माध्यम से जेमिनी चैट मॉडल से जुड़ता है।\n• Google AI Images: एक समर्पित जेमिनी इमेज-जेनरेशन सेटअप।\n• ओलामा: आपके कंप्यूटर पर स्थानीय रूप से मॉडल चलाता है। गोपनीयता और ऑफ़लाइन उपयोग के लिए अच्छा है, लेकिन यह आपके हार्डवेयर पर निर्भर करता है।\n• कोडेक्स: सामान्य एपीआई कुंजी के बजाय स्थानीय कोडेक्स सीएलआई ब्रिज का उपयोग करता है।\n• ग्रोक, ओपनराउटर, डीपसीक, इंसेप्शन, और z.ai: अन्य प्रदाता या ओपनएआई-संगत एंडपॉइंट, अक्सर उपयोगी होते हैं यदि आपके पास पहले से ही वहां एक खाता है।\n\nआपको किसे चुनना चाहिए?\n• यदि आप चैट के लिए सबसे आसान क्लाउड सेटअप चाहते हैं: OpenAI, Anthropic, या Google AI से शुरुआत करें।\n• यदि आप स्थानीय और निजी चाहते हैं: ओलामा चुनें।\n• यदि आप विशेष रूप से जेमिनी से छवि निर्माण चाहते हैं: Google AI छवियाँ चुनें।\n• यदि आप पहले से ही किसी विशिष्ट प्रदाता के लिए भुगतान कर रहे हैं या कहीं और उसका उपयोग कर रहे हैं: यहां उसी प्रदाता को चुनें।\n\nआप लॉक इन नहीं हैं। विज़ार्ड आपको पहले एक प्रदाता जोड़ने में मदद करता है, और आप बाद में सेटिंग्स में और जोड़ सकते हैं।"
         },
         {
-          "label": "platform.openai.com",
-          "action": "https://platform.openai.com"
+            "tab": "सेटअप विज़ार्ड",
+            "type": "text",
+            "title": "प्रदाता विवरण भरना",
+            "links": [
+                {
+                    "label": "सेटअप विज़ार्ड खोलें",
+                    "action": "onboarding"
+                },
+                {
+                    "label": "AI सेटअप खोलें",
+                    "action": "settings:providers"
+                }
+            ],
+            "imagePath": "Assets/Help/onboarding-provider-setup.png",
+            "imageCaption": "प्रदाता प्रकार, नाम, क्रेडेंशियल्स, मॉडल और कनेक्शन परीक्षण के साथ प्रदाता सेटअप चरण।",
+            "content": "आपके द्वारा प्रदाता चुनने के बाद, विज़ार्ड केवल वही विवरण मांगता है जो प्रदाता को चाहिए।\n\nविशिष्ट फ़ील्ड:\n• प्रदाता प्रकार: वह सेवा जिसका आप उपयोग करना चाहते हैं।\n• नाम: चैट विंडो में ऐयर लेबल दिखाई देगा।\n• एपीआई कुंजी: गुप्त टोकन जो ऐयर को प्रदाता से बात करने देता है। कुछ प्रदाता इसके बजाय ब्राउज़र साइन-इन का उपयोग करते हैं, और कुछ स्थानीय प्रदाताओं को एपीआई कुंजी की बिल्कुल भी आवश्यकता नहीं होती है।\n• बेस यूआरएल: केवल कुछ ओपनएआई-संगत सेवाओं या स्वयं-होस्ट किए गए सेटअप के लिए आवश्यक है।\n• मॉडल: वह विशिष्ट AI मॉडल जिसका आप उपयोग करना चाहते हैं।\n\nप्रदाता-विशिष्ट नोट्स:\n• Claude.ai सामान्य एपीआई कुंजी के बजाय ब्राउज़र साइन-इन का उपयोग करता है।\n• ओलामा स्थानीय है और आमतौर पर एपीआई कुंजी के बिना काम करता है।\n• कोडेक्स स्थानीय कोडेक्स सीएलआई ब्रिज का उपयोग करता है, इसलिए विज़ार्ड सामान्य एपीआई कुंजी मांगने के बजाय सीएलआई इंस्टॉलेशन की पेशकश कर सकता है।\n• Google AI Images सामान्य चैट के बजाय छवि निर्माण के लिए है।\n\nपरीक्षण कनेक्शन बटन आपके समाप्त होने से पहले कॉन्फ़िगरेशन की पुष्टि करने में आपकी सहायता के लिए है। यदि परीक्षण सफल होता है, तो ऐयर आमतौर पर तुरंत उस प्रदाता का उपयोग कर सकता है।\n\nव्यावहारिक सलाह:\n• यदि आप अनिश्चित हैं कि कौन सा मॉडल चुनना है, तो डिफ़ॉल्ट सुझाव से शुरुआत करें।\n• यदि आपको कोई एपीआई-कुंजी फ़ील्ड दिखाई देती है, तो कुंजी को ठीक उसी प्रकार चिपकाएं, जैसा सेवा द्वारा प्रदान किया गया है।\n• यदि कोई प्रदाता एपीआई एक्सेस और ब्राउज़र साइन-इन दोनों प्रदान करता है, तो यदि आप सबसे स्थिर स्वचालन और एकीकरण व्यवहार चाहते हैं तो एपीआई एक्सेस को प्राथमिकता दें।\n\nविज़ार्ड समाप्त करने के बाद, आप बाद में भी AI प्रदाता टैब में इनमें से कोई भी सेटिंग बदल सकते हैं।"
         },
         {
-          "label": "console.anthropic.com",
-          "action": "https://console.anthropic.com"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "सिंहावलोकन",
+            "links": [
+                {
+                    "label": "अपना पहला AI सेट करें",
+                    "action": "settings:providers"
+                },
+                {
+                    "label": "ऐरे का लुक बदलो",
+                    "action": "settings:appearance"
+                }
+            ],
+            "content": "Aire एक डेस्कटॉप चैट ऐप है जो आपके सिस्टम ट्रे में तब तक रहता है जब तक आपको इसकी आवश्यकता न हो। आप इसे एक चैट विंडो के रूप में सोच सकते हैं जो कई AI सेवाओं से जुड़ सकती है।\n\nयदि आप AI में नए हैं, तो सामान्य शुरुआती बिंदु सरल है:\n• AI सेटअप खोलें.\n• एक प्रदाता जोड़ें, जैसे ओपनएआई, एंथ्रोपिक, गूगल एआई, या ओलामा।\n• एक मॉडल चुनें.\n• चैट बॉक्स में एक प्रश्न टाइप करें और Enter दबाएँ।\n\nऐरे क्या कर सकता है:\n• एक ऐप से विभिन्न एआई सेवाओं से बात करें।\n• अपनी बातचीत को अपने कंप्यूटर पर सहेजें.\n• फ़ाइलों को पढ़ने, कमांड चलाने, पेज ब्राउज़ करने और बहुत कुछ करने के लिए AI को आपकी अनुमति से टूल का उपयोग करने दें।\n• विंडोज़ स्पीच सुविधाओं के साथ वॉयस इनपुट और वॉयस आउटपुट का उपयोग करें।\n• अन्य स्थानीय ऐप्स को स्थानीय API के माध्यम से Aire से बात करने दें।"
         },
         {
-          "label": "aistudio.google.com",
-          "action": "https://aistudio.google.com"
-        }
-      ],
-      "content": "प्रदाता पिकर वह जगह है जहां आप तय करते हैं कि Aire आपकी ओर से किस AI सेवा से बात करेगा।\n\nमुख्य विकल्पों का क्या अर्थ है:\n• OpenAI: यदि आप एक साधारण क्लाउड सेटअप और विस्तृत मॉडल समर्थन चाहते हैं तो एक सामान्य प्रारंभिक बिंदु।\n• एंथ्रोपिक एपीआई: एक और मजबूत क्लाउड विकल्प, जो क्लाउड मॉडल के लिए जाना जाता है।\n• Claude.ai: एपीआई कुंजी के बजाय ब्राउज़र साइन-इन का उपयोग करता है।\n• Google AI: Google AI स्टूडियो के माध्यम से जेमिनी चैट मॉडल से जुड़ता है।\n• Google AI Images: एक समर्पित जेमिनी इमेज-जेनरेशन सेटअप।\n• ओलामा: आपके कंप्यूटर पर स्थानीय रूप से मॉडल चलाता है। गोपनीयता और ऑफ़लाइन उपयोग के लिए अच्छा है, लेकिन यह आपके हार्डवेयर पर निर्भर करता है।\n• कोडेक्स: सामान्य एपीआई कुंजी के बजाय स्थानीय कोडेक्स सीएलआई ब्रिज का उपयोग करता है।\n• ग्रोक, ओपनराउटर, डीपसीक, इंसेप्शन, और z.ai: अन्य प्रदाता या ओपनएआई-संगत एंडपॉइंट, अक्सर उपयोगी होते हैं यदि आपके पास पहले से ही वहां एक खाता है।\n\nआपको किसे चुनना चाहिए?\n• यदि आप चैट के लिए सबसे आसान क्लाउड सेटअप चाहते हैं: OpenAI, Anthropic, या Google AI से शुरुआत करें।\n• यदि आप स्थानीय और निजी चाहते हैं: ओलामा चुनें।\n• यदि आप विशेष रूप से जेमिनी से छवि निर्माण चाहते हैं: Google AI छवियाँ चुनें।\n• यदि आप पहले से ही किसी विशिष्ट प्रदाता के लिए भुगतान कर रहे हैं या कहीं और उसका उपयोग कर रहे हैं: यहां उसी प्रदाता को चुनें।\n\nआप लॉक इन नहीं हैं। विज़ार्ड आपको पहले एक प्रदाता जोड़ने में मदद करता है, और आप बाद में सेटिंग्स में और जोड़ सकते हैं।"
-    },
-    {
-      "tab": "सेटअप विज़ार्ड",
-      "type": "text",
-      "title": "प्रदाता विवरण भरना",
-      "links": [
-        {
-          "label": "सेटअप विज़ार्ड खोलें",
-          "action": "onboarding"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "ट्रे चिह्न",
+            "content": "Aire सिस्टम ट्रे (टास्कबार के निचले-दाएँ कोने) में चलता है।\n\n• चैट विंडो खोलने के लिए ट्रे आइकन पर बायाँ-क्लिक करें या दाएँ-क्लिक करें।\n• विकल्पों के लिए ट्रे आइकन पर राइट-क्लिक करें: खोलें, सेटिंग्स, बाहर निकलें।\n• विंडो बंद करने से वह छिप जाती है - ऐरे पृष्ठभूमि में चलता रहता है।\n• पूरी तरह से बाहर निकलने के लिए, ट्रे आइकन पर राइट-क्लिक करें और बाहर निकलें चुनें।"
         },
         {
-          "label": "AI सेटअप खोलें",
-          "action": "settings:providers"
-        }
-      ],
-      "imagePath": "Assets/Help/onboarding-provider-setup.png",
-      "imageCaption": "प्रदाता प्रकार, नाम, क्रेडेंशियल्स, मॉडल और कनेक्शन परीक्षण के साथ प्रदाता सेटअप चरण।",
-      "content": "आपके द्वारा प्रदाता चुनने के बाद, विज़ार्ड केवल वही विवरण मांगता है जो प्रदाता को चाहिए।\n\nविशिष्ट फ़ील्ड:\n• प्रदाता प्रकार: वह सेवा जिसका आप उपयोग करना चाहते हैं।\n• नाम: चैट विंडो में ऐयर लेबल दिखाई देगा।\n• एपीआई कुंजी: गुप्त टोकन जो ऐयर को प्रदाता से बात करने देता है। कुछ प्रदाता इसके बजाय ब्राउज़र साइन-इन का उपयोग करते हैं, और कुछ स्थानीय प्रदाताओं को एपीआई कुंजी की बिल्कुल भी आवश्यकता नहीं होती है।\n• बेस यूआरएल: केवल कुछ ओपनएआई-संगत सेवाओं या स्वयं-होस्ट किए गए सेटअप के लिए आवश्यक है।\n• मॉडल: वह विशिष्ट AI मॉडल जिसका आप उपयोग करना चाहते हैं।\n\nप्रदाता-विशिष्ट नोट्स:\n• Claude.ai सामान्य एपीआई कुंजी के बजाय ब्राउज़र साइन-इन का उपयोग करता है।\n• ओलामा स्थानीय है और आमतौर पर एपीआई कुंजी के बिना काम करता है।\n• कोडेक्स स्थानीय कोडेक्स सीएलआई ब्रिज का उपयोग करता है, इसलिए विज़ार्ड सामान्य एपीआई कुंजी मांगने के बजाय सीएलआई इंस्टॉलेशन की पेशकश कर सकता है।\n• Google AI Images सामान्य चैट के बजाय छवि निर्माण के लिए है।\n\nपरीक्षण कनेक्शन बटन आपके समाप्त होने से पहले कॉन्फ़िगरेशन की पुष्टि करने में आपकी सहायता के लिए है। यदि परीक्षण सफल होता है, तो ऐयर आमतौर पर तुरंत उस प्रदाता का उपयोग कर सकता है।\n\nव्यावहारिक सलाह:\n• यदि आप अनिश्चित हैं कि कौन सा मॉडल चुनना है, तो डिफ़ॉल्ट सुझाव से शुरुआत करें।\n• यदि आपको कोई एपीआई-कुंजी फ़ील्ड दिखाई देती है, तो कुंजी को ठीक उसी प्रकार चिपकाएं, जैसा सेवा द्वारा प्रदान किया गया है।\n• यदि कोई प्रदाता एपीआई एक्सेस और ब्राउज़र साइन-इन दोनों प्रदान करता है, तो यदि आप सबसे स्थिर स्वचालन और एकीकरण व्यवहार चाहते हैं तो एपीआई एक्सेस को प्राथमिकता दें।\n\nविज़ार्ड समाप्त करने के बाद, आप बाद में भी AI प्रदाता टैब में इनमें से कोई भी सेटिंग बदल सकते हैं।"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "सिंहावलोकन",
-      "links": [
-        {
-          "label": "अपना पहला AI सेट करें",
-          "action": "settings:providers"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "बात करना",
+            "links": [
+                {
+                    "label": "प्रदाता खोलें",
+                    "action": "settings:providers"
+                }
+            ],
+            "imagePath": "Assets/Help/main-chat.png",
+            "imageCaption": "प्रदाता चयनकर्ता, वार्तालाप क्षेत्र, खोज और संगीतकार के साथ मुख्य चैट विंडो।",
+            "content": "• अपना संदेश नीचे इनपुट बॉक्स में टाइप करें और भेजने के लिए Enter दबाएँ।\n• बिना भेजे नई लाइन जोड़ने के लिए Shift+Enter दबाएँ।\n• आपके द्वारा भेजे गए पिछले संदेशों पर नेविगेट करने के लिए ↑ / ↓ दबाएँ (केवल तभी काम करता है जब कर्सर इनपुट बॉक्स की पहली या आखिरी पंक्ति पर हो)।\n• किसी छवि को अपने संदेश के साथ संलग्न करने के लिए उसे इनपुट बॉक्स में खींचें और छोड़ें (एक दृष्टि-सक्षम मॉडल की आवश्यकता है)।\n• बातचीत में खोजने के लिए Ctrl+F दबाएँ। मैचों के बीच कूदने के लिए ↑ / ↓ या तीर बटन का उपयोग करें। खोज बार बंद करने के लिए एस्केप दबाएँ।\n• बातचीत को टेक्स्ट फ़ाइल के रूप में कॉपी करने या सहेजने के लिए चैट क्षेत्र पर राइट-क्लिक करें।\n• 🗑 बटन वर्तमान वार्तालाप को साफ़ करता है (पहले पुष्टि मांगता है)।\n• साइडबार में 💬 बटन आपकी बातचीत का इतिहास खोलता है।"
         },
         {
-          "label": "ऐरे का लुक बदलो",
-          "action": "settings:appearance"
-        }
-      ],
-      "content": "Aire एक डेस्कटॉप चैट ऐप है जो आपके सिस्टम ट्रे में तब तक रहता है जब तक आपको इसकी आवश्यकता न हो। आप इसे एक चैट विंडो के रूप में सोच सकते हैं जो कई AI सेवाओं से जुड़ सकती है।\n\nयदि आप AI में नए हैं, तो सामान्य शुरुआती बिंदु सरल है:\n• AI सेटअप खोलें.\n• एक प्रदाता जोड़ें, जैसे ओपनएआई, एंथ्रोपिक, गूगल एआई, या ओलामा।\n• एक मॉडल चुनें.\n• चैट बॉक्स में एक प्रश्न टाइप करें और Enter दबाएँ।\n\nऐरे क्या कर सकता है:\n• एक ऐप से विभिन्न एआई सेवाओं से बात करें।\n• अपनी बातचीत को अपने कंप्यूटर पर सहेजें.\n• फ़ाइलों को पढ़ने, कमांड चलाने, पेज ब्राउज़ करने और बहुत कुछ करने के लिए AI को आपकी अनुमति से टूल का उपयोग करने दें।\n• विंडोज़ स्पीच सुविधाओं के साथ वॉयस इनपुट और वॉयस आउटपुट का उपयोग करें।\n• अन्य स्थानीय ऐप्स को स्थानीय API के माध्यम से Aire से बात करने दें।"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "ट्रे चिह्न",
-      "content": "Aire सिस्टम ट्रे (टास्कबार के निचले-दाएँ कोने) में चलता है।\n\n• चैट विंडो खोलने के लिए ट्रे आइकन पर बायाँ-क्लिक करें या दाएँ-क्लिक करें।\n• विकल्पों के लिए ट्रे आइकन पर राइट-क्लिक करें: खोलें, सेटिंग्स, बाहर निकलें।\n• विंडो बंद करने से वह छिप जाती है - ऐरे पृष्ठभूमि में चलता रहता है।\n• पूरी तरह से बाहर निकलने के लिए, ट्रे आइकन पर राइट-क्लिक करें और बाहर निकलें चुनें।"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "बात करना",
-      "links": [
-        {
-          "label": "प्रदाता खोलें",
-          "action": "settings:providers"
-        }
-      ],
-      "imagePath": "Assets/Help/main-chat.png",
-      "imageCaption": "प्रदाता चयनकर्ता, वार्तालाप क्षेत्र, खोज और संगीतकार के साथ मुख्य चैट विंडो।",
-      "content": "• अपना संदेश नीचे इनपुट बॉक्स में टाइप करें और भेजने के लिए Enter दबाएँ।\n• बिना भेजे नई लाइन जोड़ने के लिए Shift+Enter दबाएँ।\n• आपके द्वारा भेजे गए पिछले संदेशों पर नेविगेट करने के लिए ↑ / ↓ दबाएँ (केवल तभी काम करता है जब कर्सर इनपुट बॉक्स की पहली या आखिरी पंक्ति पर हो)।\n• किसी छवि को अपने संदेश के साथ संलग्न करने के लिए उसे इनपुट बॉक्स में खींचें और छोड़ें (एक दृष्टि-सक्षम मॉडल की आवश्यकता है)।\n• बातचीत में खोजने के लिए Ctrl+F दबाएँ। मैचों के बीच कूदने के लिए ↑ / ↓ या तीर बटन का उपयोग करें। खोज बार बंद करने के लिए एस्केप दबाएँ।\n• बातचीत को टेक्स्ट फ़ाइल के रूप में कॉपी करने या सहेजने के लिए चैट क्षेत्र पर राइट-क्लिक करें।\n• 🗑 बटन वर्तमान वार्तालाप को साफ़ करता है (पहले पुष्टि मांगता है)।\n• साइडबार में 💬 बटन आपकी बातचीत का इतिहास खोलता है।"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "table",
-      "title": "कुंजीपटल अल्प मार्ग",
-      "cols": [
-        "शॉर्टकट",
-        "कार्रवाई"
-      ],
-      "rows": [
-        [
-          "प्रवेश करना",
-          "मेसेज भेजें"
-        ],
-        [
-          "शिफ्ट+एंटर",
-          "इनपुट बॉक्स में नई लाइन"
-        ],
-        [
-          "↑ / ↓",
-          "संदेश इतिहास नेविगेट करें (जब कर्सर पहली/अंतिम पंक्ति पर हो)"
-        ],
-        [
-          "Ctrl+F",
-          "वार्तालाप खोजें"
-        ],
-        [
-          "Ctrl+स्क्रॉल",
-          "फ़ॉन्ट आकार समायोजित करें"
-        ],
-        [
-          "पलायन",
-          "खोज बार बंद करें/संवाद ख़ारिज करें"
-        ]
-      ]
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "सुझावों",
-      "content": "• आप कई AI प्रदाताओं को कॉन्फ़िगर कर सकते हैं और चैट विंडो के शीर्ष पर उनके बीच स्विच कर सकते हैं। प्रत्येक वार्तालाप अपने प्रदाता और सहायक मोड को याद रखता है।\n• शीर्ष सहित किसी भी किनारे को खींचकर विंडो का आकार बदलें।\n• वार्तालाप और सेटिंग्स स्थानीय रूप से %LOCALAPPDATA%\\Aire के अंतर्गत संग्रहीत की जाती हैं।\n• AI फ़ाइलों, कमांडों, ब्राउज़र क्रियाओं और बहुत कुछ के लिए टूल का अनुरोध कर सकता है, लेकिन Aire तब भी अनुमोदन मांगता है जब तक कि कोई ऑटो-स्वीकृति नियम लागू न हो।\n• यदि एआई प्रतिक्रिया कट जाती है, तो मॉडल अपनी टोकन या आउटपुट सीमा तक पहुंच सकता है। इसे जारी रखने के लिए कहें, कार्य का आकार कम करें, या बड़े संदर्भ विंडो वाले मॉडल का उपयोग करें।"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "सहायक मोड",
-      "imagePath": "Assets/Help/main-chat-modes.png",
-      "imageCaption": "मुख्य हेडर से सहायक मोड मेनू खोला गया। प्रत्येक वार्तालाप का अपना ढंग होता है।",
-      "content": "मुख्य हेडर में मोड बटन यह बदलता है कि Aire प्रदाता को भेजने से पहले आपके अनुरोध को कैसे फ्रेम करता है।\n\nवर्तमान विधाओं में वास्तुकार, रचनात्मक लेखक, डेवलपर, सामान्य, चित्रकार, दार्शनिक, मनोवैज्ञानिक, वैज्ञानिक, सुरक्षा और शिक्षक शामिल हैं।\n\nकौन से तरीके करते हैं:\n• वे सहायक की शैली और प्राथमिकताओं को समायोजित करते हैं।\n• चयनित मोड प्रति वार्तालाप सहेजा जाता है, इसलिए अलग-अलग चैट अलग-अलग भूमिकाएँ रख सकते हैं।\n• नई बातचीत के लिए सामान्य डिफ़ॉल्ट है।\n• विभिन्न प्रदाता अभी भी अपनी-अपनी विशिष्टताएँ रखते हैं, लेकिन Aire साझा मार्गदर्शन के रूप में चयनित मोड को लगातार पास करता है।\n\nव्यावहारिक उदाहरण:\n• डेवलपर: कोड, डिबगिंग और टर्मिनल कार्यों के लिए बेहतर।\n• वास्तुकार: संरचना, व्यापार-बंद और योजना के लिए बेहतर।\n• शिक्षक: स्पष्टीकरण और चरण-दर-चरण मार्गदर्शन के लिए बेहतर है।\n• पेंटर: छवि-उन्मुख संकेत और पीढ़ी के लिए सर्वोत्तम जब वर्तमान प्रदाता इसका समर्थन करता है।"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "उपकरण श्रेणियाँ",
-      "imagePath": "Assets/Help/main-chat-tools.png",
-      "imageCaption": "कंपोज़र से टूल मेनू खोला गया. आप सभी श्रेणियां सक्षम कर सकते हैं, सभी अक्षम कर सकते हैं, या केवल अपनी इच्छित श्रेणियां चुन सकते हैं।",
-      "content": "चैट बॉक्स के पास रिंच बटन नियंत्रित करता है कि वर्तमान प्रदाता को किस श्रेणी के टूल का उपयोग करने की अनुमति है।\n\nयह कैसे काम करता है:\n• श्रेणियाँ मेनू खोलने के लिए रिंच बटन पर क्लिक करें।\n• केवल उन्हीं श्रेणियों को चालू करें जिनके लिए आप AI से अनुरोध करना चाहते हैं।\n• यदि आप केवल टेक्स्ट वार्तालाप चाहते हैं तो कोई टूल नहीं चुनें।\n• ऐयर आपकी चयनित टूल श्रेणियों को याद रखता है और उन्हें वर्तमान टूल नीति के हिस्से के रूप में उपयोग करता है।\n\nयह क्यों मायने रखता है:\n• कम सक्षम श्रेणियां टूल के उपयोग को समझना आसान बनाती हैं।\n• श्रेणियों को प्रतिबंधित करने से जोखिम और आकस्मिक दुष्प्रभावों को कम किया जा सकता है।\n• यदि कोई प्रदाता टूल का समर्थन नहीं करता है, तो रिंच बटन छिपा हुआ है।"
-    },
-    {
-      "tab": "Providers",
-      "type": "text",
-      "title": "एआई प्रदाता",
-      "imagePath": "Assets/Help/settings-providers.png",
-      "imageCaption": "बाईं ओर प्रदाता सूची और दाईं ओर चयनित प्रदाता प्रपत्र के साथ प्रदाता सेटिंग्स।",
-      "links": [
-        {
-          "label": "AI सेटअप खोलें",
-          "action": "settings:providers"
+            "tab": "Getting Started",
+            "type": "table",
+            "title": "कुंजीपटल अल्प मार्ग",
+            "cols": [
+                "शॉर्टकट",
+                "कार्रवाई"
+            ],
+            "rows": [
+                [
+                    "प्रवेश करना",
+                    "मेसेज भेजें"
+                ],
+                [
+                    "शिफ्ट+एंटर",
+                    "इनपुट बॉक्स में नई लाइन"
+                ],
+                [
+                    "↑ / ↓",
+                    "संदेश इतिहास नेविगेट करें (जब कर्सर पहली/अंतिम पंक्ति पर हो)"
+                ],
+                [
+                    "Ctrl+F",
+                    "वार्तालाप खोजें"
+                ],
+                [
+                    "Ctrl+स्क्रॉल",
+                    "फ़ॉन्ट आकार समायोजित करें"
+                ],
+                [
+                    "पलायन",
+                    "खोज बार बंद करें/संवाद ख़ारिज करें"
+                ]
+            ]
         },
         {
-          "label": "platform.openai.com",
-          "action": "https://platform.openai.com"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "सुझावों",
+            "content": "• आप कई AI प्रदाताओं को कॉन्फ़िगर कर सकते हैं और चैट विंडो के शीर्ष पर उनके बीच स्विच कर सकते हैं। प्रत्येक वार्तालाप अपने प्रदाता और सहायक मोड को याद रखता है।\n• शीर्ष सहित किसी भी किनारे को खींचकर विंडो का आकार बदलें।\n• वार्तालाप और सेटिंग्स स्थानीय रूप से %LOCALAPPDATA%\\Aire के अंतर्गत संग्रहीत की जाती हैं।\n• AI फ़ाइलों, कमांडों, ब्राउज़र क्रियाओं और बहुत कुछ के लिए टूल का अनुरोध कर सकता है, लेकिन Aire तब भी अनुमोदन मांगता है जब तक कि कोई ऑटो-स्वीकृति नियम लागू न हो।\n• यदि एआई प्रतिक्रिया कट जाती है, तो मॉडल अपनी टोकन या आउटपुट सीमा तक पहुंच सकता है। इसे जारी रखने के लिए कहें, कार्य का आकार कम करें, या बड़े संदर्भ विंडो वाले मॉडल का उपयोग करें।"
         },
         {
-          "label": "console.anthropic.com",
-          "action": "https://console.anthropic.com"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "सहायक मोड",
+            "imagePath": "Assets/Help/main-chat-modes.png",
+            "imageCaption": "मुख्य हेडर से सहायक मोड मेनू खोला गया। प्रत्येक वार्तालाप का अपना ढंग होता है।",
+            "content": "मुख्य हेडर में मोड बटन यह बदलता है कि Aire प्रदाता को भेजने से पहले आपके अनुरोध को कैसे फ्रेम करता है।\n\nवर्तमान विधाओं में वास्तुकार, रचनात्मक लेखक, डेवलपर, सामान्य, चित्रकार, दार्शनिक, मनोवैज्ञानिक, वैज्ञानिक, सुरक्षा और शिक्षक शामिल हैं।\n\nकौन से तरीके करते हैं:\n• वे सहायक की शैली और प्राथमिकताओं को समायोजित करते हैं।\n• चयनित मोड प्रति वार्तालाप सहेजा जाता है, इसलिए अलग-अलग चैट अलग-अलग भूमिकाएँ रख सकते हैं।\n• नई बातचीत के लिए सामान्य डिफ़ॉल्ट है।\n• विभिन्न प्रदाता अभी भी अपनी-अपनी विशिष्टताएँ रखते हैं, लेकिन Aire साझा मार्गदर्शन के रूप में चयनित मोड को लगातार पास करता है।\n\nव्यावहारिक उदाहरण:\n• डेवलपर: कोड, डिबगिंग और टर्मिनल कार्यों के लिए बेहतर।\n• वास्तुकार: संरचना, व्यापार-बंद और योजना के लिए बेहतर।\n• शिक्षक: स्पष्टीकरण और चरण-दर-चरण मार्गदर्शन के लिए बेहतर है।\n• पेंटर: छवि-उन्मुख संकेत और पीढ़ी के लिए सर्वोत्तम जब वर्तमान प्रदाता इसका समर्थन करता है।"
         },
         {
-          "label": "aistudio.google.com",
-          "action": "https://aistudio.google.com"
-        }
-      ],
-      "content": "प्रदाता वह AI सेवा है जिससे Aire आपकी ओर से बात करता है। अधिकांश उपयोगकर्ताओं को आरंभ करने के लिए केवल एक प्रदाता स्थापित करने की आवश्यकता होती है।\n\nप्रत्येक प्रदाता प्रविष्टि के चार मुख्य भाग होते हैं:\n• नाम: लेबल आप ऐरे के अंदर देखेंगे।\n• प्रकार: कौन सी एआई सेवा का उपयोग करना है।\n• मॉडल: वह विशिष्ट मॉडल जिसे आप उस सेवा को चलाना चाहते हैं।\n• क्रेडेंशियल: आमतौर पर एक एपीआई कुंजी, या क्लाउड.एआई के लिए एक ब्राउज़र साइन-इन।\n\nसामान्य विकल्प:\n• OpenAI: अपनी API कुंजी कोplatform.openai.com से पेस्ट करें।\n• एंथ्रोपिक: ब्राउज़र में Claude.ai के साथ साइन इन करें, या एंथ्रोपिक एपीआई कुंजी पेस्ट करें।\n• Google AI: aistudio.google.com से अपनी जेमिनी एपीआई कुंजी पेस्ट करें।\n• ओलामा: अपनी मशीन पर स्थानीय ओलामा सर्वर का उपयोग करें। किसी API कुंजी की आवश्यकता नहीं है.\n• ओपनएआई-संगत एंडपॉइंट: ग्रोक, मिस्ट्रल, ओपनराउटर, डीपसीक या एलएम स्टूडियो जैसी सेवाएं अक्सर बेस यूआरएल सेट करके काम कर सकती हैं।\n\nयदि आप निश्चित नहीं हैं कि किसका उपयोग करना है, तो ओपनएआई या एंथ्रोपिक आमतौर पर सबसे आसान क्लाउड विकल्प हैं, जबकि ओलामा सामान्य स्थानीय विकल्प है।\n\nप्रदाताओं को हटाए बिना सक्षम या अक्षम किया जा सकता है। परिवर्तन स्वचालित रूप से सहेजे जाते हैं."
-    },
-    {
-      "tab": "Providers",
-      "type": "table",
-      "title": "टूल कॉलिंग मोड",
-      "intro": "AI मॉडल को टूल तक पहुंच प्रदान करने के लिए Aire दो तरीकों का समर्थन करता है। प्रदाता प्रकार के आधार पर मोड स्वचालित रूप से चुना जाता है, लेकिन कस्टम JSON फ़ाइल में प्रति मॉडल ओवरराइड किया जा सकता है (कस्टम मॉडल देखें)।",
-      "cols": [
-        "तरीका",
-        "यह काम किस प्रकार करता है"
-      ],
-      "rows": [
-        [
-          "पाठ आधारित\n(डिफ़ॉल्ट: ओपनएआई, एंथ्रोपिक)",
-          "टूल विवरण सिस्टम प्रॉम्प्ट में एम्बेडेड हैं। AI <tool_call> XML ब्लॉक के साथ प्रतिक्रिया करता है। निर्देशों का विश्वसनीय ढंग से पालन करने वाले किसी भी मॉडल के साथ काम करता है।"
-        ],
-        [
-          "मूल फ़ंक्शन कॉलिंग\n(डिफ़ॉल्ट: ओलामा, Google AI)",
-          "संरचित टूल स्कीमा प्रदाता एपीआई के माध्यम से भेजे जाते हैं। एआई संरचित फ़ंक्शन-कॉल ऑब्जेक्ट लौटाता है। अधिक सटीक। स्पष्ट एपीआई समर्थन की आवश्यकता है।"
-        ],
-        [
-          "असमर्थित",
-          "मॉडल टूल का उपयोग नहीं कर सकता. उन मॉडलों के लिए टूल प्रॉम्प्ट को छोड़ने के लिए इसे एक कस्टम मॉडल फ़ाइल में सेट करें जो उनसे भ्रमित हो जाते हैं।"
-        ]
-      ]
-    },
-    {
-      "tab": "Providers",
-      "type": "table",
-      "title": "प्रदाता और मॉडल संगतता",
-      "intro": "अपने विशिष्ट प्रदाता और मॉडल संयोजन को सत्यापित करने के लिए क्षमता परीक्षण बटन का उपयोग करें।",
-      "cols": [
-        "प्रदाता/समाप्ति बिंदु",
-        "तरीका",
-        "टिप्पणियाँ"
-      ],
-      "rows": [
-        [
-          "ओपनएआई",
-          "देशी",
-          "GPT-4o, GPT-4.1, GPT-4o-मिनी - विश्वसनीय उपकरण समर्थन"
-        ],
-        [
-          "anthropic",
-          "टेक्स्ट आधारित",
-          "क्लाउड 3.5 सॉनेट और नया - उत्कृष्ट अनुदेशन"
-        ],
-        [
-          "Google AI (मिथुन)",
-          "देशी",
-          "जेमिनी 2.0 फ़्लैश और नया अनुशंसित"
-        ],
-        [
-          "ओलामा (स्थानीय)",
-          "देशी",
-          "क्वेन2.5-कोडर, लामा3.1, मिस्ट्रल-निमो अच्छा काम करते हैं; छोटे मॉडल अलग-अलग होते हैं"
-        ],
-        [
-          "ग्रोक (ओपनएआई + बेस यूआरएल)",
-          "देशी",
-          "बेस यूआरएल: https://api.groq.com/openai/v1 - बहुत तेज़"
-        ],
-        [
-          "मिस्ट्रल (ओपनएआई + बेस यूआरएल)",
-          "देशी",
-          "बेस यूआरएल: https://api.mistral.ai/v1"
-        ],
-        [
-          "ओपनराउटर (ओपनएआई + बेस यूआरएल)",
-          "देशी",
-          "बेस यूआरएल: https://openrouter.ai/api/v1 - 100+ मॉडल"
-        ],
-        [
-          "डीपसीक (ओपनएआई + बेस यूआरएल)",
-          "देशी",
-          "बेस यूआरएल: https://api.depseek.com/v1"
-        ],
-        [
-          "एलएम स्टूडियो (ओपनएआई + बेस यूआरएल)",
-          "देशी",
-          "बेस यूआरएल: http://localhost:1234/v1 - एलएम स्टूडियो सेटिंग्स में फ़ंक्शन कॉलिंग सक्षम करें"
-        ]
-      ]
-    },
-    {
-      "tab": "Providers",
-      "type": "text",
-      "title": "क्षमता परीक्षण",
-      "links": [
-        {
-          "label": "AI सेटअप खोलें",
-          "action": "settings:providers"
-        }
-      ],
-      "content": "रन टेस्ट बटन जाँचता है कि चयनित प्रदाता और मॉडल वास्तव में क्या कर सकते हैं।\n\nक्या परीक्षण किया जाता है:\n• टूल-कॉल क्षमता परीक्षण यह जांचता है कि मॉडल अपेक्षित ऐयर टूल मांगता है या नहीं। कोई वास्तविक फ़ाइल, ब्राउज़र या सिस्टम क्रिया निष्पादित नहीं होती है।\n• छवि-निर्माण क्षमता परीक्षण सीधे प्रदाता के छवि-उत्पादन पथ को कॉल करते हैं। ये परीक्षण प्रदाता कोटा का उपभोग कर सकते हैं और विफल हो सकते हैं यदि आपका खाता या मॉडल छवि निर्माण का समर्थन नहीं करता है।\n\nइसका उपयोग कैसे करें:\n• सेटिंग्स खोलें ⚙ → एक प्रदाता चुनें → परीक्षण चलाएँ पर क्लिक करें।\n• परीक्षण के मध्य में कॉन्फ़िगरेशन परिवर्तन से बचने के लिए प्रदाता फॉर्म को रन के दौरान लॉक कर दिया जाता है।\n• परिणाम प्रति प्रदाता/मॉडल संयोजन के अनुसार कैश किए जाते हैं और अगली बार तुरंत पुनः लोड किए जाते हैं।\n\nपढ़ने के परिणाम:\n• ✓ (हरा) - प्रदाता ने क्षमता को सही ढंग से संभाला।\n• ✗ (लाल) - प्रदाता या मॉडल उस क्षमता में विफल रहा।\n• यदि संदेश में कोटा, शेष राशि या दर सीमा का उल्लेख है, तो विफलता एअर के बजाय प्रदाता खाते से आ रही है।\n\nयदि कोई मॉडल कई टूल परीक्षणों में विफल रहता है, तो दूसरा मॉडल आज़माएं या उसके कस्टम मॉडल मेटाडेटा को समायोजित करें। यदि छवि निर्माण विफल हो जाता है, तो सत्यापित करें कि प्रदाता खाता, मॉडल और कोटा वास्तव में इसकी अनुमति देता है।"
-    },
-    {
-      "tab": "Providers",
-      "type": "code",
-      "title": "कस्टम मॉडल",
-      "intro": "किसी भी प्रदाता प्रकार के लिए मॉडल सूची को अनुकूलित करने के लिए ऐप की डेटा मॉडल निर्देशिका में एक JSON फ़ाइल बनाएं। यह घोषित करने के लिए कि कोई मॉडल किस चीज़ का समर्थन करता है, क्षमता सारणी का उपयोग करें।\n\nक्षमता झंडे:\n• \"विज़न\" - मॉडल छवि अनुलग्नकों को स्वीकार करता है\n• \"उपकरण\" - मॉडल उपकरण का उपयोग कर सकता है\n• \"टूलकॉलमोड:नेटिव\" - नेटिव फ़ंक्शन कॉलिंग को बाध्य करें\n• \"टूलकॉलमोड: टेक्स्ट\" - टेक्स्ट-आधारित टूल कॉलिंग को बाध्य करें\n• \"टूलकॉलमोड:असमर्थित\" - टूल प्रॉम्प्ट को पूरी तरह से अक्षम करें\n\nटूल आउटपुट प्रारूप फ़्लैग (उन मॉडलों के लिए जो अपने टेक्स्ट प्रतिक्रिया में टूल कॉल एम्बेड करते हैं):\n• \"टूलफॉर्मेट:हर्मीस\" - हर्मीस/क्वेन प्रारूप: <टूल_कॉल>{\"नाम\":\"...\",\"तर्क\":{...}}</टूल_कॉल>\n• \"टूलफॉर्मेट:रिएक्ट\" - रिएक्ट/लैंगचेन फॉर्मेट: {\"एक्शन\":\"...\",\"एक्शन_इनपुट\":{...}}\n• \"टूलफॉर्मेट:नेटिव\" - ओपनएआई नेटिव टूल_कॉल स्कीमा सामग्री में एम्बेडेड है\n• \"टूलफॉर्मेट: टेक्स्ट\" - ऐरे का डिफ़ॉल्ट टेक्स्ट फॉर्मेट: {\"टूल\":\"...\", ...}",
-      "content": "{\n  \"प्रदाता प्रकार\": \"ओपनएआई\",\n  \"मॉडल\": [\n    {\n      \"आईडी\": \"जीपीटी-4ओ\",\n      \"प्रदर्शननाम\": \"GPT-4o\",\n      \"क्षमताएं\": [\"दृष्टि\", \"उपकरण\"]\n    },\n    {\n      \"आईडी\": \"ओ1-मिनी\",\n      \"displayName\": \"o1-मिनी (कोई उपकरण नहीं)\",\n      \"क्षमताएँ\": [\"टूलकॉलमोड:असमर्थित\"]\n    },\n    {\n      \"आईडी\": \"मेरा-फाइन-ट्यून्ड-मॉडल\",\n      \"displayName\": \"माई फ़ाइन-ट्यून\",\n      \"क्षमताएं\": [\"टूल्स\", \"टूलकॉलमोड: टेक्स्ट\"]\n    }\n  ]\n}"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "एआई उपकरण",
-      "links": [
-        {
-          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
-          "action": "settings:auto-accept"
-        }
-      ],
-      "content": "कुछ AI मॉडल Aire को उनके लिए कार्य करने के लिए कह सकते हैं। ऐरे इन क्रियाओं को टूल कहते हैं।\n\nमहत्वपूर्ण: उपकरण चुपचाप नहीं चलते। ऐयर आपको दिखाता है कि एआई क्या करना चाहता है, और आप इसे स्वीकार या अस्वीकार करते हैं।\n\nउपकरण क्या कर सकते हैं इसके उदाहरण:\n• फ़ाइलें पढ़ें या लिखें.\n• शेल कमांड चलाएँ।\n• वेब पेज खोलें और पढ़ें।\n• ब्राउज़र टैब का निरीक्षण करें.\n• स्क्रीनशॉट लें.\n• टाइप करें, क्लिक करें या माउस घुमाएँ।\n• ईमेल पढ़ें या भेजें.\n\nयदि आप इस सुविधा के लिए नए हैं, तो सबसे सुरक्षित आदत सरल है: इसे स्वीकृत करने से पहले कार्रवाई अनुरोध पढ़ें। केवल पढ़ने योग्य कार्रवाइयों को तभी स्वीकृत करें जब वे समझ में आएँ, और उन कार्रवाइयों से अधिक सावधान रहें जो फ़ाइलें बदलती हैं, संदेश भेजती हैं, या कीबोर्ड और माउस को नियंत्रित करती हैं।"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "प्रोफ़ाइल स्वतः स्वीकार करें",
-      "links": [
-        {
-          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
-          "action": "settings:auto-accept"
-        }
-      ],
-      "content": "स्वतः-स्वीकार प्रोफ़ाइल आपको यह परिभाषित करने देती है कि ऐयर हर बार आपको बाधित किए बिना किन कार्यों को स्वचालित रूप से स्वीकृत कर सकता है।\n\nअंतर्निहित उदाहरणों में डेवलपर, समाचार ब्राउज़र और कंज़र्वेटिव शामिल हैं।\n\nक्या ध्यान रखें:\n• प्रोफ़ाइल एक सुविधा है, सुरक्षा प्रतिस्थापन नहीं।\n• रूढ़िवादी ढंग से शुरुआत करें और केवल उन्हीं कार्यों को स्वतः स्वीकार करें जिन पर आप वास्तव में भरोसा करते हैं।\n• फ़ाइल लेखन, इनपुट नियंत्रण और बाहरी दुष्प्रभाव आमतौर पर मैनुअल रखने लायक होते हैं।\n\nयदि आप अनिश्चित हैं, तो स्वतः-स्वीकृति प्रतिबंधात्मक छोड़ दें और एक-एक करके कार्रवाइयों की समीक्षा करें।"
-    },
-    {
-      "tab": "कनेक्शन",
-      "type": "text",
-      "title": "एमसीपी सर्वर",
-      "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "एमसीपी कैटलॉग और स्थापित सर्वर सूची के साथ कनेक्शन सेटिंग्स।",
-      "links": [
-        {
-          "label": "कनेक्शन सेटिंग खोलें",
-          "action": "settings:connections"
-        }
-      ],
-      "content": "एमसीपी सर्वर बाहरी सहायक सेवाएँ हैं जो ऐयर को अधिक उपकरण और डेटा स्रोत देते हैं। MCP का मतलब मॉडल कॉन्टेक्स्ट प्रोटोकॉल है।\n\nसरल भाषा में, एक MCP सर्वर Aire और अन्य सिस्टम के बीच एक पुल है, जैसे:\n• आपका फ़ाइल सिस्टम,\n• गिटहब,\n• SQLite,\n• वेब लाने के उपकरण,\n• मेमोरी उपकरण,\n• स्लैक, जीमेल, या नोशन।\n\nऐरे उन्हें कैसे संभालता है:\n• कनेक्शंस टैब में सामान्य एमसीपी सर्वरों की एक क्यूरेटेड कैटलॉग शामिल है।\n• आप ऐप से उन्हें इंस्टॉल, हटा, सक्षम, अक्षम और संपादित कर सकते हैं।\n• कुछ सर्वरों को मशीन पर अतिरिक्त क्रेडेंशियल या Node.js/npm की आवश्यकता होती है।\n\nअच्छी शुरुआती सलाह:\n• एक साधारण सर्वर से प्रारंभ करें, जैसे फ़ाइल सिस्टम या वेब फ़ेच।\n• इसे स्थापित करने से पहले विवरण पढ़ें।\n• MCP सर्वर को किसी भी अन्य एकीकरण की तरह समझें: उपयोगी, लेकिन सक्षम करने से पहले आपको इस पर भरोसा करना चाहिए।"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "कीबोर्ड और माउस सत्र",
-      "links": [
-        {
-          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
-          "action": "settings:auto-accept"
-        }
-      ],
-      "content": "कुछ कार्यों के लिए कीबोर्ड और माउस को नियंत्रित करने के लिए AI की आवश्यकता होती है। जब कोई सत्र सक्रिय हो:\n\n• चैट विंडो के नीचे एक बैनर दिखाई देता है जो दर्शाता है कि सत्र सक्रिय है।\n• आपकी स्क्रीन के ऊपर दाईं ओर एक फ्लोटिंग ⏹ स्टॉप सेशन बटन दिखाई देता है - इसे तुरंत रद्द करने के लिए किसी भी समय क्लिक करें।\n• आवाज से रद्द करने के लिए \"एयर स्टॉप\" कहें।\n• रद्द करने के लिए बैनर में \"सत्र समाप्त करें\" पर क्लिक करें।\n\nएआई प्रत्येक व्यक्तिगत कार्रवाई (कुंजी प्रेस, माउस क्लिक, आदि) को निष्पादित करने से पहले उसके लिए अनुमोदन का अनुरोध करेगा।"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "ध्वनि इनपुट",
-      "links": [
-        {
-          "label": "ध्वनि सेटिंग खोलें",
-          "action": "settings:voice"
-        }
-      ],
-      "content": "ध्वनि पहचान प्रारंभ करने के लिए 🎤 बटन पर क्लिक करें। Aire Windows अंतर्निहित वाक् पहचान का उपयोग करता है - किसी API कुंजी या इंटरनेट कनेक्शन की आवश्यकता नहीं है।\n\n• सामान्य रूप से बोलें. जैसे ही आप बात करते हैं आपके शब्द इनपुट बॉक्स में दिखाई देते हैं।\n• जब आप बात करना बंद करते हैं, तो बटन पर उलटी गिनती (5 → 1) दिखाई देती है। यदि आप चुप रहते हैं, तो संदेश स्वचालित रूप से 0 पर भेजता है।\n• उलटी गिनती रीसेट करने के लिए किसी भी समय फिर से बात करना शुरू करें।\n• बिना भेजे रुकने के लिए बटन पर फिर से क्लिक करें (⏹ दिखाता है)।\n\nध्वनि पहचान सटीकता आपकी विंडोज़ भाषा और माइक्रोफ़ोन गुणवत्ता पर निर्भर करती है। आप विंडोज़ सेटिंग्स → समय और भाषा → स्पीच के माध्यम से विंडोज़ स्पीच रिकग्निशन को प्रशिक्षित कर सकते हैं।"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "table",
-      "title": "ध्वनि आदेश",
-      "intro": "जब माइक्रोफ़ोन सक्रिय हो तो \"AIRE\" बोलें और उसके बाद इनमें से कोई भी शब्द बोलें:",
-      "cols": [
-        "आज्ञा",
-        "यह क्या करता है"
-      ],
-      "rows": [
-        [
-          "एयर भेजें",
-          "वर्तमान संदेश तुरंत भेजें"
-        ],
-        [
-          "वायु विराम",
-          "मौन उलटी गिनती रोकें"
-        ],
-        [
-          "एयर बायोडाटा",
-          "उलटी गिनती फिर से शुरू करें"
-        ],
-        [
-          "हवा साफ़",
-          "इनपुट बॉक्स साफ़ करें"
-        ],
-        [
-          "एयर पूर्ववत करें",
-          "इनपुट बॉक्स साफ़ करें"
-        ],
-        [
-          "प्रसारण रद्द",
-          "बिना भेजे सुनना बंद करें"
-        ],
-        [
-          "एयर नया",
-          "एक नई बातचीत शुरू करें"
-        ],
-        [
-          "एयर सेटिंग्स",
-          "सेटिंग्स विंडो खोलें"
-        ],
-        [
-          "एयर ओपन/शो",
-          "मुख्य चैट विंडो दिखाएँ"
-        ],
-        [
-          "हवा बंद करो/छिपाओ",
-          "मुख्य चैट विंडो छिपाएँ"
-        ],
-        [
-          "हाँ/नहीं",
-          "किसी लंबित AI कार्रवाई को स्वीकृत या अस्वीकार करें"
-        ],
-        [
-          "एयर स्टॉप",
-          "आपातकालीन रोक - किसी भी सक्रिय कीबोर्ड/माउस सत्र को तुरंत समाप्त करें"
-        ]
-      ]
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "आवाज आउटपुट",
-      "links": [
-        {
-          "label": "ध्वनि सेटिंग खोलें",
-          "action": "settings:voice"
-        }
-      ],
-      "content": "Aire विंडोज़ टेक्स्ट-टू-स्पीच का उपयोग करके AI प्रतिक्रियाओं को ज़ोर से पढ़ सकता है। इसे सेटिंग्स (⚙) → वॉयस आउटपुट में सक्षम करें।\n\n• सभी प्रत्युत्तरों में बोलना चुनें, या केवल तब बोलें जब आप माइक्रोफ़ोन का उपयोग करें।\n• एक आवाज़ चुनें और पढ़ने की गति समायोजित करें।\n• माइक्रोफ़ोन बटन के पास स्पीकर आइकन के साथ ध्वनि आउटपुट को तुरंत चालू/बंद करें।"
-    },
-    {
-      "tab": "रूप",
-      "type": "text",
-      "title": "उपस्थिति",
-      "links": [
-        {
-          "label": "उपस्थिति सेटिंग खोलें",
-          "action": "settings:appearance"
-        }
-      ],
-      "content": "ऐप का स्वरूप बदलने के लिए सेटिंग्स (⚙) → उपस्थिति खोलें।\n\n• थीम: डार्क और लाइट (बेज) के बीच स्विच करें।\n• रंग टिंट: संपूर्ण यूआई पर रंग टिंट लागू करने के लिए स्लाइडर को खींचें। बायां सिरा (काला) और दायां सिरा (सफेद) का मतलब कोई रंग नहीं है - स्लाइडर डिफ़ॉल्ट रूप से शुद्ध ग्रेस्केल है।\n• फ़ॉन्ट आकार: फ़ॉन्ट आकार बढ़ाने या घटाने के लिए Ctrl दबाए रखें और चैट या इनपुट क्षेत्र पर माउस व्हील को स्क्रॉल करें। सेटिंग स्वचालित रूप से सहेजी जाती है.\n\nसभी उपस्थिति सेटिंग्स सहेजी जाती हैं और अगले लॉन्च पर पुनर्स्थापित की जाती हैं।"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "स्थानीय एपीआई क्या है?",
-      "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "कनेक्शन सेटिंग्स जहां स्थानीय एपीआई एक्सेस, ईमेल खाते और एमसीपी सर्वर कॉन्फ़िगर किए गए हैं।",
-      "links": [
-        {
-          "label": "कनेक्शन सेटिंग खोलें",
-          "action": "settings:connections"
-        }
-      ],
-      "content": "लोकल एपीआई यह है कि उसी कंप्यूटर पर दूसरा प्रोग्राम ऐयर से कैसे बात कर सकता है।\n\nगैर-डेवलपर्स के लिए: आपको आमतौर पर इस सुविधा की आवश्यकता नहीं होती है।\n\nडेवलपर्स और उन्नत उपयोगकर्ताओं के लिए: यह अपनी स्क्रिप्ट, टूल, ऑटोमेशन या डेस्कटॉप ऐप को Aire से कनेक्ट करने का सबसे आसान तरीका है। एक स्थानीय कार्यक्रम यह कर सकता है:\n• ऐयर को इसकी मुख्य विंडो दिखाने या छिपाने के लिए कहें,\n• बातचीत सूचीबद्ध करें और संदेश पढ़ें,\n• सक्रिय वार्तालाप के लिए एक संदेश भेजें,\n• प्रदाता या वार्तालाप स्विच करें,\n• लंबित टूल अनुमोदनों का निरीक्षण करें,\n• और सीधे ऐयर टूल्स को कॉल करें।\n\nयह कैसे काम करता है:\n• ऐयर टीसीपी पोर्ट 51234 पर सुनता है।\n• यह केवल 127.0.0.1 पर सुनता है, इसलिए अन्य कंप्यूटर सीधे इस तक नहीं पहुंच सकते।\n• प्रत्येक अनुरोध एक JSON ऑब्जेक्ट है जिसे एक पंक्ति के रूप में भेजा जाता है।\n• प्रत्येक प्रतिक्रिया एक JSON ऑब्जेक्ट है जो एक पंक्ति के रूप में लौटाई जाती है।\n\nइसका उपयोग करने के लिए, पहले कनेक्शंस सेटिंग्स खोलें और स्थानीय एपीआई एक्सेस सक्षम करें।"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "स्थानीय एपीआई त्वरित प्रारंभ",
-      "links": [
-        {
-          "label": "कनेक्शन सेटिंग खोलें",
-          "action": "settings:connections"
-        }
-      ],
-      "content": "किसी अन्य ऐप को Aire से कनेक्ट करने के लिए, इस चेकलिस्ट का उपयोग करें:\n\n1. कनेक्शंस सेटिंग्स खोलें।\n2. स्थानीय एपीआई एक्सेस चालू करें।\n3. प्रमाणीकरण टोकन की प्रतिलिपि बनाएँ।\n4. अपने ऐप या स्क्रिप्ट से, 127.0.0.1:51234 पर एक टीसीपी कनेक्शन खोलें।\n5. विधि, टोकन और वैकल्पिक पैरामीटर के साथ एक JSON लाइन भेजें।\n6. एक JSON लाइन को वापस पढ़ें।\n7. कनेक्शन बंद करें.\n\nएक अच्छा पहला परीक्षण पिंग विधि है। यदि पिंग काम करता है, तो show_main_window, list_providers, और create_conversation आज़माएँ।\n\nअनुशंसित पहला एकीकरण क्रम:\n• पिंग\n• शो_मेन_विंडो\n• सूची_प्रदाता\n• बातचीत बनाएँ\n• सूची_बातचीत\n•संदेश प्राप्त करें\n• संदेश भेजें\n• राज्य प्राप्त करें\n• यदि आप टूल अनुमोदन में सहयोग करना चाहते हैं तो लंबित अनुमोदन की प्रतीक्षा करें\n• निष्पादन_टूल केवल तभी जब आप अनुमोदन प्रवाह और सुरक्षा मॉडल के साथ सहज हों"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "प्रमाणीकरण",
-      "links": [
-        {
-          "label": "कनेक्शन सेटिंग खोलें",
-          "action": "settings:connections"
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "उपकरण श्रेणियाँ",
+            "imagePath": "Assets/Help/main-chat-tools.png",
+            "imageCaption": "कंपोज़र से टूल मेनू खोला गया. आप सभी श्रेणियां सक्षम कर सकते हैं, सभी अक्षम कर सकते हैं, या केवल अपनी इच्छित श्रेणियां चुन सकते हैं।",
+            "content": "चैट बॉक्स के पास रिंच बटन नियंत्रित करता है कि वर्तमान प्रदाता को किस श्रेणी के टूल का उपयोग करने की अनुमति है।\n\nयह कैसे काम करता है:\n• श्रेणियाँ मेनू खोलने के लिए रिंच बटन पर क्लिक करें।\n• केवल उन्हीं श्रेणियों को चालू करें जिनके लिए आप AI से अनुरोध करना चाहते हैं।\n• यदि आप केवल टेक्स्ट वार्तालाप चाहते हैं तो कोई टूल नहीं चुनें।\n• ऐयर आपकी चयनित टूल श्रेणियों को याद रखता है और उन्हें वर्तमान टूल नीति के हिस्से के रूप में उपयोग करता है।\n\nयह क्यों मायने रखता है:\n• कम सक्षम श्रेणियां टूल के उपयोग को समझना आसान बनाती हैं।\n• श्रेणियों को प्रतिबंधित करने से जोखिम और आकस्मिक दुष्प्रभावों को कम किया जा सकता है।\n• यदि कोई प्रदाता टूल का समर्थन नहीं करता है, तो रिंच बटन छिपा हुआ है।"
         },
         {
-          "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
-          "action": "settings:auto-accept"
+            "tab": "Providers",
+            "type": "text",
+            "title": "एआई प्रदाता",
+            "imagePath": "Assets/Help/settings-providers.png",
+            "imageCaption": "बाईं ओर प्रदाता सूची और दाईं ओर चयनित प्रदाता प्रपत्र के साथ प्रदाता सेटिंग्स।",
+            "links": [
+                {
+                    "label": "AI सेटअप खोलें",
+                    "action": "settings:providers"
+                },
+                {
+                    "label": "platform.openai.com",
+                    "action": "https://platform.openai.com"
+                },
+                {
+                    "label": "console.anthropic.com",
+                    "action": "https://console.anthropic.com"
+                },
+                {
+                    "label": "aistudio.google.com",
+                    "action": "https://aistudio.google.com"
+                }
+            ],
+            "content": "प्रदाता वह AI सेवा है जिससे Aire आपकी ओर से बात करता है। अधिकांश उपयोगकर्ताओं को आरंभ करने के लिए केवल एक प्रदाता स्थापित करने की आवश्यकता होती है।\n\nप्रत्येक प्रदाता प्रविष्टि के चार मुख्य भाग होते हैं:\n• नाम: लेबल आप ऐरे के अंदर देखेंगे।\n• प्रकार: कौन सी एआई सेवा का उपयोग करना है।\n• मॉडल: वह विशिष्ट मॉडल जिसे आप उस सेवा को चलाना चाहते हैं।\n• क्रेडेंशियल: आमतौर पर एक एपीआई कुंजी, या क्लाउड.एआई के लिए एक ब्राउज़र साइन-इन।\n\nसामान्य विकल्प:\n• OpenAI: अपनी API कुंजी कोplatform.openai.com से पेस्ट करें।\n• एंथ्रोपिक: ब्राउज़र में Claude.ai के साथ साइन इन करें, या एंथ्रोपिक एपीआई कुंजी पेस्ट करें।\n• Google AI: aistudio.google.com से अपनी जेमिनी एपीआई कुंजी पेस्ट करें।\n• ओलामा: अपनी मशीन पर स्थानीय ओलामा सर्वर का उपयोग करें। किसी API कुंजी की आवश्यकता नहीं है.\n• ओपनएआई-संगत एंडपॉइंट: ग्रोक, मिस्ट्रल, ओपनराउटर, डीपसीक या एलएम स्टूडियो जैसी सेवाएं अक्सर बेस यूआरएल सेट करके काम कर सकती हैं।\n\nयदि आप निश्चित नहीं हैं कि किसका उपयोग करना है, तो ओपनएआई या एंथ्रोपिक आमतौर पर सबसे आसान क्लाउड विकल्प हैं, जबकि ओलामा सामान्य स्थानीय विकल्प है।\n\nप्रदाताओं को हटाए बिना सक्षम या अक्षम किया जा सकता है। परिवर्तन स्वचालित रूप से सहेजे जाते हैं."
+        },
+        {
+            "tab": "Providers",
+            "type": "table",
+            "title": "टूल कॉलिंग मोड",
+            "intro": "AI मॉडल को टूल तक पहुंच प्रदान करने के लिए Aire दो तरीकों का समर्थन करता है। प्रदाता प्रकार के आधार पर मोड स्वचालित रूप से चुना जाता है, लेकिन कस्टम JSON फ़ाइल में प्रति मॉडल ओवरराइड किया जा सकता है (कस्टम मॉडल देखें)।",
+            "cols": [
+                "तरीका",
+                "यह काम किस प्रकार करता है"
+            ],
+            "rows": [
+                [
+                    "पाठ आधारित\n(डिफ़ॉल्ट: ओपनएआई, एंथ्रोपिक)",
+                    "टूल विवरण सिस्टम प्रॉम्प्ट में एम्बेडेड हैं। AI <tool_call> XML ब्लॉक के साथ प्रतिक्रिया करता है। निर्देशों का विश्वसनीय ढंग से पालन करने वाले किसी भी मॉडल के साथ काम करता है।"
+                ],
+                [
+                    "मूल फ़ंक्शन कॉलिंग\n(डिफ़ॉल्ट: ओलामा, Google AI)",
+                    "संरचित टूल स्कीमा प्रदाता एपीआई के माध्यम से भेजे जाते हैं। एआई संरचित फ़ंक्शन-कॉल ऑब्जेक्ट लौटाता है। अधिक सटीक। स्पष्ट एपीआई समर्थन की आवश्यकता है।"
+                ],
+                [
+                    "असमर्थित",
+                    "मॉडल टूल का उपयोग नहीं कर सकता. उन मॉडलों के लिए टूल प्रॉम्प्ट को छोड़ने के लिए इसे एक कस्टम मॉडल फ़ाइल में सेट करें जो उनसे भ्रमित हो जाते हैं।"
+                ]
+            ]
+        },
+        {
+            "tab": "Providers",
+            "type": "table",
+            "title": "प्रदाता और मॉडल संगतता",
+            "intro": "अपने विशिष्ट प्रदाता और मॉडल संयोजन को सत्यापित करने के लिए क्षमता परीक्षण बटन का उपयोग करें।",
+            "cols": [
+                "प्रदाता/समाप्ति बिंदु",
+                "तरीका",
+                "टिप्पणियाँ"
+            ],
+            "rows": [
+                [
+                    "ओपनएआई",
+                    "देशी",
+                    "GPT-4o, GPT-4.1, GPT-4o-मिनी - विश्वसनीय उपकरण समर्थन"
+                ],
+                [
+                    "anthropic",
+                    "टेक्स्ट आधारित",
+                    "क्लाउड 3.5 सॉनेट और नया - उत्कृष्ट अनुदेशन"
+                ],
+                [
+                    "Google AI (मिथुन)",
+                    "देशी",
+                    "जेमिनी 2.0 फ़्लैश और नया अनुशंसित"
+                ],
+                [
+                    "ओलामा (स्थानीय)",
+                    "देशी",
+                    "क्वेन2.5-कोडर, लामा3.1, मिस्ट्रल-निमो अच्छा काम करते हैं; छोटे मॉडल अलग-अलग होते हैं"
+                ],
+                [
+                    "ग्रोक (ओपनएआई + बेस यूआरएल)",
+                    "देशी",
+                    "बेस यूआरएल: https://api.groq.com/openai/v1 - बहुत तेज़"
+                ],
+                [
+                    "मिस्ट्रल (ओपनएआई + बेस यूआरएल)",
+                    "देशी",
+                    "बेस यूआरएल: https://api.mistral.ai/v1"
+                ],
+                [
+                    "ओपनराउटर (ओपनएआई + बेस यूआरएल)",
+                    "देशी",
+                    "बेस यूआरएल: https://openrouter.ai/api/v1 - 100+ मॉडल"
+                ],
+                [
+                    "डीपसीक (ओपनएआई + बेस यूआरएल)",
+                    "देशी",
+                    "बेस यूआरएल: https://api.depseek.com/v1"
+                ],
+                [
+                    "एलएम स्टूडियो (ओपनएआई + बेस यूआरएल)",
+                    "देशी",
+                    "बेस यूआरएल: http://localhost:1234/v1 - एलएम स्टूडियो सेटिंग्स में फ़ंक्शन कॉलिंग सक्षम करें"
+                ]
+            ]
+        },
+        {
+            "tab": "Providers",
+            "type": "text",
+            "title": "क्षमता परीक्षण",
+            "links": [
+                {
+                    "label": "AI सेटअप खोलें",
+                    "action": "settings:providers"
+                }
+            ],
+            "content": "रन टेस्ट बटन जाँचता है कि चयनित प्रदाता और मॉडल वास्तव में क्या कर सकते हैं।\n\nक्या परीक्षण किया जाता है:\n• टूल-कॉल क्षमता परीक्षण यह जांचता है कि मॉडल अपेक्षित ऐयर टूल मांगता है या नहीं। कोई वास्तविक फ़ाइल, ब्राउज़र या सिस्टम क्रिया निष्पादित नहीं होती है।\n• छवि-निर्माण क्षमता परीक्षण सीधे प्रदाता के छवि-उत्पादन पथ को कॉल करते हैं। ये परीक्षण प्रदाता कोटा का उपभोग कर सकते हैं और विफल हो सकते हैं यदि आपका खाता या मॉडल छवि निर्माण का समर्थन नहीं करता है।\n\nइसका उपयोग कैसे करें:\n• सेटिंग्स खोलें ⚙ → एक प्रदाता चुनें → परीक्षण चलाएँ पर क्लिक करें।\n• परीक्षण के मध्य में कॉन्फ़िगरेशन परिवर्तन से बचने के लिए प्रदाता फॉर्म को रन के दौरान लॉक कर दिया जाता है।\n• परिणाम प्रति प्रदाता/मॉडल संयोजन के अनुसार कैश किए जाते हैं और अगली बार तुरंत पुनः लोड किए जाते हैं।\n\nपढ़ने के परिणाम:\n• ✓ (हरा) - प्रदाता ने क्षमता को सही ढंग से संभाला।\n• ✗ (लाल) - प्रदाता या मॉडल उस क्षमता में विफल रहा।\n• यदि संदेश में कोटा, शेष राशि या दर सीमा का उल्लेख है, तो विफलता एअर के बजाय प्रदाता खाते से आ रही है।\n\nयदि कोई मॉडल कई टूल परीक्षणों में विफल रहता है, तो दूसरा मॉडल आज़माएं या उसके कस्टम मॉडल मेटाडेटा को समायोजित करें। यदि छवि निर्माण विफल हो जाता है, तो सत्यापित करें कि प्रदाता खाता, मॉडल और कोटा वास्तव में इसकी अनुमति देता है।"
+        },
+        {
+            "tab": "Providers",
+            "type": "code",
+            "title": "कस्टम मॉडल",
+            "intro": "किसी भी प्रदाता प्रकार के लिए मॉडल सूची को अनुकूलित करने के लिए ऐप की डेटा मॉडल निर्देशिका में एक JSON फ़ाइल बनाएं। यह घोषित करने के लिए कि कोई मॉडल किस चीज़ का समर्थन करता है, क्षमता सारणी का उपयोग करें।\n\nक्षमता झंडे:\n• \"विज़न\" - मॉडल छवि अनुलग्नकों को स्वीकार करता है\n• \"उपकरण\" - मॉडल उपकरण का उपयोग कर सकता है\n• \"टूलकॉलमोड:नेटिव\" - नेटिव फ़ंक्शन कॉलिंग को बाध्य करें\n• \"टूलकॉलमोड: टेक्स्ट\" - टेक्स्ट-आधारित टूल कॉलिंग को बाध्य करें\n• \"टूलकॉलमोड:असमर्थित\" - टूल प्रॉम्प्ट को पूरी तरह से अक्षम करें\n\nटूल आउटपुट प्रारूप फ़्लैग (उन मॉडलों के लिए जो अपने टेक्स्ट प्रतिक्रिया में टूल कॉल एम्बेड करते हैं):\n• \"टूलफॉर्मेट:हर्मीस\" - हर्मीस/क्वेन प्रारूप: <टूल_कॉल>{\"नाम\":\"...\",\"तर्क\":{...}}</टूल_कॉल>\n• \"टूलफॉर्मेट:रिएक्ट\" - रिएक्ट/लैंगचेन फॉर्मेट: {\"एक्शन\":\"...\",\"एक्शन_इनपुट\":{...}}\n• \"टूलफॉर्मेट:नेटिव\" - ओपनएआई नेटिव टूल_कॉल स्कीमा सामग्री में एम्बेडेड है\n• \"टूलफॉर्मेट: टेक्स्ट\" - ऐरे का डिफ़ॉल्ट टेक्स्ट फॉर्मेट: {\"टूल\":\"...\", ...}",
+            "content": "{\n  \"प्रदाता प्रकार\": \"ओपनएआई\",\n  \"मॉडल\": [\n    {\n      \"आईडी\": \"जीपीटी-4ओ\",\n      \"प्रदर्शननाम\": \"GPT-4o\",\n      \"क्षमताएं\": [\"दृष्टि\", \"उपकरण\"]\n    },\n    {\n      \"आईडी\": \"ओ1-मिनी\",\n      \"displayName\": \"o1-मिनी (कोई उपकरण नहीं)\",\n      \"क्षमताएँ\": [\"टूलकॉलमोड:असमर्थित\"]\n    },\n    {\n      \"आईडी\": \"मेरा-फाइन-ट्यून्ड-मॉडल\",\n      \"displayName\": \"माई फ़ाइन-ट्यून\",\n      \"क्षमताएं\": [\"टूल्स\", \"टूलकॉलमोड: टेक्स्ट\"]\n    }\n  ]\n}"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "एआई उपकरण",
+            "links": [
+                {
+                    "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "कुछ AI मॉडल Aire को उनके लिए कार्य करने के लिए कह सकते हैं। ऐरे इन क्रियाओं को टूल कहते हैं।\n\nमहत्वपूर्ण: उपकरण चुपचाप नहीं चलते। ऐयर आपको दिखाता है कि एआई क्या करना चाहता है, और आप इसे स्वीकार या अस्वीकार करते हैं।\n\nउपकरण क्या कर सकते हैं इसके उदाहरण:\n• फ़ाइलें पढ़ें या लिखें.\n• शेल कमांड चलाएँ।\n• वेब पेज खोलें और पढ़ें।\n• ब्राउज़र टैब का निरीक्षण करें.\n• स्क्रीनशॉट लें.\n• टाइप करें, क्लिक करें या माउस घुमाएँ।\n• ईमेल पढ़ें या भेजें.\n\nयदि आप इस सुविधा के लिए नए हैं, तो सबसे सुरक्षित आदत सरल है: इसे स्वीकृत करने से पहले कार्रवाई अनुरोध पढ़ें। केवल पढ़ने योग्य कार्रवाइयों को तभी स्वीकृत करें जब वे समझ में आएँ, और उन कार्रवाइयों से अधिक सावधान रहें जो फ़ाइलें बदलती हैं, संदेश भेजती हैं, या कीबोर्ड और माउस को नियंत्रित करती हैं।"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "प्रोफ़ाइल स्वतः स्वीकार करें",
+            "links": [
+                {
+                    "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "स्वतः-स्वीकार प्रोफ़ाइल आपको यह परिभाषित करने देती है कि ऐयर हर बार आपको बाधित किए बिना किन कार्यों को स्वचालित रूप से स्वीकृत कर सकता है।\n\nअंतर्निहित उदाहरणों में डेवलपर, समाचार ब्राउज़र और कंज़र्वेटिव शामिल हैं।\n\nक्या ध्यान रखें:\n• प्रोफ़ाइल एक सुविधा है, सुरक्षा प्रतिस्थापन नहीं।\n• रूढ़िवादी ढंग से शुरुआत करें और केवल उन्हीं कार्यों को स्वतः स्वीकार करें जिन पर आप वास्तव में भरोसा करते हैं।\n• फ़ाइल लेखन, इनपुट नियंत्रण और बाहरी दुष्प्रभाव आमतौर पर मैनुअल रखने लायक होते हैं।\n\nयदि आप अनिश्चित हैं, तो स्वतः-स्वीकृति प्रतिबंधात्मक छोड़ दें और एक-एक करके कार्रवाइयों की समीक्षा करें।"
+        },
+        {
+            "tab": "कनेक्शन",
+            "type": "text",
+            "title": "एमसीपी सर्वर",
+            "imagePath": "Assets/Help/settings-connections.png",
+            "imageCaption": "एमसीपी कैटलॉग और स्थापित सर्वर सूची के साथ कनेक्शन सेटिंग्स।",
+            "links": [
+                {
+                    "label": "कनेक्शन सेटिंग खोलें",
+                    "action": "settings:connections"
+                }
+            ],
+            "content": "एमसीपी सर्वर बाहरी सहायक सेवाएँ हैं जो ऐयर को अधिक उपकरण और डेटा स्रोत देते हैं। MCP का मतलब मॉडल कॉन्टेक्स्ट प्रोटोकॉल है।\n\nसरल भाषा में, एक MCP सर्वर Aire और अन्य सिस्टम के बीच एक पुल है, जैसे:\n• आपका फ़ाइल सिस्टम,\n• गिटहब,\n• SQLite,\n• वेब लाने के उपकरण,\n• मेमोरी उपकरण,\n• स्लैक, जीमेल, या नोशन।\n\nऐरे उन्हें कैसे संभालता है:\n• कनेक्शंस टैब में सामान्य एमसीपी सर्वरों की एक क्यूरेटेड कैटलॉग शामिल है।\n• आप ऐप से उन्हें इंस्टॉल, हटा, सक्षम, अक्षम और संपादित कर सकते हैं।\n• कुछ सर्वरों को मशीन पर अतिरिक्त क्रेडेंशियल या Node.js/npm की आवश्यकता होती है।\n\nअच्छी शुरुआती सलाह:\n• एक साधारण सर्वर से प्रारंभ करें, जैसे फ़ाइल सिस्टम या वेब फ़ेच।\n• इसे स्थापित करने से पहले विवरण पढ़ें।\n• MCP सर्वर को किसी भी अन्य एकीकरण की तरह समझें: उपयोगी, लेकिन सक्षम करने से पहले आपको इस पर भरोसा करना चाहिए।"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "कीबोर्ड और माउस सत्र",
+            "links": [
+                {
+                    "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "कुछ कार्यों के लिए कीबोर्ड और माउस को नियंत्रित करने के लिए AI की आवश्यकता होती है। जब कोई सत्र सक्रिय हो:\n\n• चैट विंडो के नीचे एक बैनर दिखाई देता है जो दर्शाता है कि सत्र सक्रिय है।\n• आपकी स्क्रीन के ऊपर दाईं ओर एक फ्लोटिंग ⏹ स्टॉप सेशन बटन दिखाई देता है - इसे तुरंत रद्द करने के लिए किसी भी समय क्लिक करें।\n• आवाज से रद्द करने के लिए \"एयर स्टॉप\" कहें।\n• रद्द करने के लिए बैनर में \"सत्र समाप्त करें\" पर क्लिक करें।\n\nएआई प्रत्येक व्यक्तिगत कार्रवाई (कुंजी प्रेस, माउस क्लिक, आदि) को निष्पादित करने से पहले उसके लिए अनुमोदन का अनुरोध करेगा।"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "ध्वनि इनपुट",
+            "links": [
+                {
+                    "label": "ध्वनि सेटिंग खोलें",
+                    "action": "settings:voice"
+                }
+            ],
+            "content": "ध्वनि पहचान प्रारंभ करने के लिए 🎤 बटन पर क्लिक करें। Aire Windows अंतर्निहित वाक् पहचान का उपयोग करता है - किसी API कुंजी या इंटरनेट कनेक्शन की आवश्यकता नहीं है।\n\n• सामान्य रूप से बोलें. जैसे ही आप बात करते हैं आपके शब्द इनपुट बॉक्स में दिखाई देते हैं।\n• जब आप बात करना बंद करते हैं, तो बटन पर उलटी गिनती (5 → 1) दिखाई देती है। यदि आप चुप रहते हैं, तो संदेश स्वचालित रूप से 0 पर भेजता है।\n• उलटी गिनती रीसेट करने के लिए किसी भी समय फिर से बात करना शुरू करें।\n• बिना भेजे रुकने के लिए बटन पर फिर से क्लिक करें (⏹ दिखाता है)।\n\nध्वनि पहचान सटीकता आपकी विंडोज़ भाषा और माइक्रोफ़ोन गुणवत्ता पर निर्भर करती है। आप विंडोज़ सेटिंग्स → समय और भाषा → स्पीच के माध्यम से विंडोज़ स्पीच रिकग्निशन को प्रशिक्षित कर सकते हैं।"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "table",
+            "title": "ध्वनि आदेश",
+            "intro": "जब माइक्रोफ़ोन सक्रिय हो तो \"AIRE\" बोलें और उसके बाद इनमें से कोई भी शब्द बोलें:",
+            "cols": [
+                "आज्ञा",
+                "यह क्या करता है"
+            ],
+            "rows": [
+                [
+                    "एयर भेजें",
+                    "वर्तमान संदेश तुरंत भेजें"
+                ],
+                [
+                    "वायु विराम",
+                    "मौन उलटी गिनती रोकें"
+                ],
+                [
+                    "एयर बायोडाटा",
+                    "उलटी गिनती फिर से शुरू करें"
+                ],
+                [
+                    "हवा साफ़",
+                    "इनपुट बॉक्स साफ़ करें"
+                ],
+                [
+                    "एयर पूर्ववत करें",
+                    "इनपुट बॉक्स साफ़ करें"
+                ],
+                [
+                    "प्रसारण रद्द",
+                    "बिना भेजे सुनना बंद करें"
+                ],
+                [
+                    "एयर नया",
+                    "एक नई बातचीत शुरू करें"
+                ],
+                [
+                    "एयर सेटिंग्स",
+                    "सेटिंग्स विंडो खोलें"
+                ],
+                [
+                    "एयर ओपन/शो",
+                    "मुख्य चैट विंडो दिखाएँ"
+                ],
+                [
+                    "हवा बंद करो/छिपाओ",
+                    "मुख्य चैट विंडो छिपाएँ"
+                ],
+                [
+                    "हाँ/नहीं",
+                    "किसी लंबित AI कार्रवाई को स्वीकृत या अस्वीकार करें"
+                ],
+                [
+                    "एयर स्टॉप",
+                    "आपातकालीन रोक - किसी भी सक्रिय कीबोर्ड/माउस सत्र को तुरंत समाप्त करें"
+                ]
+            ]
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "आवाज आउटपुट",
+            "links": [
+                {
+                    "label": "ध्वनि सेटिंग खोलें",
+                    "action": "settings:voice"
+                }
+            ],
+            "content": "Aire विंडोज़ टेक्स्ट-टू-स्पीच का उपयोग करके AI प्रतिक्रियाओं को ज़ोर से पढ़ सकता है। इसे सेटिंग्स (⚙) → वॉयस आउटपुट में सक्षम करें।\n\n• सभी प्रत्युत्तरों में बोलना चुनें, या केवल तब बोलें जब आप माइक्रोफ़ोन का उपयोग करें।\n• एक आवाज़ चुनें और पढ़ने की गति समायोजित करें।\n• माइक्रोफ़ोन बटन के पास स्पीकर आइकन के साथ ध्वनि आउटपुट को तुरंत चालू/बंद करें।"
+        },
+        {
+            "tab": "रूप",
+            "type": "text",
+            "title": "उपस्थिति",
+            "links": [
+                {
+                    "label": "उपस्थिति सेटिंग खोलें",
+                    "action": "settings:appearance"
+                }
+            ],
+            "content": "ऐप का स्वरूप बदलने के लिए सेटिंग्स (⚙) → उपस्थिति खोलें।\n\n• थीम: डार्क और लाइट (बेज) के बीच स्विच करें।\n• रंग टिंट: संपूर्ण यूआई पर रंग टिंट लागू करने के लिए स्लाइडर को खींचें। बायां सिरा (काला) और दायां सिरा (सफेद) का मतलब कोई रंग नहीं है - स्लाइडर डिफ़ॉल्ट रूप से शुद्ध ग्रेस्केल है।\n• फ़ॉन्ट आकार: फ़ॉन्ट आकार बढ़ाने या घटाने के लिए Ctrl दबाए रखें और चैट या इनपुट क्षेत्र पर माउस व्हील को स्क्रॉल करें। सेटिंग स्वचालित रूप से सहेजी जाती है.\n\nसभी उपस्थिति सेटिंग्स सहेजी जाती हैं और अगले लॉन्च पर पुनर्स्थापित की जाती हैं।"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "स्थानीय एपीआई क्या है?",
+            "imagePath": "Assets/Help/settings-connections.png",
+            "imageCaption": "कनेक्शन सेटिंग्स जहां स्थानीय एपीआई एक्सेस, ईमेल खाते और एमसीपी सर्वर कॉन्फ़िगर किए गए हैं।",
+            "links": [
+                {
+                    "label": "कनेक्शन सेटिंग खोलें",
+                    "action": "settings:connections"
+                }
+            ],
+            "content": "लोकल एपीआई यह है कि उसी कंप्यूटर पर दूसरा प्रोग्राम ऐयर से कैसे बात कर सकता है।\n\nगैर-डेवलपर्स के लिए: आपको आमतौर पर इस सुविधा की आवश्यकता नहीं होती है।\n\nडेवलपर्स और उन्नत उपयोगकर्ताओं के लिए: यह अपनी स्क्रिप्ट, टूल, ऑटोमेशन या डेस्कटॉप ऐप को Aire से कनेक्ट करने का सबसे आसान तरीका है। एक स्थानीय कार्यक्रम यह कर सकता है:\n• ऐयर को इसकी मुख्य विंडो दिखाने या छिपाने के लिए कहें,\n• बातचीत सूचीबद्ध करें और संदेश पढ़ें,\n• सक्रिय वार्तालाप के लिए एक संदेश भेजें,\n• प्रदाता या वार्तालाप स्विच करें,\n• लंबित टूल अनुमोदनों का निरीक्षण करें,\n• और सीधे ऐयर टूल्स को कॉल करें।\n\nयह कैसे काम करता है:\n• ऐयर टीसीपी पोर्ट 51234 पर सुनता है।\n• यह केवल 127.0.0.1 पर सुनता है, इसलिए अन्य कंप्यूटर सीधे इस तक नहीं पहुंच सकते।\n• प्रत्येक अनुरोध एक JSON ऑब्जेक्ट है जिसे एक पंक्ति के रूप में भेजा जाता है।\n• प्रत्येक प्रतिक्रिया एक JSON ऑब्जेक्ट है जो एक पंक्ति के रूप में लौटाई जाती है।\n\nइसका उपयोग करने के लिए, पहले कनेक्शंस सेटिंग्स खोलें और स्थानीय एपीआई एक्सेस सक्षम करें।"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "स्थानीय एपीआई त्वरित प्रारंभ",
+            "links": [
+                {
+                    "label": "कनेक्शन सेटिंग खोलें",
+                    "action": "settings:connections"
+                }
+            ],
+            "content": "किसी अन्य ऐप को Aire से कनेक्ट करने के लिए, इस चेकलिस्ट का उपयोग करें:\n\n1. कनेक्शंस सेटिंग्स खोलें।\n2. स्थानीय एपीआई एक्सेस चालू करें।\n3. प्रमाणीकरण टोकन की प्रतिलिपि बनाएँ।\n4. अपने ऐप या स्क्रिप्ट से, 127.0.0.1:51234 पर एक टीसीपी कनेक्शन खोलें।\n5. विधि, टोकन और वैकल्पिक पैरामीटर के साथ एक JSON लाइन भेजें।\n6. एक JSON लाइन को वापस पढ़ें।\n7. कनेक्शन बंद करें.\n\nएक अच्छा पहला परीक्षण पिंग विधि है। यदि पिंग काम करता है, तो show_main_window, list_providers, और create_conversation आज़माएँ।\n\nअनुशंसित पहला एकीकरण क्रम:\n• पिंग\n• शो_मेन_विंडो\n• सूची_प्रदाता\n• बातचीत बनाएँ\n• सूची_बातचीत\n•संदेश प्राप्त करें\n• संदेश भेजें\n• राज्य प्राप्त करें\n• यदि आप टूल अनुमोदन में सहयोग करना चाहते हैं तो लंबित अनुमोदन की प्रतीक्षा करें\n• निष्पादन_टूल केवल तभी जब आप अनुमोदन प्रवाह और सुरक्षा मॉडल के साथ सहज हों"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "प्रमाणीकरण",
+            "links": [
+                {
+                    "label": "कनेक्शन सेटिंग खोलें",
+                    "action": "settings:connections"
+                },
+                {
+                    "label": "एआई कार्रवाई अनुमोदन की समीक्षा करें",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "प्रत्येक स्थानीय एपीआई अनुरोध में प्रमाणीकरण टोकन शामिल होना चाहिए।\n\nइसे कहां से प्राप्त करें:\n• कनेक्शंस सेटिंग खोलें.\n• स्थानीय एपीआई अनुभाग ढूंढें.\n• टोकन कॉपी करने के लिए कॉपी पर क्लिक करें।\n• उस टोकन को अपने ऐप या स्क्रिप्ट कॉन्फ़िगरेशन में पेस्ट करें।\n\nक्या जानना है:\n• यदि आप रीजेनरेट पर क्लिक करते हैं, तो पुराने एकीकरण तब तक काम करना बंद कर देंगे जब तक वे नए टोकन का उपयोग नहीं करते।\n• एपीआई सक्षम होना चाहिए, न कि केवल कॉन्फ़िगर किया जाना चाहिए।\n• आपके कंप्यूटर पर कोई भी प्रक्रिया जो टोकन जानती है, ऐयर को नियंत्रित कर सकती है।\n\nडेवलपर्स के लिए व्यावहारिक सलाह:\n• टोकन को स्थानीय कॉन्फ़िगरेशन फ़ाइल या पर्यावरण चर में रखें, स्रोत नियंत्रण में हार्ड-कोडित नहीं।\n• इसे एक स्थानीय रहस्य की तरह समझें।\n• यदि आपको संदेह है कि यह लीक हो गया है, तो इसे पुन: उत्पन्न करें।"
+        },
+        {
+            "tab": "Local API",
+            "type": "code",
+            "title": "शिष्टाचार",
+            "intro": "स्थानीय एपीआई टीसीपी पर लाइन-आधारित JSON है।\n\nकनेक्शन पैटर्न:\n• 127.0.0.1:51234 से कनेक्ट करें\n• बिल्कुल एक कॉम्पैक्ट JSON अनुरोध लिखें और उसके बाद एक नई पंक्ति लिखें\n• बिल्कुल एक JSON प्रतिक्रिया पंक्ति पढ़ें\n• कनेक्शन बंद करें\n\nअनुरोध आकार:\n{ \"विधि\": \"विधि\", \"टोकन\": \"टोकन\", \"पैरामीटर\": { ... } }\n\nप्रतिक्रिया आकार:\n{ \"ठीक है\": सत्य, \"परिणाम\":... }\nया\n{ \"ठीक\": गलत, \"त्रुटि संदेश\": \"संदेश\" }\n\nयदि आप क्लाइंट लाइब्रेरी लिख रहे हैं, तो पहले उस सरल अनुरोध-प्रतिक्रिया पैटर्न का निर्माण करें। आरंभ करने के लिए आपको HTTP या WebSockets की आवश्यकता नहीं है।",
+            "content": "{ \"विधि\": \"पिंग\", \"टोकन\": \"आपका_टोकन\" }\n{ \"ठीक\": सत्य, \"परिणाम\": { \"प्रदाता नाम\": \"कोडेक्स\", \"प्रदाता प्रकार\": \"कोडेक्स\", \"प्रदाता मॉडल\": \"जीपीटी-5.4-मिनी\", \"सक्रिय वार्तालाप आईडी\": 12 } }\n\n{ \"विधि\": \"create_conversation\", \"टोकन\": \"आपका_टोकन\", \"पैरामीटर\": { \"शीर्षक\": \"एपीआई परीक्षण\" } }\n{ \"ठीक है\": सत्य, \"परिणाम\": 73 }\n\n{ \"विधि\": \"send_message\", \"टोकन\": \"आपका_टोकन\", \"पैरामीटर\": { \"पाठ\": \"हैलो!\" } }\n{ \"ठीक है\": सत्य, \"परिणाम\": सत्य }"
+        },
+        {
+            "tab": "Local API",
+            "type": "table",
+            "title": "उपलब्ध विधियाँ",
+            "cols": [
+                "तरीका",
+                "पैरामीटर",
+                "विवरण"
+            ],
+            "rows": [
+                [
+                    "गुनगुनाहट",
+                    "—",
+                    "जांचें कि क्या ऐरे चल रहा है। get_state जैसा ही स्टेट स्नैपशॉट लौटाता है।"
+                ],
+                [
+                    "get_state",
+                    "—",
+                    "वर्तमान प्रदाता, मॉडल, सक्रिय वार्तालाप आईडी और स्थानीय एपीआई स्थिति।"
+                ],
+                [
+                    "show_main_window",
+                    "—",
+                    "ऐरे चैट विंडो को सामने लाएँ।"
+                ],
+                [
+                    "Hide_main_window",
+                    "—",
+                    "चैट विंडो को ट्रे में छिपाएँ।"
+                ],
+                [
+                    "खुली सेटिंग",
+                    "—",
+                    "सेटिंग्स विंडो खोलें."
+                ],
+                [
+                    "खुला ब्राउज़र",
+                    "—",
+                    "ऐयर ब्राउज़र विंडो खोलें."
+                ],
+                [
+                    "सूची_प्रदाता",
+                    "—",
+                    "आईडी और नामों के साथ सभी कॉन्फ़िगर किए गए एआई प्रदाता।"
+                ],
+                [
+                    "create_provider",
+                    "नाम?, प्रकार, apiKey?, बेसयूआरएल?, मॉडल, सक्षम है?, रंग?, चयन के बाद बनाएं?, inheritCredentialsFromProviderId?",
+                    "स्थानीय एपीआई से एक नया प्रदाता बनाएं।"
+                ],
+                [
+                    "सूची_बातचीत",
+                    "—",
+                    "सभी सहेजे गए वार्तालाप (आईडी, शीर्षक, दिनांक)।"
+                ],
+                [
+                    "create_conversation",
+                    "शीर्षक?",
+                    "एक नई बातचीत बनाएं और उस पर स्विच करें."
+                ],
+                [
+                    "चयन_वार्तालाप",
+                    "बातचीतआईडी",
+                    "किसी मौजूदा वार्तालाप पर स्विच करें."
+                ],
+                [
+                    "संदेश प्राप्त करें",
+                    "बातचीतआईडी",
+                    "बातचीत के सभी संदेश."
+                ],
+                [
+                    "set_provider",
+                    "प्रदाताआईडी",
+                    "सक्रिय AI प्रदाता को स्विच करें।"
+                ],
+                [
+                    "set_provider_model",
+                    "प्रदाताआईडी, मॉडल",
+                    "प्रदाता के लिए मॉडल बदलें."
+                ],
+                [
+                    "मेसेज भेजें",
+                    "मूलपाठ",
+                    "सक्रिय वार्तालाप के लिए एक संदेश भेजें. स्वीकार किए जाने पर सत्य लौटाता है।"
+                ],
+                [
+                    "सूची_लंबित_अनुमोदन",
+                    "—",
+                    "टूल कॉल फिलहाल अनुमोदन की प्रतीक्षा में हैं।"
+                ],
+                [
+                    "लंबित_अनुमोदन के लिए प्रतीक्षा करें",
+                    "टाइमआउट_सेकंड?",
+                    "अगले लंबित टूल अनुमोदन की प्रतीक्षा करें या टाइमआउट पर शून्य वापस लौटें।"
+                ],
+                [
+                    "स्वीकृत_टूल_कॉल",
+                    "अनुक्रमणिका",
+                    "किसी लंबित टूल कॉल को उसकी वर्तमान सूची अनुक्रमणिका द्वारा स्वीकृत करें।"
+                ],
+                [
+                    "इनकार_टूल_कॉल",
+                    "अनुक्रमणिका",
+                    "किसी लंबित टूल कॉल को उसकी वर्तमान सूची अनुक्रमणिका द्वारा अस्वीकार करें।"
+                ],
+                [
+                    "निष्पादन_उपकरण",
+                    "उपकरण, पैरामीटर, अनुमोदन के लिए प्रतीक्षा करें?, अनुमोदन समय समाप्त_सेकंड?",
+                    "सीधे ऐयर टूल चलाएँ और वैकल्पिक रूप से अनुमोदन की प्रतीक्षा करें।"
+                ],
+                [
+                    "get_trace",
+                    "AfterId?, सीमा?",
+                    "डिबगिंग के लिए टूल निष्पादन ट्रेस प्रविष्टियाँ पढ़ें।"
+                ],
+                [
+                    "क्लियर_ट्रेस",
+                    "—",
+                    "टूल निष्पादन ट्रेस साफ़ करें."
+                ]
+            ]
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "मुझे किन तरीकों से शुरुआत करनी चाहिए?",
+            "content": "यदि आप कोई अन्य ऐप बना रहे हैं जो Aire से कनेक्ट होता है, तो पहले सरल तरीकों से शुरुआत करें।\n\nअनुशंसित सीखने का क्रम:\n• पिंग: पुष्टि करें कि ऐयर चल रहा है और आपका टोकन वैध है।\n• show_main_window: पुष्टि करें कि आप एक दृश्यमान ऐप कार्रवाई ट्रिगर कर सकते हैं।\n• get_state: वर्तमान वार्तालाप और प्रदाता स्थिति का निरीक्षण करें।\n• सूची_बातचीत और संदेश प्राप्त करें: डेटा को सुरक्षित रूप से पढ़ें।\n• संदेश भेजें: पूर्ण अनुरोध-उत्तर दौर की यात्रा करें।\n• सूची_लंबित_अनुमोदन, अनुमोदन_टूल_कॉल, अस्वीकार_टूल_कॉल: ऐयर के अनुमोदन मॉडल के साथ एकीकृत करें।\n•execute_tool: सुरक्षा निहितार्थ और अनुमोदन व्यवहार को समझने के बाद ही।\n\nअधिकांश एकीकरणों में, सेंड_मैसेज और रीड-ओनली विधियाँ ही पर्याप्त हैं।"
+        },
+        {
+            "tab": "Local API",
+            "type": "code",
+            "title": "पॉवरशेल उदाहरण",
+            "intro": "यह उदाहरण PowerShell में स्थानीय API क्लाइंट के लिए सबसे सरल उपयोगी आकार दिखाता है। कनेक्शंस सेटिंग्स से अपना टोकन सहेजें, इसे नीचे पेस्ट करें, और फिर किसी भी चीज़ से पहले पिंग का प्रयास करें।",
+            "content": "$टोकन = \"अपना टोकन यहां चिपकाएं\"\n$पोर्ट = 51234\n\nफ़ंक्शन इनवोक-एयर {\n    परम([स्ट्रिंग]$विधि, [हैशटेबल]$पैराम्स = @{})\n    $req = @{विधि = $विधि; टोकन = $टोकन }\n    यदि ($Params.Count) { $req[\"parameters\"] = $Params }\n    $क्लाइंट = न्यू-ऑब्जेक्ट नेट.सॉकेट.टीसीपीक्लाइंट('127.0.0.1', $पोर्ट)\n    $लेखक = [IO.StreamWriter]::नया($client.GetStream())\n    $लेखक.ऑटोफ्लश = $सत्य\n    $रीडर = [आईओ.स्ट्रीमरीडर]::नया($क्लाइंट.गेटस्ट्रीम())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $सम्मान = $पाठक.रीडलाइन()\n    $ग्राहक.बंद करें()\n    वापसी $सम्मान | ConvertFrom-Json\n}\n\n# जांचें कि ऐयर चल रहा है और स्थिति का निरीक्षण करें\n$state = इनवोक-एयर \"पिंग\"\n$राज्य.परिणाम\n\n# वार्तालाप बनाएं और चुनें\n$आईडी = (आह्वान-एयर \"create_conversation\" @{ शीर्षक = \"एपीआई परीक्षण\" }).परिणाम\nइनवोक-एयर \"select_conversation\" @{ बातचीत आईडी = $ आईडी }\n\n# एक संदेश भेजें (स्वीकार किए जाने पर सत्य लौटाता है)\nइनवोक-एयर \"send_message\" @{ टेक्स्ट = \"पावरशेल की ओर से नमस्ते\" }\n\n# बारी पूरी होने के बाद वार्तालाप संदेश पढ़ें\n(आह्वान-एयर \"get_messages\" @{बातचीतआईडी = $आईडी}).परिणाम\n\n# किसी टूल को सीधे निष्पादित करें\nInvoke-Aire \"execute_tool\" @{ टूल = \"read_file\"; पैरामीटर = @{ पथ = \"C:/Temp/notes.txt\" } }"
+        },
+        {
+            "tab": "Local API",
+            "type": "code",
+            "title": "पायथन उदाहरण",
+            "intro": "यह उदाहरण केवल पायथन मानक लाइब्रेरी का उपयोग करता है। यदि आप किसी अन्य स्थानीय टूल में ऐयर समर्थन जोड़ना चाहते हैं तो यह एक अच्छा प्रारंभिक बिंदु है।",
+            "content": "आयात सॉकेट, json\n\nटोकन = \"अपना टोकन यहां चिपकाएं\"\n\nनिश्चित आय(विधि, **पैरामीटर):\n    req = {\"विधि\": विधि, \"टोकन\": टोकन}\n    यदि पैरामीटर:\n        req[\"पैरामीटर\"] = पैरामीटर\n    सॉकेट.क्रिएट_कनेक्शन(('127.0.0.1', 51234)) के साथ एस:\n        s.sendall((json.dumps(req, विभाजक=(\",\", \":\")) + \"\\n\").encode())\n        वापसी json.loads(s.makefile().readline())\n\nराज्य = एयर (\"पिंग\")\nप्रिंट (राज्य[\"परिणाम\"])\n\nवार्तालाप_आईडी = एरे (\"create_conversation\", शीर्षक = \"एपीआई परीक्षण\") [\"परिणाम\"]\nऐयर(\"select_conversation\", बातचीतआईडी=conversation_id)\naire('send_message', text='पायथन से नमस्ते')\n\nसंदेश = aire(\"get_messages\", बातचीतआईडी=बातचीत_आईडी)[\"परिणाम\"]\nप्रिंट(संदेश)\n\nपरिणाम = वायु(\n    \"निष्पादित_टूल\",\n    टूल = \"read_file\",\n    पैरामीटर={\"पथ\": \"C:/Temp/notes.txt\"}\n)\nप्रिंट(परिणाम)"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "एकीकरण युक्तियाँ",
+            "content": "• परिणाम का उपयोग करने से पहले हमेशा ठीक जांचें। यदि ठीक गलत है, तो त्रुटि संदेश पढ़ें और उसे संभालें।\n• sent_message केवल पुष्टि करता है कि Aire ने सक्रिय वार्तालाप में संदेश स्वीकार कर लिया है। यदि आपके एकीकरण को अंतिम उत्तर की आवश्यकता है, तो get_messages का पालन करें या अनुमोदन और ट्रेस आउटपुट पर नज़र रखें।\n• प्रति टीसीपी कनेक्शन एक विधि कॉल रखें। कनेक्ट करें, भेजें, पढ़ें, बंद करें।\n•execute_tool का उपयोग करने से पहले केवल पढ़ने योग्य और दृश्यता क्रियाओं से प्रारंभ करें।\n• यदि आपका एकीकरण ऐरे के सुरक्षा मॉडल के साथ सहयोग करना चाहता है, तो यह मानने के बजाय कि प्रत्येक कार्रवाई तुरंत चलती है, list_pending_approvals, wait_for_pending_approval, Approve_tool_call, और Deny_tool_call का उपयोग करें।\n•execute_tool शक्तिशाली है क्योंकि यह आपके कोड को सीधे Aire टूल्स को कॉल करने देता है। इसका प्रयोग सावधानी से करें.\n• एपीआई जानबूझकर केवल स्थानीय है। पोर्ट 51234 को अपने नेटवर्क या इंटरनेट पर उजागर न करें।\n• उत्पादन जैसे आंतरिक उपकरणों के लिए, टोकन को स्रोत कोड के बाहर संग्रहीत करें और पिंग को अपने स्टार्टअप स्वास्थ्य जांच का हिस्सा बनाएं।"
         }
-      ],
-      "content": "प्रत्येक स्थानीय एपीआई अनुरोध में प्रमाणीकरण टोकन शामिल होना चाहिए।\n\nइसे कहां से प्राप्त करें:\n• कनेक्शंस सेटिंग खोलें.\n• स्थानीय एपीआई अनुभाग ढूंढें.\n• टोकन कॉपी करने के लिए कॉपी पर क्लिक करें।\n• उस टोकन को अपने ऐप या स्क्रिप्ट कॉन्फ़िगरेशन में पेस्ट करें।\n\nक्या जानना है:\n• यदि आप रीजेनरेट पर क्लिक करते हैं, तो पुराने एकीकरण तब तक काम करना बंद कर देंगे जब तक वे नए टोकन का उपयोग नहीं करते।\n• एपीआई सक्षम होना चाहिए, न कि केवल कॉन्फ़िगर किया जाना चाहिए।\n• आपके कंप्यूटर पर कोई भी प्रक्रिया जो टोकन जानती है, ऐयर को नियंत्रित कर सकती है।\n\nडेवलपर्स के लिए व्यावहारिक सलाह:\n• टोकन को स्थानीय कॉन्फ़िगरेशन फ़ाइल या पर्यावरण चर में रखें, स्रोत नियंत्रण में हार्ड-कोडित नहीं।\n• इसे एक स्थानीय रहस्य की तरह समझें।\n• यदि आपको संदेह है कि यह लीक हो गया है, तो इसे पुन: उत्पन्न करें।"
-    },
-    {
-      "tab": "Local API",
-      "type": "code",
-      "title": "शिष्टाचार",
-      "intro": "स्थानीय एपीआई टीसीपी पर लाइन-आधारित JSON है।\n\nकनेक्शन पैटर्न:\n• 127.0.0.1:51234 से कनेक्ट करें\n• बिल्कुल एक कॉम्पैक्ट JSON अनुरोध लिखें और उसके बाद एक नई पंक्ति लिखें\n• बिल्कुल एक JSON प्रतिक्रिया पंक्ति पढ़ें\n• कनेक्शन बंद करें\n\nअनुरोध आकार:\n{ \"विधि\": \"विधि\", \"टोकन\": \"टोकन\", \"पैरामीटर\": { ... } }\n\nप्रतिक्रिया आकार:\n{ \"ठीक है\": सत्य, \"परिणाम\":... }\nया\n{ \"ठीक\": गलत, \"त्रुटि संदेश\": \"संदेश\" }\n\nयदि आप क्लाइंट लाइब्रेरी लिख रहे हैं, तो पहले उस सरल अनुरोध-प्रतिक्रिया पैटर्न का निर्माण करें। आरंभ करने के लिए आपको HTTP या WebSockets की आवश्यकता नहीं है।",
-      "content": "{ \"विधि\": \"पिंग\", \"टोकन\": \"आपका_टोकन\" }\n{ \"ठीक\": सत्य, \"परिणाम\": { \"प्रदाता नाम\": \"कोडेक्स\", \"प्रदाता प्रकार\": \"कोडेक्स\", \"प्रदाता मॉडल\": \"जीपीटी-5.4-मिनी\", \"सक्रिय वार्तालाप आईडी\": 12 } }\n\n{ \"विधि\": \"create_conversation\", \"टोकन\": \"आपका_टोकन\", \"पैरामीटर\": { \"शीर्षक\": \"एपीआई परीक्षण\" } }\n{ \"ठीक है\": सत्य, \"परिणाम\": 73 }\n\n{ \"विधि\": \"send_message\", \"टोकन\": \"आपका_टोकन\", \"पैरामीटर\": { \"पाठ\": \"हैलो!\" } }\n{ \"ठीक है\": सत्य, \"परिणाम\": सत्य }"
-    },
-    {
-      "tab": "Local API",
-      "type": "table",
-      "title": "उपलब्ध विधियाँ",
-      "cols": [
-        "तरीका",
-        "पैरामीटर",
-        "विवरण"
-      ],
-      "rows": [
-        [
-          "गुनगुनाहट",
-          "—",
-          "जांचें कि क्या ऐरे चल रहा है। get_state जैसा ही स्टेट स्नैपशॉट लौटाता है।"
-        ],
-        [
-          "get_state",
-          "—",
-          "वर्तमान प्रदाता, मॉडल, सक्रिय वार्तालाप आईडी और स्थानीय एपीआई स्थिति।"
-        ],
-        [
-          "show_main_window",
-          "—",
-          "ऐरे चैट विंडो को सामने लाएँ।"
-        ],
-        [
-          "Hide_main_window",
-          "—",
-          "चैट विंडो को ट्रे में छिपाएँ।"
-        ],
-        [
-          "खुली सेटिंग",
-          "—",
-          "सेटिंग्स विंडो खोलें."
-        ],
-        [
-          "खुला ब्राउज़र",
-          "—",
-          "ऐयर ब्राउज़र विंडो खोलें."
-        ],
-        [
-          "सूची_प्रदाता",
-          "—",
-          "आईडी और नामों के साथ सभी कॉन्फ़िगर किए गए एआई प्रदाता।"
-        ],
-        [
-          "create_provider",
-          "नाम?, प्रकार, apiKey?, बेसयूआरएल?, मॉडल, सक्षम है?, रंग?, चयन के बाद बनाएं?, inheritCredentialsFromProviderId?",
-          "स्थानीय एपीआई से एक नया प्रदाता बनाएं।"
-        ],
-        [
-          "सूची_बातचीत",
-          "—",
-          "सभी सहेजे गए वार्तालाप (आईडी, शीर्षक, दिनांक)।"
-        ],
-        [
-          "create_conversation",
-          "शीर्षक?",
-          "एक नई बातचीत बनाएं और उस पर स्विच करें."
-        ],
-        [
-          "चयन_वार्तालाप",
-          "बातचीतआईडी",
-          "किसी मौजूदा वार्तालाप पर स्विच करें."
-        ],
-        [
-          "संदेश प्राप्त करें",
-          "बातचीतआईडी",
-          "बातचीत के सभी संदेश."
-        ],
-        [
-          "set_provider",
-          "प्रदाताआईडी",
-          "सक्रिय AI प्रदाता को स्विच करें।"
-        ],
-        [
-          "set_provider_model",
-          "प्रदाताआईडी, मॉडल",
-          "प्रदाता के लिए मॉडल बदलें."
-        ],
-        [
-          "मेसेज भेजें",
-          "मूलपाठ",
-          "सक्रिय वार्तालाप के लिए एक संदेश भेजें. स्वीकार किए जाने पर सत्य लौटाता है।"
-        ],
-        [
-          "सूची_लंबित_अनुमोदन",
-          "—",
-          "टूल कॉल फिलहाल अनुमोदन की प्रतीक्षा में हैं।"
-        ],
-        [
-          "लंबित_अनुमोदन के लिए प्रतीक्षा करें",
-          "टाइमआउट_सेकंड?",
-          "अगले लंबित टूल अनुमोदन की प्रतीक्षा करें या टाइमआउट पर शून्य वापस लौटें।"
-        ],
-        [
-          "स्वीकृत_टूल_कॉल",
-          "अनुक्रमणिका",
-          "किसी लंबित टूल कॉल को उसकी वर्तमान सूची अनुक्रमणिका द्वारा स्वीकृत करें।"
-        ],
-        [
-          "इनकार_टूल_कॉल",
-          "अनुक्रमणिका",
-          "किसी लंबित टूल कॉल को उसकी वर्तमान सूची अनुक्रमणिका द्वारा अस्वीकार करें।"
-        ],
-        [
-          "निष्पादन_उपकरण",
-          "उपकरण, पैरामीटर, अनुमोदन के लिए प्रतीक्षा करें?, अनुमोदन समय समाप्त_सेकंड?",
-          "सीधे ऐयर टूल चलाएँ और वैकल्पिक रूप से अनुमोदन की प्रतीक्षा करें।"
-        ],
-        [
-          "get_trace",
-          "AfterId?, सीमा?",
-          "डिबगिंग के लिए टूल निष्पादन ट्रेस प्रविष्टियाँ पढ़ें।"
-        ],
-        [
-          "क्लियर_ट्रेस",
-          "—",
-          "टूल निष्पादन ट्रेस साफ़ करें."
-        ]
-      ]
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "मुझे किन तरीकों से शुरुआत करनी चाहिए?",
-      "content": "यदि आप कोई अन्य ऐप बना रहे हैं जो Aire से कनेक्ट होता है, तो पहले सरल तरीकों से शुरुआत करें।\n\nअनुशंसित सीखने का क्रम:\n• पिंग: पुष्टि करें कि ऐयर चल रहा है और आपका टोकन वैध है।\n• show_main_window: पुष्टि करें कि आप एक दृश्यमान ऐप कार्रवाई ट्रिगर कर सकते हैं।\n• get_state: वर्तमान वार्तालाप और प्रदाता स्थिति का निरीक्षण करें।\n• सूची_बातचीत और संदेश प्राप्त करें: डेटा को सुरक्षित रूप से पढ़ें।\n• संदेश भेजें: पूर्ण अनुरोध-उत्तर दौर की यात्रा करें।\n• सूची_लंबित_अनुमोदन, अनुमोदन_टूल_कॉल, अस्वीकार_टूल_कॉल: ऐयर के अनुमोदन मॉडल के साथ एकीकृत करें।\n•execute_tool: सुरक्षा निहितार्थ और अनुमोदन व्यवहार को समझने के बाद ही।\n\nअधिकांश एकीकरणों में, सेंड_मैसेज और रीड-ओनली विधियाँ ही पर्याप्त हैं।"
-    },
-    {
-      "tab": "Local API",
-      "type": "code",
-      "title": "पॉवरशेल उदाहरण",
-      "intro": "यह उदाहरण PowerShell में स्थानीय API क्लाइंट के लिए सबसे सरल उपयोगी आकार दिखाता है। कनेक्शंस सेटिंग्स से अपना टोकन सहेजें, इसे नीचे पेस्ट करें, और फिर किसी भी चीज़ से पहले पिंग का प्रयास करें।",
-      "content": "$टोकन = \"अपना टोकन यहां चिपकाएं\"\n$पोर्ट = 51234\n\nफ़ंक्शन इनवोक-एयर {\n    परम([स्ट्रिंग]$विधि, [हैशटेबल]$पैराम्स = @{})\n    $req = @{विधि = $विधि; टोकन = $टोकन }\n    यदि ($Params.Count) { $req[\"parameters\"] = $Params }\n    $क्लाइंट = न्यू-ऑब्जेक्ट नेट.सॉकेट.टीसीपीक्लाइंट('127.0.0.1', $पोर्ट)\n    $लेखक = [IO.StreamWriter]::नया($client.GetStream())\n    $लेखक.ऑटोफ्लश = $सत्य\n    $रीडर = [आईओ.स्ट्रीमरीडर]::नया($क्लाइंट.गेटस्ट्रीम())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $सम्मान = $पाठक.रीडलाइन()\n    $ग्राहक.बंद करें()\n    वापसी $सम्मान | ConvertFrom-Json\n}\n\n# जांचें कि ऐयर चल रहा है और स्थिति का निरीक्षण करें\n$state = इनवोक-एयर \"पिंग\"\n$राज्य.परिणाम\n\n# वार्तालाप बनाएं और चुनें\n$आईडी = (आह्वान-एयर \"create_conversation\" @{ शीर्षक = \"एपीआई परीक्षण\" }).परिणाम\nइनवोक-एयर \"select_conversation\" @{ बातचीत आईडी = $ आईडी }\n\n# एक संदेश भेजें (स्वीकार किए जाने पर सत्य लौटाता है)\nइनवोक-एयर \"send_message\" @{ टेक्स्ट = \"पावरशेल की ओर से नमस्ते\" }\n\n# बारी पूरी होने के बाद वार्तालाप संदेश पढ़ें\n(आह्वान-एयर \"get_messages\" @{बातचीतआईडी = $आईडी}).परिणाम\n\n# किसी टूल को सीधे निष्पादित करें\nInvoke-Aire \"execute_tool\" @{ टूल = \"read_file\"; पैरामीटर = @{ पथ = \"C:/Temp/notes.txt\" } }"
-    },
-    {
-      "tab": "Local API",
-      "type": "code",
-      "title": "पायथन उदाहरण",
-      "intro": "यह उदाहरण केवल पायथन मानक लाइब्रेरी का उपयोग करता है। यदि आप किसी अन्य स्थानीय टूल में ऐयर समर्थन जोड़ना चाहते हैं तो यह एक अच्छा प्रारंभिक बिंदु है।",
-      "content": "आयात सॉकेट, json\n\nटोकन = \"अपना टोकन यहां चिपकाएं\"\n\nनिश्चित आय(विधि, **पैरामीटर):\n    req = {\"विधि\": विधि, \"टोकन\": टोकन}\n    यदि पैरामीटर:\n        req[\"पैरामीटर\"] = पैरामीटर\n    सॉकेट.क्रिएट_कनेक्शन(('127.0.0.1', 51234)) के साथ एस:\n        s.sendall((json.dumps(req, विभाजक=(\",\", \":\")) + \"\\n\").encode())\n        वापसी json.loads(s.makefile().readline())\n\nराज्य = एयर (\"पिंग\")\nप्रिंट (राज्य[\"परिणाम\"])\n\nवार्तालाप_आईडी = एरे (\"create_conversation\", शीर्षक = \"एपीआई परीक्षण\") [\"परिणाम\"]\nऐयर(\"select_conversation\", बातचीतआईडी=conversation_id)\naire('send_message', text='पायथन से नमस्ते')\n\nसंदेश = aire(\"get_messages\", बातचीतआईडी=बातचीत_आईडी)[\"परिणाम\"]\nप्रिंट(संदेश)\n\nपरिणाम = वायु(\n    \"निष्पादित_टूल\",\n    टूल = \"read_file\",\n    पैरामीटर={\"पथ\": \"C:/Temp/notes.txt\"}\n)\nप्रिंट(परिणाम)"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "एकीकरण युक्तियाँ",
-      "content": "• परिणाम का उपयोग करने से पहले हमेशा ठीक जांचें। यदि ठीक गलत है, तो त्रुटि संदेश पढ़ें और उसे संभालें।\n• sent_message केवल पुष्टि करता है कि Aire ने सक्रिय वार्तालाप में संदेश स्वीकार कर लिया है। यदि आपके एकीकरण को अंतिम उत्तर की आवश्यकता है, तो get_messages का पालन करें या अनुमोदन और ट्रेस आउटपुट पर नज़र रखें।\n• प्रति टीसीपी कनेक्शन एक विधि कॉल रखें। कनेक्ट करें, भेजें, पढ़ें, बंद करें।\n•execute_tool का उपयोग करने से पहले केवल पढ़ने योग्य और दृश्यता क्रियाओं से प्रारंभ करें।\n• यदि आपका एकीकरण ऐरे के सुरक्षा मॉडल के साथ सहयोग करना चाहता है, तो यह मानने के बजाय कि प्रत्येक कार्रवाई तुरंत चलती है, list_pending_approvals, wait_for_pending_approval, Approve_tool_call, और Deny_tool_call का उपयोग करें।\n•execute_tool शक्तिशाली है क्योंकि यह आपके कोड को सीधे Aire टूल्स को कॉल करने देता है। इसका प्रयोग सावधानी से करें.\n• एपीआई जानबूझकर केवल स्थानीय है। पोर्ट 51234 को अपने नेटवर्क या इंटरनेट पर उजागर न करें।\n• उत्पादन जैसे आंतरिक उपकरणों के लिए, टोकन को स्रोत कोड के बाहर संग्रहीत करें और पिंग को अपने स्टार्टअप स्वास्थ्य जांच का हिस्सा बनाएं।"
-    }
-  ]
+    ]
 }

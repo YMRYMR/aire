@@ -1,839 +1,1006 @@
 {
-  "code": "ja",
-  "nativeName": "日本語",
-  "flag": "🇯🇵",
-  "strings": {
-    "settings.title": "設定 — Aire",
-    "settings.aiProviders": "AIプロバイダー",
-    "settings.appearance": "外観",
-    "settings.brightness": "明るさ",
-    "settings.dark": "ダーク",
-    "settings.light": "ライト (ベージュ)",
-    "settings.colorTint": "カラーティント",
-    "settings.accentTint": "アクセントカラー",
-    "settings.accentBrightness": "アクセントの明るさ",
-    "settings.neutralLeft": "← ニュートラル",
-    "settings.neutralRight": "ニュートラル →",
-    "settings.fontSize": "フォントサイズ",
-    "settings.language": "言語",
-    "settings.name": "名前",
-    "settings.type": "タイプ",
-    "settings.model": "モデル",
-    "settings.apiKey": "APIキー",
-    "settings.baseUrl": "ベースURL (オプション)",
-    "settings.enabled": "有効",
-    "settings.addProvider": "+ 追加",
-    "settings.selectProvider": "プロバイダーを選択",
-    "settings.loginClaude": "Claude.aiでログイン",
-    "settings.reloginClaude": "Claude.aiで再ログイン",
-    "settings.anthropicHint": "ヒント: ANTHROPIC_API_KEY環境変数を使用する場合は空のままにしてください。",
-    "help.title": "ヘルプ — Aire",
-    "help.search": "ヘルプを検索…",
-    "tooltip.help": "ヘルプ",
-    "tooltip.settings": "設定",
-    "tooltip.clear": "会話をクリア",
-    "tooltip.mic": "音声入力を開始",
-    "tooltip.stopRecording": "録音を停止 (「AIRE PAUSE」と言うと一時停止)",
-    "tooltip.voicePaused": "音声一時停止中 (「AIRE RESUME」と言うと再開)",
-    "tooltip.downloadingWhisper": "Whisperモデルをダウンロード中…",
-    "tooltip.downloadWhisper": "クリックしてWhisperモデルをダウンロード (~150 MB)",
-    "tooltip.voiceOn": "音声出力オン — クリックで無効化",
-    "tooltip.voiceOff": "音声出力オフ — クリックで有効化",
-    "tooltip.modeCurrent": "アシスタントモード: {0}",
-    "tooltip.searchChat": "チャット内を検索 (Ctrl+F)",
-    "tooltip.pinAttached": "トレイに固定済み — クリックでシステムトレイ上に再スナップ",
-    "tooltip.pinDetached": "固定解除 — クリックでシステムトレイ上にスナップバック",
-    "settings.voiceOutput": "音声出力",
-    "settings.connections": "接続",
-    "settings.apiAccessTitle": "ローカルAPIアクセス",
-    "settings.apiAccessDescription": "信頼できるローカルアプリがローカルAPIを通じてAireを開いたり、チャット履歴を読み取ったり、アクションをリクエストしたりできるようにします。",
-    "settings.apiAccessEnabled": "ローカルAPIアクセスを有効化",
-    "settings.apiAccessTokenTitle": "認証トークン",
-    "settings.apiAccessTokenDescription": "ローカルAPIリクエストでこのトークンを渡して制御を承認します。",
-    "settings.apiAccessTokenCopy": "コピー",
-    "settings.apiAccessTokenRegenerate": "再生成",
-    "settings.voiceOutputEnabled": "音声出力を有効化",
-    "settings.voiceMicOnly": "マイク使用時のみ音声出力",
-    "settings.voice": "音声",
-    "settings.voiceSpeed": "速度",
-    "main.sessionActive": "セッションアクティブ",
-    "main.endSession": "セッション終了",
-    "main.thinking": "思考中…",
-    "main.assistantModeSwitched": "アシスタントモードが{0}に切り替わりました。",
-    "main.remove": "削除",
-    "menu.find": "検索... Ctrl+F",
-    "menu.saveChat": "チャットをテキストとして保存...",
-    "confirm.deleteTitle": "「{0}」を削除しますか？",
-    "confirm.deleteMsg": "プロバイダーとその設定が完全に削除されます。",
-    "onboarding.welcomeTitle": "Aireへようこそ",
-    "onboarding.welcomeSubtitle": "すべての人のためのAI",
-    "onboarding.welcomeDesc": "トレイベースのAIチャットアプリで、OpenAI、Anthropic Claude、Google AI、Ollamaなど、あらゆるAIプロバイダーと一箇所で会話できます。",
-    "onboarding.getStarted": "始めましょう →",
-    "onboarding.pickerTitle": "AIプロバイダーを選択",
-    "onboarding.pickerSubtitle": "始めるには1つ選んでください。後でいつでも追加できます。",
-    "onboarding.addAiTitle": "最初のAIを追加",
-    "onboarding.addAiSubtitle": "AIプロバイダーに接続してチャットを開始します。",
-    "onboarding.providerType": "プロバイダータイプ",
-    "onboarding.name": "名前",
-    "onboarding.apiKey": "APIキー",
-    "onboarding.baseUrl": "ベースURL (オプション — OpenAIの場合は空白のまま)",
-    "onboarding.model": "モデル",
-    "onboarding.testConnection": "接続テスト",
-    "onboarding.skipForNow": "今はスキップ",
-    "onboarding.finish": "完了 →",
-    "onboarding.doneTitle": "準備完了です！",
-    "onboarding.doneDesc": "Aireがシステムトレイで実行されています。いつでもアイコンをクリックしてチャットを開けます。",
-    "onboarding.startChatting": "チャットを開始",
-    "onboarding.testing": "テスト中…",
-    "onboarding.testOk": "接続成功！",
-    "onboarding.testFail": "失敗",
-    "onboarding.fillKeyFirst": "まずAPIキーを入力してください。",
-    "onboarding.whereApiKey": "APIキーはどこで入手できますか？",
-    "onboarding.signUpPrefix": "アカウントをお持ちでない場合: サインアップ",
-    "tooltip.sidebar": "会話履歴",
-    "tooltip.providerCooldown": "プロバイダーはクールダウン中です",
-    "tooltip.checkAvailability": "プロバイダーが再び利用可能か確認",
-    "tooltip.browser": "ブラウザを開く (AIは開いているタブを読み取れます)",
-    "placeholder.search": "検索…",
-    "tooltip.newConversation": "新しい会話",
-    "tooltip.openImageViewer": "クリックして画像ビューアーで開く",
-    "tooltip.allow": "許可",
-    "tooltip.deny": "拒否",
-    "tooltip.previousMatch": "前の一致",
-    "tooltip.nextMatch": "次の一致",
-    "tooltip.close": "閉じる",
-    "tooltip.openFile": "クリックしてファイルを開く",
-    "tooltip.removeAttachment": "添付ファイルを削除",
-    "tooltip.stopThinking": "AIの思考を停止",
-    "tooltip.toolsDisabled": "ツール無効 — クリックしてツールカテゴリを選択",
-    "tooltip.toolsEnabled": "有効なツールカテゴリ: {0}",
-    "warning.largeFile": "⚠ 大きなファイル — プロバイダーが拒否する可能性があります",
-    "menu.copyChat": "チャットをテキストとしてコピー",
-    "menu.restoreWindowSizes": "元のウィンドウサイズに復元",
-    "menu.rename": "名前変更",
-    "menu.delete": "削除",
-    "menu.deleteAllConversations": "すべての会話を削除",
-    "settings.setupWizard": "セットアップウィザード",
-    "settings.apiAccessEnabledTooltip": "他のローカルアプリがAireを制御できるようにします。呼び出し元を信頼する場合以外はオフにしてください。",
-    "settings.testSelectedVoice": "選択した音声をテスト",
-    "tooltip.dragReorder": "ドラッグして並べ替え",
-    "tooltip.runTests": "テストを実行",
-    "cooldown.suffix": "↻をクリックしてクールダウンを解除し、再試行します。",
-    "settings.refreshModelsTooltip": "サーバーからモデルリストを更新",
-    "tools.enableAllCategories": "すべてのツールカテゴリを有効化",
-    "tools.noTools": "ツールなし",
-    "toolCategory.filesystem.label": "ファイル",
-    "toolCategory.filesystem.description": "ローカルファイルとフォルダーを読み書きします。",
-    "toolCategory.browser.label": "ブラウザ",
-    "toolCategory.browser.description": "ブラウザタブとページを検査・制御します。",
-    "toolCategory.agent.label": "エージェント",
-    "toolCategory.agent.description": "計画、フォローアップ、タスク管理ツールを使用します。",
-    "toolCategory.mouse.label": "マウス",
-    "toolCategory.mouse.description": "マウスを移動、クリック、ドラッグ、スクロールし、スクリーンショットを撮ります。",
-    "toolCategory.keyboard.label": "キーボード",
-    "toolCategory.keyboard.description": "テキストを入力し、キー押下を送信します。",
-    "toolCategory.system.label": "システム",
-    "toolCategory.system.description": "プロセスを検査し、アプリを開き、ローカルシステムアクションを起動します。",
-    "toolCategory.email.label": "メール",
-    "toolCategory.email.description": "メールの読み取り、検索、送信、返信を行います。",
-    "assistantMode.architect.name": "アーキテクト",
-    "assistantMode.architect.description": "システムと設計のトレードオフモード",
-    "assistantMode.creative-writer.name": "クリエイティブライター",
-    "assistantMode.creative-writer.description": "アイデア豊富な表現力豊かなライティングモード",
-    "assistantMode.developer.name": "開発者",
-    "assistantMode.developer.description": "実装優先の技術モード",
-    "assistantMode.general.name": "一般",
-    "assistantMode.general.description": "バランスの取れたデフォルト動作",
-    "assistantMode.painter.name": "画家",
-    "assistantMode.painter.description": "絵作りと視覚的概念モード",
-    "assistantMode.philosopher.name": "哲学者",
-    "assistantMode.philosopher.description": "概念的推論と世界観モード",
-    "assistantMode.psicologist.name": "心理学者",
-    "assistantMode.psicologist.description": "共感的で内省的なモード",
-    "assistantMode.scientist.name": "科学者",
-    "assistantMode.scientist.description": "証拠に基づく分析モード",
-    "assistantMode.security.name": "セキュリティ",
-    "assistantMode.security.description": "セキュリティ重視のレビューと脅威分析モード",
-    "assistantMode.teacher.name": "教師",
-    "assistantMode.teacher.description": "説明重視の学習モード",
-    "setup.title": "Aire - セットアップ",
-    "setup.heroTitle": "初回セットアップ",
-    "setup.heroDescription": "Aireが通常のオンボーディングウィザードを開く前に、初期のアクセシビリティとアシスタントのデフォルトを選択します。",
-    "setup.languageSectionTitle": "1. 言語",
-    "setup.languageSectionDescription": "Aireが最初に起動する際に使用する言語を選択します。",
-    "setup.assistantModeSectionTitle": "2. デフォルトアシスタントモード",
-    "setup.assistantModeSectionDescription": "変更するまで、新しい会話の開始モードになります。",
-    "setup.accessibilitySectionTitle": "3. アクセシビリティデフォルト",
-    "setup.voiceOutputLabel": "Aire起動時から音声出力を有効化",
-    "setup.voiceOutputDescription": "Aireはメインアプリ起動後に応答を音声で読み上げることができます。",
-    "setup.voiceInputLabel": "起動時から音声入力を有効化",
-    "setup.voiceInputDescription": "ローカル音声モデルが利用可能な場合、Aireは起動時に自動的に聞き取りを開始します。",
-    "setup.localVoicesLabel": "ローカルのWindows音声のみを使用",
-    "setup.localVoicesDescription": "オフラインでセットアップと音声出力を機能させたい場合に便利です。",
-    "setup.voiceGuidedSectionTitle": "4. 音声ガイド付きセットアップ",
-    "setup.voiceGuidanceLabel": "セットアップ手順を音声で読み上げる",
-    "setup.voiceCommandsLabel": "音声セットアップコマンドを許可",
-    "setup.voiceCommandsDescription": "認識されるコマンド: English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
-    "setup.startVoice": "音声セットアップを開始",
-    "setup.stopVoice": "音声セットアップを停止",
-    "setup.summaryTitle": "概要",
-    "setup.savePreferences": "設定を保存",
-    "setup.saveAndOpen": "保存してAireを開く",
-    "setup.summaryLanguage": "言語",
-    "setup.summaryAssistantMode": "デフォルトアシスタントモード",
-    "setup.summaryVoiceOutput": "Aireでの音声出力",
-    "setup.summaryVoiceInput": "Aireでの音声入力",
-    "setup.summaryLocalVoices": "ローカル音声のみを使用",
-    "setup.summaryReadAloud": "セットアップを音声読み上げ",
-    "setup.summaryVoiceCommands": "音声セットアップコマンド",
-    "setup.summaryNextStep": "Aireを開くと、通常のオンボーディングウィザードに進み、プロバイダーを設定できます。",
-    "setup.summarySpoken": "言語 {0}。アシスタントモード {1}。音声出力 {2}。音声入力 {3}。保存と言うか、Open Aireと言ってください。",
-    "setup.voiceStatusListening": "音声セットアップが聞き取り中です。コマンドを話し、一時停止してください。",
-    "setup.voiceStatusCommandsOff": "音声セットアップコマンドはオフです。",
-    "setup.voiceStatusModelNeeded": "音声コマンドにはローカル音声モデルが必要です。ダウンロードするには音声セットアップを開始してください。",
-    "setup.voiceStatusReady": "音声コマンドの準備ができました。音声セットアップを開始して聞き取りを始めてください。",
-    "setup.launchNotFoundMessage": "設定は保存されましたが、セットアップアプリの隣にAire.exeが見つかりませんでした。オンボーディングを続行するには手動でAireを起動してください。",
-    "setup.preferencesSaved": "設定を保存しました。",
-    "setup.preferencesSavedSpoken": "設定を保存しました。Aireはオンボーディングウィザードを開く準備ができています。",
-    "setup.voiceStatusDownloading": "音声セットアップ用のローカル音声モデルをダウンロード中...",
-    "setup.voiceStatusDownloadFailed": "音声モデルのダウンロードに失敗しました。インターネット接続を確認して再試行してください。",
-    "setup.voiceStatusStartFailed": "音声セットアップを開始できませんでした: {0}",
-    "setup.voiceStatusDownloadProgress": "音声モデルをダウンロード中: {0}%",
-    "setup.voiceStatusCommandNotRecognized": "音声コマンドが認識されませんでした: {0}",
-    "setup.voiceStatusCommandApplied": "音声コマンドを適用しました: {0}",
-    "setup.enabled": "有効",
-    "setup.disabled": "無効",
-    "setup.yes": "はい",
-    "setup.no": "いいえ",
-    "setup.enabledSpoken": "有効",
-    "setup.disabledSpoken": "無効",
-    "panic.title": "Aire停止",
-    "panic.tooltip": "クリックしてアクティブなキーボード/マウスセッションを即座に停止します。\nドラッグして位置を変更します。",
-    "panic.stopButton": "⏹ セッション停止"
-  },
-  "help": [
-    {
-      "tab": "セットアップウィザード",
-      "type": "text",
-      "title": "セットアップ ウィザードの仕組み",
-      "links": [
+    "code": "ja",
+    "nativeName": "日本語",
+    "flag": "🇯🇵",
+    "strings": {
+        "settings.title": "設定 — Aire",
+        "settings.aiProviders": "AIプロバイダー",
+        "settings.appearance": "外観",
+        "settings.brightness": "明るさ",
+        "settings.dark": "ダーク",
+        "settings.light": "ライト (ベージュ)",
+        "settings.colorTint": "カラーティント",
+        "settings.accentTint": "アクセントカラー",
+        "settings.accentBrightness": "アクセントの明るさ",
+        "settings.neutralLeft": "← ニュートラル",
+        "settings.neutralRight": "ニュートラル →",
+        "settings.fontSize": "フォントサイズ",
+        "settings.language": "言語",
+        "settings.name": "名前",
+        "settings.type": "タイプ",
+        "settings.model": "モデル",
+        "settings.apiKey": "APIキー",
+        "settings.baseUrl": "ベースURL (オプション)",
+        "settings.enabled": "有効",
+        "settings.addProvider": "+ 追加",
+        "settings.selectProvider": "プロバイダーを選択",
+        "settings.loginClaude": "Claude.aiでログイン",
+        "settings.reloginClaude": "Claude.aiで再ログイン",
+        "settings.anthropicHint": "ヒント: ANTHROPIC_API_KEY環境変数を使用する場合は空のままにしてください。",
+        "help.title": "ヘルプ — Aire",
+        "help.search": "ヘルプを検索…",
+        "tooltip.help": "ヘルプ",
+        "tooltip.settings": "設定",
+        "tooltip.clear": "会話をクリア",
+        "tooltip.mic": "音声入力を開始",
+        "tooltip.stopRecording": "録音を停止 (「AIRE PAUSE」と言うと一時停止)",
+        "tooltip.voicePaused": "音声一時停止中 (「AIRE RESUME」と言うと再開)",
+        "tooltip.downloadingWhisper": "Whisperモデルをダウンロード中…",
+        "tooltip.downloadWhisper": "クリックしてWhisperモデルをダウンロード (~150 MB)",
+        "tooltip.voiceOn": "音声出力オン — クリックで無効化",
+        "tooltip.voiceOff": "音声出力オフ — クリックで有効化",
+        "tooltip.modeCurrent": "アシスタントモード: {0}",
+        "tooltip.searchChat": "チャット内を検索 (Ctrl+F)",
+        "tooltip.pinAttached": "トレイに固定済み — クリックでシステムトレイ上に再スナップ",
+        "tooltip.pinDetached": "固定解除 — クリックでシステムトレイ上にスナップバック",
+        "settings.voiceOutput": "音声出力",
+        "settings.connections": "接続",
+        "settings.context": "コンテクスト",
+        "settings.contextDescription": "Aire が各ターンにプロバイダーに送信する会話履歴の量、およびキャッシュと要約の適用方法を制御します。",
+        "settings.contextHistory": "歴史",
+        "settings.contextMaxMessages": "ウィンドウサイズ",
+        "settings.contextMaxMessagesDescription": "ターンごとにプロバイダーに送信される最大メッセージ数",
+        "settings.contextAnchorMessages": "アンカーメッセージ",
+        "settings.contextAnchorMessagesDescription": "古い履歴を削除しても、初期のメッセージは常に保持されます",
+        "settings.contextCaching": "キャッシング",
+        "settings.contextPromptCaching": "即時キャッシュ",
+        "settings.contextPromptCachingDescription": "プロバイダーがサポートしている場合、安定したプレフィックスをキャッシュに適したものとしてマークします。",
+        "settings.contextUncachedRecentMessages": "キャッシュされていない末尾",
+        "settings.contextUncachedRecentMessagesDescription": "最新のメッセージは常に新鮮に送信され、キャッシュマークは付けられません",
+        "settings.contextSummaries": "概要",
+        "settings.contextAutoSummarise": "自動要約",
+        "settings.contextAutoSummariseDescription": "トリミングされた要約は、文脈を維持した短い要約に変わります",
+        "settings.contextSummaryMaxCharacters": "サマリー制限",
+        "settings.contextSummaryMaxCharactersDescription": "要約要約が占めることができる最大文字数",
+        "settings.contextHint": "システムメッセージとアンカーターンは常に保持されます。キャッシュされたプレフィックスは、プロンプト キャッシュを明示的にサポートするプロバイダーのコストのみを削減します。",
+        "settings.contextRestoreDefaults": "デフォルトに戻す",
+        "settings.autoAccept": "自動承認",
+        "settings.profile": "プロフィール",
+        "settings.apply": "適用する",
+        "settings.saveAs": "名前を付けて保存",
+        "settings.delete": "消去",
+        "settings.autoAcceptEnabled": "選択したツールの自動受け入れを有効にする",
+        "settings.autoAcceptCautionTitle": "⚠注意",
+        "settings.autoAcceptCaution": "AI を監視なしで動作させることは危険な場合があります。十分に理解しているツールのみを有効にしてください。",
+        "settings.autoAcceptSelectTools": "確認なしで実行できるツールを選択します。",
+        "autoAccept.category.webBrowser": "ウェブ/ブラウザ",
+        "autoAccept.category.commands": "コマンド",
+        "autoAccept.category.fileSystem": "ファイルシステム",
+        "autoAccept.category.systemClipboard": "システム / クリップボード",
+        "autoAccept.category.memory": "メモリ",
+        "autoAccept.category.email": "電子メール",
+        "autoAccept.category.aiTaskFlow": "AI / タスクフロー",
+        "autoAccept.category.mouseKeyboard": "マウス/キーボード",
+        "autoAccept.tool.browseWeb": "Web を閲覧する (URL を取得する)",
+        "autoAccept.tool.httpRequest": "HTTPリクエスト",
+        "autoAccept.tool.openBrowserTab": "ブラウザタブを開く",
+        "autoAccept.tool.listBrowserTabs": "ブラウザのタブを一覧表示する",
+        "autoAccept.tool.readBrowserTab": "ブラウザタブを読む",
+        "autoAccept.tool.switchBrowserTab": "ブラウザのタブを切り替える",
+        "autoAccept.tool.closeBrowserTab": "ブラウザのタブを閉じる",
+        "autoAccept.tool.getBrowserHtml": "ブラウザのHTMLを取得する",
+        "autoAccept.tool.executeBrowserScript": "ブラウザスクリプトを実行する",
+        "autoAccept.tool.getBrowserCookies": "ブラウザの Cookie を取得する",
+        "autoAccept.tool.executeCommand": "コマンドを実行する",
+        "autoAccept.tool.readCommandOutput": "読み取りコマンド出力",
+        "autoAccept.tool.listFiles": "ファイルのリストを表示する",
+        "autoAccept.tool.readFile": "ファイルの読み取り",
+        "autoAccept.tool.searchFiles": "ファイルの検索",
+        "autoAccept.tool.searchFileContent": "ファイルの内容を検索する",
+        "autoAccept.tool.writeToFile": "ファイルに書き込む",
+        "autoAccept.tool.applyDiff": "コードの差分を適用する",
+        "autoAccept.tool.createDirectory": "ディレクトリの作成",
+        "autoAccept.tool.deleteFile": "ファイルの削除",
+        "autoAccept.tool.moveFile": "ファイルの移動/名前変更",
+        "autoAccept.tool.openFile": "ファイルを開く",
+        "autoAccept.tool.getClipboard": "クリップボードを取得",
+        "autoAccept.tool.setClipboard": "クリップボードを設定する",
+        "autoAccept.tool.notify": "通知を表示する",
+        "autoAccept.tool.getSystemInfo": "システム情報を取得する",
+        "autoAccept.tool.getRunningProcesses": "実行中のプロセスをリストする",
+        "autoAccept.tool.getActiveWindow": "アクティブウィンドウを取得",
+        "autoAccept.tool.getSelectedText": "選択したテキストを取得する",
+        "autoAccept.tool.remember": "覚えて",
+        "autoAccept.tool.recall": "想起",
+        "autoAccept.tool.setReminder": "リマインダーを設定する",
+        "autoAccept.tool.readEmails": "メールを読む",
+        "autoAccept.tool.searchEmails": "メールの検索",
+        "autoAccept.tool.sendEmail": "電子メールを送信する",
+        "autoAccept.tool.replyToEmail": "メールに返信する",
+        "autoAccept.tool.newTask": "新しいタスクを作成する",
+        "autoAccept.tool.askFollowupQuestion": "フォローアップの質問をする",
+        "autoAccept.tool.attemptCompletion": "タスクを完了としてマークする",
+        "autoAccept.tool.skill": "ランスキル",
+        "autoAccept.tool.switchMode": "スイッチモード",
+        "autoAccept.tool.switchModel": "スイッチモデル",
+        "autoAccept.tool.updateTodoList": "やることリストを更新する",
+        "autoAccept.tool.showImage": "画像を表示",
+        "autoAccept.tool.mouseTools": "マウスツール (移動、クリック、スクロール)",
+        "autoAccept.tool.keyboardTools": "キーボード ツール (テキストの入力、キーの組み合わせ)",
+        "autoAccept.tooltip.browseWeb": "Web ページを取得し、そのテキストを AI に返します。読み取り専用で、通常は安全です。",
+        "autoAccept.tooltip.httpRequest": "任意の HTTP リクエスト (GET、POST、PUT、DELETE など) を任意の URL に送信します。フォームを送信したり、API を呼び出したり、リモート サーバーで副作用をトリガーしたりできます。",
+        "autoAccept.tooltip.openBrowserTab": "Aire ブラウザ ウィンドウで URL を開き、表示されます。一般的には安全です。",
+        "autoAccept.tooltip.listBrowserTabs": "Aire ブラウザで開いているすべてのタブのタイトルと URL をリストします。読み取り専用で安全です。",
+        "autoAccept.tooltip.readBrowserTab": "開いているブラウザー タブのレンダリングされたテキスト コンテンツを読み取ります。読み取り専用で安全です。",
+        "autoAccept.tooltip.switchBrowserTab": "Aire ブラウザでアクティブにするタブを変更します。安全。",
+        "autoAccept.tooltip.closeBrowserTab": "Aire ブラウザで開いているタブの 1 つを閉じます。安全ですが、保存しておきたいコンテンツは閉じられます。",
+        "autoAccept.tooltip.getBrowserHtml": "開いているブラウザー タブの生の HTML ソースを返します。読み取り専用で安全です。",
+        "autoAccept.tooltip.executeBrowserScript": "開いているブラウザーのタブで任意の JavaScript を実行します。高リスク - Cookie の読み取り、フォームの送信、または任意のページ要素の操作が可能です。",
+        "autoAccept.tooltip.getBrowserCookies": "開いているブラウザーのタブから Cookie を読み取ります。セッション トークンと認証資格情報を公開できる。",
+        "autoAccept.tooltip.executeCommand": "最初に確認することなく、シェル コマンドを実行するか、インストールされているアプリケーションを起動します。高リスク — AI が自律的にコマンドを実行すると信頼できる場合にのみ有効にします。",
+        "autoAccept.tooltip.readCommandOutput": "以前に開始されたバックグラウンド プロセスの出力を読み取ります。一般的には安全です。",
+        "autoAccept.tooltip.listFiles": "フォルダーの内容を一覧表示します。読み取り専用で安全です。",
+        "autoAccept.tooltip.readFile": "ファイルを開いて内容を読み取ります。読み取り専用で安全です。",
+        "autoAccept.tooltip.searchFiles": "フォルダー内の名前パターンに基づいてファイルを検索します。読み取り専用で安全です。",
+        "autoAccept.tooltip.searchFileContent": "ファイルの内容内のテキスト パターンを検索します (grep など)。読み取り専用で安全です。",
+        "autoAccept.tooltip.writeToFile": "新しいコンテンツでファイルを作成または上書きします。既存のデータを変更または削除できます。",
+        "autoAccept.tooltip.applyDiff": "パッチを適用して、既存のファイル内の行を変更します。ソースコードや設定ファイルをサイレントに変更できます。",
+        "autoAccept.tooltip.createDirectory": "新しいフォルダーを作成します。一般的には安全です。",
+        "autoAccept.tooltip.deleteFile": "ファイルを完全に削除します。高リスク - 削除されたファイルは回復できない可能性があります。",
+        "autoAccept.tooltip.moveFile": "ファイルまたはフォルダーを移動または名前変更します。コピー先にある既存のファイルを上書きできます。",
+        "autoAccept.tooltip.openFile": "デフォルトのアプリケーションでファイルを開きます (例: PDF ビューアで PDF を開きます)。安全。",
+        "autoAccept.tooltip.getClipboard": "現在のクリップボードの内容を読み取ります。コピーした機密データが公開される可能性があります。",
+        "autoAccept.tooltip.setClipboard": "AI が生成したテキストでクリップボードを上書きします。安全ですが、コピーしたものはすべて置き換えられます。",
+        "autoAccept.tooltip.notify": "システム通知を表示します。安全。",
+        "autoAccept.tooltip.getSystemInfo": "OS、ハードウェア、環境の情報を読み取ります。読み取り専用で安全です。",
+        "autoAccept.tooltip.getRunningProcesses": "マシン上で現在実行中のプロセスのリストを返します。読み取り専用で安全です。",
+        "autoAccept.tooltip.getActiveWindow": "現在フォーカスされているウィンドウのタイトルとプロセスを返します。読み取り専用で安全です。",
+        "autoAccept.tooltip.getSelectedText": "画面上で現在選択されているテキストを読み取ります。読み取り専用で安全です。",
+        "autoAccept.tooltip.remember": "キーと値のペアを AI の永続メモリ ストアに保存します。安全。",
+        "autoAccept.tooltip.recall": "AI の永続メモリ ストアから値を読み取ります。読み取り専用で安全です。",
+        "autoAccept.tooltip.setReminder": "遅延後にリマインダー通知が表示されるようにスケジュールします。安全。",
+        "autoAccept.tooltip.readEmails": "接続されているメール アカウントから電子メールを読み取ります。プライベートな通信を公開する可能性があります。",
+        "autoAccept.tooltip.searchEmails": "メールボックスで一致するメッセージを検索します。読み取り専用。",
+        "autoAccept.tooltip.sendEmail": "あなたに代わってメールを作成して送信します。高リスク — 電子メールはすぐに配信され、元に戻せない可能性があります。",
+        "autoAccept.tooltip.replyToEmail": "既存の電子メール スレッドに返信を送信します。高リスク — 電子メールの送信と同じ。",
+        "autoAccept.tooltip.newTask": "新しいサブタスクを開始します。 AI は、それ以上のプロンプトを表示せずに、多くのツール呼び出しを内部で連鎖させる可能性があります。",
+        "autoAccept.tooltip.askFollowupQuestion": "AI は続行する前に、明確な質問をするために一時停止します。一般的には安全です。",
+        "autoAccept.tooltip.attemptCompletion": "AI は現在のタスクを完了したことを通知し、概要を表示します。安全。",
+        "autoAccept.tooltip.skill": "組み込みのスキルまたはマクロを実行します。リスクはスキルの内容によって異なります。",
+        "autoAccept.tooltip.switchMode": "AI の動作モードを変更します (例: チャットからコーディング アシスタント)。一般的には安全です。",
+        "autoAccept.tooltip.switchModel": "会話中に別の AI モデルまたはプロバイダーに切り替えます。一般的には安全です。",
+        "autoAccept.tooltip.updateTodoList": "タスク To Do リストの項目を追加、更新、またはチェックオフします。安全。",
+        "autoAccept.tooltip.showImage": "チャット内のファイル パスまたは URL から画像を表示します。安全。",
+        "autoAccept.tooltip.mouseTools": "カーソルを移動し、画面上の任意の場所をクリックします。高リスク — 最初に表示されることなく、アプリケーションまたは UI 要素と対話できる可能性があります。",
+        "autoAccept.tooltip.keyboardTools": "フォーカスされたウィンドウにテキストを入力するか、キーの組み合わせを押します。高リスク — 入力を任意のアプリケーションに送信できる。",
+        "mcp.servers": "MCPサーバー",
+        "mcp.serversDescription": "MCP サーバーを接続し、カスタム ツールで AI を拡張します。変更はすぐに有効になります。",
+        "mcp.tip": "ほとんどのサーバーには Node.js (npx) が必要です。サーバーの起動に失敗した場合は、Node.js がインストールされていることを確認してください (nodejs.org)",
+        "mcp.discover": "発見する",
+        "mcp.searchPlaceholder": "サーバーを検索…",
+        "mcp.installed": "インストール済み",
+        "mcp.installedServers": "インストールされているサーバー",
+        "mcp.addCustom": "+カスタム",
+        "mcp.edit": "編集",
+        "mcp.remove": "取り除く",
+        "mcp.enabled": "有効",
+        "mcp.disabled": "無効",
+        "settings.apiAccessTitle": "ローカルAPIアクセス",
+        "settings.apiAccessDescription": "信頼できるローカルアプリがローカルAPIを通じてAireを開いたり、チャット履歴を読み取ったり、アクションをリクエストしたりできるようにします。",
+        "settings.apiAccessEnabled": "ローカルAPIアクセスを有効化",
+        "settings.apiAccessTokenTitle": "認証トークン",
+        "settings.apiAccessTokenDescription": "ローカルAPIリクエストでこのトークンを渡して制御を承認します。",
+        "settings.apiAccessTokenCopy": "コピー",
+        "settings.apiAccessTokenRegenerate": "再生成",
+        "settings.voiceOutputEnabled": "音声出力を有効化",
+        "settings.voiceMicOnly": "マイク使用時のみ音声出力",
+        "settings.voice": "音声",
+        "settings.voiceSpeed": "速度",
+        "settings.voiceLocalOnly": "ローカル音声のみを使用します (インターネットは必要ありません)",
+        "settings.voiceLocalOnlyDescription": "ローカル音声のみを使用します (インターネットは必要ありません)",
+        "settings.downloadVoices": "Windows ボイスをダウンロード...",
+        "main.sessionActive": "セッションアクティブ",
+        "main.endSession": "セッション終了",
+        "main.thinking": "思考中…",
+        "main.assistantModeSwitched": "アシスタントモードが{0}に切り替わりました。",
+        "main.remove": "削除",
+        "menu.find": "検索... Ctrl+F",
+        "menu.saveChat": "チャットをテキストとして保存...",
+        "confirm.deleteTitle": "「{0}」を削除しますか？",
+        "confirm.deleteMsg": "プロバイダーとその設定が完全に削除されます。",
+        "onboarding.welcomeTitle": "Aireへようこそ",
+        "onboarding.welcomeSubtitle": "すべての人のためのAI",
+        "onboarding.welcomeDesc": "トレイベースのAIチャットアプリで、OpenAI、Anthropic Claude、Google AI、Ollamaなど、あらゆるAIプロバイダーと一箇所で会話できます。",
+        "onboarding.getStarted": "始めましょう →",
+        "onboarding.pickerTitle": "AIプロバイダーを選択",
+        "onboarding.pickerSubtitle": "始めるには1つ選んでください。後でいつでも追加できます。",
+        "onboarding.addAiTitle": "最初のAIを追加",
+        "onboarding.addAiSubtitle": "AIプロバイダーに接続してチャットを開始します。",
+        "onboarding.providerType": "プロバイダータイプ",
+        "onboarding.name": "名前",
+        "onboarding.apiKey": "APIキー",
+        "onboarding.baseUrl": "ベースURL (オプション — OpenAIの場合は空白のまま)",
+        "onboarding.model": "モデル",
+        "onboarding.testConnection": "接続テスト",
+        "onboarding.skipForNow": "今はスキップ",
+        "onboarding.finish": "完了 →",
+        "onboarding.doneTitle": "準備完了です！",
+        "onboarding.doneDesc": "Aireがシステムトレイで実行されています。いつでもアイコンをクリックしてチャットを開けます。",
+        "onboarding.startChatting": "チャットを開始",
+        "onboarding.testing": "テスト中…",
+        "onboarding.testOk": "接続成功！",
+        "onboarding.testFail": "失敗",
+        "onboarding.fillKeyFirst": "まずAPIキーを入力してください。",
+        "onboarding.whereApiKey": "APIキーはどこで入手できますか？",
+        "onboarding.signUpPrefix": "アカウントをお持ちでない場合: サインアップ",
+        "tooltip.sidebar": "会話履歴",
+        "tooltip.providerCooldown": "プロバイダーはクールダウン中です",
+        "tooltip.checkAvailability": "プロバイダーが再び利用可能か確認",
+        "tooltip.browser": "ブラウザを開く (AIは開いているタブを読み取れます)",
+        "placeholder.search": "検索…",
+        "tooltip.newConversation": "新しい会話",
+        "tooltip.openImageViewer": "クリックして画像ビューアーで開く",
+        "tooltip.allow": "許可",
+        "tooltip.deny": "拒否",
+        "tooltip.previousMatch": "前の一致",
+        "tooltip.nextMatch": "次の一致",
+        "tooltip.close": "閉じる",
+        "tooltip.openFile": "クリックしてファイルを開く",
+        "tooltip.removeAttachment": "添付ファイルを削除",
+        "tooltip.stopThinking": "AIの思考を停止",
+        "tooltip.toolsDisabled": "ツール無効 — クリックしてツールカテゴリを選択",
+        "tooltip.toolsEnabled": "有効なツールカテゴリ: {0}",
+        "warning.largeFile": "⚠ 大きなファイル — プロバイダーが拒否する可能性があります",
+        "menu.copyChat": "チャットをテキストとしてコピー",
+        "menu.clearConversation": "明確な会話",
+        "menu.restoreWindowSizes": "元のウィンドウサイズに復元",
+        "menu.rename": "名前変更",
+        "menu.delete": "削除",
+        "menu.deleteAllConversations": "すべての会話を削除",
+        "settings.setupWizard": "セットアップウィザード",
+        "settings.apiAccessEnabledTooltip": "他のローカルアプリがAireを制御できるようにします。呼び出し元を信頼する場合以外はオフにしてください。",
+        "settings.testSelectedVoice": "選択した音声をテスト",
+        "tooltip.dragReorder": "ドラッグして並べ替え",
+        "tooltip.runTests": "テストを実行",
+        "cooldown.suffix": "↻をクリックしてクールダウンを解除し、再試行します。",
+        "settings.refreshModelsTooltip": "サーバーからモデルリストを更新",
+        "tools.enableAllCategories": "すべてのツールカテゴリを有効化",
+        "tools.noTools": "ツールなし",
+        "toolCategory.filesystem.label": "ファイル",
+        "toolCategory.filesystem.description": "ローカルファイルとフォルダーを読み書きします。",
+        "toolCategory.browser.label": "ブラウザ",
+        "toolCategory.browser.description": "ブラウザタブとページを検査・制御します。",
+        "toolCategory.agent.label": "エージェント",
+        "toolCategory.agent.description": "計画、フォローアップ、タスク管理ツールを使用します。",
+        "toolCategory.mouse.label": "マウス",
+        "toolCategory.mouse.description": "マウスを移動、クリック、ドラッグ、スクロールし、スクリーンショットを撮ります。",
+        "toolCategory.keyboard.label": "キーボード",
+        "toolCategory.keyboard.description": "テキストを入力し、キー押下を送信します。",
+        "toolCategory.system.label": "システム",
+        "toolCategory.system.description": "プロセスを検査し、アプリを開き、ローカルシステムアクションを起動します。",
+        "toolCategory.email.label": "メール",
+        "toolCategory.email.description": "メールの読み取り、検索、送信、返信を行います。",
+        "assistantMode.architect.name": "アーキテクト",
+        "assistantMode.architect.description": "システムと設計のトレードオフモード",
+        "assistantMode.creative-writer.name": "クリエイティブライター",
+        "assistantMode.creative-writer.description": "アイデア豊富な表現力豊かなライティングモード",
+        "assistantMode.developer.name": "開発者",
+        "assistantMode.developer.description": "実装優先の技術モード",
+        "assistantMode.general.name": "一般",
+        "assistantMode.general.description": "バランスの取れたデフォルト動作",
+        "assistantMode.painter.name": "画家",
+        "assistantMode.painter.description": "絵作りと視覚的概念モード",
+        "assistantMode.philosopher.name": "哲学者",
+        "assistantMode.philosopher.description": "概念的推論と世界観モード",
+        "assistantMode.psicologist.name": "心理学者",
+        "assistantMode.psicologist.description": "共感的で内省的なモード",
+        "assistantMode.scientist.name": "科学者",
+        "assistantMode.scientist.description": "証拠に基づく分析モード",
+        "assistantMode.security.name": "セキュリティ",
+        "assistantMode.security.description": "セキュリティ重視のレビューと脅威分析モード",
+        "assistantMode.teacher.name": "教師",
+        "assistantMode.teacher.description": "説明重視の学習モード",
+        "setup.title": "Aire - セットアップ",
+        "setup.heroTitle": "初回セットアップ",
+        "setup.heroDescription": "Aireが通常のオンボーディングウィザードを開く前に、初期のアクセシビリティとアシスタントのデフォルトを選択します。",
+        "setup.languageSectionTitle": "1. 言語",
+        "setup.languageSectionDescription": "Aireが最初に起動する際に使用する言語を選択します。",
+        "setup.assistantModeSectionTitle": "2. デフォルトアシスタントモード",
+        "setup.assistantModeSectionDescription": "変更するまで、新しい会話の開始モードになります。",
+        "setup.accessibilitySectionTitle": "3. アクセシビリティデフォルト",
+        "setup.voiceOutputLabel": "Aire起動時から音声出力を有効化",
+        "setup.voiceOutputDescription": "Aireはメインアプリ起動後に応答を音声で読み上げることができます。",
+        "setup.voiceInputLabel": "起動時から音声入力を有効化",
+        "setup.voiceInputDescription": "ローカル音声モデルが利用可能な場合、Aireは起動時に自動的に聞き取りを開始します。",
+        "setup.localVoicesLabel": "ローカルのWindows音声のみを使用",
+        "setup.localVoicesDescription": "オフラインでセットアップと音声出力を機能させたい場合に便利です。",
+        "setup.voiceGuidedSectionTitle": "4. 音声ガイド付きセットアップ",
+        "setup.voiceGuidanceLabel": "セットアップ手順を音声で読み上げる",
+        "setup.voiceCommandsLabel": "音声セットアップコマンドを許可",
+        "setup.voiceCommandsDescription": "認識されるコマンド: English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
+        "setup.startVoice": "音声セットアップを開始",
+        "setup.stopVoice": "音声セットアップを停止",
+        "setup.summaryTitle": "概要",
+        "setup.savePreferences": "設定を保存",
+        "setup.saveAndOpen": "保存してAireを開く",
+        "setup.summaryLanguage": "言語",
+        "setup.summaryAssistantMode": "デフォルトアシスタントモード",
+        "setup.summaryVoiceOutput": "Aireでの音声出力",
+        "setup.summaryVoiceInput": "Aireでの音声入力",
+        "setup.summaryLocalVoices": "ローカル音声のみを使用",
+        "setup.summaryReadAloud": "セットアップを音声読み上げ",
+        "setup.summaryVoiceCommands": "音声セットアップコマンド",
+        "setup.summaryNextStep": "Aireを開くと、通常のオンボーディングウィザードに進み、プロバイダーを設定できます。",
+        "setup.summarySpoken": "言語 {0}。アシスタントモード {1}。音声出力 {2}。音声入力 {3}。保存と言うか、Open Aireと言ってください。",
+        "setup.voiceStatusListening": "音声セットアップが聞き取り中です。コマンドを話し、一時停止してください。",
+        "setup.voiceStatusCommandsOff": "音声セットアップコマンドはオフです。",
+        "setup.voiceStatusModelNeeded": "音声コマンドにはローカル音声モデルが必要です。ダウンロードするには音声セットアップを開始してください。",
+        "setup.voiceStatusReady": "音声コマンドの準備ができました。音声セットアップを開始して聞き取りを始めてください。",
+        "setup.launchNotFoundMessage": "設定は保存されましたが、セットアップアプリの隣にAire.exeが見つかりませんでした。オンボーディングを続行するには手動でAireを起動してください。",
+        "setup.preferencesSaved": "設定を保存しました。",
+        "setup.preferencesSavedSpoken": "設定を保存しました。Aireはオンボーディングウィザードを開く準備ができています。",
+        "setup.voiceStatusDownloading": "音声セットアップ用のローカル音声モデルをダウンロード中...",
+        "setup.voiceStatusDownloadFailed": "音声モデルのダウンロードに失敗しました。インターネット接続を確認して再試行してください。",
+        "setup.voiceStatusStartFailed": "音声セットアップを開始できませんでした: {0}",
+        "setup.voiceStatusDownloadProgress": "音声モデルをダウンロード中: {0}%",
+        "setup.voiceStatusCommandNotRecognized": "音声コマンドが認識されませんでした: {0}",
+        "setup.voiceStatusCommandApplied": "音声コマンドを適用しました: {0}",
+        "setup.enabled": "有効",
+        "setup.disabled": "無効",
+        "setup.yes": "はい",
+        "setup.no": "いいえ",
+        "setup.enabledSpoken": "有効",
+        "setup.disabledSpoken": "無効",
+        "panic.title": "Aire停止",
+        "panic.tooltip": "クリックしてアクティブなキーボード/マウスセッションを即座に停止します。\nドラッグして位置を変更します。",
+        "panic.stopButton": "⏹ セッション停止",
+        "settings.tab.providers": "AI Providers",
+        "settings.tab.appearance": "Appearance",
+        "settings.tab.voice": "Voice",
+        "settings.tab.context": "Context",
+        "settings.tab.autoAccept": "AutoÔÇæaccept",
+        "settings.tab.connections": "Connections",
+        "mcp.nameLabel": "名前",
+        "mcp.commandLabel": "コマンド",
+        "mcp.argsLabel": "引数",
+        "mcp.workDirLabel": "作業ディレクトリ（オプション）",
+        "mcp.envVarsLabel": "環境変数 — 1行に1つ:  KEY=value",
+        "onboarding.provider.openai.subtitle": "GPT-4o、o3 など",
+        "onboarding.provider.codex.subtitle": "ローカル CLI ブリッジ",
+        "onboarding.provider.ollama.subtitle": "ローカル・無料・プライベート",
+        "onboarding.provider.anthropic.subtitle": "Claude Sonnet、Haiku",
+        "onboarding.provider.claudeweb.subtitle": "ブラウザでサインイン",
+        "onboarding.provider.openrouter.subtitle": "100以上のモデル、無料枚あり",
+        "onboarding.provider.deepseek.subtitle": "Chat、Reasoner、V3",
+        "onboarding.provider.zai.subtitle": "GLM モデル · z.ai",
+        "onboarding.provider.inception.subtitle": "Mercury と Inception",
+        "onboarding.provider.googleai.subtitle": "Gemini Pro & Flash",
+        "onboarding.provider.googleaiimage.subtitle": "Gemini 画像生成",
+        "onboarding.provider.groq.subtitle": "無料枚あり、高速"
+    },
+    "help": [
         {
-          "label": "セットアップウィザードを開く",
-          "action": "onboarding"
+            "tab": "セットアップウィザード",
+            "type": "text",
+            "title": "セットアップ ウィザードの仕組み",
+            "links": [
+                {
+                    "label": "セットアップウィザードを開く",
+                    "action": "onboarding"
+                },
+                {
+                    "label": "AI セットアップを開く",
+                    "action": "settings:providers"
+                }
+            ],
+            "imagePath": "Assets/Help/onboarding-provider-picker.png",
+            "imageCaption": "セットアップ ウィザードは、チャットを開始する前にプロバイダーを選択するのに役立ちます。",
+            "content": "セットアップ ウィザードは、Aire を初めて実行するとき、または AI プロバイダーがまだ構成されていないときに表示されます。その役割は、新規インストールからできるだけ早くチャットが使える状態にすることです。\n\nウィザードの実行内容は次のとおりです。\n• ようこそ: Aire とは何かを説明し、アプリの言語を選択できるようにします。\n• プロバイダー ピッカー: Aire を AI サービスに接続する一般的な方法を示します。\n• プロバイダーのセットアップ: 選択したプロバイダーに必要な詳細を尋ねます。\n• 完了: Aire の準備が完了したことを確認し、メイン アプリに移動します。\n\nAI を初めて使用する場合は、ウィザードから始めるのが最適です。最初に最も単純なパスが使用され、必要になるまで詳細設定は非表示になります。\n\nセットアップをスキップして、後で戻ってくることもできますが、Aire がチャット メッセージに応答できるようにするには、少なくとも 1 つの構成済みプロバイダーが必要です。"
         },
         {
-          "label": "AI セットアップを開く",
-          "action": "settings:providers"
-        }
-      ],
-      "imagePath": "Assets/Help/onboarding-provider-picker.png",
-      "imageCaption": "セットアップ ウィザードは、チャットを開始する前にプロバイダーを選択するのに役立ちます。",
-      "content": "セットアップ ウィザードは、Aire を初めて実行するとき、または AI プロバイダーがまだ構成されていないときに表示されます。その役割は、新規インストールからできるだけ早くチャットが使える状態にすることです。\n\nウィザードの実行内容は次のとおりです。\n• ようこそ: Aire とは何かを説明し、アプリの言語を選択できるようにします。\n• プロバイダー ピッカー: Aire を AI サービスに接続する一般的な方法を示します。\n• プロバイダーのセットアップ: 選択したプロバイダーに必要な詳細を尋ねます。\n• 完了: Aire の準備が完了したことを確認し、メイン アプリに移動します。\n\nAI を初めて使用する場合は、ウィザードから始めるのが最適です。最初に最も単純なパスが使用され、必要になるまで詳細設定は非表示になります。\n\nセットアップをスキップして、後で戻ってくることもできますが、Aire がチャット メッセージに応答できるようにするには、少なくとも 1 つの構成済みプロバイダーが必要です。"
-    },
-    {
-      "tab": "セットアップウィザード",
-      "type": "text",
-      "title": "プロバイダーの選択",
-      "links": [
-        {
-          "label": "セットアップウィザードを開く",
-          "action": "onboarding"
+            "tab": "セットアップウィザード",
+            "type": "text",
+            "title": "プロバイダーの選択",
+            "links": [
+                {
+                    "label": "セットアップウィザードを開く",
+                    "action": "onboarding"
+                },
+                {
+                    "label": "platform.openai.com",
+                    "action": "https://platform.openai.com"
+                },
+                {
+                    "label": "console.anthropic.com",
+                    "action": "https://console.anthropic.com"
+                },
+                {
+                    "label": "aistudio.google.com",
+                    "action": "https://aistudio.google.com"
+                }
+            ],
+            "content": "プロバイダー ピッカーでは、Aire がユーザーに代わってどの AI サービスと通信するかを決定します。\n\n主なオプションの意味:\n• OpenAI: シンプルなクラウド設定と広範なモデルのサポートが必要な場合の一般的な開始点です。\n• Anthropic API: クロード モデルで知られるもう 1 つの強力なクラウド オプション。\n• Claude.ai: API キーの代わりにブラウザーのサインインを使用します。\n• Google AI: Google AI Studio を通じて Gemini チャット モデルに接続します。\n• Google AI イメージ: 専用の Gemini イメージ生成セットアップ。\n• Ollama: モデルをコンピュータ上でローカルに実行します。プライバシーとオフラインでの使用には適していますが、ハードウェアによって異なります。\n• Codex: 通常の API キーの代わりにローカル Codex CLI ブリッジを使用します。\n• Groq、OpenRouter、DeepSeek、Inception、および z.ai: 他のプロバイダーまたは OpenAI 互換エンドポイント。すでにアカウントを持っている場合に便利です。\n\nどれを選ぶべきですか?\n• チャット用のクラウド設定を最も簡単にしたい場合は、OpenAI、Anthropic、または Google AI から始めてください。\n• ローカルでプライベートな場合: Ollama を選択します。\n• 特に Gemini から画像を生成したい場合: Google AI 画像を選択します。\n• すでに別の場所で特定のプロバイダーの料金を支払っている場合、または特定のプロバイダーを使用している場合: ここで同じプロバイダーを選択します。\n\nロックインされていません。ウィザードを使用すると、最初にプロバイダーを 1 つ追加でき、後で [設定] でさらにプロバイダーを追加できます。"
         },
         {
-          "label": "platform.openai.com",
-          "action": "https://platform.openai.com"
+            "tab": "セットアップウィザード",
+            "type": "text",
+            "title": "プロバイダーの詳細を入力する",
+            "links": [
+                {
+                    "label": "セットアップウィザードを開く",
+                    "action": "onboarding"
+                },
+                {
+                    "label": "AI セットアップを開く",
+                    "action": "settings:providers"
+                }
+            ],
+            "imagePath": "Assets/Help/onboarding-provider-setup.png",
+            "imageCaption": "プロバイダーのタイプ、名前、資格情報、モデル、接続テストを含むプロバイダーのセットアップ手順。",
+            "content": "プロバイダーを選択すると、ウィザードはプロバイダーに必要な詳細のみを要求します。\n\n代表的なフィールド:\n• プロバイダーの種類: 使用するサービス。\n• 名前: Aire がチャット ウィンドウに表示するラベル。\n• API キー: Aire がプロバイダーと通信できるようにする秘密のトークン。一部のプロバイダーは代わりにブラウザー サインインを使用し、一部のローカル プロバイダーは API キーをまったく必要としません。\n• ベース URL: 特定の OpenAI 互換サービスまたはセルフホスト型セットアップにのみ必要です。\n• モデル: 使用する特定の AI モデル。\n\nプロバイダー固有の注意事項:\n• Claude.ai は、通常の API キーの代わりにブラウザーのサインインを使用します。\n• Ollama はローカルであり、通常は API キーなしで動作します。\n• Codex はローカル Codex CLI ブリッジを使用するため、ウィザードは通常の API キーを要求する代わりに CLI インストールを提供できます。\n• Google AI Images は、通常のチャットではなく画像生成を目的としています。\n\n[接続のテスト] ボタンは、終了する前に構成を確認するのに役立ちます。テストが成功すると、通常、Aire はそのプロバイダーをすぐに使用できるようになります。\n\n実践的なアドバイス:\n• どのモデルを選択すればよいかわからない場合は、デフォルトの提案から始めてください。\n• API キー フィールドが表示された場合は、サービスによって提供されたキーを正確に貼り付けます。\n• プロバイダーが API アクセスとブラウザー サインインの両方を提供している場合、最も安定した自動化と統合の動作が必要な場合は API アクセスを優先します。\n\nウィザードの終了後も、後から [AI プロバイダー] タブでこれらの設定を変更できます。"
         },
         {
-          "label": "console.anthropic.com",
-          "action": "https://console.anthropic.com"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "概要",
+            "links": [
+                {
+                    "label": "最初の AI をセットアップする",
+                    "action": "settings:providers"
+                },
+                {
+                    "label": "Aireの外観を変更する",
+                    "action": "settings:appearance"
+                }
+            ],
+            "content": "Aire は、必要になるまでシステム トレイに常駐するデスクトップ チャット アプリです。これは、多くの AI サービスに接続できる 1 つのチャット ウィンドウと考えることができます。\n\nAI を初めて使用する場合、通常の出発点は単純です。\n• AI セットアップを開きます。\n• OpenAI、Anthropic、Google AI、Ollama などのプロバイダーを 1 つ追加します。\n• モデルを選択します。\n• チャット ボックスに質問を入力し、Enter キーを押します。\n\nAire でできること:\n• 1 つのアプリからさまざまな AI サービスと通信します。\n• 会話をコンピュータに保存します。\n• ユーザーの承認を得て、AI にファイルの読み取り、コマンドの実行、ページの閲覧などを行うツールを使用させます。\n• Windows の音声機能を使用して音声入力と音声出力を使用します。\n• 他のローカル アプリがローカル API を通じて Aire と通信できるようにします。"
         },
         {
-          "label": "aistudio.google.com",
-          "action": "https://aistudio.google.com"
-        }
-      ],
-      "content": "プロバイダー ピッカーでは、Aire がユーザーに代わってどの AI サービスと通信するかを決定します。\n\n主なオプションの意味:\n• OpenAI: シンプルなクラウド設定と広範なモデルのサポートが必要な場合の一般的な開始点です。\n• Anthropic API: クロード モデルで知られるもう 1 つの強力なクラウド オプション。\n• Claude.ai: API キーの代わりにブラウザーのサインインを使用します。\n• Google AI: Google AI Studio を通じて Gemini チャット モデルに接続します。\n• Google AI イメージ: 専用の Gemini イメージ生成セットアップ。\n• Ollama: モデルをコンピュータ上でローカルに実行します。プライバシーとオフラインでの使用には適していますが、ハードウェアによって異なります。\n• Codex: 通常の API キーの代わりにローカル Codex CLI ブリッジを使用します。\n• Groq、OpenRouter、DeepSeek、Inception、および z.ai: 他のプロバイダーまたは OpenAI 互換エンドポイント。すでにアカウントを持っている場合に便利です。\n\nどれを選ぶべきですか?\n• チャット用のクラウド設定を最も簡単にしたい場合は、OpenAI、Anthropic、または Google AI から始めてください。\n• ローカルでプライベートな場合: Ollama を選択します。\n• 特に Gemini から画像を生成したい場合: Google AI 画像を選択します。\n• すでに別の場所で特定のプロバイダーの料金を支払っている場合、または特定のプロバイダーを使用している場合: ここで同じプロバイダーを選択します。\n\nロックインされていません。ウィザードを使用すると、最初にプロバイダーを 1 つ追加でき、後で [設定] でさらにプロバイダーを追加できます。"
-    },
-    {
-      "tab": "セットアップウィザード",
-      "type": "text",
-      "title": "プロバイダーの詳細を入力する",
-      "links": [
-        {
-          "label": "セットアップウィザードを開く",
-          "action": "onboarding"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "トレイアイコン",
+            "content": "Aire はシステム トレイ (タスクバーの右下隅) で実行されます。\n\n• トレイ アイコンを左クリックまたは右クリックして、チャット ウィンドウを開きます。\n• トレイ アイコンを右クリックして、[開く]、[設定]、[終了] のオプションを表示します。\n• ウィンドウを閉じると非表示になります - Aire はバックグラウンドで実行され続けます。\n• 完全に終了するには、トレイ アイコンを右クリックし、[終了] を選択します。"
         },
         {
-          "label": "AI セットアップを開く",
-          "action": "settings:providers"
-        }
-      ],
-      "imagePath": "Assets/Help/onboarding-provider-setup.png",
-      "imageCaption": "プロバイダーのタイプ、名前、資格情報、モデル、接続テストを含むプロバイダーのセットアップ手順。",
-      "content": "プロバイダーを選択すると、ウィザードはプロバイダーに必要な詳細のみを要求します。\n\n代表的なフィールド:\n• プロバイダーの種類: 使用するサービス。\n• 名前: Aire がチャット ウィンドウに表示するラベル。\n• API キー: Aire がプロバイダーと通信できるようにする秘密のトークン。一部のプロバイダーは代わりにブラウザー サインインを使用し、一部のローカル プロバイダーは API キーをまったく必要としません。\n• ベース URL: 特定の OpenAI 互換サービスまたはセルフホスト型セットアップにのみ必要です。\n• モデル: 使用する特定の AI モデル。\n\nプロバイダー固有の注意事項:\n• Claude.ai は、通常の API キーの代わりにブラウザーのサインインを使用します。\n• Ollama はローカルであり、通常は API キーなしで動作します。\n• Codex はローカル Codex CLI ブリッジを使用するため、ウィザードは通常の API キーを要求する代わりに CLI インストールを提供できます。\n• Google AI Images は、通常のチャットではなく画像生成を目的としています。\n\n[接続のテスト] ボタンは、終了する前に構成を確認するのに役立ちます。テストが成功すると、通常、Aire はそのプロバイダーをすぐに使用できるようになります。\n\n実践的なアドバイス:\n• どのモデルを選択すればよいかわからない場合は、デフォルトの提案から始めてください。\n• API キー フィールドが表示された場合は、サービスによって提供されたキーを正確に貼り付けます。\n• プロバイダーが API アクセスとブラウザー サインインの両方を提供している場合、最も安定した自動化と統合の動作が必要な場合は API アクセスを優先します。\n\nウィザードの終了後も、後から [AI プロバイダー] タブでこれらの設定を変更できます。"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "概要",
-      "links": [
-        {
-          "label": "最初の AI をセットアップする",
-          "action": "settings:providers"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "チャット",
+            "links": [
+                {
+                    "label": "オープンプロバイダー",
+                    "action": "settings:providers"
+                }
+            ],
+            "imagePath": "Assets/Help/main-chat.png",
+            "imageCaption": "プロバイダー セレクター、会話エリア、検索、およびコンポーザーを備えたメイン チャット ウィンドウ。",
+            "content": "• 下部の入力ボックスにメッセージを入力し、Enter キーを押して送信します。\n• 送信せずに新しい行を追加するには、Shift+Enter を押します。\n• ↑ / ↓ を押して、以前に送信したメッセージ間を移動します (カーソルが入力ボックスの最初または最後の行にある場合にのみ機能します)。\n• 画像を入力ボックスにドラッグ アンド ドロップして、メッセージに添付します (ビジョン対応モデルが必要です)。\n• Ctrl+F を押して会話内を検索します。 ↑ / ↓ または矢印ボタンを使用して、一致の間を移動します。 Esc キーを押して検索バーを閉じます。\n• チャット領域を右クリックして、会話をコピーまたはテキスト ファイルとして保存します。\n• 🗑 ボタンは現在の会話をクリアします (最初に確認を求めます)。\n• サイドバーの 💬 ボタンをクリックすると、会話履歴が開きます。"
         },
         {
-          "label": "Aireの外観を変更する",
-          "action": "settings:appearance"
-        }
-      ],
-      "content": "Aire は、必要になるまでシステム トレイに常駐するデスクトップ チャット アプリです。これは、多くの AI サービスに接続できる 1 つのチャット ウィンドウと考えることができます。\n\nAI を初めて使用する場合、通常の出発点は単純です。\n• AI セットアップを開きます。\n• OpenAI、Anthropic、Google AI、Ollama などのプロバイダーを 1 つ追加します。\n• モデルを選択します。\n• チャット ボックスに質問を入力し、Enter キーを押します。\n\nAire でできること:\n• 1 つのアプリからさまざまな AI サービスと通信します。\n• 会話をコンピュータに保存します。\n• ユーザーの承認を得て、AI にファイルの読み取り、コマンドの実行、ページの閲覧などを行うツールを使用させます。\n• Windows の音声機能を使用して音声入力と音声出力を使用します。\n• 他のローカル アプリがローカル API を通じて Aire と通信できるようにします。"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "トレイアイコン",
-      "content": "Aire はシステム トレイ (タスクバーの右下隅) で実行されます。\n\n• トレイ アイコンを左クリックまたは右クリックして、チャット ウィンドウを開きます。\n• トレイ アイコンを右クリックして、[開く]、[設定]、[終了] のオプションを表示します。\n• ウィンドウを閉じると非表示になります - Aire はバックグラウンドで実行され続けます。\n• 完全に終了するには、トレイ アイコンを右クリックし、[終了] を選択します。"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "チャット",
-      "links": [
-        {
-          "label": "オープンプロバイダー",
-          "action": "settings:providers"
-        }
-      ],
-      "imagePath": "Assets/Help/main-chat.png",
-      "imageCaption": "プロバイダー セレクター、会話エリア、検索、およびコンポーザーを備えたメイン チャット ウィンドウ。",
-      "content": "• 下部の入力ボックスにメッセージを入力し、Enter キーを押して送信します。\n• 送信せずに新しい行を追加するには、Shift+Enter を押します。\n• ↑ / ↓ を押して、以前に送信したメッセージ間を移動します (カーソルが入力ボックスの最初または最後の行にある場合にのみ機能します)。\n• 画像を入力ボックスにドラッグ アンド ドロップして、メッセージに添付します (ビジョン対応モデルが必要です)。\n• Ctrl+F を押して会話内を検索します。 ↑ / ↓ または矢印ボタンを使用して、一致の間を移動します。 Esc キーを押して検索バーを閉じます。\n• チャット領域を右クリックして、会話をコピーまたはテキスト ファイルとして保存します。\n• 🗑 ボタンは現在の会話をクリアします (最初に確認を求めます)。\n• サイドバーの 💬 ボタンをクリックすると、会話履歴が開きます。"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "table",
-      "title": "キーボードショートカット",
-      "cols": [
-        "ショートカット",
-        "アクション"
-      ],
-      "rows": [
-        [
-          "入力",
-          "メッセージを送信する"
-        ],
-        [
-          "Shift+Enter",
-          "入力ボックスの改行"
-        ],
-        [
-          "↑ / ↓",
-          "メッセージ履歴の移動 (カーソルが最初/最後の行にある場合)"
-        ],
-        [
-          "Ctrl+F",
-          "会話を検索する"
-        ],
-        [
-          "Ctrl+スクロール",
-          "フォントサイズを調整する"
-        ],
-        [
-          "逃げる",
-          "検索バーを閉じる/ダイアログを閉じる"
-        ]
-      ]
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "ヒント",
-      "content": "• 複数の AI プロバイダーを構成し、チャット ウィンドウの上部でそれらを切り替えることができます。各会話は、そのプロバイダー モードとアシスタント モードを記憶します。\n• 上部を含む任意の端をドラッグして、ウィンドウのサイズを変更します。\n• 会話と設定はローカルの %LOCALAPPDATA%\\Aire に保存されます。\n• AI はファイル、コマンド、ブラウザーアクションなどのツールを要求できますが、自動受け入れルールが適用されない限り、Aire は引き続き承認を求めます。\n• AI 応答が遮断された場合、モデルはトークンまたは出力制限に達している可能性があります。続行するか、タスクのサイズを減らすか、より大きなコンテキスト ウィンドウを持つモデルを使用するかを依頼してください。"
-    },
-    {
-      "tab": "Getting Started",
-      "type": "text",
-      "title": "アシスタントモード",
-      "imagePath": "Assets/Help/main-chat-modes.png",
-      "imageCaption": "アシスタント モード メニューはメイン ヘッダーから開きます。各会話は独自のモードを保持します。",
-      "content": "メインヘッダーのモードボタンは、Aire がプロバイダーに送信する前にリクエストをフレーム化する方法を変更します。\n\n現在のモードには、建築家、クリエイティブ ライター、開発者、一般、画家、哲学者、心理学者、科学者、セキュリティ、教師が含まれます。\n\nモードの機能:\n• アシスタントのスタイルと優先順位を調整します。\n• 選択したモードは会話ごとに保存されるため、異なるチャットで異なる役割を維持できます。\n• 新しい会話のデフォルトは「全般」です。\n• さまざまなプロバイダーは依然として独自の癖を持っていますが、Aire は選択されたモードを共通のガイダンスとして一貫して渡します。\n\n実際の例:\n• 開発者: コード、デバッグ、ターミナル タスクに適しています。\n• アーキテクト: 構造、トレードオフ、計画に優れています。\n• 教師: 説明と段階的な指導の方が適しています。\n• ペインタ: 現在のプロバイダがサポートしている場合、画像指向のプロンプトおよび生成に最適です。"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "ツールのカテゴリ",
-      "imagePath": "Assets/Help/main-chat-tools.png",
-      "imageCaption": "Composer から [ツール] メニューが開きます。すべてのカテゴリを有効にすることも、すべて無効にすることも、必要なカテゴリのみを選択することもできます。",
-      "content": "チャット ボックスの近くにあるレンチ ボタンは、現在のプロバイダーが使用できるツールのカテゴリを制御します。\n\n仕組み:\n• レンチ ボタンをクリックしてカテゴリ メニューを開きます。\n• AI にリクエストできるようにしたいカテゴリのみをオンにします。\n• テキストのみの会話が必要な場合は、[ツールなし] を選択します。\n• Aire は選択したツール カテゴリを記憶し、現在のツール ポリシーの一部として使用します。\n\nこれが重要な理由:\n• 有効なカテゴリが少ないため、ツールの使用法が理解しやすくなります。\n• カテゴリを制限すると、リスクと偶発的な副作用を軽減できます。\n• プロバイダーがツールをサポートしていない場合、レンチ ボタンは非表示になります。"
-    },
-    {
-      "tab": "Providers",
-      "type": "text",
-      "title": "AIプロバイダー",
-      "imagePath": "Assets/Help/settings-providers.png",
-      "imageCaption": "左側にプロバイダー リストが表示され、右側に選択したプロバイダー フォームが表示されるプロバイダー設定。",
-      "links": [
-        {
-          "label": "AI セットアップを開く",
-          "action": "settings:providers"
+            "tab": "Getting Started",
+            "type": "table",
+            "title": "キーボードショートカット",
+            "cols": [
+                "ショートカット",
+                "アクション"
+            ],
+            "rows": [
+                [
+                    "入力",
+                    "メッセージを送信する"
+                ],
+                [
+                    "Shift+Enter",
+                    "入力ボックスの改行"
+                ],
+                [
+                    "↑ / ↓",
+                    "メッセージ履歴の移動 (カーソルが最初/最後の行にある場合)"
+                ],
+                [
+                    "Ctrl+F",
+                    "会話を検索する"
+                ],
+                [
+                    "Ctrl+スクロール",
+                    "フォントサイズを調整する"
+                ],
+                [
+                    "逃げる",
+                    "検索バーを閉じる/ダイアログを閉じる"
+                ]
+            ]
         },
         {
-          "label": "platform.openai.com",
-          "action": "https://platform.openai.com"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "ヒント",
+            "content": "• 複数の AI プロバイダーを構成し、チャット ウィンドウの上部でそれらを切り替えることができます。各会話は、そのプロバイダー モードとアシスタント モードを記憶します。\n• 上部を含む任意の端をドラッグして、ウィンドウのサイズを変更します。\n• 会話と設定はローカルの %LOCALAPPDATA%\\Aire に保存されます。\n• AI はファイル、コマンド、ブラウザーアクションなどのツールを要求できますが、自動受け入れルールが適用されない限り、Aire は引き続き承認を求めます。\n• AI 応答が遮断された場合、モデルはトークンまたは出力制限に達している可能性があります。続行するか、タスクのサイズを減らすか、より大きなコンテキスト ウィンドウを持つモデルを使用するかを依頼してください。"
         },
         {
-          "label": "console.anthropic.com",
-          "action": "https://console.anthropic.com"
+            "tab": "Getting Started",
+            "type": "text",
+            "title": "アシスタントモード",
+            "imagePath": "Assets/Help/main-chat-modes.png",
+            "imageCaption": "アシスタント モード メニューはメイン ヘッダーから開きます。各会話は独自のモードを保持します。",
+            "content": "メインヘッダーのモードボタンは、Aire がプロバイダーに送信する前にリクエストをフレーム化する方法を変更します。\n\n現在のモードには、建築家、クリエイティブ ライター、開発者、一般、画家、哲学者、心理学者、科学者、セキュリティ、教師が含まれます。\n\nモードの機能:\n• アシスタントのスタイルと優先順位を調整します。\n• 選択したモードは会話ごとに保存されるため、異なるチャットで異なる役割を維持できます。\n• 新しい会話のデフォルトは「全般」です。\n• さまざまなプロバイダーは依然として独自の癖を持っていますが、Aire は選択されたモードを共通のガイダンスとして一貫して渡します。\n\n実際の例:\n• 開発者: コード、デバッグ、ターミナル タスクに適しています。\n• アーキテクト: 構造、トレードオフ、計画に優れています。\n• 教師: 説明と段階的な指導の方が適しています。\n• ペインタ: 現在のプロバイダがサポートしている場合、画像指向のプロンプトおよび生成に最適です。"
         },
         {
-          "label": "aistudio.google.com",
-          "action": "https://aistudio.google.com"
-        }
-      ],
-      "content": "プロバイダーは、Aire がユーザーに代わって通信する AI サービスです。ほとんどのユーザーは、プロバイダーを 1 つ設定するだけで開始できます。\n\n各プロバイダー エントリには、次の 4 つの主要な部分があります。\n• 名前: Aire 内に表示されるラベル。\n• タイプ: どの AI サービスを使用するか。\n• モデル: そのサービスを実行する特定のモデル。\n• 資格情報: 通常は API キー、または Claude.ai の場合はブラウザーのサインインです。\n\n一般的な選択肢:\n• OpenAI: platform.openai.com から API キーを貼り付けます。\n• Anthropic: ブラウザーで Claude.ai を使用してサインインするか、Anthropic API キーを貼り付けます。\n• Google AI: aistudio.google.com から Gemini API キーを貼り付けます。\n• Ollama: 自分のマシン上でローカルの Ollama サーバーを使用します。 API キーは必要ありません。\n• OpenAI 互換エンドポイント: Groq、Mistral、OpenRouter、DeepSeek、LM Studio などのサービスは、多くの場合、ベース URL を設定することで機能します。\n\nどちらを使用すればよいかわからない場合は、通常、OpenAI または Anthropic が最も簡単なクラウド オプションであり、通常のローカル オプションは Ollama です。\n\nプロバイダーは、削除せずに有効または無効にすることができます。変更は自動的に保存されます。"
-    },
-    {
-      "tab": "Providers",
-      "type": "table",
-      "title": "ツール呼び出しモード",
-      "intro": "Aire は、AI モデルにツールへのアクセスを許可する 2 つの方法をサポートしています。モードはプロバイダーの種類に基づいて自動的に選択されますが、カスタム JSON ファイル内のモデルごとにオーバーライドできます (「カスタム モデル」を参照)。",
-      "cols": [
-        "モード",
-        "仕組み"
-      ],
-      "rows": [
-        [
-          "テキストベース\n(デフォルト: OpenAI、Anthropic)",
-          "ツールの説明はシステム プロンプトに埋め込まれています。 AI は <tool_call> XML ブロックで応答します。指示に確実に従えば、どのモデルでも動作します。"
-        ],
-        [
-          "ネイティブ関数呼び出し\n(デフォルト: Ollama、Google AI)",
-          "構造化されたツール スキーマは、プロバイダー API 経由で送信されます。 AI は構造化された関数呼び出しオブジェクトを返します。より正確に。明示的な API サポートが必要です。"
-        ],
-        [
-          "サポートされていません",
-          "モデルは工具を使用できません。これをカスタム モデル ファイルで設定すると、ツール プロンプトによって混乱するモデルのプロンプトがスキップされます。"
-        ]
-      ]
-    },
-    {
-      "tab": "Providers",
-      "type": "table",
-      "title": "プロバイダーとモデルの互換性",
-      "intro": "[機能テスト] ボタンを使用して、特定のプロバイダーとモデルの組み合わせを確認します。",
-      "cols": [
-        "プロバイダー/エンドポイント",
-        "モード",
-        "注意事項"
-      ],
-      "rows": [
-        [
-          "OpenAI",
-          "ネイティブ",
-          "GPT-4o、GPT-4.1、GPT-4o-mini — 信頼できるツールのサポート"
-        ],
-        [
-          "人間的",
-          "テキストベース",
-          "Claude 3.5 Sonnet 以降 — 優れた指示に従ってください"
-        ],
-        [
-          "Google AI (ジェミニ)",
-          "ネイティブ",
-          "Gemini 2.0 Flash 以降を推奨"
-        ],
-        [
-          "オラマ (地元)",
-          "ネイティブ",
-          "qwen2.5-coder、llama3.1、mistral-nemo はうまく動作します。小型モデルはさまざまです"
-        ],
-        [
-          "Groq (Op​​enAI + ベース URL)",
-          "ネイティブ",
-          "ベース URL: https://api.groq.com/openai/v1 — 非常に高速"
-        ],
-        [
-          "ミストラル (OpenAI + ベース URL)",
-          "ネイティブ",
-          "ベース URL: https://api.mistral.ai/v1"
-        ],
-        [
-          "OpenRouter (OpenAI + ベース URL)",
-          "ネイティブ",
-          "ベース URL: https://openrouter.ai/api/v1 — 100 以上のモデル"
-        ],
-        [
-          "DeepSeek (OpenAI + ベース URL)",
-          "ネイティブ",
-          "ベース URL: https://api.deepseek.com/v1"
-        ],
-        [
-          "LM Studio (OpenAI + ベース URL)",
-          "ネイティブ",
-          "ベース URL: http://localhost:1234/v1 — LM Studio 設定で関数呼び出しを有効にする"
-        ]
-      ]
-    },
-    {
-      "tab": "Providers",
-      "type": "text",
-      "title": "能力テスト",
-      "links": [
-        {
-          "label": "AI セットアップを開く",
-          "action": "settings:providers"
-        }
-      ],
-      "content": "[テストの実行] ボタンでは、選択したプロバイダーとモデルが実際に何ができるかを確認します。\n\nテストされる内容:\n• ツール呼び出し機能テストは、モデルが予想される Aire ツールを要求するかどうかをチェックします。実際のファイル、ブラウザ、システムアクションは実行されません。\n• イメージ生成機能のテストは、プロバイダーのイメージ生成パスを直接呼び出します。これらのテストはプロバイダーの割り当てを消費する可能性があり、アカウントまたはモデルがイメージ生成をサポートしていない場合は失敗する可能性があります。\n\n使用方法:\n• [設定] ⚙ を開き、プロバイダーを選択し、[テストの実行] をクリックします。\n• テスト中の構成変更を避けるため、プロバイダー フォームは実行中はロックされます。\n• 結果はプロバイダーとモデルの組み合わせごとにキャッシュされ、次回すぐにリロードされます。\n\n読み取り結果:\n• ✓ (緑) — プロバイダーは機能を正しく処理しました。\n• ✗ (赤) — プロバイダーまたはモデルがその機能に失敗しました。\n• メッセージにクォータ、残高、またはレート制限について言及されている場合、エラーは Aire 自体からではなくプロバイダー アカウントから発生しています。\n\nモデルが多くのツール テストに失敗した場合は、別のモデルを試すか、そのカスタム モデル メタデータを調整してください。イメージの生成が失敗した場合は、プロバイダーのアカウント、モデル、クォータが実際にイメージの生成を許可していることを確認してください。"
-    },
-    {
-      "tab": "Providers",
-      "type": "code",
-      "title": "カスタムモデル",
-      "intro": "アプリの Data\\Models ディレクトリに JSON ファイルを作成して、任意のプロバイダー タイプのモデル リストをカスタマイズします。機能配列を使用して、モデルがサポートするものを宣言します。\n\n機能フラグ:\n• \"vision\" — モデルは画像の添付ファイルを受け入れます\n• 「ツール」 - モデルはツールを使用できます。\n• \"toolcallmode:native\" — ネイティブ関数の呼び出しを強制する\n• \"toolcallmode:text\" — テキストベースのツール呼び出しを強制します。\n• \"toolcallmode:unsupported\" — ツール プロンプトを完全に無効にします。\n\nツール出力形式フラグ (テキスト応答にツール呼び出しを埋め込むモデルの場合):\n• \"toolformat:hermes\" — ヘルメス/クウェン形式: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain 形式: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — コンテンツに埋め込まれた OpenAI ネイティブの tool_calls スキーマ\n• \"toolformat:text\" — Aire のデフォルトのテキスト形式: {\"tool\":\"...\", ...}",
-      "content": "{\n  \"providerType\": \"OpenAI\",\n  「モデル」: [\n    {\n      \"id\": \"gpt-4o\",\n      \"表示名\": \"GPT-4o\",\n      \"能力\": [\"ビジョン\", \"ツール\"]\n    }、\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (ツールなし)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    }、\n    {\n      \"id\": \"私の微調整モデル\",\n      \"displayName\": \"私の微調整\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  】\n}"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "AIツール",
-      "links": [
-        {
-          "label": "AI アクションの承認を確認する",
-          "action": "settings:auto-accept"
-        }
-      ],
-      "content": "一部の AI モデルは、Aire にアクションの実行を依頼できます。 Aire はこれらのアクション ツールを「ツール」と呼んでいます。\n\n重要: ツールはサイレントに実行されません。 Aire は AI が何をしたいのかを示し、あなたはそれを承認または拒否します。\n\nツールでできることの例:\n• ファイルの読み取りまたは書き込み。\n• シェルコマンドを実行します。\n• Web ページを開いて読みます。\n• ブラウザのタブを検査します。\n• スクリーンショットを撮ります。\n• マウスを入力、クリック、または移動します。\n• 電子メールを読んだり、送信したりできます。\n\nこの機能を初めて使用する場合、最も安全な習慣はシンプルです。承認する前にアクション リクエストを読むことです。意味がある場合は読み取り専用のアクションを承認し、ファイルの変更、メッセージの送信、またはキーボードとマウスの制御を行うアクションにはより注意してください。"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "プロファイルの自動承認",
-      "links": [
-        {
-          "label": "AI アクションの承認を確認する",
-          "action": "settings:auto-accept"
-        }
-      ],
-      "content": "自動承認プロファイルを使用すると、Aire が毎回中断することなく自動的に承認できるアクションを定義できます。\n\n組み込みの例には、Developer、News Browser、および Conservative が含まれます。\n\n注意すべきこと:\n• プロファイルは利便性を高めるためのものであり、セキュリティの代替品ではありません。\n• 慎重に開始し、本当に信頼できるアクションのみを自動的に受け入れます。\n• ファイルの書き込み、入力制御、および外部の副作用は通常、手動にしておく価値があります。\n\n不明な場合は、制限付きの自動受け入れをそのままにして、アクションを 1 つずつ確認してください。"
-    },
-    {
-      "tab": "接続",
-      "type": "text",
-      "title": "MCPサーバー",
-      "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "MCP カタログとインストールされているサーバーのリストを使用した接続設定。",
-      "links": [
-        {
-          "label": "接続設定を開く",
-          "action": "settings:connections"
-        }
-      ],
-      "content": "MCP サーバーは、Aire にさらに多くのツールとデータ ソースを提供する外部ヘルパー サービスです。 MCP はモデル コンテキスト プロトコルの略です。\n\nわかりやすく言うと、MCP サーバーは Aire と次のような別のシステムの間のブリッジです。\n• ファイルシステム、\n• GitHub、\n• SQLite、\n• Web フェッチツール、\n• 記憶ツール、\n• Slack、Gmail、または Notion。\n\nAire がそれらをどのように処理するか:\n• [接続] タブには、一般的な MCP サーバーの厳選されたカタログが含まれています。\n• アプリからインストール、削除、有効化、無効化、編集できます。\n• 一部のサーバーでは、マシン上に追加の認証情報または Node.js/npm が必要です。\n\n初心者向けの良いアドバイス:\n• ファイルシステムや Web フェッチなどの 1 つの単純なサーバーから始めます。\n• インストールする前に説明をお読みください。\n• MCP サーバーを他の統合と同様に扱います。便利ですが、有効にする前に信頼する必要があります。"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "キーボードとマウスのセッション",
-      "links": [
-        {
-          "label": "AI アクションの承認を確認する",
-          "action": "settings:auto-accept"
-        }
-      ],
-      "content": "一部のタスクでは、AI がキーボードとマウスを制御する必要があります。セッションがアクティブな場合:\n\n• セッションがアクティブであることを示すバナーがチャット ウィンドウの下部に表示されます。\n• フローティング ⏹ STOP SESSION ボタンが画面の右上に表示されます。これをクリックすると、いつでもすぐにキャンセルできます。\n• 音声で解除する場合は「AIRE STOP」と発声してください。\n• キャンセルするには、バナーの「セッションを終了」をクリックします。\n\nAI は、個々のアクション (キーを押す、マウスのクリックなど) を実行する前に、そのアクションに対する承認を要求します。"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "音声入力",
-      "links": [
-        {
-          "label": "音声設定を開く",
-          "action": "settings:voice"
-        }
-      ],
-      "content": "🎤 ボタンをクリックして音声認識を開始します。 Aire は Windows 組み込みの音声認識を使用します。API キーやインターネット接続は必要ありません。\n\n• 普通に話してください。話すと言葉が入力ボックスに表示されます。\n• 会話を終えると、ボタンにカウントダウン（5→1）が表示されます。沈黙していると、メッセージは自動的に 0 に送信されます。\n• カウントダウンをリセットするには、いつでももう一度話し始めてください。\n• もう一度ボタンをクリックすると（⏹が表示）、送信せずに停止します。\n\n音声認識の精度は、Windows の言語とマイクの品質によって異なります。 Windows 音声認識は、[Windows の設定] → [時刻と言語] → [音声] でトレーニングできます。"
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "table",
-      "title": "音声コマンド",
-      "intro": "マイクがアクティブになっているときに、「AIRE」と続けて次のいずれかの単語を言います。",
-      "cols": [
-        "指示",
-        "何をするのか"
-      ],
-      "rows": [
-        [
-          "エアセンド",
-          "現在のメッセージをすぐに送信します"
-        ],
-        [
-          "アイレポーズ",
-          "沈黙のカウントダウンをフリーズする"
-        ],
-        [
-          "エア履歴書",
-          "カウントダウンを再開する"
-        ],
-        [
-          "アイレクリア",
-          "入力ボックスをクリアします"
-        ],
-        [
-          "アイレアンドゥ",
-          "入力ボックスをクリアします"
-        ],
-        [
-          "エアキャンセル",
-          "送信せずに聞くのをやめる"
-        ],
-        [
-          "アイレニュー",
-          "新しい会話を開始する"
-        ],
-        [
-          "エア設定",
-          "設定ウィンドウを開きます"
-        ],
-        [
-          "エアオープン/ショー",
-          "メインチャットウィンドウを表示する"
-        ],
-        [
-          "エア閉じる/隠す",
-          "メインチャットウィンドウを非表示にする"
-        ],
-        [
-          "アイレはい/いいえ",
-          "保留中の AI アクションを承認または拒否する"
-        ],
-        [
-          "エアストップ",
-          "緊急停止 - アクティブなキーボード/マウス セッションを直ちに終了します。"
-        ]
-      ]
-    },
-    {
-      "tab": "Tools & Voice",
-      "type": "text",
-      "title": "音声出力",
-      "links": [
-        {
-          "label": "音声設定を開く",
-          "action": "settings:voice"
-        }
-      ],
-      "content": "Aire は、Windows の音声合成を使用して AI の応答を読み上げることができます。 [設定] (⚙) → [音声出力] でこれを有効にします。\n\n• すべての応答を話すか、マイクを使用するときのみ話すかを選択します。\n• 音声を選択し、読み上げ速度を調整します。\n• マイク ボタンの近くにあるスピーカー アイコンを使用して、音声出力のオン/オフをすばやく切り替えます。"
-    },
-    {
-      "tab": "外観",
-      "type": "text",
-      "title": "外観",
-      "links": [
-        {
-          "label": "外観設定を開く",
-          "action": "settings:appearance"
-        }
-      ],
-      "content": "設定 (⚙) → 外観を開き、アプリの外観を変更します。\n\n• テーマ: ダークとライト (ベージュ) を切り替えます。\n• 色合い: スライダーをドラッグして、UI 全体に色合いを適用します。左端 (黒) と右端 (白) は色合いがないことを意味します。スライダーはデフォルトで純粋なグレースケールです。\n• フォント サイズ: Ctrl キーを押したまま、チャットまたは入力領域上でマウス ホイールをスクロールして、フォント サイズを拡大または縮小します。設定は自動的に保存されます。\n\nすべての外観設定は保存され、次回の起動時に復元されます。"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "ローカルAPIとは何ですか?",
-      "imagePath": "Assets/Help/settings-connections.png",
-      "imageCaption": "ローカル API アクセス、電子メール アカウント、および MCP サーバーが構成される接続設定。",
-      "links": [
-        {
-          "label": "接続設定を開く",
-          "action": "settings:connections"
-        }
-      ],
-      "content": "ローカル API は、同じコンピュータ上の別のプログラムが Aire と通信する方法です。\n\n開発者以外の場合: 通常、この機能は必要ありません。\n\n開発者および上級ユーザー向け: これは、独自のスクリプト、ツール、自動化、またはデスクトップ アプリを Aire に接続する最も簡単な方法です。ローカル プログラムでは次のことができます。\n• Aire にメイン ウィンドウを表示または非表示にするよう依頼します。\n• 会話をリストし、メッセージを読む、\n• アクティブな会話にメッセージを送信します。\n• プロバイダーまたは会話を切り替える、\n• 保留中のツールの承認を検査します。\n• Aire ツールを直接呼び出します。\n\n仕組み:\n• Aire は TCP ポート 51234 をリッスンします。\n• 127.0.0.1 でのみリッスンするため、他のコンピュータは 127.0.0.1 に直接アクセスできません。\n• 各リクエストは 1 行で送信される 1 つの JSON オブジェクトです。\n• 各応答は 1 行で返される 1 つの JSON オブジェクトです。\n\nこれを使用するには、まず接続設定を開き、ローカル API アクセスを有効にします。"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "ローカル API クイック スタート",
-      "links": [
-        {
-          "label": "接続設定を開く",
-          "action": "settings:connections"
-        }
-      ],
-      "content": "別のアプリを Aire に接続するには、次のチェックリストを使用します。\n\n1. 接続設定を開きます。\n2. ローカル API アクセスをオンにします。\n3. 認証トークンをコピーします。\n4. アプリまたはスクリプトから、127.0.0.1:51234 への TCP 接続を開きます。\n5. メソッド、トークン、およびオプションのパラメーターを含む 1 つの JSON 行を送信します。\n6. JSON を 1 行戻します。\n7. 接続を閉じます。\n\n最初のテストとしては、ping メソッドが適しています。 ping が機能する場合は、show_main_window、list_providers、および create_conversation を試してください。\n\n推奨される最初の統合順序:\n• ピング\n• show_main_window\n• list_providers\n• 会話の作成\n• リスト_会話\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval ツールの承認に協力したい場合\n• 承認フローとセキュリティ モデルに慣れた後でのみ、execute_tool を実行してください。"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "認証",
-      "links": [
-        {
-          "label": "接続設定を開く",
-          "action": "settings:connections"
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "ツールのカテゴリ",
+            "imagePath": "Assets/Help/main-chat-tools.png",
+            "imageCaption": "Composer から [ツール] メニューが開きます。すべてのカテゴリを有効にすることも、すべて無効にすることも、必要なカテゴリのみを選択することもできます。",
+            "content": "チャット ボックスの近くにあるレンチ ボタンは、現在のプロバイダーが使用できるツールのカテゴリを制御します。\n\n仕組み:\n• レンチ ボタンをクリックしてカテゴリ メニューを開きます。\n• AI にリクエストできるようにしたいカテゴリのみをオンにします。\n• テキストのみの会話が必要な場合は、[ツールなし] を選択します。\n• Aire は選択したツール カテゴリを記憶し、現在のツール ポリシーの一部として使用します。\n\nこれが重要な理由:\n• 有効なカテゴリが少ないため、ツールの使用法が理解しやすくなります。\n• カテゴリを制限すると、リスクと偶発的な副作用を軽減できます。\n• プロバイダーがツールをサポートしていない場合、レンチ ボタンは非表示になります。"
         },
         {
-          "label": "AI アクションの承認を確認する",
-          "action": "settings:auto-accept"
+            "tab": "Providers",
+            "type": "text",
+            "title": "AIプロバイダー",
+            "imagePath": "Assets/Help/settings-providers.png",
+            "imageCaption": "左側にプロバイダー リストが表示され、右側に選択したプロバイダー フォームが表示されるプロバイダー設定。",
+            "links": [
+                {
+                    "label": "AI セットアップを開く",
+                    "action": "settings:providers"
+                },
+                {
+                    "label": "platform.openai.com",
+                    "action": "https://platform.openai.com"
+                },
+                {
+                    "label": "console.anthropic.com",
+                    "action": "https://console.anthropic.com"
+                },
+                {
+                    "label": "aistudio.google.com",
+                    "action": "https://aistudio.google.com"
+                }
+            ],
+            "content": "プロバイダーは、Aire がユーザーに代わって通信する AI サービスです。ほとんどのユーザーは、プロバイダーを 1 つ設定するだけで開始できます。\n\n各プロバイダー エントリには、次の 4 つの主要な部分があります。\n• 名前: Aire 内に表示されるラベル。\n• タイプ: どの AI サービスを使用するか。\n• モデル: そのサービスを実行する特定のモデル。\n• 資格情報: 通常は API キー、または Claude.ai の場合はブラウザーのサインインです。\n\n一般的な選択肢:\n• OpenAI: platform.openai.com から API キーを貼り付けます。\n• Anthropic: ブラウザーで Claude.ai を使用してサインインするか、Anthropic API キーを貼り付けます。\n• Google AI: aistudio.google.com から Gemini API キーを貼り付けます。\n• Ollama: 自分のマシン上でローカルの Ollama サーバーを使用します。 API キーは必要ありません。\n• OpenAI 互換エンドポイント: Groq、Mistral、OpenRouter、DeepSeek、LM Studio などのサービスは、多くの場合、ベース URL を設定することで機能します。\n\nどちらを使用すればよいかわからない場合は、通常、OpenAI または Anthropic が最も簡単なクラウド オプションであり、通常のローカル オプションは Ollama です。\n\nプロバイダーは、削除せずに有効または無効にすることができます。変更は自動的に保存されます。"
+        },
+        {
+            "tab": "Providers",
+            "type": "table",
+            "title": "ツール呼び出しモード",
+            "intro": "Aire は、AI モデルにツールへのアクセスを許可する 2 つの方法をサポートしています。モードはプロバイダーの種類に基づいて自動的に選択されますが、カスタム JSON ファイル内のモデルごとにオーバーライドできます (「カスタム モデル」を参照)。",
+            "cols": [
+                "モード",
+                "仕組み"
+            ],
+            "rows": [
+                [
+                    "テキストベース\n(デフォルト: OpenAI、Anthropic)",
+                    "ツールの説明はシステム プロンプトに埋め込まれています。 AI は <tool_call> XML ブロックで応答します。指示に確実に従えば、どのモデルでも動作します。"
+                ],
+                [
+                    "ネイティブ関数呼び出し\n(デフォルト: Ollama、Google AI)",
+                    "構造化されたツール スキーマは、プロバイダー API 経由で送信されます。 AI は構造化された関数呼び出しオブジェクトを返します。より正確に。明示的な API サポートが必要です。"
+                ],
+                [
+                    "サポートされていません",
+                    "モデルは工具を使用できません。これをカスタム モデル ファイルで設定すると、ツール プロンプトによって混乱するモデルのプロンプトがスキップされます。"
+                ]
+            ]
+        },
+        {
+            "tab": "Providers",
+            "type": "table",
+            "title": "プロバイダーとモデルの互換性",
+            "intro": "[機能テスト] ボタンを使用して、特定のプロバイダーとモデルの組み合わせを確認します。",
+            "cols": [
+                "プロバイダー/エンドポイント",
+                "モード",
+                "注意事項"
+            ],
+            "rows": [
+                [
+                    "OpenAI",
+                    "ネイティブ",
+                    "GPT-4o、GPT-4.1、GPT-4o-mini — 信頼できるツールのサポート"
+                ],
+                [
+                    "人間的",
+                    "テキストベース",
+                    "Claude 3.5 Sonnet 以降 — 優れた指示に従ってください"
+                ],
+                [
+                    "Google AI (ジェミニ)",
+                    "ネイティブ",
+                    "Gemini 2.0 Flash 以降を推奨"
+                ],
+                [
+                    "オラマ (地元)",
+                    "ネイティブ",
+                    "qwen2.5-coder、llama3.1、mistral-nemo はうまく動作します。小型モデルはさまざまです"
+                ],
+                [
+                    "Groq (Op​​enAI + ベース URL)",
+                    "ネイティブ",
+                    "ベース URL: https://api.groq.com/openai/v1 — 非常に高速"
+                ],
+                [
+                    "ミストラル (OpenAI + ベース URL)",
+                    "ネイティブ",
+                    "ベース URL: https://api.mistral.ai/v1"
+                ],
+                [
+                    "OpenRouter (OpenAI + ベース URL)",
+                    "ネイティブ",
+                    "ベース URL: https://openrouter.ai/api/v1 — 100 以上のモデル"
+                ],
+                [
+                    "DeepSeek (OpenAI + ベース URL)",
+                    "ネイティブ",
+                    "ベース URL: https://api.deepseek.com/v1"
+                ],
+                [
+                    "LM Studio (OpenAI + ベース URL)",
+                    "ネイティブ",
+                    "ベース URL: http://localhost:1234/v1 — LM Studio 設定で関数呼び出しを有効にする"
+                ]
+            ]
+        },
+        {
+            "tab": "Providers",
+            "type": "text",
+            "title": "能力テスト",
+            "links": [
+                {
+                    "label": "AI セットアップを開く",
+                    "action": "settings:providers"
+                }
+            ],
+            "content": "[テストの実行] ボタンでは、選択したプロバイダーとモデルが実際に何ができるかを確認します。\n\nテストされる内容:\n• ツール呼び出し機能テストは、モデルが予想される Aire ツールを要求するかどうかをチェックします。実際のファイル、ブラウザ、システムアクションは実行されません。\n• イメージ生成機能のテストは、プロバイダーのイメージ生成パスを直接呼び出します。これらのテストはプロバイダーの割り当てを消費する可能性があり、アカウントまたはモデルがイメージ生成をサポートしていない場合は失敗する可能性があります。\n\n使用方法:\n• [設定] ⚙ を開き、プロバイダーを選択し、[テストの実行] をクリックします。\n• テスト中の構成変更を避けるため、プロバイダー フォームは実行中はロックされます。\n• 結果はプロバイダーとモデルの組み合わせごとにキャッシュされ、次回すぐにリロードされます。\n\n読み取り結果:\n• ✓ (緑) — プロバイダーは機能を正しく処理しました。\n• ✗ (赤) — プロバイダーまたはモデルがその機能に失敗しました。\n• メッセージにクォータ、残高、またはレート制限について言及されている場合、エラーは Aire 自体からではなくプロバイダー アカウントから発生しています。\n\nモデルが多くのツール テストに失敗した場合は、別のモデルを試すか、そのカスタム モデル メタデータを調整してください。イメージの生成が失敗した場合は、プロバイダーのアカウント、モデル、クォータが実際にイメージの生成を許可していることを確認してください。"
+        },
+        {
+            "tab": "Providers",
+            "type": "code",
+            "title": "カスタムモデル",
+            "intro": "アプリの Data\\Models ディレクトリに JSON ファイルを作成して、任意のプロバイダー タイプのモデル リストをカスタマイズします。機能配列を使用して、モデルがサポートするものを宣言します。\n\n機能フラグ:\n• \"vision\" — モデルは画像の添付ファイルを受け入れます\n• 「ツール」 - モデルはツールを使用できます。\n• \"toolcallmode:native\" — ネイティブ関数の呼び出しを強制する\n• \"toolcallmode:text\" — テキストベースのツール呼び出しを強制します。\n• \"toolcallmode:unsupported\" — ツール プロンプトを完全に無効にします。\n\nツール出力形式フラグ (テキスト応答にツール呼び出しを埋め込むモデルの場合):\n• \"toolformat:hermes\" — ヘルメス/クウェン形式: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain 形式: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — コンテンツに埋め込まれた OpenAI ネイティブの tool_calls スキーマ\n• \"toolformat:text\" — Aire のデフォルトのテキスト形式: {\"tool\":\"...\", ...}",
+            "content": "{\n  \"providerType\": \"OpenAI\",\n  「モデル」: [\n    {\n      \"id\": \"gpt-4o\",\n      \"表示名\": \"GPT-4o\",\n      \"能力\": [\"ビジョン\", \"ツール\"]\n    }、\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (ツールなし)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    }、\n    {\n      \"id\": \"私の微調整モデル\",\n      \"displayName\": \"私の微調整\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  】\n}"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "AIツール",
+            "links": [
+                {
+                    "label": "AI アクションの承認を確認する",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "一部の AI モデルは、Aire にアクションの実行を依頼できます。 Aire はこれらのアクション ツールを「ツール」と呼んでいます。\n\n重要: ツールはサイレントに実行されません。 Aire は AI が何をしたいのかを示し、あなたはそれを承認または拒否します。\n\nツールでできることの例:\n• ファイルの読み取りまたは書き込み。\n• シェルコマンドを実行します。\n• Web ページを開いて読みます。\n• ブラウザのタブを検査します。\n• スクリーンショットを撮ります。\n• マウスを入力、クリック、または移動します。\n• 電子メールを読んだり、送信したりできます。\n\nこの機能を初めて使用する場合、最も安全な習慣はシンプルです。承認する前にアクション リクエストを読むことです。意味がある場合は読み取り専用のアクションを承認し、ファイルの変更、メッセージの送信、またはキーボードとマウスの制御を行うアクションにはより注意してください。"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "プロファイルの自動承認",
+            "links": [
+                {
+                    "label": "AI アクションの承認を確認する",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "自動承認プロファイルを使用すると、Aire が毎回中断することなく自動的に承認できるアクションを定義できます。\n\n組み込みの例には、Developer、News Browser、および Conservative が含まれます。\n\n注意すべきこと:\n• プロファイルは利便性を高めるためのものであり、セキュリティの代替品ではありません。\n• 慎重に開始し、本当に信頼できるアクションのみを自動的に受け入れます。\n• ファイルの書き込み、入力制御、および外部の副作用は通常、手動にしておく価値があります。\n\n不明な場合は、制限付きの自動受け入れをそのままにして、アクションを 1 つずつ確認してください。"
+        },
+        {
+            "tab": "接続",
+            "type": "text",
+            "title": "MCPサーバー",
+            "imagePath": "Assets/Help/settings-connections.png",
+            "imageCaption": "MCP カタログとインストールされているサーバーのリストを使用した接続設定。",
+            "links": [
+                {
+                    "label": "接続設定を開く",
+                    "action": "settings:connections"
+                }
+            ],
+            "content": "MCP サーバーは、Aire にさらに多くのツールとデータ ソースを提供する外部ヘルパー サービスです。 MCP はモデル コンテキスト プロトコルの略です。\n\nわかりやすく言うと、MCP サーバーは Aire と次のような別のシステムの間のブリッジです。\n• ファイルシステム、\n• GitHub、\n• SQLite、\n• Web フェッチツール、\n• 記憶ツール、\n• Slack、Gmail、または Notion。\n\nAire がそれらをどのように処理するか:\n• [接続] タブには、一般的な MCP サーバーの厳選されたカタログが含まれています。\n• アプリからインストール、削除、有効化、無効化、編集できます。\n• 一部のサーバーでは、マシン上に追加の認証情報または Node.js/npm が必要です。\n\n初心者向けの良いアドバイス:\n• ファイルシステムや Web フェッチなどの 1 つの単純なサーバーから始めます。\n• インストールする前に説明をお読みください。\n• MCP サーバーを他の統合と同様に扱います。便利ですが、有効にする前に信頼する必要があります。"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "キーボードとマウスのセッション",
+            "links": [
+                {
+                    "label": "AI アクションの承認を確認する",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "一部のタスクでは、AI がキーボードとマウスを制御する必要があります。セッションがアクティブな場合:\n\n• セッションがアクティブであることを示すバナーがチャット ウィンドウの下部に表示されます。\n• フローティング ⏹ STOP SESSION ボタンが画面の右上に表示されます。これをクリックすると、いつでもすぐにキャンセルできます。\n• 音声で解除する場合は「AIRE STOP」と発声してください。\n• キャンセルするには、バナーの「セッションを終了」をクリックします。\n\nAI は、個々のアクション (キーを押す、マウスのクリックなど) を実行する前に、そのアクションに対する承認を要求します。"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "音声入力",
+            "links": [
+                {
+                    "label": "音声設定を開く",
+                    "action": "settings:voice"
+                }
+            ],
+            "content": "🎤 ボタンをクリックして音声認識を開始します。 Aire は Windows 組み込みの音声認識を使用します。API キーやインターネット接続は必要ありません。\n\n• 普通に話してください。話すと言葉が入力ボックスに表示されます。\n• 会話を終えると、ボタンにカウントダウン（5→1）が表示されます。沈黙していると、メッセージは自動的に 0 に送信されます。\n• カウントダウンをリセットするには、いつでももう一度話し始めてください。\n• もう一度ボタンをクリックすると（⏹が表示）、送信せずに停止します。\n\n音声認識の精度は、Windows の言語とマイクの品質によって異なります。 Windows 音声認識は、[Windows の設定] → [時刻と言語] → [音声] でトレーニングできます。"
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "table",
+            "title": "音声コマンド",
+            "intro": "マイクがアクティブになっているときに、「AIRE」と続けて次のいずれかの単語を言います。",
+            "cols": [
+                "指示",
+                "何をするのか"
+            ],
+            "rows": [
+                [
+                    "エアセンド",
+                    "現在のメッセージをすぐに送信します"
+                ],
+                [
+                    "アイレポーズ",
+                    "沈黙のカウントダウンをフリーズする"
+                ],
+                [
+                    "エア履歴書",
+                    "カウントダウンを再開する"
+                ],
+                [
+                    "アイレクリア",
+                    "入力ボックスをクリアします"
+                ],
+                [
+                    "アイレアンドゥ",
+                    "入力ボックスをクリアします"
+                ],
+                [
+                    "エアキャンセル",
+                    "送信せずに聞くのをやめる"
+                ],
+                [
+                    "アイレニュー",
+                    "新しい会話を開始する"
+                ],
+                [
+                    "エア設定",
+                    "設定ウィンドウを開きます"
+                ],
+                [
+                    "エアオープン/ショー",
+                    "メインチャットウィンドウを表示する"
+                ],
+                [
+                    "エア閉じる/隠す",
+                    "メインチャットウィンドウを非表示にする"
+                ],
+                [
+                    "アイレはい/いいえ",
+                    "保留中の AI アクションを承認または拒否する"
+                ],
+                [
+                    "エアストップ",
+                    "緊急停止 - アクティブなキーボード/マウス セッションを直ちに終了します。"
+                ]
+            ]
+        },
+        {
+            "tab": "Tools & Voice",
+            "type": "text",
+            "title": "音声出力",
+            "links": [
+                {
+                    "label": "音声設定を開く",
+                    "action": "settings:voice"
+                }
+            ],
+            "content": "Aire は、Windows の音声合成を使用して AI の応答を読み上げることができます。 [設定] (⚙) → [音声出力] でこれを有効にします。\n\n• すべての応答を話すか、マイクを使用するときのみ話すかを選択します。\n• 音声を選択し、読み上げ速度を調整します。\n• マイク ボタンの近くにあるスピーカー アイコンを使用して、音声出力のオン/オフをすばやく切り替えます。"
+        },
+        {
+            "tab": "外観",
+            "type": "text",
+            "title": "外観",
+            "links": [
+                {
+                    "label": "外観設定を開く",
+                    "action": "settings:appearance"
+                }
+            ],
+            "content": "設定 (⚙) → 外観を開き、アプリの外観を変更します。\n\n• テーマ: ダークとライト (ベージュ) を切り替えます。\n• 色合い: スライダーをドラッグして、UI 全体に色合いを適用します。左端 (黒) と右端 (白) は色合いがないことを意味します。スライダーはデフォルトで純粋なグレースケールです。\n• フォント サイズ: Ctrl キーを押したまま、チャットまたは入力領域上でマウス ホイールをスクロールして、フォント サイズを拡大または縮小します。設定は自動的に保存されます。\n\nすべての外観設定は保存され、次回の起動時に復元されます。"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "ローカルAPIとは何ですか?",
+            "imagePath": "Assets/Help/settings-connections.png",
+            "imageCaption": "ローカル API アクセス、電子メール アカウント、および MCP サーバーが構成される接続設定。",
+            "links": [
+                {
+                    "label": "接続設定を開く",
+                    "action": "settings:connections"
+                }
+            ],
+            "content": "ローカル API は、同じコンピュータ上の別のプログラムが Aire と通信する方法です。\n\n開発者以外の場合: 通常、この機能は必要ありません。\n\n開発者および上級ユーザー向け: これは、独自のスクリプト、ツール、自動化、またはデスクトップ アプリを Aire に接続する最も簡単な方法です。ローカル プログラムでは次のことができます。\n• Aire にメイン ウィンドウを表示または非表示にするよう依頼します。\n• 会話をリストし、メッセージを読む、\n• アクティブな会話にメッセージを送信します。\n• プロバイダーまたは会話を切り替える、\n• 保留中のツールの承認を検査します。\n• Aire ツールを直接呼び出します。\n\n仕組み:\n• Aire は TCP ポート 51234 をリッスンします。\n• 127.0.0.1 でのみリッスンするため、他のコンピュータは 127.0.0.1 に直接アクセスできません。\n• 各リクエストは 1 行で送信される 1 つの JSON オブジェクトです。\n• 各応答は 1 行で返される 1 つの JSON オブジェクトです。\n\nこれを使用するには、まず接続設定を開き、ローカル API アクセスを有効にします。"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "ローカル API クイック スタート",
+            "links": [
+                {
+                    "label": "接続設定を開く",
+                    "action": "settings:connections"
+                }
+            ],
+            "content": "別のアプリを Aire に接続するには、次のチェックリストを使用します。\n\n1. 接続設定を開きます。\n2. ローカル API アクセスをオンにします。\n3. 認証トークンをコピーします。\n4. アプリまたはスクリプトから、127.0.0.1:51234 への TCP 接続を開きます。\n5. メソッド、トークン、およびオプションのパラメーターを含む 1 つの JSON 行を送信します。\n6. JSON を 1 行戻します。\n7. 接続を閉じます。\n\n最初のテストとしては、ping メソッドが適しています。 ping が機能する場合は、show_main_window、list_providers、および create_conversation を試してください。\n\n推奨される最初の統合順序:\n• ピング\n• show_main_window\n• list_providers\n• 会話の作成\n• リスト_会話\n• get_messages\n• send_message\n• get_state\n• wait_for_pending_approval ツールの承認に協力したい場合\n• 承認フローとセキュリティ モデルに慣れた後でのみ、execute_tool を実行してください。"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "認証",
+            "links": [
+                {
+                    "label": "接続設定を開く",
+                    "action": "settings:connections"
+                },
+                {
+                    "label": "AI アクションの承認を確認する",
+                    "action": "settings:auto-accept"
+                }
+            ],
+            "content": "すべてのローカル API リクエストには認証トークンが含まれている必要があります。\n\n入手場所:\n• [接続設定]を開きます。\n• [ローカル API] セクションを見つけます。\n• [コピー] をクリックしてトークンをコピーします。\n• そのトークンをアプリまたはスクリプトの設定に貼り付けます。\n\n知っておくべきこと:\n• [再生成] をクリックすると、古い統合は新しいトークンを使用するまで動作を停止します。\n• API は構成するだけでなく、有効にする必要があります。\n• トークンを認識しているコンピュータ上のプロセスは、Aire を制御できます。\n\n開発者向けの実践的なアドバイス:\n• トークンは、ソース管理にハードコードせずに、ローカル構成ファイルまたは環境変数に保持します。\n• ローカル秘密のように扱います。\n• 漏れが疑われる場合は、再生成してください。"
+        },
+        {
+            "tab": "Local API",
+            "type": "code",
+            "title": "プロトコル",
+            "intro": "ローカル API は、TCP 上の行ベースの JSON です。\n\n接続パターン：\n• 127.0.0.1:51234 に接続します\n• コンパクトな JSON リクエストを 1 つだけ記述し、その後に改行を追加します。\n• JSON 応答行を 1 行だけ読み取ります\n• 接続を閉じる\n\nリクエストの形状:\n{ \"メソッド\": \"メソッド\"、\"トークン\": \"トークン\"、\"パラメータ\": { ... } }\n\n応答形状:\n{ \"ok\": true、\"結果\": ... }\nまたは\n{ \"ok\": false、\"errorMessage\": \"メッセージ\" }\n\nクライアント ライブラリを作成している場合は、最初にその単純な要求と応答のパターンを中心に構築します。開始するのに HTTP や WebSocket は必要ありません。",
+            "content": "{ \"メソッド\": \"ping\"、\"トークン\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"メソッド\": \"create_conversation\", \"トークン\": \"YOUR_TOKEN\", \"パラメータ\": { \"タイトル\": \"API テスト\" } }\n{ \"ok\": true、\"結果\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"こんにちは!\" } }\n{ \"ok\": true、\"result\": true }"
+        },
+        {
+            "tab": "Local API",
+            "type": "table",
+            "title": "利用可能な方法",
+            "cols": [
+                "方法",
+                "パラメータ",
+                "説明"
+            ],
+            "rows": [
+                [
+                    "ピング",
+                    "—",
+                    "Aireが動作しているか確認してください。 get_state と同じ状態のスナップショットを返します。"
+                ],
+                [
+                    "状態の取得",
+                    "—",
+                    "現在のプロバイダー、モデル、アクティブな会話 ID、およびローカル API ステータス。"
+                ],
+                [
+                    "show_main_window",
+                    "—",
+                    "Aire チャット ウィンドウを前面に表示します。"
+                ],
+                [
+                    "メインウィンドウを隠す",
+                    "—",
+                    "チャット ウィンドウをトレイに非表示にします。"
+                ],
+                [
+                    "オープン設定",
+                    "—",
+                    "設定ウィンドウを開きます。"
+                ],
+                [
+                    "ブラウザを開く",
+                    "—",
+                    "Aire ブラウザ ウィンドウを開きます。"
+                ],
+                [
+                    "リストプロバイダー",
+                    "—",
+                    "ID と名前を持つすべての構成済み AI プロバイダー。"
+                ],
+                [
+                    "プロバイダーの作成",
+                    "name?、type、apiKey?、baseUrl?、model、isEnabled?、color?、selectAfterCreate?、inheritCredentialsFromProviderId?",
+                    "ローカル API から新しいプロバイダーを作成します。"
+                ],
+                [
+                    "リスト_会話",
+                    "—",
+                    "保存されたすべての会話 (ID、タイトル、日付)。"
+                ],
+                [
+                    "会話の作成",
+                    "タイトル？",
+                    "新しい会話を作成し、それに切り替えます。"
+                ],
+                [
+                    "選択_会話",
+                    "会話ID",
+                    "既存の会話に切り替えます。"
+                ],
+                [
+                    "get_messages",
+                    "会話ID",
+                    "会話内のすべてのメッセージ。"
+                ],
+                [
+                    "セットプロバイダー",
+                    "プロバイダーID",
+                    "アクティブな AI プロバイダーを切り替えます。"
+                ],
+                [
+                    "set_provider_model",
+                    "プロバイダーID、モデル",
+                    "プロバイダーのモデルを変更します。"
+                ],
+                [
+                    "send_message",
+                    "文章",
+                    "アクティブな会話にメッセージを送信します。受け入れられた場合は true を返します。"
+                ],
+                [
+                    "list_pending_approvals",
+                    "—",
+                    "ツール呼び出しは現在承認を待っています。"
+                ],
+                [
+                    "保留中の承認を待つ",
+                    "timeout_秒?",
+                    "次の保留中のツールの承認を待つか、タイムアウト時に null を返します。"
+                ],
+                [
+                    "approve_tool_call",
+                    "索引",
+                    "現在のリスト インデックスに基づいて保留中のツール呼び出しを承認します。"
+                ],
+                [
+                    "拒否ツール呼び出し",
+                    "索引",
+                    "現在のリスト インデックスに基づいて保留中のツール呼び出しを拒否します。"
+                ],
+                [
+                    "実行ツール",
+                    "ツール、パラメータ、wait_for_approval?、approval_timeout_秒?",
+                    "Aire ツールを直接実行し、必要に応じて承認を待ちます。"
+                ],
+                [
+                    "get_trace",
+                    "afterID?、制限?",
+                    "デバッグのためにツール実行トレース エントリを読み取ります。"
+                ],
+                [
+                    "クリアトレース",
+                    "—",
+                    "ツール実行トレースをクリアします。"
+                ]
+            ]
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "どの方法から始めればよいでしょうか?",
+            "content": "Aire に接続する別のアプリを構築している場合は、まず簡単な方法から始めてください。\n\n推奨される学習順序:\n• ping: Aire が実行中であり、トークンが有効であることを確認します。\n• show_main_window: 表示されるアプリ アクションをトリガーできることを確認します。\n• get_state: 現在の会話とプロバイダーの状態を検査します。\n• list_conversations と get_messages: データを安全に読み取ります。\n• send_message: 完全な要求と応答の往復を実行します。\n• list_pending_approvals、approve_tool_call、deny_tool_call: Aire の承認モデルと統合します。\n•execute_tool: セキュリティへの影響と承認動作を理解した後でのみ。\n\nほとんどの統合では、send_message と読み取り専用メソッドで十分です。"
+        },
+        {
+            "tab": "Local API",
+            "type": "code",
+            "title": "PowerShell の例",
+            "intro": "この例は、PowerShell のローカル API クライアントの最も単純で便利な形状を示しています。接続設定からトークンを保存し、それを下に貼り付けてから、何よりも先に ping を試してください。",
+            "content": "$TOKEN = \"ここにトークンを貼り付け\"\n$ポート = 51234\n\n関数 Invoke-Aire {\n    param([文字列]$Method, [ハッシュテーブル]$Params = @{})\n    $req = @{メソッド = $Method;トークン = $TOKEN }\n    if ($Params.Count) { $req[\"パラメータ\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    $resp を返す | ConvertFrom-Json\n}\n\n# Aire が実行中であることを確認し、状態を検査する\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# 会話を作成して選択する\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API テスト\" }).result\nInvoke-Aire「select_conversation」@{conversationId = $id }\n\n# メッセージを送信します (受け入れられた場合は true を返します)\nInvoke-Aire \"send_message\" @{ text = \"PowerShell からこんにちは\" }\n\n# ターン完了後に会話メッセージを読む\n(Invoke-Aire \"get_messages\" @{conversationId = $id }).result\n\n# ツールを直接実行する\nInvoke-Aire \"execute_tool\" @{ tools = \"read_file\";パラメータ = @{ パス = \"C:/Temp/notes.txt\" } }"
+        },
+        {
+            "tab": "Local API",
+            "type": "code",
+            "title": "Python の例",
+            "intro": "この例では、Python 標準ライブラリのみを使用します。 Aire サポートを別のローカル ツールに追加する場合は、これが良い出発点になります。",
+            "content": "インポートソケット、JSON\n\nTOKEN = \"ここにトークンを貼り付け\"\n\nデフォルト(メソッド、**パラメータ):\n    req = {\"メソッド\": メソッド、\"トークン\": トークン}\n    パラメータの場合:\n        req[\"パラメータ\"] = パラメータ\n    sとしてsocket.create_connection((\"127.0.0.1\", 51234))を使用します:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(状態[\"結果\"])\n\ncommunication_id = aire(\"create_conversation\", title=\"API テスト\")[\"結果\"]\naire(\"select_conversation\"、conversationId=conversation_id)\naire(\"send_message\", text=\"Python からこんにちは\")\n\nメッセージ = aire(\"get_messages\",conversationId=conversation_id)[\"result\"]\nprint(メッセージ)\n\n結果 = エア(\n    \"ツールの実行\",\n    ツール=\"読み取りファイル\",\n    パラメータ={\"パス\": \"C:/Temp/notes.txt\"}\n)\n印刷(結果)"
+        },
+        {
+            "tab": "Local API",
+            "type": "text",
+            "title": "統合のヒント",
+            "content": "• 結果を使用する前に、必ず [ok] をチェックしてください。 ok が false の場合は、エラー メッセージを読んで対処してください。\n• send_message は、Aire がアクティブな会話にメッセージを受け入れたことを確認するだけです。統合に最終的な答えが必要な場合は、get_messages でフォローアップするか、承認を監視して出力をトレースします。\n• TCP 接続ごとに 1 つのメソッド呼び出しを保持します。接続、送信、読み取り、閉じる。\n•execute_tool を使用する前に、読み取り専用アクションと可視アクションから始めます。\n• 統合が Aire の安全モデルと連携したい場合は、すべてのアクションがすぐに実行されると仮定するのではなく、list_pending_approvals、wait_for_pending_approval、approve_tool_call、およびdeny_tool_call を使用します。\n•execute_tool は、コードから Aire ツールを直接呼び出すことができるため、強力です。慎重に使用してください。\n• API は意図的にローカル専用です。ポート 51234 をネットワークまたはインターネットに公開しないでください。\n• 運用環境に似た内部ツールの場合は、トークンをソース コードの外部に保存し、ping を起動時のヘルス チェックの一部にします。"
         }
-      ],
-      "content": "すべてのローカル API リクエストには認証トークンが含まれている必要があります。\n\n入手場所:\n• [接続設定]を開きます。\n• [ローカル API] セクションを見つけます。\n• [コピー] をクリックしてトークンをコピーします。\n• そのトークンをアプリまたはスクリプトの設定に貼り付けます。\n\n知っておくべきこと:\n• [再生成] をクリックすると、古い統合は新しいトークンを使用するまで動作を停止します。\n• API は構成するだけでなく、有効にする必要があります。\n• トークンを認識しているコンピュータ上のプロセスは、Aire を制御できます。\n\n開発者向けの実践的なアドバイス:\n• トークンは、ソース管理にハードコードせずに、ローカル構成ファイルまたは環境変数に保持します。\n• ローカル秘密のように扱います。\n• 漏れが疑われる場合は、再生成してください。"
-    },
-    {
-      "tab": "Local API",
-      "type": "code",
-      "title": "プロトコル",
-      "intro": "ローカル API は、TCP 上の行ベースの JSON です。\n\n接続パターン：\n• 127.0.0.1:51234 に接続します\n• コンパクトな JSON リクエストを 1 つだけ記述し、その後に改行を追加します。\n• JSON 応答行を 1 行だけ読み取ります\n• 接続を閉じる\n\nリクエストの形状:\n{ \"メソッド\": \"メソッド\"、\"トークン\": \"トークン\"、\"パラメータ\": { ... } }\n\n応答形状:\n{ \"ok\": true、\"結果\": ... }\nまたは\n{ \"ok\": false、\"errorMessage\": \"メッセージ\" }\n\nクライアント ライブラリを作成している場合は、最初にその単純な要求と応答のパターンを中心に構築します。開始するのに HTTP や WebSocket は必要ありません。",
-      "content": "{ \"メソッド\": \"ping\"、\"トークン\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"メソッド\": \"create_conversation\", \"トークン\": \"YOUR_TOKEN\", \"パラメータ\": { \"タイトル\": \"API テスト\" } }\n{ \"ok\": true、\"結果\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"こんにちは!\" } }\n{ \"ok\": true、\"result\": true }"
-    },
-    {
-      "tab": "Local API",
-      "type": "table",
-      "title": "利用可能な方法",
-      "cols": [
-        "方法",
-        "パラメータ",
-        "説明"
-      ],
-      "rows": [
-        [
-          "ピング",
-          "—",
-          "Aireが動作しているか確認してください。 get_state と同じ状態のスナップショットを返します。"
-        ],
-        [
-          "状態の取得",
-          "—",
-          "現在のプロバイダー、モデル、アクティブな会話 ID、およびローカル API ステータス。"
-        ],
-        [
-          "show_main_window",
-          "—",
-          "Aire チャット ウィンドウを前面に表示します。"
-        ],
-        [
-          "メインウィンドウを隠す",
-          "—",
-          "チャット ウィンドウをトレイに非表示にします。"
-        ],
-        [
-          "オープン設定",
-          "—",
-          "設定ウィンドウを開きます。"
-        ],
-        [
-          "ブラウザを開く",
-          "—",
-          "Aire ブラウザ ウィンドウを開きます。"
-        ],
-        [
-          "リストプロバイダー",
-          "—",
-          "ID と名前を持つすべての構成済み AI プロバイダー。"
-        ],
-        [
-          "プロバイダーの作成",
-          "name?、type、apiKey?、baseUrl?、model、isEnabled?、color?、selectAfterCreate?、inheritCredentialsFromProviderId?",
-          "ローカル API から新しいプロバイダーを作成します。"
-        ],
-        [
-          "リスト_会話",
-          "—",
-          "保存されたすべての会話 (ID、タイトル、日付)。"
-        ],
-        [
-          "会話の作成",
-          "タイトル？",
-          "新しい会話を作成し、それに切り替えます。"
-        ],
-        [
-          "選択_会話",
-          "会話ID",
-          "既存の会話に切り替えます。"
-        ],
-        [
-          "get_messages",
-          "会話ID",
-          "会話内のすべてのメッセージ。"
-        ],
-        [
-          "セットプロバイダー",
-          "プロバイダーID",
-          "アクティブな AI プロバイダーを切り替えます。"
-        ],
-        [
-          "set_provider_model",
-          "プロバイダーID、モデル",
-          "プロバイダーのモデルを変更します。"
-        ],
-        [
-          "send_message",
-          "文章",
-          "アクティブな会話にメッセージを送信します。受け入れられた場合は true を返します。"
-        ],
-        [
-          "list_pending_approvals",
-          "—",
-          "ツール呼び出しは現在承認を待っています。"
-        ],
-        [
-          "保留中の承認を待つ",
-          "timeout_秒?",
-          "次の保留中のツールの承認を待つか、タイムアウト時に null を返します。"
-        ],
-        [
-          "approve_tool_call",
-          "索引",
-          "現在のリスト インデックスに基づいて保留中のツール呼び出しを承認します。"
-        ],
-        [
-          "拒否ツール呼び出し",
-          "索引",
-          "現在のリスト インデックスに基づいて保留中のツール呼び出しを拒否します。"
-        ],
-        [
-          "実行ツール",
-          "ツール、パラメータ、wait_for_approval?、approval_timeout_秒?",
-          "Aire ツールを直接実行し、必要に応じて承認を待ちます。"
-        ],
-        [
-          "get_trace",
-          "afterID?、制限?",
-          "デバッグのためにツール実行トレース エントリを読み取ります。"
-        ],
-        [
-          "クリアトレース",
-          "—",
-          "ツール実行トレースをクリアします。"
-        ]
-      ]
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "どの方法から始めればよいでしょうか?",
-      "content": "Aire に接続する別のアプリを構築している場合は、まず簡単な方法から始めてください。\n\n推奨される学習順序:\n• ping: Aire が実行中であり、トークンが有効であることを確認します。\n• show_main_window: 表示されるアプリ アクションをトリガーできることを確認します。\n• get_state: 現在の会話とプロバイダーの状態を検査します。\n• list_conversations と get_messages: データを安全に読み取ります。\n• send_message: 完全な要求と応答の往復を実行します。\n• list_pending_approvals、approve_tool_call、deny_tool_call: Aire の承認モデルと統合します。\n•execute_tool: セキュリティへの影響と承認動作を理解した後でのみ。\n\nほとんどの統合では、send_message と読み取り専用メソッドで十分です。"
-    },
-    {
-      "tab": "Local API",
-      "type": "code",
-      "title": "PowerShell の例",
-      "intro": "この例は、PowerShell のローカル API クライアントの最も単純で便利な形状を示しています。接続設定からトークンを保存し、それを下に貼り付けてから、何よりも先に ping を試してください。",
-      "content": "$TOKEN = \"ここにトークンを貼り付け\"\n$ポート = 51234\n\n関数 Invoke-Aire {\n    param([文字列]$Method, [ハッシュテーブル]$Params = @{})\n    $req = @{メソッド = $Method;トークン = $TOKEN }\n    if ($Params.Count) { $req[\"パラメータ\"] = $Params }\n    $client = New-Object Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    $resp を返す | ConvertFrom-Json\n}\n\n# Aire が実行中であることを確認し、状態を検査する\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# 会話を作成して選択する\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API テスト\" }).result\nInvoke-Aire「select_conversation」@{conversationId = $id }\n\n# メッセージを送信します (受け入れられた場合は true を返します)\nInvoke-Aire \"send_message\" @{ text = \"PowerShell からこんにちは\" }\n\n# ターン完了後に会話メッセージを読む\n(Invoke-Aire \"get_messages\" @{conversationId = $id }).result\n\n# ツールを直接実行する\nInvoke-Aire \"execute_tool\" @{ tools = \"read_file\";パラメータ = @{ パス = \"C:/Temp/notes.txt\" } }"
-    },
-    {
-      "tab": "Local API",
-      "type": "code",
-      "title": "Python の例",
-      "intro": "この例では、Python 標準ライブラリのみを使用します。 Aire サポートを別のローカル ツールに追加する場合は、これが良い出発点になります。",
-      "content": "インポートソケット、JSON\n\nTOKEN = \"ここにトークンを貼り付け\"\n\nデフォルト(メソッド、**パラメータ):\n    req = {\"メソッド\": メソッド、\"トークン\": トークン}\n    パラメータの場合:\n        req[\"パラメータ\"] = パラメータ\n    sとしてsocket.create_connection((\"127.0.0.1\", 51234))を使用します:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(状態[\"結果\"])\n\ncommunication_id = aire(\"create_conversation\", title=\"API テスト\")[\"結果\"]\naire(\"select_conversation\"、conversationId=conversation_id)\naire(\"send_message\", text=\"Python からこんにちは\")\n\nメッセージ = aire(\"get_messages\",conversationId=conversation_id)[\"result\"]\nprint(メッセージ)\n\n結果 = エア(\n    \"ツールの実行\",\n    ツール=\"読み取りファイル\",\n    パラメータ={\"パス\": \"C:/Temp/notes.txt\"}\n)\n印刷(結果)"
-    },
-    {
-      "tab": "Local API",
-      "type": "text",
-      "title": "統合のヒント",
-      "content": "• 結果を使用する前に、必ず [ok] をチェックしてください。 ok が false の場合は、エラー メッセージを読んで対処してください。\n• send_message は、Aire がアクティブな会話にメッセージを受け入れたことを確認するだけです。統合に最終的な答えが必要な場合は、get_messages でフォローアップするか、承認を監視して出力をトレースします。\n• TCP 接続ごとに 1 つのメソッド呼び出しを保持します。接続、送信、読み取り、閉じる。\n•execute_tool を使用する前に、読み取り専用アクションと可視アクションから始めます。\n• 統合が Aire の安全モデルと連携したい場合は、すべてのアクションがすぐに実行されると仮定するのではなく、list_pending_approvals、wait_for_pending_approval、approve_tool_call、およびdeny_tool_call を使用します。\n•execute_tool は、コードから Aire ツールを直接呼び出すことができるため、強力です。慎重に使用してください。\n• API は意図的にローカル専用です。ポート 51234 をネットワークまたはインターネットに公開しないでください。\n• 運用環境に似た内部ツールの場合は、トークンをソース コードの外部に保存し、ping を起動時のヘルス チェックの一部にします。"
-    }
-  ]
+    ]
 }

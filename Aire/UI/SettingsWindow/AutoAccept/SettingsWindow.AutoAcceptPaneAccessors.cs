@@ -65,5 +65,16 @@ namespace Aire.UI
         private CheckBox AutoAcceptShowImageCheckBox => AutoAcceptPane.AutoAcceptShowImageCheckBox;
         private CheckBox AutoAcceptMouseToolsCheckBox => AutoAcceptPane.AutoAcceptMouseToolsCheckBox;
         private CheckBox AutoAcceptKeyboardToolsCheckBox => AutoAcceptPane.AutoAcceptKeyboardToolsCheckBox;
+        private TextBlock AutoAcceptCautionTitle => AutoAcceptPane.AutoAcceptCautionTitle;
+        private TextBlock AutoAcceptCautionText => AutoAcceptPane.AutoAcceptCautionText;
+        private TextBlock AutoAcceptInstructionText => AutoAcceptPane.AutoAcceptInstructionText;
+        private TextBlock AutoAcceptWebBrowserHeader => AutoAcceptPane.AutoAcceptWebBrowserHeader;
+        private TextBlock AutoAcceptCommandsHeader => AutoAcceptPane.AutoAcceptCommandsHeader;
+        private TextBlock AutoAcceptFileSystemHeader => AutoAcceptPane.AutoAcceptFileSystemHeader;
+        private TextBlock AutoAcceptSystemClipboardHeader => AutoAcceptPane.AutoAcceptSystemClipboardHeader;
+        private TextBlock AutoAcceptMemoryHeader => AutoAcceptPane.AutoAcceptMemoryHeader;
+        private TextBlock AutoAcceptEmailHeader => AutoAcceptPane.AutoAcceptEmailHeader;
+        private TextBlock AutoAcceptAiTaskFlowHeader => AutoAcceptPane.AutoAcceptAiTaskFlowHeader;
+        private TextBlock AutoAcceptMouseKeyboardHeader => AutoAcceptPane.AutoAcceptMouseKeyboardHeader;
     }
 }

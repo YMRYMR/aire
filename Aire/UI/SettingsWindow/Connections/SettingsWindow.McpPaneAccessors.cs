@@ -22,6 +22,12 @@ namespace Aire.UI
         private TextBlock McpTipText => McpConnectionsPane.McpTipText;
         private Border McpEditPanel => McpConnectionsPane.McpEditPanel;
         private TextBlock McpEditTitle => McpConnectionsPane.McpEditTitle;
+        private TextBlock McpInstalledServersTitle => McpConnectionsPane.McpInstalledServersTitle;
+        private TextBlock McpNameLabel => McpConnectionsPane.McpNameLabel;
+        private TextBlock McpCommandLabel => McpConnectionsPane.McpCommandLabel;
+        private TextBlock McpArgsLabel => McpConnectionsPane.McpArgsLabel;
+        private TextBlock McpWorkDirLabel => McpConnectionsPane.McpWorkDirLabel;
+        private TextBlock McpEnvVarsLabel => McpConnectionsPane.McpEnvVarsLabel;
         private TextBox McpNameBox => McpConnectionsPane.McpNameBox;
         private TextBox McpCommandBox => McpConnectionsPane.McpCommandBox;
         private TextBox McpArgsBox => McpConnectionsPane.McpArgsBox;
