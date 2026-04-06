@@ -30,7 +30,14 @@ internal static class ScreenshotCli
                     return 0;
 
                 case "run-plan":
-                    await RunPlanAsync(ParseRequiredValue(args[1..], "--plan"));
+                    var planPath = ParseRequiredValue(args[1..], "--plan");
+                    var language = ParseOptionalValue(args[1..], "--language") ?? "en";
+                    await RunPlanAsync(planPath, language);
+                    return 0;
+
+                case "run-plan-all":
+                    var planPathAll = ParseRequiredValue(args[1..], "--plan");
+                    await RunPlanAllAsync(planPathAll);
                     return 0;
 
                 default:
@@ -52,10 +59,23 @@ internal static class ScreenshotCli
             Console.WriteLine($"{window.ProcessName}\t{window.Title}");
     }
 
-    private static async Task RunPlanAsync(string planPath)
+    private static string AdjustOutputPathForLanguage(string outputPath, string language)
+    {
+        if (string.Equals(language, "en", StringComparison.OrdinalIgnoreCase))
+            return outputPath;
+
+        var directory = Path.GetDirectoryName(outputPath);
+        var fileName = Path.GetFileName(outputPath);
+        return Path.Combine(directory, language, fileName);
+    }
+
+    private static async Task RunPlanAsync(string planPath, string language = "en")
     {
         if (!File.Exists(planPath))
             throw new FileNotFoundException("Plan file not found.", planPath);
+
+        // Set the application language before any UI actions
+        LanguageHelper.SetAppStateLanguage(language);
 
         await using var stream = File.OpenRead(planPath);
         var plan = await JsonSerializer.DeserializeAsync<ScreenshotPlan>(stream, JsonOptions.Default)
@@ -63,36 +83,23 @@ internal static class ScreenshotCli
 
         await UiAutomationRunner.RunActionsAsync(plan.SetupActions);
 
-        if (plan.LanguageBatch is { } batch && batch.Languages.Count > 0)
+        foreach (var request in plan.Screenshots)
         {
-            foreach (var lang in batch.Languages)
+            var adjustedRequest = request with
             {
-                Console.WriteLine($"--- Language: {lang} ---");
-
-                // Close any windows left open from the previous batch
-                await UiAutomationRunner.RunActionsAsync(batch.PreBatchActions);
-
-                // Switch language via Local API
-                await UiAutomationRunner.SetLanguageAsync(lang);
-                if (batch.SwitchDelayMs > 0)
-                    await Task.Delay(batch.SwitchDelayMs);
-
-                // Capture every screenshot, routing output into the lang sub-folder
-                foreach (var request in plan.Screenshots)
-                {
-                    var outputPath = Path.Combine(
-                        batch.OutputFolder,
-                        lang,
-                        Path.GetFileName(request.OutputPath));
-
-                    await CaptureWindowAsync(request with { OutputPath = outputPath });
-                }
-            }
+                OutputPath = AdjustOutputPathForLanguage(request.OutputPath, language)
+            };
+            await CaptureWindowAsync(adjustedRequest);
         }
-        else
+    }
+
+    private static async Task RunPlanAllAsync(string planPath)
+    {
+        var availableLanguages = LanguageHelper.GetAvailableLanguageCodes();
+        foreach (var lang in availableLanguages)
         {
-            foreach (var request in plan.Screenshots)
-                await CaptureWindowAsync(request);
+            Console.WriteLine($"Running plan for language: {lang}");
+            await RunPlanAsync(planPath, lang);
         }
     }
 
@@ -192,7 +199,8 @@ internal static class ScreenshotCli
               capture-window --title-contains "<text>" --output "<path>" [--process Aire] [--delay-ms 500] [--padding 16] [--activate]
               capture-window --exact-title "<text>" --output "<path>" [--delay-ms 500] [--padding 16] [--activate]
               capture-active --output "<path>" [--delay-ms 500] [--padding 16]
-              run-plan --plan "<path-to-json>"
+              run-plan --plan "<path-to-json>" [--language <code>]
+              run-plan-all --plan "<path-to-json>"
 
             Plan JSON shape:
               {

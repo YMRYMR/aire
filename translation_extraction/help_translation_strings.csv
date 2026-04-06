@@ -1,0 +1,640 @@
+﻿ID,Tab,Field,Text,Translator Notes,Context
+0,Setup Wizard,title,How the Setup Wizard Works,Short heading for this help item. Keep concise.,Short heading for this help item.
+0,Setup Wizard,content,"The Setup Wizard appears the first time you run Aire, or when no AI providers are configured yet. Its job is to get you from a fresh install to a working chat as quickly as possible.
+
+What the wizard does, step by step:
+• Welcome: explains what Aire is and lets you choose the app language.
+• Provider picker: shows common ways to connect Aire to AI services.
+• Provider setup: asks for the details needed for the provider you picked.
+• Finish: confirms Aire is ready and takes you to the main app.
+
+If you are new to AI, the wizard is the best place to start. It uses the simplest path first and hides advanced settings until you need them.
+
+You can skip setup and come back later, but you will need at least one configured provider before Aire can answer chat messages.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+0,Setup Wizard,imageCaption,The setup wizard helps you choose a provider before you start chatting.,Caption for an image shown in the help window.,Caption for an image.
+0,Setup Wizard,links[0].label,Open the Setup Wizard,Translate the label; keep action unchanged.,Hyperlink label (action: onboarding)
+0,Setup Wizard,links[1].label,Open AI setup,Translate the label; keep action unchanged.,Hyperlink label (action: settings:providers)
+1,Setup Wizard,title,Choosing a Provider,Short heading for this help item. Keep concise.,Short heading for this help item.
+1,Setup Wizard,content,"The provider picker is where you decide which AI service Aire will talk to on your behalf.
+
+What the main options mean:
+• OpenAI: a common starting point if you want a simple cloud setup and wide model support.
+• Anthropic API: another strong cloud option, known for Claude models.
+• Claude.ai: uses browser sign-in instead of an API key.
+• Google AI: connects to Gemini chat models through Google AI Studio.
+• Google AI Images: a dedicated Gemini image-generation setup.
+• Ollama: runs models locally on your computer. Good for privacy and offline use, but it depends on your hardware.
+• Codex: uses the local Codex CLI bridge instead of a normal API key.
+• Groq, OpenRouter, DeepSeek, Inception, and z.ai: other providers or OpenAI-compatible endpoints, often useful if you already have an account there.
+
+Which one should you choose?
+• If you want the easiest cloud setup for chat: start with OpenAI, Anthropic, or Google AI.
+• If you want local and private: choose Ollama.
+• If you specifically want image generation from Gemini: choose Google AI Images.
+• If you already pay for or use a specific provider elsewhere: choose that same provider here.
+
+You are not locked in. The wizard helps you add one provider first, and you can add more later in Settings.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+1,Setup Wizard,links[0].label,Open the Setup Wizard,Translate the label; keep action unchanged.,Hyperlink label (action: onboarding)
+1,Setup Wizard,links[1].label,platform.openai.com,Translate the label; keep action unchanged.,Hyperlink label (action: https://platform.openai.com)
+1,Setup Wizard,links[2].label,console.anthropic.com,Translate the label; keep action unchanged.,Hyperlink label (action: https://console.anthropic.com)
+1,Setup Wizard,links[3].label,aistudio.google.com,Translate the label; keep action unchanged.,Hyperlink label (action: https://aistudio.google.com)
+2,Setup Wizard,title,Filling in Provider Details,Short heading for this help item. Keep concise.,Short heading for this help item.
+2,Setup Wizard,content,"After you pick a provider, the wizard asks only for the details that provider needs.
+
+Typical fields:
+• Provider type: the service you want to use.
+• Name: the label Aire will show in the chat window.
+• API key: the secret token that lets Aire talk to the provider. Some providers use browser sign-in instead, and some local providers do not need an API key at all.
+• Base URL: only needed for certain OpenAI-compatible services or self-hosted setups.
+• Model: the specific AI model you want to use.
+
+Provider-specific notes:
+• Claude.ai uses browser sign-in instead of a normal API key.
+• Ollama is local and usually works without an API key.
+• Codex uses the local Codex CLI bridge, so the wizard can offer CLI installation instead of asking for a normal API key.
+• Google AI Images is for image generation rather than normal chat.
+
+The Test connection button is there to help you confirm the configuration before you finish. If the test succeeds, Aire can usually use that provider immediately.
+
+Practical advice:
+• If you are unsure which model to pick, start with the default suggestion.
+• If you see an API-key field, paste the key exactly as provided by the service.
+• If a provider offers both API access and browser sign-in, prefer API access if you want the most stable automation and integration behavior.
+
+After you finish the wizard, you can still change any of these settings later in the AI Providers tab.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+2,Setup Wizard,imageCaption,"Provider setup step with the provider type, name, credentials, model, and connection test.",Caption for an image shown in the help window.,Caption for an image.
+2,Setup Wizard,links[0].label,Open the Setup Wizard,Translate the label; keep action unchanged.,Hyperlink label (action: onboarding)
+2,Setup Wizard,links[1].label,Open AI setup,Translate the label; keep action unchanged.,Hyperlink label (action: settings:providers)
+3,Getting Started,title,Overview,Short heading for this help item. Keep concise.,Short heading for this help item.
+3,Getting Started,content,"Aire is a desktop chat app that stays in your system tray until you need it. You can think of it as one chat window that can connect to many AI services.
+
+If you are new to AI, the usual starting point is simple:
+• Open AI setup.
+• Add one provider, such as OpenAI, Anthropic, Google AI, or Ollama.
+• Choose a model.
+• Type a question in the chat box and press Enter.
+
+What Aire can do:
+• Talk to different AI services from one app.
+• Save your conversations on your computer.
+• Let the AI use tools, with your approval, to read files, run commands, browse pages, and more.
+• Use voice input and voice output with Windows speech features.
+• Let other local apps talk to Aire through the Local API.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+3,Getting Started,links[0].label,Set up your first AI,Translate the label; keep action unchanged.,Hyperlink label (action: settings:providers)
+3,Getting Started,links[1].label,Change the look of Aire,Translate the label; keep action unchanged.,Hyperlink label (action: settings:appearance)
+4,Getting Started,title,Tray Icon,Short heading for this help item. Keep concise.,Short heading for this help item.
+4,Getting Started,content,"Aire runs in the system tray (bottom-right corner of the taskbar).
+
+• Left-click or right-click the tray icon to open the chat window.
+• Right-click the tray icon for options: Open, Settings, Exit.
+• Closing the window hides it — Aire keeps running in the background.
+• To quit completely, right-click the tray icon and choose Exit.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+5,Getting Started,title,Chat,Short heading for this help item. Keep concise.,Short heading for this help item.
+5,Getting Started,content,"• Type your message in the input box at the bottom and press Enter to send.
+• Press Shift+Enter to add a new line without sending.
+• Press ↑ / ↓ to navigate through previous messages you’ve sent (only works when the cursor is on the first or last line of the input box).
+• Drag and drop an image into the input box to attach it to your message (requires a vision-capable model).
+• Press Ctrl+F to search within the conversation. Use ↑ / ↓ or the arrow buttons to jump between matches. Press Escape to close the search bar.
+• Right-click the chat area to copy or save the conversation as a text file.
+• The 🗑 button clears the current conversation (asks for confirmation first).
+• The 💬 button in the sidebar opens your conversation history.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+5,Getting Started,imageCaption,"Main chat window with the provider selector, conversation area, search, and composer.",Caption for an image shown in the help window.,Caption for an image.
+5,Getting Started,links[0].label,Open Providers,Translate the label; keep action unchanged.,Hyperlink label (action: settings:providers)
+6,Getting Started,title,Keyboard Shortcuts,Short heading for this help item. Keep concise.,Short heading for this help item.
+6,Getting Started,cols[0],Shortcut,Table column header.,Keep short and consistent.
+6,Getting Started,cols[1],Action,Table column header.,Keep short and consistent.
+6,Getting Started,rows[0][0],Enter,Table cell content.,May contain placeholders.
+6,Getting Started,rows[0][1],Send message,Table cell content.,May contain placeholders.
+6,Getting Started,rows[1][0],Shift+Enter,Table cell content.,May contain placeholders.
+6,Getting Started,rows[1][1],New line in the input box,Table cell content.,May contain placeholders.
+6,Getting Started,rows[2][0],↑ / ↓,Table cell content.,May contain placeholders.
+6,Getting Started,rows[2][1],Navigate message history (when cursor is on first/last line),Table cell content.,May contain placeholders.
+6,Getting Started,rows[3][0],Ctrl+F,Table cell content.,May contain placeholders.
+6,Getting Started,rows[3][1],Search conversation,Table cell content.,May contain placeholders.
+6,Getting Started,rows[4][0],Ctrl+Scroll,Table cell content.,May contain placeholders.
+6,Getting Started,rows[4][1],Adjust font size,Table cell content.,May contain placeholders.
+6,Getting Started,rows[5][0],Escape,Table cell content.,May contain placeholders.
+6,Getting Started,rows[5][1],Close search bar / dismiss dialog,Table cell content.,May contain placeholders.
+7,Getting Started,title,Tips,Short heading for this help item. Keep concise.,Short heading for this help item.
+7,Getting Started,content,"• You can have multiple AI providers configured and switch between them at the top of the chat window. Each conversation remembers its provider and assistant mode.
+• Resize the window by dragging any edge, including the top.
+• Conversations and settings are stored locally under %LOCALAPPDATA%\Aire.
+• The AI can request tools for files, commands, browser actions, and more, but Aire still asks for approval unless an auto-accept rule applies.
+• If an AI response is cut off, the model may have hit its token or output limit. Ask it to continue, reduce the size of the task, or use a model with a larger context window.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+8,Getting Started,title,Assistant Modes,Short heading for this help item. Keep concise.,Short heading for this help item.
+8,Getting Started,content,"The mode button in the main header changes how Aire frames your request before it sends it to the provider.
+
+Current modes include Architect, Creative writer, Developer, General, Painter, Philosopher, Psychologist, Scientist, Security, and Teacher.
+
+What modes do:
+• They adjust the style and priorities of the assistant.
+• The selected mode is saved per conversation, so different chats can keep different roles.
+• General is the default for new conversations.
+• Different providers still keep their own quirks, but Aire passes the selected mode consistently as shared guidance.
+
+Practical examples:
+• Developer: better for code, debugging, and terminal tasks.
+• Architect: better for structure, trade-offs, and planning.
+• Teacher: better for explanations and step-by-step guidance.
+• Painter: best for image-oriented prompting and generation when the current provider supports it.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+8,Getting Started,imageCaption,Assistant mode menu opened from the main header. Each conversation keeps its own mode.,Caption for an image shown in the help window.,Caption for an image.
+9,Tools & Voice,title,Tool Categories,Short heading for this help item. Keep concise.,Short heading for this help item.
+9,Tools & Voice,content,"The wrench button near the chat box controls which categories of tools the current provider is allowed to use.
+
+How it works:
+• Click the wrench button to open the categories menu.
+• Turn on only the categories you want the AI to be able to request.
+• Choose No tools if you want a text-only conversation.
+• Aire remembers your selected tool categories and uses them as part of the current tool policy.
+
+Why this matters:
+• Fewer enabled categories make tool use easier to understand.
+• Restricting categories can reduce risk and accidental side effects.
+• If a provider does not support tools, the wrench button is hidden.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+9,Tools & Voice,imageCaption,"Tools menu opened from the composer. You can enable all categories, disable all, or choose only the categories you want.",Caption for an image shown in the help window.,Caption for an image.
+10,Providers,title,AI Providers,Short heading for this help item. Keep concise.,Short heading for this help item.
+10,Providers,content,"A provider is the AI service Aire talks to on your behalf. Most users only need to set up one provider to get started.
+
+Each provider entry has four main parts:
+• Name: the label you will see inside Aire.
+• Type: which AI service to use.
+• Model: the specific model you want that service to run.
+• Credentials: usually an API key, or for Claude.ai a browser sign-in.
+
+Common choices:
+• OpenAI: paste your API key from platform.openai.com.
+• Anthropic: sign in with Claude.ai in the browser, or paste an Anthropic API key.
+• Google AI: paste your Gemini API key from aistudio.google.com.
+• Ollama: use a local Ollama server on your own machine. No API key is needed.
+• OpenAI-compatible endpoints: services like Groq, Mistral, OpenRouter, DeepSeek, or LM Studio can often work by setting the Base URL.
+
+If you are unsure which one to use, OpenAI or Anthropic are usually the easiest cloud options, while Ollama is the usual local option.
+
+Providers can be enabled or disabled without deleting them. Changes save automatically.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+10,Providers,imageCaption,Provider settings with the provider list on the left and the selected provider form on the right.,Caption for an image shown in the help window.,Caption for an image.
+10,Providers,links[0].label,Open AI setup,Translate the label; keep action unchanged.,Hyperlink label (action: settings:providers)
+10,Providers,links[1].label,platform.openai.com,Translate the label; keep action unchanged.,Hyperlink label (action: https://platform.openai.com)
+10,Providers,links[2].label,console.anthropic.com,Translate the label; keep action unchanged.,Hyperlink label (action: https://console.anthropic.com)
+10,Providers,links[3].label,aistudio.google.com,Translate the label; keep action unchanged.,Hyperlink label (action: https://aistudio.google.com)
+11,Providers,title,Tool Calling Modes,Short heading for this help item. Keep concise.,Short heading for this help item.
+11,Providers,intro,"Aire supports two methods for giving an AI model access to tools. The mode is chosen automatically based on the provider type, but can be overridden per model in a custom JSON file (see Custom Models).",Introductory text above a table.,Introductory text above a table.
+11,Providers,cols[0],Mode,Table column header.,Keep short and consistent.
+11,Providers,cols[1],How it works,Table column header.,Keep short and consistent.
+11,Providers,rows[0][0],"Text-based
+(default: OpenAI, Anthropic)",Table cell content.,May contain placeholders.
+11,Providers,rows[0][1],Tool descriptions are embedded in the system prompt. The AI responds with a <tool_call> XML block. Works with any model that follows instructions reliably.,Table cell content.,May contain placeholders.
+11,Providers,rows[1][0],"Native function calling
+(default: Ollama, Google AI)",Table cell content.,May contain placeholders.
+11,Providers,rows[1][1],Structured tool schemas are sent via the provider API. The AI returns structured function-call objects. More accurate. Requires explicit API support.,Table cell content.,May contain placeholders.
+11,Providers,rows[2][0],Unsupported,Table cell content.,May contain placeholders.
+11,Providers,rows[2][1],The model cannot use tools. Set this in a custom model file to skip tool prompts for models that get confused by them.,Table cell content.,May contain placeholders.
+12,Providers,title,Provider & Model Compatibility,Short heading for this help item. Keep concise.,Short heading for this help item.
+12,Providers,intro,Use the Capability Tests button to verify your specific provider and model combination.,Introductory text above a table.,Introductory text above a table.
+12,Providers,cols[0],Provider / Endpoint,Table column header.,Keep short and consistent.
+12,Providers,cols[1],Mode,Table column header.,Keep short and consistent.
+12,Providers,cols[2],Notes,Table column header.,Keep short and consistent.
+12,Providers,rows[0][0],OpenAI,Table cell content.,May contain placeholders.
+12,Providers,rows[0][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[0][2],"GPT-4o, GPT-4.1, GPT-4o-mini — reliable tool support",Table cell content.,May contain placeholders.
+12,Providers,rows[1][0],Anthropic,Table cell content.,May contain placeholders.
+12,Providers,rows[1][1],Text-based,Table cell content.,May contain placeholders.
+12,Providers,rows[1][2],Claude 3.5 Sonnet and newer — excellent instruction following,Table cell content.,May contain placeholders.
+12,Providers,rows[2][0],Google AI (Gemini),Table cell content.,May contain placeholders.
+12,Providers,rows[2][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[2][2],Gemini 2.0 Flash and newer recommended,Table cell content.,May contain placeholders.
+12,Providers,rows[3][0],Ollama (local),Table cell content.,May contain placeholders.
+12,Providers,rows[3][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[3][2],"qwen2.5-coder, llama3.1, mistral-nemo work well; small models vary",Table cell content.,May contain placeholders.
+12,Providers,rows[4][0],Groq (OpenAI + Base URL),Table cell content.,May contain placeholders.
+12,Providers,rows[4][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[4][2],Base URL: https://api.groq.com/openai/v1 — very fast,Table cell content.,May contain placeholders.
+12,Providers,rows[5][0],Mistral (OpenAI + Base URL),Table cell content.,May contain placeholders.
+12,Providers,rows[5][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[5][2],Base URL: https://api.mistral.ai/v1,Table cell content.,May contain placeholders.
+12,Providers,rows[6][0],OpenRouter (OpenAI + Base URL),Table cell content.,May contain placeholders.
+12,Providers,rows[6][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[6][2],Base URL: https://openrouter.ai/api/v1 — 100+ models,Table cell content.,May contain placeholders.
+12,Providers,rows[7][0],DeepSeek (OpenAI + Base URL),Table cell content.,May contain placeholders.
+12,Providers,rows[7][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[7][2],Base URL: https://api.deepseek.com/v1,Table cell content.,May contain placeholders.
+12,Providers,rows[8][0],LM Studio (OpenAI + Base URL),Table cell content.,May contain placeholders.
+12,Providers,rows[8][1],Native,Table cell content.,May contain placeholders.
+12,Providers,rows[8][2],Base URL: http://localhost:1234/v1 — enable function calling in LM Studio settings,Table cell content.,May contain placeholders.
+13,Providers,title,Capability Tests,Short heading for this help item. Keep concise.,Short heading for this help item.
+13,Providers,content,"The Run Tests button checks what the selected provider and model can really do.
+
+What is tested:
+• Tool-call capability tests check whether the model asks for the expected Aire tool. No real file, browser, or system action is executed.
+• Image-generation capability tests call the provider's image-generation path directly. These tests can consume provider quota and may fail if your account or model does not support image generation.
+
+How to use it:
+• Open Settings ⚙ → select a provider → click Run Tests.
+• The provider form is locked during the run to avoid configuration changes mid-test.
+• Results are cached per provider/model combination and reload quickly next time.
+
+Reading results:
+• ✓ (green) — the provider handled the capability correctly.
+• ✗ (red) — the provider or model failed that capability.
+• If the message mentions quota, balance, or rate limits, the failure is coming from the provider account rather than from Aire itself.
+
+If a model fails many tool tests, try another model or adjust its custom model metadata. If image generation fails, verify that the provider account, model, and quota actually allow it.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+13,Providers,links[0].label,Open AI setup,Translate the label; keep action unchanged.,Hyperlink label (action: settings:providers)
+14,Providers,title,Custom Models,Short heading for this help item. Keep concise.,Short heading for this help item.
+14,Providers,content,"{
+  ""providerType"": ""OpenAI"",
+  ""models"": [
+    {
+      ""id"": ""gpt-4o"",
+      ""displayName"": ""GPT-4o"",
+      ""capabilities"": [""vision"", ""tools""]
+    },
+    {
+      ""id"": ""o1-mini"",
+      ""displayName"": ""o1-mini (no tools)"",
+      ""capabilities"": [""toolcallmode:unsupported""]
+    },
+    {
+      ""id"": ""my-fine-tuned-model"",
+      ""displayName"": ""My Fine-tune"",
+      ""capabilities"": [""tools"", ""toolcallmode:text""]
+    }
+  ]
+}",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+14,Providers,intro,"Create a JSON file in the app’s Data\Models directory to customise the model list for any provider type. Use the capabilities array to declare what a model supports.
+
+Capability flags:
+• ""vision"" — model accepts image attachments
+• ""tools"" — model can use tools
+• ""toolcallmode:native"" — force native function calling
+• ""toolcallmode:text"" — force text-based tool calling
+• ""toolcallmode:unsupported"" — disable tool prompts entirely
+
+Tool output format flags (for models that embed tool calls in their text response):
+• ""toolformat:hermes"" — Hermes/Qwen format: <tool_call>{""name"":""..."",""arguments"":{...}}</tool_call>
+• ""toolformat:react"" — ReAct/LangChain format: {""action"":""..."",""action_input"":{...}}
+• ""toolformat:native"" — OpenAI native tool_calls schema embedded in content
+• ""toolformat:text"" — Aire’s default text format: {""tool"":""..."", ...}",Introductory text above a table.,Introductory text above a table.
+15,Tools & Voice,title,AI Tools,Short heading for this help item. Keep concise.,Short heading for this help item.
+15,Tools & Voice,content,"Some AI models can ask Aire to perform actions for them. Aire calls these actions tools.
+
+Important: tools do not run silently. Aire shows you what the AI wants to do, and you approve or deny it.
+
+Examples of what tools can do:
+• Read or write files.
+• Run shell commands.
+• Open and read web pages.
+• Inspect browser tabs.
+• Take screenshots.
+• Type, click, or move the mouse.
+• Read or send email.
+
+If you are new to this feature, the safest habit is simple: read the action request before approving it. Approve read-only actions when they make sense, and be more careful with actions that change files, send messages, or control the keyboard and mouse.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+15,Tools & Voice,links[0].label,Review AI action approvals,Translate the label; keep action unchanged.,Hyperlink label (action: settings:auto-accept)
+16,Tools & Voice,title,Auto-accept Profiles,Short heading for this help item. Keep concise.,Short heading for this help item.
+16,Tools & Voice,content,"Auto-accept profiles let you define which actions Aire can approve automatically without interrupting you each time.
+
+Built-in examples include Developer, News browser, and Conservative.
+
+What to keep in mind:
+• Profiles are a convenience, not a security replacement.
+• Start conservatively and only auto-accept actions you really trust.
+• File writes, input control, and external side effects are usually worth keeping manual.
+
+If you are unsure, leave auto-accept restrictive and review actions one by one.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+16,Tools & Voice,links[0].label,Review AI action approvals,Translate the label; keep action unchanged.,Hyperlink label (action: settings:auto-accept)
+17,Connections,title,MCP Servers,Short heading for this help item. Keep concise.,Short heading for this help item.
+17,Connections,content,"MCP servers are external helper services that give Aire more tools and data sources. MCP stands for Model Context Protocol.
+
+In plain language, an MCP server is a bridge between Aire and another system, such as:
+• your file system,
+• GitHub,
+• SQLite,
+• web fetch tools,
+• memory tools,
+• Slack, Gmail, or Notion.
+
+How Aire handles them:
+• The Connections tab includes a curated catalog of common MCP servers.
+• You can install, remove, enable, disable, and edit them from the app.
+• Some servers need extra credentials or Node.js/npm on the machine.
+
+Good beginner advice:
+• Start with one simple server, such as Filesystem or Web Fetch.
+• Read the description before installing it.
+• Treat an MCP server like any other integration: useful, but something you should trust before enabling.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+17,Connections,imageCaption,Connections settings with the MCP catalog and installed server list.,Caption for an image shown in the help window.,Caption for an image.
+17,Connections,links[0].label,Open connections settings,Translate the label; keep action unchanged.,Hyperlink label (action: settings:connections)
+18,Tools & Voice,title,Keyboard & Mouse Sessions,Short heading for this help item. Keep concise.,Short heading for this help item.
+18,Tools & Voice,content,"Some tasks require the AI to control the keyboard and mouse. When a session is active:
+
+• A banner appears at the bottom of the chat window showing the session is active.
+• A floating ⏹ STOP SESSION button appears at the top-right of your screen — click it at any time to cancel immediately.
+• Say “AIRE STOP” to cancel by voice.
+• Click “End session” in the banner to cancel.
+
+The AI will request approval for each individual action (key press, mouse click, etc.) before performing it.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+18,Tools & Voice,links[0].label,Review AI action approvals,Translate the label; keep action unchanged.,Hyperlink label (action: settings:auto-accept)
+19,Tools & Voice,title,Voice Input,Short heading for this help item. Keep concise.,Short heading for this help item.
+19,Tools & Voice,content,"Click the 🎤 button to start voice recognition. Aire uses Windows built-in speech recognition — no API key or internet connection required.
+
+• Speak normally. Your words appear in the input box as you talk.
+• When you stop talking, a countdown (5 → 1) appears on the button. If you stay silent, the message sends automatically at 0.
+• Start talking again at any time to reset the countdown.
+• Click the button again (shows ⏹) to stop without sending.
+
+Voice recognition accuracy depends on your Windows language and microphone quality. You can train Windows Speech Recognition via Windows Settings → Time & Language → Speech.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+19,Tools & Voice,links[0].label,Open voice settings,Translate the label; keep action unchanged.,Hyperlink label (action: settings:voice)
+20,Tools & Voice,title,Voice Commands,Short heading for this help item. Keep concise.,Short heading for this help item.
+20,Tools & Voice,intro,Say “AIRE” followed by any of these words while the microphone is active:,Introductory text above a table.,Introductory text above a table.
+20,Tools & Voice,cols[0],Command,Table column header.,Keep short and consistent.
+20,Tools & Voice,cols[1],What it does,Table column header.,Keep short and consistent.
+20,Tools & Voice,rows[0][0],AIRE SEND,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[0][1],Send the current message immediately,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[1][0],AIRE PAUSE,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[1][1],Freeze the silence countdown,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[2][0],AIRE RESUME,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[2][1],Resume the countdown,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[3][0],AIRE CLEAR,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[3][1],Clear the input box,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[4][0],AIRE UNDO,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[4][1],Clear the input box,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[5][0],AIRE CANCEL,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[5][1],Stop listening without sending,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[6][0],AIRE NEW,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[6][1],Start a new conversation,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[7][0],AIRE SETTINGS,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[7][1],Open the Settings window,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[8][0],AIRE OPEN/SHOW,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[8][1],Show the main chat window,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[9][0],AIRE CLOSE/HIDE,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[9][1],Hide the main chat window,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[10][0],AIRE YES/NO,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[10][1],Approve or deny a pending AI action,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[11][0],AIRE STOP,Table cell content.,May contain placeholders.
+20,Tools & Voice,rows[11][1],Emergency stop — end any active keyboard/mouse session immediately,Table cell content.,May contain placeholders.
+21,Tools & Voice,title,Voice Output,Short heading for this help item. Keep concise.,Short heading for this help item.
+21,Tools & Voice,content,"Aire can read AI responses aloud using Windows text-to-speech. Enable this in Settings (⚙) → Voice Output.
+
+• Choose to speak all responses, or only when you use the microphone.
+• Select a voice and adjust the reading speed.
+• Toggle voice output on/off quickly with the speaker icon near the microphone button.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+21,Tools & Voice,links[0].label,Open voice settings,Translate the label; keep action unchanged.,Hyperlink label (action: settings:voice)
+22,Appearance,title,Appearance,Short heading for this help item. Keep concise.,Short heading for this help item.
+22,Appearance,content,"Open Settings (⚙) → Appearance to change the look of the app.
+
+• Theme: switch between Dark and Light (Beige).
+• Color tint: drag the slider to apply a hue tint across the entire UI. The left end (black) and right end (white) mean no tint — the slider is pure grayscale by default.
+• Font size: hold Ctrl and scroll the mouse wheel over the chat or input area to increase or decrease the font size. The setting is saved automatically.
+
+All appearance settings are saved and restored on next launch.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+22,Appearance,links[0].label,Open appearance settings,Translate the label; keep action unchanged.,Hyperlink label (action: settings:appearance)
+23,Local API,title,What is the Local API?,Short heading for this help item. Keep concise.,Short heading for this help item.
+23,Local API,content,"The Local API is how another program on the same computer can talk to Aire.
+
+For non-developers: you usually do not need this feature.
+
+For developers and advanced users: this is the easiest way to connect your own script, tool, automation, or desktop app to Aire. A local program can:
+• ask Aire to show or hide its main window,
+• list conversations and read messages,
+• send a message to the active conversation,
+• switch provider or conversation,
+• inspect pending tool approvals,
+• and call Aire tools directly.
+
+How it works:
+• Aire listens on TCP port 51234.
+• It only listens on 127.0.0.1, so other computers cannot reach it directly.
+• Each request is one JSON object sent as one line.
+• Each response is one JSON object returned as one line.
+
+To use it, first open Connections settings and enable local API access.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+23,Local API,imageCaption,"Connections settings where local API access, email accounts, and MCP servers are configured.",Caption for an image shown in the help window.,Caption for an image.
+23,Local API,links[0].label,Open connections settings,Translate the label; keep action unchanged.,Hyperlink label (action: settings:connections)
+24,Local API,title,Local API Quick Start,Short heading for this help item. Keep concise.,Short heading for this help item.
+24,Local API,content,"To connect another app to Aire, use this checklist:
+
+1. Open Connections settings.
+2. Turn on local API access.
+3. Copy the auth token.
+4. From your app or script, open a TCP connection to 127.0.0.1:51234.
+5. Send one JSON line with method, token, and optional parameters.
+6. Read one JSON line back.
+7. Close the connection.
+
+A good first test is the ping method. If ping works, then try show_main_window, list_providers, and create_conversation.
+
+Recommended first integration order:
+• ping
+• show_main_window
+• list_providers
+• create_conversation
+• list_conversations
+• get_messages
+• send_message
+• get_state
+• wait_for_pending_approval if you want to cooperate with tool approvals
+• execute_tool only after you are comfortable with the approval flow and security model",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+24,Local API,links[0].label,Open connections settings,Translate the label; keep action unchanged.,Hyperlink label (action: settings:connections)
+25,Local API,title,Authentication,Short heading for this help item. Keep concise.,Short heading for this help item.
+25,Local API,content,"Every Local API request must include the auth token.
+
+Where to get it:
+• Open Connections settings.
+• Find the Local API section.
+• Click Copy to copy the token.
+• Paste that token into your app or script configuration.
+
+What to know:
+• If you click Regenerate, old integrations will stop working until they use the new token.
+• The API must be enabled, not just configured.
+• Any process on your computer that knows the token can control Aire.
+
+Practical advice for developers:
+• Keep the token in a local config file or environment variable, not hard-coded in source control.
+• Treat it like a local secret.
+• If you suspect it leaked, regenerate it.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+25,Local API,links[0].label,Open connections settings,Translate the label; keep action unchanged.,Hyperlink label (action: settings:connections)
+25,Local API,links[1].label,Review AI action approvals,Translate the label; keep action unchanged.,Hyperlink label (action: settings:auto-accept)
+26,Local API,title,Protocol,Short heading for this help item. Keep concise.,Short heading for this help item.
+26,Local API,content,"{ ""method"": ""ping"", ""token"": ""YOUR_TOKEN"" }
+{ ""ok"": true, ""result"": { ""providerName"": ""Codex"", ""providerType"": ""Codex"", ""providerModel"": ""gpt-5.4-mini"", ""activeConversationId"": 12 } }
+
+{ ""method"": ""create_conversation"", ""token"": ""YOUR_TOKEN"", ""parameters"": { ""title"": ""API test"" } }
+{ ""ok"": true, ""result"": 73 }
+
+{ ""method"": ""send_message"", ""token"": ""YOUR_TOKEN"", ""parameters"": { ""text"": ""Hello!"" } }
+{ ""ok"": true, ""result"": true }",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+26,Local API,intro,"The Local API is line-based JSON over TCP.
+
+Connection pattern:
+• connect to 127.0.0.1:51234
+• write exactly one compact JSON request followed by a newline
+• read exactly one JSON response line
+• close the connection
+
+Request shape:
+{ ""method"": ""METHOD"", ""token"": ""TOKEN"", ""parameters"": { ... } }
+
+Response shape:
+{ ""ok"": true, ""result"": ... }
+or
+{ ""ok"": false, ""errorMessage"": ""message"" }
+
+If you are writing a client library, build around that simple request-response pattern first. You do not need HTTP or WebSockets to get started.",Introductory text above a table.,Introductory text above a table.
+27,Local API,title,Available Methods,Short heading for this help item. Keep concise.,Short heading for this help item.
+27,Local API,cols[0],Method,Table column header.,Keep short and consistent.
+27,Local API,cols[1],Parameters,Table column header.,Keep short and consistent.
+27,Local API,cols[2],Description,Table column header.,Keep short and consistent.
+27,Local API,rows[0][0],ping,Table cell content.,May contain placeholders.
+27,Local API,rows[0][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[0][2],Check if Aire is running. Returns the same state snapshot as get_state.,Table cell content.,May contain placeholders.
+27,Local API,rows[1][0],get_state,Table cell content.,May contain placeholders.
+27,Local API,rows[1][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[1][2],"Current provider, model, active conversation ID, and local API status.",Table cell content.,May contain placeholders.
+27,Local API,rows[2][0],show_main_window,Table cell content.,May contain placeholders.
+27,Local API,rows[2][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[2][2],Bring the Aire chat window to the front.,Table cell content.,May contain placeholders.
+27,Local API,rows[3][0],hide_main_window,Table cell content.,May contain placeholders.
+27,Local API,rows[3][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[3][2],Hide the chat window to the tray.,Table cell content.,May contain placeholders.
+27,Local API,rows[4][0],open_settings,Table cell content.,May contain placeholders.
+27,Local API,rows[4][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[4][2],Open the Settings window.,Table cell content.,May contain placeholders.
+27,Local API,rows[5][0],open_browser,Table cell content.,May contain placeholders.
+27,Local API,rows[5][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[5][2],Open the Aire browser window.,Table cell content.,May contain placeholders.
+27,Local API,rows[6][0],list_providers,Table cell content.,May contain placeholders.
+27,Local API,rows[6][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[6][2],All configured AI providers with IDs and names.,Table cell content.,May contain placeholders.
+27,Local API,rows[7][0],create_provider,Table cell content.,May contain placeholders.
+27,Local API,rows[7][1],"name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritCredentialsFromProviderId?",Table cell content.,May contain placeholders.
+27,Local API,rows[7][2],Create a new provider from the local API.,Table cell content.,May contain placeholders.
+27,Local API,rows[8][0],list_conversations,Table cell content.,May contain placeholders.
+27,Local API,rows[8][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[8][2],"All saved conversations (ID, title, date).",Table cell content.,May contain placeholders.
+27,Local API,rows[9][0],create_conversation,Table cell content.,May contain placeholders.
+27,Local API,rows[9][1],title?,Table cell content.,May contain placeholders.
+27,Local API,rows[9][2],Create a new conversation and switch to it.,Table cell content.,May contain placeholders.
+27,Local API,rows[10][0],select_conversation,Table cell content.,May contain placeholders.
+27,Local API,rows[10][1],conversationId,Table cell content.,May contain placeholders.
+27,Local API,rows[10][2],Switch to an existing conversation.,Table cell content.,May contain placeholders.
+27,Local API,rows[11][0],get_messages,Table cell content.,May contain placeholders.
+27,Local API,rows[11][1],conversationId,Table cell content.,May contain placeholders.
+27,Local API,rows[11][2],All messages in a conversation.,Table cell content.,May contain placeholders.
+27,Local API,rows[12][0],set_provider,Table cell content.,May contain placeholders.
+27,Local API,rows[12][1],providerId,Table cell content.,May contain placeholders.
+27,Local API,rows[12][2],Switch the active AI provider.,Table cell content.,May contain placeholders.
+27,Local API,rows[13][0],set_provider_model,Table cell content.,May contain placeholders.
+27,Local API,rows[13][1],"providerId, model",Table cell content.,May contain placeholders.
+27,Local API,rows[13][2],Change the model for a provider.,Table cell content.,May contain placeholders.
+27,Local API,rows[14][0],send_message,Table cell content.,May contain placeholders.
+27,Local API,rows[14][1],text,Table cell content.,May contain placeholders.
+27,Local API,rows[14][2],Send a message to the active conversation. Returns true when accepted.,Table cell content.,May contain placeholders.
+27,Local API,rows[15][0],list_pending_approvals,Table cell content.,May contain placeholders.
+27,Local API,rows[15][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[15][2],Tool calls currently waiting for approval.,Table cell content.,May contain placeholders.
+27,Local API,rows[16][0],wait_for_pending_approval,Table cell content.,May contain placeholders.
+27,Local API,rows[16][1],timeout_seconds?,Table cell content.,May contain placeholders.
+27,Local API,rows[16][2],Wait for the next pending tool approval or return null on timeout.,Table cell content.,May contain placeholders.
+27,Local API,rows[17][0],approve_tool_call,Table cell content.,May contain placeholders.
+27,Local API,rows[17][1],index,Table cell content.,May contain placeholders.
+27,Local API,rows[17][2],Approve a pending tool call by its current list index.,Table cell content.,May contain placeholders.
+27,Local API,rows[18][0],deny_tool_call,Table cell content.,May contain placeholders.
+27,Local API,rows[18][1],index,Table cell content.,May contain placeholders.
+27,Local API,rows[18][2],Deny a pending tool call by its current list index.,Table cell content.,May contain placeholders.
+27,Local API,rows[19][0],execute_tool,Table cell content.,May contain placeholders.
+27,Local API,rows[19][1],"tool, parameters, wait_for_approval?, approval_timeout_seconds?",Table cell content.,May contain placeholders.
+27,Local API,rows[19][2],Run an Aire tool directly and optionally wait for approval.,Table cell content.,May contain placeholders.
+27,Local API,rows[20][0],get_trace,Table cell content.,May contain placeholders.
+27,Local API,rows[20][1],"afterId?, limit?",Table cell content.,May contain placeholders.
+27,Local API,rows[20][2],Read tool execution trace entries for debugging.,Table cell content.,May contain placeholders.
+27,Local API,rows[21][0],clear_trace,Table cell content.,May contain placeholders.
+27,Local API,rows[21][1],—,Table cell content.,May contain placeholders.
+27,Local API,rows[21][2],Clear the tool execution trace.,Table cell content.,May contain placeholders.
+28,Local API,title,Which methods should I start with?,Short heading for this help item. Keep concise.,Short heading for this help item.
+28,Local API,content,"If you are building another app that connects to Aire, start with the simpler methods first.
+
+Recommended learning order:
+• ping: confirm Aire is running and your token is valid.
+• show_main_window: confirm you can trigger a visible app action.
+• get_state: inspect the current conversation and provider state.
+• list_conversations and get_messages: read data safely.
+• send_message: perform a full request-reply round trip.
+• list_pending_approvals, approve_tool_call, deny_tool_call: integrate with Aire's approval model.
+• execute_tool: only after you understand the security implications and approval behavior.
+
+In most integrations, send_message and the read-only methods are enough.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+29,Local API,title,PowerShell Example,Short heading for this help item. Keep concise.,Short heading for this help item.
+29,Local API,content,"$TOKEN = ""paste-your-token-here""
+$PORT  = 51234
+
+function Invoke-Aire {
+    param([string]$Method, [hashtable]$Params = @{})
+    $req = @{ method = $Method; token = $TOKEN }
+    if ($Params.Count) { $req[""parameters""] = $Params }
+    $client = New-Object Net.Sockets.TcpClient(""127.0.0.1"", $PORT)
+    $writer = [IO.StreamWriter]::new($client.GetStream())
+    $writer.AutoFlush = $true
+    $reader = [IO.StreamReader]::new($client.GetStream())
+    $writer.WriteLine(($req | ConvertTo-Json -Compress))
+    $resp = $reader.ReadLine()
+    $client.Close()
+    return $resp | ConvertFrom-Json
+}
+
+# Check Aire is running and inspect state
+$state = Invoke-Aire ""ping""
+$state.result
+
+# Create and select a conversation
+$id = (Invoke-Aire ""create_conversation"" @{ title = ""API test"" }).result
+Invoke-Aire ""select_conversation"" @{ conversationId = $id }
+
+# Send a message (returns true when accepted)
+Invoke-Aire ""send_message"" @{ text = ""Hello from PowerShell"" }
+
+# Read the conversation messages after the turn completes
+(Invoke-Aire ""get_messages"" @{ conversationId = $id }).result
+
+# Execute a tool directly
+Invoke-Aire ""execute_tool"" @{ tool = ""read_file""; parameters = @{ path = ""C:/Temp/notes.txt"" } }",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+29,Local API,intro,"This example shows the simplest useful shape for a Local API client in PowerShell. Save your token from Connections settings, paste it below, and then try ping before anything else.",Introductory text above a table.,Introductory text above a table.
+30,Local API,title,Python Example,Short heading for this help item. Keep concise.,Short heading for this help item.
+30,Local API,content,"import socket, json
+
+TOKEN = ""paste-your-token-here""
+
+def aire(method, **params):
+    req = {""method"": method, ""token"": TOKEN}
+    if params:
+        req[""parameters""] = params
+    with socket.create_connection((""127.0.0.1"", 51234)) as s:
+        s.sendall((json.dumps(req, separators=("","", "":"")) + ""\n"").encode())
+        return json.loads(s.makefile().readline())
+
+state = aire(""ping"")
+print(state[""result""])
+
+conversation_id = aire(""create_conversation"", title=""API test"")[""result""]
+aire(""select_conversation"", conversationId=conversation_id)
+aire(""send_message"", text=""Hello from Python"")
+
+messages = aire(""get_messages"", conversationId=conversation_id)[""result""]
+print(messages)
+
+result = aire(
+    ""execute_tool"",
+    tool=""read_file"",
+    parameters={""path"": ""C:/Temp/notes.txt""}
+)
+print(result)",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.
+30,Local API,intro,This example uses only the Python standard library. It is a good starting point if you want to add Aire support to another local tool.,Introductory text above a table.,Introductory text above a table.
+31,Local API,title,Integration Tips,Short heading for this help item. Keep concise.,Short heading for this help item.
+31,Local API,content,"• Always check ok before using result. If ok is false, read the error message and handle it.
+• send_message only confirms that Aire accepted the message into the active conversation. If your integration needs the final answer, follow up with get_messages or watch for approvals and trace output.
+• Keep one method call per TCP connection. Connect, send, read, close.
+• Start with read-only and visibility actions before using execute_tool.
+• If your integration wants to cooperate with Aire's safety model, use list_pending_approvals, wait_for_pending_approval, approve_tool_call, and deny_tool_call instead of assuming every action runs immediately.
+• execute_tool is powerful because it lets your code call Aire tools directly. Use it carefully.
+• The API is intentionally local-only. Do not expose port 51234 to your network or the internet.
+• For production-like internal tools, store the token outside source code and make ping part of your startup health check.",Main explanatory text. May contain bullet points (•) and line breaks.,Main explanatory text.

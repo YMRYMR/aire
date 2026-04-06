@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -459,17 +460,25 @@ namespace Aire.UI
             if (string.IsNullOrWhiteSpace(relativePath)) return null;
             if (Path.IsPathRooted(relativePath)) return relativePath;
 
-            var baseDir  = AppContext.BaseDirectory;
-
-            // Prefer a language-specific variant, e.g. Assets/Help/es/main-chat.png
-            var dir      = Path.GetDirectoryName(relativePath) ?? string.Empty;
-            var fileName = Path.GetFileName(relativePath);
+            // Try language-specific subdirectory first
             var langCode = LocalizationService.CurrentCode;
-            var langPath = Path.GetFullPath(Path.Combine(baseDir, dir, langCode, fileName));
-            if (File.Exists(langPath))
-                return langPath;
+            if (!string.IsNullOrEmpty(langCode) && langCode != "en")
+            {
+                var langSpecificPath = Path.Combine(
+                    Path.GetDirectoryName(relativePath) ?? "",
+                    langCode,
+                    Path.GetFileName(relativePath));
+                var fullLangPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, langSpecificPath));
+                if (File.Exists(fullLangPath))
+                {
+                    Debug.WriteLine($"[HelpWindow] Using language-specific image: {fullLangPath}");
+                    return fullLangPath;
+                }
+            }
 
-            return Path.GetFullPath(Path.Combine(baseDir, relativePath));
+            // Fall back to default location
+            var defaultPath = Path.Combine(AppContext.BaseDirectory, relativePath);
+            return Path.GetFullPath(defaultPath);
         }
 
         private static Brush GetBrush(string key)

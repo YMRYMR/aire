@@ -3,212 +3,834 @@
   "nativeName": "한국어",
   "flag": "🇰🇷",
   "strings": {
-    "settings.apiAccessTitle": "로컬 API 접근",
-    "tooltip.settings": "설정",
-    "tooltip.downloadWhisper": "Whisper 모델 다운로드 (~150 MB)",
-    "help.search": "도움말 검색…",
-    "tooltip.voiceOff": "음성 출력 꺼짐 — 클릭하여 활성화",
-    "onboarding.pickerTitle": "AI 제공자 선택",
-    "tooltip.pinAttached": "트레이에 고정됨 — 클릭하여 시스템 트레이 위로 다시 붙이기",
-    "onboarding.pickerSubtitle": "시작하려면 하나를 선택하세요. 언제든지 더 추가할 수 있습니다.",
-    "tooltip.clear": "대화 지우기",
-    "tooltip.help": "도움말",
-    "onboarding.getStarted": "시작하기  →",
-    "main.sessionActive": "세션 활성화됨",
-    "settings.apiAccessTokenDescription": "로컬 API 요청 시 이 토큰을 전달하여 제어 권한을 부여하세요.",
-    "settings.voiceMicOnly": "마이크 사용 시에만 말하기",
+    "settings.title": "설정 — Aire",
+    "settings.aiProviders": "AI 제공자",
+    "settings.appearance": "외관",
+    "settings.brightness": "밝기",
+    "settings.dark": "어두운",
+    "settings.light": "밝은 (베이지)",
+    "settings.colorTint": "색조",
+    "settings.accentTint": "강조 색상",
+    "settings.accentBrightness": "강조 색상 밝기",
     "settings.neutralLeft": "← 중립",
     "settings.neutralRight": "중립 →",
-    "settings.type": "유형",
-    "settings.apiAccessTokenTitle": "인증 토큰",
-    "settings.reloginClaude": "Claude.ai로 다시 로그인",
-    "tooltip.mic": "음성 입력 시작",
-    "menu.saveChat": "채팅을 텍스트로 저장...",
-    "tooltip.stopRecording": "녹음 중지  ('AIRE PAUSE'라고 말하여 일시 정지)",
-    "onboarding.welcomeSubtitle": "모두를 위한 AI",
-    "settings.connections": "연결",
-    "main.endSession": "세션 종료",
-    "settings.apiAccessTokenRegenerate": "재생성",
-    "settings.addProvider": "+ 추가",
-    "tooltip.modeCurrent": "어시스턴트 모드: {0}",
-    "help.title": "도움말 — Aire",
-    "main.remove": "제거",
-    "settings.apiKey": "API 키",
-    "tooltip.downloadingWhisper": "Whisper 모델 다운로드 중…",
-    "settings.loginClaude": "Claude.ai로 로그인",
-    "tooltip.pinDetached": "고정 해제됨 — 클릭하여 시스템 트레이 위로 다시 붙이기",
-    "settings.enabled": "활성화됨",
-    "settings.apiAccessDescription": "신뢰할 수 있는 로컬 앱이 Aire를 열고, 채팅 기록을 읽고, 로컬 API를 통해 작업을 요청할 수 있도록 허용합니다.",
     "settings.fontSize": "글꼴 크기",
-    "settings.anthropicHint": "팁: 비워두면 ANTHROPIC_API_KEY 환경 변수를 사용합니다.",
-    "settings.voiceOutput": "음성 출력",
-    "settings.baseUrl": "기본 URL (선택 사항)",
-    "settings.voice": "음성",
     "settings.language": "언어",
-    "main.assistantModeSwitched": "어시스턴트 모드가 {0}(으)로 전환되었습니다.",
-    "onboarding.welcomeDesc": "트레이 기반 AI 채팅 앱으로 OpenAI, Anthropic Claude, Google AI, Ollama 등 모든 AI 제공자와 한 곳에서 대화할 수 있습니다.",
-    "tooltip.voiceOn": "음성 출력 켜짐 — 클릭하여 비활성화",
-    "settings.accentBrightness": "강조 색상 밝기",
-    "settings.model": "모델",
-    "settings.appearance": "외관",
-    "menu.find": "찾기...  Ctrl+F",
-    "settings.apiAccessTokenCopy": "복사",
-    "settings.accentTint": "강조 색상",
-    "onboarding.welcomeTitle": "Aire에 오신 것을 환영합니다",
-    "settings.aiProviders": "AI 제공자",
-    "settings.colorTint": "색조",
-    "settings.light": "밝은 (베이지)",
-    "settings.selectProvider": "제공자 선택",
-    "confirm.deleteTitle": "'{0}'을(를) 삭제하시겠습니까?",
-    "tooltip.searchChat": "채팅에서 찾기  (Ctrl+F)",
-    "tooltip.voicePaused": "음성 일시 정지됨  ('AIRE RESUME'이라고 말하여 계속)",
-    "confirm.deleteMsg": "이 작업은 제공자와 해당 구성을 영구적으로 제거합니다.",
     "settings.name": "이름",
-    "settings.brightness": "밝기",
+    "settings.type": "유형",
+    "settings.model": "모델",
+    "settings.apiKey": "API 키",
+    "settings.baseUrl": "기본 URL (선택 사항)",
+    "settings.enabled": "활성화됨",
+    "settings.addProvider": "+ 추가",
+    "settings.selectProvider": "제공자 선택",
+    "settings.loginClaude": "Claude.ai로 로그인",
+    "settings.reloginClaude": "Claude.ai로 다시 로그인",
+    "settings.anthropicHint": "팁: 비워두면 ANTHROPIC_API_KEY 환경 변수를 사용합니다.",
+    "help.title": "도움말 — Aire",
+    "help.search": "도움말 검색…",
+    "tooltip.help": "도움말",
+    "tooltip.settings": "설정",
+    "tooltip.clear": "대화 지우기",
+    "tooltip.mic": "음성 입력 시작",
+    "tooltip.stopRecording": "녹음 중지  ('AIRE PAUSE'라고 말하여 일시 정지)",
+    "tooltip.voicePaused": "음성 일시 정지됨  ('AIRE RESUME'이라고 말하여 계속)",
+    "tooltip.downloadingWhisper": "Whisper 모델 다운로드 중…",
+    "tooltip.downloadWhisper": "Whisper 모델 다운로드 (~150 MB)",
+    "tooltip.voiceOn": "음성 출력 켜짐 — 클릭하여 비활성화",
+    "tooltip.voiceOff": "음성 출력 꺼짐 — 클릭하여 활성화",
+    "tooltip.modeCurrent": "어시스턴트 모드: {0}",
+    "tooltip.searchChat": "채팅에서 찾기  (Ctrl+F)",
+    "tooltip.pinAttached": "트레이에 고정됨 — 클릭하여 시스템 트레이 위로 다시 붙이기",
+    "tooltip.pinDetached": "고정 해제됨 — 클릭하여 시스템 트레이 위로 다시 붙이기",
+    "settings.voiceOutput": "음성 출력",
+    "settings.connections": "연결",
+    "settings.apiAccessTitle": "로컬 API 접근",
+    "settings.apiAccessDescription": "신뢰할 수 있는 로컬 앱이 Aire를 열고, 채팅 기록을 읽고, 로컬 API를 통해 작업을 요청할 수 있도록 허용합니다.",
     "settings.apiAccessEnabled": "로컬 API 접근 활성화",
-    "settings.dark": "어두운",
-    "main.thinking": "생각 중…",
+    "settings.apiAccessTokenTitle": "인증 토큰",
+    "settings.apiAccessTokenDescription": "로컬 API 요청 시 이 토큰을 전달하여 제어 권한을 부여하세요.",
+    "settings.apiAccessTokenCopy": "복사",
+    "settings.apiAccessTokenRegenerate": "재생성",
     "settings.voiceOutputEnabled": "음성 출력 활성화",
-    "settings.title": "설정 — Aire",
+    "settings.voiceMicOnly": "마이크 사용 시에만 말하기",
+    "settings.voice": "음성",
     "settings.voiceSpeed": "속도",
+    "main.sessionActive": "세션 활성화됨",
+    "main.endSession": "세션 종료",
+    "main.thinking": "생각 중…",
+    "main.assistantModeSwitched": "어시스턴트 모드가 {0}(으)로 전환되었습니다.",
+    "main.remove": "제거",
+    "menu.find": "찾기...  Ctrl+F",
+    "menu.saveChat": "채팅을 텍스트로 저장...",
+    "confirm.deleteTitle": "'{0}'을(를) 삭제하시겠습니까?",
+    "confirm.deleteMsg": "이 작업은 제공자와 해당 구성을 영구적으로 제거합니다.",
+    "onboarding.welcomeTitle": "Aire에 오신 것을 환영합니다",
+    "onboarding.welcomeSubtitle": "모두를 위한 AI",
+    "onboarding.welcomeDesc": "트레이 기반 AI 채팅 앱으로 OpenAI, Anthropic Claude, Google AI, Ollama 등 모든 AI 제공자와 한 곳에서 대화할 수 있습니다.",
+    "onboarding.getStarted": "시작하기  →",
+    "onboarding.pickerTitle": "AI 제공자 선택",
+    "onboarding.pickerSubtitle": "시작하려면 하나를 선택하세요. 언제든지 더 추가할 수 있습니다.",
+    "onboarding.addAiTitle": "첫 번째 AI 추가",
+    "onboarding.addAiSubtitle": "AI 공급자에 연결하여 채팅을 시작하세요.",
+    "onboarding.providerType": "공급자 유형",
+    "onboarding.name": "이름",
+    "onboarding.apiKey": "API 키",
+    "onboarding.baseUrl": "기본 URL (선택 사항 — OpenAI의 경우 비워두세요)",
+    "onboarding.model": "모델",
+    "onboarding.testConnection": "연결 테스트",
+    "onboarding.skipForNow": "지금은 건너뛰기",
+    "onboarding.finish": "완료  →",
+    "onboarding.doneTitle": "준비 완료!",
+    "onboarding.doneDesc": "Aire가 시스템 트레이에서 실행 중입니다. 아이콘을 클릭하면 언제든지 채팅을 열 수 있습니다.",
+    "onboarding.startChatting": "채팅 시작",
+    "onboarding.testing": "테스트 중…",
+    "onboarding.testOk": "연결됨!",
+    "onboarding.testFail": "온보딩 테스트 실패",
+    "onboarding.fillKeyFirst": "먼저 API 키를 입력하세요.",
+    "onboarding.whereApiKey": "API 키는 어디서 얻나요?",
+    "onboarding.signUpPrefix": "계정이 없으신가요? 가입하세요:",
+    "tooltip.sidebar": "대화 기록",
+    "tooltip.providerCooldown": "공급자가 쿨다운 상태입니다",
+    "tooltip.checkAvailability": "공급자가 다시 사용 가능한지 확인",
+    "tooltip.browser": "브라우저 열기 (AI가 열린 탭을 읽을 수 있음)",
+    "placeholder.search": "검색…",
+    "tooltip.newConversation": "새 대화",
+    "tooltip.openImageViewer": "클릭하여 이미지 뷰어에서 열기",
+    "tooltip.allow": "허용",
+    "tooltip.deny": "거부",
+    "tooltip.previousMatch": "이전 일치 항목",
+    "tooltip.nextMatch": "다음 일치 항목",
+    "tooltip.close": "닫기",
+    "tooltip.openFile": "클릭하여 파일 열기",
+    "tooltip.removeAttachment": "첨부 파일 제거",
+    "tooltip.stopThinking": "AI 사고 중지",
+    "tooltip.toolsDisabled": "도구 비활성화됨 — 클릭하여 도구 카테고리 선택",
+    "tooltip.toolsEnabled": "활성화된 도구 카테고리: {0}",
+    "warning.largeFile": "⚠ 대용량 파일 — 공급자가 거부할 수 있음",
+    "menu.copyChat": "채팅을 텍스트로 복사",
+    "menu.restoreWindowSizes": "원래 창 크기 복원",
+    "settings.setupWizard": "설정 마법사",
+    "settings.apiAccessEnabledTooltip": "다른 로컬 앱이 Aire를 제어할 수 있도록 합니다. 호출자를 신뢰하지 않는 한 끄세요.",
+    "settings.testSelectedVoice": "선택된 음성 테스트",
+    "tooltip.dragReorder": "드래그하여 순서 변경",
+    "tooltip.runTests": "테스트 실행",
+    "cooldown.suffix": "↻을 클릭하여 쿨다운을 초기화하고 다시 시도하세요.",
+    "settings.refreshModelsTooltip": "서버에서 모델 목록 새로 고침",
+    "tools.enableAllCategories": "모든 도구 카테고리 활성화",
+    "tools.noTools": "도구 없음",
+    "toolCategory.filesystem.label": "파일",
+    "toolCategory.filesystem.description": "로컬 파일과 폴더를 읽고 수정합니다.",
     "toolCategory.browser.label": "브라우저",
     "toolCategory.browser.description": "브라우저 탭과 페이지를 검사하고 제어합니다.",
-    "onboarding.finish": "완료  →",
-    "toolCategory.filesystem.description": "로컬 파일과 폴더를 읽고 수정합니다.",
-    "onboarding.providerType": "공급자 유형",
-    "assistantMode.developer.name": "개발자",
-    "tooltip.nextMatch": "다음 일치 항목",
-    "cooldown.suffix": "↻을 클릭하여 쿨다운을 초기화하고 다시 시도하세요.",
-    "tooltip.previousMatch": "이전 일치 항목",
-    "assistantMode.developer.description": "구현 중심 기술 모드",
-    "tooltip.stopThinking": "AI 사고 중지",
-    "placeholder.search": "검색…",
-    "onboarding.addAiSubtitle": "AI 공급자에 연결하여 채팅을 시작하세요.",
     "toolCategory.agent.label": "에이전트",
-    "settings.setupWizard": "설정 마법사",
-    "onboarding.testConnection": "연결 테스트",
-    "tooltip.toolsEnabled": "활성화된 도구 카테고리: {0}",
-    "toolCategory.keyboard.label": "키보드",
-    "tooltip.providerCooldown": "공급자가 쿨다운 상태입니다",
-    "tools.enableAllCategories": "모든 도구 카테고리 활성화",
-    "tooltip.newConversation": "새 대화",
-    "tooltip.deny": "거부",
     "toolCategory.agent.description": "계획, 후속 작업 및 작업 관리 도구를 사용합니다.",
-    "assistantMode.architect.name": "아키텍트",
-    "tooltip.toolsDisabled": "도구 비활성화됨 — 클릭하여 도구 카테고리 선택",
-    "onboarding.testing": "테스트 중…",
-    "tooltip.removeAttachment": "첨부 파일 제거",
-    "menu.copyChat": "채팅을 텍스트로 복사",
-    "warning.largeFile": "⚠ 대용량 파일 — 공급자가 거부할 수 있음",
-    "tooltip.checkAvailability": "공급자가 다시 사용 가능한지 확인",
+    "toolCategory.mouse.label": "마우스",
     "toolCategory.mouse.description": "마우스를 이동하고, 클릭하고, 드래그하고, 스크롤하고, 스크린샷을 찍습니다.",
-    "toolCategory.filesystem.label": "파일",
-    "tooltip.openImageViewer": "클릭하여 이미지 뷰어에서 열기",
-    "onboarding.doneDesc": "Aire가 시스템 트레이에서 실행 중입니다. 아이콘을 클릭하면 언제든지 채팅을 열 수 있습니다.",
-    "menu.restoreWindowSizes": "원래 창 크기 복원",
-    "menu.rename": "이름 바꾸기",
-    "menu.delete": "삭제",
-    "menu.deleteAllConversations": "모든 대화 삭제",
-    "onboarding.doneTitle": "준비 완료!",
+    "toolCategory.keyboard.label": "키보드",
     "toolCategory.keyboard.description": "텍스트를 입력하고 키 입력을 보냅니다.",
-    "tooltip.runTests": "테스트 실행",
-    "tooltip.browser": "브라우저 열기 (AI가 열린 탭을 읽을 수 있음)",
-    "onboarding.baseUrl": "기본 URL (선택 사항 — OpenAI의 경우 비워두세요)",
-    "toolCategory.email.label": "이메일",
-    "onboarding.whereApiKey": "API 키는 어디서 얻나요?",
-    "tooltip.close": "닫기",
-    "assistantMode.architect.description": "시스템 및 설계 트레이드오프 모드",
-    "onboarding.apiKey": "API 키",
-    "tooltip.allow": "허용",
+    "toolCategory.system.label": "시스템",
     "toolCategory.system.description": "프로세스를 검사하고, 앱을 열고, 로컬 시스템 작업을 실행합니다.",
+    "toolCategory.email.label": "이메일",
+    "toolCategory.email.description": "이메일을 읽고, 검색하고, 보내고, 답장합니다.",
+    "assistantMode.architect.name": "아키텍트",
+    "assistantMode.architect.description": "시스템 및 설계 트레이드오프 모드",
     "assistantMode.creative-writer.name": "창작 작가",
     "assistantMode.creative-writer.description": "아이디어가 풍부한 표현적 글쓰기 모드",
-    "onboarding.startChatting": "채팅 시작",
-    "toolCategory.system.label": "시스템",
-    "onboarding.fillKeyFirst": "먼저 API 키를 입력하세요.",
-    "tooltip.sidebar": "대화 기록",
-    "onboarding.addAiTitle": "첫 번째 AI 추가",
-    "onboarding.signUpPrefix": "계정이 없으신가요? 가입하세요:",
-    "onboarding.name": "이름",
-    "toolCategory.mouse.label": "마우스",
-    "onboarding.skipForNow": "지금은 건너뛰기",
-    "toolCategory.email.description": "이메일을 읽고, 검색하고, 보내고, 답장합니다.",
-    "settings.apiAccessEnabledTooltip": "다른 로컬 앱이 Aire를 제어할 수 있도록 합니다. 호출자를 신뢰하지 않는 한 끄세요.",
-    "onboarding.testOk": "연결됨!",
-    "onboarding.model": "모델",
-    "settings.refreshModelsTooltip": "서버에서 모델 목록 새로 고침",
-    "settings.testSelectedVoice": "선택된 음성 테스트",
-    "tools.noTools": "도구 없음",
-    "tooltip.openFile": "클릭하여 파일 열기",
-    "tooltip.dragReorder": "드래그하여 순서 변경",
-    "setup.voiceStatusDownloadFailed": "음성 모델 다운로드 실패. 인터넷 연결을 확인하고 다시 시도하세요.",
-    "assistantMode.security.name": "보안",
-    "setup.assistantModeSectionDescription": "변경하기 전까지 새 대화의 시작 모드가 됩니다.",
-    "setup.voiceStatusStartFailed": "음성 설정을 시작할 수 없습니다: {0}",
-    "setup.summaryLocalVoices": "로컬 음성만 사용",
-    "setup.summaryNextStep": "Aire를 열면 일반 온보딩 마법사로 계속 진행하여 공급자를 구성할 수 있습니다.",
-    "setup.savePreferences": "환경 설정 저장",
-    "setup.heroTitle": "첫 실행 설정",
-    "assistantMode.psicologist.name": "심리학자",
-    "setup.summaryReadAloud": "설정 내용 소리내어 읽기",
-    "assistantMode.psicologist.description": "공감적 반영 모드",
-    "setup.languageSectionDescription": "Aire가 처음 실행 시 사용할 언어를 선택하세요.",
-    "setup.enabled": "활성화됨",
-    "setup.localVoicesDescription": "설정 및 음성 출력이 오프라인에서 작동하도록 할 때 유용합니다.",
-    "setup.voiceCommandsDescription": "인식되는 명령어: English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
-    "setup.voiceStatusCommandNotRecognized": "음성 명령을 인식할 수 없습니다: {0}",
-    "setup.accessibilitySectionTitle": "3. 접근성 기본값",
+    "assistantMode.developer.name": "개발자",
+    "assistantMode.developer.description": "구현 중심 기술 모드",
     "assistantMode.general.name": "일반",
-    "setup.voiceOutputLabel": "시작부터 Aire에서 음성 출력 활성화",
-    "assistantMode.scientist.name": "과학자",
-    "assistantMode.security.description": "보안 중심 검토 및 위협 분석 모드",
-    "assistantMode.scientist.description": "증거 기반 분석 모드",
-    "assistantMode.teacher.name": "교사",
-    "setup.preferencesSaved": "환경 설정이 저장되었습니다.",
-    "setup.disabled": "비활성화됨",
-    "panic.stopButton": "⏹ 세션 중지",
-    "setup.voiceInputDescription": "로컬 음성 모델을 사용할 수 있는 경우, Aire는 시작 시 자동으로 듣기 모드를 시작합니다.",
-    "setup.disabledSpoken": "비활성화됨",
-    "setup.summaryAssistantMode": "기본 어시스턴트 모드",
-    "setup.voiceInputLabel": "시작부터 음성 입력 활성화",
-    "setup.title": "Aire - 설정",
-    "setup.voiceStatusListening": "음성 설정이 듣고 있습니다. 명령을 말한 후 멈추세요.",
-    "setup.heroDescription": "Aire가 일반 온보딩 마법사를 열기 전에 초기 접근성 및 어시스턴트 기본값을 선택하세요.",
-    "setup.saveAndOpen": "저장하고 Aire 열기",
-    "setup.summaryTitle": "요약",
-    "panic.title": "Aire 중지",
-    "setup.voiceStatusReady": "음성 명령이 준비되었습니다. 음성 설정을 시작하여 듣기를 시작하세요.",
-    "setup.voiceStatusDownloading": "음성 설정을 위한 로컬 음성 모델 다운로드 중...",
-    "assistantMode.painter.description": "그림 제작 및 시각적 개념 모드",
-    "setup.languageSectionTitle": "1. 언어",
-    "setup.enabledSpoken": "활성화됨",
     "assistantMode.general.description": "균형 잡힌 기본 동작",
-    "setup.summaryVoiceCommands": "음성 설정 명령어",
-    "setup.voiceStatusModelNeeded": "음성 명령에는 로컬 음성 모델이 필요합니다. 음성 설정을 시작하여 다운로드하세요.",
-    "assistantMode.teacher.description": "설명 중심 학습 모드",
-    "setup.summaryVoiceOutput": "Aire에서 음성 출력",
-    "setup.yes": "예",
-    "setup.no": "아니오",
-    "panic.tooltip": "클릭하여 활성 키보드/마우스 세션을 즉시 중지합니다.\n드래그하여 위치를 변경합니다.",
-    "setup.localVoicesLabel": "로컬 Windows 음성만 사용",
-    "setup.assistantModeSectionTitle": "2. 기본 어시스턴트 모드",
     "assistantMode.painter.name": "화가",
-    "setup.voiceStatusDownloadProgress": "음성 모델 다운로드 중: {0}%",
-    "setup.voiceCommandsLabel": "음성 설정 명령어 허용",
-    "setup.stopVoice": "음성 설정 중지",
-    "setup.launchNotFoundMessage": "환경 설정이 저장되었지만, 설정 앱 옆에서 Aire.exe를 찾을 수 없습니다. 온보딩을 계속하려면 수동으로 Aire를 실행하세요.",
+    "assistantMode.painter.description": "그림 제작 및 시각적 개념 모드",
     "assistantMode.philosopher.name": "철학자",
     "assistantMode.philosopher.description": "개념적 추론 및 세계관 모드",
-    "setup.startVoice": "음성 설정 시작",
-    "setup.voiceStatusCommandsOff": "음성 설정 명령어가 꺼져 있습니다.",
-    "setup.voiceGuidedSectionTitle": "4. 음성 안내 설정",
+    "assistantMode.psicologist.name": "심리학자",
+    "assistantMode.psicologist.description": "공감적 반영 모드",
+    "assistantMode.scientist.name": "과학자",
+    "assistantMode.scientist.description": "증거 기반 분석 모드",
+    "assistantMode.security.name": "보안",
+    "assistantMode.security.description": "보안 중심 검토 및 위협 분석 모드",
+    "assistantMode.teacher.name": "교사",
+    "assistantMode.teacher.description": "설명 중심 학습 모드",
+    "setup.title": "Aire - 설정",
+    "setup.heroTitle": "첫 실행 설정",
+    "setup.heroDescription": "Aire가 일반 온보딩 마법사를 열기 전에 초기 접근성 및 어시스턴트 기본값을 선택하세요.",
+    "setup.languageSectionTitle": "1. 언어",
+    "setup.languageSectionDescription": "Aire가 처음 실행 시 사용할 언어를 선택하세요.",
+    "setup.assistantModeSectionTitle": "2. 기본 어시스턴트 모드",
+    "setup.assistantModeSectionDescription": "변경하기 전까지 새 대화의 시작 모드가 됩니다.",
+    "setup.accessibilitySectionTitle": "3. 접근성 기본값",
+    "setup.voiceOutputLabel": "시작부터 Aire에서 음성 출력 활성화",
     "setup.voiceOutputDescription": "Aire는 메인 앱이 열린 후 응답을 소리내어 읽을 수 있습니다.",
-    "setup.voiceStatusCommandApplied": "음성 명령 적용됨: {0}",
-    "setup.summaryVoiceInput": "Aire에서 음성 입력",
+    "setup.voiceInputLabel": "시작부터 음성 입력 활성화",
+    "setup.voiceInputDescription": "로컬 음성 모델을 사용할 수 있는 경우, Aire는 시작 시 자동으로 듣기 모드를 시작합니다.",
+    "setup.localVoicesLabel": "로컬 Windows 음성만 사용",
+    "setup.localVoicesDescription": "설정 및 음성 출력이 오프라인에서 작동하도록 할 때 유용합니다.",
+    "setup.voiceGuidedSectionTitle": "4. 음성 안내 설정",
     "setup.voiceGuidanceLabel": "설정 지침 소리내어 읽기",
-    "setup.summarySpoken": "언어 {0}. 어시스턴트 모드 {1}. 음성 출력 {2}. 음성 입력 {3}. 저장이라고 말하거나, Aire 열기라고 말하세요.",
-    "setup.preferencesSavedSpoken": "환경 설정이 저장되었습니다. Aire가 온보딩 마법사를 열 준비가 되었습니다.",
+    "setup.voiceCommandsLabel": "음성 설정 명령어 허용",
+    "setup.voiceCommandsDescription": "인식되는 명령어: English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
+    "setup.startVoice": "음성 설정 시작",
+    "setup.stopVoice": "음성 설정 중지",
+    "setup.summaryTitle": "요약",
+    "setup.savePreferences": "환경 설정 저장",
+    "setup.saveAndOpen": "저장하고 Aire 열기",
     "setup.summaryLanguage": "언어",
-    "onboarding.testFail": "온보딩 테스트 실패"
-  }
+    "setup.summaryAssistantMode": "기본 어시스턴트 모드",
+    "setup.summaryVoiceOutput": "Aire에서 음성 출력",
+    "setup.summaryVoiceInput": "Aire에서 음성 입력",
+    "setup.summaryLocalVoices": "로컬 음성만 사용",
+    "setup.summaryReadAloud": "설정 내용 소리내어 읽기",
+    "setup.summaryVoiceCommands": "음성 설정 명령어",
+    "setup.summaryNextStep": "Aire를 열면 일반 온보딩 마법사로 계속 진행하여 공급자를 구성할 수 있습니다.",
+    "setup.summarySpoken": "언어 {0}. 어시스턴트 모드 {1}. 음성 출력 {2}. 음성 입력 {3}. 저장이라고 말하거나, Aire 열기라고 말하세요.",
+    "setup.voiceStatusListening": "음성 설정이 듣고 있습니다. 명령을 말한 후 멈추세요.",
+    "setup.voiceStatusCommandsOff": "음성 설정 명령어가 꺼져 있습니다.",
+    "setup.voiceStatusModelNeeded": "음성 명령에는 로컬 음성 모델이 필요합니다. 음성 설정을 시작하여 다운로드하세요.",
+    "setup.voiceStatusReady": "음성 명령이 준비되었습니다. 음성 설정을 시작하여 듣기를 시작하세요.",
+    "setup.launchNotFoundMessage": "환경 설정이 저장되었지만, 설정 앱 옆에서 Aire.exe를 찾을 수 없습니다. 온보딩을 계속하려면 수동으로 Aire를 실행하세요.",
+    "setup.preferencesSaved": "환경 설정이 저장되었습니다.",
+    "setup.preferencesSavedSpoken": "환경 설정이 저장되었습니다. Aire가 온보딩 마법사를 열 준비가 되었습니다.",
+    "setup.voiceStatusDownloading": "음성 설정을 위한 로컬 음성 모델 다운로드 중...",
+    "setup.voiceStatusDownloadFailed": "음성 모델 다운로드 실패. 인터넷 연결을 확인하고 다시 시도하세요.",
+    "setup.voiceStatusStartFailed": "음성 설정을 시작할 수 없습니다: {0}",
+    "setup.voiceStatusDownloadProgress": "음성 모델 다운로드 중: {0}%",
+    "setup.voiceStatusCommandNotRecognized": "음성 명령을 인식할 수 없습니다: {0}",
+    "setup.voiceStatusCommandApplied": "음성 명령 적용됨: {0}",
+    "setup.enabled": "활성화됨",
+    "setup.disabled": "비활성화됨",
+    "setup.yes": "예",
+    "setup.no": "아니오",
+    "setup.enabledSpoken": "활성화됨",
+    "setup.disabledSpoken": "비활성화됨",
+    "panic.title": "Aire 중지",
+    "panic.tooltip": "클릭하여 활성 키보드/마우스 세션을 즉시 중지합니다.\n드래그하여 위치를 변경합니다.",
+    "panic.stopButton": "⏹ 세션 중지"
+  },
+  "help": [
+    {
+      "tab": "설정 마법사",
+      "type": "text",
+      "title": "설정 마법사의 작동 방식",
+      "links": [
+        {
+          "label": "설정 마법사 열기",
+          "action": "onboarding"
+        },
+        {
+          "label": "AI 설정 열기",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-picker.png",
+      "imageCaption": "설정 마법사는 채팅을 시작하기 전에 제공업체를 선택하는 데 도움을 줍니다.",
+      "content": "설치 마법사는 Aire를 처음 실행할 때 또는 아직 구성된 AI 공급자가 없을 때 나타납니다. 그 임무는 새로 설치한 후 가능한 한 빨리 작업 채팅으로 연결하는 것입니다.\n\n마법사가 수행하는 작업을 단계별로 설명합니다.\n• 환영합니다: Aire가 무엇인지 설명하고 앱 언어를 선택할 수 있습니다.\n• 공급자 선택기: Aire를 AI 서비스에 연결하는 일반적인 방법을 보여줍니다.\n• 제공업체 설정: 선택한 제공업체에 필요한 세부정보를 묻습니다.\n• 마침: Aire가 준비되었음을 확인하고 기본 앱으로 이동합니다.\n\nAI를 처음 사용하는 경우 마법사를 시작하는 것이 가장 좋습니다. 가장 간단한 경로를 먼저 사용하고 필요할 때까지 고급 설정을 숨깁니다.\n\n설정을 건너뛰고 나중에 다시 돌아올 수 있지만 Aire가 채팅 메시지에 응답하려면 구성된 공급자가 하나 이상 필요합니다."
+    },
+    {
+      "tab": "설정 마법사",
+      "type": "text",
+      "title": "제공자 선택",
+      "links": [
+        {
+          "label": "설정 마법사 열기",
+          "action": "onboarding"
+        },
+        {
+          "label": "platform.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "공급자 선택기는 Aire가 귀하를 대신하여 어떤 AI 서비스와 대화할지 결정하는 곳입니다.\n\n주요 옵션의 의미:\n• OpenAI: 간단한 클라우드 설정과 광범위한 모델 지원을 원하는 경우 일반적인 시작점입니다.\n• Anthropic API: Claude 모델로 알려진 또 다른 강력한 클라우드 옵션입니다.\n• Claude.ai: API 키 대신 브라우저 로그인을 사용합니다.\n• Google AI: Google AI Studio를 통해 Gemini 채팅 모델에 연결합니다.\n• Google AI 이미지: 전용 Gemini 이미지 생성 설정.\n• Ollama: 컴퓨터에서 로컬로 모델을 실행합니다. 개인 정보 보호 및 오프라인 사용에 적합하지만 하드웨어에 따라 다릅니다.\n• Codex: 일반 API 키 대신 로컬 Codex CLI 브리지를 사용합니다.\n• Groq, OpenRouter, DeepSeek, Inception 및 z.ai: 다른 공급자 또는 OpenAI 호환 엔드포인트. 이미 계정이 있는 경우 유용합니다.\n\n어느 것을 선택해야 합니까?\n• 채팅을 위한 가장 쉬운 클라우드 설정을 원한다면 OpenAI, Anthropic 또는 Google AI로 시작하세요.\n• 로컬 및 비공개를 원할 경우: Ollama를 선택하세요.\n• Gemini에서 이미지 생성을 특별히 원하는 경우: Google AI 이미지를 선택하세요.\n• 이미 비용을 지불했거나 다른 곳에서 특정 서비스 제공자를 이용하는 경우: 여기에서 동일한 서비스 제공자를 선택하십시오.\n\n갇혀 있지 않습니다. 마법사는 먼저 하나의 공급자를 추가하는 데 도움을 주고 나중에 설정에서 더 추가할 수 있습니다."
+    },
+    {
+      "tab": "설정 마법사",
+      "type": "text",
+      "title": "제공자 세부정보 작성",
+      "links": [
+        {
+          "label": "설정 마법사 열기",
+          "action": "onboarding"
+        },
+        {
+          "label": "AI 설정 열기",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-setup.png",
+      "imageCaption": "공급자 유형, 이름, 자격 증명, 모델 및 연결 테스트가 포함된 공급자 설정 단계입니다.",
+      "content": "공급자를 선택하면 마법사는 공급자에게 필요한 세부 정보만 묻습니다.\n\n일반적인 분야:\n• 제공자 유형: 사용하려는 서비스입니다.\n• 이름: Aire라는 라벨이 채팅 창에 표시됩니다.\n• API 키: Aire가 공급자와 대화할 수 있게 해주는 비밀 토큰입니다. 일부 공급자는 대신 브라우저 로그인을 사용하고 일부 로컬 공급자는 API 키가 전혀 필요하지 않습니다.\n• 기본 URL: 특정 OpenAI 호환 서비스 또는 자체 호스팅 설정에만 필요합니다.\n• 모델: 사용하려는 특정 AI 모델입니다.\n\n제공업체별 참고 사항:\n• Claude.ai는 일반 API 키 대신 브라우저 로그인을 사용합니다.\n• Ollama는 로컬이며 일반적으로 API 키 없이 작동합니다.\n• Codex는 로컬 Codex CLI 브리지를 사용하므로 마법사는 일반 API 키를 요청하는 대신 CLI 설치를 제공할 수 있습니다.\n• Google AI Images는 일반 채팅이 아닌 이미지 생성을 위한 것입니다.\n\n연결 테스트 버튼은 완료하기 전에 구성을 확인하는 데 도움이 됩니다. 테스트가 성공하면 Aire는 일반적으로 해당 공급자를 즉시 ​​사용할 수 있습니다.\n\n실용적인 조언:\n• 어떤 모델을 선택해야 할지 확실하지 않은 경우 기본 제안부터 시작하세요.\n• API 키 필드가 표시되면 서비스에서 제공한 것과 정확히 동일한 키를 붙여넣습니다.\n• 공급자가 API 액세스와 브라우저 로그인을 모두 제공하는 경우 가장 안정적인 자동화 및 통합 동작을 원한다면 API 액세스를 선호하십시오.\n\n마법사를 마친 후에도 나중에 AI 공급자 탭에서 이러한 설정을 변경할 수 있습니다."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "개요",
+      "links": [
+        {
+          "label": "첫 번째 AI 설정",
+          "action": "settings:providers"
+        },
+        {
+          "label": "에어의 모습을 바꿔보세요",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "Aire는 필요할 때까지 시스템 트레이에 남아 있는 데스크톱 채팅 앱입니다. 여러 AI 서비스를 연결할 수 있는 하나의 채팅창이라고 생각하시면 됩니다.\n\nAI를 처음 접하는 경우 일반적인 시작점은 간단합니다.\n• AI 설정을 엽니다.\n• OpenAI, Anthropic, Google AI 또는 Ollama와 같은 공급자 하나를 추가합니다.\n• 모델을 선택하세요.\n• 채팅 상자에 질문을 입력하고 Enter를 누릅니다.\n\nAire가 할 수 있는 일:\n• 하나의 앱에서 다양한 AI 서비스와 대화하세요.\n• 대화 내용을 컴퓨터에 저장하세요.\n• 귀하의 승인을 받아 AI가 도구를 사용하여 파일을 읽고, 명령을 실행하고, 페이지를 찾아보는 등의 작업을 수행하도록 합니다.\n• Windows 음성 기능으로 음성 입력 및 음성 출력을 사용합니다.\n• 다른 로컬 앱이 Local API를 통해 Aire와 통신하도록 합니다."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "트레이 아이콘",
+      "content": "Aire는 시스템 트레이(작업 표시줄의 오른쪽 하단)에서 실행됩니다.\n\n• 트레이 아이콘을 마우스 왼쪽 버튼 또는 오른쪽 버튼으로 클릭하면 채팅창이 열립니다.\n• 열기, 설정, 종료 옵션을 보려면 트레이 아이콘을 마우스 오른쪽 버튼으로 클릭합니다.\n• 창을 닫으면 창은 숨겨집니다. Aire는 백그라운드에서 계속 실행됩니다.\n• 완전히 종료하려면 트레이 아이콘을 마우스 오른쪽 버튼으로 클릭하고 종료를 선택합니다."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "채팅",
+      "links": [
+        {
+          "label": "공개 공급자",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/main-chat.png",
+      "imageCaption": "공급자 선택기, 대화 영역, 검색 및 작성기가 포함된 기본 채팅 창입니다.",
+      "content": "• 하단의 입력창에 메시지를 입력하고 Enter를 눌러 전송하세요.\n• 전송하지 않고 새 줄을 추가하려면 Shift+Enter를 누릅니다.\n• 이전에 보낸 메시지를 탐색하려면 ↑ / ↓를 누르세요. (커서가 입력 상자의 첫 번째 줄이나 마지막 줄에 있을 때만 작동합니다.)\n• 이미지를 입력 상자에 끌어다 놓아 메시지에 첨부합니다(비전 지원 모델 필요).\n• 대화 내에서 검색하려면 Ctrl+F를 누릅니다. ↑ / ↓ 또는 화살표 버튼을 사용하여 일치 항목 사이를 이동합니다. 검색창을 닫으려면 Esc 키를 누르세요.\n• 채팅 영역을 마우스 오른쪽 버튼으로 클릭하면 대화 내용을 텍스트 파일로 복사하거나 저장할 수 있습니다.\n• 🗑 버튼을 누르면 현재 대화가 삭제됩니다(먼저 확인 요청).\n• 사이드바의 💬 버튼을 누르면 대화 기록이 열립니다."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "table",
+      "title": "키보드 단축키",
+      "cols": [
+        "지름길",
+        "행동"
+      ],
+      "rows": [
+        [
+          "입력하다",
+          "메시지 보내기"
+        ],
+        [
+          "Shift+Enter",
+          "입력 상자의 새 줄"
+        ],
+        [
+          "↑ / ↓",
+          "메시지 기록 탐색(커서가 첫 번째/마지막 줄에 있을 때)"
+        ],
+        [
+          "Ctrl+F",
+          "대화 검색"
+        ],
+        [
+          "Ctrl+스크롤",
+          "글꼴 크기 조정"
+        ],
+        [
+          "탈출하다",
+          "검색창 닫기/대화상자 닫기"
+        ]
+      ]
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "팁",
+      "content": "• 여러 AI 제공자를 구성하고 채팅 창 상단에서 이들 사이를 전환할 수 있습니다. 각 대화는 공급자 및 보조자 모드를 기억합니다.\n• 상단을 포함하여 가장자리를 드래그하여 창 크기를 조정합니다.\n• 대화 및 설정은 %LOCALAPPDATA%\\Aire에 로컬로 저장됩니다.\n• AI는 파일, 명령, 브라우저 작업 등에 대한 도구를 요청할 수 있지만 Aire는 자동 수락 규칙이 적용되지 않는 한 여전히 승인을 요청합니다.\n• AI 응답이 끊어지면 모델이 토큰 또는 출력 제한에 도달했을 수 있습니다. 계속하거나, 작업 크기를 줄이거나, 더 큰 컨텍스트 창이 있는 모델을 사용하도록 요청하세요."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "어시스턴트 모드",
+      "imagePath": "Assets/Help/main-chat-modes.png",
+      "imageCaption": "기본 헤더에서 어시스턴트 모드 메뉴가 열립니다. 각 대화는 자체 모드를 유지합니다.",
+      "content": "기본 헤더의 모드 버튼은 Aire가 요청을 공급자에게 보내기 전에 요청을 구성하는 방법을 변경합니다.\n\n현재 모드에는 건축가, 창의적 작가, 개발자, 일반, 화가, 철학자, 심리학자, 과학자, 보안 및 교사가 포함됩니다.\n\n어떤 모드가 수행되나요?\n• 보조자의 스타일과 우선순위를 조정합니다.\n• 선택한 모드는 대화별로 저장되므로 채팅별로 서로 다른 역할을 유지할 수 있습니다.\n• 일반은 새 대화의 기본값입니다.\n• 여러 제공업체는 여전히 고유한 특성을 유지하지만 Aire는 공유 지침에 따라 선택한 모드를 일관되게 전달합니다.\n\n실제 예:\n• 개발자: 코드, 디버깅 및 터미널 작업에 더 좋습니다.\n• Architect: 구조, 절충 및 계획에 더 좋습니다.\n• 교사: 설명과 단계별 안내가 더 좋습니다.\n• Painter: 현재 공급자가 지원하는 경우 이미지 중심 프롬프트 및 생성에 가장 적합합니다."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "도구 카테고리",
+      "imagePath": "Assets/Help/main-chat-tools.png",
+      "imageCaption": "작성기에서 도구 메뉴가 열립니다. 모든 카테고리를 활성화하거나, 모두 비활성화하거나, 원하는 카테고리만 선택할 수 있습니다.",
+      "content": "채팅 상자 근처에 있는 렌치 버튼은 현재 공급자가 사용할 수 있는 도구 범주를 제어합니다.\n\n작동 방식:\n• 렌치 버튼을 클릭하여 카테고리 메뉴를 엽니다.\n• AI가 요청할 수 있도록 하려는 카테고리만 켭니다.\n• 텍스트로만 대화하려면 도구 없음을 선택하세요.\n• Aire는 선택한 도구 범주를 기억하고 이를 현재 도구 정책의 일부로 사용합니다.\n\n이것이 중요한 이유:\n• 활성화된 범주가 적어 도구 사용을 더 쉽게 이해할 수 있습니다.\n• 범주를 제한하면 위험과 우발적인 부작용을 줄일 수 있습니다.\n• 공급자가 도구를 지원하지 않으면 렌치 버튼이 숨겨집니다."
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "AI 제공업체",
+      "imagePath": "Assets/Help/settings-providers.png",
+      "imageCaption": "왼쪽에는 공급자 목록이 있고 오른쪽에는 선택한 공급자 양식이 있는 공급자 설정입니다.",
+      "links": [
+        {
+          "label": "AI 설정 열기",
+          "action": "settings:providers"
+        },
+        {
+          "label": "platform.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "공급자는 Aire가 귀하를 대신하여 대화하는 AI 서비스입니다. 대부분의 사용자는 시작하려면 공급자를 하나만 설정하면 됩니다.\n\n각 공급자 항목은 네 가지 주요 부분으로 구성됩니다.\n• 이름: Aire 내부에 표시되는 라벨입니다.\n• 유형: 사용할 AI 서비스입니다.\n• 모델: 해당 서비스를 실행하려는 특정 모델입니다.\n• 자격 증명: 일반적으로 API 키이거나 Claude.ai의 경우 브라우저 로그인입니다.\n\n일반적인 선택:\n• OpenAI: platform.openai.com에서 API 키를 붙여넣습니다.\n• Anthropic: 브라우저에서 Claude.ai로 로그인하거나 Anthropic API 키를 붙여넣습니다.\n• Google AI: aistudio.google.com에서 Gemini API 키를 붙여넣습니다.\n• Ollama: 자신의 컴퓨터에서 로컬 Ollama 서버를 사용합니다. API 키가 필요하지 않습니다.\n• OpenAI 호환 엔드포인트: Groq, Mistral, OpenRouter, DeepSeek 또는 LM Studio와 같은 서비스는 기본 URL을 설정하여 작동할 수 있는 경우가 많습니다.\n\n어떤 것을 사용해야 할지 확실하지 않은 경우 OpenAI 또는 Anthropic이 일반적으로 가장 쉬운 클라우드 옵션이고 Ollama는 일반적인 로컬 옵션입니다.\n\n공급자를 삭제하지 않고도 활성화하거나 비활성화할 수 있습니다. 변경 사항은 자동으로 저장됩니다."
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "도구 호출 모드",
+      "intro": "Aire는 AI 모델에 도구에 대한 액세스 권한을 부여하는 두 가지 방법을 지원합니다. 모드는 공급자 유형에 따라 자동으로 선택되지만 사용자 정의 JSON 파일에서 모델별로 재정의될 수 있습니다(사용자 정의 모델 참조).",
+      "cols": [
+        "방법",
+        "작동 원리"
+      ],
+      "rows": [
+        [
+          "텍스트 기반\n(기본값: OpenAI, Anthropic)",
+          "도구 설명은 시스템 프롬프트에 포함되어 있습니다. AI는 <tool_call> XML 블록으로 응답합니다. 지침을 안정적으로 따르는 모든 모델에서 작동합니다."
+        ],
+        [
+          "네이티브 함수 호출\n(기본값: Ollama, Google AI)",
+          "구조화된 도구 스키마는 공급자 API를 통해 전송됩니다. AI는 구조화된 함수 호출 개체를 반환합니다. 더 정확합니다. 명시적인 API 지원이 필요합니다."
+        ],
+        [
+          "지원되지 않음",
+          "모델은 도구를 사용할 수 없습니다. 혼동되는 모델에 대한 도구 프롬프트를 건너뛰려면 사용자 정의 모델 파일에서 이를 설정하십시오."
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "공급자 및 모델 호환성",
+      "intro": "특정 제공업체와 모델 조합을 확인하려면 기능 테스트 버튼을 사용하세요.",
+      "cols": [
+        "제공자/엔드포인트",
+        "방법",
+        "메모"
+      ],
+      "rows": [
+        [
+          "오픈AI",
+          "토종의",
+          "GPT-4o, GPT-4.1, GPT-4o-mini — 안정적인 도구 지원"
+        ],
+        [
+          "인류학",
+          "텍스트 기반",
+          "Claude 3.5 Sonnet 이상 — 훌륭한 지침 준수"
+        ],
+        [
+          "구글 AI(제미니)",
+          "토종의",
+          "Gemini 2.0 플래시 이상 권장"
+        ],
+        [
+          "올라마(현지)",
+          "토종의",
+          "qwen2.5-coder, llama3.1, mistral-nemo가 잘 작동합니다. 작은 모델은 다양합니다"
+        ],
+        [
+          "Groq(OpenAI + 기본 URL)",
+          "토종의",
+          "기본 URL: https://api.groq.com/openai/v1 — 매우 빠릅니다."
+        ],
+        [
+          "미스트랄(OpenAI + 기본 URL)",
+          "토종의",
+          "기본 URL: https://api.mistral.ai/v1"
+        ],
+        [
+          "OpenRouter(OpenAI + 기본 URL)",
+          "토종의",
+          "기본 URL: https://openrouter.ai/api/v1 — 100개 이상의 모델"
+        ],
+        [
+          "DeepSeek(OpenAI + 기본 URL)",
+          "토종의",
+          "기본 URL: https://api.deepseek.com/v1"
+        ],
+        [
+          "LM Studio(OpenAI + 기본 URL)",
+          "토종의",
+          "기본 URL: http://localhost:1234/v1 — LM Studio 설정에서 함수 호출을 활성화합니다."
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "능력 테스트",
+      "links": [
+        {
+          "label": "AI 설정 열기",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "테스트 실행 버튼은 선택한 공급자와 모델이 실제로 무엇을 할 수 있는지 확인합니다.\n\n테스트 대상:\n• 도구 호출 기능 테스트는 모델이 예상되는 Aire 도구를 요구하는지 확인합니다. 실제 파일, 브라우저 또는 시스템 작업이 실행되지 않습니다.\n• 이미지 생성 기능 테스트는 공급자의 이미지 생성 경로를 직접 호출합니다. 이러한 테스트는 공급자 할당량을 소비할 수 있으며 계정이나 모델이 이미지 생성을 지원하지 않는 경우 실패할 수 있습니다.\n\n그것을 사용하는 방법:\n• 설정 열기 ⚙ → 공급자 선택 → 테스트 실행을 클릭합니다.\n• 테스트 도중 구성 변경을 방지하기 위해 실행 중에는 공급자 양식이 잠겨 있습니다.\n• 결과는 공급자/모델 조합별로 캐시되며 다음에 빠르게 다시 로드됩니다.\n\n판독 결과:\n• ✓ (녹색) - 공급자가 기능을 올바르게 처리했습니다.\n• ✗(빨간색) - 공급자 또는 모델이 해당 기능에 실패했습니다.\n• 메시지에 할당량, 잔고 또는 속도 제한이 언급되어 있으면 Aire 자체가 아닌 공급자 계정에서 오류가 발생하는 것입니다.\n\n모델이 여러 도구 테스트에 실패하면 다른 모델을 시도하거나 사용자 정의 모델 메타데이터를 조정하세요. 이미지 생성이 실패하면 공급자 계정, 모델 및 할당량이 실제로 이를 허용하는지 확인하십시오."
+    },
+    {
+      "tab": "Providers",
+      "type": "code",
+      "title": "맞춤형 모델",
+      "intro": "앱의 Data\\Models 디렉터리에 JSON 파일을 생성하여 모든 공급자 유형에 대한 모델 목록을 사용자 지정합니다. 기능 배열을 사용하여 모델이 지원하는 것을 선언하세요.\n\n기능 플래그:\n• \"vision\" — 모델이 이미지 첨부 파일을 허용합니다.\n• \"tools\" — 모델이 도구를 사용할 수 있습니다.\n• \"toolcallmode:native\" — 기본 함수 호출을 강제합니다.\n• \"toolcallmode:text\" — 텍스트 기반 도구 호출을 강제합니다.\n• \"toolcallmode:unsupported\" — 도구 프롬프트를 완전히 비활성화합니다.\n\n도구 출력 형식 플래그(텍스트 응답에 도구 호출을 포함하는 모델의 경우):\n• \"toolformat:hermes\" — Hermes/Qwen 형식: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — ReAct/LangChain 형식: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — 콘텐츠에 포함된 OpenAI 기본 tool_calls 스키마\n• \"toolformat:text\" — Aire의 기본 텍스트 형식: {\"tool\":\"...\", ...}",
+      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"모델\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capability\": [\"비전\", \"도구\"]\n    },\n    {\n      \"id\": \"o1-미니\",\n      \"displayName\": \"o1-mini (도구 없음)\",\n      \"capability\": [\"toolcallmode:지원되지 않음\"]\n    },\n    {\n      \"id\": \"나의 미세 조정 모델\",\n      \"displayName\": \"나의 미세 조정\",\n      \"capability\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "AI 도구",
+      "links": [
+        {
+          "label": "AI 작업 승인 검토",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "일부 AI 모델은 Aire에게 작업을 수행하도록 요청할 수 있습니다. Aire는 이러한 작업 도구를 호출합니다.\n\n중요: 도구는 자동으로 실행되지 않습니다. Aire는 AI가 원하는 작업을 보여주고 이를 승인하거나 거부합니다.\n\n도구로 수행할 수 있는 작업의 예:\n• 파일을 읽거나 씁니다.\n• 쉘 명령을 실행합니다.\n• 웹페이지를 열고 읽어보세요.\n• 브라우저 탭을 검사합니다.\n• 스크린샷을 찍으세요.\n• 마우스를 입력하거나 클릭하거나 이동합니다.\n• 이메일을 읽거나 보냅니다.\n\n이 기능을 처음 사용하는 경우 가장 안전한 습관은 간단합니다. 승인하기 전에 작업 요청을 읽어보는 것입니다. 타당한 경우 읽기 전용 작업을 승인하고, 파일 변경, 메시지 전송, 키보드 및 마우스 제어 작업에 더욱 주의하세요."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "프로필 자동 수락",
+      "links": [
+        {
+          "label": "AI 작업 승인 검토",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "자동 수락 프로필을 사용하면 Aire가 매번 방해하지 않고 자동으로 승인할 수 있는 작업을 정의할 수 있습니다.\n\n내장된 예로는 개발자, 뉴스 브라우저, 보수적 등이 있습니다.\n\n명심해야 할 사항:\n• 프로필은 보안을 대체하는 것이 아니라 편의를 위한 것입니다.\n• 보수적으로 시작하고 정말로 신뢰하는 작업만 자동으로 수락하세요.\n• 파일 쓰기, 입력 제어 및 외부 부작용은 일반적으로 수동으로 유지하는 것이 좋습니다.\n\n확실하지 않은 경우 자동 수락 제한을 두고 작업을 하나씩 검토하세요."
+    },
+    {
+      "tab": "연결",
+      "type": "text",
+      "title": "MCP 서버",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "MCP 카탈로그 및 설치된 서버 목록과의 연결 설정입니다.",
+      "links": [
+        {
+          "label": "연결 설정 열기",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "MCP 서버는 Aire에게 더 많은 도구와 데이터 소스를 제공하는 외부 도우미 서비스입니다. MCP는 모델 컨텍스트 프로토콜을 나타냅니다.\n\n일반 언어로 MCP 서버는 Aire와 다음과 같은 다른 시스템 간의 브리지입니다.\n• 파일 시스템\n• GitHub,\n• SQLite,\n• 웹 가져오기 도구,\n• 기억 도구,\n• Slack, Gmail 또는 Notion.\n\nAire가 이를 처리하는 방법:\n• 연결 탭에는 공통 MCP 서버의 선별된 카탈로그가 포함되어 있습니다.\n• 앱에서 설치, 제거, 활성화, 비활성화 및 편집할 수 있습니다.\n• 일부 서버에는 컴퓨터에 추가 자격 증명이나 Node.js/npm이 필요합니다.\n\n초보자에게 좋은 조언:\n• Filesystem 또는 Web Fetch와 같은 하나의 간단한 서버로 시작하십시오.\n• 설치하기 전에 설명을 읽어보십시오.\n• MCP 서버를 다른 통합과 마찬가지로 취급합니다. 유용하지만 활성화하기 전에 신뢰해야 합니다."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "키보드 및 마우스 세션",
+      "links": [
+        {
+          "label": "AI 작업 승인 검토",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "일부 작업에는 AI가 키보드와 마우스를 제어해야 합니다. 세션이 활성화된 경우:\n\n• 세션이 활성 상태임을 나타내는 배너가 채팅 창 하단에 나타납니다.\n• 부동 ⏹ 세션 중지 버튼이 화면 오른쪽 상단에 나타납니다. 즉시 취소하려면 언제든지 클릭하세요.\n• 음성으로 취소하려면 “AIRE STOP”이라고 말하세요.\n• 취소하려면 배너에서 “세션 종료”를 클릭하세요.\n\nAI는 각 개별 작업(키 누르기, 마우스 클릭 등)을 수행하기 전에 승인을 요청합니다."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "음성 입력",
+      "links": [
+        {
+          "label": "음성 설정 열기",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "🎤 버튼을 클릭하면 음성 인식이 시작됩니다. Aire는 Windows 내장 음성 인식을 사용하므로 API 키나 인터넷 연결이 필요하지 않습니다.\n\n• 정상적으로 말하세요. 말하는 동안 입력란에 단어가 나타납니다.\n• 말을 멈추면 버튼에 카운트다운(5 → 1)이 나타납니다. 침묵하시면 0시에 자동으로 메시지가 발송됩니다.\n• 카운트다운을 재설정하려면 언제든지 다시 대화를 시작하세요.\n• 전송하지 않고 중지하려면 버튼을 다시 클릭합니다(⏹ 표시).\n\n음성 인식 정확도는 Windows 언어 및 마이크 품질에 따라 다릅니다. Windows 설정 → 시간 및 언어 → 음성을 통해 Windows 음성 인식을 훈련할 수 있습니다."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "table",
+      "title": "음성 명령",
+      "intro": "마이크가 활성화된 동안 \"AIRE\"라고 말한 다음 다음 단어 중 하나를 말하십시오.",
+      "cols": [
+        "명령",
+        "기능"
+      ],
+      "rows": [
+        [
+          "아이레 센드",
+          "현재 메시지를 즉시 보내기"
+        ],
+        [
+          "아이레 일시정지",
+          "침묵 카운트다운을 멈춰라"
+        ],
+        [
+          "에어 이력서",
+          "카운트다운을 재개하세요"
+        ],
+        [
+          "에어클리어",
+          "입력 상자 지우기"
+        ],
+        [
+          "아이레 언두",
+          "입력 상자 지우기"
+        ],
+        [
+          "에어 취소",
+          "보내지 않고 듣기 중지"
+        ],
+        [
+          "에어 뉴",
+          "새로운 대화를 시작하세요"
+        ],
+        [
+          "에어 설정",
+          "설정 창을 엽니다"
+        ],
+        [
+          "에어 오픈/쇼",
+          "기본 채팅 창 표시"
+        ],
+        [
+          "AIRE 닫기/숨기기",
+          "기본 채팅 창 숨기기"
+        ],
+        [
+          "에어 예/아니오",
+          "보류 중인 AI 작업 승인 또는 거부"
+        ],
+        [
+          "에어스톱",
+          "비상 중지 - 활성 키보드/마우스 세션을 즉시 종료합니다."
+        ]
+      ]
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "음성 출력",
+      "links": [
+        {
+          "label": "음성 설정 열기",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "Aire는 Windows 텍스트 음성 변환을 사용하여 AI 응답을 소리내어 읽을 수 있습니다. 설정(⚙) → 음성 출력에서 ​​활성화하세요.\n\n• 모든 응답을 말하거나 마이크를 사용할 때만 말하도록 선택합니다.\n• 음성을 선택하고 읽기 속도를 조절하세요.\n• 마이크 버튼 근처에 있는 스피커 아이콘을 사용하여 음성 출력을 빠르게 켜거나 끌 수 있습니다."
+    },
+    {
+      "tab": "외관",
+      "type": "text",
+      "title": "모습",
+      "links": [
+        {
+          "label": "모양 설정 열기",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "설정(⚙) → 모양을 열어 앱의 모양을 변경하세요.\n\n• 테마: 어두움과 밝음(베이지색) 사이를 전환합니다.\n• 색상 색조: 슬라이더를 끌어 UI 전체에 색조를 적용합니다. 왼쪽 끝(검은색)과 오른쪽 끝(흰색)은 색조가 없음을 의미합니다. 슬라이더는 기본적으로 순수 회색조입니다.\n• 글꼴 크기: Ctrl을 누른 상태에서 채팅이나 입력 영역 위로 마우스 휠을 스크롤하면 글꼴 크기를 늘리거나 줄일 수 있습니다. 설정이 자동으로 저장됩니다.\n\n모든 모양 설정은 다음 실행 시 저장되고 복원됩니다."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "로컬 API란 무엇입니까?",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "로컬 API 액세스, 이메일 계정 및 MCP 서버가 구성되는 연결 설정입니다.",
+      "links": [
+        {
+          "label": "연결 설정 열기",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "로컬 API는 동일한 컴퓨터의 다른 프로그램이 Aire와 대화할 수 있는 방법입니다.\n\n개발자가 아닌 경우: 일반적으로 이 기능은 필요하지 않습니다.\n\n개발자 및 고급 사용자의 경우: 이것은 자신의 스크립트, 도구, 자동화 또는 데스크탑 앱을 Aire에 연결하는 가장 쉬운 방법입니다. 로컬 프로그램은 다음을 수행할 수 있습니다.\n• Aire에게 메인 창을 표시하거나 숨기도록 요청합니다.\n• 대화 목록을 작성하고 메시지를 읽습니다.\n• 활성 대화에 메시지를 보냅니다.\n• 공급자 또는 대화를 전환합니다.\n• 보류 중인 도구 승인을 검사합니다.\n• Aire 도구에 직접 호출합니다.\n\n작동 방식:\n• Aire는 TCP 포트 51234에서 수신 대기합니다.\n• 127.0.0.1에서만 수신 대기하므로 다른 컴퓨터가 직접 연결할 수 없습니다.\n• 각 요청은 한 줄로 전송되는 하나의 JSON 개체입니다.\n• 각 응답은 한 줄로 반환된 하나의 JSON 개체입니다.\n\n이를 사용하려면 먼저 Connections 설정을 열고 로컬 API 액세스를 활성화하십시오."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "로컬 API 빠른 시작",
+      "links": [
+        {
+          "label": "연결 설정 열기",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "다른 앱을 Aire에 연결하려면 다음 체크리스트를 사용하세요.\n\n1. 연결 설정을 엽니다.\n2. 로컬 API 액세스를 활성화합니다.\n3. 인증 토큰을 복사합니다.\n4. 앱이나 스크립트에서 127.0.0.1:51234에 대한 TCP 연결을 엽니다.\n5. 메서드, 토큰 및 선택적 매개변수가 포함된 JSON 라인 하나를 보냅니다.\n6. JSON 한 줄을 뒤로 읽으세요.\n7. 연결을 닫습니다.\n\n좋은 첫 번째 테스트는 ping 방법입니다. ping이 작동하면 show_main_window, list_providers 및 create_conversation을 시도하십시오.\n\n권장되는 첫 번째 통합 순서:\n• 핑\n• show_main_window\n• 목록_공급자\n• create_conversation\n• 목록_대화\n• get_messages\n• send_message\n• get_state\n• 도구 승인에 협조하려는 경우 wait_for_pending_approval\n• 승인 흐름과 보안 모델에 익숙해진 후에만 실행 도구를 실행하세요."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "입증",
+      "links": [
+        {
+          "label": "연결 설정 열기",
+          "action": "settings:connections"
+        },
+        {
+          "label": "AI 작업 승인 검토",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "모든 로컬 API 요청에는 인증 토큰이 포함되어야 합니다.\n\n어디서 구할 수 있나요?\n• 연결 설정을 엽니다.\n• 로컬 API 섹션을 찾으세요.\n• 토큰을 복사하려면 복사를 클릭합니다.\n• 해당 토큰을 앱 또는 스크립트 구성에 붙여넣습니다.\n\n알아야 할 사항:\n• 재생성을 클릭하면 새 토큰을 사용할 때까지 이전 통합의 작동이 중지됩니다.\n• API는 단지 구성하는 것이 아니라 활성화되어야 합니다.\n• 토큰을 알고 있는 컴퓨터의 모든 프로세스는 Aire를 제어할 수 있습니다.\n\n개발자를 위한 실용적인 조언:\n• 소스 제어에 하드 코딩되지 않은 로컬 구성 파일이나 환경 변수에 토큰을 보관합니다.\n• 지역의 비밀처럼 다루십시오.\n• 누출이 의심되는 경우 재생성하십시오."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "규약",
+      "intro": "로컬 API는 TCP를 통한 라인 기반 JSON입니다.\n\n연결 패턴:\n• 127.0.0.1:51234에 연결\n• 정확히 하나의 압축 JSON 요청과 개행 문자를 작성합니다.\n• 정확히 하나의 JSON 응답 라인을 읽습니다.\n• 연결을 닫는다\n\n요청 형태:\n{ \"메서드\": \"메서드\", \"토큰\": \"토큰\", \"매개변수\": { ... } }\n\n응답 형태:\n{ \"확인\": 참, \"결과\": ... }\n또는\n{ \"확인\": 거짓, \"errorMessage\": \"메시지\" }\n\n클라이언트 라이브러리를 작성하는 경우 먼저 간단한 요청-응답 패턴을 기반으로 구축하세요. 시작하는 데 HTTP나 WebSocket이 필요하지 않습니다.",
+      "content": "{ \"방법\": \"핑\", \"토큰\": \"YOUR_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"title\": \"API 테스트\" } }\n{ \"확인\": 참, \"결과\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"YOUR_TOKEN\", \"parameters\": { \"text\": \"안녕하세요!\" } }\n{ \"확인\": 참, \"결과\": 참 }"
+    },
+    {
+      "tab": "Local API",
+      "type": "table",
+      "title": "사용 가능한 방법",
+      "cols": [
+        "방법",
+        "매개변수",
+        "설명"
+      ],
+      "rows": [
+        [
+          "핑",
+          "—",
+          "Aire가 실행 중인지 확인합니다. get_state와 동일한 상태 스냅샷을 반환합니다."
+        ],
+        [
+          "get_state",
+          "—",
+          "현재 공급자, 모델, 활성 대화 ID 및 로컬 API 상태입니다."
+        ],
+        [
+          "show_main_window",
+          "—",
+          "Aire 채팅창을 앞으로 가져옵니다."
+        ],
+        [
+          "hide_main_window",
+          "—",
+          "채팅창을 트레이로 숨깁니다."
+        ],
+        [
+          "open_settings",
+          "—",
+          "설정 창을 엽니다."
+        ],
+        [
+          "open_browser",
+          "—",
+          "Aire 브라우저 창을 엽니다."
+        ],
+        [
+          "목록_공급자",
+          "—",
+          "ID와 이름으로 구성된 모든 AI 제공자."
+        ],
+        [
+          "create_provider",
+          "이름?, 유형, apiKey?, baseUrl?, 모델, isEnabled?, 색상?, selectAfterCreate?, 상속CredentialsFromProviderId?",
+          "로컬 API에서 새 공급자를 만듭니다."
+        ],
+        [
+          "목록_대화",
+          "—",
+          "저장된 모든 대화(ID, 제목, 날짜)."
+        ],
+        [
+          "create_conversation",
+          "제목?",
+          "새 대화를 만들고 전환하세요."
+        ],
+        [
+          "select_conversation",
+          "대화 ID",
+          "기존 대화로 전환합니다."
+        ],
+        [
+          "get_messages",
+          "대화 ID",
+          "대화의 모든 메시지."
+        ],
+        [
+          "set_provider",
+          "공급자 ID",
+          "활성 AI 공급자를 전환합니다."
+        ],
+        [
+          "set_provider_model",
+          "공급자 ID, 모델",
+          "공급자의 모델을 변경합니다."
+        ],
+        [
+          "send_message",
+          "텍스트",
+          "활성 대화에 메시지를 보냅니다. 승인되면 true를 반환합니다."
+        ],
+        [
+          "목록_보류_승인",
+          "—",
+          "현재 승인 대기 중인 도구 호출입니다."
+        ],
+        [
+          "wait_for_pending_approval",
+          "timeout_seconds?",
+          "보류 중인 다음 도구 승인을 기다리거나 시간 초과 시 null을 반환합니다."
+        ],
+        [
+          "승인_도구_전화",
+          "색인",
+          "현재 목록 인덱스로 보류 중인 도구 호출을 승인합니다."
+        ],
+        [
+          "deny_tool_call",
+          "색인",
+          "현재 목록 인덱스로 보류 중인 도구 호출을 거부합니다."
+        ],
+        [
+          "실행_도구",
+          "도구, 매개변수, wait_for_approval?, 승인_timeout_seconds?",
+          "Aire 도구를 직접 실행하고 선택적으로 승인을 기다립니다."
+        ],
+        [
+          "get_trace",
+          "afterId?, 제한?",
+          "디버깅을 위한 도구 실행 추적 항목을 읽습니다."
+        ],
+        [
+          "클리어_트레이스",
+          "—",
+          "도구 실행 추적을 지웁니다."
+        ]
+      ]
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "어떤 방법부터 시작해야 하나요?",
+      "content": "Aire에 연결되는 다른 앱을 구축하는 경우 먼저 더 간단한 방법부터 시작하세요.\n\n권장 학습 순서:\n• ping: Aire가 실행 중이고 토큰이 유효한지 확인합니다.\n• show_main_window: 표시되는 앱 작업을 실행할 수 있는지 확인합니다.\n• get_state: 현재 대화 및 공급자 상태를 검사합니다.\n• list_conversations 및 get_messages: 데이터를 안전하게 읽습니다.\n• send_message: 전체 요청-응답 왕복을 수행합니다.\n• list_pending_approvals, Approved_tool_call, denial_tool_call: Aire의 승인 모델과 통합됩니다.\n• Execute_tool: 보안 영향 및 승인 동작을 이해한 후에만 가능합니다.\n\n대부분의 통합에서는 send_message 및 읽기 전용 메소드로 충분합니다."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "파워셸 예제",
+      "intro": "이 예에서는 PowerShell의 로컬 API 클라이언트에 대한 가장 간단하고 유용한 모양을 보여줍니다. Connections 설정에서 토큰을 저장하고 아래에 붙여넣은 다음 다른 작업보다 먼저 ping을 시도해보세요.",
+      "content": "$TOKEN = \"여기에 토큰을 붙여넣으세요\"\n$PORT = 51234\n\n함수 호출-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ 방법 = $방법; 토큰 = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = 새 개체 Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -압축))\n    $resp = $reader.ReadLine()\n    $클라이언트.닫기()\n    $resp 반환 | ConvertFrom-Json\n}\n\n# Aire가 실행 중인지 확인하고 상태를 검사합니다.\n$state = Invoke-Aire \"ping\"\n$state.결과\n\n# 대화 생성 및 선택\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API 테스트\" }).result\nInvoke-Aire \"select_conversation\" @{ 대화Id = $id }\n\n# 메시지 보내기(수락되면 true를 반환)\nInvoke-Aire \"send_message\" @{ text = \"Hello from PowerShell\" }\n\n# 차례가 완료된 후 대화 메시지를 읽습니다.\n(Invoke-Aire \"get_messages\" @{ 대화 ID = $id }).result\n\n# 도구를 직접 실행\nInvoke-Aire \"execute_tool\" @{ 도구 = \"read_file\"; 매개변수 = @{ 경로 = \"C:/Temp/notes.txt\" } }"
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "파이썬 예제",
+      "intro": "이 예제에서는 Python 표준 라이브러리만 사용합니다. 다른 로컬 도구에 Aire 지원을 추가하려는 경우 좋은 출발점이 됩니다.",
+      "content": "가져오기 소켓, JSON\n\nTOKEN = \"여기에 토큰을 붙여넣으세요\"\n\ndef aire(메서드, **매개변수):\n    req = {\"방법\": 방법, \"토큰\": 토큰}\n    매개변수인 경우:\n        req[\"매개변수\"] = 매개변수\n    소켓.create_connection((\"127.0.0.1\", 51234))을 s로 사용:\n        s.sendall((json.dumps(req, 구분 기호=(\",\", \":\")) + \"\\n\").encode())\n        json.loads(s.makefile().readline()) 반환\n\n상태 = aire(\"핑\")\nprint(상태[\"결과\"])\n\nConversation_id = aire(\"create_conversation\", title=\"API 테스트\")[\"result\"]\naire(\"select_conversation\", 대화Id=conversation_id)\naire(\"send_message\", text=\"파이썬에서 안녕하세요\")\n\n메시지 = aire(\"get_messages\", ConversationId=conversation_id)[\"result\"]\n인쇄(메시지)\n\n결과 = 에어(\n    \"execute_tool\",\n    도구=\"읽기_파일\",\n    매개변수={\"경로\": \"C:/Temp/notes.txt\"}\n)\n인쇄(결과)"
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "통합 팁",
+      "content": "• 결과를 사용하기 전에 항상 확인을 선택하세요. ok가 false인 경우 오류 메시지를 읽고 처리하세요.\n• send_message는 Aire가 활성 대화에 메시지를 수락했다는 것만 확인합니다. 통합에 최종 답변이 필요한 경우 get_messages로 후속 조치를 취하거나 승인 및 추적 출력을 살펴보세요.\n• TCP 연결당 하나의 메서드 호출을 유지합니다. 연결하고, 보내고, 읽고, 닫습니다.\n• Execute_tool을 사용하기 전에 읽기 전용 및 가시성 작업으로 시작하십시오.\n• 통합이 Aire의 안전 모델과 협력하려는 경우 모든 작업이 즉시 실행된다고 가정하는 대신 list_pending_approvals, wait_for_pending_approval, Approval_tool_call 및deny_tool_call을 사용하십시오.\n• Execute_tool은 코드에서 Aire 도구를 직접 호출할 수 있게 해주기 때문에 강력합니다. 주의해서 사용하세요.\n• API는 의도적으로 로컬 전용입니다. 포트 51234를 네트워크나 인터넷에 노출하지 마십시오.\n• 프로덕션과 유사한 내부 도구의 경우 소스 코드 외부에 토큰을 저장하고 시작 상태 확인의 핑 부분을 만듭니다."
+    }
+  ]
 }

@@ -84,6 +84,11 @@ internal static class UiAutomationRunner
                 await DelayIfNeededAsync(action);
                 return;
 
+            case "closeupdatewindow":
+                CloseUpdateWindow();
+                await DelayIfNeededAsync(action);
+                return;
+
             default:
                 throw new InvalidOperationException($"Unsupported automation action kind '{action.Kind}'.");
         }
@@ -94,6 +99,61 @@ internal static class UiAutomationRunner
         var processName = action.ProcessName
             ?? throw new InvalidOperationException("show-window action requires processName.");
         NativeWindowFinder.ShowProcessWindow(processName);
+    }
+
+    private static void CloseUpdateWindow()
+    {
+        try
+        {
+            var request = new ScreenshotRequest(
+                OutputPath: string.Empty,
+                ExactTitle: "Aire Update",
+                TitleContains: null,
+                ProcessName: "Aire",
+                DelayMs: 0,
+                Padding: 0,
+                ActivateWindow: true,
+                UseActiveWindow: false,
+                Actions: null);
+
+            if (!NativeWindowFinder.TryGetWindow(request, out var window))
+                return; // No update window found
+
+            // Activate the window (already done by TryGetWindow? Not necessarily)
+            NativeWindowFinder.ActivateWindow(window.Handle);
+
+            var root = AutomationElement.FromHandle(window.Handle);
+            if (root == null)
+                return;
+
+            // Find the CloseButton (X) or LaterButton
+            var closeButton = root.FindFirst(TreeScope.Descendants,
+                new PropertyCondition(AutomationElement.AutomationIdProperty, "CloseButton"));
+            if (closeButton != null)
+            {
+                if (closeButton.TryGetCurrentPattern(InvokePattern.Pattern, out var invokePattern))
+                {
+                    ((InvokePattern)invokePattern).Invoke();
+                    return;
+                }
+            }
+
+            // Fallback to LaterButton
+            var laterButton = root.FindFirst(TreeScope.Descendants,
+                new PropertyCondition(AutomationElement.AutomationIdProperty, "LaterButton"));
+            if (laterButton != null)
+            {
+                if (laterButton.TryGetCurrentPattern(InvokePattern.Pattern, out var invokePattern))
+                {
+                    ((InvokePattern)invokePattern).Invoke();
+                    return;
+                }
+            }
+        }
+        catch
+        {
+            // Silently ignore any errors
+        }
     }
 
     private static void StartProcess(UiAutomationAction action)
