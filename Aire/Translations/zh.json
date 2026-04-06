@@ -210,7 +210,7 @@
   },
   "help": [
     {
-      "tab": "Setup Wizard",
+      "tab": "设置向导",
       "type": "text",
       "title": "设置向导的工作原理",
       "links": [
@@ -228,7 +228,7 @@
       "content": "首次运行 Aire 或尚未配置 AI 提供商时，会出现设置向导。它的工作是让您尽快从全新安装进入正常聊天。\n\n向导的步骤如下：\n• 欢迎：解释Aire 是什么并让您选择应用程序语言。\n• 提供商选择器：显示将Aire 连接到AI 服务的常见方法。\n• 提供商设置：询问您选择的提供商所需的详细信息。\n• 完成：确认Aire 已准备好并带您进入主应用程序。\n\n如果您是 AI 新手，向导是最好的起点。它首先使用最简单的路径，并隐藏高级设置，直到您需要它们为止。\n\n您可以跳过设置并稍后返回，但在 Aire 可以回复聊天消息之前，您至少需要一个已配置的提供商。"
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "设置向导",
       "type": "text",
       "title": "选择提供商",
       "links": [
@@ -252,7 +252,7 @@
       "content": "您可以在提供商选择器中决定 Aire 将代表您与哪个 AI 服务进行对话。\n\n主要选项的含义：\n• OpenAI ：如果您想要简单的云设置和广泛的模型支持，这是一个常见的起点。\n• Anthropic API ：另一个强大的云选项，以克劳德模型而闻名。\n• Claude.ai ：使用浏览器登录而不是API 密钥。\n• Google AI ：通过Google AI Studio 连接到Gemini 聊天模型。\n• Google AI Images ：专用的Gemini 图像生成设置。\n• Ollama ：在您的计算机上本地运行模型。有利于隐私和离线使用，但这取决于您的硬件。\n• Codex ：使用本地Codex CLI 桥而不是普通的API 密钥。\n• Groq、OpenRouter、DeepSeek、Inception 和 z.ai ：其他提供商或 OpenAI 兼容端点，如果您已经在那里拥有帐户，通常很有用。\n\n你应该选择哪一个？\n• 如果您想要最简单的云聊天设置：从 OpenAI、Anthropic 或 Google AI 开始。\n• 如果您想要本地和私密：选择Ollama 。\n• 如果您特别想要从 Gemini 生成图像：选择 Google AI Images 。\n• 如果您已在其他地方付费或使用特定提供商：请在此处选择同一提供商。\n\n您没有被锁定。向导会帮助您首先添加一个提供商，稍后您可以在“设置”中添加更多提供商。"
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "设置向导",
       "type": "text",
       "title": "填写提供商详细信息",
       "links": [
@@ -514,7 +514,7 @@
       "content": "自动接受配置文件可让您定义 Aire 可以自动批准哪些操作，而无需每次都打扰您。\n\n内置示例包括 Developer、News browser 和 Conservative 。\n\n要记住什么：\n• 配置文件只是一种便利，而不是安全性的替代品。\n• 谨慎开始，仅自动接受您真正信任的操作。\n• 文件写入、输入控制和外部副作用通常值得手动保存。\n\n如果您不确定，请保留自动接受限制并一一检查操作。"
     },
     {
-      "tab": "Connections",
+      "tab": "连接",
       "type": "text",
       "title": "MCP服务器",
       "imagePath": "Assets/Help/settings-connections.png",
@@ -624,7 +624,7 @@
       "content": "Aire 可以使用 Windows 文本转语音功能大声朗读 AI 的回答。在设置 (⚙) → 语音输出中启用此功能。\n\n• 选择说出所有答复，或仅在使用麦克风时发言。\n• 选择声音并调整阅读速度。\n• 使用麦克风按钮附近的扬声器图标快速打开/关闭语音输出。"
     },
     {
-      "tab": "Appearance",
+      "tab": "外观",
       "type": "text",
       "title": "外貌",
       "links": [

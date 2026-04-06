@@ -210,7 +210,7 @@
   },
   "help": [
     {
-      "tab": "Setup Wizard",
+      "tab": "Assistente de Configuração",
       "type": "text",
       "title": "Como funciona o assistente de configuração",
       "links": [
@@ -228,7 +228,7 @@
       "content": "O Assistente de configuração aparece na primeira vez que você executa o Aire ou quando nenhum provedor de IA está configurado ainda. Seu trabalho é levar você de uma nova instalação para um bate-papo funcional o mais rápido possível.\n\nO que o assistente faz, passo a passo:\n• Bem vindo: explica o que é Aire e permite escolher o idioma do app.\n• Seletor de provedor: mostra maneiras comuns de conectar o Aire aos serviços de IA.\n• Configuração do provedor: solicita os detalhes necessários para o provedor que você escolheu.\n• Concluir: confirma que o Aire está pronto e leva você para o aplicativo principal.\n\nSe você é novo na IA, o assistente é o melhor lugar para começar. Ele usa primeiro o caminho mais simples e oculta as configurações avançadas até que você precise delas.\n\nVocê pode pular a configuração e voltar mais tarde, mas precisará de pelo menos um provedor configurado antes que o Aire possa responder às mensagens de bate-papo."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Assistente de Configuração",
       "type": "text",
       "title": "Escolhendo um provedor",
       "links": [
@@ -252,7 +252,7 @@
       "content": "O seletor de provedor é onde você decide com qual serviço de IA a Aire falará em seu nome.\n\nO que significam as principais opções:\n• OpenAI: um ponto de partida comum se você deseja uma configuração de nuvem simples e amplo suporte a modelos.\n• API Anthropic: outra forte opção de nuvem, conhecida pelos modelos de Claude.\n• Claude.ai: usa login no navegador em vez de uma chave de API.\n• Google AI: conecta-se aos modelos de bate-papo Gemini por meio do Google AI Studio.\n• Google AI Images: uma configuração dedicada de geração de imagens Gemini.\n• Ollama: executa modelos localmente em seu computador. Bom para privacidade e uso offline, mas depende do seu hardware.\n• Codex: usa a ponte local Codex CLI em vez de uma chave de API normal.\n• Groq, OpenRouter, DeepSeek, Inception e z.ai: outros provedores ou endpoints compatíveis com OpenAI, geralmente úteis se você já tiver uma conta lá.\n\nQual você deve escolher?\n• Se você deseja a configuração de nuvem mais fácil para bate-papo: comece com OpenAI, Anthropic ou Google AI.\n• Se você quer local e privado: escolha Ollama.\n• Se você deseja especificamente a geração de imagens do Gemini: escolha Google AI Images.\n• Se você já paga ou usa um provedor específico em outro lugar: escolha esse mesmo provedor aqui.\n\nVocê não está bloqueado. O assistente ajuda você a adicionar um provedor primeiro e você pode adicionar mais posteriormente em Configurações."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Assistente de Configuração",
       "type": "text",
       "title": "Preenchendo detalhes do provedor",
       "links": [
@@ -514,7 +514,7 @@
       "content": "Os perfis de aceitação automática permitem definir quais ações o Aire pode aprovar automaticamente sem interrompê-lo todas as vezes.\n\nExemplos integrados incluem Desenvolvedor, Navegador de notícias e Conservador.\n\nO que ter em mente:\n• Os perfis são uma conveniência e não um substituto de segurança.\n• Comece de forma conservadora e aceite automaticamente apenas ações em que você realmente confia.\n• Geralmente vale a pena manter a gravação de arquivos, o controle de entrada e os efeitos colaterais externos manualmente.\n\nSe não tiver certeza, deixe a aceitação automática restritiva e revise as ações uma por uma."
     },
     {
-      "tab": "Connections",
+      "tab": "Conexões",
       "type": "text",
       "title": "Servidores MCP",
       "imagePath": "Assets/Help/settings-connections.png",
@@ -624,7 +624,7 @@
       "content": "Aire pode ler as respostas da IA ​​em voz alta usando a conversão de texto em fala do Windows. Habilite isso em Configurações (⚙) → Saída de voz.\n\n• Escolha falar todas as respostas ou apenas quando usar o microfone.\n• Selecione uma voz e ajuste a velocidade de leitura.\n• Ative/desative a saída de voz rapidamente com o ícone do alto-falante próximo ao botão do microfone."
     },
     {
-      "tab": "Appearance",
+      "tab": "Aparência",
       "type": "text",
       "title": "Aparência",
       "links": [

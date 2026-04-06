@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -458,7 +459,26 @@ namespace Aire.UI
         {
             if (string.IsNullOrWhiteSpace(relativePath)) return null;
             if (Path.IsPathRooted(relativePath)) return relativePath;
-            return Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, relativePath));
+
+            // Try language-specific subdirectory first
+            var langCode = LocalizationService.CurrentCode;
+            if (!string.IsNullOrEmpty(langCode) && langCode != "en")
+            {
+                var langSpecificPath = Path.Combine(
+                    Path.GetDirectoryName(relativePath) ?? "",
+                    langCode,
+                    Path.GetFileName(relativePath));
+                var fullLangPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, langSpecificPath));
+                if (File.Exists(fullLangPath))
+                {
+                    Debug.WriteLine($"[HelpWindow] Using language-specific image: {fullLangPath}");
+                    return fullLangPath;
+                }
+            }
+
+            // Fall back to default location
+            var defaultPath = Path.Combine(AppContext.BaseDirectory, relativePath);
+            return Path.GetFullPath(defaultPath);
         }
 
         private static Brush GetBrush(string key)

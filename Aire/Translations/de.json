@@ -210,7 +210,7 @@
   },
   "help": [
     {
-      "tab": "Setup Wizard",
+      "tab": "Setup-Assistent",
       "type": "text",
       "title": "So funktioniert der Setup-Assistent",
       "links": [
@@ -228,7 +228,7 @@
       "content": "Der Setup-Assistent wird angezeigt, wenn Sie Aire zum ersten Mal ausführen oder wenn noch keine KI-Anbieter konfiguriert sind. Seine Aufgabe ist es, Sie so schnell wie möglich von einer Neuinstallation zu einem funktionierenden Chat zu bringen.\n\nWas der Assistent tut, Schritt für Schritt:\n• Willkommen: erklärt, was Aire ist und ermöglicht Ihnen die Auswahl der App-Sprache.\n• Anbieterauswahl: Zeigt gängige Möglichkeiten, Aire mit KI-Diensten zu verbinden.\n• Anbieter-Setup: fragt nach den Details, die für den von Ihnen ausgewählten Anbieter erforderlich sind.\n• Fertig stellen: Bestätigt, dass Aire bereit ist, und führt Sie zur Haupt-App.\n\nWenn Sie neu im Bereich KI sind, ist der Assistent der beste Ausgangspunkt. Es verwendet zuerst den einfachsten Pfad und verbirgt erweiterte Einstellungen, bis Sie sie benötigen.\n\nSie können die Einrichtung überspringen und später wiederkommen, aber Sie benötigen mindestens einen konfigurierten Anbieter, bevor Aire Chatnachrichten beantworten kann."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Setup-Assistent",
       "type": "text",
       "title": "Auswahl eines Anbieters",
       "links": [
@@ -252,7 +252,7 @@
       "content": "In der Anbieterauswahl können Sie entscheiden, mit welchem ​​KI-Dienst Aire in Ihrem Namen kommuniziert.\n\nWas die Hauptoptionen bedeuten:\n• OpenAI: ein gemeinsamer Ausgangspunkt, wenn Sie eine einfache Cloud-Einrichtung und umfassende Modellunterstützung wünschen.\n• Anthropic API: eine weitere starke Cloud-Option, bekannt für Claude-Modelle.\n• Claude.ai: Verwendet Browser-Anmeldung anstelle eines API-Schlüssels.\n• Google AI: stellt über Google AI Studio eine Verbindung zu Gemini-Chat-Modellen her.\n• Google AI Images: ein spezielles Gemini-Bildgenerierungssetup.\n• Ollama: führt Modelle lokal auf Ihrem Computer aus. Gut für den Datenschutz und die Offline-Nutzung, hängt aber von Ihrer Hardware ab.\n• Codex: Verwendet die lokale Codex-CLI-Brücke anstelle eines normalen API-Schlüssels.\n• Groq, OpenRouter, DeepSeek, Inception und z.ai: andere Anbieter oder OpenAI-kompatible Endpunkte, oft nützlich, wenn Sie dort bereits ein Konto haben.\n\nWelches sollten Sie wählen?\n• Wenn Sie die einfachste Cloud-Einrichtung für den Chat wünschen: Beginnen Sie mit OpenAI, Anthropic oder Google AI.\n• Wenn Sie lokal und privat sein möchten: Wählen Sie Ollama.\n• Wenn Sie speziell die Bildgenerierung von Gemini wünschen: Wählen Sie Google AI Images.\n• Wenn Sie bereits woanders einen bestimmten Anbieter bezahlen oder nutzen: Wählen Sie hier denselben Anbieter aus.\n\nSie sind nicht gesperrt. Der Assistent hilft Ihnen, zunächst einen Anbieter hinzuzufügen, und Sie können später in den Einstellungen weitere hinzufügen."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Setup-Assistent",
       "type": "text",
       "title": "Ausfüllen der Anbieterdetails",
       "links": [
@@ -514,7 +514,7 @@
       "content": "Mit Profilen zur automatischen Annahme können Sie festlegen, welche Aktionen Aire automatisch genehmigen kann, ohne Sie jedes Mal zu unterbrechen.\n\nZu den integrierten Beispielen gehören „Developer“, „News Browser“ und „Conservative“.\n\nWas Sie beachten sollten:\n• Profile sind eine Annehmlichkeit und kein Sicherheitsersatz.\n• Beginnen Sie konservativ und akzeptieren Sie nur Aktionen automatisch, denen Sie wirklich vertrauen.\n• Dateischreibvorgänge, Eingabekontrolle und externe Nebenwirkungen sollten normalerweise manuell erfolgen.\n\nWenn Sie sich nicht sicher sind, lassen Sie die Auto-Akzeptanz restriktiv und überprüfen Sie die Aktionen einzeln."
     },
     {
-      "tab": "Connections",
+      "tab": "Verbindungen",
       "type": "text",
       "title": "MCP-Server",
       "imagePath": "Assets/Help/settings-connections.png",
@@ -624,7 +624,7 @@
       "content": "Aire kann KI-Antworten mithilfe der Text-to-Speech-Funktion von Windows vorlesen. Aktivieren Sie dies in den Einstellungen (⚙) → Sprachausgabe.\n\n• Wählen Sie, ob Sie alle Antworten sprechen möchten oder nur, wenn Sie das Mikrofon verwenden.\n• Wählen Sie eine Stimme und passen Sie die Lesegeschwindigkeit an.\n• Mit dem Lautsprechersymbol neben der Mikrofontaste können Sie die Sprachausgabe schnell ein-/ausschalten."
     },
     {
-      "tab": "Appearance",
+      "tab": "Aussehen",
       "type": "text",
       "title": "Aussehen",
       "links": [

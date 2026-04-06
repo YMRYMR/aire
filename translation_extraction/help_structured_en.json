@@ -4,18 +4,17 @@
     "extraction_date": "2026-04-05",
     "total_items": 32,
     "structural_fields": [
-      "tab",
-      "code",
-      "imagePath",
-      "action",
-      "type",
       "nativeName",
+      "action",
+      "imagePath",
+      "type",
+      "code",
       "flag"
     ],
     "array_fields": [
       "cols",
-      "links",
-      "rows"
+      "rows",
+      "links"
     ],
     "note": "Fields marked as structural should not be translated. Placeholders like {0} must be preserved."
   },

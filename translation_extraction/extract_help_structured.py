@@ -16,7 +16,7 @@ EXTRACTION_PATH = OUTPUT_DIR / "help_structured_en.json"
 GLOSSARY_PATH = OUTPUT_DIR / "help_glossary_detailed.json"
 
 # Fields that should NOT be translated (structural)
-STRUCTURAL_FIELDS = {"tab", "type", "action", "imagePath", "code", "nativeName", "flag"}
+STRUCTURAL_FIELDS = {"type", "action", "imagePath", "code", "nativeName", "flag"}
 # Fields that contain nested arrays of strings that need translation
 ARRAY_FIELDS = {"links", "cols", "rows"}
 
@@ -58,7 +58,7 @@ def generate_translator_notes(item: Dict) -> Dict[str, str]:
     # Rows: table rows, each row is an array of strings
     if "rows" in item:
         notes["rows"] = "Table rows. Each cell may contain text, placeholders, or formatting."
-    # Tab: section tab name (structural, but note)
+    # Tab: section tab name (translatable, keep consistent)
     if "tab" in item:
         notes["tab"] = "Tab category name. Keep consistent across all help items belonging to same tab."
     # Type: content type (text, table, code) – structural

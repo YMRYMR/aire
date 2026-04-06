@@ -210,7 +210,7 @@
   },
   "help": [
     {
-      "tab": "Setup Wizard",
+      "tab": "Procedura guidata di configurazione",
       "type": "text",
       "title": "Come funziona l'installazione guidata",
       "links": [
@@ -228,7 +228,7 @@
       "content": "La configurazione guidata viene visualizzata la prima volta che si esegue Aire o quando non è stato ancora configurato alcun provider AI. Il suo compito è portarti da una nuova installazione a una chat funzionante il più rapidamente possibile.\n\nCosa fa la procedura guidata, passo dopo passo:\n• Benvenuto: spiega cos'è Aire e ti permette di scegliere la lingua dell'app.\n• Selettore provider: mostra i modi comuni per connettere Aire ai servizi AI.\n• Impostazione provider: richiede i dettagli necessari per il provider scelto.\n• Fine: conferma che Aire è pronto e porta all'app principale.\n\nSe non conosci l'intelligenza artificiale, la procedura guidata è il punto di partenza migliore. Utilizza prima il percorso più semplice e nasconde le impostazioni avanzate finché non ne hai bisogno.\n\nPuoi saltare la configurazione e tornare più tardi, ma avrai bisogno di almeno un provider configurato prima che Aire possa rispondere ai messaggi di chat."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Procedura guidata di configurazione",
       "type": "text",
       "title": "Scelta di un fornitore",
       "links": [
@@ -252,7 +252,7 @@
       "content": "Il selettore del fornitore è dove decidi con quale servizio AI Aire parlerà per tuo conto.\n\nCosa significano le opzioni principali:\n• OpenAI: un punto di partenza comune se si desidera una configurazione cloud semplice e un ampio supporto per i modelli.\n• API antropica: un'altra potente opzione cloud, nota per i modelli Claude.\n• Claude.ai: utilizza l'accesso tramite browser invece di una chiave API.\n• Google AI: si connette ai modelli di chat Gemini tramite Google AI Studio.\n• Google AI Images: una configurazione Gemini dedicata alla generazione di immagini.\n• Ollama: esegue i modelli localmente sul computer. Buono per la privacy e l'utilizzo offline, ma dipende dal tuo hardware.\n• Codex: utilizza il bridge CLI Codex locale invece di una normale chiave API.\n• Groq, OpenRouter, DeepSeek, Inception e z.ai: altri provider o endpoint compatibili con OpenAI, spesso utili se hai già un account lì.\n\nQuale dovresti scegliere?\n• Se desideri la configurazione cloud più semplice per la chat: inizia con OpenAI, Anthropic o Google AI.\n• Se vuoi locale e privato: scegli Ollama.\n• Se desideri specificamente la generazione di immagini da Gemini: scegli Google AI Images.\n• Se paghi o utilizzi già un fornitore specifico altrove: scegli qui lo stesso fornitore.\n\nNon sei bloccato. La procedura guidata ti aiuta ad aggiungere prima un provider e puoi aggiungerne altri in seguito in Impostazioni."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Procedura guidata di configurazione",
       "type": "text",
       "title": "Compilazione dei dettagli del fornitore",
       "links": [
@@ -514,7 +514,7 @@
       "content": "I profili di accettazione automatica ti consentono di definire quali azioni Aire può approvare automaticamente senza interromperti ogni volta.\n\nGli esempi integrati includono Sviluppatore, Browser notizie e Conservatore.\n\nCosa tenere a mente:\n• I profili sono una comodità, non un sostituto della sicurezza.\n• Inizia in modo conservativo e accetta automaticamente solo le azioni di cui ti fidi veramente.\n• In genere è opportuno mantenere manuali le scritture dei file, il controllo dell'input e gli effetti collaterali esterni.\n\nSe non sei sicuro, lascia l'accettazione automatica restrittiva e rivedi le azioni una per una."
     },
     {
-      "tab": "Connections",
+      "tab": "Connessioni",
       "type": "text",
       "title": "Server MCP",
       "imagePath": "Assets/Help/settings-connections.png",
@@ -624,7 +624,7 @@
       "content": "Aire può leggere ad alta voce le risposte dell'intelligenza artificiale utilizzando la sintesi vocale di Windows. Abilitalo in Impostazioni (⚙) → Uscita vocale.\n\n• Scegliere di pronunciare tutte le risposte o solo quando si utilizza il microfono.\n• Selezionare una voce e regolare la velocità di lettura.\n• Attiva/disattiva rapidamente l'uscita vocale con l'icona dell'altoparlante accanto al pulsante del microfono."
     },
     {
-      "tab": "Appearance",
+      "tab": "Aspetto",
       "type": "text",
       "title": "Aspetto",
       "links": [

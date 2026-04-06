@@ -210,7 +210,7 @@
   },
   "help": [
     {
-      "tab": "Setup Wizard",
+      "tab": "Assistant de configuration",
       "type": "text",
       "title": "Fonctionnement de l'assistant d'installation",
       "links": [
@@ -228,7 +228,7 @@
       "content": "L'assistant de configuration apparaît la première fois que vous exécutez Aire ou lorsqu'aucun fournisseur d'IA n'est encore configuré. Son travail consiste à vous faire passer d’une nouvelle installation à un chat fonctionnel le plus rapidement possible.\n\nCe que fait l'assistant, étape par étape :\n• Bienvenue : explique ce qu'est Aire et vous permet de choisir la langue de l'application.\n• Sélecteur de fournisseur : affiche les méthodes courantes pour connecter Aire aux services d'IA.\n• Configuration du fournisseur : demande les détails nécessaires pour le fournisseur que vous avez choisi.\n• Terminer : confirme qu'Aire est prêt et vous amène à l'application principale.\n\nSi vous débutez dans l’IA, l’assistant est le meilleur point de départ. Il utilise d'abord le chemin le plus simple et masque les paramètres avancés jusqu'à ce que vous en ayez besoin.\n\nVous pouvez ignorer la configuration et revenir plus tard, mais vous aurez besoin d'au moins un fournisseur configuré avant qu'Aire puisse répondre aux messages de discussion."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Assistant de configuration",
       "type": "text",
       "title": "Choisir un fournisseur",
       "links": [
@@ -252,7 +252,7 @@
       "content": "Le sélecteur de fournisseur est l'endroit où vous décidez à quel service d'IA Aire parlera en votre nom.\n\nQue signifient les principales options :\n• OpenAI : un point de départ courant si vous souhaitez une configuration cloud simple et une prise en charge étendue des modèles.\n• API Anthropic : une autre option cloud puissante, connue pour les modèles Claude.\n• Claude.ai : utilise la connexion au navigateur au lieu d'une clé API.\n• Google AI : se connecte aux modèles de discussion Gemini via Google AI Studio.\n• Google AI Images : une configuration dédiée à la génération d'images Gemini.\n• Ollama : exécute les modèles localement sur votre ordinateur. Bon pour la confidentialité et l’utilisation hors ligne, mais cela dépend de votre matériel.\n• Codex : utilise le pont CLI Codex local au lieu d'une clé API normale.\n• Groq, OpenRouter, DeepSeek, Inception et z.ai : autres fournisseurs ou points de terminaison compatibles OpenAI, souvent utiles si vous y avez déjà un compte.\n\nLequel devriez-vous choisir ?\n• Si vous souhaitez la configuration cloud la plus simple pour le chat : commencez par OpenAI, Anthropic ou Google AI.\n• Si vous souhaitez du local et du privé : choisissez Ollama.\n• Si vous souhaitez spécifiquement générer des images à partir de Gemini : choisissez Google AI Images.\n• Si vous payez ou utilisez déjà un fournisseur spécifique ailleurs : choisissez ce même fournisseur ici.\n\nVous n'êtes pas bloqué. L'assistant vous aide d'abord à ajouter un fournisseur, et vous pouvez en ajouter d'autres ultérieurement dans Paramètres."
     },
     {
-      "tab": "Setup Wizard",
+      "tab": "Assistant de configuration",
       "type": "text",
       "title": "Remplir les détails du fournisseur",
       "links": [
@@ -514,7 +514,7 @@
       "content": "Les profils d'acceptation automatique vous permettent de définir les actions qu'Aire peut approuver automatiquement sans vous interrompre à chaque fois.\n\nLes exemples intégrés incluent Développeur, Navigateur d'actualités et Conservateur.\n\nCe qu'il faut garder à l'esprit :\n• Les profils sont une commodité et non un remplacement de sécurité.\n• Commencez de manière prudente et n'acceptez automatiquement que les actions en lesquelles vous avez vraiment confiance.\n• Les écritures de fichiers, le contrôle des entrées et les effets secondaires externes valent généralement la peine d'être conservés manuellement.\n\nEn cas de doute, laissez l'acceptation automatique restrictive et examinez les actions une par une."
     },
     {
-      "tab": "Connections",
+      "tab": "Connexions",
       "type": "text",
       "title": "Serveurs MCP",
       "imagePath": "Assets/Help/settings-connections.png",
@@ -624,7 +624,7 @@
       "content": "Aire peut lire les réponses de l'IA à haute voix à l'aide de la synthèse vocale Windows. Activez-le dans Paramètres (⚙) → Sortie vocale.\n\n• Choisissez de prononcer toutes les réponses, ou seulement lorsque vous utilisez le microphone.\n• Sélectionnez une voix et ajustez la vitesse de lecture.\n• Activez/désactivez rapidement la sortie vocale à l'aide de l'icône de haut-parleur située à côté du bouton du microphone."
     },
     {
-      "tab": "Appearance",
+      "tab": "Apparence",
       "type": "text",
       "title": "Apparence",
       "links": [
