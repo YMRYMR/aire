@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -24,11 +25,41 @@ internal static class LanguageHelper
         {
             var directory = Path.GetDirectoryName(AppStatePath);
             if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+                Directory.CreateDirectory(directory!);
 
-            var appState = new { language = languageCode };
-            var json = JsonSerializer.Serialize(appState, JsonOptions.Default);
-            File.WriteAllText(AppStatePath, json);
+            // Merge into the existing file so other keys (e.g. apiAccessToken) are preserved.
+            var existing = new Dictionary<string, JsonElement>();
+            if (File.Exists(AppStatePath))
+            {
+                try
+                {
+                    using var doc = JsonDocument.Parse(File.ReadAllText(AppStatePath));
+                    foreach (var prop in doc.RootElement.EnumerateObject())
+                        existing[prop.Name] = prop.Value.Clone();
+                }
+                catch
+                {
+                    // If the existing file is corrupt, start fresh.
+                }
+            }
+
+            // Build merged JSON: keep all existing properties, set/overwrite "language".
+            using var ms = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(ms, new JsonWriterOptions { Indented = false }))
+            {
+                writer.WriteStartObject();
+                writer.WriteString("language", languageCode);
+                foreach (var (key, value) in existing)
+                {
+                    if (key == "language") continue; // already written above
+                    writer.WritePropertyName(key);
+                    value.WriteTo(writer);
+                }
+                writer.WriteEndObject();
+            }
+
+            var json = Encoding.UTF8.GetString(ms.ToArray());
+            File.WriteAllText(AppStatePath, json, Encoding.UTF8);
 
             Console.WriteLine($"Language set to '{languageCode}' in {AppStatePath}");
         }
