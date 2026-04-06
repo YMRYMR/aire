@@ -128,7 +128,7 @@
     "toolCategory.browser.description": "Inspecionar e controlar abas e páginas do navegador.",
     "toolCategory.agent.label": "Agente",
     "toolCategory.agent.description": "Usar ferramentas de planejamento, acompanhamento e gerenciamento de tarefas.",
-    "toolCategory.mouse.label": "Mouse",
+    "toolCategory.mouse.label": "Rato",
     "toolCategory.mouse.description": "Mover o mouse, clicar, arrastar, rolar e capturar telas.",
     "toolCategory.keyboard.label": "Teclado",
     "toolCategory.keyboard.description": "Digitar texto e enviar pressionamentos de tecla.",
@@ -192,6 +192,9 @@
     "setup.voiceStatusCommandsOff": "Comandos de configuração falados estão desativados.",
     "setup.voiceStatusModelNeeded": "Comandos de voz precisam do modelo de fala local. Inicie a Configuração por Voz para baixá-lo.",
     "setup.voiceStatusReady": "Comandos de voz estão prontos. Inicie a Configuração por Voz para começar a ouvir.",
+    "setup.launchNotFoundMessage": "Aire não pôde ser encontrado. Certifique-se de que o aplicativo está instalado e tente novamente.",
+    "setup.preferencesSaved": "Preferências do Aire salvas",
+    "setup.preferencesSavedSpoken": "Preferências do Aire salvas com sucesso",
     "setup.voiceStatusDownloading": "Baixando o modelo de fala local para configuração por voz...",
     "setup.voiceStatusDownloadFailed": "Falha no download do modelo de voz. Verifique a conexão com a internet e tente novamente.",
     "setup.voiceStatusStartFailed": "A configuração por voz não pôde iniciar: {0}",
@@ -206,9 +209,631 @@
     "setup.disabledSpoken": "desativado",
     "panic.title": "Parada do Aire",
     "panic.tooltip": "Clique para parar a sessão ativa de teclado/mouse imediatamente.\nArraste para reposicionar.",
-    "panic.stopButton": "⏹ PARAR SESSÃO",
-    "setup.launchNotFoundMessage": "Aire não pôde ser encontrado. Certifique-se de que o aplicativo está instalado e tente novamente.",
-    "setup.preferencesSaved": "Preferências do Aire salvas",
-    "setup.preferencesSavedSpoken": "Preferências do Aire salvas com sucesso"
-  }
+    "panic.stopButton": "⏹ PARAR SESSÃO"
+  },
+  "help": [
+    {
+      "tab": "Assistente de Configuração",
+      "type": "text",
+      "title": "Como funciona o assistente de configuração",
+      "links": [
+        {
+          "label": "Abra o assistente de configuração",
+          "action": "onboarding"
+        },
+        {
+          "label": "Abra a configuração de IA",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-picker.png",
+      "imageCaption": "O assistente de configuração ajuda você a escolher um provedor antes de começar a conversar.",
+      "content": "O Assistente de configuração aparece na primeira vez que você executa o Aire ou quando nenhum provedor de IA está configurado ainda. Seu trabalho é levar você de uma nova instalação para um bate-papo funcional o mais rápido possível.\n\nO que o assistente faz, passo a passo:\n• Bem vindo: explica o que é Aire e permite escolher o idioma do app.\n• Seletor de provedor: mostra maneiras comuns de conectar o Aire aos serviços de IA.\n• Configuração do provedor: solicita os detalhes necessários para o provedor que você escolheu.\n• Concluir: confirma que o Aire está pronto e leva você para o aplicativo principal.\n\nSe você é novo na IA, o assistente é o melhor lugar para começar. Ele usa primeiro o caminho mais simples e oculta as configurações avançadas até que você precise delas.\n\nVocê pode pular a configuração e voltar mais tarde, mas precisará de pelo menos um provedor configurado antes que o Aire possa responder às mensagens de bate-papo."
+    },
+    {
+      "tab": "Assistente de Configuração",
+      "type": "text",
+      "title": "Escolhendo um provedor",
+      "links": [
+        {
+          "label": "Abra o assistente de configuração",
+          "action": "onboarding"
+        },
+        {
+          "label": "plataforma.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "O seletor de provedor é onde você decide com qual serviço de IA a Aire falará em seu nome.\n\nO que significam as principais opções:\n• OpenAI: um ponto de partida comum se você deseja uma configuração de nuvem simples e amplo suporte a modelos.\n• API Anthropic: outra forte opção de nuvem, conhecida pelos modelos de Claude.\n• Claude.ai: usa login no navegador em vez de uma chave de API.\n• Google AI: conecta-se aos modelos de bate-papo Gemini por meio do Google AI Studio.\n• Google AI Images: uma configuração dedicada de geração de imagens Gemini.\n• Ollama: executa modelos localmente em seu computador. Bom para privacidade e uso offline, mas depende do seu hardware.\n• Codex: usa a ponte local Codex CLI em vez de uma chave de API normal.\n• Groq, OpenRouter, DeepSeek, Inception e z.ai: outros provedores ou endpoints compatíveis com OpenAI, geralmente úteis se você já tiver uma conta lá.\n\nQual você deve escolher?\n• Se você deseja a configuração de nuvem mais fácil para bate-papo: comece com OpenAI, Anthropic ou Google AI.\n• Se você quer local e privado: escolha Ollama.\n• Se você deseja especificamente a geração de imagens do Gemini: escolha Google AI Images.\n• Se você já paga ou usa um provedor específico em outro lugar: escolha esse mesmo provedor aqui.\n\nVocê não está bloqueado. O assistente ajuda você a adicionar um provedor primeiro e você pode adicionar mais posteriormente em Configurações."
+    },
+    {
+      "tab": "Assistente de Configuração",
+      "type": "text",
+      "title": "Preenchendo detalhes do provedor",
+      "links": [
+        {
+          "label": "Abra o assistente de configuração",
+          "action": "onboarding"
+        },
+        {
+          "label": "Abra a configuração de IA",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-setup.png",
+      "imageCaption": "Etapa de configuração do provedor com tipo, nome, credenciais, modelo e teste de conexão do provedor.",
+      "content": "Depois de escolher um provedor, o assistente solicitará apenas os detalhes de que esse provedor precisa.\n\nCampos típicos:\n• Tipo de provedor: o serviço que deseja utilizar.\n• Nome: o rótulo Aire aparecerá na janela de chat.\n• Chave API: o token secreto que permite ao Aire conversar com o provedor. Alguns provedores usam login no navegador e alguns provedores locais não precisam de uma chave de API.\n• URL base: necessário apenas para determinados serviços compatíveis com OpenAI ou configurações auto-hospedadas.\n• Modelo: o modelo de IA específico que você deseja usar.\n\nNotas específicas do fornecedor:\n• Claude.ai usa login no navegador em vez de uma chave de API normal.\n• Ollama é local e normalmente funciona sem uma chave API.\n• O Codex usa a ponte CLI local do Codex, para que o assistente possa oferecer a instalação CLI em vez de solicitar uma chave de API normal.\n• Google AI Images serve para geração de imagens e não para bate-papo normal.\n\nO botão Testar conexão existe para ajudá-lo a confirmar a configuração antes de terminar. Se o teste for bem-sucedido, Aire geralmente poderá usar esse provedor imediatamente.\n\nConselhos práticos:\n• Se não tiver certeza de qual modelo escolher, comece com a sugestão padrão.\n• Se você vir um campo de chave de API, cole a chave exatamente como fornecida pelo serviço.\n• Se um provedor oferecer acesso à API e login no navegador, prefira o acesso à API se desejar o comportamento de automação e integração mais estável.\n\nDepois de concluir o assistente, você ainda poderá alterar qualquer uma dessas configurações posteriormente na guia Provedores de IA."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Visão geral",
+      "links": [
+        {
+          "label": "Configure sua primeira IA",
+          "action": "settings:providers"
+        },
+        {
+          "label": "Mude a aparência de Aire",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "Aire é um aplicativo de bate-papo para desktop que permanece na bandeja do sistema até que você precise dele. Você pode pensar nisso como uma janela de bate-papo que pode se conectar a muitos serviços de IA.\n\nSe você é novo na IA, o ponto de partida usual é simples:\n• Abra a configuração de IA.\n• Adicione um provedor, como OpenAI, Anthropic, Google AI ou Ollama.\n• Escolha um modelo.\n• Digite uma pergunta na caixa de bate-papo e pressione Enter.\n\nO que Aire pode fazer:\n• Converse com diferentes serviços de IA em um único aplicativo.\n• Salve suas conversas no seu computador.\n• Deixe a IA usar ferramentas, com sua aprovação, para ler arquivos, executar comandos, navegar em páginas e muito mais.\n• Use entrada e saída de voz com recursos de fala do Windows.\n• Permita que outros aplicativos locais se comuniquem com o Aire por meio da API Local."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Ícone da bandeja",
+      "content": "Aire é executado na bandeja do sistema (canto inferior direito da barra de tarefas).\n\n• Clique com o botão esquerdo ou direito no ícone da bandeja para abrir a janela de bate-papo.\n• Clique com o botão direito no ícone da bandeja para ver as opções: Abrir, Configurações, Sair.\n• Fechar a janela a oculta — o Aire continua rodando em segundo plano.\n• Para sair completamente, clique com o botão direito no ícone da bandeja e escolha Sair."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Bater papo",
+      "links": [
+        {
+          "label": "Provedores abertos",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/main-chat.png",
+      "imageCaption": "Janela principal de bate-papo com seletor de provedor, área de conversa, pesquisa e compositor.",
+      "content": "• Digite sua mensagem na caixa de entrada na parte inferior e pressione Enter para enviar.\n• Pressione Shift+Enter para adicionar uma nova linha sem enviar.\n• Pressione ↑ / ↓ para navegar pelas mensagens enviadas anteriormente (funciona apenas quando o cursor está na primeira ou última linha da caixa de entrada).\n• Arraste e solte uma imagem na caixa de entrada para anexá-la à sua mensagem (requer um modelo com capacidade de visão).\n• Pressione Ctrl+F para pesquisar na conversa. Use ↑ / ↓ ou os botões de seta para alternar entre as partidas. Pressione Escape para fechar a barra de pesquisa.\n• Clique com o botão direito na área de bate-papo para copiar ou salvar a conversa como um arquivo de texto.\n• O botão 🗑 limpa a conversa atual (pede confirmação primeiro).\n• O botão 💬 na barra lateral abre seu histórico de conversas."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "table",
+      "title": "Atalhos de teclado",
+      "cols": [
+        "Atalho",
+        "Ação"
+      ],
+      "rows": [
+        [
+          "Digitar",
+          "Enviar mensagem"
+        ],
+        [
+          "Shift + Enter",
+          "Nova linha na caixa de entrada"
+        ],
+        [
+          "↑ / ↓",
+          "Navegue pelo histórico de mensagens (quando o cursor está na primeira/última linha)"
+        ],
+        [
+          "Ctrl+F",
+          "Pesquisar conversa"
+        ],
+        [
+          "Ctrl+Rolar",
+          "Ajustar o tamanho da fonte"
+        ],
+        [
+          "Escapar",
+          "Fechar barra de pesquisa/dispensar caixa de diálogo"
+        ]
+      ]
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Pontas",
+      "content": "• Você pode configurar vários provedores de IA e alternar entre eles na parte superior da janela de bate-papo. Cada conversa lembra seu modo de provedor e assistente.\n• Redimensione a janela arrastando qualquer borda, inclusive a superior.\n• Conversas e configurações são armazenadas localmente em %LOCALAPPDATA%\\Aire.\n• A IA pode solicitar ferramentas para arquivos, comandos, ações do navegador e muito mais, mas Aire ainda pede aprovação, a menos que uma regra de aceitação automática se aplique.\n• Se uma resposta da IA ​​for interrompida, o modelo pode ter atingido seu token ou limite de saída. Peça para continuar, reduza o tamanho da tarefa ou use um modelo com uma janela de contexto maior."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Modos de assistente",
+      "imagePath": "Assets/Help/main-chat-modes.png",
+      "imageCaption": "Menu do modo assistente aberto no cabeçalho principal. Cada conversa mantém seu próprio modo.",
+      "content": "O botão de modo no cabeçalho principal altera a forma como Aire enquadra sua solicitação antes de enviá-la ao provedor.\n\nOs modos atuais incluem Arquiteto, Escritor criativo, Desenvolvedor, Geral, Pintor, Filósofo, Psicólogo, Cientista, Segurança e Professor.\n\nQuais modos fazem:\n• Ajustam o estilo e as prioridades do assistente.\n• O modo selecionado é salvo por conversa, portanto diferentes chats podem manter funções diferentes.\n• Geral é o padrão para novas conversas.\n• Diferentes provedores ainda mantêm suas peculiaridades, mas Aire passa o modo selecionado de forma consistente como orientação compartilhada.\n\nExemplos práticos:\n• Desenvolvedor: melhor para código, depuração e tarefas de terminal.\n• Arquiteto: melhor para estrutura, compensações e planejamento.\n• Professor: melhor para explicações e orientações passo a passo.\n• Painter: melhor para geração e solicitação orientada a imagens quando o provedor atual oferece suporte."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Categorias de ferramentas",
+      "imagePath": "Assets/Help/main-chat-tools.png",
+      "imageCaption": "Menu de ferramentas aberto no compositor. Você pode ativar todas as categorias, desativar todas ou escolher apenas as categorias desejadas.",
+      "content": "O botão de chave inglesa próximo à caixa de bate-papo controla quais categorias de ferramentas o provedor atual pode usar.\n\nComo funciona:\n• Clique no botão de chave inglesa para abrir o menu de categorias.\n• Ative apenas as categorias que você deseja que a IA possa solicitar.\n• Escolha Sem ferramentas se desejar uma conversa somente com texto.\n• Aire lembra as categorias de ferramentas selecionadas e as utiliza como parte da política de ferramentas atual.\n\nPor que isso é importante:\n• Menos categorias habilitadas facilitam a compreensão do uso da ferramenta.\n• A restrição de categorias pode reduzir o risco e os efeitos secundários acidentais.\n• Se um fornecedor não oferecer suporte a ferramentas, o botão de chave inglesa ficará oculto."
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "Provedores de IA",
+      "imagePath": "Assets/Help/settings-providers.png",
+      "imageCaption": "Configurações do provedor com a lista de provedores à esquerda e o formulário do provedor selecionado à direita.",
+      "links": [
+        {
+          "label": "Abra a configuração de IA",
+          "action": "settings:providers"
+        },
+        {
+          "label": "plataforma.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "Um provedor é o serviço de IA com o qual Aire fala em seu nome. A maioria dos usuários só precisa configurar um provedor para começar.\n\nCada entrada de provedor tem quatro partes principais:\n• Nome: o rótulo que você verá dentro do Aire.\n• Tipo: qual serviço de IA usar.\n• Modelo: o modelo específico que você deseja que esse serviço execute.\n• Credenciais: geralmente uma chave de API ou, para Claude.ai, um login no navegador.\n\nEscolhas comuns:\n• OpenAI: cole sua chave de API em platform.openai.com.\n• Antrópico: faça login com Claude.ai no navegador ou cole uma chave de API do Antrópico.\n• Google AI: cole sua chave de API Gemini em aistudio.google.com.\n• Ollama: use um servidor Ollama local em sua própria máquina. Nenhuma chave de API é necessária.\n• Endpoints compatíveis com OpenAI: serviços como Groq, Mistral, OpenRouter, DeepSeek ou LM Studio geralmente podem funcionar definindo o URL base.\n\nSe você não tiver certeza de qual usar, OpenAI ou Anthropic são geralmente as opções de nuvem mais fáceis, enquanto Ollama é a opção local usual.\n\nOs provedores podem ser ativados ou desativados sem excluí-los. As alterações são salvas automaticamente."
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "Modos de chamada de ferramenta",
+      "intro": "Aire oferece suporte a dois métodos para fornecer acesso às ferramentas a um modelo de IA. O modo é escolhido automaticamente com base no tipo de provedor, mas pode ser substituído por modelo em um arquivo JSON personalizado (consulte Modelos Personalizados).",
+      "cols": [
+        "Modo",
+        "Como funciona"
+      ],
+      "rows": [
+        [
+          "Baseado em texto\n(padrão: OpenAI, Antrópico)",
+          "As descrições das ferramentas estão incorporadas no prompt do sistema. A IA responde com um bloco XML <tool_call>. Funciona com qualquer modelo que siga as instruções de forma confiável."
+        ],
+        [
+          "Chamada de função nativa\n(padrão: Ollama, Google AI)",
+          "Esquemas de ferramentas estruturadas são enviados por meio da API do provedor. A IA retorna objetos estruturados de chamada de função. Mais preciso. Requer suporte explícito de API."
+        ],
+        [
+          "Não compatível",
+          "O modelo não pode usar ferramentas. Defina isso em um arquivo de modelo personalizado para ignorar os prompts da ferramenta para modelos que ficam confusos com eles."
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "Compatibilidade de provedor e modelo",
+      "intro": "Use o botão Testes de capacidade para verificar sua combinação específica de fornecedor e modelo.",
+      "cols": [
+        "Provedor/ponto final",
+        "Modo",
+        "Notas"
+      ],
+      "rows": [
+        [
+          "OpenAI",
+          "Nativo",
+          "GPT-4o, GPT-4.1, GPT-4o-mini — suporte confiável para ferramentas"
+        ],
+        [
+          "Antrópico",
+          "Baseado em texto",
+          "Claude 3.5 Sonnet e mais recente - excelente instrução seguindo"
+        ],
+        [
+          "IA do Google (Gêmeos)",
+          "Nativo",
+          "Gemini 2.0 Flash e mais recente recomendado"
+        ],
+        [
+          "Ollama (local)",
+          "Nativo",
+          "qwen2.5-coder, llama3.1, mistral-nemo funcionam bem; modelos pequenos variam"
+        ],
+        [
+          "Groq (OpenAI + URL base)",
+          "Nativo",
+          "URL base: https://api.groq.com/openai/v1 — muito rápido"
+        ],
+        [
+          "Mistral (OpenAI + URL base)",
+          "Nativo",
+          "URL base: https://api.mistral.ai/v1"
+        ],
+        [
+          "OpenRouter (OpenAI + URL base)",
+          "Nativo",
+          "URL base: https://openrouter.ai/api/v1 — mais de 100 modelos"
+        ],
+        [
+          "DeepSeek (OpenAI + URL base)",
+          "Nativo",
+          "URL base: https://api.deepseek.com/v1"
+        ],
+        [
+          "LM Studio (OpenAI + URL base)",
+          "Nativo",
+          "URL base: http://localhost:1234/v1 — habilite a chamada de função nas configurações do LM Studio"
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "Testes de capacidade",
+      "links": [
+        {
+          "label": "Abra a configuração de IA",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "O botão Executar testes verifica o que o provedor e o modelo selecionados realmente podem fazer.\n\nO que é testado:\n• Os testes de capacidade de chamada de ferramenta verificam se o modelo solicita a ferramenta Aire esperada. Nenhum arquivo real, navegador ou ação do sistema é executado.\n• Os testes de capacidade de geração de imagens chamam diretamente o caminho de geração de imagens do provedor. Esses testes podem consumir a cota do provedor e falhar se sua conta ou modelo não oferecer suporte à geração de imagens.\n\nComo usar:\n• Abra Configurações ⚙ → selecione um provedor → clique em Executar testes.\n• O formulário do provedor é bloqueado durante a execução para evitar alterações na configuração durante o teste.\n• Os resultados são armazenados em cache por combinação de provedor/modelo e recarregados rapidamente na próxima vez.\n\nResultados de leitura:\n• ✓ (verde) — o provedor administrou o recurso corretamente.\n• ✗ (vermelho) — o provedor ou modelo falhou nesse recurso.\n• Se a mensagem mencionar limites de cota, saldo ou taxa, a falha vem da conta do provedor e não da própria Aire.\n\nSe um modelo falhar em muitos testes de ferramenta, tente outro modelo ou ajuste os metadados do modelo personalizado. Se a geração da imagem falhar, verifique se a conta, o modelo e a cota do provedor realmente permitem isso."
+    },
+    {
+      "tab": "Providers",
+      "type": "code",
+      "title": "Modelos personalizados",
+      "intro": "Crie um arquivo JSON no diretório Data\\Models do aplicativo para personalizar a lista de modelos para qualquer tipo de provedor. Use a matriz de capacidades para declarar o que um modelo suporta.\n\nSinalizadores de capacidade:\n• \"visão\" — o modelo aceita anexos de imagem\n• \"ferramentas\" — o modelo pode usar ferramentas\n• \"toolcallmode:native\" — força a chamada de função nativa\n• \"toolcallmode:text\" — força a chamada de ferramenta baseada em texto\n• \"toolcallmode:unsupported\" — desativa totalmente os prompts da ferramenta\n\nSinalizadores de formato de saída da ferramenta (para modelos que incorporam chamadas de ferramenta em sua resposta de texto):\n• \"toolformat:hermes\" — formato Hermes/Qwen: <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" — Formato ReAct/LangChain: {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" — Esquema tool_calls nativo da OpenAI incorporado no conteúdo\n• \"toolformat:text\" — Formato de texto padrão do Aire: {\"tool\":\"...\", ...}",
+      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"modelos\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capacidades\": [\"visão\", \"ferramentas\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (sem ferramentas)\",\n      \"capabilities\": [\"toolcallmode:não suportado\"]\n    },\n    {\n      \"id\": \"meu modelo ajustado\",\n      \"displayName\": \"Meu ajuste fino\",\n      \"capabilities\": [\"ferramentas\", \"toolcallmode:texto\"]\n    }\n  ]\n}"
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Ferramentas de IA",
+      "links": [
+        {
+          "label": "Revise as aprovações de ações de IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Alguns modelos de IA podem solicitar que Aire execute ações para eles. Aire chama essas ações de ferramentas.\n\nImportante: as ferramentas não funcionam silenciosamente. Aire mostra o que a IA quer fazer e você aprova ou nega.\n\nExemplos do que as ferramentas podem fazer:\n• Ler ou gravar arquivos.\n• Execute comandos shell.\n• Abra e leia páginas da web.\n• Inspecione as guias do navegador.\n• Faça capturas de tela.\n• Digite, clique ou mova o mouse.\n• Ler ou enviar e-mail.\n\nSe você é novo nesse recurso, o hábito mais seguro é simples: leia a solicitação de ação antes de aprová-la. Aprove ações somente leitura quando elas fizerem sentido e tenha mais cuidado com ações que alteram arquivos, enviam mensagens ou controlam o teclado e o mouse."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Aceitar perfis automaticamente",
+      "links": [
+        {
+          "label": "Revise as aprovações de ações de IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Os perfis de aceitação automática permitem definir quais ações o Aire pode aprovar automaticamente sem interrompê-lo todas as vezes.\n\nExemplos integrados incluem Desenvolvedor, Navegador de notícias e Conservador.\n\nO que ter em mente:\n• Os perfis são uma conveniência e não um substituto de segurança.\n• Comece de forma conservadora e aceite automaticamente apenas ações em que você realmente confia.\n• Geralmente vale a pena manter a gravação de arquivos, o controle de entrada e os efeitos colaterais externos manualmente.\n\nSe não tiver certeza, deixe a aceitação automática restritiva e revise as ações uma por uma."
+    },
+    {
+      "tab": "Conexões",
+      "type": "text",
+      "title": "Servidores MCP",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "Configurações de conexões com catálogo MCP e lista de servidores instalados.",
+      "links": [
+        {
+          "label": "Abrir configurações de conexões",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "Os servidores MCP são serviços auxiliares externos que fornecem à Aire mais ferramentas e fontes de dados. MCP significa Protocolo de contexto de modelo.\n\nEm linguagem simples, um servidor MCP é uma ponte entre o Aire e outro sistema, como:\n• seu sistema de arquivos,\n• GitHub,\n• SQLite,\n• ferramentas de busca na web,\n• ferramentas de memória,\n• Slack, Gmail ou Notion.\n\nComo Aire lida com eles:\n• A guia Conexões inclui um catálogo selecionado de servidores MCP comuns.\n• Você pode instalá-los, removê-los, ativá-los, desativá-los e editá-los no aplicativo.\n• Alguns servidores precisam de credenciais extras ou Node.js/npm na máquina.\n\nBons conselhos para iniciantes:\n• Comece com um servidor simples, como Filesystem ou Web Fetch.\n• Leia a descrição antes de instalá-lo.\n• Trate um servidor MCP como qualquer outra integração: útil, mas algo em que você deve confiar antes de ativar."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Sessões de teclado e mouse",
+      "links": [
+        {
+          "label": "Revise as aprovações de ações de IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Algumas tarefas exigem que a IA controle o teclado e o mouse. Quando uma sessão está ativa:\n\n• Um banner aparece na parte inferior da janela de bate-papo mostrando que a sessão está ativa.\n• Um botão flutuante ⏹ PARAR SESSÃO aparece no canto superior direito da tela — clique nele a qualquer momento para cancelar imediatamente.\n• Diga “AIRE STOP” para cancelar por voz.\n• Clique em “Encerrar sessão” no banner para cancelar.\n\nA IA solicitará aprovação para cada ação individual (pressionamento de tecla, clique do mouse, etc.) antes de executá-la."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Entrada de voz",
+      "links": [
+        {
+          "label": "Abra as configurações de voz",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "Clique no botão 🎤 para iniciar o reconhecimento de voz. Aire usa reconhecimento de fala integrado do Windows – não é necessária chave de API ou conexão com a Internet.\n\n• Fale normalmente. Suas palavras aparecem na caixa de entrada enquanto você fala.\n• Quando você para de falar, uma contagem regressiva (5 → 1) aparece no botão. Se você ficar em silêncio, a mensagem será enviada automaticamente em 0.\n• Comece a falar novamente a qualquer momento para reiniciar a contagem regressiva.\n• Clique no botão novamente (mostra ⏹) para parar sem enviar.\n\nA precisão do reconhecimento de voz depende do idioma do Windows e da qualidade do microfone. Você pode treinar o reconhecimento de fala do Windows em Configurações do Windows → Hora e idioma → Fala."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "table",
+      "title": "Comandos de voz",
+      "intro": "Diga “AIRE” seguido de qualquer uma destas palavras enquanto o microfone estiver ativo:",
+      "cols": [
+        "Comando",
+        "O que isso faz"
+      ],
+      "rows": [
+        [
+          "AIRE ENVIAR",
+          "Envie a mensagem atual imediatamente"
+        ],
+        [
+          "AIRE PAUSA",
+          "Congele a contagem regressiva do silêncio"
+        ],
+        [
+          "RESUMO AIRE",
+          "Retomar a contagem regressiva"
+        ],
+        [
+          "AR LIVRE",
+          "Limpe a caixa de entrada"
+        ],
+        [
+          "AIRE DESFAZER",
+          "Limpe a caixa de entrada"
+        ],
+        [
+          "CANCELAR AIRE",
+          "Pare de ouvir sem enviar"
+        ],
+        [
+          "AIRE NOVO",
+          "Inicie uma nova conversa"
+        ],
+        [
+          "CONFIGURAÇÕES DE AR",
+          "Abra a janela Configurações"
+        ],
+        [
+          "AIRE ABERTO/SHOW",
+          "Mostrar a janela principal do chat"
+        ],
+        [
+          "AIRE FECHAR/OCULTAR",
+          "Ocultar a janela principal do chat"
+        ],
+        [
+          "AIRE SIM/NÃO",
+          "Aprovar ou negar uma ação de IA pendente"
+        ],
+        [
+          "PARADA AÉREA",
+          "Parada de emergência — encerre imediatamente qualquer sessão ativa de teclado/mouse"
+        ]
+      ]
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Saída de voz",
+      "links": [
+        {
+          "label": "Abra as configurações de voz",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "Aire pode ler as respostas da IA ​​em voz alta usando a conversão de texto em fala do Windows. Habilite isso em Configurações (⚙) → Saída de voz.\n\n• Escolha falar todas as respostas ou apenas quando usar o microfone.\n• Selecione uma voz e ajuste a velocidade de leitura.\n• Ative/desative a saída de voz rapidamente com o ícone do alto-falante próximo ao botão do microfone."
+    },
+    {
+      "tab": "Aparência",
+      "type": "text",
+      "title": "Aparência",
+      "links": [
+        {
+          "label": "Abra as configurações de aparência",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "Abra Configurações (⚙) → Aparência para alterar a aparência do aplicativo.\n\n• Tema: alterne entre Escuro e Claro (Bege).\n• Tonalidade de cor: arraste o controle deslizante para aplicar uma tonalidade em toda a UI. A extremidade esquerda (preto) e a extremidade direita (branco) significam que não há tonalidade – o controle deslizante é em tons de cinza puros por padrão.\n• Tamanho da fonte: segure Ctrl e role a roda do mouse sobre o bate-papo ou área de entrada para aumentar ou diminuir o tamanho da fonte. A configuração é salva automaticamente.\n\nTodas as configurações de aparência serão salvas e restauradas na próxima inicialização."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "O que é a API local?",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "Configurações de conexões onde o acesso à API local, contas de e-mail e servidores MCP são configurados.",
+      "links": [
+        {
+          "label": "Abrir configurações de conexões",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "A API local é como outro programa no mesmo computador pode se comunicar com o Aire.\n\nPara não desenvolvedores: normalmente você não precisa desse recurso.\n\nPara desenvolvedores e usuários avançados: esta é a maneira mais fácil de conectar seu próprio script, ferramenta, automação ou aplicativo de desktop ao Aire. Um programa local pode:\n• peça ao Aire para mostrar ou ocultar sua janela principal,\n• listar conversas e ler mensagens,\n• enviar uma mensagem para a conversa ativa,\n• mudar de provedor ou conversa,\n• inspecionar aprovações de ferramentas pendentes,\n• e ligue diretamente para a Aire Tools.\n\nComo funciona:\n• Aire escuta na porta TCP 51234.\n• Ele escuta apenas em 127.0.0.1, portanto outros computadores não podem acessá-lo diretamente.\n• Cada solicitação é um objeto JSON enviado como uma linha.\n• Cada resposta é um objeto JSON retornado como uma linha.\n\nPara usá-lo, primeiro abra as configurações do Connections e habilite o acesso à API local."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Início rápido da API local",
+      "links": [
+        {
+          "label": "Abrir configurações de conexões",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "Para conectar outro aplicativo ao Aire, use esta lista de verificação:\n\n1. Abra as configurações de conexões.\n2. Ative o acesso à API local.\n3. Copie o token de autenticação.\n4. No seu aplicativo ou script, abra uma conexão TCP para 127.0.0.1:51234.\n5. Envie uma linha JSON com método, token e parâmetros opcionais.\n6. Leia uma linha JSON novamente.\n7. Feche a conexão.\n\nUm bom primeiro teste é o método ping. Se o ping funcionar, tente show_main_window, list_providers e create_conversation.\n\nPrimeira ordem de integração recomendada:\n• ping\n• mostrar_janela_principal\n• lista_provedores\n• criar_conversação\n• lista_conversas\n• obter_mensagens\n• enviar_mensagem\n• obter_estado\n• wait_for_pending_approval se quiser cooperar com aprovações de ferramentas\n• execute_tool somente depois que você estiver confortável com o fluxo de aprovação e o modelo de segurança"
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Autenticação",
+      "links": [
+        {
+          "label": "Abrir configurações de conexões",
+          "action": "settings:connections"
+        },
+        {
+          "label": "Revise as aprovações de ações de IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Cada solicitação de API local deve incluir o token de autenticação.\n\nOnde conseguir:\n• Abra as configurações de conexões.\n• Encontre a seção API local.\n• Clique em Copiar para copiar o token.\n• Cole esse token na configuração do seu aplicativo ou script.\n\nO que saber:\n• Se você clicar em Regenerar, as integrações antigas deixarão de funcionar até usarem o novo token.\n• A API deve estar habilitada e não apenas configurada.\n• Qualquer processo no seu computador que conheça o token pode controlar o Aire.\n\nConselhos práticos para desenvolvedores:\n• Mantenha o token em um arquivo de configuração local ou variável de ambiente, não codificado no controle de origem.\n• Trate-o como um segredo local.\n• Se você suspeitar que houve vazamento, regenere-o."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Protocolo",
+      "intro": "A API local é JSON baseada em linha sobre TCP.\n\nPadrão de conexão:\n• conectar-se a 127.0.0.1:51234\n• escrever exatamente uma solicitação JSON compacta seguida por uma nova linha\n• leia exatamente uma linha de resposta JSON\n• fechar a conexão\n\nForma de solicitação:\n{ \"método\": \"MÉTODO\", \"token\": \"TOKEN\", \"parâmetros\": { ... } }\n\nForma de resposta:\n{ \"ok\": verdadeiro, \"resultado\": ... }\nou\n{ \"ok\": falso, \"errorMessage\": \"mensagem\" }\n\nSe você estiver escrevendo uma biblioteca cliente, crie primeiro esse padrão simples de solicitação-resposta. Você não precisa de HTTP ou WebSockets para começar.",
+      "content": "{ \"método\": \"ping\", \"token\": \"SEU_TOKEN\" }\n{ \"ok\": verdadeiro, \"resultado\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"método\": \"criar_conversação\", \"token\": \"SEU_TOKEN\", \"parâmetros\": { \"título\": \"teste de API\" } }\n{ \"ok\": verdadeiro, \"resultado\": 73 }\n\n{ \"método\": \"send_message\", \"token\": \"SEU_TOKEN\", \"parâmetros\": { \"texto\": \"Olá!\" } }\n{ \"ok\": verdadeiro, \"resultado\": verdadeiro }"
+    },
+    {
+      "tab": "Local API",
+      "type": "table",
+      "title": "Métodos Disponíveis",
+      "cols": [
+        "Método",
+        "Parâmetros",
+        "Descrição"
+      ],
+      "rows": [
+        [
+          "pingar",
+          "-",
+          "Verifique se o Aire está funcionando. Retorna o mesmo instantâneo de estado que get_state."
+        ],
+        [
+          "get_state",
+          "-",
+          "Provedor atual, modelo, ID de conversa ativa e status da API local."
+        ],
+        [
+          "mostrar_janela_principal",
+          "-",
+          "Traga a janela de bate-papo do Aire para a frente."
+        ],
+        [
+          "hide_main_window",
+          "-",
+          "Oculte a janela de bate-papo na bandeja."
+        ],
+        [
+          "configurações_abertas",
+          "-",
+          "Abra a janela Configurações."
+        ],
+        [
+          "navegador_aberto",
+          "-",
+          "Abra a janela do navegador Aire."
+        ],
+        [
+          "lista_provedores",
+          "-",
+          "Todos os provedores de IA configurados com IDs e nomes."
+        ],
+        [
+          "criar_provedor",
+          "nome?, tipo, apiKey?, baseUrl?, modelo, isEnabled?, cor?, selectAfterCreate?, herdarCredentialsFromProviderId?",
+          "Crie um novo provedor na API local."
+        ],
+        [
+          "lista_conversações",
+          "-",
+          "Todas as conversas salvas (ID, título, data)."
+        ],
+        [
+          "criar_conversação",
+          "título?",
+          "Crie uma nova conversa e mude para ela."
+        ],
+        [
+          "select_conversation",
+          "ID de conversação",
+          "Mude para uma conversa existente."
+        ],
+        [
+          "get_messages",
+          "ID de conversação",
+          "Todas as mensagens em uma conversa."
+        ],
+        [
+          "set_provider",
+          "ID do provedor",
+          "Mude o provedor de IA ativo."
+        ],
+        [
+          "set_provider_model",
+          "ID do provedor, modelo",
+          "Altere o modelo de um provedor."
+        ],
+        [
+          "enviar_mensagem",
+          "texto",
+          "Envie uma mensagem para a conversa ativa. Retorna verdadeiro quando aceito."
+        ],
+        [
+          "lista_pendentes_aprovações",
+          "-",
+          "Chamadas de ferramentas atualmente aguardando aprovação."
+        ],
+        [
+          "esperar_por_aprovação_pendente",
+          "tempo limite_segundos?",
+          "Aguarde a próxima aprovação de ferramenta pendente ou retorne nulo no tempo limite."
+        ],
+        [
+          "aprovar_tool_call",
+          "índice",
+          "Aprova uma chamada de ferramenta pendente pelo seu índice de lista atual."
+        ],
+        [
+          "negar_tool_call",
+          "índice",
+          "Negar uma chamada de ferramenta pendente pelo seu índice de lista atual."
+        ],
+        [
+          "execute_tool",
+          "ferramenta, parâmetros, wait_for_approval?, aprovado_timeout_seconds?",
+          "Execute uma ferramenta Aire diretamente e, opcionalmente, aguarde a aprovação."
+        ],
+        [
+          "get_trace",
+          "depoisId?, limite?",
+          "Leia as entradas de rastreamento de execução da ferramenta para depuração."
+        ],
+        [
+          "clear_trace",
+          "-",
+          "Limpe o rastreamento de execução da ferramenta."
+        ]
+      ]
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Com quais métodos devo começar?",
+      "content": "Se você estiver criando outro aplicativo que se conecte ao Aire, comece primeiro com os métodos mais simples.\n\nOrdem de aprendizagem recomendada:\n• ping: confirma que o Aire está rodando e seu token é válido.\n• show_main_window: confirme que você pode acionar uma ação visível no aplicativo.\n• get_state: inspeciona a conversa atual e o estado do provedor.\n• list_conversations e get_messages: lê dados com segurança.\n• send_message: realiza uma viagem de ida e volta completa entre solicitação e resposta.\n• list_pending_approvals, aprovar_tool_call, deny_tool_call: integração com o modelo de aprovação da Aire.\n• execute_tool: somente depois de compreender as implicações de segurança e o comportamento de aprovação.\n\nNa maioria das integrações, send_message e os métodos somente leitura são suficientes."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Exemplo do PowerShell",
+      "intro": "Este exemplo mostra a forma útil mais simples para um cliente de API local no PowerShell. Salve seu token nas configurações do Connections, cole-o abaixo e tente o ping antes de qualquer outra coisa.",
+      "content": "$TOKEN = \"cole seu token aqui\"\n$PORTA = 51234\n\nfunção Invocar-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{método = $Método; token = $TOKEN}\n    if ($Params.Count) { $req[\"parâmetros\"] = $Params }\n    $client = Novo Objeto Net.Sockets.TcpClient(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $leitor = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $leitor.ReadLine()\n    $cliente.Fechar()\n    retornar $resp | ConverterFrom-Json\n}\n\n# Verifique se o Aire está rodando e inspecione o estado\n$state = Invocar-Aire \"ping\"\n$estado.resultado\n\n# Crie e selecione uma conversa\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).resultado\nInvoque-Aire \"select_conversation\" @{conversationId = $id }\n\n# Envia uma mensagem (retorna verdadeiro quando aceita)\nInvoke-Aire \"send_message\" @{ text = \"Olá do PowerShell\" }\n\n# Leia as mensagens da conversa após a conclusão do turno\n(Invoke-Aire \"get_messages\" @{conversationId = $id }).resultado\n\n# Execute uma ferramenta diretamente\nInvoque-Aire \"execute_tool\" @{tool = \"read_file\"; parâmetros = @{ caminho = \"C:/Temp/notes.txt\" } }"
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Exemplo de Python",
+      "intro": "Este exemplo usa apenas a biblioteca padrão do Python. É um bom ponto de partida se você deseja adicionar suporte Aire a outra ferramenta local.",
+      "content": "importar soquete, json\n\nTOKEN = \"cole seu token aqui\"\n\ndef aire(método, **parâmetros):\n    req = {\"método\": método, \"token\": TOKEN}\n    se parâmetros:\n        req[\"parâmetros\"] = parâmetros\n    com socket.create_connection((\"127.0.0.1\", 51234)) como s:\n        s.sendall((json.dumps(req, separadores=(\",\", \":\")) + \"\\n\").encode())\n        retornar json.loads(s.makefile().readline())\n\nestado = aire(\"ping\")\nimprimir(estado[\"resultado\"])\n\nconversa_id = aire(\"create_conversation\", title=\"Teste de API\")[\"resultado\"]\naire(\"select_conversation\",conversationId=conversation_id)\naire(\"send_message\", text=\"Olá do Python\")\n\nmensagens = aire(\"get_messages\", conversaId=conversation_id)[\"resultado\"]\nimprimir(mensagens)\n\nresultado = aire(\n    \"executar_ferramenta\",\n    ferramenta=\"ler_arquivo\",\n    parâmetros={\"caminho\": \"C:/Temp/notes.txt\"}\n)\nimprimir (resultado)"
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Dicas de integração",
+      "content": "• Sempre verifique ok antes de usar o resultado. Se ok for falso, leia a mensagem de erro e resolva-a.\n• send_message apenas confirma que Aire aceitou a mensagem na conversa ativa. Se sua integração precisar da resposta final, faça o acompanhamento com get_messages ou observe as aprovações e rastreie a saída.\n• Mantenha uma chamada de método por conexão TCP. Conecte, envie, leia, feche.\n• Comece com ações somente leitura e de visibilidade antes de usar execute_tool.\n• Se sua integração quiser cooperar com o modelo de segurança da Aire, use list_pending_approvals, wait_for_pending_approval, aprovar_tool_call e deny_tool_call em vez de assumir que cada ação é executada imediatamente.\n• execute_tool é poderoso porque permite que seu código chame as ferramentas Aire diretamente. Use-o com cuidado.\n• A API é intencionalmente apenas local. Não exponha a porta 51234 à sua rede ou à Internet.\n• Para ferramentas internas de produção, armazene o token fora do código-fonte e inclua o ping na verificação de integridade da inicialização."
+    }
+  ]
 }
