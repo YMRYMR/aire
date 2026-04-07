@@ -64,6 +64,9 @@ namespace Aire.UI
                     }
                 }
 
+                if ((_owner.TypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() != plan.Type)
+                    _owner.TypeComboBox.SelectedIndex = -1;
+
                 _owner.ApiKeyPasswordBox.Password = plan.ApiKey;
                 _owner.BaseUrlTextBox.Text = plan.BaseUrl;
                 _owner.ModelComboBox.Text = plan.Model;
