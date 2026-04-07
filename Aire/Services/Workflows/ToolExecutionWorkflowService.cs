@@ -54,7 +54,7 @@ namespace Aire.Services.Workflows
                 var status = $"\u2713 {request.Description}";
 
                 if (conversationId.HasValue)
-                    _ = _conversations.SaveMessageAsync(conversationId.Value, "tool", status);
+                    await _conversations.SaveMessageAsync(conversationId.Value, "tool", status);
 
                 await _settings.LogFileAccessAsync(request.Tool, toolPath, true);
 
@@ -70,7 +70,7 @@ namespace Aire.Services.Workflows
             const string deniedResult = "[Operation denied by user]";
             const string deniedStatus = "\u2717 Denied";
             if (conversationId.HasValue)
-                _ = _conversations.SaveMessageAsync(conversationId.Value, "tool", deniedStatus);
+                await _conversations.SaveMessageAsync(conversationId.Value, "tool", deniedStatus);
 
             await _settings.LogFileAccessAsync(request.Tool, toolPath, false);
 

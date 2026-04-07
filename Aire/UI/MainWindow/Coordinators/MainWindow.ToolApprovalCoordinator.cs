@@ -33,7 +33,7 @@ namespace Aire
                 var sessionService = GetSessionService();
                 var decision = await sessionService.DetermineAutoApproveAsync(toolName, DateTime.Now);
                 if (!string.IsNullOrWhiteSpace(decision.SessionStatusMessage))
-                    _owner.AddSystemMessage(decision.SessionStatusMessage);
+                    await _owner.AddSystemMessageAsync(decision.SessionStatusMessage);
                 _owner.UpdateMouseSessionBanner();
                 return decision.AutoApprove;
             }

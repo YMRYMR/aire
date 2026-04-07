@@ -63,6 +63,27 @@ public class ConversationTranscriptApplicationServiceTests
     }
 
     [Fact]
+    public void BuildTranscript_PreservesLegacyJpegImagePath()
+    {
+        var service = new ConversationTranscriptApplicationService();
+        var messages = new[]
+        {
+            new Message
+            {
+                Role = "assistant",
+                Content = "Rendered concept",
+                ImagePath = @"C:\temp\generated.jpg",
+                CreatedAt = DateTime.UtcNow
+            }
+        };
+
+        var transcript = service.BuildTranscript(messages);
+
+        Assert.Single(transcript.Entries[0].ImageReferences);
+        Assert.Equal(@"C:\temp\generated.jpg", transcript.Entries[0].ImageReferences.Single());
+    }
+
+    [Fact]
     public void BuildTranscript_PreservesNonImageAttachments()
     {
         var service = new ConversationTranscriptApplicationService();

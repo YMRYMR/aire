@@ -87,6 +87,20 @@ public sealed class ToolExecutionWorkflowServiceTests
         Assert.Equal(("search_files", "C:\\repo", false), settings.FileAccessLogs[0]);
     }
 
+    [Fact]
+    public async Task ExecuteAsync_Approved_PropagatesConversationPersistenceFailures()
+    {
+        var conversations = new ThrowingConversationRepository();
+        var settings = new RecordingSettingsRepository();
+        var toolService = new ToolExecutionService(new FileSystemService(), new CommandExecutionService());
+        var workflow = new ToolExecutionWorkflowService(toolService, conversations, settings);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => workflow.ExecuteAsync(
+            CreateRequest("read_file", """{"path":"C:\\repo\\file.txt"}""", "Read file"),
+            approved: true,
+            conversationId: 42));
+    }
+
     private static ToolCallRequest CreateRequest(string tool, string json, string description)
     {
         using var doc = JsonDocument.Parse(json);
@@ -125,6 +139,29 @@ public sealed class ToolExecutionWorkflowServiceTests
             SavedMessages.Add((conversationId, role, content));
             return Task.CompletedTask;
         }
+    }
+
+    private sealed class ThrowingConversationRepository : IConversationRepository
+    {
+        public Task<int> CreateConversationAsync(int providerId, string title) => throw new NotSupportedException();
+        public Task<Aire.Data.Conversation?> GetLatestConversationAsync(int providerId) => throw new NotSupportedException();
+        public Task<Aire.Data.Conversation?> GetConversationAsync(int conversationId) => throw new NotSupportedException();
+        public Task<List<Aire.Data.ConversationSummary>> ListConversationsAsync(string? search = null) => throw new NotSupportedException();
+        public Task UpdateConversationTitleAsync(int conversationId, string title) => throw new NotSupportedException();
+        public Task UpdateConversationProviderAsync(int conversationId, int providerId) => throw new NotSupportedException();
+        public Task UpdateConversationAssistantModeAsync(int conversationId, string assistantModeKey) => throw new NotSupportedException();
+        public Task<List<Aire.Data.Message>> GetMessagesAsync(int conversationId) => throw new NotSupportedException();
+        public Task DeleteMessagesByConversationIdAsync(int conversationId) => throw new NotSupportedException();
+        public Task DeleteConversationAsync(int conversationId) => throw new NotSupportedException();
+        public Task DeleteAllConversationsAsync() => throw new NotSupportedException();
+
+        public Task SaveMessageAsync(
+            int conversationId,
+            string role,
+            string content,
+            string? imagePath = null,
+            IEnumerable<Aire.Data.MessageAttachment>? attachments = null)
+            => throw new InvalidOperationException("conversation persistence failed");
     }
 
     private sealed class RecordingSettingsRepository : ISettingsRepository

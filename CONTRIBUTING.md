@@ -47,16 +47,11 @@ Do **not** commit these values.
 - Do not commit machine-local state, generated binaries, local databases, or WebView2 runtime data.
 - Prefer adding tests for service-layer and provider-layer changes.
 - For UI refactors, keep WPF `x:Class` and partial class wiring stable unless a larger migration is intentional.
-- When changing `Aire.Setup`, `Aire.Screenshots`, or `Aire.Installer`, run the release-helper smoke items in [docs/development/testing/manual-smoke-checklist.md](./docs/development/testing/manual-smoke-checklist.md).
-- Read the architecture guides before adding a new feature:
-  - [docs/development/architecture/overview.md](./docs/development/architecture/overview.md)
-  - [docs/development/architecture/developer-map.md](./docs/development/architecture/developer-map.md)
-  - [docs/development/architecture/adding-features.md](./docs/development/architecture/adding-features.md)
-  - [docs/development/providers/how-to-add-a-provider.md](./docs/development/providers/how-to-add-a-provider.md)
-  - [docs/development/testing/strategy.md](./docs/development/testing/strategy.md)
-  - [docs/development/testing/manual-smoke-checklist.md](./docs/development/testing/manual-smoke-checklist.md)
-  - [docs/development/security/model.md](./docs/development/security/model.md)
-- Before preparing a public GitHub release, review [docs/development/release/public-repo-checklist.md](./docs/development/release/public-repo-checklist.md).
+- When changing `Aire.Setup`, `Aire.Screenshots`, or `Aire.Installer`, run the release-helper smoke items in [docs/development/handbook.md](./docs/development/handbook.md).
+- Read the handbook before adding a new feature:
+  - [docs/development/handbook.md](./docs/development/handbook.md)
+  - [docs/development/roadmap.md](./docs/development/roadmap.md)
+- Before preparing a public GitHub release, review the release guidance in [docs/development/handbook.md](./docs/development/handbook.md).
 
 ## Pull Requests
 

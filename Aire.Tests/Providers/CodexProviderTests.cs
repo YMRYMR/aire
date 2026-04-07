@@ -265,6 +265,17 @@ public class CodexProviderTests
         Assert.Equal(expected, CodexProvider.IsRetryFollowUp(prompt));
     }
 
+    [Theory]
+    [InlineData("OK", true)]
+    [InlineData(" ok ", true)]
+    [InlineData("NOT OK", false)]
+    [InlineData("OKAY", false)]
+    [InlineData("OK\nextra", false)]
+    public void IsValidationSuccessOutput_RequiresExactTrimmedOK(string output, bool expected)
+    {
+        Assert.Equal(expected, CodexProvider.IsValidationSuccessOutput(output));
+    }
+
     [Fact]
     public void SelectConversationWindow_ForRetryFollowUp_KeepsPreviousUserTask()
     {

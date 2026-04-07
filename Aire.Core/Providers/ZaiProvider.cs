@@ -6,6 +6,7 @@ using OpenAI.Managers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -104,13 +105,42 @@ namespace Aire.Providers
             if (string.IsNullOrWhiteSpace(message))
                 return "Unknown error from z.ai.";
 
+            var original = message;
+            var readable = ProviderErrorClassifier.ExtractReadableMessage(message);
+            if (!string.IsNullOrWhiteSpace(readable))
+                message = readable;
+
             if (message.Contains("Insufficient balance or no resource package", StringComparison.OrdinalIgnoreCase))
             {
                 return "z.ai rejected the request because this account does not currently have access to that model. " +
                        "If your account only has a GLM Coding Plan, use the coding base URL https://api.z.ai/api/coding/paas/v4 and a coding-plan model such as GLM-5.1, GLM-4.7, or GLM-4.5 Air. Otherwise add normal z.ai balance/resource access for GLM-5.1.";
             }
 
-            return "An unexpected error occurred while processing your request through z.ai.";
+            if (message.Contains("OpenAI request failed.", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("OpenAI configuration validation failed.", StringComparison.OrdinalIgnoreCase))
+            {
+                return "An unexpected error occurred while processing your request through z.ai.";
+            }
+
+            var looksZaiSpecific =
+                message.Contains("z.ai", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("glm-", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("resource package", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("billing", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("balance", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("credit", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("quota", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("payment", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("rate limit", StringComparison.OrdinalIgnoreCase);
+
+            if (readable is null && !looksZaiSpecific &&
+                !original.Contains("z.ai", StringComparison.OrdinalIgnoreCase) &&
+                !original.Contains("glm-", StringComparison.OrdinalIgnoreCase))
+            {
+                return "An unexpected error occurred while processing your request through z.ai.";
+            }
+
+            return message;
         }
     }
 }

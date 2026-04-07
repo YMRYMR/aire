@@ -49,6 +49,10 @@ namespace Aire.Services
 
                 return response;
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch
             {
                 ErrorOccurred?.Invoke(this, "An unexpected error occurred.");
@@ -95,6 +99,10 @@ namespace Aire.Services
                     IsSuccess = true
                 });
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch
             {
                 ErrorOccurred?.Invoke(this, "An unexpected error occurred.");
@@ -126,6 +134,10 @@ namespace Aire.Services
                 };
                 ResponseCompleted?.Invoke(this, response);
                 return response;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch
             {
