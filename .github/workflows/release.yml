@@ -55,13 +55,17 @@ jobs:
             if ($null -eq $baseVersion) {
               $baseVersion = [version]'1.0.0'
             }
-            $version = '{0}.{1}.{2}' -f $baseVersion.Major, $baseVersion.Minor, ($baseVersion.Build + 1)
+            $patch = if ($baseVersion.Build -ge 0) { $baseVersion.Build } else { 0 }
+            $version = '{0}.{1}.{2}' -f $baseVersion.Major, $baseVersion.Minor, ($patch + 1)
           }
         } else {
           $version = "${{ github.ref_name }}".TrimStart('v', 'V')
         }
         if ([string]::IsNullOrWhiteSpace($version)) {
           throw "Unable to derive version from trigger."
+        }
+        if (-not (Get-VersionValue $version)) {
+          throw "Version '$version' is invalid. Use a numeric version like 1.2.3."
         }
         "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
