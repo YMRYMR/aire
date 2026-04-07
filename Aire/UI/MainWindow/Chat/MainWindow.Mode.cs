@@ -82,7 +82,7 @@ namespace Aire
             if (_currentConversationId.HasValue)
             {
                 await _conversationApplicationService.UpdateConversationAssistantModeAsync(_currentConversationId.Value, mode.Key);
-                AddSystemMessage(string.Format(
+                await AddSystemMessageAsync(string.Format(
                     LocalizationService.S("main.assistantModeSwitched", "Assistant mode switched to {0}."),
                     mode.DisplayName));
                 if (_sidebarOpen)

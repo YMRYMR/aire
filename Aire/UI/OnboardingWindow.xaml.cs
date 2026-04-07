@@ -107,7 +107,7 @@ namespace Aire.UI
 
             Loaded += (_, _) =>
             {
-                PruneClaudeWebChoices();
+                PruneHiddenProviderChoices();
                 BuildLanguageButtons();
                 DetectAndSelectLanguage();
                 BuildProviderCards();
@@ -350,26 +350,8 @@ namespace Aire.UI
         private static WpfUIElement CreateGroqLogo()
             => CreateTextLogo("⚡", 17, FontWeights.SemiBold);
 
-        private void PruneClaudeWebChoices()
-        {
-            if (ProviderVisibility.ShowClaudeWebProvider)
-                return;
-
-            RemoveProviderChoice(ProviderTypeCombo, "ClaudeWeb");
-        }
-
-        private static void RemoveProviderChoice(System.Windows.Controls.ComboBox comboBox, string tag)
-        {
-            for (int index = comboBox.Items.Count - 1; index >= 0; index--)
-            {
-                if (comboBox.Items[index] is WpfComboBoxItem item &&
-                    item.Tag is string itemTag &&
-                    string.Equals(itemTag, tag, StringComparison.OrdinalIgnoreCase))
-                {
-                    comboBox.Items.RemoveAt(index);
-                }
-            }
-        }
+        private void PruneHiddenProviderChoices()
+            => ProviderChoiceVisibility.PruneHiddenChoices(ProviderTypeCombo);
 
         private static WpfUIElement CreateGoogleAiLogo()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
 namespace Aire
 {
@@ -43,7 +44,12 @@ namespace Aire
             Messages.Add(msg);
         }
 
-        private void AddSystemMessage(string text)
+        private void RemoveFromUI(ChatMessage msg)
+        {
+            Messages.Remove(msg);
+        }
+
+        private async Task AddSystemMessageAsync(string text)
         {
             Messages.Add(new ChatMessage
             {
@@ -55,10 +61,10 @@ namespace Aire
             });
 
             if (_currentConversationId.HasValue)
-                _ = _chatSessionApplicationService.PersistSystemMessageAsync(_currentConversationId.Value, text);
+                await _chatSessionApplicationService.PersistSystemMessageAsync(_currentConversationId.Value, text);
         }
 
-        private void AddErrorMessage(string rawError, string? cooldownMsg = null)
+        private async Task AddErrorMessageAsync(string rawError, string? cooldownMsg = null)
         {
             var display = Aire.Services.ProviderErrorClassifier.ExtractReadableMessage(rawError) ?? rawError;
             var text = cooldownMsg != null ? $"{display}\n\n{cooldownMsg}" : display;
@@ -72,8 +78,11 @@ namespace Aire
             });
 
             if (_currentConversationId.HasValue)
-                _ = _chatSessionApplicationService.PersistSystemMessageAsync(_currentConversationId.Value, text);
+                await _chatSessionApplicationService.PersistSystemMessageAsync(_currentConversationId.Value, text);
         }
+
+        private void AddErrorMessage(string rawError, string? cooldownMsg = null)
+            => _ = AddErrorMessageAsync(rawError, cooldownMsg);
 
         private void ScrollToBottom()
         {

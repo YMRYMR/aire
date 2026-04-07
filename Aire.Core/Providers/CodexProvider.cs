@@ -142,7 +142,7 @@ namespace Aire.Providers
                     if (result.ExitCode != 0)
                         return ProviderValidationResult.Fail($"Codex exited with code {result.ExitCode}.");
 
-                    return result.Output.Contains("OK", StringComparison.OrdinalIgnoreCase)
+                    return IsValidationSuccessOutput(result.Output)
                         ? ProviderValidationResult.Ok()
                         : ProviderValidationResult.Fail("Codex responded but output was unexpected.");
                 }
@@ -391,6 +391,9 @@ namespace Aire.Providers
 
             return retryPhrases.Contains(normalized, StringComparer.Ordinal);
         }
+
+        internal static bool IsValidationSuccessOutput(string? output)
+            => string.Equals(output?.Trim(), "OK", StringComparison.OrdinalIgnoreCase);
 
         private static string TrimForPrompt(string? content, int maxChars)
         {

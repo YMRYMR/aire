@@ -35,9 +35,12 @@ namespace Aire
             }
         }
 
-        private void CancelMouseSession_Click(object sender, RoutedEventArgs e) => EmergencyStopSession();
+        private async void CancelMouseSession_Click(object sender, RoutedEventArgs e) => await EmergencyStopSessionAsync();
 
         private void EmergencyStopSession()
+            => _ = EmergencyStopSessionAsync();
+
+        private async Task EmergencyStopSessionAsync()
         {
             (_toolControlSessionApplicationService
                 ?? new Aire.AppLayer.Tools.ToolControlSessionApplicationService(
@@ -46,7 +49,7 @@ namespace Aire
                         new Aire.Services.Policies.ToolAutoAcceptPolicyService(() => System.Threading.Tasks.Task.FromResult<string?>(UI.SettingsWindow.AutoAcceptJsonCache)))))
                 .Stop();
             UpdateMouseSessionBanner();
-            AddSystemMessage("Session stopped by user.");
+            await AddSystemMessageAsync("Session stopped by user.");
         }
     }
 }

@@ -92,6 +92,17 @@ namespace Aire
                 try
                 {
                     var response = await _owner._chatService.StreamMessageWithHistoryAsync(messages, cancellationToken);
+                    if (!response.IsSuccess)
+                    {
+                        if (streamedMessage != null)
+                            _owner.RemoveFromUI(streamedMessage);
+
+                        if (ShouldFallbackToNonStreaming(response, streamedMessage))
+                            return (await _owner._chatService.SendMessageWithHistoryAsync(messages, cancellationToken), null);
+
+                        return (response, null);
+                    }
+
                     if (ShouldFallbackToNonStreaming(response, streamedMessage))
                         return (await _owner._chatService.SendMessageWithHistoryAsync(messages, cancellationToken), null);
 
@@ -103,6 +114,12 @@ namespace Aire
                     }
 
                     return (response, streamedMessage);
+                }
+                catch (OperationCanceledException)
+                {
+                    if (streamedMessage != null)
+                        _owner.RemoveFromUI(streamedMessage);
+                    throw;
                 }
                 finally
                 {

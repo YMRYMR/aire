@@ -105,9 +105,8 @@ namespace Aire.AppLayer.Chat
                     .ToList();
                 if (imageReferences.Count == 0 &&
                     attachments.Count == 0 &&
-                    msg.ImagePath != null &&
-                    Path.GetExtension(msg.ImagePath).Equals(".png", StringComparison.OrdinalIgnoreCase))
-                    imageReferences = new[] { msg.ImagePath };
+                    IsLegacyImagePath(msg.ImagePath))
+                    imageReferences = new[] { msg.ImagePath! };
 
                 var fileAttachments = attachments
                     .Where(attachment => !attachment.IsImage)
@@ -150,6 +149,20 @@ namespace Aire.AppLayer.Chat
             {
                 return new List<MessageAttachment>();
             }
+        }
+
+        private static bool IsLegacyImagePath(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
+            var extension = Path.GetExtension(path);
+            return extension.Equals(".png", StringComparison.OrdinalIgnoreCase) ||
+                   extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                   extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                   extension.Equals(".gif", StringComparison.OrdinalIgnoreCase) ||
+                   extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase) ||
+                   extension.Equals(".webp", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

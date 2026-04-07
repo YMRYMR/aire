@@ -140,6 +140,10 @@ namespace Aire.Services
 
                 return response;
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception)
             {
                 const string message = "An unexpected error occurred. Please try again.";

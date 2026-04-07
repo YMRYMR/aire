@@ -83,17 +83,24 @@ namespace Aire
         private async void ConversationListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
+            await SwitchConversationAsync(summary);
+        }
+
+        private async Task SwitchConversationAsync(ConversationSummary summary)
+        {
             if (summary.Id == _currentConversationId) return;
-            _currentConversationId = summary.Id;
+            var previousConversationId = _currentConversationId;
             try
             {
                 await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
                 await LoadConversationMessages(summary.Id);
+                _currentConversationId = summary.Id;
             }
             catch (Exception ex)
             {
                 AppLogger.Error("ConversationListBox_SelectionChanged", "Failed to switch chat", ex);
-                AddErrorMessage("Failed to load conversation. The chat history may be unavailable.");
+                _currentConversationId = previousConversationId;
+                await AddErrorMessageAsync("Failed to load conversation. The chat history may be unavailable.");
             }
         }
 

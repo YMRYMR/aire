@@ -109,7 +109,10 @@ Do not commit local databases, generated help screenshots, or user-specific runt
 
 ## Docs
 
-User-facing help lives in the app itself and in the checked-in help assets under `Aire/Assets/Help/`.
+- [Development handbook](./docs/development/handbook.md)
+- [Development roadmap](./docs/development/roadmap.md)
+
+User-facing help currently lives in the app itself and in the checked-in help assets under `Aire/Assets/Help/`.
 
 ## Security
 
