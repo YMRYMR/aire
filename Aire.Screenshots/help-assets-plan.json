@@ -119,6 +119,7 @@
           "delayMs": 400
         },
         {
+          "exactTitle": "Aire",
           "kind": "invoke",
           "automationId": "PART_ToolsButton",
           "delayMs": 300
@@ -134,6 +135,7 @@
       "activateWindow": true,
       "actions": [
         {
+          "exactTitle": "Aire",
           "kind": "invoke",
           "titleContains": "Aire",
           "processName": "Aire",
@@ -141,6 +143,7 @@
           "delayMs": 400
         },
         {
+          "exactTitle": "Aire",
           "kind": "invoke",
           "titleContains": "Aire",
           "processName": "Aire",

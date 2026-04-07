@@ -64,6 +64,9 @@ namespace Aire.UI
                     }
                 }
 
+                if ((_owner.TypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() != plan.Type)
+                    _owner.TypeComboBox.SelectedIndex = -1;
+
                 _owner.ApiKeyPasswordBox.Password = plan.ApiKey;
                 _owner.BaseUrlTextBox.Text = plan.BaseUrl;
                 _owner.ModelComboBox.Text = plan.Model;
@@ -106,7 +109,11 @@ namespace Aire.UI
 
                 _owner._timeoutSaveTimer?.Stop();
 
-                var type = (_owner.TypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "OpenAI";
+                // If the type picker omits the current provider type (for example hidden ClaudeWeb),
+                // preserve the existing provider type instead of falling back to a different one.
+                var type = (_owner.TypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString()
+                    ?? _owner._selectedProvider.Type
+                    ?? "OpenAI";
                 string modelText, modelValue;
                 IEnumerable<(string, string)>? modelMappings;
 

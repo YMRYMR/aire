@@ -23,6 +23,9 @@ public partial class UpdateAvailableDialog : Window
         _update = update ?? throw new ArgumentNullException(nameof(update));
         InitializeComponent();
         FontSize = AppearanceService.FontSize;
+        FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
+            ? System.Windows.FlowDirection.RightToLeft
+            : System.Windows.FlowDirection.LeftToRight;
         AppearanceService.AppearanceChanged += OnThemeChanged;
         Closed += (_, _) => AppearanceService.AppearanceChanged -= OnThemeChanged;
         Loaded += OnLoaded;

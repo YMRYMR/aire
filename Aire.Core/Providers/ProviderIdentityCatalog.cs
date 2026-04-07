@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aire.Providers
 {
@@ -51,6 +52,14 @@ namespace Aire.Providers
                     "Codex",
                     string.Empty,
                     "https://openai.com/codex/",
+                    RequiresApiKey: false,
+                    SupportsSessionCredential: false),
+                ["ClaudeCode"] = new(
+                    "ClaudeCode",
+                    "Claude Code",
+                    "Claude Code",
+                    string.Empty,
+                    "https://docs.anthropic.com/en/docs/claude-code",
                     RequiresApiKey: false,
                     SupportsSessionCredential: false),
                 ["Anthropic"] = new(
@@ -119,7 +128,10 @@ namespace Aire.Providers
                     SupportsSessionCredential: false),
             };
 
-        public static IReadOnlyCollection<ProviderIdentityDescriptor> All => (IReadOnlyCollection<ProviderIdentityDescriptor>)Descriptors.Values;
+        public static IReadOnlyCollection<ProviderIdentityDescriptor> All =>
+            ProviderVisibility.ShowClaudeWebProvider
+                ? (IReadOnlyCollection<ProviderIdentityDescriptor>)Descriptors.Values
+                : Descriptors.Values.Where(descriptor => !ProviderVisibility.IsHiddenFromRelease(descriptor.Type)).ToArray();
 
         public static string NormalizeType(string? type)
         {
@@ -131,6 +143,9 @@ namespace Aire.Providers
             {
                 "openai" => "OpenAI",
                 "codex" => "Codex",
+                "claudecode" => "ClaudeCode",
+                "claude code" => "ClaudeCode",
+                "claude-code" => "ClaudeCode",
                 "anthropic" => "Anthropic",
                 "claudeweb" => "ClaudeWeb",
                 "claude.ai" => "ClaudeWeb",

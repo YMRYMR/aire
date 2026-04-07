@@ -11,6 +11,9 @@ namespace Aire.UI
         {
             InitializeComponent();
             FontSize = Services.AppearanceService.FontSize;
+            FlowDirection = Services.LocalizationService.IsRightToLeftLanguage(Services.LocalizationService.CurrentCode)
+                ? System.Windows.FlowDirection.RightToLeft
+                : System.Windows.FlowDirection.LeftToRight;
             Services.AppearanceService.AppearanceChanged += OnThemeChanged;
             Closed += (_, _) => Services.AppearanceService.AppearanceChanged -= OnThemeChanged;
         }

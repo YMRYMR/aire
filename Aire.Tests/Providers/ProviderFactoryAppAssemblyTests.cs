@@ -73,6 +73,7 @@ public class ProviderFactoryAppAssemblyTests : IAsyncLifetime, IDisposable
     {
         Assert.IsType<ClaudeAiProvider>(ProviderFactory.GetMetadata("Anthropic"));
         Assert.IsType<AireWpf::Aire.Providers.ClaudeWebProvider>(ProviderFactory.GetMetadata("ClaudeWeb"));
+        Assert.IsType<ClaudeCodeProvider>(ProviderFactory.GetMetadata("ClaudeCode"));
         Assert.IsType<PortableOllamaProvider>(ProviderFactory.GetMetadata("Ollama"));
     }
 

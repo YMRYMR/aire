@@ -26,6 +26,7 @@ namespace Aire.UI
 
             foreach (var tabName in tabNames)
             {
+                var displayName = LocalizeTabName(tabName);
                 var border = new Border
                 {
                     Padding = new Thickness(16, 10, 16, 10),
@@ -36,7 +37,7 @@ namespace Aire.UI
                 };
                 var text = new TextBlock
                 {
-                    Text = tabName,
+                    Text = displayName,
                     FontSize = 13,
                     Foreground = GetBrush("TextSecondaryBrush"),
                 };
@@ -123,7 +124,7 @@ namespace Aire.UI
                 {
                     HelpContentPanel.Children.Add(new TextBlock
                     {
-                        Text = section.Tab.ToUpperInvariant(),
+                        Text = LocalizeTabName(section.Tab).ToUpperInvariant(),
                         Foreground = GetBrush("TextSecondaryBrush"),
                         FontSize = 10,
                         FontWeight = FontWeights.SemiBold,
@@ -485,6 +486,18 @@ namespace Aire.UI
         {
             var res = Application.Current.Resources[key];
             return res is Brush b ? b : Brushes.Gray;
+        }
+
+        private static string LocalizeTabName(string tabName)
+        {
+            return tabName switch
+            {
+                "Getting Started" => LocalizationService.S("help.tab.gettingStarted", "Getting Started"),
+                "Tools & Voice" => LocalizationService.S("help.tab.toolsVoice", "Tools & Voice"),
+                "Providers" => LocalizationService.S("help.tab.providers", "Providers"),
+                "Local API" => LocalizationService.S("help.tab.localApi", "Local API"),
+                _ => tabName
+            };
         }
     }
 }

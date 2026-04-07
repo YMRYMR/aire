@@ -26,6 +26,9 @@ namespace Aire.UI
         private void ApplyLocalization()
         {
             Title = LocalizationService.S("login.title", "Login with Claude.ai — Aire");
+            FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
+                ? System.Windows.FlowDirection.RightToLeft
+                : System.Windows.FlowDirection.LeftToRight;
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)

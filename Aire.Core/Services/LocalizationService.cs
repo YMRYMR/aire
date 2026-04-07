@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace Aire.Services
@@ -168,12 +169,62 @@ namespace Aire.Services
             }
             CurrentCode  = code;
             _strings     = data.strings;
-            HelpSections = data.help;
+            HelpSections = ShouldFallbackToEnglishHelp(code, data.help)
+                && _cache.TryGetValue("en", out var english)
+                    ? english.help
+                    : data.help;
             LanguageChanged?.Invoke();
         }
 
         /// <summary>Returns the translation for <paramref name="key"/>, falling back to <paramref name="fallback"/> or the key itself.</summary>
         public static string S(string key, string? fallback = null) =>
             _strings.TryGetValue(key, out var v) && !string.IsNullOrEmpty(v) ? v : fallback ?? key;
+
+        public static bool IsRightToLeftLanguage(string? code = null)
+            => code is not null && RightToLeftLanguageCodes.Contains(code);
+
+        private static bool ShouldFallbackToEnglishHelp(string code, IReadOnlyList<HelpSection> helpSections)
+        {
+            if (code == "en")
+                return false;
+
+            return helpSections.Any(ContainsReplacementCharacters);
+        }
+
+        private static bool ContainsReplacementCharacters(HelpSection section)
+        {
+            return HasReplacementCharacters(section.Type)
+                || HasReplacementCharacters(section.Title)
+                || HasReplacementCharacters(section.Tab)
+                || HasReplacementCharacters(section.Content)
+                || HasReplacementCharacters(section.Intro)
+                || HasReplacementCharacters(section.ImagePath)
+                || HasReplacementCharacters(section.ImageCaption)
+                || HasReplacementCharacters(section.Cols)
+                || HasReplacementCharacters(section.Rows)
+                || HasReplacementCharacters(section.Links?.Select(link => $"{link.Label} {link.Action}"));
+        }
+
+        private static bool HasReplacementCharacters(string? value)
+            => !string.IsNullOrEmpty(value) && value.Contains('\uFFFD');
+
+        private static bool HasReplacementCharacters(IEnumerable<string>? values)
+            => values?.Any(HasReplacementCharacters) == true;
+
+        private static bool HasReplacementCharacters(IEnumerable<IEnumerable<string>>? values)
+            => values?.Any(HasReplacementCharacters) == true;
+
+        private static readonly HashSet<string> RightToLeftLanguageCodes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "ar",
+            "fa",
+            "he",
+            "iw",
+            "ps",
+            "ur",
+            "yi",
+            "dv",
+            "ku",
+        };
     }
 }

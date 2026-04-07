@@ -8,6 +8,7 @@ public sealed class ProviderCatalogTests
     [Theory]
     [InlineData("chatgpt", "OpenAI")]
     [InlineData("claude.ai", "ClaudeWeb")]
+    [InlineData("claude code", "ClaudeCode")]
     [InlineData("Google AI Images", "GoogleAIImage")]
     [InlineData("z.ai", "Zai")]
     public void NormalizeType_MapsKnownAliases(string input, string expected)
@@ -31,6 +32,12 @@ public sealed class ProviderCatalogTests
         Assert.Equal(identity.SupportsSessionCredential, catalog.SupportsSessionCredential);
         Assert.Equal("Zai", ProviderCatalog.CreateRuntimeProvider("Zai").ProviderType);
         Assert.Equal("Zai", ProviderCatalog.CreateMetadataProvider("Zai").ProviderType);
+
+        var claudeCodeIdentity = ProviderIdentityCatalog.GetDescriptor("ClaudeCode");
+        var claudeCodeCatalog = ProviderCatalog.GetDescriptor("ClaudeCode");
+        Assert.Equal(claudeCodeIdentity.Type, claudeCodeCatalog.Type);
+        Assert.Equal("ClaudeCode", ProviderCatalog.CreateRuntimeProvider("ClaudeCode").ProviderType);
+        Assert.Equal("ClaudeCode", ProviderCatalog.CreateMetadataProvider("ClaudeCode").ProviderType);
     }
 
     [Fact]

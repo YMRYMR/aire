@@ -125,7 +125,7 @@ namespace Aire.UI
             Step4Desc.Text = S("onboarding.doneDesc", "Aire is running in your system tray. Click the icon any time to open the chat.");
             StartChattingButton.Content = S("onboarding.startChatting", "Start chatting");
 
-            FlowDirection = LocalizationService.CurrentCode == "ar"
+            FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
                 ? WpfFlowDir.RightToLeft
                 : WpfFlowDir.LeftToRight;
         }
