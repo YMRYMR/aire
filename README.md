@@ -8,7 +8,8 @@ Aire is a Windows desktop AI workspace designed to be easy to use from day one. 
   <img src="Aire/Assets/Help/en/onboarding-provider-picker.png" height="350" alt="Setup wizard — provider selection" />
   &nbsp;&nbsp;
   <img src="Aire/Assets/Help/en/main-chat.png" height="350" alt="Chat window" />
-  &nbsp;&nbsp;
+</p>
+<p align="center">
   <img src="Aire/Assets/Help/en/settings-providers.png" height="350" alt="Provider settings" />
 </p>
 
