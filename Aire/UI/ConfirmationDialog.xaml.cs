@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 
 namespace Aire.UI
@@ -78,7 +79,7 @@ namespace Aire.UI
             if (message != null) dialog.MessageText.Text = message;
 
             dialog.NoButton.Visibility = Visibility.Collapsed;
-            dialog.YesButton.Content   = "OK";
+            dialog.YesButton.Content = Services.LocalizationService.S("confirm.ok", "OK");
 
             dialog.ShowDialog();
         }

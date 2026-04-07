@@ -49,7 +49,7 @@ namespace Aire.UI
             try
             {
                 CapTestResultsBorder.Visibility = Visibility.Collapsed;
-                CapTestStatusText.Text = "Not yet tested";
+                CapTestStatusText.Text = LocalizationService.S("captest.notTested", "Not yet tested");
 
                 var sessionService = _capabilitySessionService ?? new ProviderCapabilityTestSessionService();
                 var session = await sessionService.LoadAsync(
@@ -85,8 +85,8 @@ namespace Aire.UI
             StopTestsButton.Visibility = Visibility.Visible;
             CapTestProgressBorder.Visibility = Visibility.Visible;
             CapTestProgressBar.IsIndeterminate = true;
-            CapTestProgressText.Text = "Validating…";
-            CapTestStatusText.Text = "Running…";
+            CapTestProgressText.Text = LocalizationService.S("captest.validating", "Validating\u2026");
+            CapTestStatusText.Text = LocalizationService.S("captest.running", "Running\u2026");
 
             // Clear the results panel now so rows appear as they arrive.
             CapTestResultsPanel.Children.Clear();
@@ -133,12 +133,12 @@ namespace Aire.UI
             }
             catch (OperationCanceledException)
             {
-                CapTestStatusText.Text = "Tests cancelled.";
+                CapTestStatusText.Text = LocalizationService.S("captest.cancelled", "Tests cancelled.");
             }
             catch
             {
-                ShowToast("Test run failed.", isError: true);
-                CapTestStatusText.Text = "Test run failed.";
+                ShowToast(LocalizationService.S("captest.failed", "Test run failed."), isError: true);
+                CapTestStatusText.Text = LocalizationService.S("captest.failed", "Test run failed.");
             }
             finally
             {
@@ -154,7 +154,7 @@ namespace Aire.UI
         {
             _testCts?.Cancel();
             StopTestsButton.IsEnabled = false;
-            CapTestProgressText.Text = "Cancelling…";
+            CapTestProgressText.Text = LocalizationService.S("captest.cancelling", "Cancelling\u2026");
             // RunTestsButton stays disabled until the finally block in RunTestsButton_Click fires
         }
 
@@ -281,12 +281,14 @@ namespace Aire.UI
 
         private void UpdateTestedAtLabel(DateTime testedAt)
         {
+            var L = LocalizationService.S;
             var ago = DateTime.Now - testedAt;
-            CapTestStatusText.Text = ago.TotalSeconds < 10 ? "Last tested: just now"
-                : ago.TotalMinutes < 1  ? $"Last tested: {(int)ago.TotalSeconds}s ago"
-                : ago.TotalMinutes < 60 ? $"Last tested: {(int)ago.TotalMinutes}m ago"
-                : ago.TotalHours   < 24 ? $"Last tested: {(int)ago.TotalHours}h ago"
-                : $"Last tested: {testedAt:d}";
+            string when = ago.TotalSeconds < 10 ? L("captest.justNow", "just now")
+                : ago.TotalMinutes < 1  ? string.Format(L("captest.secondsAgo", "{0}s ago"), (int)ago.TotalSeconds)
+                : ago.TotalMinutes < 60 ? string.Format(L("captest.minutesAgo", "{0}m ago"), (int)ago.TotalMinutes)
+                : ago.TotalHours   < 24 ? string.Format(L("captest.hoursAgo", "{0}h ago"), (int)ago.TotalHours)
+                : testedAt.ToString("d");
+            CapTestStatusText.Text = string.Format(L("captest.lastTested", "Last tested: {0}"), when);
         }
 
         internal async Task SaveTestResultsAsync(Provider provider, List<CapabilityTestResult> results, DateTime testedAt)

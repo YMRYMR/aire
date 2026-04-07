@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Aire.Providers;
+using Aire.Services;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using MessageBox = System.Windows.MessageBox;
@@ -22,8 +23,15 @@ namespace Aire.UI
             Loaded += OnLoaded;
         }
 
+        private void ApplyLocalization()
+        {
+            Title = LocalizationService.S("login.title", "Login with Claude.ai — Aire");
+        }
+
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+            ApplyLocalization();
+
             try
             {
                 if (_webView == null)
@@ -35,10 +43,9 @@ namespace Aire.UI
             }
             catch (Exception)
             {
-                ConfirmationDialog.ShowAlert(this, "WebView2 Required",
-                    "The WebView2 runtime is required but not installed.\n\n" +
-                    "Download it from: https://developer.microsoft.com/en-us/microsoft-edge/webview2/\n\n" +
-                    "Unable to initialize the login window. Please try again or restart the application.");
+                ConfirmationDialog.ShowAlert(this,
+                    LocalizationService.S("login.webview2Title", "WebView2 Required"),
+                    LocalizationService.S("login.webview2Message", "The WebView2 runtime is required but not installed.\n\nDownload it from: https://developer.microsoft.com/en-us/microsoft-edge/webview2/\n\nUnable to initialize the login window. Please try again or restart the application."));
                 Close();
             }
         }
@@ -54,11 +61,11 @@ namespace Aire.UI
             var sessionCookie = cookies.FirstOrDefault(c => c.Name == "sessionKey");
             if (sessionCookie == null || string.IsNullOrEmpty(sessionCookie.Value))
             {
-                StatusText.Text = "Waiting for login…";
+                StatusText.Text = LocalizationService.S("login.waiting", "Waiting for login…");
                 return;
             }
 
-            StatusText.Text = "Logged in — setting up session…";
+            StatusText.Text = LocalizationService.S("login.success", "Logged in — setting up session…");
 
             // Copy cookies into the session's own permanent WebView2, then this
             // window (and its WebView2) can be safely disposed.

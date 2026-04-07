@@ -24,7 +24,7 @@ namespace Aire.UI
         private void AddMcpBtn_Click(object sender, RoutedEventArgs e)
         {
             McpNameBox.Text = McpCommandBox.Text = McpArgsBox.Text = McpWorkDirBox.Text = McpEnvVarsBox.Text = string.Empty;
-            McpEditTitle.Text = "Add MCP server";
+            McpEditTitle.Text = Services.LocalizationService.S("mcp.addTitle", "Add MCP server");
             _editingMcpVm = null;
             McpEditPanel.Visibility = Visibility.Visible;
         }
@@ -37,7 +37,7 @@ namespace Aire.UI
             var installed = _mcpCatalogApplicationService.FindInstalledConfig(vm.Key, _mcpVms.Select(entry => entry.Model));
             if (installed != null)
             {
-                if (MessageBox.Show($"Remove '{installed.Name}'?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                if (MessageBox.Show(string.Format(Services.LocalizationService.S("mcp.removeConfirm", "Remove '{0}'?"), installed.Name), Services.LocalizationService.S("confirm.title", "Confirm"), MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                     return;
 
                 McpManager.Instance.StopSingle(installed.Name);
@@ -78,7 +78,7 @@ namespace Aire.UI
             }
 
             _editingMcpVm = vm;
-            McpEditTitle.Text = $"Edit {vm.Name}";
+            McpEditTitle.Text = string.Format(Services.LocalizationService.S("mcp.editTitle", "Edit {0}"), vm.Name);
             McpNameBox.Text = vm.Model.Name;
             McpCommandBox.Text = vm.Model.Command;
             McpArgsBox.Text = vm.Model.Arguments;
@@ -95,7 +95,7 @@ namespace Aire.UI
                 return;
             }
 
-            if (MessageBox.Show($"Remove '{vm.Name}'?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (MessageBox.Show(string.Format(Services.LocalizationService.S("mcp.removeConfirm", "Remove '{0}'?"), vm.Name), Services.LocalizationService.S("confirm.title", "Confirm"), MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
                 return;
             }
@@ -137,7 +137,7 @@ namespace Aire.UI
             var config = BuildMcpConfigFromForm();
             if (string.IsNullOrWhiteSpace(config.Name) || string.IsNullOrWhiteSpace(config.Command))
             {
-                McpTestResult.Text = "Name and command are required.";
+                McpTestResult.Text = Services.LocalizationService.S("mcp.fieldsRequired", "Name and command are required.");
                 return;
             }
 
@@ -196,7 +196,7 @@ namespace Aire.UI
 
         private async void TestMcpBtn_Click(object sender, RoutedEventArgs e)
         {
-            McpTestResult.Text = "Starting...";
+            McpTestResult.Text = Services.LocalizationService.S("mcp.starting", "Starting...");
             var config = BuildMcpConfigFromForm();
             try
             {
@@ -206,11 +206,11 @@ namespace Aire.UI
                 await client.InitializeAsync(cts.Token);
                 var tools = await client.ListToolsAsync(cts.Token);
                 client.Stop();
-                McpTestResult.Text = $"\u2713 Connected \u2014 {tools.Count} tool{(tools.Count == 1 ? "" : "s")} available";
+                McpTestResult.Text = string.Format(Services.LocalizationService.S("mcp.connected", "\u2713 Connected \u2014 {0} tool(s) available"), tools.Count);
             }
             catch
             {
-            McpTestResult.Text = "\u2717 Connection failed.";
+            McpTestResult.Text = Services.LocalizationService.S("mcp.connectionFailed", "\u2717 Connection failed.");
             }
         }
 

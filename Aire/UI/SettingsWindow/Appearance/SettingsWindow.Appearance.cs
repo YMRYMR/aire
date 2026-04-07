@@ -345,20 +345,20 @@ namespace Aire.UI
             }
 
             System.Windows.Clipboard.SetText(token);
-            ShowToast("API token copied to clipboard.");
+            ShowToast(LocalizationService.S("toast.tokenCopied", "API token copied to clipboard."));
         }
 
         private void RegenerateApiAccessTokenButton_Click(object sender, RoutedEventArgs e)
         {
             if (!ConfirmationDialog.ShowCentered(this,
-                title: "Regenerate API token?",
-                message: "Existing local tools will stop working until they use the new token."))
+                title: LocalizationService.S("settings.regenerateToken", "Regenerate API token?"),
+                message: LocalizationService.S("settings.regenerateTokenMsg", "Existing local tools will stop working until they use the new token.")))
             {
                 return;
             }
 
             ApiAccessTokenBox.Text = AppState.RegenerateApiAccessToken();
-            ShowToast("API token regenerated.");
+            ShowToast(LocalizationService.S("toast.tokenRegenerated", "API token regenerated."));
         }
 
         private void FontSizeDecrease_Click(object sender, RoutedEventArgs e)

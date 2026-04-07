@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using Aire.Services;
 
 namespace Aire.UI
 {
@@ -12,6 +13,8 @@ namespace Aire.UI
             InitializeComponent();
             PromptText.Text  = prompt;
             InputBox.Text    = initialValue;
+            CancelButton.Content = LocalizationService.S("input.cancel", "Cancel");
+            OKButton.Content = LocalizationService.S("input.ok", "OK");
             InputBox.Focus();
             InputBox.SelectAll();
         }

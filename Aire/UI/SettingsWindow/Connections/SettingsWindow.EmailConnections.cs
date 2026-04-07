@@ -25,8 +25,10 @@ namespace Aire.UI
             EmailUsernameBox.Text = account.Username;
             EmailPasswordBox.Password = string.Empty;
             OAuthStatusText.Text = account.UseOAuth && !string.IsNullOrEmpty(_editingOAuthRefreshToken)
-                ? "\u2713 Authorized" : string.Empty;
-            EmailEditTitle.Text = isNew ? "Add email account" : "Edit email account";
+                ? LocalizationService.S("email.authorized", "\u2713 Authorized") : string.Empty;
+            EmailEditTitle.Text = isNew
+                ? LocalizationService.S("email.addTitle", "Add email account")
+                : LocalizationService.S("email.editTitle", "Edit email account");
 
             foreach (ComboBoxItem item in EmailProviderCombo.Items)
             {
@@ -103,7 +105,7 @@ namespace Aire.UI
                 return;
             }
 
-            if (System.Windows.MessageBox.Show($"Delete '{vm.DisplayName}'?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (System.Windows.MessageBox.Show(string.Format(LocalizationService.S("email.deleteConfirm", "Delete '{0}'?"), vm.DisplayName), LocalizationService.S("confirm.title", "Confirm"), MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
                 return;
             }
@@ -114,24 +116,24 @@ namespace Aire.UI
 
         private async void SignInWithGoogleBtn_Click(object sender, RoutedEventArgs e)
         {
-            OAuthStatusText.Text = "Opening browser...";
+            OAuthStatusText.Text = LocalizationService.S("email.openingBrowser", "Opening browser...");
             try
             {
                 var result = await GoogleOAuthService.AuthorizeAsync();
                 _editingOAuthRefreshToken = result.RefreshToken;
-                OAuthStatusText.Text = "\u2713 Authorized";
+                OAuthStatusText.Text = LocalizationService.S("email.authorized", "\u2713 Authorized");
                 OAuthStatusText.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(60, 179, 113));
             }
             catch
             {
-            OAuthStatusText.Text = "\u2717 Connection failed.";
+            OAuthStatusText.Text = LocalizationService.S("email.connectionFailed", "\u2717 Connection failed.");
                 OAuthStatusText.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(204, 51, 51));
             }
         }
 
         private async void TestEmailConnBtn_Click(object sender, RoutedEventArgs e)
         {
-            EmailTestResult.Text = "Testing...";
+            EmailTestResult.Text = LocalizationService.S("email.testing", "Testing...");
             var account = BuildEmailAccountFromForm();
             if (!account.UseOAuth)
             {
@@ -140,7 +142,7 @@ namespace Aire.UI
 
             var svc = new EmailService(account);
             var (ok, error) = await svc.TestConnectionAsync();
-            EmailTestResult.Text = ok ? "\u2713 Connected" : $"\u2717 {error}";
+            EmailTestResult.Text = ok ? LocalizationService.S("email.connected", "\u2713 Connected") : $"\u2717 {error}";
             EmailTestResult.Foreground = ok
                 ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(60, 179, 113))
                 : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(204, 51, 51));
@@ -156,13 +158,13 @@ namespace Aire.UI
 
             if (string.IsNullOrWhiteSpace(account.DisplayName) || string.IsNullOrWhiteSpace(account.Username))
             {
-                EmailTestResult.Text = "Display name and email address are required.";
+                EmailTestResult.Text = LocalizationService.S("email.fieldsRequired", "Display name and email address are required.");
                 return;
             }
 
             if (account.UseOAuth && string.IsNullOrEmpty(_editingOAuthRefreshToken))
             {
-                EmailTestResult.Text = "Sign in with Google first.";
+                EmailTestResult.Text = LocalizationService.S("email.signInFirst", "Sign in with Google first.");
                 return;
             }
 

@@ -26,7 +26,7 @@ namespace Aire.UI
         {
             CodexInstallButton.IsEnabled = false;
             CodexInstallProgressBar.Visibility = Visibility.Visible;
-            CodexInstallStatus.Text = "Installing Codex CLI…";
+            CodexInstallStatus.Text = LocalizationService.S("onboard.installingCodex", "Installing Codex CLI\u2026");
 
             try
             {
@@ -54,7 +54,7 @@ namespace Aire.UI
             {
                 CodexInstallButton.Visibility = Visibility.Collapsed;
                 CodexInstallProgressBar.Visibility = Visibility.Collapsed;
-                CodexInstallStatus.Text = "Codex CLI detected. You can test the connection now.";
+                CodexInstallStatus.Text = LocalizationService.S("onboard.codexDetected", "Codex CLI detected. You can test the connection now.");
                 return;
             }
 
@@ -92,8 +92,9 @@ namespace Aire.UI
 
                     if (result.IsDuplicate)
                     {
-                        ConfirmationDialog.ShowAlert(this, "Already configured",
-                            $"A provider of type '{ProviderDisplayName(result.ProviderType)}' with model '{result.Model}' already exists.\n\nYou can manage providers in Settings.");
+                        ConfirmationDialog.ShowAlert(this,
+                            LocalizationService.S("onboard.alreadyConfigured", "Already configured"),
+                            LocalizationService.S("onboard.alreadyConfigMsg", "This provider is already configured. Edit it in Settings."));
                         return;
                     }
                 }
