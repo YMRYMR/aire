@@ -50,6 +50,12 @@ namespace Aire.UI.Settings.Controls
         public TextBlock McpTipText            => PART_McpTipText;
         public Border    McpEditPanel          => PART_McpEditPanel;
         public TextBlock McpEditTitle          => PART_McpEditTitle;
+        public TextBlock McpInstalledServersTitle => PART_McpInstalledServersTitle;
+        public TextBlock McpNameLabel          => PART_McpNameLabel;
+        public TextBlock McpCommandLabel       => PART_McpCommandLabel;
+        public TextBlock McpArgsLabel          => PART_McpArgsLabel;
+        public TextBlock McpWorkDirLabel       => PART_McpWorkDirLabel;
+        public TextBlock McpEnvVarsLabel       => PART_McpEnvVarsLabel;
         public TextBox   McpNameBox            => PART_McpNameBox;
         public TextBox   McpCommandBox         => PART_McpCommandBox;
         public TextBox   McpArgsBox            => PART_McpArgsBox;

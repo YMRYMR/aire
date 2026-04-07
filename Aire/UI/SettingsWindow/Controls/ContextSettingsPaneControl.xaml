@@ -18,7 +18,8 @@
                        Margin="0 0 0 20" />
 
             <!-- ── History ───────────────────────────────────────────── -->
-            <TextBlock Text="HISTORY"
+            <TextBlock x:Name="PART_ContextHistoryHeader"
+                       Text="HISTORY"
                        Foreground="{DynamicResource TextSecondaryBrush}"
                        FontSize="10"
                        FontWeight="SemiBold"
@@ -39,7 +40,8 @@
                                Text="Window size"
                                Foreground="{DynamicResource TextBrush}"
                                FontSize="12" />
-                    <TextBlock Text="Maximum messages sent to the provider per turn"
+                    <TextBlock x:Name="PART_MaxMessagesSubLabel"
+                               Text="Maximum messages sent to the provider per turn"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
                                Margin="0 2 0 0"
@@ -64,7 +66,8 @@
                                Text="Anchor messages"
                                Foreground="{DynamicResource TextBrush}"
                                FontSize="12" />
-                    <TextBlock Text="Early messages always kept, even when trimming older history"
+                    <TextBlock x:Name="PART_AnchorMessagesSubLabel"
+                               Text="Early messages always kept, even when trimming older history"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
                                Margin="0 2 0 0"
@@ -79,7 +82,8 @@
             </Grid>
 
             <!-- ── Caching ──────────────────────────────────────────── -->
-            <TextBlock Text="CACHING"
+            <TextBlock x:Name="PART_ContextCachingHeader"
+                       Text="CACHING"
                        Foreground="{DynamicResource TextSecondaryBrush}"
                        FontSize="10"
                        FontWeight="SemiBold"
@@ -96,10 +100,12 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock Text="Prompt caching"
+                    <TextBlock x:Name="PART_PromptCachingLabel"
+                               Text="Prompt caching"
                                Foreground="{DynamicResource TextBrush}"
                                FontSize="12" />
-                    <TextBlock Text="Mark stable prefixes cache-friendly when the provider supports it"
+                    <TextBlock x:Name="PART_PromptCachingSubLabel"
+                               Text="Mark stable prefixes cache-friendly when the provider supports it"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
                                Margin="0 2 0 0"
@@ -123,7 +129,8 @@
                                Text="Uncached tail"
                                Foreground="{DynamicResource TextBrush}"
                                FontSize="12" />
-                    <TextBlock Text="Most recent messages always sent fresh, never cache-marked"
+                    <TextBlock x:Name="PART_UncachedRecentMessagesSubLabel"
+                               Text="Most recent messages always sent fresh, never cache-marked"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
                                Margin="0 2 0 0"
@@ -138,7 +145,8 @@
             </Grid>
 
             <!-- ── Summaries ────────────────────────────────────────── -->
-            <TextBlock Text="SUMMARIES"
+            <TextBlock x:Name="PART_ContextSummariesHeader"
+                       Text="SUMMARIES"
                        Foreground="{DynamicResource TextSecondaryBrush}"
                        FontSize="10"
                        FontWeight="SemiBold"
@@ -155,10 +163,12 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock Text="Auto-summarise"
+                    <TextBlock x:Name="PART_AutoSummariseLabel"
+                               Text="Auto-summarise"
                                Foreground="{DynamicResource TextBrush}"
                                FontSize="12" />
-                    <TextBlock Text="Condense trimmed turns into a brief summary kept in context"
+                    <TextBlock x:Name="PART_AutoSummariseSubLabel"
+                               Text="Condense trimmed turns into a brief summary kept in context"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
                                Margin="0 2 0 0"
@@ -182,7 +192,8 @@
                                Text="Summary limit"
                                Foreground="{DynamicResource TextBrush}"
                                FontSize="12" />
-                    <TextBlock Text="Maximum characters the condensed summary may occupy"
+                    <TextBlock x:Name="PART_SummaryMaxCharactersSubLabel"
+                               Text="Maximum characters the condensed summary may occupy"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
                                Margin="0 2 0 0"

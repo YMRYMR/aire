@@ -7,6 +7,7 @@
         xmlns:mw="clr-namespace:Aire.UI.MainWindow.Controls"
         xmlns:data="clr-namespace:Aire.Data;assembly=Aire.Core"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        xmlns:l="clr-namespace:Aire.Services"
         mc:Ignorable="d"
         Title="Aire"
         Height="620"
@@ -94,19 +95,8 @@
                           x:Name="MessagesScrollViewer"
                       VerticalScrollBarVisibility="Auto"
                       Padding="12 8"
-                      Background="{DynamicResource BackgroundBrush}">
-            <ScrollViewer.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Find...  Ctrl+F" Click="FindMenuItem_Click" />
-                    <Separator />
-                    <MenuItem Header="Save chat as text..." Click="SaveChatText_Click" />
-                    <MenuItem Header="Copy chat as text" Click="CopyChatText_Click" />
-                    <Separator />
-                    <MenuItem Header="Clear conversation" Click="ClearChatMenuItem_Click" />
-                    <Separator />
-                    <MenuItem Header="Restore original window sizes" Click="RestoreWindowSizes_Click" />
-                </ContextMenu>
-            </ScrollViewer.ContextMenu>
+                      Background="{DynamicResource BackgroundBrush}"
+                      ContextMenuOpening="MessagesScrollViewer_ContextMenuOpening">
             <ItemsControl x:Name="MessagesItemsControl"
                           Background="Transparent"
                           ItemsSource="{Binding Messages}">

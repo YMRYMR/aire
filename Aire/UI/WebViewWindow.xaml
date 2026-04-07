@@ -105,26 +105,26 @@
                              KeyDown="UrlBar_KeyDown"
                              GotFocus="UrlBar_GotFocus" />
 
-                    <Button Grid.Column="4"
+                    <Button Grid.Column="4" x:Name="NewTabButton"
                             Content="+" ToolTip="New tab  (Ctrl+T)"
                             Width="30" Height="30" Padding="0"
                             FontSize="16"
                             Margin="6 0 0 0"
                             Click="NewTabButton_Click" />
 
-                    <Button Grid.Column="5"
+                    <Button Grid.Column="5" x:Name="CloseAllTabsButton"
                             Content="⊗" ToolTip="Close all tabs"
                             Width="30" Height="30" Padding="0"
                             Margin="3 0 0 0"
                             Click="CloseAllTabsButton_Click" />
 
-                    <Button Grid.Column="6"
+                    <Button Grid.Column="6" x:Name="OpenExternalButton"
                             Content="⤴" ToolTip="Open current page in default browser"
                             Width="30" Height="30" Padding="0"
                             Margin="3 0 0 0"
                             Click="OpenExternalButton_Click" />
 
-                    <Button Grid.Column="7"
+                    <Button Grid.Column="7" x:Name="CloseButton"
                             Content="✕" ToolTip="Close browser"
                             Width="30" Height="30" Padding="0"
                             Margin="3 0 0 0"

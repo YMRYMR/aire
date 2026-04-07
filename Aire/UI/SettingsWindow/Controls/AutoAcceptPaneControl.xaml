@@ -5,7 +5,7 @@
                   HorizontalScrollBarVisibility="Disabled"
                   Margin="0 8 0 0">
         <StackPanel x:Name="PART_AutoAcceptSection"
-                    Margin="4 8 4 16" MaxWidth="480" HorizontalAlignment="Left">
+                    Margin="4 8 4 16" HorizontalAlignment="Stretch">
             <TextBlock x:Name="PART_ProfileLabel"
                        Text="Profile"
                        Foreground="{DynamicResource TextSecondaryBrush}"
@@ -43,12 +43,14 @@
                     Padding="10 8"
                     Margin="0 0 0 16">
                 <StackPanel>
-                    <TextBlock Text="⚠  Caution"
+                    <TextBlock x:Name="PART_AutoAcceptCautionTitle"
+                               Text="⚠  Caution"
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource TextBrush}"
                                FontSize="12"
                                Margin="0 0 0 3" />
-                    <TextBlock Text="Letting AIs act unsupervised can be dangerous. Only enable tools you fully understand."
+                    <TextBlock x:Name="PART_AutoAcceptCautionText"
+                               Text="Letting AIs act unsupervised can be dangerous. Only enable tools you fully understand."
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="12"
                                TextWrapping="Wrap" />
@@ -63,7 +65,8 @@
 
             <Separator Height="1" Background="{DynamicResource BorderBrush}" Margin="0 0 0 12" />
 
-            <TextBlock Text="Select which tools can be executed without confirmation:"
+            <TextBlock x:Name="PART_AutoAcceptInstructionText"
+                       Text="Select which tools can be executed without confirmation:"
                        Foreground="{DynamicResource TextSecondaryBrush}"
                        FontSize="11"
                        Margin="0 0 0 6" />
@@ -78,7 +81,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="Web / Browser" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 2" />
+                    <TextBlock x:Name="PART_AutoAcceptWebBrowserHeader" Text="Web / Browser" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptOpenUrlCheckBox" Content="Browse web (fetch URL)" ToolTip="Fetches a web page and returns its text to the AI. Read-only and generally safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptHttpRequestCheckBox" Content="HTTP request" ToolTip="Sends an arbitrary HTTP request (GET, POST, PUT, DELETE, etc.) to any URL. Can submit forms, call APIs, or trigger side effects on remote servers." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptOpenBrowserTabCheckBox" Content="Open browser tab" ToolTip="Opens a URL in the Aire browser window, which is visible to you. Generally safe." Margin="0 4 0 0" />
@@ -89,13 +92,13 @@
                     <CheckBox x:Name="PART_AutoAcceptGetBrowserHtmlCheckBox" Content="Get browser HTML" ToolTip="Returns the raw HTML source of an open browser tab. Read-only and safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptExecuteBrowserScriptCheckBox" Content="Execute browser script" ToolTip="Runs arbitrary JavaScript in an open browser tab. High risk — can read cookies, submit forms, or interact with any page element." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptGetBrowserCookiesCheckBox" Content="Get browser cookies" ToolTip="Reads cookies from an open browser tab. Can expose session tokens and authentication credentials." Margin="0 4 0 0" />
-                    <TextBlock Text="Commands" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
+                    <TextBlock x:Name="PART_AutoAcceptCommandsHeader" Text="Commands" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptExecuteCommandCheckBox" Content="Execute command" ToolTip="Runs a shell command or launches any installed application without asking you first. High risk — only enable if you trust the AI to run commands autonomously." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptReadCommandOutputCheckBox" Content="Read command output" ToolTip="Reads the output of a previously started background process. Generally safe." Margin="0 4 0 0" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="2">
-                    <TextBlock Text="File System" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 2" />
+                    <TextBlock x:Name="PART_AutoAcceptFileSystemHeader" Text="File System" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptListFilesCheckBox" Content="List files" ToolTip="Lists the contents of a folder. Read-only and safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptReadFileCheckBox" Content="Read file" ToolTip="Opens and reads the contents of a file. Read-only and safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptSearchFilesCheckBox" Content="Search files" ToolTip="Searches for files by name pattern inside a folder. Read-only and safe." Margin="0 4 0 0" />
@@ -106,7 +109,7 @@
                     <CheckBox x:Name="PART_AutoAcceptDeleteFileCheckBox" Content="Delete file" ToolTip="Permanently deletes a file. High risk — deleted files may not be recoverable." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptMoveFileCheckBox" Content="Move / rename file" ToolTip="Moves or renames a file or folder. Can overwrite existing files at the destination." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptOpenFileCheckBox" Content="Open file" ToolTip="Opens a file with its default application (e.g. opens a PDF in your PDF viewer). Safe." Margin="0 4 0 0" />
-                    <TextBlock Text="System / Clipboard" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
+                    <TextBlock x:Name="PART_AutoAcceptSystemClipboardHeader" Text="System / Clipboard" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptGetClipboardCheckBox" Content="Get clipboard" ToolTip="Reads the current clipboard contents. Can expose sensitive data you have copied." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptSetClipboardCheckBox" Content="Set clipboard" ToolTip="Overwrites your clipboard with AI-generated text. Safe, but replaces whatever you had copied." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptNotifyCheckBox" Content="Show notification" ToolTip="Displays a system notification. Safe." Margin="0 4 0 0" />
@@ -117,16 +120,16 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="4">
-                    <TextBlock Text="Memory" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 2" />
+                    <TextBlock x:Name="PART_AutoAcceptMemoryHeader" Text="Memory" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 0 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptRememberCheckBox" Content="Remember" ToolTip="Saves a key-value pair to the AI's persistent memory store. Safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptRecallCheckBox" Content="Recall" ToolTip="Reads a value from the AI's persistent memory store. Read-only and safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptSetReminderCheckBox" Content="Set reminder" ToolTip="Schedules a reminder notification to appear after a delay. Safe." Margin="0 4 0 0" />
-                    <TextBlock Text="Email" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" Visibility="Collapsed" />
+                    <TextBlock x:Name="PART_AutoAcceptEmailHeader" Text="Email" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" Visibility="Collapsed" />
                     <CheckBox x:Name="PART_AutoAcceptReadEmailsCheckBox" Content="Read emails" ToolTip="Reads emails from your connected mail account. Can expose private correspondence." Margin="0 4 0 0" Visibility="Collapsed" />
                     <CheckBox x:Name="PART_AutoAcceptSearchEmailsCheckBox" Content="Search emails" ToolTip="Searches your mailbox for matching messages. Read-only." Margin="0 4 0 0" Visibility="Collapsed" />
                     <CheckBox x:Name="PART_AutoAcceptSendEmailCheckBox" Content="Send email" ToolTip="Composes and sends an email on your behalf. High risk — emails are delivered immediately and may be irreversible." Margin="0 4 0 0" Visibility="Collapsed" />
                     <CheckBox x:Name="PART_AutoAcceptReplyToEmailCheckBox" Content="Reply to email" ToolTip="Sends a reply to an existing email thread. High risk — same as send email." Margin="0 4 0 0" Visibility="Collapsed" />
-                    <TextBlock Text="AI / Task flow" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
+                    <TextBlock x:Name="PART_AutoAcceptAiTaskFlowHeader" Text="AI / Task flow" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptNewTaskCheckBox" Content="Create new task" ToolTip="Starts a new sub-task. The AI may chain many tool calls inside it without further prompts." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptAskFollowupQuestionCheckBox" Content="Ask follow-up question" ToolTip="The AI pauses to ask you a clarifying question before continuing. Generally safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptAttemptCompletionCheckBox" Content="Mark task as complete" ToolTip="The AI signals it has finished the current task and presents a summary. Safe." Margin="0 4 0 0" />
@@ -135,7 +138,7 @@
                     <CheckBox x:Name="PART_AutoAcceptSwitchModelCheckBox" Content="Switch model" ToolTip="Switches to a different AI model or provider mid-conversation. Generally safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptUpdateTodoListCheckBox" Content="Update to-do list" ToolTip="Adds, updates, or checks off items in the task to-do list. Safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptShowImageCheckBox" Content="Show image" ToolTip="Displays an image from a file path or URL in the chat. Safe." Margin="0 4 0 0" />
-                    <TextBlock Text="Mouse / Keyboard" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
+                    <TextBlock x:Name="PART_AutoAcceptMouseKeyboardHeader" Text="Mouse / Keyboard" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0 12 0 2" />
                     <CheckBox x:Name="PART_AutoAcceptMouseToolsCheckBox" Content="Mouse tools (move, click, scroll)" ToolTip="Moves the cursor and clicks anywhere on screen. High risk — can interact with any application or UI element without you seeing it first." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptKeyboardToolsCheckBox" Content="Keyboard tools (type text, key combos)" ToolTip="Types text or presses key combinations into the focused window. High risk — can send input to any application." Margin="0 4 0 0" />
                 </StackPanel>

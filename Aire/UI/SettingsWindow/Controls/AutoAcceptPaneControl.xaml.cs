@@ -71,6 +71,17 @@ namespace Aire.UI.Settings.Controls
         public CheckBox AutoAcceptShowImageCheckBox => PART_AutoAcceptShowImageCheckBox;
         public CheckBox AutoAcceptMouseToolsCheckBox => PART_AutoAcceptMouseToolsCheckBox;
         public CheckBox AutoAcceptKeyboardToolsCheckBox => PART_AutoAcceptKeyboardToolsCheckBox;
+        public TextBlock AutoAcceptCautionTitle => PART_AutoAcceptCautionTitle;
+        public TextBlock AutoAcceptCautionText => PART_AutoAcceptCautionText;
+        public TextBlock AutoAcceptInstructionText => PART_AutoAcceptInstructionText;
+        public TextBlock AutoAcceptWebBrowserHeader => PART_AutoAcceptWebBrowserHeader;
+        public TextBlock AutoAcceptCommandsHeader => PART_AutoAcceptCommandsHeader;
+        public TextBlock AutoAcceptFileSystemHeader => PART_AutoAcceptFileSystemHeader;
+        public TextBlock AutoAcceptSystemClipboardHeader => PART_AutoAcceptSystemClipboardHeader;
+        public TextBlock AutoAcceptMemoryHeader => PART_AutoAcceptMemoryHeader;
+        public TextBlock AutoAcceptEmailHeader => PART_AutoAcceptEmailHeader;
+        public TextBlock AutoAcceptAiTaskFlowHeader => PART_AutoAcceptAiTaskFlowHeader;
+        public TextBlock AutoAcceptMouseKeyboardHeader => PART_AutoAcceptMouseKeyboardHeader;
 
         public event RoutedEventHandler? AutoAcceptEnabledChanged;
         public event RoutedEventHandler? ApplyProfileClicked;

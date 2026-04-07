@@ -11,6 +11,8 @@ public partial class WebViewWindow
 {
     private void OnWindowLoaded(object sender, RoutedEventArgs e)
     {
+        ApplyLocalization();
+
         var (savedTabs, activeIdx) = LoadSavedTabUrls();
 
         if (savedTabs.Length > 0)
