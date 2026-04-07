@@ -12,6 +12,9 @@ namespace Aire.UI
         public SessionPanicButton()
         {
             InitializeComponent();
+            FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
+                ? System.Windows.FlowDirection.RightToLeft
+                : System.Windows.FlowDirection.LeftToRight;
             ApplyLocalization();
             LocalizationService.LanguageChanged += OnLanguageChanged;
 

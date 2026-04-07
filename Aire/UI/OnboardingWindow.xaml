@@ -177,6 +177,7 @@
                 <ComboBoxItem Content="Groq" Tag="Groq" />
                 <ComboBoxItem Content="OpenRouter" Tag="OpenRouter" />
                 <ComboBoxItem Content="Codex (local CLI bridge)" Tag="Codex" />
+                <ComboBoxItem Content="Claude Code (local CLI bridge)" Tag="ClaudeCode" />
                 <ComboBoxItem Content="Anthropic API" Tag="Anthropic" />
                 <ComboBoxItem Content="Claude.ai (browser sign-in)" Tag="ClaudeWeb" />
                 <ComboBoxItem Content="Google AI" Tag="GoogleAI" />

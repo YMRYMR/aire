@@ -202,6 +202,7 @@
                                             <ComboBoxItem Content="Groq (free tier, fast)" Tag="Groq" />
                                             <ComboBoxItem Content="OpenRouter (100+ models, free tier)" Tag="OpenRouter" />
                                             <ComboBoxItem Content="Codex (local CLI bridge)" Tag="Codex" />
+                                            <ComboBoxItem Content="Claude Code (local CLI bridge)" Tag="ClaudeCode" />
                                             <ComboBoxItem Content="Google AI" Tag="GoogleAI" />
                                             <ComboBoxItem Content="Google AI Images" Tag="GoogleAIImage" />
                                             <ComboBoxItem Content="Anthropic API" Tag="Anthropic" />

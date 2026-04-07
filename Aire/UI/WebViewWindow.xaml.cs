@@ -90,6 +90,9 @@ public partial class WebViewWindow : Window
     private void ApplyLocalization()
     {
         var L = LocalizationService.S;
+        FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
+            ? System.Windows.FlowDirection.RightToLeft
+            : System.Windows.FlowDirection.LeftToRight;
         Title = L("browser.title", "Aire — Browser");
         BackButton.ToolTip = L("browser.back", "Back");
         ForwardButton.ToolTip = L("browser.forward", "Forward");

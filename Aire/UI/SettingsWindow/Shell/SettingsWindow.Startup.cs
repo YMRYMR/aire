@@ -20,6 +20,7 @@ namespace Aire.UI
         public SettingsWindow(SpeechSynthesisService? ttsService = null)
         {
             InitializeComponent();
+            PruneClaudeWebChoices();
             _databaseService = new DatabaseService();
             _mcpCatalogApplicationService = new McpCatalogApplicationService();
             _mcpConfigApplicationService = new McpConfigApplicationService(_databaseService);

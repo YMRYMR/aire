@@ -86,6 +86,23 @@ public class ProviderFactoryTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
+    public void CreateProvider_ClaudeCode_ReturnsClaudeCodeProvider()
+    {
+        Provider providerConfig = new Provider
+        {
+            Id = 12,
+            Type = "ClaudeCode",
+            Model = "claude-sonnet-4-5",
+            ApiKey = null,
+            Color = "#000000",
+            Name = "Claude Code"
+        };
+        IAiProvider aiProvider = _factory.CreateProvider(providerConfig);
+        Assert.IsType<ClaudeCodeProvider>(aiProvider);
+        Assert.Equal("ClaudeCode", aiProvider.ProviderType);
+    }
+
+    [Fact]
     public void CreateProvider_MercuryType_ThrowsNotSupportedException()
     {
         Provider config = new Provider

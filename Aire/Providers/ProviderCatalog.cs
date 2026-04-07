@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aire.Data;
 
 namespace Aire.Providers
@@ -28,6 +29,7 @@ namespace Aire.Providers
                 ["Groq"] = CreateDescriptor("Groq", static () => new GroqProvider(), static () => new GroqProvider()),
                 ["OpenRouter"] = CreateDescriptor("OpenRouter", static () => new OpenRouterProvider(), static () => new OpenRouterProvider()),
                 ["Codex"] = CreateDescriptor("Codex", static () => new CodexProvider(), static () => new CodexProvider()),
+                ["ClaudeCode"] = CreateDescriptor("ClaudeCode", static () => new ClaudeCodeProvider(), static () => new ClaudeCodeProvider()),
                 ["Anthropic"] = CreateDescriptor("Anthropic", static () => new ClaudeAiProvider(), static () => new ClaudeAiProvider()),
                 ["ClaudeWeb"] = CreateDescriptor("ClaudeWeb", static () => new ClaudeWebProvider(), static () => new ClaudeWebProvider()),
                 ["GoogleAI"] = CreateDescriptor("GoogleAI", static () => new GoogleAiProvider(), static () => new GoogleAiProvider()),
@@ -38,7 +40,10 @@ namespace Aire.Providers
                 ["Zai"] = CreateDescriptor("Zai", static () => new ZaiProvider(), static () => new ZaiProvider()),
             };
 
-        public static IReadOnlyCollection<ProviderDescriptor> All => (IReadOnlyCollection<ProviderDescriptor>)Descriptors.Values;
+        public static IReadOnlyCollection<ProviderDescriptor> All =>
+            ProviderVisibility.ShowClaudeWebProvider
+                ? (IReadOnlyCollection<ProviderDescriptor>)Descriptors.Values
+                : Descriptors.Values.Where(descriptor => !ProviderVisibility.IsHiddenFromRelease(descriptor.Type)).ToArray();
 
         public static string NormalizeType(string? type)
             => ProviderIdentityCatalog.NormalizeType(type);
