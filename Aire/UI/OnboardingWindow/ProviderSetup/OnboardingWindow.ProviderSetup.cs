@@ -102,6 +102,7 @@ namespace Aire.UI
         {
             if (sender is not System.Windows.Controls.Button btn) return;
             var type = btn.Tag as string ?? "OpenAI";
+            var descriptor = ProviderCatalog.GetDescriptor(type);
 
             foreach (WpfComboBoxItem item in ProviderTypeCombo.Items)
             {
@@ -114,7 +115,7 @@ namespace Aire.UI
 
             GoToStep(3);
 
-            if (type != "Ollama" && type != "ClaudeWeb")
+            if (descriptor.RequiresApiKey)
                 ApiKeyBox.Focus();
             else
                 ProviderNameBox.Focus();
@@ -170,7 +171,7 @@ namespace Aire.UI
                 else
                     ApiKeyLink.Visibility = Visibility.Collapsed;
                 UpdateVisitProviderButton();
-                var models = ModelCatalog.GetDefaults(type == "ClaudeWeb" ? "Anthropic" : type);
+                var models = ModelCatalog.GetDefaults(type is "ClaudeWeb" or "ClaudeCode" ? "Anthropic" : type);
                 BindStandardModels(models);
                 ClearTestResult();
             }

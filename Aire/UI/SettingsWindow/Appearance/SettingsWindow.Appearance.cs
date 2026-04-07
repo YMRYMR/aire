@@ -43,12 +43,12 @@ namespace Aire.UI
 
             TitleText.Text = L("settings.title", "Settings — Aire");
             CloseButton.ToolTip = L("tooltip.close", "Close");
-            TabProviders.Header = L("settings.aiProviders", "AI Providers");
-            TabAppearance.Header = L("settings.appearance", "Appearance");
-            TabVoice.Header = L("settings.voiceOutput", "Voice");
-            TabContext.Header = L("settings.context", "Context");
-            TabAutoAccept.Header = L("settings.autoAccept", "Auto-accept");
-            TabConnections.Header = L("settings.connections", "Connections");
+            TabProviders.Header = L("settings.tab.providers", "AI Providers");
+            TabAppearance.Header = L("settings.tab.appearance", "Appearance");
+            TabVoice.Header = L("settings.tab.voice", "Voice");
+            TabContext.Header = L("settings.tab.context", "Context");
+            TabAutoAccept.Header = L("settings.tab.autoAccept", "Auto-accept");
+            TabConnections.Header = L("settings.tab.connections", "Connections");
             BrightnessLabel.Text = L("settings.brightness", "Brightness");
             ColorTintLabel.Text = L("settings.colorTint", "Color tint");
             NeutralLeftLabel.Text = L("settings.neutralLeft", "← Neutral");
@@ -104,6 +104,9 @@ namespace Aire.UI
             SummaryMaxCharactersSubLabel.Text = L("settings.contextSummaryMaxCharactersDescription", "Maximum characters the condensed summary may occupy");
             ContextHintText.Text = L("settings.contextHint", "System messages and anchor turns are always kept. Cached prefixes only reduce cost on providers that explicitly support prompt caching.");
             RestoreDefaultsButton.Content = L("settings.contextRestoreDefaults", "Restore defaults");
+            FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
+                ? System.Windows.FlowDirection.RightToLeft
+                : System.Windows.FlowDirection.LeftToRight;
 
             // Auto-accept
             AutoAcceptCautionTitle.Text = L("settings.autoAcceptCautionTitle", "⚠  Caution");

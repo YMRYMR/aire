@@ -11,6 +11,9 @@ namespace Aire.UI
         public SimpleInputDialog(string prompt, string initialValue = "")
         {
             InitializeComponent();
+            FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
+                ? System.Windows.FlowDirection.RightToLeft
+                : System.Windows.FlowDirection.LeftToRight;
             PromptText.Text  = prompt;
             InputBox.Text    = initialValue;
             CancelButton.Content = LocalizationService.S("input.cancel", "Cancel");

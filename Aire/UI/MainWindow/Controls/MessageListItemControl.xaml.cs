@@ -151,7 +151,12 @@ namespace Aire.UI.MainWindow.Controls
                 ? (TryFindResource("UserMessageTextBrush") as System.Windows.Media.Brush ?? MessageText.Foreground)
                 : (TryFindResource("AssistantMessageTextBrush") as System.Windows.Media.Brush ?? MessageText.Foreground);
 
-            MessageText.Visibility = string.IsNullOrEmpty(msg.Text) ? Visibility.Collapsed : Visibility.Visible;
+            var hasText = !string.IsNullOrEmpty(msg.Text);
+            var usePlainText = hasText && ShouldUsePlainText(msg.Text);
+
+            MessageText.Visibility = hasText && !usePlainText ? Visibility.Visible : Visibility.Collapsed;
+            PlainMessageText.Foreground = MessageText.Foreground;
+            PlainMessageText.Visibility = usePlainText ? Visibility.Visible : Visibility.Collapsed;
             ToolApprovalPanel.Visibility = msg.IsApprovalPending ? Visibility.Visible : Visibility.Collapsed;
             ToolCallDescriptionText.Visibility = msg.IsApprovalPending ? Visibility.Visible : Visibility.Collapsed;
             ToolCallStatusText.Visibility = msg.HasToolCallStatus ? Visibility.Visible : Visibility.Collapsed;
@@ -167,6 +172,27 @@ namespace Aire.UI.MainWindow.Controls
             MessageBorder.BorderBrush = msg.IsSearchMatch
                 ? new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#5A6070"))
                 : null;
+        }
+
+        private static bool ShouldUsePlainText(string text)
+        {
+            if (text.IndexOf('\n') >= 0 || text.IndexOf('\r') >= 0)
+                return false;
+
+            if (text.Contains("```", StringComparison.Ordinal) ||
+                text.Contains("**", StringComparison.Ordinal) ||
+                text.Contains('*') ||
+                text.Contains('`') ||
+                text.Contains("[", StringComparison.Ordinal) ||
+                text.Contains("](", StringComparison.Ordinal) ||
+                text.Contains("http://", StringComparison.OrdinalIgnoreCase) ||
+                text.Contains("https://", StringComparison.OrdinalIgnoreCase) ||
+                text.Contains("file:///", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

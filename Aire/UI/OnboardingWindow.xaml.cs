@@ -71,10 +71,10 @@ namespace Aire.UI
         private ModelDefinition?       _preStandardModelFilterSelection;
         private static readonly string[][] ProviderRows =
         [
-            ["OpenAI", "Codex", "Ollama"],
+            ["OpenAI", "Codex", "Groq"],
             ["Anthropic", "ClaudeWeb", "OpenRouter"],
-            ["DeepSeek", "Zai", "Inception"],
-            ["GoogleAI", "GoogleAIImage", "Groq"]
+            ["Ollama", "DeepSeek", "Zai"],
+            ["Inception", "GoogleAI", "GoogleAIImage", "ClaudeCode"]
         ];
 
         private sealed record ProviderCardDefinition(
@@ -107,6 +107,7 @@ namespace Aire.UI
 
             Loaded += (_, _) =>
             {
+                PruneClaudeWebChoices();
                 BuildLanguageButtons();
                 DetectAndSelectLanguage();
                 BuildProviderCards();
@@ -126,7 +127,7 @@ namespace Aire.UI
 
             Dictionary<string, ProviderCardDefinition> cards = GetProviderCardDefinitions();
 
-            foreach (string tag in ProviderRows.SelectMany(row => row))
+            foreach (string tag in ProviderRows.SelectMany(row => row).Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)))
             {
                 if (cards.TryGetValue(tag, out ProviderCardDefinition? card))
                 {
@@ -147,12 +148,14 @@ namespace Aire.UI
                 .Where(button => button.Tag is string)
                 .ToDictionary(button => (string)button.Tag, button => (WpfUIElement)button, StringComparer.Ordinal);
 
-            if (ProviderRows.Any(row => row.Any(tag => !cardsByTag.ContainsKey(tag))))
+            if (ProviderRows.Any(row => row.Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)).Any(tag => !cardsByTag.ContainsKey(tag))))
             {
                 return;
             }
 
             var shuffledRows = ProviderRows
+                .Select(row => row.Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)).ToArray())
+                .Where(row => row.Length > 0)
                 .OrderBy(_ => Random.Shared.Next())
                 .ToArray();
 
@@ -174,6 +177,7 @@ namespace Aire.UI
             {
                 ["OpenAI"]       = new("OpenAI",       "OpenAI",          L("onboarding.provider.openai.subtitle",      "GPT-4o, o3 & more"),        "#10A37F", CreateOpenAiLogo),
                 ["Codex"]        = new("Codex",        "Codex",           L("onboarding.provider.codex.subtitle",       "Local CLI bridge"),          "#0F172A", CreateCodexLogo),
+                ["ClaudeCode"]   = new("ClaudeCode",   "Claude Code",     L("onboarding.provider.claudecode.subtitle",   "Local CLI bridge"),          "#111111", CreateClaudeLogo),
                 ["Ollama"]       = new("Ollama",       "Ollama",          L("onboarding.provider.ollama.subtitle",      "Local, free, private"),      "#5A5A5A", CreateOllamaLogo),
                 ["Anthropic"]    = new("Anthropic",    "Anthropic API",   L("onboarding.provider.anthropic.subtitle",   "Claude Sonnet, Haiku"),      "#D97757", CreateAnthropicLogo),
                 ["ClaudeWeb"]    = new("ClaudeWeb",    "Claude.ai",       L("onboarding.provider.claudeweb.subtitle",   "Browser sign-in"),           "#111111", CreateClaudeLogo),
@@ -345,6 +349,27 @@ namespace Aire.UI
 
         private static WpfUIElement CreateGroqLogo()
             => CreateTextLogo("⚡", 17, FontWeights.SemiBold);
+
+        private void PruneClaudeWebChoices()
+        {
+            if (ProviderVisibility.ShowClaudeWebProvider)
+                return;
+
+            RemoveProviderChoice(ProviderTypeCombo, "ClaudeWeb");
+        }
+
+        private static void RemoveProviderChoice(System.Windows.Controls.ComboBox comboBox, string tag)
+        {
+            for (int index = comboBox.Items.Count - 1; index >= 0; index--)
+            {
+                if (comboBox.Items[index] is WpfComboBoxItem item &&
+                    item.Tag is string itemTag &&
+                    string.Equals(itemTag, tag, StringComparison.OrdinalIgnoreCase))
+                {
+                    comboBox.Items.RemoveAt(index);
+                }
+            }
+        }
 
         private static WpfUIElement CreateGoogleAiLogo()
         {
