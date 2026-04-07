@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number (e.g. 1.0.3)'
-        required: true
+        description: 'Version number (e.g. 1.0.3). Leave blank to auto-bump the next patch version.'
+        required: false
 
 permissions:
   contents: write
@@ -29,13 +29,41 @@ jobs:
       id: version
       shell: pwsh
       run: |
+        function Get-VersionValue([string]$value) {
+          if ([string]::IsNullOrWhiteSpace($value)) {
+            return $null
+          }
+          $clean = $value.Trim().TrimStart('v', 'V')
+          try {
+            return [version]$clean
+          } catch {
+            return $null
+          }
+        }
+
         if ("${{ github.event_name }}" -eq "workflow_dispatch") {
-          $version = "${{ github.event.inputs.version }}".TrimStart('v', 'V')
+          $manualVersion = "${{ github.event.inputs.version }}".Trim()
+          if (-not [string]::IsNullOrWhiteSpace($manualVersion)) {
+            $version = $manualVersion.TrimStart('v', 'V')
+          } else {
+            [xml]$props = Get-Content -LiteralPath 'Directory.Build.props' -Raw
+            $currentVersion = Get-VersionValue $props.Project.PropertyGroup.Version
+            $latestTag = git tag --list 'v*' | ForEach-Object { Get-VersionValue $_ } | Where-Object { $_ -ne $null } | Sort-Object -Descending | Select-Object -First 1
+            $baseVersion = @($currentVersion, $latestTag) | Where-Object { $_ -ne $null } | Sort-Object -Descending | Select-Object -First 1
+            if ($null -eq $baseVersion) {
+              $baseVersion = [version]'1.0.0'
+            }
+            $patch = if ($baseVersion.Build -ge 0) { $baseVersion.Build } else { 0 }
+            $version = '{0}.{1}.{2}' -f $baseVersion.Major, $baseVersion.Minor, ($patch + 1)
+          }
         } else {
           $version = "${{ github.ref_name }}".TrimStart('v', 'V')
         }
         if ([string]::IsNullOrWhiteSpace($version)) {
           throw "Unable to derive version from trigger."
+        }
+        if (-not (Get-VersionValue $version)) {
+          throw "Version '$version' is invalid. Use a numeric version like 1.2.3."
         }
         "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
@@ -44,6 +72,10 @@ jobs:
       shell: pwsh
       run: |
         $version = "${{ steps.version.outputs.version }}"
+        git rev-parse -q --verify "refs/tags/v$version" *> $null
+        if ($LASTEXITCODE -eq 0) {
+          throw "Version v$version already exists. Leave the version blank to auto-bump or choose a different version."
+        }
         git config user.name  "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git tag "v$version"
