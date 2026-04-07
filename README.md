@@ -5,14 +5,17 @@
 Aire is a Windows desktop AI workspace designed to be easy to use from day one. It lets you talk to different AI providers from one chat window, keep local conversation history, approve or deny tool use, connect MCP servers, use voice features, and expose a loopback local API for trusted local automation.
 
 <p align="center">
-  <img src="Aire/Assets/Help/en/main-chat.png" width="48%" alt="Chat window" />
+  <img src="Aire/Assets/Help/en/main-chat.png" height="350" alt="Chat window" />
   &nbsp;&nbsp;
-  <img src="Aire/Assets/Help/en/settings-providers.png" width="48%" alt="Provider settings" />
+  <img src="Aire/Assets/Help/en/settings-providers.png" height="350" alt="Provider settings" />
 </p>
 <p align="center">
-  <img src="Aire/Assets/Help/en/settings-appearance.png" width="48%" alt="Appearance settings" />
+  <img src="Aire/Assets/Help/en/main-chat-tools.png" height="350" alt="Tool use" />
   &nbsp;&nbsp;
-  <img src="Aire/Assets/Help/en/onboarding-provider-picker.png" width="48%" alt="Setup wizard — provider selection" />
+  <img src="Aire/Assets/Help/en/onboarding-provider-picker.png" height="350" alt="Setup wizard — provider selection" />
+</p>
+<p align="center">
+  <img src="Aire/Assets/Help/en/main-chat-modes.png" height="350" alt="Assistant modes" />
 </p>
 
 ## What Aire does
@@ -78,7 +81,6 @@ If you are not sure where to start:
 - `Aire.Setup/`: first-run accessibility and preference bootstrapper
 - `Aire.Tests/`: automated tests
 - `Aire.Screenshots/`: repeatable help/documentation screenshot automation
-- `docs/development/`: architecture, testing, release, and contributor notes
 
 ## Build
 
@@ -113,9 +115,7 @@ Do not commit local databases, generated help screenshots, or user-specific runt
 
 ## Docs
 
-- [Development docs](./docs/development/README.md)
-
-User-facing help currently lives in the app itself and in the checked-in help assets under `Aire/Assets/Help/`.
+User-facing help lives in the app itself and in the checked-in help assets under `Aire/Assets/Help/`.
 
 ## Security
 
@@ -127,6 +127,17 @@ User-facing help currently lives in the app itself and in the checked-in help as
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE).
+
+## AI contributors welcome
+
+This project is AI-friendly. Approximately 99.99% of the code in this repository was written by AI models, and AI contributors are actively welcome.
+
+AIs can work on this project fully autonomously:
+
+- **Local API**: Aire exposes a loopback API on `127.0.0.1:51234`. AIs can use it to send messages, switch providers and models, and inspect app state without requiring a human in the loop.
+- **UI screenshots**: The `Aire.Screenshots` project captures repeatable screenshots of the running app and writes them to `Aire/Assets/Help/en/`. AIs can run it to observe the current UI, verify visual changes, and fix UI issues by themselves — no human review needed between iterations.
+
+See [Aire.Screenshots/README.md](./Aire.Screenshots/README.md) for instructions on capturing screenshots programmatically.
 
 ## Credits
 
