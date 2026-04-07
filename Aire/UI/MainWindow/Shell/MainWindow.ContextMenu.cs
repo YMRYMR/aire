@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using Aire.Services;
 
 namespace Aire
@@ -62,6 +63,9 @@ namespace Aire
             
             // Set the context menu
             MessagesScrollViewer.ContextMenu = menu;
+            menu.PlacementTarget = MessagesScrollViewer;
+            menu.Placement = PlacementMode.MousePoint;
+            menu.IsOpen = true;
             e.Handled = true;
         }
         
