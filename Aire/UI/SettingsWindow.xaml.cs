@@ -121,6 +121,27 @@ namespace Aire.UI
                 ["codex-install"]  = InstallOllamaButton,
             };
 
+        private void PruneClaudeWebChoices()
+        {
+            if (ProviderVisibility.ShowClaudeWebProvider)
+                return;
+
+            RemoveProviderChoice(TypeComboBox, "ClaudeWeb");
+        }
+
+        private static void RemoveProviderChoice(System.Windows.Controls.ComboBox comboBox, string tag)
+        {
+            for (int index = comboBox.Items.Count - 1; index >= 0; index--)
+            {
+                if (comboBox.Items[index] is ComboBoxItem item &&
+                    item.Tag is string itemTag &&
+                    string.Equals(itemTag, tag, StringComparison.OrdinalIgnoreCase))
+                {
+                    comboBox.Items.RemoveAt(index);
+                }
+            }
+        }
+
         // ── Capability Tests ─────────────────────────────────────────────────
 
         /// <summary>

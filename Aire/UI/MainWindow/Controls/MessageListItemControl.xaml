@@ -45,9 +45,24 @@
                     CornerRadius="14 14 14 4"
                     Padding="12 8"
                     Background="{DynamicResource AssistantMessageBrush}"
+                    HorizontalAlignment="Left"
                     MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer}, Path=ActualWidth, Converter={StaticResource PercentageConverter}, ConverterParameter=0.7}">
-                <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
                     <ItemsControl x:Name="InlineImagesPanel"
+                                  Grid.Row="0"
                                   ItemsSource="{Binding InlineImages}"
                                   Visibility="Collapsed"
                                   Margin="0 0 0 6">
@@ -66,6 +81,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     <Image x:Name="AttachedImageElement"
+                           Grid.Row="1"
                            Source="{Binding AttachedImage, Mode=OneWay}"
                            Visibility="Collapsed"
                            MaxWidth="280"
@@ -77,12 +93,13 @@
                            ToolTip="Click to open in image viewer"
                            MouseLeftButtonUp="AttachedImageElement_MouseLeftButtonUp" />
                     <ItemsControl x:Name="FileAttachmentsPanel"
+                                  Grid.Row="2"
                                   ItemsSource="{Binding FileAttachments}"
                                   Visibility="Collapsed"
                                   Margin="0 0 0 6">
                         <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Button Content="{Binding DisplayLabel}"
+                            <DataTemplate>
+                                <Button Content="{Binding DisplayLabel}"
                                         Margin="0 0 0 6"
                                         Padding="10 4"
                                         HorizontalAlignment="Left"
@@ -91,10 +108,11 @@
                                         AutomationProperties.HelpText="Open attached file"
                                         ToolTip="{Binding FilePath}"
                                         Click="FileAttachmentButton_Click" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                     <RichTextBox x:Name="MessageText"
+                                 Grid.Row="3"
                                  ui:LinkedText.Text="{Binding Text}"
                                  Foreground="{DynamicResource AssistantMessageTextBrush}"
                                  IsReadOnly="True"
@@ -103,47 +121,80 @@
                                  BorderThickness="0"
                                  Background="Transparent"
                                  Padding="0"
+                                 MinWidth="0"
                                  SelectionBrush="{DynamicResource PrimaryHoverBrush}"
                                  VerticalScrollBarVisibility="Disabled"
                                  HorizontalScrollBarVisibility="Disabled"
                                  IsTabStop="False"
+                                 HorizontalAlignment="Left"
                                  Cursor="IBeam"
                                  FocusVisualStyle="{x:Null}" />
+                    <TextBox x:Name="PlainMessageText"
+                             Grid.Row="3"
+                             Text="{Binding Text, Mode=OneWay}"
+                             Foreground="{DynamicResource AssistantMessageTextBrush}"
+                             FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                             TextWrapping="Wrap"
+                             Visibility="Collapsed"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             HorizontalContentAlignment="Left"
+                             VerticalContentAlignment="Top"
+                             Cursor="IBeam"
+                             Margin="0"
+                             Padding="0"
+                             MinWidth="0"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             IsReadOnly="True"
+                             IsReadOnlyCaretVisible="False"
+                             IsTabStop="False"
+                             Focusable="True"
+                             VerticalScrollBarVisibility="Disabled"
+                             HorizontalScrollBarVisibility="Disabled"
+                             FocusVisualStyle="{x:Null}" />
                     <TextBox x:Name="ToolCallDescriptionText"
+                             Grid.Row="4"
                              Text="{Binding PendingToolCall.Description, Mode=OneWay}"
                              Visibility="Collapsed"
                              Foreground="{DynamicResource TextBrush}"
                              FontSize="12"
                              TextWrapping="Wrap"
                              Margin="0 4 0 0"
+                             MinWidth="0"
                              IsReadOnly="True"
                              BorderThickness="0"
                              Background="Transparent"
                              Padding="0"
                              VerticalContentAlignment="Top"
+                             HorizontalAlignment="Left"
                              Focusable="True"
                              Cursor="IBeam"
                              IsReadOnlyCaretVisible="False"
                              VerticalScrollBarVisibility="Hidden"
                              HorizontalScrollBarVisibility="Disabled" />
                     <TextBox x:Name="ToolCallStatusText"
+                             Grid.Row="5"
                              Text="{Binding ToolCallStatus, Mode=OneWay}"
                              Visibility="Collapsed"
                              Foreground="{DynamicResource TextSecondaryBrush}"
                              FontSize="11"
                              TextWrapping="Wrap"
                              Margin="0 4 0 0"
+                             MinWidth="0"
                              IsReadOnly="True"
                              BorderThickness="0"
                              Background="Transparent"
                              Padding="0"
                              VerticalContentAlignment="Top"
+                             HorizontalAlignment="Left"
                              Focusable="True"
                              Cursor="IBeam"
                              IsReadOnlyCaretVisible="False"
                              VerticalScrollBarVisibility="Hidden"
                              HorizontalScrollBarVisibility="Disabled" />
                     <Border x:Name="TodoListPanel"
+                            Grid.Row="6"
                             Visibility="Collapsed"
                             Margin="0 6 0 0">
                         <ItemsControl ItemsSource="{Binding TodoItems}">
@@ -180,12 +231,14 @@
                         </ItemsControl>
                     </Border>
                     <Border x:Name="FollowUpPanel"
+                            Grid.Row="7"
                             Visibility="Collapsed"
                             Margin="0 6 0 0">
                         <StackPanel>
                             <TextBlock Text="{Binding FollowUpQuestion}"
                                        TextWrapping="Wrap"
                                        FontWeight="SemiBold"
+                                       HorizontalAlignment="Left"
                                        Margin="0 0 0 8" />
                             <ItemsControl x:Name="AnswerButtonsPanel"
                                           ItemsSource="{Binding FollowUpOptions}"
@@ -206,6 +259,7 @@
                         </StackPanel>
                     </Border>
                     <Image x:Name="ScreenshotImageElement"
+                           Grid.Row="8"
                            Source="{Binding ScreenshotImage, Mode=OneWay}"
                            Visibility="Collapsed"
                            MaxWidth="400"
@@ -216,12 +270,13 @@
                            Cursor="Hand"
                            ToolTip="Click to open in image viewer"
                            MouseLeftButtonUp="ScreenshotImageElement_MouseLeftButtonUp" />
-                    <TextBlock Text="{Binding Timestamp}"
+                    <TextBlock Grid.Row="9"
+                               Text="{Binding Timestamp}"
                                FontSize="10"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                HorizontalAlignment="Right"
                                Margin="0 3 0 0" />
-                </StackPanel>
+                </Grid>
             </Border>
             <StackPanel x:Name="ToolApprovalPanel"
                         Visibility="Collapsed"

@@ -227,6 +227,9 @@ namespace Aire
                 warningText.Text = L("warning.largeFile", "⚠ Large file — provider may reject");
 
             Resources["PlaceholderSearchText"] = L("placeholder.search", "Search…");
+            FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
+                ? System.Windows.FlowDirection.RightToLeft
+                : System.Windows.FlowDirection.LeftToRight;
 
             // Re-resolve the current mode display name in the new language so the
             // mode button label and tooltip reflect the active language immediately.

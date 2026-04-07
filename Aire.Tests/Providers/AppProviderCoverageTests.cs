@@ -131,6 +131,30 @@ public class AppProviderCoverageTests
     }
 
     [Fact]
+    public void ClaudeCodeProvider_MetadataAndFailurePaths_Work()
+    {
+        var seededFolder = SeedModelsFolder();
+        try
+        {
+            var provider = new ClaudeCodeProvider();
+            provider.Initialize(new ProviderConfig { Model = "claude-sonnet-4-5" });
+
+            Assert.Equal("ClaudeCode", provider.ProviderType);
+            Assert.Equal("Claude Code", provider.DisplayName);
+            Assert.False(provider.FieldHints.ShowApiKey);
+            Assert.False(provider.FieldHints.ApiKeyRequired);
+            Assert.False(provider.FieldHints.ShowBaseUrl);
+            Assert.NotNull(provider.GetDefaultModels());
+            Assert.NotEmpty(provider.GetDefaultModels());
+            Assert.NotNull(ClaudeCodeProvider.GetCliStatus());
+        }
+        finally
+        {
+            ClearModelsFolder(seededFolder);
+        }
+    }
+
+    [Fact]
     public async Task OllamaProvider_MetadataInitializationAndOfflineValidation_Work()
     {
         string? originalEnv = Environment.GetEnvironmentVariable("OLLAMA_API_KEY");

@@ -17,6 +17,7 @@ namespace Aire.AppLayer.Providers
             => new IProviderAdapter[]
             {
                 new CodexCliAdapter(),
+                new ClaudeCodeAdapter(),
                 new OpenAiCompatibleAdapter(),
                 new GoogleAiAdapter(),
                 new AnthropicAdapter(),

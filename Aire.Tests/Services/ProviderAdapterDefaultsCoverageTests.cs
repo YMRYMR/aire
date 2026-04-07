@@ -8,6 +8,7 @@ public sealed class ProviderAdapterDefaultsCoverageTests
 {
     [Theory]
     [InlineData("Codex", typeof(CodexCliAdapter))]
+    [InlineData("ClaudeCode", typeof(ClaudeCodeAdapter))]
     [InlineData("OpenAI", typeof(OpenAiCompatibleAdapter))]
     [InlineData("Groq", typeof(OpenAiCompatibleAdapter))]
     [InlineData("OpenRouter", typeof(OpenAiCompatibleAdapter))]
