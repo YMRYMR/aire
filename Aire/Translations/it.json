@@ -600,6 +600,20 @@
         {
             "tab": "Getting Started",
             "type": "text",
+            "title": "Lingua",
+            "links": [
+                {
+                    "label": "Configura la tua prima IA",
+                    "action": "settings:appearance"
+                }
+            ],
+            "imagePath": "Assets/Help/settings-language.png",
+            "imageCaption": "Il selettore della lingua in Impostazioni → Aspetto.",
+            "content": "Apri Impostazioni (⚙) → Aspetto e scorri fino alla sezione Lingua.\n\nFai clic sul menu a discesa e scegli una delle lingue disponibili. L’app si aggiorna immediatamente, senza bisogno di riavviare.\n\nLa lingua viene salvata automaticamente e ripristinata al successivo avvio. Puoi anche cambiarla dal primo passaggio della procedura guidata di configurazione."
+        },
+        {
+            "tab": "Getting Started",
+            "type": "text",
             "title": "Icona del vassoio",
             "content": "Aire viene eseguito nella barra delle applicazioni (angolo in basso a destra della barra delle applicazioni).\n\n• Fare clic con il pulsante sinistro o destro del mouse sull'icona nella barra delle applicazioni per aprire la finestra di chat.\n• Fare clic con il pulsante destro del mouse sull'icona nella barra delle applicazioni per le opzioni: Apri, Impostazioni, Esci.\n• Chiudendo la finestra la si nasconde: Aire continua a funzionare in background.\n• Per uscire completamente, fare clic con il pulsante destro del mouse sull'icona nella barra delle applicazioni e scegliere Esci."
         },

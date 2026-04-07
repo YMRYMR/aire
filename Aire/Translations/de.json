@@ -600,6 +600,20 @@
         {
             "tab": "Getting Started",
             "type": "text",
+            "title": "Sprache",
+            "links": [
+                {
+                    "label": "Richten Sie Ihre erste KI ein",
+                    "action": "settings:appearance"
+                }
+            ],
+            "imagePath": "Assets/Help/settings-language.png",
+            "imageCaption": "Die Sprachauswahl unter Einstellungen → Aussehen.",
+            "content": "Öffnen Sie Einstellungen (⚙) → Aussehen und scrollen Sie zum Abschnitt Sprache.\n\nKlicken Sie auf das Dropdown-Menü und wählen Sie eine der verfügbaren Sprachen. Die App aktualisiert sich sofort - kein Neustart erforderlich.\n\nDie Sprache wird automatisch gespeichert und beim nächsten Start wiederhergestellt. Sie können sie auch im ersten Schritt des Einrichtungsassistenten ändern."
+        },
+        {
+            "tab": "Getting Started",
+            "type": "text",
             "title": "Tray-Symbol",
             "content": "Aire wird in der Taskleiste (unten rechts in der Taskleiste) ausgeführt.\n\n• Klicken Sie mit der linken oder rechten Maustaste auf das Taskleistensymbol, um das Chatfenster zu öffnen.\n• Klicken Sie mit der rechten Maustaste auf das Taskleistensymbol, um folgende Optionen anzuzeigen: Öffnen, Einstellungen, Beenden.\n• Durch Schließen des Fensters wird es ausgeblendet – Aire läuft im Hintergrund weiter.\n• Um den Vorgang vollständig zu beenden, klicken Sie mit der rechten Maustaste auf das Taskleistensymbol und wählen Sie „Beenden“."
         },

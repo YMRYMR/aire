@@ -178,6 +178,28 @@
       ]
     },
     {
+      "outputPath": "Aire/Assets/Help/settings-language.png",
+      "titleContains": "Settings",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "select",
+          "automationId": "TabAppearance",
+          "controlType": "tabitem",
+          "delayMs": 300
+        },
+        {
+          "kind": "scroll-into-view",
+          "automationId": "PART_LanguageComboBox",
+          "controlType": "combobox",
+          "delayMs": 300
+        }
+      ]
+    },
+    {
       "outputPath": "Aire/Assets/Help/settings-voice.png",
       "titleContains": "Settings",
       "processName": "Aire",

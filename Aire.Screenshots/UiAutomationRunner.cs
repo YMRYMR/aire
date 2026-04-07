@@ -63,6 +63,11 @@ internal static class UiAutomationRunner
                 await DelayIfNeededAsync(action);
                 return;
 
+            case "scrollintoview":
+                ScrollIntoView(action, defaultWindow);
+                await DelayIfNeededAsync(action);
+                return;
+
             case "closewindow":
                 CloseWindow(BuildWindowSelector(action, defaultWindow));
                 await DelayIfNeededAsync(action);
@@ -116,7 +121,7 @@ internal static class UiAutomationRunner
                 UseActiveWindow: false,
                 Actions: null);
 
-            if (!NativeWindowFinder.TryGetWindow(request, out var window))
+            if (!NativeWindowFinder.TryGetWindow(request, out var window) || window is null)
                 return; // No update window found
 
             // Activate the window (already done by TryGetWindow? Not necessarily)
@@ -129,13 +134,11 @@ internal static class UiAutomationRunner
             // Find the CloseButton (X) or LaterButton
             var closeButton = root.FindFirst(TreeScope.Descendants,
                 new PropertyCondition(AutomationElement.AutomationIdProperty, "CloseButton"));
-            if (closeButton != null)
+            if (closeButton is not null &&
+                closeButton.TryGetCurrentPattern(InvokePattern.Pattern, out var closeInvokePattern))
             {
-                if (closeButton.TryGetCurrentPattern(InvokePattern.Pattern, out var invokePattern))
-                {
-                    ((InvokePattern)invokePattern).Invoke();
-                    return;
-                }
+                ((InvokePattern)closeInvokePattern).Invoke();
+                return;
             }
 
             // Fallback to LaterButton
@@ -143,9 +146,9 @@ internal static class UiAutomationRunner
                 new PropertyCondition(AutomationElement.AutomationIdProperty, "LaterButton"));
             if (laterButton != null)
             {
-                if (laterButton.TryGetCurrentPattern(InvokePattern.Pattern, out var invokePattern))
+                if (laterButton.TryGetCurrentPattern(InvokePattern.Pattern, out var laterInvokePattern))
                 {
-                    ((InvokePattern)invokePattern).Invoke();
+                    ((InvokePattern)laterInvokePattern).Invoke();
                     return;
                 }
             }
@@ -310,6 +313,40 @@ internal static class UiAutomationRunner
         }
 
         throw new InvalidOperationException($"ComboBox item '{action.Name}' is not selectable.");
+    }
+
+    private static void ScrollIntoView(UiAutomationAction action, ScreenshotRequest? defaultWindow)
+    {
+        var element = FindTargetElement(action, defaultWindow);
+
+        if (element.TryGetCurrentPattern(ScrollItemPattern.Pattern, out var scrollItemPattern))
+        {
+            ((ScrollItemPattern)scrollItemPattern).ScrollIntoView();
+            return;
+        }
+
+        AutomationElement? current = element;
+        while (current != null)
+        {
+            if (current.TryGetCurrentPattern(ScrollPattern.Pattern, out var scrollPatternObj))
+            {
+                var scrollPattern = (ScrollPattern)scrollPatternObj;
+                if (!scrollPattern.Current.VerticallyScrollable)
+                    return;
+
+                while (scrollPattern.Current.VerticalScrollPercent < 100)
+                {
+                    scrollPattern.Scroll(ScrollAmount.NoAmount, ScrollAmount.LargeIncrement);
+                    Thread.Sleep(75);
+                }
+
+                return;
+            }
+
+            current = TreeWalker.ControlViewWalker.GetParent(current);
+        }
+
+        element.SetFocus();
     }
 
     public static async Task SetLanguageAsync(string languageCode)

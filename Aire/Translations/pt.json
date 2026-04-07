@@ -600,6 +600,20 @@
         {
             "tab": "Getting Started",
             "type": "text",
+            "title": "Idioma",
+            "links": [
+                {
+                    "label": "Configure sua primeira IA",
+                    "action": "settings:appearance"
+                }
+            ],
+            "imagePath": "Assets/Help/settings-language.png",
+            "imageCaption": "Seletor de idioma em Configurações → Aparência.",
+            "content": "Abra Configurações (⚙) → Aparência e role até a seção Idioma.\n\nClique na lista suspensa e escolha um dos idiomas disponíveis. O app é atualizado imediatamente, sem necessidade de reiniciar.\n\nO idioma é salvo automaticamente e restaurado na próxima vez que o Aire for aberto. Você também pode alterá-lo na primeira etapa do assistente de configuração."
+        },
+        {
+            "tab": "Getting Started",
+            "type": "text",
             "title": "Ícone da bandeja",
             "content": "Aire é executado na bandeja do sistema (canto inferior direito da barra de tarefas).\n\n• Clique com o botão esquerdo ou direito no ícone da bandeja para abrir a janela de bate-papo.\n• Clique com o botão direito no ícone da bandeja para ver as opções: Abrir, Configurações, Sair.\n• Fechar a janela a oculta — o Aire continua rodando em segundo plano.\n• Para sair completamente, clique com o botão direito no ícone da bandeja e escolha Sair."
         },

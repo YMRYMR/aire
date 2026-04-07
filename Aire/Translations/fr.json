@@ -600,6 +600,20 @@
         {
             "tab": "Getting Started",
             "type": "text",
+            "title": "Langue",
+            "links": [
+                {
+                    "label": "Configurez votre premi�re IA",
+                    "action": "settings:appearance"
+                }
+            ],
+            "imagePath": "Assets/Help/settings-language.png",
+            "imageCaption": "Le sélecteur de langue dans Paramètres → Apparence.",
+            "content": "Ouvrez Paramètres (⚙) → Apparence et faites défiler jusqu’à la section Langue.\n\nCliquez sur la liste déroulante et choisissez l’une des langues disponibles. L’application se met à jour immédiatement, sans redémarrage.\n\nLa langue est enregistrée automatiquement et restaurée au prochain lancement. Vous pouvez aussi la changer dès la première étape de l’assistant d’installation."
+        },
+        {
+            "tab": "Getting Started",
+            "type": "text",
             "title": "Ic�ne de la barre d'�tat",
             "content": "Aire s'ex�cute dans la barre d'�tat syst�me (coin inf�rieur droit de la barre des t�ches).\n\n� Cliquez avec le bouton gauche ou cliquez avec le bouton droit sur l'ic�ne de la barre d'�tat pour ouvrir la fen�tre de discussion.\n� Cliquez avec le bouton droit sur l'ic�ne de la barre d'�tat pour acc�der aux options�: Ouvrir, Param�tres, Quitter.\n� La fermeture de la fen�tre la masque � Aire continue de fonctionner en arri�re-plan.\n� Pour quitter compl�tement, cliquez avec le bouton droit sur l'ic�ne de la barre d'�tat et choisissez Quitter."
         },

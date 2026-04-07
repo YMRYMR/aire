@@ -600,6 +600,20 @@
         {
             "tab": "Getting Started",
             "type": "text",
+            "title": "语言",
+            "links": [
+                {
+                    "label": "设置你的第一个人工智能",
+                    "action": "settings:appearance"
+                }
+            ],
+            "imagePath": "Assets/Help/settings-language.png",
+            "imageCaption": "设置 → 外观中的语言选择器。",
+            "content": "打开“设置”(⚙) → “外观”，然后滚动到“语言”部分。\n\n点击下拉菜单并选择任意可用语言。应用会立即更新，无需重启。\n\n语言会自动保存，并在下次启动时恢复。你也可以在设置向导的第一步中更改它。"
+        },
+        {
+            "tab": "Getting Started",
+            "type": "text",
             "title": "托盘图标",
             "content": "Aire 在系统托盘（任务栏右下角）中运行。\n\n• 左键单击或右键单击托盘图标可打开聊天窗口。\n• 右键单击​​托盘图标可以选择以下选项：打开、设置、退出。\n• 关闭窗口将其隐藏——Aire 继续在后台运行。\n• 要完全退出，请右键单击托盘图标并选择退出。"
         },
