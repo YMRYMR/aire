@@ -190,7 +190,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Installed Servers"
+            <TextBlock x:Name="PART_McpInstalledServersTitle"
+                       Text="Installed Servers"
                        FontSize="11"
                        FontWeight="SemiBold"
                        Foreground="{DynamicResource TextBrush}"
@@ -302,7 +303,8 @@
                            Foreground="{DynamicResource TextBrush}"
                            Margin="0 0 0 12"/>
 
-                <TextBlock Text="Name"
+                <TextBlock x:Name="PART_McpNameLabel"
+                           Text="Name"
                            FontSize="11"
                            Foreground="{DynamicResource TextSecondaryBrush}"
                            Margin="0 0 0 3"/>
@@ -320,7 +322,8 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="Command"
+                        <TextBlock x:Name="PART_McpCommandLabel"
+                                   Text="Command"
                                    FontSize="11"
                                    Foreground="{DynamicResource TextSecondaryBrush}"
                                    Margin="0 0 0 3"/>
@@ -331,7 +334,8 @@
                                  FontSize="11"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="Arguments"
+                        <TextBlock x:Name="PART_McpArgsLabel"
+                                   Text="Arguments"
                                    FontSize="11"
                                    Foreground="{DynamicResource TextSecondaryBrush}"
                                    Margin="0 0 0 3"/>
@@ -343,7 +347,8 @@
                     </StackPanel>
                 </Grid>
 
-                <TextBlock Text="Working directory (optional)"
+                <TextBlock x:Name="PART_McpWorkDirLabel"
+                           Text="Working directory (optional)"
                            FontSize="11"
                            Foreground="{DynamicResource TextSecondaryBrush}"
                            Margin="0 0 0 3"/>
@@ -354,7 +359,8 @@
                          FontSize="11"
                          Margin="0 0 0 10"/>
 
-                <TextBlock Text="Environment variables — one per line:  KEY=value"
+                <TextBlock x:Name="PART_McpEnvVarsLabel"
+                           Text="Environment variables — one per line:  KEY=value"
                            FontSize="11"
                            Foreground="{DynamicResource TextSecondaryBrush}"
                            Margin="0 0 0 3"/>

@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using Aire.AppLayer.Providers;
 using Aire.Providers;
+using Aire.Services;
 
 namespace Aire.UI
 {
@@ -17,11 +18,11 @@ namespace Aire.UI
             {
                 var meta = ProviderFactory.GetMetadata(_selectedProvider.Type);
                 await PopulateModelsFromMetadataAsync(meta);
-                ShowToast("Model list refreshed from server.");
+                ShowToast(LocalizationService.S("toast.modelRefreshed", "Model list refreshed from server."));
             }
             catch
             {
-                ShowToast("Could not refresh models.", isError: true);
+                ShowToast(LocalizationService.S("toast.modelRefreshFail", "Could not refresh models."), isError: true);
             }
         }
 
@@ -39,7 +40,7 @@ namespace Aire.UI
             try
             {
                 _providerFormActions.ImportModels(dialog.FileName);
-                ShowToast("Models imported. Refreshing list…");
+                ShowToast(LocalizationService.S("toast.modelsImported", "Models imported. Refreshing list\u2026"));
 
                 if (_selectedProvider == null) return;
 
@@ -47,7 +48,7 @@ namespace Aire.UI
             }
             catch
             {
-                ShowToast("Import failed.", isError: true);
+                ShowToast(LocalizationService.S("toast.importFailed", "Import failed."), isError: true);
             }
         }
 
@@ -66,8 +67,8 @@ namespace Aire.UI
             {
                 if (!ConfirmationDialog.ShowCentered(
                         this,
-                        title: "Install Codex CLI",
-                        message: "This will run 'npm install -g @openai/codex' on your system. Continue?"))
+                        title: LocalizationService.S("settings.installCodex", "Install Codex CLI"),
+                        message: LocalizationService.S("settings.installCodexMsg", "This will run 'npm install -g @openai/codex' on your system. Continue?")))
                 {
                     return;
                 }
@@ -75,7 +76,7 @@ namespace Aire.UI
                 InstallOllamaButton.IsEnabled = false;
                 CodexInstallProgressBar.Visibility = Visibility.Visible;
                 CodexInstallStatusText.Visibility = Visibility.Visible;
-                CodexInstallStatusText.Text = "Installing Codex CLI…";
+                CodexInstallStatusText.Text = LocalizationService.S("onboard.installingCodex", "Installing Codex CLI\u2026");
                 var progress = new Progress<string>(message => Dispatcher.Invoke(() =>
                 {
                     CodexInstallStatusText.Text = message;

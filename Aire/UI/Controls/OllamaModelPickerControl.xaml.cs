@@ -185,7 +185,7 @@ namespace Aire.UI.Controls
                 catch
                 {
                     if (!ct.IsCancellationRequested)
-                        Dispatcher.Invoke(() => InstallStatusText.Text = "Error checking Ollama status.");
+                        Dispatcher.Invoke(() => InstallStatusText.Text = LocalizationService.S("ollama.errorStatus", "Error checking Ollama status."));
                 }
                 return;
             }
@@ -237,7 +237,7 @@ namespace Aire.UI.Controls
                 catch
                 {
                     if (!ct.IsCancellationRequested)
-                        Dispatcher.Invoke(() => InstallStatusText.Text = "Error checking Ollama status.");
+                        Dispatcher.Invoke(() => InstallStatusText.Text = LocalizationService.S("ollama.errorStatus", "Error checking Ollama status."));
                 }
         }
 
@@ -296,11 +296,11 @@ namespace Aire.UI.Controls
             {
                 Dispatcher.Invoke(() =>
                 {
-                    ReadyText.Text = "Ollama is running. Loading models…";
-                    LabelModel.Text = "Choose a model:";
+                    ReadyText.Text = LocalizationService.S("ollama.running", "Ollama is running. Loading models\u2026");
+                    LabelModel.Text = LocalizationService.S("ollama.chooseModel", "Choose a model:");
                     ModelCombo.ItemsSource = null;
                     ModelCombo.Text = string.Empty;
-                    ModelHint.Text = "Loading models…";
+                    ModelHint.Text = LocalizationService.S("ollama.loadingModels", "Loading models\u2026");
                     DownloadBtn.Visibility = Visibility.Collapsed;
                     DownloadProgressBorder.Visibility = Visibility.Collapsed;
                 });
@@ -357,7 +357,7 @@ namespace Aire.UI.Controls
             catch (OperationCanceledException) { }
             catch
             {
-                Dispatcher.Invoke(() => ModelHint.Text = "Could not load models.");
+                Dispatcher.Invoke(() => ModelHint.Text = LocalizationService.S("ollama.couldNotLoad", "Could not load models."));
             }
             finally
             {
@@ -505,12 +505,12 @@ namespace Aire.UI.Controls
         {
             InstallBtn.IsEnabled    = false;
             InstallBar.Visibility   = Visibility.Visible;
-            InstallStatusText.Text  = "Downloading Ollama installer…";
+            InstallStatusText.Text  = LocalizationService.S("ollama.downloading", "Downloading Ollama installer\u2026");
 
             try
             {
                 var progress = new Progress<int>(pct =>
-                    Dispatcher.Invoke(() => InstallStatusText.Text = $"Installing… {pct}%"));
+                    Dispatcher.Invoke(() => InstallStatusText.Text = string.Format(LocalizationService.S("ollama.installing", "Installing\u2026 {0}%"), pct)));
 
                 var result = await _actionService.InstallAsync(progress);
                 InstallBar.Visibility = Visibility.Collapsed;
@@ -522,14 +522,14 @@ namespace Aire.UI.Controls
                     return;
                 }
 
-                InstallStatusText.Text = "Installation complete. Starting Ollama…";
+                InstallStatusText.Text = LocalizationService.S("ollama.installComplete", "Installation complete. Starting Ollama\u2026");
                 await Task.Delay(3000);
                 await RunCheckAsync();
             }
             catch
             {
                 InstallBar.Visibility  = Visibility.Collapsed;
-                InstallStatusText.Text = "Installation failed.";
+                InstallStatusText.Text = LocalizationService.S("ollama.installFailed", "Installation failed.");
                 InstallBtn.IsEnabled   = true;
             }
         }
@@ -553,7 +553,7 @@ namespace Aire.UI.Controls
             CancelDownloadBtn.IsEnabled         = true;
             DownloadProgressBar.IsIndeterminate = true;
             DownloadProgressBar.Value           = 0;
-            DownloadProgressText.Text           = "Connecting…";
+            DownloadProgressText.Text           = LocalizationService.S("ollama.connecting", "Connecting\u2026");
             DownloadProgressBorder.Visibility   = Visibility.Visible;
 
             try
@@ -581,7 +581,7 @@ namespace Aire.UI.Controls
 
                 if (ct.IsCancellationRequested)
                 {
-                    ModelHint.Text        = "Download cancelled.";
+                    ModelHint.Text        = LocalizationService.S("ollama.downloadCancel", "Download cancelled.");
                     DownloadBtn.IsEnabled = true;
                     return;
                 }
@@ -615,7 +615,7 @@ namespace Aire.UI.Controls
             catch
             {
                 DownloadProgressBorder.Visibility = Visibility.Collapsed;
-                ModelHint.Text        = "Download failed.";
+                ModelHint.Text        = LocalizationService.S("ollama.downloadFailed", "Download failed.");
                 DownloadBtn.IsEnabled = true;
             }
             finally
@@ -628,7 +628,7 @@ namespace Aire.UI.Controls
         {
             _downloadCts?.Cancel();
             CancelDownloadBtn.IsEnabled  = false;
-            DownloadProgressText.Text    = "Cancelling…";
+            DownloadProgressText.Text    = LocalizationService.S("ollama.cancelling", "Cancelling\u2026");
         }
 
         private async void UninstallBtn_Click(object sender, RoutedEventArgs e)
@@ -638,8 +638,8 @@ namespace Aire.UI.Controls
 
             if (!ConfirmationDialog.ShowCentered(
                     Window.GetWindow(this),
-                    title:   "Uninstall Ollama Model",
-                    message: $"Are you sure you want to uninstall '{modelName}'? This will delete the model files from your system."))
+                    title:   LocalizationService.S("ollama.uninstallModel", "Uninstall Ollama Model"),
+                    message: string.Format(LocalizationService.S("ollama.uninstallModelMsg", "Are you sure you want to uninstall '{0}'? This will delete the model files from your system."), modelName)))
             {
                 return;
             }
@@ -660,7 +660,7 @@ namespace Aire.UI.Controls
             }
             catch
             {
-                ModelHint.Text         = "Uninstall failed.";
+                ModelHint.Text         = LocalizationService.S("ollama.uninstallFailed", "Uninstall failed.");
                 UninstallBtn.IsEnabled = true;
             }
         }
@@ -683,7 +683,7 @@ namespace Aire.UI.Controls
             }
             catch
             {
-                ModelHint.Text = "Import failed.";
+                ModelHint.Text = LocalizationService.S("ollama.importFailed", "Import failed.");
             }
         }
 

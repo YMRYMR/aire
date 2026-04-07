@@ -6,6 +6,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using Aire.Services;
 using MouseEventArgs       = System.Windows.Input.MouseEventArgs;
 using MouseButtonEventArgs = System.Windows.Input.MouseButtonEventArgs;
 using KeyEventArgs         = System.Windows.Input.KeyEventArgs;

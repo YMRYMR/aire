@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Aire.Services;
@@ -203,6 +204,22 @@ namespace Aire
             SearchNextButton.ToolTip = L("tooltip.nextMatch", "Next match");
             CloseSearchButton.ToolTip = L("tooltip.close", "Close");
             FileChipBorder.ToolTip = L("tooltip.openFile", "Click to open file");
+            // Context menu items
+            if (MessagesScrollViewer?.ContextMenu is System.Windows.Controls.ContextMenu contextMenu)
+            {
+                var items = contextMenu.Items;
+                // Order: Find, Separator, Save, Copy, Separator, Clear, Separator, Restore
+                if (items.Count >= 1 && items[0] is System.Windows.Controls.MenuItem findItem)
+                    findItem.Header = L("menu.find", "Find...  Ctrl+F");
+                if (items.Count >= 3 && items[2] is System.Windows.Controls.MenuItem saveItem)
+                    saveItem.Header = L("menu.saveChat", "Save chat as text...");
+                if (items.Count >= 4 && items[3] is System.Windows.Controls.MenuItem copyItem)
+                    copyItem.Header = L("menu.copyChat", "Copy chat as text");
+                if (items.Count >= 6 && items[5] is System.Windows.Controls.MenuItem clearItem)
+                    clearItem.Header = L("menu.clearConversation", "Clear conversation");
+                if (items.Count >= 8 && items[7] is System.Windows.Controls.MenuItem restoreItem)
+                    restoreItem.Header = L("menu.restoreWindowSizes", "Restore original window sizes");
+            }
             UpdatePinButton();
 
             var warningText = LargeFileWarning.Child as System.Windows.Controls.TextBlock;

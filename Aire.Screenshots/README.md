@@ -64,4 +64,5 @@ Supported action kinds:
 - `invoke`
 - `select`
 - `select-combo-item`
+- `scroll-into-view`
 - `set-active-provider-by-name`

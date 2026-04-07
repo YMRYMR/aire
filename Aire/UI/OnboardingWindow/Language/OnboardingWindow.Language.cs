@@ -186,7 +186,7 @@ namespace Aire.UI
             bool hasSession = _claudeSessionActive || ClaudeAiSession.Instance.IsReady;
             if (hasSession)
             {
-                ClaudeSessionStatus.Text = "✓ Logged in with Claude.ai";
+                ClaudeSessionStatus.Text = S("login.claudeLoggedIn", "\u2713 Logged in with Claude.ai");
                 ClaudeSessionStatus.Foreground = new WpfSolidBrush(WpfColor.FromRgb(0x4C, 0xAF, 0x50));
                 ClaudeSessionStatus.Visibility = Visibility.Visible;
                 ClaudeLoginButton.Content = S("settings.reloginClaude", "Re-login with Claude.ai");

@@ -174,6 +174,6 @@ namespace Aire.Services
 
         /// <summary>Returns the translation for <paramref name="key"/>, falling back to <paramref name="fallback"/> or the key itself.</summary>
         public static string S(string key, string? fallback = null) =>
-            _strings.TryGetValue(key, out var v) ? v : fallback ?? key;
+            _strings.TryGetValue(key, out var v) && !string.IsNullOrEmpty(v) ? v : fallback ?? key;
     }
 }

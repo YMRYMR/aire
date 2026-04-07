@@ -29,7 +29,7 @@ namespace Aire.UI
                 if (type == "Ollama" || type == "ClaudeWeb" || apiKey.Length < 8)
                     return;
 
-                ModelFetchStatus.Text = "Fetching latest models…";
+                ModelFetchStatus.Text = LocalizationService.S("onboard.fetchingModels", "Fetching latest models\u2026");
                 ModelFetchStatus.Visibility = Visibility.Visible;
 
                 var baseUrl = BaseUrlBox.Text.Trim();
@@ -54,7 +54,7 @@ namespace Aire.UI
             catch
             {
                 if (!ct.IsCancellationRequested)
-                    ModelFetchStatus.Text = "Could not fetch models — showing built-in list";
+                    ModelFetchStatus.Text = LocalizationService.S("onboard.fetchFailed", "Could not fetch models \u2014 showing built-in list");
             }
         }
     }

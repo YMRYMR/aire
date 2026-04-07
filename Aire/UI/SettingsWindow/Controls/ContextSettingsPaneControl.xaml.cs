@@ -30,6 +30,17 @@ namespace Aire.UI.Settings.Controls
         public TextBox SummaryMaxCharactersTextBox => PART_SummaryMaxCharactersTextBox;
         public TextBlock ContextHintText => PART_ContextHintText;
         public Button RestoreDefaultsButton => PART_RestoreDefaultsButton;
+        public TextBlock ContextHistoryHeader => PART_ContextHistoryHeader;
+        public TextBlock MaxMessagesSubLabel => PART_MaxMessagesSubLabel;
+        public TextBlock AnchorMessagesSubLabel => PART_AnchorMessagesSubLabel;
+        public TextBlock ContextCachingHeader => PART_ContextCachingHeader;
+        public TextBlock PromptCachingLabel => PART_PromptCachingLabel;
+        public TextBlock PromptCachingSubLabel => PART_PromptCachingSubLabel;
+        public TextBlock UncachedRecentMessagesSubLabel => PART_UncachedRecentMessagesSubLabel;
+        public TextBlock ContextSummariesHeader => PART_ContextSummariesHeader;
+        public TextBlock AutoSummariseLabel => PART_AutoSummariseLabel;
+        public TextBlock AutoSummariseSubLabel => PART_AutoSummariseSubLabel;
+        public TextBlock SummaryMaxCharactersSubLabel => PART_SummaryMaxCharactersSubLabel;
 
         public event RoutedEventHandler? ContextSettingChangedRequested;
         public event RoutedEventHandler? RestoreDefaultsRequested;
