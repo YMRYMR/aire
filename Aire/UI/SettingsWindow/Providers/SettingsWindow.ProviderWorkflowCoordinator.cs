@@ -106,7 +106,11 @@ namespace Aire.UI
 
                 _owner._timeoutSaveTimer?.Stop();
 
-                var type = (_owner.TypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "OpenAI";
+                // If the type picker omits the current provider type (for example hidden ClaudeWeb),
+                // preserve the existing provider type instead of falling back to a different one.
+                var type = (_owner.TypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString()
+                    ?? _owner._selectedProvider.Type
+                    ?? "OpenAI";
                 string modelText, modelValue;
                 IEnumerable<(string, string)>? modelMappings;
 

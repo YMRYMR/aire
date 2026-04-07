@@ -418,7 +418,7 @@ namespace Aire.Providers
                 try
                 {
                     var wsl = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "wsl.exe");
-                    if (File.Exists(wsl))
+                    if (File.Exists(wsl) && IsClaudeAvailableInWsl(wsl))
                         return (wsl, true);
                 }
                 catch
@@ -458,6 +458,49 @@ namespace Aire.Providers
             }
 
             return Array.Empty<string>();
+        }
+
+        private static bool IsClaudeAvailableInWsl(string wslPath)
+        {
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = wslPath,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                psi.ArgumentList.Add("-e");
+                psi.ArgumentList.Add("sh");
+                psi.ArgumentList.Add("-lc");
+                psi.ArgumentList.Add("command -v claude >/dev/null 2>&1");
+
+                using var process = Process.Start(psi);
+                if (process == null)
+                    return false;
+
+                if (!process.WaitForExit(5000))
+                {
+                    try
+                    {
+                        if (!process.HasExited)
+                            process.Kill(entireProcessTree: true);
+                    }
+                    catch
+                    {
+                    }
+
+                    return false;
+                }
+
+                return process.ExitCode == 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static string GetWorkingDirectory()
