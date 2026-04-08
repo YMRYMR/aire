@@ -8,6 +8,32 @@ namespace Aire.UI;
 
 public partial class WebViewWindow
 {
+    private static void OpenOrQueue(
+        Action<WebViewWindow> whenVisible,
+        Action<WebViewWindow> whenHidden)
+    {
+        if (Current is { IsLoaded: true })
+        {
+            Current.Activate();
+            whenVisible(Current);
+            return;
+        }
+
+        var window = new WebViewWindow();
+        whenHidden(window);
+        window.Show();
+    }
+
+    public static void OpenUrl(string url)
+        => OpenOrQueue(
+            whenVisible: window => _ = window.NavigateActiveTabAsync(url),
+            whenHidden: window => window._queuedNavigate = url);
+
+    public static void OpenInNewTab(string url)
+        => OpenOrQueue(
+            whenVisible: window => window.AddTab(url),
+            whenHidden: window => window._queuedNewTab = url);
+
     /// <summary>
     /// Returns a text summary of all open browser tabs for tool and local API callers.
     /// </summary>

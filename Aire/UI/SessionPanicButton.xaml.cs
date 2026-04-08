@@ -12,11 +12,7 @@ namespace Aire.UI
         public SessionPanicButton()
         {
             InitializeComponent();
-            FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
-                ? System.Windows.FlowDirection.RightToLeft
-                : System.Windows.FlowDirection.LeftToRight;
-            ApplyLocalization();
-            LocalizationService.LanguageChanged += OnLanguageChanged;
+            InitializeLocalization();
 
             // Default position: top-right corner of the work area, clear of the taskbar.
             var area = SystemParameters.WorkArea;
@@ -34,6 +30,17 @@ namespace Aire.UI
             StopButton.Content = LocalizationService.S("panic.stopButton", "⏹ STOP SESSION");
         }
 
+        private void InitializeLocalization()
+        {
+            ApplyLocalization();
+            LocalizationService.LanguageChanged += OnLanguageChanged;
+        }
+
+        private void CleanupLocalization()
+        {
+            LocalizationService.LanguageChanged -= OnLanguageChanged;
+        }
+
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             StopRequested?.Invoke();
@@ -47,7 +54,7 @@ namespace Aire.UI
 
         protected override void OnClosed(EventArgs e)
         {
-            LocalizationService.LanguageChanged -= OnLanguageChanged;
+            CleanupLocalization();
             base.OnClosed(e);
         }
     }

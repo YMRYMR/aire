@@ -1,15 +1,10 @@
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Aire.Services;
-using Application = System.Windows.Application;
-using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using TextBox = System.Windows.Controls.TextBox;
@@ -18,142 +13,6 @@ namespace Aire.UI
 {
     public partial class HelpWindow
     {
-        private void RebuildTabs()
-        {
-            TabButtonsPanel.Children.Clear();
-
-            var tabNames = _allSections.Select(s => s.Tab ?? "General").Distinct().ToList();
-
-            foreach (var tabName in tabNames)
-            {
-                var displayName = LocalizeTabName(tabName);
-                var border = new Border
-                {
-                    Padding = new Thickness(16, 10, 16, 10),
-                    BorderThickness = new Thickness(0, 0, 0, 2),
-                    BorderBrush = Brushes.Transparent,
-                    Cursor = System.Windows.Input.Cursors.Hand,
-                    Tag = tabName,
-                };
-                var text = new TextBlock
-                {
-                    Text = displayName,
-                    FontSize = 13,
-                    Foreground = GetBrush("TextSecondaryBrush"),
-                };
-                border.Child = text;
-                border.MouseLeftButtonDown += (_, _) => SelectTab(tabName);
-                TabButtonsPanel.Children.Add(border);
-            }
-
-            var toSelect = tabNames.Contains(_activeTab) ? _activeTab : tabNames.FirstOrDefault() ?? "";
-            SelectTab(toSelect);
-        }
-
-        private void SelectTab(string tabName)
-        {
-            _activeTab = tabName;
-
-            foreach (Border btn in TabButtonsPanel.Children.OfType<Border>())
-            {
-                bool active = (string?)btn.Tag == tabName;
-                btn.BorderBrush = active ? GetBrush("TextBrush") : Brushes.Transparent;
-                if (btn.Child is TextBlock tb)
-                {
-                    tb.Foreground = active ? GetBrush("TextBrush") : GetBrush("TextSecondaryBrush");
-                    tb.FontWeight = active ? FontWeights.SemiBold : FontWeights.Normal;
-                }
-            }
-
-            RebuildContentForTab(tabName);
-        }
-
-        private void RebuildContentForTab(string tabName)
-        {
-            HelpContentPanel.Children.Clear();
-            ContentScroller.ScrollToTop();
-
-            foreach (var section in _allSections.Where(s => (s.Tab ?? "General") == tabName))
-                RenderSection(section, HelpContentPanel);
-        }
-
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var query = SearchBox.Text.Trim();
-            SearchPlaceholder.Visibility = string.IsNullOrEmpty(SearchBox.Text) ? Visibility.Visible : Visibility.Collapsed;
-            ClearSearchButton.Visibility = string.IsNullOrEmpty(query) ? Visibility.Collapsed : Visibility.Visible;
-
-            if (string.IsNullOrEmpty(query))
-            {
-                TabStrip.Visibility = Visibility.Visible;
-                SelectTab(_activeTab);
-                return;
-            }
-
-            TabStrip.Visibility = Visibility.Collapsed;
-            RebuildSearchResults(query);
-        }
-
-        private void ClearSearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            SearchBox.Text = "";
-            SearchBox.Focus();
-        }
-
-        private void RebuildSearchResults(string query)
-        {
-            HelpContentPanel.Children.Clear();
-            ContentScroller.ScrollToTop();
-
-            var lq = query.ToLowerInvariant();
-            var matches = _allSections.Where(s => SectionMatchesQuery(s, lq)).ToList();
-
-            HelpContentPanel.Children.Add(new TextBlock
-            {
-                Text = matches.Count == 0
-                    ? $"No results for \u201c{query}\u201d"
-                    : $"{matches.Count} result{(matches.Count == 1 ? "" : "s")} for \u201c{query}\u201d",
-                Foreground = GetBrush("TextSecondaryBrush"),
-                FontSize = 12,
-                Margin = new Thickness(0, 0, 0, 20),
-            });
-
-            foreach (var section in matches)
-            {
-                if (!string.IsNullOrEmpty(section.Tab))
-                {
-                    HelpContentPanel.Children.Add(new TextBlock
-                    {
-                        Text = LocalizeTabName(section.Tab).ToUpperInvariant(),
-                        Foreground = GetBrush("TextSecondaryBrush"),
-                        FontSize = 10,
-                        FontWeight = FontWeights.SemiBold,
-                        Margin = new Thickness(0, 0, 0, 2),
-                    });
-                }
-                RenderSection(section, HelpContentPanel);
-            }
-        }
-
-        internal static bool SectionMatchesQuery(HelpSection section, string lq)
-        {
-            if (section.Title.Contains(lq, StringComparison.OrdinalIgnoreCase)) return true;
-            if (section.Content?.Contains(lq, StringComparison.OrdinalIgnoreCase) == true) return true;
-            if (section.Intro?.Contains(lq, StringComparison.OrdinalIgnoreCase) == true) return true;
-            if (section.ImageCaption?.Contains(lq, StringComparison.OrdinalIgnoreCase) == true) return true;
-            if (section.Rows != null)
-            {
-                foreach (var row in section.Rows)
-                {
-                    foreach (var cell in row)
-                    {
-                        if (cell.Contains(lq, StringComparison.OrdinalIgnoreCase)) return true;
-                    }
-                }
-            }
-            return false;
-        }
-
         internal void RenderSection(HelpSection section, StackPanel target)
         {
             if (section.Type == "table") AddTableSection(section, target);
@@ -197,43 +56,6 @@ namespace Aire.UI
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 Child = panel
             });
-        }
-
-        private void ExecuteLinkAction(string action)
-        {
-            if (action.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                action.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-            {
-                Dispatcher.Invoke(() => WebViewWindow.OpenInNewTab(action));
-                return;
-            }
-
-            if (action.StartsWith("browser:", StringComparison.OrdinalIgnoreCase))
-            {
-                var url = action["browser:".Length..];
-                Dispatcher.Invoke(() => WebViewWindow.OpenInNewTab(url));
-                return;
-            }
-
-            if (action.Equals("onboarding", StringComparison.OrdinalIgnoreCase))
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    var wizard = new OnboardingWindow
-                    {
-                        Owner = this
-                    };
-                    wizard.OpenSettingsAction = () => SettingsWindow.RequestOpen("providers");
-                    wizard.ShowDialog();
-                });
-                return;
-            }
-
-            if (action == "settings" || action.StartsWith("settings:", StringComparison.OrdinalIgnoreCase))
-            {
-                var tab = action.Contains(':') ? action[(action.IndexOf(':') + 1)..] : null;
-                SettingsWindow.RequestOpen(tab);
-            }
         }
 
         private void AddTextSection(HelpSection section, StackPanel target)
@@ -454,50 +276,6 @@ namespace Aire.UI
             }
 
             target.Children.Add(panel);
-        }
-
-        private static string? ResolveHelpImagePath(string relativePath)
-        {
-            if (string.IsNullOrWhiteSpace(relativePath)) return null;
-            if (Path.IsPathRooted(relativePath)) return relativePath;
-
-            // Try language-specific subdirectory first
-            var langCode = LocalizationService.CurrentCode;
-            if (!string.IsNullOrEmpty(langCode) && langCode != "en")
-            {
-                var langSpecificPath = Path.Combine(
-                    Path.GetDirectoryName(relativePath) ?? "",
-                    langCode,
-                    Path.GetFileName(relativePath));
-                var fullLangPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, langSpecificPath));
-                if (File.Exists(fullLangPath))
-                {
-                    Debug.WriteLine($"[HelpWindow] Using language-specific image: {fullLangPath}");
-                    return fullLangPath;
-                }
-            }
-
-            // Fall back to default location
-            var defaultPath = Path.Combine(AppContext.BaseDirectory, relativePath);
-            return Path.GetFullPath(defaultPath);
-        }
-
-        private static Brush GetBrush(string key)
-        {
-            var res = Application.Current.Resources[key];
-            return res is Brush b ? b : Brushes.Gray;
-        }
-
-        private static string LocalizeTabName(string tabName)
-        {
-            return tabName switch
-            {
-                "Getting Started" => LocalizationService.S("help.tab.gettingStarted", "Getting Started"),
-                "Tools & Voice" => LocalizationService.S("help.tab.toolsVoice", "Tools & Voice"),
-                "Providers" => LocalizationService.S("help.tab.providers", "Providers"),
-                "Local API" => LocalizationService.S("help.tab.localApi", "Local API"),
-                _ => tabName
-            };
         }
     }
 }

@@ -73,14 +73,13 @@ public sealed class OllamaProviderTests
     [Fact]
     public async Task SendChatAsync_ReturnsGenericError_WhenTransportThrows()
     {
-        var provider = CreateProvider("http://127.0.0.1:1");
+        var baseUrl = CreateUnreachableBaseUrl();
+        var provider = CreateProvider(baseUrl);
 
         var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
 
         Assert.False(response.IsSuccess);
-        Assert.Equal(
-            "Network error while contacting Ollama. Make sure Ollama is running at http://127.0.0.1:1.",
-            response.ErrorMessage);
+        Assert.Equal($"Network error while contacting Ollama. Make sure Ollama is running at {baseUrl}.", response.ErrorMessage);
     }
 
     [Fact]
@@ -127,7 +126,7 @@ public sealed class OllamaProviderTests
     [Fact]
     public async Task ValidateConfigurationAsync_ReturnsGenericError_WhenTransportThrows()
     {
-        var provider = CreateProvider("http://127.0.0.1:1");
+        var provider = CreateProvider(CreateUnreachableBaseUrl());
 
         var validation = await provider.ValidateConfigurationAsync(CancellationToken.None);
 
@@ -171,6 +170,15 @@ public sealed class OllamaProviderTests
             ModelCapabilities = ["tools"]
         });
         return provider;
+    }
+
+    private static string CreateUnreachableBaseUrl()
+    {
+        using var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+        return $"http://127.0.0.1:{port}";
     }
 
     private sealed class OllamaTestServer : IDisposable
