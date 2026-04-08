@@ -94,9 +94,11 @@ namespace Aire.Tests.UI
                 Grid row = Assert.IsType<Grid>(stackPanel.Children[1]);
                 Assert.Equal(6, header.ColumnDefinitions.Count);
                 Button rerunButton = Assert.Single(row.Children.OfType<Button>());
-                Assert.Equal("↻", rerunButton.Content);
-                Assert.Equal(24d, rerunButton.Width);
-                Assert.Equal(24d, rerunButton.Height);
+                TextBlock rerunGlyph = Assert.IsType<TextBlock>(rerunButton.Content);
+                Assert.Equal("\uE72C", rerunGlyph.Text);
+                Assert.Equal("Segoe MDL2 Assets", rerunGlyph.FontFamily.Source);
+                Assert.Equal(22d, rerunButton.Width);
+                Assert.Equal(22d, rerunButton.Height);
                 Assert.Equal("cat", rerunButton.Tag);
                 Assert.Equal(6, row.ColumnDefinitions.Count);
                 

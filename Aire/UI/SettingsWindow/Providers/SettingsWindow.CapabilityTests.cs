@@ -283,7 +283,10 @@ namespace Aire.UI
             AddCell(row, new TextBlock
             {
                 Text                = r.Passed ? "✓" : "✗",
-                Foreground          = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x4C, 0xAF, 0x50)),
+                Foreground          = new System.Windows.Media.SolidColorBrush(
+                    r.Passed
+                        ? System.Windows.Media.Color.FromRgb(0x4C, 0xAF, 0x50)
+                        : System.Windows.Media.Color.FromRgb(0xF4, 0x43, 0x36)),
                 FontSize            = 12,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalAlignment   = System.Windows.VerticalAlignment.Center,
@@ -314,10 +317,13 @@ namespace Aire.UI
                 Foreground   = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
                 FontStyle    = r.Passed ? FontStyles.Normal : FontStyles.Italic,
                 FontSize     = 11,
-                TextWrapping = TextWrapping.Wrap,
+                TextWrapping = TextWrapping.NoWrap,
+                TextTrimming = TextTrimming.CharacterEllipsis,
             };
             if (!r.Passed && !string.IsNullOrEmpty(r.Error) && r.Error != detail)
                 detailBlock.ToolTip = r.Error;
+            else if (r.Passed && !string.IsNullOrEmpty(detail))
+                detailBlock.ToolTip = detail;
 
             AddCell(row, detailBlock, 3);
             AddCell(row, new TextBlock
@@ -331,16 +337,24 @@ namespace Aire.UI
 
             var rerunButton = new Button
             {
-                Content                 = "↻",
-                Width                   = 24,
-                Height                  = 24,
-                Padding                 = new Thickness(0),
-                Margin                  = new Thickness(0, 0, 0, 0),
-                MinWidth                = 24,
-                MinHeight               = 24,
-                Tag                     = r.Id,
-                ToolTip                 = "Run this test again",
-                Foreground              = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["LinkBrush"],
+                Content                    = new TextBlock
+                {
+                    Text              = "\uE72C",
+                    FontFamily        = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
+                    FontSize          = 12,
+                    Foreground        = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["LinkBrush"],
+                    TextAlignment     = TextAlignment.Center,
+                    VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                },
+                Width                      = 22,
+                Height                     = 22,
+                Padding                    = new Thickness(0),
+                Margin                     = new Thickness(0, 0, 0, 0),
+                MinWidth                   = 22,
+                MinHeight                  = 22,
+                Tag                        = r.Id,
+                ToolTip                    = "Run this test again",
+                Foreground                 = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["LinkBrush"],
                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalContentAlignment   = System.Windows.VerticalAlignment.Center,
             };
@@ -390,7 +404,7 @@ namespace Aire.UI
 
             AddCapabilityResultColumns(header);
 
-            header.Children.Add(CreateHeaderText(" "));
+            AddCell(header, CreateHeaderText(" "), 0);
             AddCell(header, CreateHeaderText("Test"), 1);
             AddCell(header, CreateHeaderText("Category"), 2);
             AddCell(header, CreateHeaderText("Result / details"), 3);
@@ -418,12 +432,12 @@ namespace Aire.UI
 
         private static void AddCapabilityResultColumns(Grid grid)
         {
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "CapTestStatus" });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star), SharedSizeGroup = "CapTestName" });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star), SharedSizeGroup = "CapTestCategory" });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star), SharedSizeGroup = "CapTestDetail" });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "CapTestDuration" });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "CapTestAction" });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(18) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(132) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(88) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star), MinWidth = 120 });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(56) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(28) });
         }
 
         internal async Task SaveTestResultsAsync(Provider provider, List<CapabilityTestResult> results, DateTime testedAt)
