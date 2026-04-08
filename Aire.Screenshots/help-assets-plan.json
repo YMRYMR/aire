@@ -126,11 +126,6 @@
       "activateWindow": true,
       "actions": [
         {
-          "kind": "set-active-provider-by-name",
-          "name": "Codex",
-          "delayMs": 400
-        },
-        {
           "exactTitle": "Aire",
           "kind": "invoke",
           "automationId": "PART_ToolsButton",

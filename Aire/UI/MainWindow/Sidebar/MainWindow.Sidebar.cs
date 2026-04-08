@@ -105,11 +105,11 @@ namespace Aire
         {
             if (summary.Id == _currentConversationId) return;
             var previousConversationId = _currentConversationId;
+            _currentConversationId = summary.Id;
             try
             {
                 await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
-                await LoadConversationMessages(summary.Id);
-                _currentConversationId = summary.Id;
+                await LoadConversationMessages(summary.Id, syncProviderSelection: false);
             }
             catch (Exception ex)
             {

@@ -148,7 +148,7 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
-    public async Task InitializeAsync_RemovesLegacySwitchedToCodexSystemMessages()
+    public async Task InitializeAsync_RemovesLegacySwitchedProviderSystemMessages()
     {
         int providerId = await _db.InsertProviderAsync(new Provider
         {
@@ -162,6 +162,8 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
 
         int conversationId = await _db.CreateConversationAsync(providerId, "Cleanup conversation");
         await _db.SaveMessageAsync(conversationId, "system", "Switched to Codex");
+        await _db.SaveMessageAsync(conversationId, "system", "Switched to qwen2.5:7b");
+        await _db.SaveMessageAsync(conversationId, "system", "Switched to Nemotron");
         await _db.SaveMessageAsync(conversationId, "system", "Keep me");
         await _db.SaveMessageAsync(conversationId, "assistant", "Also keep me");
 
@@ -169,9 +171,33 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
         await db2.InitializeAsync();
 
         List<Aire.Data.Message> messages = await db2.GetMessagesAsync(conversationId);
-        Assert.DoesNotContain(messages, message => message.Role == "system" && message.Content == "Switched to Codex");
+        Assert.DoesNotContain(messages, message => message.Role == "system" && message.Content.StartsWith("Switched to ", StringComparison.Ordinal));
         Assert.Contains(messages, message => message.Role == "system" && message.Content == "Keep me");
         Assert.Contains(messages, message => message.Role == "assistant" && message.Content == "Also keep me");
+    }
+
+    [Fact]
+    public async Task SaveMessageAsync_DedupesConsecutiveIdenticalSystemMessages()
+    {
+        int providerId = await _db.InsertProviderAsync(new Provider
+        {
+            Name = "Dedupe Provider",
+            Type = "OpenAI",
+            ApiKey = "sk-dedupe",
+            Model = "gpt-4o-mini",
+            IsEnabled = true,
+            Color = "#555555"
+        });
+
+        int conversationId = await _db.CreateConversationAsync(providerId, "Dedupe conversation");
+        await _db.SaveMessageAsync(conversationId, "system", "Switched to qwen2.5:7b");
+        await _db.SaveMessageAsync(conversationId, "system", "Switched to qwen2.5:7b");
+        await _db.SaveMessageAsync(conversationId, "system", "Keep me too");
+
+        List<Aire.Data.Message> messages = await _db.GetMessagesAsync(conversationId);
+        Assert.Equal(2, messages.Count(message => message.Role == "system"));
+        Assert.Contains(messages, message => message.Role == "system" && message.Content == "Switched to qwen2.5:7b");
+        Assert.Contains(messages, message => message.Role == "system" && message.Content == "Keep me too");
     }
 
     [Fact]

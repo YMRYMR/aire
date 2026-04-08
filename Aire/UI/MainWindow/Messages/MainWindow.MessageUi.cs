@@ -49,7 +49,7 @@ namespace Aire
             Messages.Remove(msg);
         }
 
-        private async Task AddSystemMessageAsync(string text)
+        private async Task AddSystemMessageAsync(string text, bool persistToConversation = true)
         {
             Messages.Add(new ChatMessage
             {
@@ -60,7 +60,7 @@ namespace Aire
                 SenderForeground = SystemFgBrush
             });
 
-            if (_currentConversationId.HasValue)
+            if (persistToConversation && _currentConversationId.HasValue)
                 await _chatSessionApplicationService.PersistSystemMessageAsync(_currentConversationId.Value, text);
         }
 

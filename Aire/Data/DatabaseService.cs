@@ -64,6 +64,7 @@ namespace Aire.Data
             await MigrateEmailOAuthAsync();
             await MigrateEncryptEmailOAuthTokensAsync();
             await MigrateEncryptMcpEnvVarsAsync();
+            await MigrateRemoveLegacySwitchedProviderMessagesAsync();
             await SeedDefaultProvidersAsync();
         }
 

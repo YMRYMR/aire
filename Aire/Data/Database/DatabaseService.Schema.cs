@@ -327,7 +327,7 @@ namespace Aire.Data
             cmd.CommandText = @"
                 DELETE FROM Messages
                 WHERE Role = 'system'
-                  AND Content = 'Switched to Codex'";
+                  AND Content LIKE 'Switched to %'";
             await cmd.ExecuteNonQueryAsync();
         }
 
