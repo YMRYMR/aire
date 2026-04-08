@@ -312,8 +312,19 @@ namespace Aire.Tests.UI
                     };
                     provider.Id = db.InsertProviderAsync(provider).GetAwaiter().GetResult();
 
+                    Provider targetProvider = new Provider
+                    {
+                        Name = "P2",
+                        Type = "Groq",
+                        ApiKey = "k2",
+                        Model = "m2",
+                        IsEnabled = true,
+                        Color = "#993366"
+                    };
+                    targetProvider.Id = db.InsertProviderAsync(targetProvider).GetAwaiter().GetResult();
+
                     int currentConversationId = db.CreateConversationAsync(provider.Id, "Current").GetAwaiter().GetResult();
-                    int targetConversationId = db.CreateConversationAsync(provider.Id, "Target").GetAwaiter().GetResult();
+                    int targetConversationId = db.CreateConversationAsync(targetProvider.Id, "Target").GetAwaiter().GetResult();
 
                     MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
                     typeof(DispatcherObject).GetField("_dispatcher", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(window, Application.Current.Dispatcher);
@@ -330,9 +341,10 @@ namespace Aire.Tests.UI
                     var header = new MainHeaderControl();
                     header._testProviderComboBox = new ComboBox();
                     header._testCheckAgainButton = new Button();
-                    header.ProviderComboBox.ItemsSource = new[] { provider };
+                    header.ProviderComboBox.ItemsSource = new[] { provider, targetProvider };
                     header.ProviderComboBox.SelectedItem = provider;
                     window.HeaderControl = header;
+                    window.ConversationSidebar = new ConversationSidebarControl();
 
                     typeof(MainWindow).GetField("_assistantModeApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
                         .SetValue(window, new AssistantModeApplicationService());
@@ -340,20 +352,35 @@ namespace Aire.Tests.UI
                     var throwingRepo = new ThrowingConversationRepository(db, targetConversationId);
                     window._conversationApplicationService = new ConversationApplicationService(throwingRepo);
 
-                    var summary = new ConversationSummary
+                    var currentSummary = new ConversationSummary
                     {
-                        Id = targetConversationId,
-                        Title = "Target",
-                        UpdatedAt = DateTime.UtcNow,
+                        Id = currentConversationId,
+                        Title = "Current",
+                        UpdatedAt = DateTime.UtcNow.AddMinutes(-1),
                         ProviderName = provider.Name,
                         ProviderColor = provider.Color,
                         AssistantModeKey = "general"
                     };
 
+                    var targetSummary = new ConversationSummary
+                    {
+                        Id = targetConversationId,
+                        Title = "Target",
+                        UpdatedAt = DateTime.UtcNow,
+                        ProviderName = targetProvider.Name,
+                        ProviderColor = targetProvider.Color,
+                        AssistantModeKey = "general"
+                    };
+
+                    window.ConversationSidebar.ItemsSource = new[] { currentSummary, targetSummary };
+                    window.ConversationSidebar.SelectedItem = currentSummary;
+
                     var method = typeof(MainWindow).GetMethod("SwitchConversationAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
-                    ((Task)method.Invoke(window, [summary])!).GetAwaiter().GetResult();
+                    ((Task)method.Invoke(window, [targetSummary])!).GetAwaiter().GetResult();
 
                     Assert.Equal(currentConversationId, window._currentConversationId);
+                    Assert.Equal(provider, window.ProviderComboBox.SelectedItem);
+                    Assert.Equal(currentConversationId, ((ConversationSummary)window.ConversationSidebar.SelectedItem).Id);
                     Assert.Contains(window.Messages, msg => msg.Sender == "System" && msg.Text.Contains("Failed to load conversation", StringComparison.Ordinal));
                 }
                 finally
