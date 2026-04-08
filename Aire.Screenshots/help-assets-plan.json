@@ -11,7 +11,7 @@
     },
     {
       "kind": "try-close-window",
-      "titleContains": "Aire Help",
+      "titleContains": "Help",
       "processName": "Aire",
       "delayMs": 300
     },
@@ -38,7 +38,7 @@
       },
       {
         "kind": "try-close-window",
-        "titleContains": "Aire Help",
+        "titleContains": "Help",
         "processName": "Aire",
         "delayMs": 300
       },
