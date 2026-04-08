@@ -9,9 +9,15 @@ namespace Aire.UI
     internal static class ProviderChoiceVisibility
     {
         internal static void PruneHiddenChoices(WpfComboBox comboBox)
+            => PruneHiddenChoices(comboBox, ProviderVisibility.ShowClaudeWebProvider);
+
+        internal static void PruneHiddenChoices(WpfComboBox comboBox, bool showClaudeWebProvider)
         {
             if (comboBox == null)
                 throw new ArgumentNullException(nameof(comboBox));
+
+            if (showClaudeWebProvider)
+                return;
 
             string? selectedTag = (comboBox.SelectedItem as WpfComboBoxItem)?.Tag as string;
             bool selectedTagHidden = !string.IsNullOrWhiteSpace(selectedTag) && ProviderVisibility.IsHiddenFromRelease(selectedTag);
