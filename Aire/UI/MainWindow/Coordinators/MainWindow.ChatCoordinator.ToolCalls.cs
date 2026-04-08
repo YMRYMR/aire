@@ -18,16 +18,16 @@ namespace Aire
             /// <summary>
             /// Applies a todo-list tool update to the current UI message and returns a short status summary.
             /// </summary>
-            private void HandleErrorOutcome(ChatTurnWorkflowService.ChatTurnOutcome outcome)
+            private async Task HandleErrorOutcome(ChatTurnWorkflowService.ChatTurnOutcome outcome)
             {
                 if (outcome.CooldownReason != CooldownReason.None && _owner._currentProviderId.HasValue)
                 {
                     _owner._availabilityTracker.SetCooldown(_owner._currentProviderId.Value, outcome.CooldownReason, outcome.CooldownMessage ?? string.Empty);
-                    _owner.AddErrorMessage(outcome.ErrorMessage ?? string.Empty, outcome.CooldownMessage);
+                    await _owner.AddErrorMessageAsync(outcome.ErrorMessage ?? string.Empty, outcome.CooldownMessage);
                 }
                 else
                 {
-                    _owner.AddErrorMessage(outcome.ErrorMessage ?? string.Empty);
+                    await _owner.AddErrorMessageAsync(outcome.ErrorMessage ?? string.Empty);
                 }
             }
 

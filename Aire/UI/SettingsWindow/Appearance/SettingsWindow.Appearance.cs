@@ -14,17 +14,7 @@ namespace Aire.UI
             LanguageComboBox.Items.Clear();
             foreach (var lang in LocalizationService.AvailableLanguages)
             {
-                var flag = FlagPainter.Create(lang.Code, 22, 14);
-                ((FrameworkElement)flag).Margin = new Thickness(0, 0, 7, 0);
-                ((FrameworkElement)flag).VerticalAlignment = VerticalAlignment.Center;
-
-                var nameText = new TextBlock { Text = lang.NativeName, VerticalAlignment = VerticalAlignment.Center };
-
-                var panel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal };
-                panel.Children.Add(flag);
-                panel.Children.Add(nameText);
-
-                var item = new ComboBoxItem { Tag = lang.Code, Content = panel };
+                var item = CreateLanguageComboBoxItem(lang.Code, lang.NativeName);
                 LanguageComboBox.Items.Add(item);
                 if (lang.Code == LocalizationService.CurrentCode)
                 {
@@ -33,6 +23,21 @@ namespace Aire.UI
             }
 
             _suppressAppearance = false;
+        }
+
+        private static ComboBoxItem CreateLanguageComboBoxItem(string code, string nativeName)
+        {
+            var flag = FlagPainter.Create(code, 22, 14);
+            ((FrameworkElement)flag).Margin = new Thickness(0, 0, 7, 0);
+            ((FrameworkElement)flag).VerticalAlignment = VerticalAlignment.Center;
+
+            var nameText = new TextBlock { Text = nativeName, VerticalAlignment = VerticalAlignment.Center };
+
+            var panel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal };
+            panel.Children.Add(flag);
+            panel.Children.Add(nameText);
+
+            return new ComboBoxItem { Tag = code, Content = panel };
         }
 
         private void OnLanguageChanged() => Dispatcher.Invoke(ApplyLocalization);

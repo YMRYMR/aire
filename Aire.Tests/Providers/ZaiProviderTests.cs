@@ -68,6 +68,18 @@ public class ZaiProviderTests
         Assert.DoesNotContain("429", normalized, System.StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public void NormalizeZaiError_PreservesReadableApiMessage()
+    {
+        const string raw = """
+        {"error":{"message":"Model glm-5.1 is temporarily unavailable."}}
+        """;
+
+        var normalized = ZaiProvider.NormalizeZaiError(raw);
+
+        Assert.Equal("Model glm-5.1 is temporarily unavailable.", normalized);
+    }
+
     private sealed class ZaiTestServer : System.IDisposable
     {
         private readonly TcpListener _listener;
