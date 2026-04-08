@@ -334,6 +334,7 @@ namespace Aire.Data
                 (Name: "Anthropic API", Type: "Anthropic", Model: "claude-sonnet-4-5", Color: "#D4A059", BaseUrl: (string?)null),
                 (Name: "Google AI (Gemini)", Type: "GoogleAI", Model: "gemini-2.0-flash", Color: "#4285F4", BaseUrl: (string?)null),
                 (Name: "DeepSeek (OpenAI-compatible)", Type: "DeepSeek", Model: "deepseek-chat", Color: "#00B4D8", BaseUrl: "https://api.deepseek.com"),
+                (Name: "Mistral AI (OpenAI-compatible)", Type: "Mistral", Model: "mistral-large-latest", Color: "#FF6D00", BaseUrl: "https://api.mistral.ai"),
                 (Name: "Inception (OpenAI-compatible)", Type: "Inception", Model: "mercury-latest", Color: "#FF6B6B", BaseUrl: "https://api.inceptionlabs.ai"),
                 (Name: "Ollama (Local AI)", Type: "Ollama", Model: "qwen2.5-coder:7b", Color: "#8A2BE2", BaseUrl: "http://localhost:11434")
             };

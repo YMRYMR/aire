@@ -203,4 +203,21 @@ public class ProviderFactoryTests : IAsyncLifetime, IDisposable
         Assert.Equal("ClaudeWeb", aiProvider.ProviderType); // Type is from Aire assembly
         Assert.Equal("ClaudeWeb", aiProvider.ProviderType);
     }
+
+    [Fact]
+    public void CreateProvider_Mistral_ReturnsMistralProvider()
+    {
+        Provider providerConfig = new Provider
+        {
+            Id = 13,
+            Type = "Mistral",
+            Model = "mistral-large-latest",
+            ApiKey = "sk-test",
+            Color = "#000000",
+            Name = "Mistral AI"
+        };
+        IAiProvider aiProvider = _factory.CreateProvider(providerConfig);
+        Assert.IsType<MistralProvider>(aiProvider);
+        Assert.Equal("Mistral", aiProvider.ProviderType);
+    }
 }

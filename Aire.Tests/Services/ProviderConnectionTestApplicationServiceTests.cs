@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -50,6 +51,17 @@ public sealed class ProviderConnectionTestApplicationServiceTests
 
         public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default)
             => Task.FromResult<TokenUsage?>(null);
+    }
+
+    private sealed class StubClaudeCodeProvider(bool installed) : ClaudeCodeProvider
+    {
+        public override ClaudeCliStatus GetConnectionStatus()
+            => installed
+                ? new ClaudeCliStatus(true, "claude", false, "Claude Code detected.")
+                : new ClaudeCliStatus(false, null, false, "Claude Code missing.");
+
+        public override Task<AiResponse> SendChatAsync(IEnumerable<ChatMessage> messages, CancellationToken cancellationToken = default)
+            => throw new InvalidOperationException("Smoke test should not call SendChatAsync for Claude Code.");
     }
 
     [Fact]
@@ -109,6 +121,17 @@ public sealed class ProviderConnectionTestApplicationServiceTests
         var service = new ProviderConnectionTestApplicationService(setup);
 
         var result = await service.RunAsync(new StubProvider(true), CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.Equal("Connected!", result.Message);
+    }
+
+    [Fact]
+    public async Task RunAsync_ReturnsConnected_ForClaudeCodeWithoutInvokingChatProbe()
+    {
+        var service = new ProviderConnectionTestApplicationService();
+
+        var result = await service.RunAsync(new StubClaudeCodeProvider(true), CancellationToken.None);
 
         Assert.True(result.Success);
         Assert.Equal("Connected!", result.Message);

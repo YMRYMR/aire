@@ -56,6 +56,11 @@ public class AppProviderCoverageTests
                 .Invoke(this, new object[] { baseUrl })!;
     }
 
+    private sealed class InspectableClaudeCodeProvider(ClaudeCodeProvider.ClaudeCliStatus status) : ClaudeCodeProvider
+    {
+        public override ClaudeCliStatus GetConnectionStatus() => status;
+    }
+
     [Fact]
     public async Task ClaudeAiProvider_MetadataAndFailurePaths_Work()
     {
@@ -146,7 +151,45 @@ public class AppProviderCoverageTests
             Assert.False(provider.FieldHints.ShowBaseUrl);
             Assert.NotNull(provider.GetDefaultModels());
             Assert.NotEmpty(provider.GetDefaultModels());
-            Assert.NotNull(ClaudeCodeProvider.GetCliStatus());
+        }
+        finally
+        {
+            ClearModelsFolder(seededFolder);
+        }
+    }
+
+    [Fact]
+    public async Task ClaudeCodeProvider_ValidateConfiguration_UsesConnectionStatusProbe()
+    {
+        var provider = new InspectableClaudeCodeProvider(
+            new ClaudeCodeProvider.ClaudeCliStatus(true, "C:/tools/claude", false, "ready"));
+
+        provider.Initialize(new ProviderConfig { Model = "claude-sonnet-4-5" });
+
+        var validation = await provider.ValidateConfigurationAsync(CancellationToken.None);
+
+        Assert.True(validation.IsValid);
+    }
+
+    [Fact]
+    public void MistralProvider_MetadataAndDefaults_Work()
+    {
+        var seededFolder = SeedModelsFolder();
+        try
+        {
+            var provider = new MistralProvider();
+            provider.Initialize(new ProviderConfig
+            {
+                ApiKey = "mistral-test-key",
+                Model = "mistral-small-latest"
+            });
+
+            Assert.Equal("Mistral", provider.ProviderType);
+            Assert.Equal("Mistral AI", provider.DisplayName);
+            Assert.False(provider.FieldHints.ShowBaseUrl);
+            Assert.NotEmpty(provider.GetDefaultModels());
+            Assert.Contains(provider.GetDefaultModels(), model => model.Id == "mistral-large-latest");
+            Assert.Contains(provider.GetDefaultModels(), model => model.Id == "ministral-8b-latest");
         }
         finally
         {

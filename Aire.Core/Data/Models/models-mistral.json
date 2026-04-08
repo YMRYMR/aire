@@ -1,0 +1,15 @@
+{
+  "providerType": "Mistral",
+  "models": [
+    { "id": "mistral-large-latest",   "displayName": "Mistral Large 3",      "capabilities": ["vision", "tools"] },
+    { "id": "mistral-medium-latest",   "displayName": "Mistral Medium 3.1",   "capabilities": ["vision", "tools"] },
+    { "id": "mistral-small-latest",    "displayName": "Mistral Small 4",      "capabilities": ["vision", "tools"] },
+    { "id": "ministral-14b-latest",    "displayName": "Ministral 3 14B",      "capabilities": ["vision", "tools"] },
+    { "id": "ministral-8b-latest",     "displayName": "Ministral 3 8B",       "capabilities": ["vision", "tools"] },
+    { "id": "ministral-3b-latest",     "displayName": "Ministral 3 3B",       "capabilities": ["vision", "tools"] },
+    { "id": "magistral-medium-latest", "displayName": "Magistral Medium 1.2", "capabilities": ["tools"] },
+    { "id": "magistral-small-latest",  "displayName": "Magistral Small 1.2",  "capabilities": ["tools"] },
+    { "id": "devstral-small-latest",   "displayName": "Devstral Small 2",     "capabilities": ["tools"] },
+    { "id": "codestral-latest",        "displayName": "Codestral",            "capabilities": ["tools"] }
+  ]
+}

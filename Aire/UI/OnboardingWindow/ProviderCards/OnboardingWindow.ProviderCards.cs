@@ -34,7 +34,7 @@ namespace Aire.UI
     {
         private static readonly string[][] ProviderRows =
         [
-            ["OpenAI", "Codex", "Groq"],
+            ["OpenAI", "Mistral", "Codex", "Groq"],
             ["Anthropic", "ClaudeWeb", "OpenRouter"],
             ["Ollama", "DeepSeek", "Zai"],
             ["Inception", "GoogleAI", "GoogleAIImage", "ClaudeCode"]
@@ -107,6 +107,7 @@ namespace Aire.UI
             return new(StringComparer.Ordinal)
             {
                 ["OpenAI"]        = new("OpenAI", "OpenAI", L("onboarding.provider.openai.subtitle", "GPT-4o, o3 & more"), "#10A37F", CreateOpenAiLogo),
+                ["Mistral"]       = new("Mistral", "Mistral AI", L("onboarding.provider.mistral.subtitle", "OpenAI-compatible API"), "#F97316", CreateMistralLogo),
                 ["Codex"]         = new("Codex", "Codex", L("onboarding.provider.codex.subtitle", "Local CLI bridge"), "#0F172A", CreateCodexLogo),
                 ["ClaudeCode"]    = new("ClaudeCode", "Claude Code", L("onboarding.provider.claudecode.subtitle", "Local CLI bridge"), "#111111", CreateClaudeLogo),
                 ["Ollama"]        = new("Ollama", "Ollama", L("onboarding.provider.ollama.subtitle", "Local, free, private"), "#5A5A5A", CreateOllamaLogo),
@@ -202,6 +203,9 @@ namespace Aire.UI
 
         private static WpfUIElement CreateOpenAiLogo()
             => CreateTextLogo("◎", 20, FontWeights.Regular);
+
+        private static WpfUIElement CreateMistralLogo()
+            => CreateTextLogo("M", 17, FontWeights.SemiBold);
 
         private static WpfUIElement CreateCodexLogo()
         {
