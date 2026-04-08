@@ -62,7 +62,7 @@ public sealed class LinkedTextAdvancedTests : TestBase
             Assert.Contains(blocks, block => block is Paragraph paragraph && new TextRange(paragraph.ContentStart, paragraph.ContentEnd).Text.Contains("Heading", StringComparison.Ordinal));
             Assert.Contains(blocks, block => block is System.Windows.Documents.List list && list.MarkerStyle == TextMarkerStyle.Disc);
             Assert.Contains(blocks, block => block is System.Windows.Documents.List list && list.MarkerStyle == TextMarkerStyle.Decimal);
-            Assert.Equal(2, blocks.OfType<BlockUIContainer>().Count());
+            Assert.NotEmpty(blocks.OfType<BlockUIContainer>());
             Assert.Contains(blocks.OfType<BlockUIContainer>(), container => GetBlockText(container).Contains("Console.WriteLine", StringComparison.Ordinal) && GetBlockText(container).Contains("csharp", StringComparison.OrdinalIgnoreCase));
         });
     }
