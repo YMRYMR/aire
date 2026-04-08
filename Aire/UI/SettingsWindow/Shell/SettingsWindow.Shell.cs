@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,7 +14,6 @@ namespace Aire.UI
 
             if (msg == WM_NCHITTEST && ResizeMode == ResizeMode.CanResize)
             {
-                int screenX = unchecked((short)(lParam.ToInt32() & 0xFFFF));
                 int screenY = unchecked((short)(lParam.ToInt32() >> 16));
                 GetWindowRect(hwnd, out var r);
                 if (screenY >= r.Top && screenY < r.Top + resizePx)

@@ -67,6 +67,23 @@ public sealed class ProviderConnectionTestApplicationServiceTests
     }
 
     [Fact]
+    public async Task RunAsync_AppendsRemediationHint_WhenValidationSuggestsBillingIssue()
+    {
+        var gateway = new FakeProviderRuntimeGateway();
+        var runtime = new ProviderRuntimeApplicationService(gateway);
+        var setup = new ProviderSetupApplicationService(runtime);
+        var service = new ProviderConnectionTestApplicationService(setup);
+
+        var result = await service.RunAsync(
+            new StubProvider(false, "Insufficient balance or no resource package. Please recharge."),
+            CancellationToken.None);
+
+        Assert.False(result.Success);
+        Assert.Contains("credits", result.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Please recharge", result.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public async Task RunAsync_ReturnsSmokeFailureMessage()
     {
         var gateway = new FakeProviderRuntimeGateway

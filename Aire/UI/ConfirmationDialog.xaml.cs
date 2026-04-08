@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Aire.UI
 {
@@ -10,6 +11,13 @@ namespace Aire.UI
         public ConfirmationDialog()
         {
             InitializeComponent();
+            InitializeThemeAndLanguage();
+        }
+
+        private void OnThemeChanged() => Dispatcher.Invoke(() => FontSize = Services.AppearanceService.FontSize);
+
+        private void InitializeThemeAndLanguage()
+        {
             FontSize = Services.AppearanceService.FontSize;
             FlowDirection = Services.LocalizationService.IsRightToLeftLanguage(Services.LocalizationService.CurrentCode)
                 ? System.Windows.FlowDirection.RightToLeft
@@ -18,11 +26,9 @@ namespace Aire.UI
             Closed += (_, _) => Services.AppearanceService.AppearanceChanged -= OnThemeChanged;
         }
 
-        private void OnThemeChanged() => Dispatcher.Invoke(() => FontSize = Services.AppearanceService.FontSize);
-
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ButtonState == System.Windows.Input.MouseButtonState.Pressed) DragMove();
+            if (e.ButtonState == MouseButtonState.Pressed) DragMove();
         }
 
         internal void YesButton_Click(object sender, RoutedEventArgs e)

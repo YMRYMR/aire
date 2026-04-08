@@ -4,20 +4,22 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using Aire.Data;
 using Aire.Providers;
 using Aire.Services;
 using Aire.UI.Controls;
-using ProviderChatMessage = Aire.Providers.ChatMessage;
 using WpfComboBoxItem = System.Windows.Controls.ComboBoxItem;
 using WpfBrush = System.Windows.Media.Brush;
-using WpfColor = System.Windows.Media.Color;
-using WpfSolidBrush = System.Windows.Media.SolidColorBrush;
 
 namespace Aire.UI
 {
     public partial class OnboardingWindow
     {
+        private readonly CollectionViewSource _standardModelViewSource = new();
+        private bool _suppressStandardModelFilter;
+        private ModelDefinition? _preStandardModelFilterSelection;
+
         private void BindStandardModels(IReadOnlyList<ModelDefinition> models, string? preferredModelId = null)
         {
             var previous = preferredModelId
@@ -195,6 +197,5 @@ namespace Aire.UI
             var ct = _modelFetchCts.Token;
             _ = FetchModelsWithDebounceAsync(ct);
         }
-
     }
 }

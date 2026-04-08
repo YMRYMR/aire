@@ -13,6 +13,8 @@ namespace Aire.UI
 {
     public partial class OnboardingWindow
     {
+        internal void CancelOllamaOps() => OllamaModelPicker.CancelCheck();
+
         private static readonly CodexActionApplicationService _codexActionApplicationService = new(new CodexManagementClient());
 
         internal void SkipForNow_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
