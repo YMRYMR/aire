@@ -321,6 +321,16 @@ namespace Aire.Data
             await normalizeCmd.ExecuteNonQueryAsync();
         }
 
+        private async Task MigrateRemoveLegacySwitchedProviderMessagesAsync()
+        {
+            using var cmd = _connection!.CreateCommand();
+            cmd.CommandText = @"
+                DELETE FROM Messages
+                WHERE Role = 'system'
+                  AND Content = 'Switched to Codex'";
+            await cmd.ExecuteNonQueryAsync();
+        }
+
         private async Task SeedDefaultProvidersAsync()
         {
             using var checkCmd = _connection!.CreateCommand();

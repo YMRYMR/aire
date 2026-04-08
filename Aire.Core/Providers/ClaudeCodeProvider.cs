@@ -93,6 +93,9 @@ namespace Aire.Providers
             }
         }
 
+        /// <summary>
+        /// Returns the lightweight Claude Code availability probe used by validation and setup tests.
+        /// </summary>
         public virtual ClaudeCliStatus GetConnectionStatus()
             => GetCliStatus();
 

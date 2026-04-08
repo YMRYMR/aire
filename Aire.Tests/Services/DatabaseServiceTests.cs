@@ -148,6 +148,33 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
+    public async Task InitializeAsync_RemovesLegacySwitchedToCodexSystemMessages()
+    {
+        int providerId = await _db.InsertProviderAsync(new Provider
+        {
+            Name = "Cleanup Provider",
+            Type = "OpenAI",
+            ApiKey = "sk-cleanup",
+            Model = "gpt-4o-mini",
+            IsEnabled = true,
+            Color = "#444444"
+        });
+
+        int conversationId = await _db.CreateConversationAsync(providerId, "Cleanup conversation");
+        await _db.SaveMessageAsync(conversationId, "system", "Switched to Codex");
+        await _db.SaveMessageAsync(conversationId, "system", "Keep me");
+        await _db.SaveMessageAsync(conversationId, "assistant", "Also keep me");
+
+        using DatabaseService db2 = new DatabaseService(_dbPath);
+        await db2.InitializeAsync();
+
+        List<Aire.Data.Message> messages = await db2.GetMessagesAsync(conversationId);
+        Assert.DoesNotContain(messages, message => message.Role == "system" && message.Content == "Switched to Codex");
+        Assert.Contains(messages, message => message.Role == "system" && message.Content == "Keep me");
+        Assert.Contains(messages, message => message.Role == "assistant" && message.Content == "Also keep me");
+    }
+
+    [Fact]
     public async Task SetSettingAsync_OverwritesExistingValue()
     {
         await _db.SetSettingAsync("theme", "dark");
