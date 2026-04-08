@@ -30,36 +30,7 @@
   "languageBatch": {
     "outputFolder": "Aire/Assets/Help",
     "languages": ["en", "es", "fr", "de", "it", "pt", "ja", "zh", "ko", "ar", "hi", "uk"],
-    "switchDelayMs": 1500,
-    "preBatchActions": [
-      {
-        "kind": "close-update-window",
-        "delayMs": 300
-      },
-      {
-        "kind": "try-close-window",
-        "titleContains": "Help",
-        "processName": "Aire",
-        "delayMs": 300
-      },
-      {
-        "kind": "try-close-window",
-        "titleContains": "Welcome",
-        "processName": "Aire",
-        "delayMs": 300
-      },
-      {
-        "kind": "try-close-window",
-        "titleContains": "Settings",
-        "processName": "Aire",
-        "delayMs": 300
-      },
-      {
-        "kind": "show-window",
-        "processName": "Aire",
-        "delayMs": 500
-      }
-    ]
+    "switchDelayMs": 1500
   },
   "screenshots": [
     {
