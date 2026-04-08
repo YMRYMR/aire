@@ -154,7 +154,7 @@ Initial contributors:
 
 ---
 
-## 🤖 Built by AIs, for AIs
+## Built by AIs, for AIs (and humans too!)
 
 This project is **99.99% AI-authored**. Every layer — from architecture to UI to tests — was designed and implemented by AI models working autonomously.
 
