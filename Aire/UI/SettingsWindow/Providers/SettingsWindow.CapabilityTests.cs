@@ -22,6 +22,7 @@ namespace Aire.UI
         private readonly ProviderCapabilityTestApplicationService _capabilityTestApplicationService = new();
         private readonly ProviderCapabilityTestSessionService _capabilitySessionService = new();
         private readonly List<CapabilityTestResult> _capabilityTestResults = new();
+        internal bool _isCapabilitySuiteRunning;
 
         private IAiProvider? BuildProviderFromForm()
         {
@@ -91,6 +92,7 @@ namespace Aire.UI
             CapTestProgressBar.IsIndeterminate = true;
             CapTestProgressText.Text = LocalizationService.S("captest.validating", "Validating\u2026");
             CapTestStatusText.Text = LocalizationService.S("captest.running", "Running\u2026");
+            _isCapabilitySuiteRunning = true;
 
             // Clear the results panel now so rows appear as they arrive.
             CapTestResultsPanel.Children.Clear();
@@ -147,6 +149,8 @@ namespace Aire.UI
             }
             finally
             {
+                _isCapabilitySuiteRunning = false;
+                SetCapabilityRerunButtonsEnabled(true);
                 CapTestProgressBar.IsIndeterminate = false;
                 CapTestProgressBorder.Visibility = Visibility.Collapsed;
                 StopTestsButton.Visibility = Visibility.Collapsed;
@@ -164,6 +168,11 @@ namespace Aire.UI
 
             var test = CapabilityTestRunner.AllTests.FirstOrDefault(t => t.Id == testId);
             if (test == null)
+            {
+                return;
+            }
+
+            if (_isCapabilitySuiteRunning)
             {
                 return;
             }
@@ -357,6 +366,7 @@ namespace Aire.UI
                 Foreground                 = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["LinkBrush"],
                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalContentAlignment   = System.Windows.VerticalAlignment.Center,
+                IsEnabled                  = !_isCapabilitySuiteRunning,
             };
             rerunButton.Click += RerunCapabilityTestButton_Click;
             AddCell(row, rerunButton, 5);
@@ -377,6 +387,7 @@ namespace Aire.UI
                 AppendTestResultRow(r);
 
             CapTestResultsBorder.Visibility = Visibility.Visible;
+            SetCapabilityRerunButtonsEnabled(!_isCapabilitySuiteRunning);
             UpdateTestedAtLabel(testedAt);
         }
 
@@ -438,6 +449,20 @@ namespace Aire.UI
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star), MinWidth = 120 });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(56) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(28) });
+        }
+
+        private void SetCapabilityRerunButtonsEnabled(bool enabled)
+        {
+            foreach (var row in CapTestResultsPanel.Children.OfType<Grid>())
+            {
+                foreach (var button in row.Children.OfType<Button>())
+                {
+                    if (button.Tag is string)
+                    {
+                        button.IsEnabled = enabled;
+                    }
+                }
+            }
         }
 
         internal async Task SaveTestResultsAsync(Provider provider, List<CapabilityTestResult> results, DateTime testedAt)

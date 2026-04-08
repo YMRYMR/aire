@@ -101,6 +101,13 @@ namespace Aire.Tests.UI
                 Assert.Equal(22d, rerunButton.Height);
                 Assert.Equal("cat", rerunButton.Tag);
                 Assert.Equal(6, row.ColumnDefinitions.Count);
+                Assert.True(rerunButton.IsEnabled);
+
+                settingsWindow._isCapabilitySuiteRunning = true;
+                settingsWindow.DisplayTestResults(array, DateTime.Now);
+                Grid runningRow = Assert.IsType<Grid>(stackPanel.Children[1]);
+                Button disabledRerunButton = Assert.Single(runningRow.Children.OfType<Button>());
+                Assert.False(disabledRerunButton.IsEnabled);
                 
                 Provider provider = new Provider
                 {
