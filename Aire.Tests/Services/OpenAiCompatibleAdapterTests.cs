@@ -16,6 +16,7 @@ public sealed class OpenAiCompatibleAdapterTests
     [InlineData("OpenAI")]
     [InlineData("Groq")]
     [InlineData("OpenRouter")]
+    [InlineData("Mistral")]
     [InlineData("DeepSeek")]
     [InlineData("Inception")]
     [InlineData("Zai")]
@@ -44,6 +45,7 @@ public sealed class OpenAiCompatibleAdapterTests
     [InlineData("OpenAI", typeof(OpenAiProvider))]
     [InlineData("Groq", typeof(GroqProvider))]
     [InlineData("OpenRouter", typeof(OpenRouterProvider))]
+    [InlineData("Mistral", typeof(MistralProvider))]
     [InlineData("DeepSeek", typeof(DeepSeekProvider))]
     [InlineData("Inception", typeof(InceptionProvider))]
     [InlineData("Zai", typeof(ZaiProvider))]
@@ -75,6 +77,7 @@ public sealed class OpenAiCompatibleAdapterTests
 
         Assert.IsType<OpenAiCompatibleAdapter>(service.Resolve("OpenAI"));
         Assert.IsType<OpenAiCompatibleAdapter>(service.Resolve("Groq"));
+        Assert.IsType<OpenAiCompatibleAdapter>(service.Resolve("Mistral"));
         Assert.IsType<OpenAiCompatibleAdapter>(service.Resolve("Zai"));
     }
 

@@ -12,6 +12,7 @@ public sealed class ProviderAdapterDefaultsCoverageTests
     [InlineData("OpenAI", typeof(OpenAiCompatibleAdapter))]
     [InlineData("Groq", typeof(OpenAiCompatibleAdapter))]
     [InlineData("OpenRouter", typeof(OpenAiCompatibleAdapter))]
+    [InlineData("Mistral", typeof(OpenAiCompatibleAdapter))]
     [InlineData("DeepSeek", typeof(OpenAiCompatibleAdapter))]
     [InlineData("Inception", typeof(OpenAiCompatibleAdapter))]
     [InlineData("Zai", typeof(OpenAiCompatibleAdapter))]

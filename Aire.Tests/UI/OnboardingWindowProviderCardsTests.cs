@@ -35,7 +35,9 @@ public class OnboardingWindowProviderCardsTests : TestBase
                 var buttons = children.OfType<Button>().ToList();
                 Assert.NotEmpty(buttons);
                 Assert.Contains(buttons, button => button.Tag as string == "OpenAI");
+                Assert.Contains(buttons, button => button.Tag as string == "Mistral");
                 Assert.Contains(buttons, button => button.Tag as string == "Ollama");
+                Assert.Contains(buttons, button => button.Tag as string == "Mistral");
             }
             finally
             {

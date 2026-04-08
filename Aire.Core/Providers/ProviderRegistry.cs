@@ -31,6 +31,7 @@ namespace Aire.Providers
                 "ClaudeCode"  => new ClaudeCodeProvider(),
                 "Groq"        => new GroqProvider(),
                 "OpenRouter"  => new OpenRouterProvider(),
+                "Mistral"     => new MistralProvider(),
                 "Ollama"      => new PortableOllamaProvider(),
                 "Zai"         => new ZaiProvider(),
                 _             => throw new NotSupportedException($"Provider type '{providerConfig.Type}' is not supported.")
@@ -85,6 +86,7 @@ namespace Aire.Providers
                 "ClaudeCode" => new ClaudeCodeProvider(),
                 "Groq"       => new GroqProvider(),
                 "OpenRouter" => new OpenRouterProvider(),
+                "Mistral"    => new MistralProvider(),
                 "Ollama"     => new PortableOllamaProvider(),
                 "Zai"        => new ZaiProvider(),
                 _            => throw new NotSupportedException($"Provider type '{providerType}' is not supported."),

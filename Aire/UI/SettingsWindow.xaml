@@ -209,6 +209,7 @@
                                             <ComboBoxItem Content="Claude.ai" Tag="ClaudeWeb" />
                                             <ComboBoxItem Content="Ollama" Tag="Ollama" />
                                             <ComboBoxItem Content="DeepSeek (OpenAI‑compatible)" Tag="DeepSeek" />
+                                            <ComboBoxItem Content="Mistral AI (OpenAI-compatible)" Tag="Mistral" />
                                             <ComboBoxItem Content="Inception (OpenAI‑compatible)" Tag="Inception" />
                                             <ComboBoxItem Content="Zhipu AI (OpenAI‑compatible)" Tag="Zai" />
                                         </ComboBox>

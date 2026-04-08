@@ -22,6 +22,7 @@ namespace Aire.Services.Providers
             "OpenAI",
             "Groq",
             "OpenRouter",
+            "Mistral",
             "DeepSeek",
             "Inception",
             "Zai"
