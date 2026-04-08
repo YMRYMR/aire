@@ -42,7 +42,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Add direct tests for important application services instead of relying only on WPF-backed tests.
 - Focus first on chat orchestration, provider workflows, and settings persistence.
 
-### 2.3 Reduce test fragility `[ ]`
+### 2.3 Reduce test fragility `[x]`
 - Remove remaining assumptions that depend on `GetUninitializedObject` or hidden WPF state.
 - Prefer test seams that construct the real object graph when feasible.
 

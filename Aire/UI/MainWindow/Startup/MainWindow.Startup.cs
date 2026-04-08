@@ -24,10 +24,12 @@ namespace Aire
                 .IsAutoAcceptedAsync(toolName, UI.SettingsWindow.AutoAcceptJsonCache);
 
         public MainWindow()
+            : this(initializeUi: true)
         {
-            InitializeComponent();
-            DataContext = this;
+        }
 
+        internal MainWindow(bool initializeUi)
+        {
             _databaseService = new DatabaseService();
             _localApiApplicationService = new LocalApiApplicationService();
             _assistantModeApplicationService = new AssistantModeApplicationService();
@@ -84,6 +86,16 @@ namespace Aire
             _ttsService = new SpeechSynthesisService();
             _ttsService.SpeakingCompleted += OnTtsSpeakingCompleted;
 
+            if (!initializeUi)
+                return;
+
+            InitializeComponent();
+            InitializeUiState();
+        }
+
+        private void InitializeUiState()
+        {
+            DataContext = this;
             AppearanceService.AppearanceChanged += () => Dispatcher.Invoke(() => FontSize = AppearanceService.FontSize);
             LocalizationService.LoadAll();
             LocalizationService.LanguageChanged += () =>

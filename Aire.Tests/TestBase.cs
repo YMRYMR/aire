@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -50,6 +51,11 @@ namespace Aire.Tests
             thread.Join();
             if (error != null)
                 throw new Exception($"STA thread failed: {error.Message}\n{error.StackTrace}", error);
+        }
+
+        protected static void RunOnStaThread(Func<Task> action)
+        {
+            RunOnStaThread(() => action().GetAwaiter().GetResult());
         }
 
         protected static void SelectComboTag(ComboBox comboBox, string tag)

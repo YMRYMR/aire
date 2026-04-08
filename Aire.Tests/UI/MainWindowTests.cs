@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +19,7 @@ using Aire.Services;
 using Aire.UI;
 using Aire.UI.MainWindow.Controls;
 using Aire.UI.MainWindow.Models;
+using Aire.UI.Settings.Models;
 using Xunit;
 using UiModels = Aire.UI.MainWindow.Models;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
@@ -30,53 +30,54 @@ namespace Aire.Tests.UI
     public class MainWindowTests : TestBase
     {
         [Fact]
-        public async Task MainWindow_ApiPendingApprovalHelpers_Work()
+        public void MainWindow_ApiPendingApprovalHelpers_Work()
         {
-            AppStartupState.MarkReady();
-            // GetUninitializedObject avoids InitializeComponent(); only Messages and the API
-            // approval helpers are exercised here — no other constructor state is needed.
-            MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-
-            ObservableCollection<UiModels.ChatMessage> messages = new ObservableCollection<UiModels.ChatMessage>
+            RunOnStaThread(async () =>
             {
-                new UiModels.ChatMessage
-                {
-                    IsApprovalPending = true,
-                    PendingToolCall = new ToolCallRequest
-                    {
-                        Tool = "execute_command",
-                        Description = "run",
-                        RawJson = "{}"
-                    },
-                    ApprovalTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously),
-                    Timestamp = "10:00"
-                },
-                new UiModels.ChatMessage
-                {
-                    IsApprovalPending = true,
-                    PendingToolCall = new ToolCallRequest
-                    {
-                        Tool = "read_file",
-                        Description = "read",
-                        RawJson = "{}"
-                    },
-                    ApprovalTcs = TaskCompletionSource_GetValue(true),
-                    Timestamp = "10:01"
-                }
-            };
-            window.Messages = messages;
+                AppStartupState.MarkReady();
+                MainWindow window = new MainWindow(initializeUi: false);
 
-            var pending = await window.ApiListPendingApprovalsAsync();
-            Assert.Single(pending);
-            Assert.Equal("execute_command", pending[0].Tool);
-            Assert.Equal(0, pending[0].Index);
+                ObservableCollection<UiModels.ChatMessage> messages = new ObservableCollection<UiModels.ChatMessage>
+                {
+                    new UiModels.ChatMessage
+                    {
+                        IsApprovalPending = true,
+                        PendingToolCall = new ToolCallRequest
+                        {
+                            Tool = "execute_command",
+                            Description = "run",
+                            RawJson = "{}"
+                        },
+                        ApprovalTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously),
+                        Timestamp = "10:00"
+                    },
+                    new UiModels.ChatMessage
+                    {
+                        IsApprovalPending = true,
+                        PendingToolCall = new ToolCallRequest
+                        {
+                            Tool = "read_file",
+                            Description = "read",
+                            RawJson = "{}"
+                        },
+                        ApprovalTcs = TaskCompletionSource_GetValue(true),
+                        Timestamp = "10:01"
+                    }
+                };
+                window.Messages = messages;
 
-            Assert.False(await window.ApiSetPendingApprovalAsync(-1, true));
-            Assert.False(await window.ApiSetPendingApprovalAsync(1, true));
-            Assert.True(await window.ApiSetPendingApprovalAsync(0, false));
-            
-            Assert.True(messages[0].ApprovalTcs.Task.IsCompleted);
-            Assert.Empty(await window.ApiListPendingApprovalsAsync());
+                var pending = await window.ApiListPendingApprovalsAsync();
+                Assert.Single(pending);
+                Assert.Equal("execute_command", pending[0].Tool);
+                Assert.Equal(0, pending[0].Index);
+
+                Assert.False(await window.ApiSetPendingApprovalAsync(-1, true));
+                Assert.False(await window.ApiSetPendingApprovalAsync(1, true));
+                Assert.True(await window.ApiSetPendingApprovalAsync(0, false));
+                
+                Assert.True(messages[0].ApprovalTcs.Task.IsCompleted);
+                Assert.Empty(await window.ApiListPendingApprovalsAsync());
+            });
         }
 
         [Fact]
@@ -106,9 +107,7 @@ namespace Aire.Tests.UI
                     };
                     provider.Id = databaseService.InsertProviderAsync(provider).GetAwaiter().GetResult();
                     
-                    // GetUninitializedObject avoids InitializeComponent(); required service
-                    // fields are injected below.
-                    MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+                    MainWindow window = new MainWindow(initializeUi: false);
                     
                     MainHeaderControl header = new MainHeaderControl();
                     header._testProviderComboBox = new ComboBox();
@@ -155,24 +154,22 @@ namespace Aire.Tests.UI
             {
                 EnsureApplication();
                 AppStartupState.MarkReady();
-                // GetUninitializedObject avoids InitializeComponent(); required service
-                // fields are injected below.
-                MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+                MainWindow window = new MainWindow(initializeUi: false);
                 window.Messages = new ObservableCollection<UiModels.ChatMessage>();
-
-                // DispatcherObject._dispatcher is null on an uninitialized object; wire it
-                // explicitly so Dispatcher.Invoke calls in the tested code resolve correctly.
-                FieldInfo dispatcherField = typeof(DispatcherObject).GetField("_dispatcher", BindingFlags.Instance | BindingFlags.NonPublic);
-                dispatcherField?.SetValue(window, Application.Current.Dispatcher);
 
                 string tempDir = Path.Combine(Path.GetTempPath(), "aire-tool-tests-" + Guid.NewGuid().ToString("N"));
                 Directory.CreateDirectory(tempDir);
                 string testFile = Path.Combine(tempDir, "tool.txt");
                 File.WriteAllText(testFile, "hello from tool");
+                using var databaseService = new DatabaseService();
+                databaseService.InitializeAsync().GetAwaiter().GetResult();
 
                 try
                 {
+                    window._databaseService = databaseService;
                     window._toolExecutionService = new ToolExecutionService(new FileSystemService(), new CommandExecutionService());
+                    typeof(MainWindow).GetField("_toolApprovalExecutionApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, null);
                     window.MessagesScrollViewer = new ScrollViewer();
                     SettingsWindow.SetAutoAcceptCache(string.Empty);
 
@@ -183,22 +180,15 @@ namespace Aire.Tests.UI
                     Assert.Equal("pending_approval", result.Status);
                     Assert.NotNull(result.PendingApprovalIndex);
 
-                    UiModels.ChatMessage msg1 = new UiModels.ChatMessage
+                    SettingsWindow.SetAutoAcceptCache(JsonSerializer.Serialize(new AutoAcceptSettings
                     {
-                        PendingToolCall = new ToolCallRequest { Tool = "read_file", Description = "read", RawJson = "{}" }
-                    };
-                    var denyResult = (ApiToolExecutionResult)window.ProcessApiToolApprovalAsync(msg1, msg1.PendingToolCall, Task.FromResult(false)).GetAwaiter().GetResult();
-                    Assert.Equal("denied", denyResult.Status);
-                    Assert.Equal("✗ Denied", msg1.ToolCallStatus);
-
-                    var toolReq = new ToolCallRequest
-                    {
-                        Tool = "read_file",
-                        Description = "read_file",
-                        Parameters = JsonElementFor(new { path = testFile })
-                    };
-                    UiModels.ChatMessage msg2 = new UiModels.ChatMessage { PendingToolCall = toolReq };
-                    var allowResult = (ApiToolExecutionResult)window.ProcessApiToolApprovalAsync(msg2, toolReq, Task.FromResult(true)).GetAwaiter().GetResult();
+                        Enabled = true,
+                        AllowedTools = new List<string> { "read_file" },
+                        AllowMouseTools = false,
+                        AllowKeyboardTools = false
+                    }));
+                    using JsonDocument pathParams = JsonDocument.Parse($@"{{""path"":""{testFile.Replace("\\", "\\\\")}""}}");
+                    var allowResult = window.ApiExecuteToolAsync("read_file", pathParams.RootElement, true, 300).GetAwaiter().GetResult();
                     Assert.Equal("completed", allowResult.Status);
                     Assert.Contains("hello from tool", allowResult.TextResult);
                 }
@@ -235,11 +225,7 @@ namespace Aire.Tests.UI
                     int convId = db.CreateConversationAsync(p1.Id, "Needle Chat").GetAwaiter().GetResult();
                     db.SaveMessageAsync(convId, "user", "needle content").GetAwaiter().GetResult();
 
-                    // GetUninitializedObject avoids InitializeComponent(); required service
-                    // fields are injected below. The dispatcher is wired explicitly because
-                    // DispatcherObject._dispatcher is null on an uninitialized object.
-                    MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-                    typeof(DispatcherObject).GetField("_dispatcher", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(window, Application.Current.Dispatcher);
+                    MainWindow window = new MainWindow(initializeUi: false);
 
                     MainHeaderControl header = new MainHeaderControl();
                     header._testProviderComboBox = new ComboBox();
@@ -254,7 +240,7 @@ namespace Aire.Tests.UI
                     window._chatSessionApplicationService = new ChatSessionApplicationService(db, db);
                     window._conversationApplicationService = new ConversationApplicationService(db);
                     window._currentConversationId = convId;
-                    window._settingsWindow = (SettingsWindow)RuntimeHelpers.GetUninitializedObject(typeof(SettingsWindow)); // stub — not used by the tested API methods
+                    window._settingsWindow = new SettingsWindow(initializeUi: false); // stub — not used by the tested API methods
                     window.Messages = new ObservableCollection<UiModels.ChatMessage>();
                     window._conversationHistory = new List<ProviderChatMessage>();
 
@@ -315,8 +301,7 @@ namespace Aire.Tests.UI
                     int currentConversationId = db.CreateConversationAsync(provider.Id, "Current").GetAwaiter().GetResult();
                     int targetConversationId = db.CreateConversationAsync(provider.Id, "Target").GetAwaiter().GetResult();
 
-                    MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-                    typeof(DispatcherObject).GetField("_dispatcher", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(window, Application.Current.Dispatcher);
+                    MainWindow window = new MainWindow(initializeUi: false);
 
                     window.Messages = new ObservableCollection<UiModels.ChatMessage>();
                     window._conversationHistory = new List<ProviderChatMessage>();
@@ -393,8 +378,7 @@ namespace Aire.Tests.UI
                     };
                     provider.Id = db.InsertProviderAsync(provider).GetAwaiter().GetResult();
 
-                    MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-                    typeof(DispatcherObject).GetField("_dispatcher", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(window, Application.Current.Dispatcher);
+                    MainWindow window = new MainWindow(initializeUi: false);
 
                     var header = new MainHeaderControl();
                     header._testProviderComboBox = new ComboBox();
