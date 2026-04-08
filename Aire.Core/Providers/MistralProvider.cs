@@ -10,6 +10,7 @@ namespace Aire.Providers
 
         protected override ProviderCapabilities GetBaseCapabilities() =>
             ProviderCapabilities.TextChat |
+            ProviderCapabilities.ImageInput |
             ProviderCapabilities.Streaming |
             ProviderCapabilities.ToolCalling |
             ProviderCapabilities.SystemPrompt;

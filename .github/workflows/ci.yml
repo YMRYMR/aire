@@ -5,6 +5,19 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: Test scope to run
+        required: false
+        default: all
+        type: choice
+        options:
+          - all
+          - core
+          - providers
+          - services
+          - ui
 
 jobs:
   build:
@@ -25,4 +38,78 @@ jobs:
       run: dotnet build aire.sln --no-restore -c Release -m:1 /p:UseSharedCompilation=false
       
     - name: Test
-      run: dotnet test .\Aire.Tests\Aire.Tests.csproj --no-build -c Release --verbosity normal
+      shell: pwsh
+      env:
+        TEST_SCOPE: ${{ github.event.inputs.scope }}
+      run: |
+        $scope = $env:TEST_SCOPE
+        if ([string]::IsNullOrWhiteSpace($scope)) {
+          $scope = 'all'
+        }
+
+        $filter = switch ($scope) {
+          'core' { 'FullyQualifiedName~Aire.Tests.Core' }
+          'providers' { 'FullyQualifiedName~Aire.Tests.Providers' }
+          'services' { 'FullyQualifiedName~Aire.Tests.Services' }
+          'ui' { 'FullyQualifiedName~Aire.Tests.UI' }
+          default { '' }
+        }
+
+        $resultsRoot = Join-Path $PWD 'TestResults'
+        $args = @(
+          'test',
+          '.\Aire.Tests\Aire.Tests.csproj',
+          '--no-build',
+          '-c',
+          'Release',
+          '--verbosity',
+          'normal',
+          '--logger',
+          'trx;LogFileName=test-results.trx',
+          '--results-directory',
+          $resultsRoot,
+          '--collect',
+          'XPlat Code Coverage'
+        )
+
+        if (-not [string]::IsNullOrWhiteSpace($filter)) {
+          $args += @('--filter', $filter)
+        }
+
+        dotnet @args
+        if ($LASTEXITCODE -ne 0) {
+          exit $LASTEXITCODE
+        }
+
+        $trx = Get-ChildItem -Path $resultsRoot -Recurse -Filter '*.trx' | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        if (-not $trx) {
+          throw 'Could not find TRX test results.'
+        }
+
+        [xml]$trxXml = Get-Content -Path $trx.FullName -Raw
+        $ns = New-Object System.Xml.XmlNamespaceManager($trxXml.NameTable)
+        $ns.AddNamespace('t', 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010')
+        $counters = $trxXml.SelectSingleNode('//t:ResultSummary/t:Counters', $ns)
+        $totalTests = if ($counters) { [int]$counters.GetAttribute('total') } else { 0 }
+        $passedTests = if ($counters) { [int]$counters.GetAttribute('passed') } else { 0 }
+
+        $coverage = Get-ChildItem -Path $resultsRoot -Recurse -Filter 'coverage.cobertura.xml' | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        if (-not $coverage) {
+          throw 'Could not find coverage output.'
+        }
+
+        [xml]$coverageXml = Get-Content -Path $coverage.FullName -Raw
+        $coverageRoot = $coverageXml.coverage
+        $lineRate = [double]$coverageRoot.'line-rate'
+        $branchRate = [double]$coverageRoot.'branch-rate'
+
+        $linePct = [math]::Round($lineRate * 100, 2)
+        $branchPct = [math]::Round($branchRate * 100, 2)
+
+        @(
+          '### Test Summary'
+          ''
+          "| Scope | Tests | Passed | Line coverage | Branch coverage |"
+          '| --- | ---: | ---: | ---: | ---: |'
+          "| $scope | $totalTests | $passedTests | $linePct% | $branchPct% |"
+        ) | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append

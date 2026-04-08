@@ -56,9 +56,22 @@ namespace Aire.Services.Providers
             if (provider is ClaudeCodeProvider claudeCodeProvider)
             {
                 var status = claudeCodeProvider.GetConnectionStatus();
-                return status.IsInstalled
+                if (!status.IsInstalled)
+                    return new ProviderSmokeTestResult(false, status.UserMessage);
+
+                var response = await provider.SendChatAsync(
+                    [
+                        new ChatMessage
+                        {
+                            Role = "user",
+                            Content = "Reply with OK."
+                        }
+                    ],
+                    cancellationToken).ConfigureAwait(false);
+
+                return response.IsSuccess
                     ? new ProviderSmokeTestResult(true)
-                    : new ProviderSmokeTestResult(false, status.UserMessage);
+                    : new ProviderSmokeTestResult(false, response.ErrorMessage);
             }
 
             var validation = await provider.ValidateConfigurationAsync(cancellationToken).ConfigureAwait(false);

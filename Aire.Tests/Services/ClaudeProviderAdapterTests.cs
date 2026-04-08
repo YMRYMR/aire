@@ -80,16 +80,25 @@ public sealed class ClaudeProviderAdapterTests
     }
 
     [Fact]
-    public async Task ClaudeCodeAdapter_RunSmokeTest_UsesConnectionStatusInsteadOfChatRoundTrip()
+    public async Task ClaudeCodeAdapter_RunSmokeTest_UsesMinimalChatProbe_WhenInstalled()
     {
         var adapter = new ClaudeCodeAdapter();
         var provider = new FakeClaudeCodeProvider(
-            new ClaudeCodeProvider.ClaudeCliStatus(true, "C:/tools/claude", false, "ready"));
+            new ClaudeCodeProvider.ClaudeCliStatus(true, "C:/tools/claude", false, "ready"))
+        {
+            Response = new AiResponse
+            {
+                IsSuccess = true,
+                Content = "OK"
+            }
+        };
 
         var result = await adapter.RunSmokeTestAsync(provider, CancellationToken.None);
 
         Assert.True(result.Success);
         Assert.Null(result.ErrorMessage);
+        Assert.Single(provider.LastMessages);
+        Assert.Equal("Reply with OK.", provider.LastMessages[0].Content);
     }
 
     [Fact]
@@ -103,6 +112,17 @@ public sealed class ClaudeProviderAdapterTests
 
         Assert.False(result.Success);
         Assert.Equal("Claude Code not found.", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void ClaudeCodeProvider_BuildFailureMessage_UsesStructuredStdoutWhenPresent()
+    {
+        var result = ClaudeCodeProvider.BuildFailureMessage((
+            1,
+            "{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":true,\"result\":\"Failed to authenticate. API Error: 401 Invalid bearer token\"}",
+            string.Empty));
+
+        Assert.Equal("Failed to authenticate. API Error: 401 Invalid bearer token", result);
     }
 
     private sealed class FakeProvider : IAiProvider
@@ -147,9 +167,20 @@ public sealed class ClaudeProviderAdapterTests
 
     private sealed class FakeClaudeCodeProvider(ClaudeCodeProvider.ClaudeCliStatus status) : ClaudeCodeProvider
     {
+        public AiResponse Response { get; init; } = new AiResponse
+        {
+            IsSuccess = true,
+            Content = "OK"
+        };
+
+        public IReadOnlyList<ChatMessage> LastMessages { get; private set; } = [];
+
         public override ClaudeCliStatus GetConnectionStatus() => status;
 
         public override Task<AiResponse> SendChatAsync(IEnumerable<ChatMessage> messages, CancellationToken cancellationToken = default)
-            => throw new InvalidOperationException("Claude Code smoke tests should not call SendChatAsync.");
+        {
+            LastMessages = messages is IReadOnlyList<ChatMessage> list ? list : [.. messages];
+            return Task.FromResult(Response);
+        }
     }
 }

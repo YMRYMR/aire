@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Aire.AppLayer.Abstractions;
 using Aire.AppLayer.Providers;
 using Aire.Data;
 using Aire.Domain.Providers;
 using Aire.Providers;
 using Aire.Services;
+using Button = System.Windows.Controls.Button;
 
 namespace Aire.UI
 {
@@ -18,6 +21,8 @@ namespace Aire.UI
     {
         private readonly ProviderCapabilityTestApplicationService _capabilityTestApplicationService = new();
         private readonly ProviderCapabilityTestSessionService _capabilitySessionService = new();
+        private readonly List<CapabilityTestResult> _capabilityTestResults = new();
+        internal bool _isCapabilitySuiteRunning;
 
         private IAiProvider? BuildProviderFromForm()
         {
@@ -87,17 +92,18 @@ namespace Aire.UI
             CapTestProgressBar.IsIndeterminate = true;
             CapTestProgressText.Text = LocalizationService.S("captest.validating", "Validating\u2026");
             CapTestStatusText.Text = LocalizationService.S("captest.running", "Running\u2026");
+            _isCapabilitySuiteRunning = true;
 
             // Clear the results panel now so rows appear as they arrive.
             CapTestResultsPanel.Children.Clear();
-            _lastRenderedCategory = null;
+            _capabilityTestResults.Clear();
             CapTestResultsBorder.Visibility = Visibility.Visible;
 
-            var results = new List<CapabilityTestResult>();
             try
             {
                 var progress = new Progress<ProviderCapabilityTestApplicationService.ProgressUpdate>(update =>
                 {
+                    _capabilityTestResults.Add(update.Result);
                     CapTestProgressText.Text =
                         $"Tested: {update.Result.Name} ({update.CompletedCount}/{CapabilityTestRunner.AllTests.Count})";
 
@@ -127,7 +133,8 @@ namespace Aire.UI
                 if (!string.IsNullOrWhiteSpace(executionResult.WarningMessage))
                     ShowToast(executionResult.WarningMessage, isError: false);
 
-                results = executionResult.Results.ToList();
+                _capabilityTestResults.Clear();
+                _capabilityTestResults.AddRange(executionResult.Results);
                 // Results are already rendered row by row; just update the timestamp label.
                 UpdateTestedAtLabel(executionResult.TestedAt ?? DateTime.Now);
             }
@@ -142,9 +149,85 @@ namespace Aire.UI
             }
             finally
             {
+                _isCapabilitySuiteRunning = false;
+                SetCapabilityRerunButtonsEnabled(true);
                 CapTestProgressBar.IsIndeterminate = false;
                 CapTestProgressBorder.Visibility = Visibility.Collapsed;
                 StopTestsButton.Visibility = Visibility.Collapsed;
+                SetProvidersTabEnabled(true);
+                RunTestsButton.IsEnabled = true;
+            }
+        }
+
+        private async void RerunCapabilityTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.Tag is not string testId)
+            {
+                return;
+            }
+
+            var test = CapabilityTestRunner.AllTests.FirstOrDefault(t => t.Id == testId);
+            if (test == null)
+            {
+                return;
+            }
+
+            if (_isCapabilitySuiteRunning)
+            {
+                return;
+            }
+
+            await RunSingleCapabilityTestAsync(test);
+        }
+
+        private async Task RunSingleCapabilityTestAsync(CapabilityTest test)
+        {
+            var provider = BuildProviderFromForm();
+            if (provider == null)
+            {
+                return;
+            }
+
+            SetProvidersTabEnabled(false);
+            RunTestsButton.IsEnabled = false;
+            StopTestsButton.Visibility = Visibility.Collapsed;
+            CapTestProgressBorder.Visibility = Visibility.Visible;
+            CapTestProgressBar.IsIndeterminate = true;
+            CapTestProgressText.Text = string.Format(
+                LocalizationService.S("captest.runningOne", "Running {0}…"),
+                test.Name);
+            CapTestStatusText.Text = string.Format(
+                LocalizationService.S("captest.rerunning", "Rerunning {0}…"),
+                test.Name);
+
+            try
+            {
+                var executionResult = await _capabilityTestApplicationService.RunSingleAndPersistAsync(
+                    provider,
+                    _selectedProvider?.Id,
+                    _selectedProvider?.Model ?? string.Empty,
+                    test,
+                    CapabilityTestRunner.RunOneAsync,
+                    _databaseService,
+                    CancellationToken.None);
+
+                var index = _capabilityTestResults.FindIndex(r => r.Id == executionResult.Result.Id);
+                if (index >= 0)
+                    _capabilityTestResults[index] = executionResult.Result;
+                else
+                    _capabilityTestResults.Add(executionResult.Result);
+
+                DisplayTestResults(_capabilityTestResults, executionResult.TestedAt);
+            }
+            catch
+            {
+                ShowToast(LocalizationService.S("captest.failed", "Test run failed."), isError: true);
+                CapTestStatusText.Text = LocalizationService.S("captest.failed", "Test run failed.");
+            }
+            finally
+            {
+                CapTestProgressBar.IsIndeterminate = false;
+                CapTestProgressBorder.Visibility = Visibility.Collapsed;
                 SetProvidersTabEnabled(true);
                 RunTestsButton.IsEnabled = true;
             }
@@ -191,56 +274,50 @@ namespace Aire.UI
             return error.Length <= maxLen ? error : error[..maxLen] + "…";
         }
 
-        // Tracks the last category header written during an incremental run so we only
-        // insert a new header when the category changes.
-        private string? _lastRenderedCategory;
-
         /// <summary>
-        /// Appends a single result row (and a category header when needed) to the results panel.
+        /// Appends a single result row to the results panel.
         /// Call this while a test run is in progress to show results as they arrive.
         /// </summary>
         private void AppendTestResultRow(CapabilityTestResult r)
         {
-            // Category header — only when the category changes
-            if (r.Category != _lastRenderedCategory)
-            {
-                bool isFirst = _lastRenderedCategory == null;
-                CapTestResultsPanel.Children.Add(new TextBlock
-                {
-                    Text       = r.Category,
-                    Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
-                    FontSize   = 10,
-                    FontWeight = FontWeights.SemiBold,
-                    Margin     = new Thickness(0, isFirst ? 0 : 10, 0, 4),
-                });
-                _lastRenderedCategory = r.Category;
-            }
+            EnsureCapabilityResultsHeaderRow();
 
-            // Result row
-            var row = new StackPanel
+            var row = new Grid
             {
-                Orientation = System.Windows.Controls.Orientation.Horizontal,
-                Margin      = new Thickness(0, 0, 0, 3),
+                Margin = new Thickness(0, 0, 0, 2),
             };
 
-            row.Children.Add(new TextBlock
+            AddCapabilityResultColumns(row);
+
+            AddCell(row, new TextBlock
             {
-                Text       = r.Passed ? "✓" : "✗",
-                Foreground = new System.Windows.Media.SolidColorBrush(
+                Text                = r.Passed ? "✓" : "✗",
+                Foreground          = new System.Windows.Media.SolidColorBrush(
                     r.Passed
                         ? System.Windows.Media.Color.FromRgb(0x4C, 0xAF, 0x50)
                         : System.Windows.Media.Color.FromRgb(0xF4, 0x43, 0x36)),
-                Width    = 14,
-                FontSize = 12,
-            });
+                FontSize            = 12,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                VerticalAlignment   = System.Windows.VerticalAlignment.Center,
+            }, 0);
 
-            row.Children.Add(new TextBlock
+            AddCell(row, new TextBlock
             {
-                Text       = r.Name,
-                Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextBrush"],
-                Width    = 128,
-                FontSize = 12,
-            });
+                Text              = r.Name,
+                Foreground        = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextBrush"],
+                FontSize          = 12,
+                TextTrimming      = TextTrimming.CharacterEllipsis,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+            }, 1);
+
+            AddCell(row, new TextBlock
+            {
+                Text              = r.Category,
+                Foreground        = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
+                FontSize          = 11,
+                TextTrimming      = TextTrimming.CharacterEllipsis,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+            }, 2);
 
             var detail = r.Passed ? (r.ActualTool ?? string.Empty) : ShortenErrorMessage(r.Error ?? "failed");
             var detailBlock = new TextBlock
@@ -248,34 +325,69 @@ namespace Aire.UI
                 Text         = detail,
                 Foreground   = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
                 FontStyle    = r.Passed ? FontStyles.Normal : FontStyles.Italic,
-                MinWidth     = 80,
                 FontSize     = 11,
-                TextWrapping = TextWrapping.Wrap,
-                MaxWidth     = 180,
+                TextWrapping = TextWrapping.NoWrap,
+                TextTrimming = TextTrimming.CharacterEllipsis,
             };
             if (!r.Passed && !string.IsNullOrEmpty(r.Error) && r.Error != detail)
                 detailBlock.ToolTip = r.Error;
+            else if (r.Passed && !string.IsNullOrEmpty(detail))
+                detailBlock.ToolTip = detail;
 
-            row.Children.Add(detailBlock);
-            row.Children.Add(new TextBlock
+            AddCell(row, detailBlock, 3);
+            AddCell(row, new TextBlock
             {
-                Text       = $"  {r.DurationMs / 1000.0:F1}s",
-                Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
-                FontSize   = 11,
-            });
+                Text                = $"{r.DurationMs / 1000.0:F1}s",
+                Foreground          = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
+                FontSize            = 11,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                VerticalAlignment   = System.Windows.VerticalAlignment.Center,
+            }, 4);
+
+            var rerunButton = new Button
+            {
+                Content                    = new TextBlock
+                {
+                    Text              = "\uE72C",
+                    FontFamily        = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
+                    FontSize          = 12,
+                    Foreground        = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["LinkBrush"],
+                    TextAlignment     = TextAlignment.Center,
+                    VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                },
+                Width                      = 22,
+                Height                     = 22,
+                Padding                    = new Thickness(0),
+                Margin                     = new Thickness(0, 0, 0, 0),
+                MinWidth                   = 22,
+                MinHeight                  = 22,
+                Tag                        = r.Id,
+                ToolTip                    = "Run this test again",
+                Foreground                 = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["LinkBrush"],
+                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center,
+                VerticalContentAlignment   = System.Windows.VerticalAlignment.Center,
+                IsEnabled                  = !_isCapabilitySuiteRunning,
+            };
+            rerunButton.Click += RerunCapabilityTestButton_Click;
+            AddCell(row, rerunButton, 5);
 
             CapTestResultsPanel.Children.Add(row);
         }
 
         internal void DisplayTestResults(IEnumerable<CapabilityTestResult> results, DateTime testedAt)
         {
-            CapTestResultsPanel.Children.Clear();
-            _lastRenderedCategory = null;
+            var snapshot = results.ToList();
+            _capabilityTestResults.Clear();
+            _capabilityTestResults.AddRange(snapshot);
 
-            foreach (var r in results)
+            CapTestResultsPanel.Children.Clear();
+            EnsureCapabilityResultsHeaderRow();
+
+            foreach (var r in snapshot)
                 AppendTestResultRow(r);
 
             CapTestResultsBorder.Visibility = Visibility.Visible;
+            SetCapabilityRerunButtonsEnabled(!_isCapabilitySuiteRunning);
             UpdateTestedAtLabel(testedAt);
         }
 
@@ -289,6 +401,68 @@ namespace Aire.UI
                 : ago.TotalHours   < 24 ? string.Format(L("captest.hoursAgo", "{0}h ago"), (int)ago.TotalHours)
                 : testedAt.ToString("d");
             CapTestStatusText.Text = string.Format(L("captest.lastTested", "Last tested: {0}"), when);
+        }
+
+        private void EnsureCapabilityResultsHeaderRow()
+        {
+            if (CapTestResultsPanel.Children.Count > 0)
+                return;
+
+            var header = new Grid
+            {
+                Margin = new Thickness(0, 0, 0, 6),
+            };
+
+            AddCapabilityResultColumns(header);
+
+            AddCell(header, CreateHeaderText(" "), 0);
+            AddCell(header, CreateHeaderText("Test"), 1);
+            AddCell(header, CreateHeaderText("Category"), 2);
+            AddCell(header, CreateHeaderText("Result / details"), 3);
+            AddCell(header, CreateHeaderText("Time"), 4);
+            AddCell(header, CreateHeaderText(" "), 5);
+
+            CapTestResultsPanel.Children.Add(header);
+        }
+
+        private static void AddCell(Grid grid, UIElement element, int column)
+        {
+            Grid.SetColumn(element, column);
+            grid.Children.Add(element);
+        }
+
+        private static TextBlock CreateHeaderText(string text) =>
+            new()
+            {
+                Text = text,
+                FontSize = 10,
+                FontWeight = FontWeights.SemiBold,
+                Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+            };
+
+        private static void AddCapabilityResultColumns(Grid grid)
+        {
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(18) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(132) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(88) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star), MinWidth = 120 });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(56) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(28) });
+        }
+
+        private void SetCapabilityRerunButtonsEnabled(bool enabled)
+        {
+            foreach (var row in CapTestResultsPanel.Children.OfType<Grid>())
+            {
+                foreach (var button in row.Children.OfType<Button>())
+                {
+                    if (button.Tag is string)
+                    {
+                        button.IsEnabled = enabled;
+                    }
+                }
+            }
         }
 
         internal async Task SaveTestResultsAsync(Provider provider, List<CapabilityTestResult> results, DateTime testedAt)

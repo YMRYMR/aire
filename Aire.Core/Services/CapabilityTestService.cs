@@ -340,7 +340,7 @@ public class CapabilityTestRunner
         }
     }
 
-    internal static async Task<CapabilityTestResult> RunOneAsync(
+    public static async Task<CapabilityTestResult> RunOneAsync(
         IAiProvider provider, CapabilityTest test, CancellationToken ct)
     {
         var sw = Stopwatch.StartNew();
