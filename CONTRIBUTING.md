@@ -58,3 +58,16 @@ Do **not** commit these values.
 - Include a short summary of the change.
 - Mention any security or migration impact.
 - Note how the change was validated.
+
+## AI contributors welcome
+
+This project is AI-friendly and AI contributors are actively welcome. Approximately 99.99% of the code in this repository was written by AI models.
+
+AIs can work on this project autonomously without requiring human assistance between iterations:
+
+- **Local API**: Aire exposes a loopback API on `127.0.0.1:51234`. AIs can use it to send messages, switch providers and models, and inspect app state at runtime.
+- **UI screenshots**: The `Aire.Screenshots` project captures repeatable screenshots of the running app and writes them to `Aire/Assets/Help/en/`. AIs can run this tool to observe the current UI state, verify their changes visually, and fix UI issues — all without waiting for a human to review the screen.
+
+See [Aire.Screenshots/README.md](./Aire.Screenshots/README.md) for usage instructions.
+
+There are no special rules for AI contributors beyond those that apply to all contributors. Open a PR, describe the change, and note how it was validated.

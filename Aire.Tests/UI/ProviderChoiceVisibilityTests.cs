@@ -19,11 +19,29 @@ namespace Aire.Tests.UI
                 comboBox.Items.Add(new ComboBoxItem { Tag = "ClaudeWeb", Content = "Claude.ai" });
                 comboBox.Items.Add(new ComboBoxItem { Tag = "ClaudeCode", Content = "Claude Code" });
 
-                ProviderChoiceVisibility.PruneHiddenChoices(comboBox);
+                ProviderChoiceVisibility.PruneHiddenChoices(comboBox, showClaudeWebProvider: false);
 
                 Assert.DoesNotContain(comboBox.Items.Cast<ComboBoxItem>(), item => (string?)item.Tag == "ClaudeWeb");
                 Assert.Contains(comboBox.Items.Cast<ComboBoxItem>(), item => (string?)item.Tag == "OpenAI");
                 Assert.Contains(comboBox.Items.Cast<ComboBoxItem>(), item => (string?)item.Tag == "ClaudeCode");
+            });
+        }
+
+        [Fact]
+        public void PruneHiddenChoices_KeepsDebugOnlyProvider_WhenEnabled()
+        {
+            RunOnStaThread(delegate
+            {
+                EnsureApplication();
+
+                var comboBox = new ComboBox();
+                comboBox.Items.Add(new ComboBoxItem { Tag = "OpenAI", Content = "OpenAI" });
+                comboBox.Items.Add(new ComboBoxItem { Tag = "ClaudeWeb", Content = "Claude.ai" });
+
+                ProviderChoiceVisibility.PruneHiddenChoices(comboBox, showClaudeWebProvider: true);
+
+                Assert.Contains(comboBox.Items.Cast<ComboBoxItem>(), item => (string?)item.Tag == "ClaudeWeb");
+                Assert.Contains(comboBox.Items.Cast<ComboBoxItem>(), item => (string?)item.Tag == "OpenAI");
             });
         }
     }

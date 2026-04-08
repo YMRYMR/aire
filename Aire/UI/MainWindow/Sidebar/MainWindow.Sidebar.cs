@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -65,6 +67,19 @@ namespace Aire
             }
         }
 
+        private void RestoreSidebarSelection(int conversationId)
+        {
+            var items = ConversationSidebar.ItemsSource as IEnumerable<ConversationSummary> ?? ConversationSidebar.ConversationListBox.Items.OfType<ConversationSummary>();
+            foreach (var item in items)
+            {
+                if (item.Id != conversationId)
+                    continue;
+
+                ConversationSidebar.SelectedItem = item;
+                return;
+            }
+        }
+
         private void ConversationSearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             _searchDebounce?.Stop();
@@ -100,6 +115,29 @@ namespace Aire
             {
                 AppLogger.Error("ConversationListBox_SelectionChanged", "Failed to switch chat", ex);
                 _currentConversationId = previousConversationId;
+
+                if (previousConversationId.HasValue)
+                {
+                    try
+                    {
+                        await ConversationFlow.SyncConversationSelectionStateAsync(previousConversationId.Value);
+                        RestoreSidebarSelection(previousConversationId.Value);
+                    }
+                    catch (Exception restoreEx)
+                    {
+                        AppLogger.Warn("ConversationListBox_SelectionChanged", "Failed to restore previous conversation state", restoreEx);
+                    }
+                }
+
+                try
+                {
+                    await RefreshSidebarAsync();
+                }
+                catch (Exception refreshEx)
+                {
+                    AppLogger.Warn("ConversationListBox_SelectionChanged", "Failed to refresh sidebar after conversation switch failure", refreshEx);
+                }
+
                 await AddErrorMessageAsync("Failed to load conversation. The chat history may be unavailable.");
             }
         }

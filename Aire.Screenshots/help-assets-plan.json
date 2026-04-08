@@ -10,13 +10,19 @@
       "delayMs": 500
     },
     {
+      "kind": "try-close-window",
+      "titleContains": "Aire Help",
+      "processName": "Aire",
+      "delayMs": 300
+    },
+    {
       "kind": "show-window",
       "processName": "Aire",
       "delayMs": 1500
     },
     {
       "kind": "wait-for-window",
-      "titleContains": "Aire",
+      "exactTitle": "Aire",
       "processName": "Aire",
       "delayMs": 4000
     }
@@ -28,6 +34,12 @@
     "preBatchActions": [
       {
         "kind": "close-update-window",
+        "delayMs": 300
+      },
+      {
+        "kind": "try-close-window",
+        "titleContains": "Aire Help",
+        "processName": "Aire",
         "delayMs": 300
       },
       {
@@ -52,7 +64,7 @@
   "screenshots": [
     {
       "outputPath": "Aire/Assets/Help/main-chat.png",
-      "titleContains": "Aire",
+      "exactTitle": "Aire",
       "processName": "Aire",
       "delayMs": 750,
       "padding": 0,
@@ -60,7 +72,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/main-chat-sidebar.png",
-      "titleContains": "Aire",
+      "exactTitle": "Aire",
       "processName": "Aire",
       "delayMs": 400,
       "padding": 0,
@@ -83,7 +95,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/main-chat-modes.png",
-      "titleContains": "Aire",
+      "exactTitle": "Aire",
       "processName": "Aire",
       "delayMs": 350,
       "padding": 20,
@@ -107,7 +119,7 @@
     },
     {
       "outputPath": "Aire/Assets/Help/main-chat-tools.png",
-      "titleContains": "Aire",
+      "exactTitle": "Aire",
       "processName": "Aire",
       "delayMs": 350,
       "padding": 24,
