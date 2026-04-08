@@ -62,11 +62,11 @@ namespace Aire
                 }
                 catch (OperationCanceledException)
                 {
-                    _owner.AddSystemMessage("Image generation stopped.");
+                    await _owner.AddSystemMessageAsync("Image generation stopped.");
                 }
                 catch
                 {
-                    _owner.AddErrorMessage("Image generation failed.");
+                    await _owner.AddErrorMessageAsync("Image generation failed.");
                 }
             }
 
@@ -82,7 +82,7 @@ namespace Aire
 
                 if (iteration >= maxIterations)
                 {
-                    _owner.AddSystemMessage("Maximum tool-call iterations reached — the task has been stopped. You can continue by sending a new message.");
+                    await _owner.AddSystemMessageAsync("Maximum tool-call iterations reached — the task has been stopped. You can continue by sending a new message.");
                     return;
                 }
 
@@ -120,13 +120,13 @@ namespace Aire
                 catch (OperationCanceledException)
                 {
                     _owner.IsThinking = false;
-                    _owner.AddSystemMessage("AI operation stopped.");
+                    await _owner.AddSystemMessageAsync("AI operation stopped.");
                     return;
                 }
                 catch
                 {
                     _owner.IsThinking = false;
-                    HandleErrorOutcome(_workflow.BuildErrorOutcome(new InvalidOperationException("AI operation failed.")));
+                    await HandleErrorOutcome(_workflow.BuildErrorOutcome(new InvalidOperationException("AI operation failed.")));
                     return;
                 }
 
@@ -134,7 +134,7 @@ namespace Aire
                 if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.Error)
                 {
                     _owner.IsThinking = false;
-                    HandleErrorOutcome(outcome);
+                    await HandleErrorOutcome(outcome);
                     return;
                 }
 
@@ -288,9 +288,15 @@ namespace Aire
                         _owner.ScrollToBottom();
                     }
                 }
+                catch (OperationCanceledException)
+                {
+                    _owner.IsThinking = false;
+                    await _owner.AddSystemMessageAsync("AI operation stopped.");
+                    return;
+                }
                 catch
                 {
-                    _owner.AddErrorMessage("Tool execution error.");
+                    await _owner.AddErrorMessageAsync("Tool execution error.");
                     return;
                 }
 

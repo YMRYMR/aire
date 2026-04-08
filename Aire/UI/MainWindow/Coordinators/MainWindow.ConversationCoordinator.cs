@@ -197,7 +197,7 @@ namespace Aire
                 _owner._currentConversationId = id;
                 _owner._conversationHistory.Clear();
                 _owner.Messages.Clear();
-                _owner.AddSystemMessage(systemMessage);
+                await _owner.AddSystemMessageAsync(systemMessage);
                 return id;
             }
 

@@ -50,6 +50,10 @@ namespace Aire
                     return;
                 }
 
+                _owner.ProviderComboBox.SelectedItem = null;
+                _owner._currentProvider = null;
+                _owner._currentProviderId = null;
+
                 if (supported.Count == 0)
                 {
                     _owner.AddToUI(new ChatMessage
@@ -83,6 +87,12 @@ namespace Aire
                     var same = _owner._providerCatalogApplicationService.ResolveSelectionAfterRefresh(providers, selectedId);
                     if (same != null)
                         _owner.ProviderComboBox.SelectedItem = same;
+                    else
+                    {
+                        _owner.ProviderComboBox.SelectedItem = null;
+                        _owner._currentProvider = null;
+                        _owner._currentProviderId = null;
+                    }
                 }
 
                 _owner._suppressProviderChange = false;
@@ -111,7 +121,14 @@ namespace Aire
             public async Task UpdateCurrentProviderAsync(bool showSwitchedMessage = true)
             {
                 var sel = _owner.ProviderComboBox.SelectedItem as Provider;
-                if (sel == null) return;
+                if (sel == null)
+                {
+                    await _owner._chatService.ClearProviderAsync();
+                    _owner._currentProvider = null;
+                    _owner._currentProviderId = null;
+                    _owner.UpdateCapabilityUI();
+                    return;
+                }
 
                 try
                 {
@@ -131,7 +148,7 @@ namespace Aire
                     if (plan.ConversationAction == ProviderActivationWorkflowService.ConversationActionKind.KeepCurrentConversation)
                     {
                         if (plan.ShouldAnnounceSwitch)
-                            _owner.AddSystemMessage(activation.SwitchedProviderMessage);
+                            await _owner.AddSystemMessageAsync(activation.SwitchedProviderMessage);
 
                         if (_owner._sidebarOpen)
                             await _owner.RefreshSidebarAsync();
@@ -154,7 +171,7 @@ namespace Aire
                 }
                 catch
                 {
-                    _owner.AddErrorMessage($"Failed to initialize provider '{sel.Name}'.");
+                    await _owner.AddErrorMessageAsync($"Failed to initialize provider '{sel.Name}'.");
                 }
             }
 

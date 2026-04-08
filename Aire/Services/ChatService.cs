@@ -91,6 +91,16 @@ namespace Aire.Services
         }
 
         /// <summary>
+        /// Clears the active provider so subsequent chat calls fail fast until a new provider is selected.
+        /// </summary>
+        public Task ClearProviderAsync()
+        {
+            _currentProvider = null;
+            _orchestrator.SetProvider(null);
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
         /// Sends a chat message and returns the full response.
         /// </summary>
         /// <param name="userMessage">User text to send.</param>
@@ -139,6 +149,10 @@ namespace Aire.Services
                     _responseCompleted?.Invoke(this, response);
 
                 return response;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch (Exception)
             {

@@ -283,11 +283,225 @@ namespace Aire.Tests.UI
             });
         }
 
+        [Fact]
+        public void MainWindow_ConversationSelection_RestoresPreviousConversation_WhenLoadFails()
+        {
+            RunOnStaThread(delegate
+            {
+                EnsureApplication();
+                AppStartupState.MarkReady();
+
+                string tempDir = Path.Combine(Path.GetTempPath(), "aire-conversation-switch-" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(tempDir);
+                string originalAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA");
+                Environment.SetEnvironmentVariable("LOCALAPPDATA", tempDir);
+
+                try
+                {
+                    using var db = new DatabaseService();
+                    db.InitializeAsync().GetAwaiter().GetResult();
+
+                    Provider provider = new Provider
+                    {
+                        Name = "P1",
+                        Type = "OpenAI",
+                        ApiKey = "k1",
+                        Model = "m1",
+                        IsEnabled = true,
+                        Color = "#336699"
+                    };
+                    provider.Id = db.InsertProviderAsync(provider).GetAwaiter().GetResult();
+
+                    Provider targetProvider = new Provider
+                    {
+                        Name = "P2",
+                        Type = "Groq",
+                        ApiKey = "k2",
+                        Model = "m2",
+                        IsEnabled = true,
+                        Color = "#993366"
+                    };
+                    targetProvider.Id = db.InsertProviderAsync(targetProvider).GetAwaiter().GetResult();
+
+                    int currentConversationId = db.CreateConversationAsync(provider.Id, "Current").GetAwaiter().GetResult();
+                    int targetConversationId = db.CreateConversationAsync(targetProvider.Id, "Target").GetAwaiter().GetResult();
+
+                    MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+                    typeof(DispatcherObject).GetField("_dispatcher", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(window, Application.Current.Dispatcher);
+
+                    window.Messages = new ObservableCollection<UiModels.ChatMessage>();
+                    window._conversationHistory = new List<ProviderChatMessage>();
+                    window._currentConversationId = currentConversationId;
+                    window._currentProviderId = provider.Id;
+                    window._providerFactory = new ProviderFactory(db);
+                    typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ChatService(window._providerFactory));
+                    window._chatSessionApplicationService = new ChatSessionApplicationService(db, db);
+
+                    var header = new MainHeaderControl();
+                    header._testProviderComboBox = new ComboBox();
+                    header._testCheckAgainButton = new Button();
+                    header.ProviderComboBox.ItemsSource = new[] { provider, targetProvider };
+                    header.ProviderComboBox.SelectedItem = provider;
+                    window.HeaderControl = header;
+                    window.ConversationSidebar = new ConversationSidebarControl();
+
+                    typeof(MainWindow).GetField("_assistantModeApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new AssistantModeApplicationService());
+
+                    var throwingRepo = new ThrowingConversationRepository(db, targetConversationId);
+                    window._conversationApplicationService = new ConversationApplicationService(throwingRepo);
+
+                    var currentSummary = new ConversationSummary
+                    {
+                        Id = currentConversationId,
+                        Title = "Current",
+                        UpdatedAt = DateTime.UtcNow.AddMinutes(-1),
+                        ProviderName = provider.Name,
+                        ProviderColor = provider.Color,
+                        AssistantModeKey = "general"
+                    };
+
+                    var targetSummary = new ConversationSummary
+                    {
+                        Id = targetConversationId,
+                        Title = "Target",
+                        UpdatedAt = DateTime.UtcNow,
+                        ProviderName = targetProvider.Name,
+                        ProviderColor = targetProvider.Color,
+                        AssistantModeKey = "general"
+                    };
+
+                    window.ConversationSidebar.ItemsSource = new[] { currentSummary, targetSummary };
+                    window.ConversationSidebar.SelectedItem = currentSummary;
+
+                    var method = typeof(MainWindow).GetMethod("SwitchConversationAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+                    ((Task)method.Invoke(window, [targetSummary])!).GetAwaiter().GetResult();
+
+                    Assert.Equal(currentConversationId, window._currentConversationId);
+                    Assert.Equal(provider, window.ProviderComboBox.SelectedItem);
+                    Assert.Equal(currentConversationId, ((ConversationSummary)window.ConversationSidebar.SelectedItem).Id);
+                    Assert.Contains(window.Messages, msg => msg.Sender == "System" && msg.Text.Contains("Failed to load conversation", StringComparison.Ordinal));
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable("LOCALAPPDATA", originalAppData);
+                    try { Directory.Delete(tempDir, true); } catch { }
+                }
+            });
+        }
+
+        [Fact]
+        public void MainWindow_RefreshProvidersAsync_ClearsSelection_WhenCurrentProviderDisappears()
+        {
+            RunOnStaThread(delegate
+            {
+                EnsureApplication();
+                AppStartupState.MarkReady();
+
+                string tempDir = Path.Combine(Path.GetTempPath(), "aire-provider-refresh-" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(tempDir);
+                string originalAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA");
+                Environment.SetEnvironmentVariable("LOCALAPPDATA", tempDir);
+
+                try
+                {
+                    using var db = new DatabaseService();
+                    db.InitializeAsync().GetAwaiter().GetResult();
+
+                    Provider provider = new Provider
+                    {
+                        Name = "P1",
+                        Type = "OpenAI",
+                        ApiKey = "k1",
+                        Model = "m1",
+                        IsEnabled = true,
+                        Color = "#336699"
+                    };
+                    provider.Id = db.InsertProviderAsync(provider).GetAwaiter().GetResult();
+
+                    MainWindow window = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+                    typeof(DispatcherObject).GetField("_dispatcher", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(window, Application.Current.Dispatcher);
+
+                    var header = new MainHeaderControl();
+                    header._testProviderComboBox = new ComboBox();
+                    header._testCheckAgainButton = new Button();
+                    header.ProviderComboBox.ItemsSource = new[] { provider };
+                    header.ProviderComboBox.SelectedItem = provider;
+
+                    window.HeaderControl = header;
+                    window.Messages = new ObservableCollection<UiModels.ChatMessage>();
+                    window._availabilityTracker = ProviderAvailabilityTracker.Instance;
+                    window._databaseService = db;
+                    window._providerFactory = new ProviderFactory(db);
+                    window._speechService = new SpeechRecognitionService();
+                    typeof(MainWindow).GetField("ComposerControl", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!
+                        .SetValue(window, new MainComposerControl());
+                    typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ChatService(window._providerFactory));
+                    typeof(MainWindow).GetField("_providerCatalogApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ProviderCatalogApplicationService(db));
+                    window._currentProviderId = provider.Id;
+                    typeof(MainWindow).GetField("_enabledToolCategories", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+
+                    provider.IsEnabled = false;
+                    db.UpdateProviderAsync(provider).GetAwaiter().GetResult();
+
+                    window.RefreshProvidersAsync().GetAwaiter().GetResult();
+
+                    Assert.Null(window.ProviderComboBox.SelectedItem);
+                    Assert.Null(window._currentProviderId);
+                    Assert.Null(typeof(MainWindow).GetField("_currentProvider", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(window));
+                    Assert.Null(typeof(ChatService).GetField("_currentProvider", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(window)));
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable("LOCALAPPDATA", originalAppData);
+                    try { Directory.Delete(tempDir, true); } catch { }
+                }
+            });
+        }
+
         private static TaskCompletionSource<bool> TaskCompletionSource_GetValue(bool value)
         {
             var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             tcs.SetResult(value);
             return tcs;
+        }
+
+        private sealed class ThrowingConversationRepository : Aire.AppLayer.Abstractions.IConversationRepository
+        {
+            private readonly DatabaseService _databaseService;
+            private readonly int _throwingConversationId;
+
+            public ThrowingConversationRepository(DatabaseService databaseService, int throwingConversationId)
+            {
+                _databaseService = databaseService;
+                _throwingConversationId = throwingConversationId;
+            }
+
+            public Task<int> CreateConversationAsync(int providerId, string title) => _databaseService.CreateConversationAsync(providerId, title);
+            public Task<Aire.Data.Conversation?> GetLatestConversationAsync(int providerId) => _databaseService.GetLatestConversationAsync(providerId);
+            public Task<Aire.Data.Conversation?> GetConversationAsync(int conversationId) => _databaseService.GetConversationAsync(conversationId);
+            public Task<List<Aire.Data.ConversationSummary>> ListConversationsAsync(string? search = null) => _databaseService.ListConversationsAsync(search);
+            public Task UpdateConversationTitleAsync(int conversationId, string title) => _databaseService.UpdateConversationTitleAsync(conversationId, title);
+            public Task UpdateConversationProviderAsync(int conversationId, int providerId) => _databaseService.UpdateConversationProviderAsync(conversationId, providerId);
+            public Task UpdateConversationAssistantModeAsync(int conversationId, string assistantModeKey) => _databaseService.UpdateConversationAssistantModeAsync(conversationId, assistantModeKey);
+
+            public Task<List<Aire.Data.Message>> GetMessagesAsync(int conversationId)
+            {
+                if (conversationId == _throwingConversationId)
+                    throw new InvalidOperationException("forced load failure");
+
+                return _databaseService.GetMessagesAsync(conversationId);
+            }
+
+            public Task DeleteMessagesByConversationIdAsync(int conversationId) => _databaseService.DeleteMessagesByConversationIdAsync(conversationId);
+            public Task DeleteConversationAsync(int conversationId) => _databaseService.DeleteConversationAsync(conversationId);
+            public Task DeleteAllConversationsAsync() => _databaseService.DeleteAllConversationsAsync();
+            public Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null, IEnumerable<Aire.Data.MessageAttachment>? attachments = null)
+                => _databaseService.SaveMessageAsync(conversationId, role, content, imagePath, attachments);
         }
     }
 }

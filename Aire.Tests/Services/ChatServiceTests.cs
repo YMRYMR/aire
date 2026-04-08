@@ -206,6 +206,45 @@ public class ChatServiceTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
+    public async Task SendMessageWithHistoryAsync_PropagatesCancellation()
+    {
+        var adapter = new CancelingAdapter();
+        var runtimeWorkflow = new ProviderRuntimeApplicationService(new ProviderAdapterApplicationService([adapter]));
+        var service = new ChatService(_factory, runtimeWorkflow, new ChatOrchestrator());
+        typeof(ChatService)
+            .GetField("_currentProvider", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(service, new FakeProvider());
+
+        await Assert.ThrowsAsync<OperationCanceledException>(() => service.SendMessageWithHistoryAsync(
+        [
+            new ChatMessage
+            {
+                Role = "user",
+                Content = "hello"
+            }
+        ]));
+    }
+
+    [Fact]
+    public async Task StreamMessageWithHistoryAsync_PropagatesCancellation()
+    {
+        var orchestrator = new ChatOrchestrator();
+        var service = new ChatService(_factory, new ProviderRuntimeApplicationService(new ProviderAdapterApplicationService([new RecordingAdapter()])), orchestrator);
+        typeof(ChatService)
+            .GetField("_currentProvider", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(service, new CancelingStreamingProvider());
+
+        await Assert.ThrowsAsync<OperationCanceledException>(() => service.StreamMessageWithHistoryAsync(
+        [
+            new ChatMessage
+            {
+                Role = "user",
+                Content = "hello"
+            }
+        ]));
+    }
+
+    [Fact]
     public async Task StreamMessageAsync_ForwardsStreamingEventsFromOrchestrator()
     {
         var orchestrator = new ChatOrchestrator();
@@ -315,6 +354,25 @@ public class ChatServiceTests : IAsyncLifetime, IDisposable
             => Task.FromResult(ProviderValidationOutcome.Invalid("boom"));
     }
 
+    private sealed class CancelingAdapter : IProviderAdapter
+    {
+        public string ProviderType => "Fake";
+
+        public bool CanHandle(string providerType)
+            => string.Equals(providerType, ProviderType, StringComparison.OrdinalIgnoreCase);
+
+        public IAiProvider? BuildProvider(ProviderRuntimeRequest request) => null;
+
+        public Task<ProviderExecutionResult> ExecuteAsync(IAiProvider provider, ProviderRequestContext requestContext)
+            => throw new OperationCanceledException();
+
+        public Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
+            => Task.FromResult(new ProviderSmokeTestResult(false, "canceled"));
+
+        public Task<ProviderValidationOutcome> ValidateAsync(IAiProvider provider, CancellationToken cancellationToken)
+            => Task.FromResult(ProviderValidationOutcome.Invalid("canceled"));
+    }
+
     private sealed class FakeProvider : IAiProvider
     {
         public string ProviderType => "Fake";
@@ -361,6 +419,33 @@ public class ChatServiceTests : IAsyncLifetime, IDisposable
             await Task.CompletedTask;
             yield return "echo:";
             yield return "hello";
+        }
+        public Task<ProviderValidationResult> ValidateConfigurationAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult(ProviderValidationResult.Ok());
+        public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult<TokenUsage?>(null);
+    }
+
+    private sealed class CancelingStreamingProvider : IAiProvider
+    {
+        public string ProviderType => "Fake";
+        public string DisplayName => "Fake";
+        public ProviderCapabilities Capabilities => ProviderCapabilities.TextChat | ProviderCapabilities.Streaming;
+        public ToolCallMode ToolCallMode => ToolCallMode.TextBased;
+        public ToolOutputFormat ToolOutputFormat => ToolOutputFormat.AireText;
+
+        public bool Has(ProviderCapabilities cap) => (Capabilities & cap) == cap;
+        public void Initialize(ProviderConfig config) { }
+        public Task<AiResponse> SendChatAsync(IEnumerable<ChatMessage> messages, CancellationToken cancellationToken = default)
+            => Task.FromResult(new AiResponse());
+        public void PrepareForCapabilityTesting() { }
+        public void SetToolsEnabled(bool enabled) { }
+        public void SetEnabledToolCategories(IEnumerable<string>? categories) { }
+        public async IAsyncEnumerable<string> StreamChatAsync(IEnumerable<ChatMessage> messages, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
+            yield return "partial";
+            throw new OperationCanceledException();
         }
         public Task<ProviderValidationResult> ValidateConfigurationAsync(CancellationToken cancellationToken = default)
             => Task.FromResult(ProviderValidationResult.Ok());
