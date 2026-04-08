@@ -28,6 +28,7 @@ namespace Aire.Providers
                 ["OpenAI"] = CreateDescriptor("OpenAI", static () => new OpenAiProvider(), static () => new OpenAiProvider()),
                 ["Groq"] = CreateDescriptor("Groq", static () => new GroqProvider(), static () => new GroqProvider()),
                 ["OpenRouter"] = CreateDescriptor("OpenRouter", static () => new OpenRouterProvider(), static () => new OpenRouterProvider()),
+                ["Mistral"] = CreateDescriptor("Mistral", static () => new MistralProvider(), static () => new MistralProvider()),
                 ["Codex"] = CreateDescriptor("Codex", static () => new CodexProvider(), static () => new CodexProvider()),
                 ["ClaudeCode"] = CreateDescriptor("ClaudeCode", static () => new ClaudeCodeProvider(), static () => new ClaudeCodeProvider()),
                 ["Anthropic"] = CreateDescriptor("Anthropic", static () => new ClaudeAiProvider(), static () => new ClaudeAiProvider()),

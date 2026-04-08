@@ -10,6 +10,7 @@ public sealed class ProviderCatalogTests
     [InlineData("claude.ai", "ClaudeWeb")]
     [InlineData("claude code", "ClaudeCode")]
     [InlineData("Google AI Images", "GoogleAIImage")]
+    [InlineData("mistral ai", "Mistral")]
     [InlineData("z.ai", "Zai")]
     public void NormalizeType_MapsKnownAliases(string input, string expected)
     {
@@ -38,6 +39,12 @@ public sealed class ProviderCatalogTests
         Assert.Equal(claudeCodeIdentity.Type, claudeCodeCatalog.Type);
         Assert.Equal("ClaudeCode", ProviderCatalog.CreateRuntimeProvider("ClaudeCode").ProviderType);
         Assert.Equal("ClaudeCode", ProviderCatalog.CreateMetadataProvider("ClaudeCode").ProviderType);
+
+        var mistralIdentity = ProviderIdentityCatalog.GetDescriptor("Mistral");
+        var mistralCatalog = ProviderCatalog.GetDescriptor("Mistral");
+        Assert.Equal(mistralIdentity.Type, mistralCatalog.Type);
+        Assert.Equal("Mistral", ProviderCatalog.CreateRuntimeProvider("Mistral").ProviderType);
+        Assert.Equal("Mistral", ProviderCatalog.CreateMetadataProvider("Mistral").ProviderType);
     }
 
     [Fact]

@@ -184,6 +184,7 @@
                 <ComboBoxItem Content="Google AI Images" Tag="GoogleAIImage" />
                 <ComboBoxItem Content="Ollama (local, private)" Tag="Ollama" />
                 <ComboBoxItem Content="DeepSeek (OpenAI-compatible)" Tag="DeepSeek" />
+                <ComboBoxItem Content="Mistral AI (OpenAI-compatible)" Tag="Mistral" />
                 <ComboBoxItem Content="Inception (OpenAI-compatible)" Tag="Inception" />
                 <ComboBoxItem Content="Zhipu AI / z.ai (OpenAI-compatible)" Tag="Zai" />
             </ComboBox>

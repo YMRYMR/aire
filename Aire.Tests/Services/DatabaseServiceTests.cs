@@ -54,7 +54,7 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
     {
         List<Provider> providers = await _db.GetProvidersAsync();
         Assert.NotEmpty(providers);
-        Assert.Equal(6, providers.Count);
+        Assert.Equal(7, providers.Count);
     }
 
     [Fact]
@@ -64,6 +64,7 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
         Assert.Contains((IEnumerable<Provider>)providers, (Predicate<Provider>)((Provider p) => p.Type == "OpenAI"));
         Assert.Contains((IEnumerable<Provider>)providers, (Predicate<Provider>)((Provider p) => p.Type == "Inception"));
         Assert.Contains((IEnumerable<Provider>)providers, (Predicate<Provider>)((Provider p) => p.Type == "DeepSeek"));
+        Assert.Contains((IEnumerable<Provider>)providers, (Predicate<Provider>)((Provider p) => p.Type == "Mistral"));
         Assert.Contains((IEnumerable<Provider>)providers, (Predicate<Provider>)((Provider p) => p.Type == "Anthropic"));
         Assert.Contains((IEnumerable<Provider>)providers, (Predicate<Provider>)((Provider p) => p.Type == "Ollama" && p.Model == "qwen2.5-coder:7b"));
     }

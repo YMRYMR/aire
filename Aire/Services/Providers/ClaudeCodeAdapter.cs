@@ -53,12 +53,18 @@ namespace Aire.Services.Providers
         /// <inheritdoc />
         public async Task<ProviderSmokeTestResult> RunSmokeTestAsync(IAiProvider provider, CancellationToken cancellationToken)
         {
-            var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Reply with exactly OK and nothing else." }], cancellationToken)
-                .ConfigureAwait(false);
+            if (provider is ClaudeCodeProvider claudeCodeProvider)
+            {
+                var status = claudeCodeProvider.GetConnectionStatus();
+                return status.IsInstalled
+                    ? new ProviderSmokeTestResult(true)
+                    : new ProviderSmokeTestResult(false, status.UserMessage);
+            }
 
-            return response.IsSuccess
+            var validation = await provider.ValidateConfigurationAsync(cancellationToken).ConfigureAwait(false);
+            return validation.IsValid
                 ? new ProviderSmokeTestResult(true)
-                : new ProviderSmokeTestResult(false, response.ErrorMessage);
+                : new ProviderSmokeTestResult(false, validation.Error);
         }
 
         /// <inheritdoc />

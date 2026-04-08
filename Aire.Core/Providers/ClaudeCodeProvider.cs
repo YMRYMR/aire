@@ -95,19 +95,15 @@ namespace Aire.Providers
             }
         }
 
-        public override async Task<ProviderValidationResult> ValidateConfigurationAsync(CancellationToken cancellationToken = default)
+        public virtual ClaudeCliStatus GetConnectionStatus()
+            => GetCliStatus();
+
+        public override Task<ProviderValidationResult> ValidateConfigurationAsync(CancellationToken cancellationToken = default)
         {
-            var status = GetCliStatus();
-            if (!status.IsInstalled)
-                return ProviderValidationResult.Fail(status.UserMessage);
-
-            var response = await SendChatAsync(
-                [new ChatMessage { Role = "user", Content = "Reply with exactly OK and nothing else." }],
-                cancellationToken).ConfigureAwait(false);
-
-            return response.IsSuccess
+            var status = GetConnectionStatus();
+            return Task.FromResult(status.IsInstalled
                 ? ProviderValidationResult.Ok()
-                : ProviderValidationResult.Fail(response.ErrorMessage ?? "Claude Code validation failed.");
+                : ProviderValidationResult.Fail(status.UserMessage));
         }
 
         public static ClaudeCliStatus GetCliStatus()

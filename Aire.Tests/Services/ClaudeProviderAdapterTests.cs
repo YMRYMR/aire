@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,6 +79,32 @@ public sealed class ClaudeProviderAdapterTests
         Assert.Single(provider.LastMessages);
     }
 
+    [Fact]
+    public async Task ClaudeCodeAdapter_RunSmokeTest_UsesConnectionStatusInsteadOfChatRoundTrip()
+    {
+        var adapter = new ClaudeCodeAdapter();
+        var provider = new FakeClaudeCodeProvider(
+            new ClaudeCodeProvider.ClaudeCliStatus(true, "C:/tools/claude", false, "ready"));
+
+        var result = await adapter.RunSmokeTestAsync(provider, CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.Null(result.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task ClaudeCodeAdapter_RunSmokeTest_ReturnsStatusFailureWithoutCallingChat()
+    {
+        var adapter = new ClaudeCodeAdapter();
+        var provider = new FakeClaudeCodeProvider(
+            new ClaudeCodeProvider.ClaudeCliStatus(false, null, false, "Claude Code not found."));
+
+        var result = await adapter.RunSmokeTestAsync(provider, CancellationToken.None);
+
+        Assert.False(result.Success);
+        Assert.Equal("Claude Code not found.", result.ErrorMessage);
+    }
+
     private sealed class FakeProvider : IAiProvider
     {
         private readonly AiResponse _response;
@@ -116,5 +143,13 @@ public sealed class ClaudeProviderAdapterTests
             => Task.FromResult(ProviderValidationResult.Ok());
         public Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default)
             => Task.FromResult<TokenUsage?>(null);
+    }
+
+    private sealed class FakeClaudeCodeProvider(ClaudeCodeProvider.ClaudeCliStatus status) : ClaudeCodeProvider
+    {
+        public override ClaudeCliStatus GetConnectionStatus() => status;
+
+        public override Task<AiResponse> SendChatAsync(IEnumerable<ChatMessage> messages, CancellationToken cancellationToken = default)
+            => throw new InvalidOperationException("Claude Code smoke tests should not call SendChatAsync.");
     }
 }
