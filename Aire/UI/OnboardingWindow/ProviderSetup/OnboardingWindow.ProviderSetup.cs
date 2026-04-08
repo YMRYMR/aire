@@ -83,7 +83,6 @@ namespace Aire.UI
             Step4Panel.Visibility = step == 4 ? Visibility.Visible : Visibility.Collapsed;
 
             UpdateDots();
-            SizeToContent = SizeToContent.Height;
         }
 
         private void UpdateDots()

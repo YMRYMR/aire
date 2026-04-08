@@ -137,18 +137,24 @@ namespace Aire
                 if (provider == null || provider.Id == _owner._currentProviderId)
                     return;
 
-                _owner._suppressProviderChange = true;
-                _owner.ProviderComboBox.SelectedItem = provider;
-                _owner._suppressProviderChange = false;
-                _owner._currentProviderId = provider.Id;
-
                 try { _owner._currentProvider = _owner._providerFactory.CreateProvider(provider); }
                 catch { _owner._currentProvider = null; }
 
-                await _owner._chatService.SetProviderAsync(provider.Id);
-                await _owner._chatSessionApplicationService.SaveSelectedProviderAsync(provider.Id);
-                _owner.UpdateCapabilityUI();
-                _owner.StartTokenUsageRefreshTimer();
+                _owner._suppressProviderChange = true;
+                try
+                {
+                    _owner.ProviderComboBox.SelectedItem = provider;
+                    _owner._currentProviderId = provider.Id;
+
+                    await _owner._chatService.SetProviderAsync(provider.Id);
+                    await _owner._chatSessionApplicationService.SaveSelectedProviderAsync(provider.Id);
+                    _owner.UpdateCapabilityUI();
+                    _owner.StartTokenUsageRefreshTimer();
+                }
+                finally
+                {
+                    _owner._suppressProviderChange = false;
+                }
             }
 
             public async Task ClearConversationAsync()

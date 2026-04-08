@@ -30,9 +30,11 @@ namespace Aire
             }
         }
 
-        private async Task LoadConversationMessages(int conversationId)
+        private async Task LoadConversationMessages(int conversationId, bool syncProviderSelection = true)
         {
-            await ConversationFlow.SyncConversationSelectionStateAsync(conversationId);
+            if (syncProviderSelection)
+                await ConversationFlow.SyncConversationSelectionStateAsync(conversationId);
+
             await ConversationFlow.LoadConversationMessagesAsync(conversationId);
         }
 

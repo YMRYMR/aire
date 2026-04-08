@@ -1261,6 +1261,11 @@ public class ServiceWorkflowRegressionTests
         Assert.True(saved.ShouldAdvance);
         Assert.True(saved.SavedProvider);
         Assert.False(saved.IsDuplicate);
+        OnboardingProviderSetupApplicationService.Step3Result claudeCode = await service.CompleteStepAsync(repository, new OnboardingProviderSetupApplicationService.Step3Request("Claude Code", "ClaudeCode", null, null, "claude-4.5-sonnet", null, ClaudeWebSessionReady: false));
+        Assert.True(claudeCode.ShouldAdvance);
+        Assert.True(claudeCode.SavedProvider);
+        Assert.False(claudeCode.IsDuplicate);
+        Assert.Contains(await repository.GetProvidersAsync(), provider => provider.Type == "ClaudeCode" && provider.Name == "Claude Code");
         OnboardingProviderSetupApplicationService.Step3Result duplicate = await service.CompleteStepAsync(repository, new OnboardingProviderSetupApplicationService.Step3Request("Claude Browser 2", "ClaudeWeb", null, null, "claude-sonnet", null, ClaudeWebSessionReady: true));
         Assert.False(duplicate.ShouldAdvance);
         Assert.True(duplicate.IsDuplicate);

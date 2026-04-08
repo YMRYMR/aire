@@ -49,9 +49,7 @@ namespace Aire.Providers
                     return new AiResponse
                     {
                         IsSuccess = false,
-                        ErrorMessage = string.IsNullOrWhiteSpace(result.ErrorOutput)
-                            ? $"Claude Code exited with code {result.ExitCode}."
-                            : result.ErrorOutput.Trim(),
+                        ErrorMessage = BuildFailureMessage(result),
                         Duration = sw.Elapsed
                     };
                 }
@@ -95,6 +93,9 @@ namespace Aire.Providers
             }
         }
 
+        /// <summary>
+        /// Returns the lightweight Claude Code availability probe used by validation and setup tests.
+        /// </summary>
         public virtual ClaudeCliStatus GetConnectionStatus()
             => GetCliStatus();
 
@@ -301,6 +302,18 @@ namespace Aire.Providers
                 psi.WorkingDirectory = GetWorkingDirectory();
 
             return psi;
+        }
+
+        internal static string BuildFailureMessage((int ExitCode, string Output, string ErrorOutput) result)
+        {
+            var extracted = ExtractResultText(result.Output);
+            if (!string.IsNullOrWhiteSpace(extracted))
+                return extracted.Trim();
+
+            if (!string.IsNullOrWhiteSpace(result.ErrorOutput))
+                return result.ErrorOutput.Trim();
+
+            return $"Claude Code exited with code {result.ExitCode}.";
         }
 
         private static string ExtractResultText(string output)

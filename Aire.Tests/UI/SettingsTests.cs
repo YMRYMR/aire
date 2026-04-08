@@ -15,6 +15,7 @@ using Aire.Services;
 using Aire.UI;
 using Aire.UI.Settings.Models;
 using Xunit;
+using Button = System.Windows.Controls.Button;
 
 namespace Aire.Tests.UI
 {
@@ -88,7 +89,25 @@ namespace Aire.Tests.UI
                 settingsWindow.CapTestResultsBorder = new Border();
                 settingsWindow.CapTestStatusText = new TextBlock();
                 settingsWindow.DisplayTestResults(array, DateTime.Now);
-                Assert.True(stackPanel.Children.Count >= 1);
+                Assert.True(stackPanel.Children.Count >= 2);
+                Grid header = Assert.IsType<Grid>(stackPanel.Children[0]);
+                Grid row = Assert.IsType<Grid>(stackPanel.Children[1]);
+                Assert.Equal(6, header.ColumnDefinitions.Count);
+                Button rerunButton = Assert.Single(row.Children.OfType<Button>());
+                TextBlock rerunGlyph = Assert.IsType<TextBlock>(rerunButton.Content);
+                Assert.Equal("\uE72C", rerunGlyph.Text);
+                Assert.Equal("Segoe MDL2 Assets", rerunGlyph.FontFamily.Source);
+                Assert.Equal(22d, rerunButton.Width);
+                Assert.Equal(22d, rerunButton.Height);
+                Assert.Equal("cat", rerunButton.Tag);
+                Assert.Equal(6, row.ColumnDefinitions.Count);
+                Assert.True(rerunButton.IsEnabled);
+
+                settingsWindow._isCapabilitySuiteRunning = true;
+                settingsWindow.DisplayTestResults(array, DateTime.Now);
+                Grid runningRow = Assert.IsType<Grid>(stackPanel.Children[1]);
+                Button disabledRerunButton = Assert.Single(runningRow.Children.OfType<Button>());
+                Assert.False(disabledRerunButton.IsEnabled);
                 
                 Provider provider = new Provider
                 {

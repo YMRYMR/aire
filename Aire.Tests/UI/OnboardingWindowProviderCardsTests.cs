@@ -25,6 +25,7 @@ public class OnboardingWindowProviderCardsTests : TestBase
                 Assert.NotNull(buildProviderCards);
 
                 var providerCardGrid = window.FindName("ProviderCardGrid")!;
+                Assert.Equal(OnboardingWindow.ProviderCardColumns, 4);
                 var children = (UIElementCollection)providerCardGrid.GetType()
                     .GetProperty("Children", BindingFlags.Instance | BindingFlags.Public)!
                     .GetValue(providerCardGrid)!;
@@ -36,8 +37,8 @@ public class OnboardingWindowProviderCardsTests : TestBase
                 Assert.NotEmpty(buttons);
                 Assert.Contains(buttons, button => button.Tag as string == "OpenAI");
                 Assert.Contains(buttons, button => button.Tag as string == "Mistral");
+                Assert.Contains(buttons, button => button.Tag as string == "ClaudeCode");
                 Assert.Contains(buttons, button => button.Tag as string == "Ollama");
-                Assert.Contains(buttons, button => button.Tag as string == "Mistral");
             }
             finally
             {
