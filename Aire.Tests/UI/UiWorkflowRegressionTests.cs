@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,7 +34,8 @@ public class UiWorkflowRegressionTests : TestBase
                 var db       = new DatabaseService();
                 db.InitializeAsync().GetAwaiter().GetResult();
                 SetField(settings, "_databaseService", db);
-SetField(settings, "_appSettingsApplicationService", new Aire.AppLayer.Settings.AppSettingsApplicationService(db));
+                SetField(settings, "_appSettingsApplicationService", new Aire.AppLayer.Settings.AppSettingsApplicationService(db));
+                SetField(settings, "_autoAcceptProfilesApplicationService", new Aire.AppLayer.Tools.AutoAcceptProfilesApplicationService(db));
 
                 var pane = new AutoAcceptPaneControl();
                 SetField(settings, "AutoAcceptPaneControl", pane);
@@ -174,13 +174,10 @@ SetField(settings, "_appSettingsApplicationService", new Aire.AppLayer.Settings.
     [Fact]
     public void MainWindow_SearchAndChatExport_WorkFromRealWindowState()
     {
-        RunOnStaThread(() =>
-        {
-            EnsureApplication();
-            // GetUninitializedObject avoids triggering InitializeComponent()/XAML loading.
-            // The tested methods (OpenSearch, PerformSearch, BuildChatText, …) depend only on
-            // the fields injected below, not on constructor-initialised state.
-            var window      = (MainWindow)RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
+            RunOnStaThread(() =>
+            {
+                EnsureApplication();
+                var window      = new MainWindow(initializeUi: false);
             var searchPanel = new SearchPanelControl();
             var itemsCtrl   = new ItemsControl();
             SetField(window, "SearchPanelControl",    searchPanel);
@@ -258,8 +255,8 @@ SetField(settings, "_appSettingsApplicationService", new Aire.AppLayer.Settings.
     /// and would require a full XAML/WPF startup). Required XAML-named fields are injected
     /// individually by each test via <see cref="SetField"/>.
     /// </summary>
-    private static SettingsWindow CreateUninitializedSettings()
-        => (SettingsWindow)RuntimeHelpers.GetUninitializedObject(typeof(SettingsWindow));
+        private static SettingsWindow CreateUninitializedSettings()
+            => new SettingsWindow(initializeUi: false);
 
     private static void WithTempLocalAppData(Action action)
     {

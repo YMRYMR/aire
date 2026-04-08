@@ -64,6 +64,9 @@ namespace Aire.Services.Workflows
         /// <returns>The most relevant path-like argument, or an empty string when none is present.</returns>
         public string GetPathFromRequest(ToolCallRequest request)
         {
+            if (request.Parameters.ValueKind != JsonValueKind.Object)
+                return string.Empty;
+
             foreach (var key in new[] { "path", "from", "directory" })
             {
                 if (request.Parameters.TryGetProperty(key, out var value))

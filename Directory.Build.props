@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
     <Version>1.1.2</Version>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 </Project>

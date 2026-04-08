@@ -123,10 +123,7 @@ namespace Aire
                 var sel = _owner.ProviderComboBox.SelectedItem as Provider;
                 if (sel == null)
                 {
-                    await _owner._chatService.ClearProviderAsync();
-                    _owner._currentProvider = null;
-                    _owner._currentProviderId = null;
-                    _owner.UpdateCapabilityUI();
+                    await ResetClearedProviderSelectionAsync();
                     return;
                 }
 
@@ -139,35 +136,7 @@ namespace Aire
                         previousProviderId,
                         _owner._currentConversationId,
                         showSwitchedMessage);
-                    _owner._currentProvider = activation.ProviderInstance;
-
-                    UpdateCapabilityUi();
-                    StartTokenUsageRefreshTimer();
-                    var plan = activation.ActivationPlan;
-
-                    if (plan.ConversationAction == ProviderActivationWorkflowService.ConversationActionKind.KeepCurrentConversation)
-                    {
-                        if (plan.ShouldAnnounceSwitch)
-                            await _owner.AddSystemMessageAsync(activation.SwitchedProviderMessage);
-
-                        if (_owner._sidebarOpen)
-                            await _owner.RefreshSidebarAsync();
-                    }
-                    else if (plan.ConversationAction == ProviderActivationWorkflowService.ConversationActionKind.LoadExistingConversation)
-                    {
-                        _owner._currentConversationId = plan.ConversationIdToLoad;
-                        await _owner.LoadConversationMessages(plan.ConversationIdToLoad!.Value);
-                    }
-                    else
-                    {
-                        await _owner.ConversationFlow.CreateConversationAsync(
-                            sel,
-                            plan.NewConversationTitle ?? "Chat",
-                            plan.NewConversationMessage ?? $"New conversation started with {sel.Name}.");
-                    }
-
-                    if (_owner._sidebarOpen)
-                        await _owner.RefreshSidebarAsync();
+                    await ApplyActivatedProviderAsync(sel, activation, showSwitchedMessage);
                 }
                 catch
                 {

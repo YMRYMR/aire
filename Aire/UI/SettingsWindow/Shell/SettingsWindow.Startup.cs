@@ -18,9 +18,12 @@ namespace Aire.UI
     public partial class SettingsWindow
     {
         public SettingsWindow(SpeechSynthesisService? ttsService = null)
+            : this(initializeUi: true, ttsService)
         {
-            InitializeComponent();
-            PruneHiddenProviderChoices();
+        }
+
+        internal SettingsWindow(bool initializeUi, SpeechSynthesisService? ttsService = null)
+        {
             _databaseService = new DatabaseService();
             _mcpCatalogApplicationService = new McpCatalogApplicationService();
             _mcpConfigApplicationService = new McpConfigApplicationService(_databaseService);
@@ -29,6 +32,12 @@ namespace Aire.UI
             _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
             _autoAcceptProfilesApplicationService = new AutoAcceptProfilesApplicationService(_databaseService);
             _ttsService = ttsService ?? SpeechSynthesisService.Current;
+
+            if (!initializeUi)
+                return;
+
+            InitializeComponent();
+            PruneHiddenProviderChoices();
             WireProviderListPaneEvents();
             WireAppearancePaneEvents();
             WireLocalApiPaneEvents();
