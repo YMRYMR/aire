@@ -11,6 +11,8 @@ namespace Aire.Data
     /// </summary>
     public partial class DatabaseService : IDisposable, IProviderRepository, IConversationRepository, ISettingsRepository, IDatabaseInitializer, IMcpConfigRepository, IEmailAccountRepository
     {
+        internal const string LegacySwitchedProviderMessagesCleanupSettingKey = "migration_remove_legacy_switched_provider_messages";
+
         private readonly string _databasePath;
         private SqliteConnection? _connection;
         private bool _disposed;

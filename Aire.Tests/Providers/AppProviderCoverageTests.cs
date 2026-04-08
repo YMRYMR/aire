@@ -187,6 +187,7 @@ public class AppProviderCoverageTests
             Assert.Equal("Mistral", provider.ProviderType);
             Assert.Equal("Mistral AI", provider.DisplayName);
             Assert.False(provider.FieldHints.ShowBaseUrl);
+            Assert.True(provider.SupportsImages);
             Assert.NotEmpty(provider.GetDefaultModels());
             Assert.Contains(provider.GetDefaultModels(), model => model.Id == "mistral-large-latest");
             Assert.Contains(provider.GetDefaultModels(), model => model.Id == "ministral-8b-latest");

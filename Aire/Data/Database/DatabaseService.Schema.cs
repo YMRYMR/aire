@@ -323,12 +323,17 @@ namespace Aire.Data
 
         private async Task MigrateRemoveLegacySwitchedProviderMessagesAsync()
         {
+            if (!string.IsNullOrWhiteSpace(await GetSettingAsync(DatabaseService.LegacySwitchedProviderMessagesCleanupSettingKey)))
+                return;
+
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
                 DELETE FROM Messages
                 WHERE Role = 'system'
                   AND Content LIKE 'Switched to %'";
             await cmd.ExecuteNonQueryAsync();
+
+            await SetSettingAsync(DatabaseService.LegacySwitchedProviderMessagesCleanupSettingKey, "1");
         }
 
         private async Task SeedDefaultProvidersAsync()

@@ -13,6 +13,8 @@ namespace Aire.Tests.Services;
 
 public class DatabaseServiceTests : IAsyncLifetime, IDisposable
 {
+    private const string LegacySwitchedProviderMessagesCleanupSettingKey = "migration_remove_legacy_switched_provider_messages";
+
     private readonly string _dbPath;
 
     private readonly DatabaseService _db;
@@ -148,32 +150,47 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
-    public async Task InitializeAsync_RemovesLegacySwitchedProviderSystemMessages()
+    public async Task InitializeAsync_RemovesLegacySwitchedProviderSystemMessages_Once()
     {
-        int providerId = await _db.InsertProviderAsync(new Provider
+        string dbPath = Path.Combine(Path.GetTempPath(), $"aire_test_{Guid.NewGuid():N}.db");
+        try
         {
-            Name = "Cleanup Provider",
-            Type = "OpenAI",
-            ApiKey = "sk-cleanup",
-            Model = "gpt-4o-mini",
-            IsEnabled = true,
-            Color = "#444444"
-        });
+            await CreateLegacySchemaAsync(dbPath);
+            await InsertMessageAsync(dbPath, "Switched to Codex");
+            await InsertMessageAsync(dbPath, "Keep me");
 
-        int conversationId = await _db.CreateConversationAsync(providerId, "Cleanup conversation");
-        await _db.SaveMessageAsync(conversationId, "system", "Switched to Codex");
-        await _db.SaveMessageAsync(conversationId, "system", "Switched to qwen2.5:7b");
-        await _db.SaveMessageAsync(conversationId, "system", "Switched to Nemotron");
-        await _db.SaveMessageAsync(conversationId, "system", "Keep me");
-        await _db.SaveMessageAsync(conversationId, "assistant", "Also keep me");
+            using (DatabaseService db1 = new DatabaseService(dbPath))
+            {
+                await db1.InitializeAsync();
+            }
 
-        using DatabaseService db2 = new DatabaseService(_dbPath);
-        await db2.InitializeAsync();
+            Assert.Equal(0, await CountSystemMessagesLikeAsync(dbPath, "Switched to %"));
+            Assert.Equal(1, await CountRowsAsync(dbPath, "Settings", "Key = @key", ("@key", LegacySwitchedProviderMessagesCleanupSettingKey)));
 
-        List<Aire.Data.Message> messages = await db2.GetMessagesAsync(conversationId);
-        Assert.DoesNotContain(messages, message => message.Role == "system" && message.Content.StartsWith("Switched to ", StringComparison.Ordinal));
-        Assert.Contains(messages, message => message.Role == "system" && message.Content == "Keep me");
-        Assert.Contains(messages, message => message.Role == "assistant" && message.Content == "Also keep me");
+            await InsertMessageAsync(dbPath, "Switched to qwen2.5:7b");
+
+            using (DatabaseService db2 = new DatabaseService(dbPath))
+            {
+                await db2.InitializeAsync();
+            }
+
+            Assert.Equal(1, await CountSystemMessagesLikeAsync(dbPath, "Switched to %"));
+            Assert.Contains(await LoadMessageContentsAsync(dbPath), message => message == "Keep me");
+            Assert.Contains(await LoadMessageContentsAsync(dbPath), message => message == "Switched to qwen2.5:7b");
+        }
+        finally
+        {
+            try
+            {
+                if (File.Exists(dbPath))
+                {
+                    File.Delete(dbPath);
+                }
+            }
+            catch
+            {
+            }
+        }
     }
 
     [Fact]
@@ -308,5 +325,100 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
         Assert.Equal("read", reader.GetString(0));
         Assert.Equal("C:/tmp/file.txt", reader.GetString(1));
         Assert.True(reader.GetBoolean(2));
+    }
+
+    private static async Task CreateLegacySchemaAsync(string dbPath)
+    {
+        using SqliteConnection connection = new SqliteConnection("Data Source=" + dbPath);
+        await connection.OpenAsync();
+
+        using SqliteCommand cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+            CREATE TABLE IF NOT EXISTS Providers (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Name TEXT NOT NULL,
+                Type TEXT NOT NULL,
+                ApiKey TEXT,
+                BaseUrl TEXT,
+                Model TEXT,
+                IsEnabled INTEGER DEFAULT 1,
+                Color TEXT DEFAULT '#007ACC',
+                TimeoutMinutes INTEGER NOT NULL DEFAULT 5,
+                CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS Settings (
+                Key TEXT PRIMARY KEY,
+                Value TEXT,
+                UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS Conversations (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ProviderId INTEGER,
+                Title TEXT,
+                AssistantModeKey TEXT NOT NULL DEFAULT 'general',
+                CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (ProviderId) REFERENCES Providers (Id)
+            );
+            CREATE TABLE IF NOT EXISTS Messages (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ConversationId INTEGER,
+                Role TEXT NOT NULL,
+                Content TEXT NOT NULL,
+                ImagePath TEXT,
+                AttachmentsJson TEXT,
+                Tokens INTEGER,
+                CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (ConversationId) REFERENCES Conversations (Id)
+            );";
+        await cmd.ExecuteNonQueryAsync();
+    }
+
+    private static async Task InsertMessageAsync(string dbPath, string content)
+    {
+        using SqliteConnection connection = new SqliteConnection("Data Source=" + dbPath);
+        await connection.OpenAsync();
+
+        using SqliteCommand cmd = connection.CreateCommand();
+        cmd.CommandText = "INSERT INTO Messages (ConversationId, Role, Content) VALUES (NULL, 'system', @content)";
+        cmd.Parameters.AddWithValue("@content", content);
+        await cmd.ExecuteNonQueryAsync();
+    }
+
+    private static async Task<int> CountSystemMessagesLikeAsync(string dbPath, string pattern)
+    {
+        return await CountRowsAsync(dbPath, "Messages", "Role = 'system' AND Content LIKE @pattern", ("@pattern", pattern));
+    }
+
+    private static async Task<int> CountRowsAsync(string dbPath, string tableName, string whereClause, params (string Name, object Value)[] parameters)
+    {
+        using SqliteConnection connection = new SqliteConnection("Data Source=" + dbPath);
+        await connection.OpenAsync();
+
+        using SqliteCommand cmd = connection.CreateCommand();
+        cmd.CommandText = $"SELECT COUNT(*) FROM {tableName} WHERE {whereClause}";
+        foreach (var (name, value) in parameters)
+        {
+            cmd.Parameters.AddWithValue(name, value);
+        }
+
+        object? result = await cmd.ExecuteScalarAsync();
+        return Convert.ToInt32(result);
+    }
+
+    private static async Task<List<string>> LoadMessageContentsAsync(string dbPath)
+    {
+        using SqliteConnection connection = new SqliteConnection("Data Source=" + dbPath);
+        await connection.OpenAsync();
+
+        using SqliteCommand cmd = connection.CreateCommand();
+        cmd.CommandText = "SELECT Content FROM Messages ORDER BY Id";
+        using SqliteDataReader reader = await cmd.ExecuteReaderAsync();
+        List<string> contents = new();
+        while (await reader.ReadAsync())
+        {
+            contents.Add(reader.GetString(0));
+        }
+        return contents;
     }
 }
