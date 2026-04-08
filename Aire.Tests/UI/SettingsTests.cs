@@ -15,6 +15,7 @@ using Aire.Services;
 using Aire.UI;
 using Aire.UI.Settings.Models;
 using Xunit;
+using Button = System.Windows.Controls.Button;
 
 namespace Aire.Tests.UI
 {
@@ -89,6 +90,10 @@ namespace Aire.Tests.UI
                 settingsWindow.CapTestStatusText = new TextBlock();
                 settingsWindow.DisplayTestResults(array, DateTime.Now);
                 Assert.True(stackPanel.Children.Count >= 1);
+                StackPanel row = Assert.IsType<StackPanel>(stackPanel.Children[1]);
+                Button rerunButton = Assert.Single(row.Children.OfType<Button>());
+                Assert.Equal("Rerun", rerunButton.Content);
+                Assert.Equal("cat", rerunButton.Tag);
                 
                 Provider provider = new Provider
                 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,7 @@ using Aire.Data;
 using Aire.Domain.Providers;
 using Aire.Providers;
 using Aire.Services;
+using Button = System.Windows.Controls.Button;
 
 namespace Aire.UI
 {
@@ -18,6 +20,7 @@ namespace Aire.UI
     {
         private readonly ProviderCapabilityTestApplicationService _capabilityTestApplicationService = new();
         private readonly ProviderCapabilityTestSessionService _capabilitySessionService = new();
+        private readonly List<CapabilityTestResult> _capabilityTestResults = new();
 
         private IAiProvider? BuildProviderFromForm()
         {
@@ -91,13 +94,14 @@ namespace Aire.UI
             // Clear the results panel now so rows appear as they arrive.
             CapTestResultsPanel.Children.Clear();
             _lastRenderedCategory = null;
+            _capabilityTestResults.Clear();
             CapTestResultsBorder.Visibility = Visibility.Visible;
 
-            var results = new List<CapabilityTestResult>();
             try
             {
                 var progress = new Progress<ProviderCapabilityTestApplicationService.ProgressUpdate>(update =>
                 {
+                    _capabilityTestResults.Add(update.Result);
                     CapTestProgressText.Text =
                         $"Tested: {update.Result.Name} ({update.CompletedCount}/{CapabilityTestRunner.AllTests.Count})";
 
@@ -127,7 +131,8 @@ namespace Aire.UI
                 if (!string.IsNullOrWhiteSpace(executionResult.WarningMessage))
                     ShowToast(executionResult.WarningMessage, isError: false);
 
-                results = executionResult.Results.ToList();
+                _capabilityTestResults.Clear();
+                _capabilityTestResults.AddRange(executionResult.Results);
                 // Results are already rendered row by row; just update the timestamp label.
                 UpdateTestedAtLabel(executionResult.TestedAt ?? DateTime.Now);
             }
@@ -145,6 +150,75 @@ namespace Aire.UI
                 CapTestProgressBar.IsIndeterminate = false;
                 CapTestProgressBorder.Visibility = Visibility.Collapsed;
                 StopTestsButton.Visibility = Visibility.Collapsed;
+                SetProvidersTabEnabled(true);
+                RunTestsButton.IsEnabled = true;
+            }
+        }
+
+        private async void RerunCapabilityTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.Tag is not string testId)
+            {
+                return;
+            }
+
+            var test = CapabilityTestRunner.AllTests.FirstOrDefault(t => t.Id == testId);
+            if (test == null)
+            {
+                return;
+            }
+
+            await RunSingleCapabilityTestAsync(test);
+        }
+
+        private async Task RunSingleCapabilityTestAsync(CapabilityTest test)
+        {
+            var provider = BuildProviderFromForm();
+            if (provider == null)
+            {
+                return;
+            }
+
+            SetProvidersTabEnabled(false);
+            RunTestsButton.IsEnabled = false;
+            StopTestsButton.Visibility = Visibility.Collapsed;
+            CapTestProgressBorder.Visibility = Visibility.Visible;
+            CapTestProgressBar.IsIndeterminate = true;
+            CapTestProgressText.Text = string.Format(
+                LocalizationService.S("captest.runningOne", "Running {0}…"),
+                test.Name);
+            CapTestStatusText.Text = string.Format(
+                LocalizationService.S("captest.rerunning", "Rerunning {0}…"),
+                test.Name);
+
+            try
+            {
+                var executionResult = await _capabilityTestApplicationService.RunSingleAndPersistAsync(
+                    provider,
+                    _selectedProvider?.Id,
+                    _selectedProvider?.Model ?? string.Empty,
+                    test,
+                    CapabilityTestRunner.RunOneAsync,
+                    _databaseService,
+                    CancellationToken.None);
+
+                var index = _capabilityTestResults.FindIndex(r => r.Id == executionResult.Result.Id);
+                if (index >= 0)
+                    _capabilityTestResults[index] = executionResult.Result;
+                else
+                    _capabilityTestResults.Add(executionResult.Result);
+
+                DisplayTestResults(_capabilityTestResults, executionResult.TestedAt);
+            }
+            catch
+            {
+                ShowToast(LocalizationService.S("captest.failed", "Test run failed."), isError: true);
+                CapTestStatusText.Text = LocalizationService.S("captest.failed", "Test run failed.");
+            }
+            finally
+            {
+                CapTestProgressBar.IsIndeterminate = false;
+                CapTestProgressBorder.Visibility = Visibility.Collapsed;
                 SetProvidersTabEnabled(true);
                 RunTestsButton.IsEnabled = true;
             }
@@ -264,15 +338,31 @@ namespace Aire.UI
                 FontSize   = 11,
             });
 
+            var rerunButton = new Button
+            {
+                Content   = "Rerun",
+                Padding   = new Thickness(8, 3, 8, 3),
+                Margin    = new Thickness(10, 0, 0, 0),
+                MinWidth  = 56,
+                Tag       = r.Id,
+                ToolTip   = "Run this test again",
+            };
+            rerunButton.Click += RerunCapabilityTestButton_Click;
+            row.Children.Add(rerunButton);
+
             CapTestResultsPanel.Children.Add(row);
         }
 
         internal void DisplayTestResults(IEnumerable<CapabilityTestResult> results, DateTime testedAt)
         {
+            var snapshot = results.ToList();
+            _capabilityTestResults.Clear();
+            _capabilityTestResults.AddRange(snapshot);
+
             CapTestResultsPanel.Children.Clear();
             _lastRenderedCategory = null;
 
-            foreach (var r in results)
+            foreach (var r in snapshot)
                 AppendTestResultRow(r);
 
             CapTestResultsBorder.Visibility = Visibility.Visible;

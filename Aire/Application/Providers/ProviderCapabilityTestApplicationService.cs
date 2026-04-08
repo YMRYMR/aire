@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.AppLayer.Abstractions;
@@ -37,6 +38,11 @@ namespace Aire.AppLayer.Providers
         /// Result of one capability-test run.
         /// </summary>
         public sealed record RunResult(IReadOnlyList<CapabilityTestResult> Results, DateTime TestedAt);
+
+        /// <summary>
+        /// Result of rerunning one capability test.
+        /// </summary>
+        public sealed record SingleRunResult(CapabilityTestResult Result, DateTime TestedAt);
 
         private readonly ProviderCapabilityTestSessionService _sessionService = new();
         private readonly ProviderSetupApplicationService _providerSetupService;
@@ -149,6 +155,43 @@ namespace Aire.AppLayer.Providers
                 cancellationToken).ConfigureAwait(false);
 
             return new ExecutionResult(true, runResult.Results, runResult.TestedAt, null, warning.WarningMessage);
+        }
+
+        /// <summary>
+        /// Runs one capability test and persists the updated session result without revalidating the provider.
+        /// This is used by the settings window's per-test rerun action when a full suite would be too expensive.
+        /// </summary>
+        public async Task<SingleRunResult> RunSingleAndPersistAsync(
+            IAiProvider provider,
+            int? providerId,
+            string model,
+            CapabilityTest test,
+            Func<IAiProvider, CapabilityTest, CancellationToken, Task<CapabilityTestResult>> runOneAsync,
+            ISettingsRepository settingsRepository,
+            CancellationToken cancellationToken)
+        {
+            var result = await runOneAsync(provider, test, cancellationToken).ConfigureAwait(false);
+            var testedAt = DateTime.Now;
+
+            if (providerId.HasValue)
+            {
+                var existing = await _sessionService.LoadAsync(providerId.Value, model ?? string.Empty, settingsRepository).ConfigureAwait(false);
+                var results = existing?.Results?.ToList() ?? new List<CapabilityTestResult>();
+                var index = results.FindIndex(item => item.Id == result.Id);
+                if (index >= 0)
+                    results[index] = result;
+                else
+                    results.Add(result);
+
+                await _sessionService.SaveAsync(
+                    providerId.Value,
+                    model ?? string.Empty,
+                    results,
+                    testedAt,
+                    settingsRepository).ConfigureAwait(false);
+            }
+
+            return new SingleRunResult(result, testedAt);
         }
 
         private static (string? BlockingMessage, string? WarningMessage) BuildSmokeTestWarning(
