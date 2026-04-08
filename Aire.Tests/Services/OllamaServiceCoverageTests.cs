@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.Services;
@@ -81,10 +83,11 @@ public class OllamaServiceCoverageTests : IDisposable
     }
 
     [Theory]
-    [InlineData(new object[] { "http://127.0.0.1:1" })]
-    [InlineData(new object[] { "http://localhost:1" })]
-    public async Task IsOllamaReachableAsync_ReturnsFalseForUnavailableLocalEndpoints(string baseUrl)
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task IsOllamaReachableAsync_ReturnsFalseForUnavailableLocalEndpoints(bool useLocalhostHost)
     {
+        string baseUrl = CreateUnreachableBaseUrl(useLocalhostHost);
         Assert.False(await _service.IsOllamaReachableAsync(baseUrl, CancellationToken.None));
     }
 
@@ -251,6 +254,33 @@ public class OllamaServiceCoverageTests : IDisposable
         Assert.False(OllamaService.IsOllamaServiceRunning());
     }
 
+    [Fact]
+    public async Task GetAvailableModelsAsync_MergesRemoteModelsAndKnownDefaults()
+    {
+        var handler = new RecordingOllamaHandler(request =>
+        {
+            Assert.Equal(HttpMethod.Get, request.Method);
+            Assert.Equal("https://ollama.com/api/tags", request.RequestUri!.AbsoluteUri);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(
+                    """{"models":[{"name":"llava:7b","size":0},{"name":"custom:1b","size":12345}]}""",
+                    Encoding.UTF8,
+                    "application/json")
+            };
+        });
+
+        var provider = new OllamaService();
+        typeof(OllamaService).GetField("_httpClient", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(provider, new HttpClient(handler));
+
+        var models = await provider.GetAvailableModelsAsync(CancellationToken.None);
+
+        Assert.Contains(models, m => m.Name == "llava:7b" && m.Size == OllamaService.KnownModelMeta["llava:7b"].SizeBytes);
+        Assert.Contains(models, m => m.Name == "custom:1b" && m.Size == 12345);
+        Assert.Contains(models, m => m.Name == "qwen3:4b");
+    }
+
     private sealed class OllamaHttpServer : IDisposable
     {
         private readonly TcpListener _listener;
@@ -335,5 +365,29 @@ public class OllamaServiceCoverageTests : IDisposable
         }
 
         public sealed record Response(int StatusCode, string ContentType, byte[] Body);
+    }
+
+    private static string CreateUnreachableBaseUrl(bool useLocalhostHost)
+    {
+        using var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+        return useLocalhostHost
+            ? $"http://localhost:{port}"
+            : $"http://127.0.0.1:{port}";
+    }
+
+    private sealed class RecordingOllamaHandler : HttpMessageHandler
+    {
+        private readonly Func<HttpRequestMessage, HttpResponseMessage> _handler;
+
+        public RecordingOllamaHandler(Func<HttpRequestMessage, HttpResponseMessage> handler)
+        {
+            _handler = handler;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            => Task.FromResult(_handler(request));
     }
 }

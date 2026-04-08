@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 using Aire.Services;
+using WpfKeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Aire.UI
 {
@@ -34,9 +35,9 @@ namespace Aire.UI
             Close();
         }
 
-        private void InputBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void InputBox_KeyDown(object sender, WpfKeyEventArgs e)
         {
-            if (e.Key == Key.Enter)  { DialogResult = true;  Close(); }
+            if (e.Key == Key.Enter) { DialogResult = true; Close(); }
             if (e.Key == Key.Escape) { DialogResult = false; Close(); }
         }
     }
