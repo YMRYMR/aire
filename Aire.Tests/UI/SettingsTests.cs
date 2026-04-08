@@ -89,11 +89,16 @@ namespace Aire.Tests.UI
                 settingsWindow.CapTestResultsBorder = new Border();
                 settingsWindow.CapTestStatusText = new TextBlock();
                 settingsWindow.DisplayTestResults(array, DateTime.Now);
-                Assert.True(stackPanel.Children.Count >= 1);
-                StackPanel row = Assert.IsType<StackPanel>(stackPanel.Children[1]);
+                Assert.True(stackPanel.Children.Count >= 2);
+                Grid header = Assert.IsType<Grid>(stackPanel.Children[0]);
+                Grid row = Assert.IsType<Grid>(stackPanel.Children[1]);
+                Assert.Equal(6, header.ColumnDefinitions.Count);
                 Button rerunButton = Assert.Single(row.Children.OfType<Button>());
-                Assert.Equal("Rerun", rerunButton.Content);
+                Assert.Equal("↻", rerunButton.Content);
+                Assert.Equal(24d, rerunButton.Width);
+                Assert.Equal(24d, rerunButton.Height);
                 Assert.Equal("cat", rerunButton.Tag);
+                Assert.Equal(6, row.ColumnDefinitions.Count);
                 
                 Provider provider = new Provider
                 {

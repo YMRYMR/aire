@@ -482,6 +482,7 @@
                                             Padding="10,8"
                                             Background="{DynamicResource Surface2Brush}"
                                             CornerRadius="6"
+                                            Grid.IsSharedSizeScope="True"
                                             Visibility="Collapsed">
                                             <StackPanel x:Name="CapTestResultsPanel" />
                                         </Border>

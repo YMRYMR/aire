@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Aire.AppLayer.Abstractions;
 using Aire.AppLayer.Providers;
 using Aire.Data;
@@ -93,7 +94,6 @@ namespace Aire.UI
 
             // Clear the results panel now so rows appear as they arrive.
             CapTestResultsPanel.Children.Clear();
-            _lastRenderedCategory = null;
             _capabilityTestResults.Clear();
             CapTestResultsBorder.Visibility = Visibility.Visible;
 
@@ -265,56 +265,47 @@ namespace Aire.UI
             return error.Length <= maxLen ? error : error[..maxLen] + "…";
         }
 
-        // Tracks the last category header written during an incremental run so we only
-        // insert a new header when the category changes.
-        private string? _lastRenderedCategory;
-
         /// <summary>
-        /// Appends a single result row (and a category header when needed) to the results panel.
+        /// Appends a single result row to the results panel.
         /// Call this while a test run is in progress to show results as they arrive.
         /// </summary>
         private void AppendTestResultRow(CapabilityTestResult r)
         {
-            // Category header — only when the category changes
-            if (r.Category != _lastRenderedCategory)
-            {
-                bool isFirst = _lastRenderedCategory == null;
-                CapTestResultsPanel.Children.Add(new TextBlock
-                {
-                    Text       = r.Category,
-                    Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
-                    FontSize   = 10,
-                    FontWeight = FontWeights.SemiBold,
-                    Margin     = new Thickness(0, isFirst ? 0 : 10, 0, 4),
-                });
-                _lastRenderedCategory = r.Category;
-            }
+            EnsureCapabilityResultsHeaderRow();
 
-            // Result row
-            var row = new StackPanel
+            var row = new Grid
             {
-                Orientation = System.Windows.Controls.Orientation.Horizontal,
-                Margin      = new Thickness(0, 0, 0, 3),
+                Margin = new Thickness(0, 0, 0, 2),
             };
 
-            row.Children.Add(new TextBlock
-            {
-                Text       = r.Passed ? "✓" : "✗",
-                Foreground = new System.Windows.Media.SolidColorBrush(
-                    r.Passed
-                        ? System.Windows.Media.Color.FromRgb(0x4C, 0xAF, 0x50)
-                        : System.Windows.Media.Color.FromRgb(0xF4, 0x43, 0x36)),
-                Width    = 14,
-                FontSize = 12,
-            });
+            AddCapabilityResultColumns(row);
 
-            row.Children.Add(new TextBlock
+            AddCell(row, new TextBlock
             {
-                Text       = r.Name,
-                Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextBrush"],
-                Width    = 128,
-                FontSize = 12,
-            });
+                Text                = r.Passed ? "✓" : "✗",
+                Foreground          = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x4C, 0xAF, 0x50)),
+                FontSize            = 12,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                VerticalAlignment   = System.Windows.VerticalAlignment.Center,
+            }, 0);
+
+            AddCell(row, new TextBlock
+            {
+                Text              = r.Name,
+                Foreground        = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextBrush"],
+                FontSize          = 12,
+                TextTrimming      = TextTrimming.CharacterEllipsis,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+            }, 1);
+
+            AddCell(row, new TextBlock
+            {
+                Text              = r.Category,
+                Foreground        = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
+                FontSize          = 11,
+                TextTrimming      = TextTrimming.CharacterEllipsis,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+            }, 2);
 
             var detail = r.Passed ? (r.ActualTool ?? string.Empty) : ShortenErrorMessage(r.Error ?? "failed");
             var detailBlock = new TextBlock
@@ -322,33 +313,39 @@ namespace Aire.UI
                 Text         = detail,
                 Foreground   = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
                 FontStyle    = r.Passed ? FontStyles.Normal : FontStyles.Italic,
-                MinWidth     = 80,
                 FontSize     = 11,
                 TextWrapping = TextWrapping.Wrap,
-                MaxWidth     = 180,
             };
             if (!r.Passed && !string.IsNullOrEmpty(r.Error) && r.Error != detail)
                 detailBlock.ToolTip = r.Error;
 
-            row.Children.Add(detailBlock);
-            row.Children.Add(new TextBlock
+            AddCell(row, detailBlock, 3);
+            AddCell(row, new TextBlock
             {
-                Text       = $"  {r.DurationMs / 1000.0:F1}s",
-                Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
-                FontSize   = 11,
-            });
+                Text                = $"{r.DurationMs / 1000.0:F1}s",
+                Foreground          = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
+                FontSize            = 11,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                VerticalAlignment   = System.Windows.VerticalAlignment.Center,
+            }, 4);
 
             var rerunButton = new Button
             {
-                Content   = "Rerun",
-                Padding   = new Thickness(8, 3, 8, 3),
-                Margin    = new Thickness(10, 0, 0, 0),
-                MinWidth  = 56,
-                Tag       = r.Id,
-                ToolTip   = "Run this test again",
+                Content                 = "↻",
+                Width                   = 24,
+                Height                  = 24,
+                Padding                 = new Thickness(0),
+                Margin                  = new Thickness(0, 0, 0, 0),
+                MinWidth                = 24,
+                MinHeight               = 24,
+                Tag                     = r.Id,
+                ToolTip                 = "Run this test again",
+                Foreground              = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["LinkBrush"],
+                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center,
+                VerticalContentAlignment   = System.Windows.VerticalAlignment.Center,
             };
             rerunButton.Click += RerunCapabilityTestButton_Click;
-            row.Children.Add(rerunButton);
+            AddCell(row, rerunButton, 5);
 
             CapTestResultsPanel.Children.Add(row);
         }
@@ -360,7 +357,7 @@ namespace Aire.UI
             _capabilityTestResults.AddRange(snapshot);
 
             CapTestResultsPanel.Children.Clear();
-            _lastRenderedCategory = null;
+            EnsureCapabilityResultsHeaderRow();
 
             foreach (var r in snapshot)
                 AppendTestResultRow(r);
@@ -379,6 +376,54 @@ namespace Aire.UI
                 : ago.TotalHours   < 24 ? string.Format(L("captest.hoursAgo", "{0}h ago"), (int)ago.TotalHours)
                 : testedAt.ToString("d");
             CapTestStatusText.Text = string.Format(L("captest.lastTested", "Last tested: {0}"), when);
+        }
+
+        private void EnsureCapabilityResultsHeaderRow()
+        {
+            if (CapTestResultsPanel.Children.Count > 0)
+                return;
+
+            var header = new Grid
+            {
+                Margin = new Thickness(0, 0, 0, 6),
+            };
+
+            AddCapabilityResultColumns(header);
+
+            header.Children.Add(CreateHeaderText(" "));
+            AddCell(header, CreateHeaderText("Test"), 1);
+            AddCell(header, CreateHeaderText("Category"), 2);
+            AddCell(header, CreateHeaderText("Result / details"), 3);
+            AddCell(header, CreateHeaderText("Time"), 4);
+            AddCell(header, CreateHeaderText(" "), 5);
+
+            CapTestResultsPanel.Children.Add(header);
+        }
+
+        private static void AddCell(Grid grid, UIElement element, int column)
+        {
+            Grid.SetColumn(element, column);
+            grid.Children.Add(element);
+        }
+
+        private static TextBlock CreateHeaderText(string text) =>
+            new()
+            {
+                Text = text,
+                FontSize = 10,
+                FontWeight = FontWeights.SemiBold,
+                Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["TextSecondaryBrush"],
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+            };
+
+        private static void AddCapabilityResultColumns(Grid grid)
+        {
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "CapTestStatus" });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star), SharedSizeGroup = "CapTestName" });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star), SharedSizeGroup = "CapTestCategory" });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star), SharedSizeGroup = "CapTestDetail" });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "CapTestDuration" });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "CapTestAction" });
         }
 
         internal async Task SaveTestResultsAsync(Provider provider, List<CapabilityTestResult> results, DateTime testedAt)
