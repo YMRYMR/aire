@@ -484,7 +484,11 @@
                                             CornerRadius="6"
                                             Grid.IsSharedSizeScope="True"
                                             Visibility="Collapsed">
-                                            <StackPanel x:Name="CapTestResultsPanel" />
+                                            <ScrollViewer
+                                                HorizontalScrollBarVisibility="Auto"
+                                                VerticalScrollBarVisibility="Disabled">
+                                                <StackPanel x:Name="CapTestResultsPanel" MinWidth="650" />
+                                            </ScrollViewer>
                                         </Border>
                                     </Grid>
                                 </ScrollViewer>
