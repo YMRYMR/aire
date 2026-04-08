@@ -197,10 +197,9 @@ namespace Aire.Services
         /// <returns>A normalized local API response.</returns>
         internal async Task<LocalApiResponse> DispatchAsync(LocalApiRequest request, CancellationToken token)
         {
-            var method = request.Method.Trim().ToLowerInvariant();
-
             try
             {
+                var method = request.Method?.Trim().ToLowerInvariant() ?? string.Empty;
                 return method switch
                 {
                     "ping" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiStateSnapshot>(() => _mainWindow.ApiGetStateAsync()).ConfigureAwait(false)),
@@ -251,7 +250,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                ApiTraceLog.Record("error", request.Method, $"Unexpected local API failure: {ex.GetType().Name}", false);
+                ApiTraceLog.Record("error", request?.Method ?? "<null>", $"Unexpected local API failure: {ex.GetType().Name}", false);
                 return LocalApiResponse.Error("An internal error occurred.");
             }
         }

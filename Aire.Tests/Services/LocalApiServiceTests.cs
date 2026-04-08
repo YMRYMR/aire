@@ -148,14 +148,17 @@ namespace Aire.Tests.Services
         [Fact]
         public void IsAuthorized_DeniesMissingAndWrongTokens()
         {
-            AppState.SetApiAccessEnabled(true);
-            AppState.SetApiAccessToken("expected-token");
-            
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window); 
-            Assert.False(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = null }));
-            Assert.False(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = "wrong" }));
-            Assert.True(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = "expected-token" }));
+            RunOnStaThread(() =>
+            {
+                AppState.SetApiAccessEnabled(true);
+                AppState.SetApiAccessToken("expected-token");
+                
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window); 
+                Assert.False(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = null }));
+                Assert.False(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = "wrong" }));
+                Assert.True(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = "expected-token" }));
+            });
         }
 
         [Fact]
@@ -173,56 +176,62 @@ namespace Aire.Tests.Services
         }
 
         [Fact]
-        public async Task WriteResponseAsync_SerializesCamelCaseJson()
+        public void WriteResponseAsync_SerializesCamelCaseJson()
         {
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
-            using var stream = new MemoryStream();
-            using var writer = new StreamWriter(stream, leaveOpen: true);
-
-            await service.WriteResponseAsync(writer, new LocalApiResponse
+            RunOnStaThread(async () =>
             {
-                Ok = false,
-                ErrorMessage = "bad request"
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
+                using var stream = new MemoryStream();
+                using var writer = new StreamWriter(stream, leaveOpen: true);
+
+                await service.WriteResponseAsync(writer, new LocalApiResponse
+                {
+                    Ok = false,
+                    ErrorMessage = "bad request"
+                });
+                await writer.FlushAsync();
+                stream.Position = 0;
+                using var reader = new StreamReader(stream);
+                var json = await reader.ReadToEndAsync();
+
+                Assert.Contains("\"ok\":false", json, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("\"errorMessage\":\"bad request\"", json, StringComparison.OrdinalIgnoreCase);
             });
-            await writer.FlushAsync();
-            stream.Position = 0;
-            using var reader = new StreamReader(stream);
-            var json = await reader.ReadToEndAsync();
-
-            Assert.Contains("\"ok\":false", json, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("\"errorMessage\":\"bad request\"", json, StringComparison.OrdinalIgnoreCase);
         }
 
         [Fact]
-        public async Task DispatchAsync_ReturnsUnknownMethodError_WithoutTouchingUi()
+        public void DispatchAsync_ReturnsUnknownMethodError_WithoutTouchingUi()
         {
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
-
-            var response = await service.DispatchAsync(new LocalApiRequest
+            RunOnStaThread(async () =>
             {
-                Method = "  unknown_method  "
-            }, CancellationToken.None);
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
 
-            Assert.False(response.Ok);
-            Assert.Contains("Unknown method", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+                var response = await service.DispatchAsync(new LocalApiRequest
+                {
+                    Method = "  unknown_method  "
+                }, CancellationToken.None);
+
+                Assert.False(response.Ok);
+                Assert.Contains("Unknown method", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+            });
         }
 
         [Fact]
-        public async Task DispatchAsync_ReturnsGenericError_ForUnexpectedExceptions()
+        public void DispatchAsync_ReturnsGenericError_ForUnexpectedExceptions()
         {
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
-
-            var response = await service.DispatchAsync(new LocalApiRequest
+            RunOnStaThread(async () =>
             {
-                Method = "ping"
-            }, CancellationToken.None);
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
 
-            Assert.False(response.Ok);
-            Assert.Equal("An internal error occurred.", response.ErrorMessage);
-            Assert.DoesNotContain("Object reference", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+                var response = await service.DispatchAsync(null!, CancellationToken.None);
+
+                Assert.False(response.Ok);
+                Assert.Equal("An internal error occurred.", response.ErrorMessage);
+                Assert.DoesNotContain("Object reference", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+            });
         }
 
         [Fact]
@@ -269,73 +278,88 @@ namespace Aire.Tests.Services
         [Fact]
         public void IsAuthorized_DeniesWhenExpectedTokenMissing()
         {
-            AppState.SetApiAccessEnabled(true);
-            AppState.SetApiAccessToken(string.Empty);
+            RunOnStaThread(() =>
+            {
+                AppState.SetApiAccessEnabled(true);
+                AppState.SetApiAccessToken(string.Empty);
 
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
 
-            Assert.False(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = "anything" }));
+                Assert.False(service.IsAuthorized(new LocalApiRequest { Method = "ping", Token = "anything" }));
+            });
         }
 
         [Fact]
-        public async Task HandleClientAsync_EmptyRequest_ReturnsEmptyRequestError()
+        public void HandleClientAsync_EmptyRequest_ReturnsEmptyRequestError()
         {
-            AppState.SetApiAccessEnabled(true);
-            AppState.SetApiAccessToken("token");
+            RunOnStaThread(async () =>
+            {
+                AppState.SetApiAccessEnabled(true);
+                AppState.SetApiAccessToken("token");
 
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
 
-            var response = await RoundTripAsync(service, string.Empty + Environment.NewLine);
+                var response = await RoundTripAsync(service, string.Empty + Environment.NewLine);
 
-            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("Empty request", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("Empty request", response, StringComparison.OrdinalIgnoreCase);
+            });
         }
 
         [Fact]
-        public async Task HandleClientAsync_InvalidJson_ReturnsJsonError()
+        public void HandleClientAsync_InvalidJson_ReturnsJsonError()
         {
-            AppState.SetApiAccessEnabled(true);
-            AppState.SetApiAccessToken("token");
+            RunOnStaThread(async () =>
+            {
+                AppState.SetApiAccessEnabled(true);
+                AppState.SetApiAccessToken("token");
 
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
 
-            var response = await RoundTripAsync(service, "{not-json}" + Environment.NewLine);
+                var response = await RoundTripAsync(service, "{not-json}" + Environment.NewLine);
 
-            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("Invalid JSON", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("Invalid JSON", response, StringComparison.OrdinalIgnoreCase);
+            });
         }
 
         [Fact]
-        public async Task HandleClientAsync_DisabledApi_ReturnsDisabledError()
+        public void HandleClientAsync_DisabledApi_ReturnsDisabledError()
         {
-            AppState.SetApiAccessEnabled(false);
-            AppState.SetApiAccessToken("token");
+            RunOnStaThread(async () =>
+            {
+                AppState.SetApiAccessEnabled(false);
+                AppState.SetApiAccessToken("token");
 
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
 
-            var response = await RoundTripAsync(service, "{\"method\":\"ping\",\"token\":\"token\"}" + Environment.NewLine);
+                var response = await RoundTripAsync(service, "{\"method\":\"ping\",\"token\":\"token\"}" + Environment.NewLine);
 
-            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("disabled", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("disabled", response, StringComparison.OrdinalIgnoreCase);
+            });
         }
 
         [Fact]
-        public async Task HandleClientAsync_InvalidToken_ReturnsAuthError()
+        public void HandleClientAsync_InvalidToken_ReturnsAuthError()
         {
-            AppState.SetApiAccessEnabled(true);
-            AppState.SetApiAccessToken("expected-token");
+            RunOnStaThread(async () =>
+            {
+                AppState.SetApiAccessEnabled(true);
+                AppState.SetApiAccessToken("expected-token");
 
-            var window = (MainWindow)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(MainWindow));
-            var service = new LocalApiService(window);
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
 
-            var response = await RoundTripAsync(service, "{\"method\":\"ping\",\"token\":\"wrong\"}" + Environment.NewLine);
+                var response = await RoundTripAsync(service, "{\"method\":\"ping\",\"token\":\"wrong\"}" + Environment.NewLine);
 
-            Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("invalid auth token", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("\"ok\":false", response, StringComparison.OrdinalIgnoreCase);
+                Assert.Contains("invalid auth token", response, StringComparison.OrdinalIgnoreCase);
+            });
         }
 
         private static async Task<string> RoundTripAsync(LocalApiService service, string requestLine)

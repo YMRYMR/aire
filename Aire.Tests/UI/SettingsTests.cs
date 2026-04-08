@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,9 +27,7 @@ namespace Aire.Tests.UI
             RunOnStaThread(delegate
             {
                 EnsureApplication();
-                // GetUninitializedObject avoids InitializeComponent()/XAML loading.
-                // Only static helpers and public property setters are exercised here.
-                SettingsWindow settingsWindow = (SettingsWindow)RuntimeHelpers.GetUninitializedObject(typeof(SettingsWindow));
+                SettingsWindow settingsWindow = new SettingsWindow(initializeUi: false);
 
                 Assert.Equal(string.Empty, Aire.AppLayer.Providers.OllamaModelCatalogApplicationService.FormatModelSize(0L));
                 Assert.Equal("512 MB", Aire.AppLayer.Providers.OllamaModelCatalogApplicationService.FormatModelSize(536870912L));
@@ -75,7 +72,7 @@ namespace Aire.Tests.UI
             RunOnStaThread(delegate
             {
                 EnsureApplication();
-                SettingsWindow settingsWindow = (SettingsWindow)RuntimeHelpers.GetUninitializedObject(typeof(SettingsWindow));
+                SettingsWindow settingsWindow = new SettingsWindow(initializeUi: false);
                 
                 Assert.Equal("test", SettingsWindow.ShortenErrorMessage("test"));
                 Assert.Equal("test", SettingsWindow.ShortenErrorMessage("prefix {\"error\":{\"message\":\"test\"}}"));
@@ -111,7 +108,7 @@ namespace Aire.Tests.UI
                 Application.Current.Resources["TextBrush"] = Brushes.Black;
                 Application.Current.Resources["TextSecondaryBrush"] = Brushes.Gray;
                 
-                SettingsWindow settingsWindow = (SettingsWindow)RuntimeHelpers.GetUninitializedObject(typeof(SettingsWindow));
+                SettingsWindow settingsWindow = new SettingsWindow(initializeUi: false);
                 settingsWindow.CapTestResultsPanel = new StackPanel();
                 settingsWindow.CapTestResultsBorder = new Border { Visibility = Visibility.Collapsed };
                 settingsWindow.CapTestStatusText = new TextBlock();
