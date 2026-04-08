@@ -434,9 +434,16 @@ namespace Aire.Tests.UI
                     window._availabilityTracker = ProviderAvailabilityTracker.Instance;
                     window._databaseService = db;
                     window._providerFactory = new ProviderFactory(db);
+                    window._speechService = new SpeechRecognitionService();
+                    typeof(MainWindow).GetField("ComposerControl", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!
+                        .SetValue(window, new MainComposerControl());
+                    typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ChatService(window._providerFactory));
                     typeof(MainWindow).GetField("_providerCatalogApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
                         .SetValue(window, new ProviderCatalogApplicationService(db));
                     window._currentProviderId = provider.Id;
+                    typeof(MainWindow).GetField("_enabledToolCategories", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
 
                     provider.IsEnabled = false;
                     db.UpdateProviderAsync(provider).GetAwaiter().GetResult();
@@ -446,6 +453,7 @@ namespace Aire.Tests.UI
                     Assert.Null(window.ProviderComboBox.SelectedItem);
                     Assert.Null(window._currentProviderId);
                     Assert.Null(typeof(MainWindow).GetField("_currentProvider", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(window));
+                    Assert.Null(typeof(ChatService).GetField("_currentProvider", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(window)));
                 }
                 finally
                 {

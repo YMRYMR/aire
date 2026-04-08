@@ -121,7 +121,14 @@ namespace Aire
             public async Task UpdateCurrentProviderAsync(bool showSwitchedMessage = true)
             {
                 var sel = _owner.ProviderComboBox.SelectedItem as Provider;
-                if (sel == null) return;
+                if (sel == null)
+                {
+                    await _owner._chatService.ClearProviderAsync();
+                    _owner._currentProvider = null;
+                    _owner._currentProviderId = null;
+                    _owner.UpdateCapabilityUI();
+                    return;
+                }
 
                 try
                 {
