@@ -1,13 +1,4 @@
-<table>
-  <tr>
-    <td valign="middle">
-      <h1>Aire</h1>
-    </td>
-    <td valign="middle" align="right">
-      <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" height="72" alt="Built by AIs, for AIs (and humans too!)" />
-    </td>
-  </tr>
-</table>
+# Aire
 
 <p align="center"><strong>Built by AIs, for AIs (and humans too!)</strong></p>
 <p align="center">
