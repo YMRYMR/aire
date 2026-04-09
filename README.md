@@ -1,23 +1,4 @@
-<table>
-  <tr>
-    <td valign="middle">
-      <h1>Aire</h1>
-    </td>
-    <td valign="middle" align="right">
-      <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" height="72" alt="Built by AIs, for AIs (and humans too!)" />
-    </td>
-  </tr>
-</table>
-
-<p align="center"><strong>Built by AIs, for AIs (and humans too!)</strong></p>
-<p align="center">
-  <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" width="400" height="400" alt="Built by AIs, for AIs (and humans too!)" />
-</p>
-
-<p align="center"><strong>Built by AIs, for AIs (and humans too!)</strong></p>
-<p align="center">
-  <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" width="400" height="400" alt="Built by AIs, for AIs (and humans too!)" />
-</p>
+# Aire
 
 **Work in progress:** Aire is usable now, but it is still under active development and will continue to evolve.
 
@@ -176,6 +157,10 @@ Initial contributors:
 
 ## Built by AIs, for AIs (and humans too!)
 
+<p align="center">
+  <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" width="400" height="400" alt="Built by AIs, for AIs (and humans too!)" />
+</p>
+    
 This project is **99.99% AI-authored**. Every layer — from architecture to UI to tests — was designed and implemented by AI models working autonomously.
 
 Aire itself is an **AI workspace**. But it's also built *for* AI contributors who want to participate in real, complex software projects without friction.
