@@ -37,10 +37,12 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ### 2.1 Finish window decomposition `[~]`
 - Keep extracting logic from large window classes into small, testable partials or coordinators.
 - Prefer UI shells that forward to application services instead of owning workflow logic.
+- Recent progress: split main-window localization, settings localization, chat image generation, and capability-test result rendering into dedicated partials.
 
-### 2.2 Strengthen application-service tests `[ ]`
+### 2.2 Strengthen application-service tests `[~]`
 - Add direct tests for important application services instead of relying only on WPF-backed tests.
 - Focus first on chat orchestration, provider workflows, and settings persistence.
+- Recent progress: added direct provider-activation workflow tests, provider UI-state tests, chat-session tests, local API shaping tests, local API dispatch tests, tool-approval tests, control-session tests, conversation-asset tests, and tool-category settings tests that cover provider persistence, conversation routing, cooldown messaging, token-usage presentation, message persistence, title updates, API snapshot normalization, approval policy fallback, category normalization, screenshot persistence, local API response shaping, and session-management behavior without the WPF shell.
 
 ### 2.3 Reduce test fragility `[x]`
 - Remove remaining assumptions that depend on `GetUninitializedObject` or hidden WPF state.
@@ -50,15 +52,17 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Preserve the `UI -> Application -> Domain/Infrastructure` direction.
 - Keep new domain concepts out of window code-behind and out of ad-hoc helper files.
 
-### 2.5 Structured logging `[ ]`
+### 2.5 Structured logging `[~]`
 - Replace `Debug.WriteLine` calls in production paths with a proper logging framework (Serilog or `Microsoft.Extensions.Logging`).
 - Essential for diagnosing issues in release builds where Debug output is unavailable.
 - Fix bare `catch` blocks in `OllamaProvider.Chat.cs` and `LocalApiService.cs` to log at minimum debug level.
+- Recent progress: the highest-signal production paths now route warnings through `AppLogger` instead of `Debug.WriteLine`.
 
-### 2.6 Fix resource and event leaks `[ ]`
+### 2.6 Fix resource and event leaks `[~]`
 - Ensure `HttpResponseMessage` is disposed on all exception paths in streaming providers.
 - Unsubscribe event handlers in `ChatService` when the orchestrator is replaced or the service is disposed.
 - Audit remaining `IDisposable` implementations for completeness.
+- Recent progress: Ollama streaming responses are disposed on all paths, `ChatService` unsubscribes on dispose, and the local API listener now logs unexpected failures instead of swallowing them.
 
 ## 3. Quality Bar
 

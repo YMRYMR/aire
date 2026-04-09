@@ -37,8 +37,7 @@ namespace Aire.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync(cancellationToken);
-                    Debug.WriteLine($"Ollama API response from {url}: {json.Length} chars");
-                    Log($"Ollama API response from {url}: {json.Length} chars");
+                    AppLogger.Info(nameof(OllamaService), $"Ollama API response from {url}: {json.Length} chars");
                     try
                     {
                         var tagsResponse = JsonSerializer.Deserialize<OllamaTagsResponse>(json, new JsonSerializerOptions
@@ -46,43 +45,39 @@ namespace Aire.Services
                             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
                         });
                         httpModels = tagsResponse?.Models ?? new List<OllamaModel>();
-                        Debug.WriteLine($"Deserialized models count: {httpModels.Count}");
-                        Log($"Deserialized models count: {httpModels.Count}");
+                        AppLogger.Info(nameof(OllamaService), $"Deserialized models count: {httpModels.Count}");
                         httpSuccess = true;
                     }
                     catch (JsonException ex)
                     {
-                        Debug.WriteLine($"JSON deserialization error: {ex.GetType().Name}");
-                        Log($"JSON deserialization error: {ex.GetType().Name}");
+                        AppLogger.Warn(nameof(OllamaService), "JSON deserialization error.", ex);
                     }
                 }
                 else
                 {
-                    Debug.WriteLine($"HTTP request failed with status {response.StatusCode}");
-                    Log($"HTTP request failed with status {response.StatusCode}");
+                    AppLogger.Warn(nameof(OllamaService), $"HTTP request failed with status {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"HTTP request exception: {ex.GetType().Name}");
-                Log($"HTTP request exception: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(OllamaService), "HTTP request exception.", ex);
             }
 
             if (httpSuccess && httpModels != null && httpModels.Count > 0)
             {
-                Debug.WriteLine($"Returning {httpModels.Count} models from HTTP API");
+                AppLogger.Info(nameof(OllamaService), $"Returning {httpModels.Count} models from HTTP API");
                 return httpModels;
             }
 
-            Debug.WriteLine("Falling back to CLI");
+            AppLogger.Info(nameof(OllamaService), "Falling back to CLI");
             var cliModels = await GetInstalledModelsViaCliAsync(cancellationToken);
             if (cliModels.Count > 0)
             {
-                Debug.WriteLine($"Returning {cliModels.Count} models from CLI");
+                AppLogger.Info(nameof(OllamaService), $"Returning {cliModels.Count} models from CLI");
                 return cliModels;
             }
 
-            Debug.WriteLine("Both HTTP and CLI failed to retrieve models");
+            AppLogger.Warn(nameof(OllamaService), "Both HTTP and CLI failed to retrieve models.");
             return new List<OllamaModel>();
         }
 
@@ -109,7 +104,7 @@ namespace Aire.Services
                 var error = await process.StandardError.ReadToEndAsync(cancellationToken);
 
                 if (!string.IsNullOrEmpty(error))
-                    Debug.WriteLine($"Ollama CLI error: {error}");
+                    AppLogger.Warn(nameof(OllamaService), $"Ollama CLI error: {error}");
 
                 var models = new List<OllamaModel>();
                 var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -124,7 +119,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Ollama CLI fallback failed: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(OllamaService), "Ollama CLI fallback failed.", ex);
                 return new List<OllamaModel>();
             }
         }

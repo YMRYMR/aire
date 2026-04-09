@@ -13,12 +13,16 @@ namespace Aire.Services
     /// <summary>
     /// Orchestrates chat interactions with AI providers.
     /// </summary>
-    public class ChatService
+    public class ChatService : IDisposable
     {
         private readonly ProviderFactory _providerFactory;
         private readonly ProviderRuntimeApplicationService _runtimeWorkflow;
         private readonly ChatOrchestrator _orchestrator;
+        private readonly EventHandler<string> _orchestratorResponseChunkReceived;
+        private readonly EventHandler<AiResponse> _orchestratorResponseCompleted;
+        private readonly EventHandler<string> _orchestratorErrorOccurred;
         private IAiProvider? _currentProvider;
+        private bool _disposed;
 
         private event EventHandler<string>? _responseChunkReceived;
         private event EventHandler<AiResponse>? _responseCompleted;
@@ -75,9 +79,13 @@ namespace Aire.Services
             _runtimeWorkflow = runtimeWorkflow ?? throw new ArgumentNullException(nameof(runtimeWorkflow));
             _orchestrator = orchestrator ?? throw new ArgumentNullException(nameof(orchestrator));
 
-            _orchestrator.ResponseChunkReceived += (_, chunk) => _responseChunkReceived?.Invoke(this, chunk);
-            _orchestrator.ResponseCompleted += (_, response) => _responseCompleted?.Invoke(this, response);
-            _orchestrator.ErrorOccurred += (_, message) => _errorOccurred?.Invoke(this, message);
+            _orchestratorResponseChunkReceived = (_, chunk) => _responseChunkReceived?.Invoke(this, chunk);
+            _orchestratorResponseCompleted = (_, response) => _responseCompleted?.Invoke(this, response);
+            _orchestratorErrorOccurred = (_, message) => _errorOccurred?.Invoke(this, message);
+
+            _orchestrator.ResponseChunkReceived += _orchestratorResponseChunkReceived;
+            _orchestrator.ResponseCompleted += _orchestratorResponseCompleted;
+            _orchestrator.ErrorOccurred += _orchestratorErrorOccurred;
         }
 
         /// <summary>
@@ -86,6 +94,7 @@ namespace Aire.Services
         /// <param name="providerId">Persisted provider id that should become active.</param>
         public async Task SetProviderAsync(int providerId)
         {
+            ThrowIfDisposed();
             _currentProvider = await _providerFactory.GetCurrentProviderAsync(providerId).ConfigureAwait(false);
             _orchestrator.SetProvider(_currentProvider);
         }
@@ -95,6 +104,7 @@ namespace Aire.Services
         /// </summary>
         public Task ClearProviderAsync()
         {
+            ThrowIfDisposed();
             _currentProvider = null;
             _orchestrator.SetProvider(null);
             return Task.CompletedTask;
@@ -108,6 +118,7 @@ namespace Aire.Services
         /// <returns>The completed AI response.</returns>
         public async Task<AiResponse> SendMessageAsync(string userMessage, string? imagePath = null)
         {
+            ThrowIfDisposed();
             return await _orchestrator.SendMessageAsync(userMessage, imagePath).ConfigureAwait(false);
         }
 
@@ -122,6 +133,7 @@ namespace Aire.Services
             IEnumerable<ProviderChatMessage> messages,
             CancellationToken cancellationToken = default)
         {
+            ThrowIfDisposed();
             var provider = _currentProvider ?? throw new InvalidOperationException("No AI provider selected.");
 
             try
@@ -174,6 +186,7 @@ namespace Aire.Services
         /// <param name="cancellationToken">Cancellation token for the streaming request.</param>
         public async Task StreamMessageAsync(string userMessage, string? imagePath = null, CancellationToken cancellationToken = default)
         {
+            ThrowIfDisposed();
             await _orchestrator.StreamMessageAsync(userMessage, imagePath, cancellationToken).ConfigureAwait(false);
         }
 
@@ -189,12 +202,31 @@ namespace Aire.Services
             IEnumerable<ProviderChatMessage> messages,
             CancellationToken cancellationToken = default)
         {
+            ThrowIfDisposed();
             var provider = _currentProvider ?? throw new InvalidOperationException("No AI provider selected.");
             _orchestrator.SetProvider(provider);
             return await _orchestrator.StreamMessageWithHistoryAsync(
                 ProviderRequestContextMapper.ToLegacyMessages(
                     ProviderRequestContextMapper.FromLegacyMessages(messages)),
                 cancellationToken).ConfigureAwait(false);
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            _orchestrator.ResponseChunkReceived -= _orchestratorResponseChunkReceived;
+            _orchestrator.ResponseCompleted -= _orchestratorResponseCompleted;
+            _orchestrator.ErrorOccurred -= _orchestratorErrorOccurred;
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(ChatService));
         }
 
         /// <summary>

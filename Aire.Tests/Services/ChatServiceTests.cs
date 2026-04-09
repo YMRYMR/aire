@@ -54,6 +54,33 @@ public class ChatServiceTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
+    public async Task Dispose_UnsubscribesFromOrchestratorEvents_AndRejectsFurtherUse()
+    {
+        var orchestrator = new ChatOrchestrator();
+        var service = new ChatService(
+            _factory,
+            new ProviderRuntimeApplicationService(new ProviderAdapterApplicationService([new RecordingAdapter()])),
+            orchestrator);
+
+        var completed = 0;
+        service.ResponseCompleted += (_, _) => completed++;
+
+        service.Dispose();
+
+        await Assert.ThrowsAsync<ObjectDisposedException>(() => service.ClearProviderAsync());
+
+        var chunkHandler = GetEventHandler(orchestrator, "ResponseChunkReceived");
+        var completedHandler = GetEventHandler(orchestrator, "ResponseCompleted");
+        var errorHandler = GetEventHandler(orchestrator, "ErrorOccurred");
+
+        Assert.Null(chunkHandler);
+        Assert.Null(completedHandler);
+        Assert.Null(errorHandler);
+
+        Assert.Equal(0, completed);
+    }
+
+    [Fact]
     public async Task GetConversationsAsync_ReturnsEmptyList()
     {
         List<Aire.Services.Conversation> conversations = await _chatService.GetConversationsAsync();
@@ -315,6 +342,9 @@ public class ChatServiceTests : IAsyncLifetime, IDisposable
         public Task<ProviderValidationOutcome> ValidateAsync(IAiProvider provider, CancellationToken cancellationToken)
             => Task.FromResult(ProviderValidationOutcome.Valid());
     }
+
+    private static Delegate? GetEventHandler(object target, string eventName)
+        => target.GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(target) as Delegate;
 
     private sealed class FailingAdapter : IProviderAdapter
     {
