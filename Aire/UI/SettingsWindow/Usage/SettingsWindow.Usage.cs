@@ -491,7 +491,7 @@ namespace Aire.UI
                 if (liveUsage.Unit.Equals("credits", StringComparison.OrdinalIgnoreCase))
                     return string.Format(
                         LocalizationService.S("settings.usageSpendLiveUnitsLabel", "Live: {0}"),
-                        $"{liveUsage.Used:N0} {liveUsage.Unit}");
+                        $"{liveUsage.Used / 100m:N2} {liveUsage.Unit}");
             }
 
             if (UsageSpendEstimator.TryEstimateUsd(summary.ProviderType, summary.Model, summary.TokensUsed, out var estimatedUsd))
@@ -574,6 +574,12 @@ namespace Aire.UI
                     parts.Add(string.Format(
                         L("settings.usageRemainingMoney", "{0} remaining"),
                         CurrencyExchangeService.FormatFromMinorUnits(usage.Remaining.Value, usage.Unit)));
+                }
+                else if (usage.Unit.Equals("credits", StringComparison.OrdinalIgnoreCase))
+                {
+                    parts.Add(string.Format(
+                        L("settings.usageRemainingTokens", "{0} remaining"),
+                        $"{usage.Remaining.Value / 100m:N2} {usage.Unit}"));
                 }
                 else
                 {
