@@ -669,7 +669,7 @@ public class ServiceWorkflowRegressionTests
             var toolWorkflow = new ToolExecutionWorkflowService(new ToolExecutionService(new FileSystemService(), new CommandExecutionService()), db, db);
             var service = new ChatTurnApplicationService(session, toolWorkflow);
 
-            var result = await service.HandleSuccessTextAsync("![chart](https://example.com/chart.png)", conversationId, isWindowVisible: true);
+            var result = await service.HandleSuccessTextAsync("![chart](https://example.com/chart.png)", conversationId, tokensUsed: null, isWindowVisible: true);
 
             Assert.Equal(string.Empty, result.FinalText);
             Assert.Single(result.ImageReferences);
@@ -968,7 +968,7 @@ public class ServiceWorkflowRegressionTests
             ToolExecutionWorkflowService toolExecution = new ToolExecutionWorkflowService(new ToolExecutionService(new FileSystemService(), new CommandExecutionService()), db, db);
             ChatTurnApplicationService service = new ChatTurnApplicationService(chatSession, toolExecution);
             int conversationId = await db.CreateConversationAsync(1, "Chat Turn");
-            ChatTurnApplicationService.SuccessTextResult success = await service.HandleSuccessTextAsync("hello there", conversationId, isWindowVisible: false, 12);
+            ChatTurnApplicationService.SuccessTextResult success = await service.HandleSuccessTextAsync("hello there", conversationId, tokensUsed: null, isWindowVisible: false, 12);
             Assert.Equal("hello there", success.FinalText);
             Assert.Equal("hello there", success.TrayPreview);
             Assert.Equal("assistant", success.AssistantHistoryMessage.Role);

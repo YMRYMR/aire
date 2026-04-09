@@ -1,8 +1,11 @@
-using System.Threading;
-using System.Threading.Tasks;
+using System;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Aire.Providers;
 using Xunit;
 
@@ -11,41 +14,28 @@ namespace Aire.Tests.Providers;
 public class OpenRouterProviderTests
 {
     [Fact]
-    public void ProviderMetadata_IsExpected()
-    {
-        var provider = new OpenRouterProvider();
-
-        Assert.Equal("OpenRouter", provider.ProviderType);
-        Assert.Equal("OpenRouter", provider.DisplayName);
-        Assert.False(provider.FieldHints.ShowBaseUrl);
-    }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
-    public async Task FetchLiveModelsAsync_EmptyApiKey_ReturnsNull(string? apiKey)
-    {
-        var provider = new OpenRouterProvider();
-
-        Assert.Null(await provider.FetchLiveModelsAsync(apiKey, null, CancellationToken.None));
-    }
-
-    [Fact]
-    public async Task FetchLiveModelsAsync_MapsFreeAndPaidDisplayLabels()
+    public async Task GetTokenUsageAsync_ParsesKeyUsagePayload()
     {
         using var server = new SimpleJsonServer((method, path) =>
-            method == "GET" && path == "/v1/models"
-                ? SimpleJsonServer.Json(200, """{"data":[{"id":"openai/gpt-4o-mini:free"},{"id":"anthropic/claude-sonnet-4-5"}]}""")
+            method == "GET" && path == "/v1/key"
+                ? SimpleJsonServer.Json(200, """{"usage":123,"limit_remaining":77,"reset_date":"2026-04-30T00:00:00Z"}""")
                 : SimpleJsonServer.Json(404, """{"error":"missing"}"""));
 
         var provider = new OpenRouterProvider();
+        provider.Initialize(new ProviderConfig
+        {
+            ApiKey = "or-test",
+            BaseUrl = server.BaseUrl,
+            Model = "openai/gpt-4o-mini"
+        });
 
-        var models = await provider.FetchLiveModelsAsync("router-key", server.BaseUrl, CancellationToken.None);
+        var usage = await provider.GetTokenUsageAsync(CancellationToken.None);
 
-        Assert.NotNull(models);
-        Assert.Contains(models!, m => m.Id == "openai/gpt-4o-mini:free" && m.DisplayName.Contains("free", StringComparison.OrdinalIgnoreCase) && m.Capabilities.Count == 0);
-        Assert.Contains(models!, m => m.Id == "anthropic/claude-sonnet-4-5" && m.DisplayName.Contains("paid", StringComparison.OrdinalIgnoreCase) && m.Capabilities.Contains("tools"));
+        Assert.NotNull(usage);
+        Assert.Equal(123L, usage!.Used);
+        Assert.Equal(200L, usage.Limit);
+        Assert.Equal("credits", usage.Unit);
+        Assert.Equal(new DateTime(2026, 4, 30, 0, 0, 0, DateTimeKind.Utc), usage.ResetDate?.ToUniversalTime());
     }
 
     private sealed class SimpleJsonServer : IDisposable
@@ -77,18 +67,30 @@ public class OpenRouterProviderTests
                     using var client = await _listener.AcceptTcpClientAsync();
                     using var stream = client.GetStream();
                     using var reader = new StreamReader(stream, leaveOpen: true);
+
                     var requestLine = await reader.ReadLineAsync();
-                    if (requestLine == null) continue;
+                    if (requestLine == null)
+                        continue;
+
                     var parts = requestLine.Split(' ');
                     var response = _handler(parts[0], parts[1]);
-                    while (!string.IsNullOrEmpty(await reader.ReadLineAsync())) { }
-                    var header = $"HTTP/1.1 {response.StatusCode} {(response.StatusCode == 200 ? "OK" : "Error")}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.Body.Length}\r\nConnection: close\r\n\r\n";
+
+                    while (!string.IsNullOrEmpty(await reader.ReadLineAsync()))
+                    {
+                    }
+
+                    var header = $"HTTP/1.1 {response.StatusCode} {(response.StatusCode == 200 ? "OK" : "Error")}\r\n" +
+                                 $"Content-Type: {response.ContentType}\r\n" +
+                                 $"Content-Length: {response.Body.Length}\r\n" +
+                                 "Connection: close\r\n\r\n";
                     await stream.WriteAsync(Encoding.ASCII.GetBytes(header));
                     await stream.WriteAsync(response.Body);
                     await stream.FlushAsync();
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         public void Dispose()

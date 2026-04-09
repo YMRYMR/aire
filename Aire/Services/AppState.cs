@@ -77,6 +77,10 @@ internal static class AppState
     public static void SetLanguage(string code) => SetString("language", code);
     /// <summary>Returns the persisted UI language code, or an empty string when none was saved.</summary>
     public static string GetLanguage()          => GetString("language");
+    /// <summary>Persists the preferred currency code for usage display.</summary>
+    public static void SetPreferredCurrency(string code) => SetString("preferredCurrency", code);
+    /// <summary>Returns the preferred currency code, or empty when none was saved.</summary>
+    public static string GetPreferredCurrency() => GetString("preferredCurrency");
     /// <summary>Encrypts and persists the local API token.</summary>
     public static void SetApiAccessToken(string token) => SetSecureString("apiAccessToken", token);
     /// <summary>Loads and decrypts the persisted local API token.</summary>

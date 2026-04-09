@@ -53,6 +53,7 @@ namespace Aire.UI
             TabContext.Header = L("settings.tab.context", "Context");
             TabAutoAccept.Header = L("settings.tab.autoAccept", "Auto-accept");
             TabConnections.Header = L("settings.tab.connections", "Connections");
+            TabUsage.Header = L("settings.tab.usage", "Usage");
             BrightnessLabel.Text = L("settings.brightness", "Brightness");
             ColorTintLabel.Text = L("settings.colorTint", "Color tint");
             NeutralLeftLabel.Text = L("settings.neutralLeft", "← Neutral");
@@ -111,6 +112,12 @@ namespace Aire.UI
             FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
                 ? System.Windows.FlowDirection.RightToLeft
                 : System.Windows.FlowDirection.LeftToRight;
+
+            UpdateUsageHeaderLocalization();
+            UsageLiveProviderText.Text = L("settings.usageNoProviderSelected", "No provider selected");
+            UsageLiveUsageText.Text = L("settings.usageNoProviderUsage", "Select a provider in the AI Providers tab to see live quota or spend.");
+            UsageLiveUsageDetailText.Text = L("settings.usageHistoricalNote", "Historical totals below still track stored assistant turns.");
+            TabUsage.Header = L("settings.tab.usage", "Usage");
 
             // Auto-accept
             AutoAcceptCautionTitle.Text = L("settings.autoAcceptCautionTitle", "⚠  Caution");

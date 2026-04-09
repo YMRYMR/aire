@@ -26,6 +26,7 @@ namespace Aire.UI
         internal AppSettingsApplicationService _appSettingsApplicationService;
         internal ContextSettingsApplicationService _contextSettingsApplicationService;
         internal AutoAcceptProfilesApplicationService _autoAcceptProfilesApplicationService;
+        internal ProviderFactory _providerFactory;
         private readonly SpeechSynthesisService? _ttsService;
         private List<Provider> _providers = new();
         private Provider? _selectedProvider;
@@ -75,6 +76,10 @@ namespace Aire.UI
         private System.Collections.ObjectModel.ObservableCollection<EmailAccountViewModel> _emailVms = new();
         private System.Collections.ObjectModel.ObservableCollection<McpServerViewModel> _mcpVms = new();
         private System.Collections.ObjectModel.ObservableCollection<McpCatalogEntryViewModel> _mcpCatalogVms = new();
+        private System.Collections.ObjectModel.ObservableCollection<UsageProviderRowViewModel> _usageProviderVms = new();
+        private System.Collections.ObjectModel.ObservableCollection<UsageConversationRowViewModel> _usageConversationVms = new();
+        private System.Collections.ObjectModel.ObservableCollection<UsageTrendLegendItemViewModel> _usageTrendLegendVms = new();
+        private IReadOnlyList<UsageTrendSeries> _usageTrendSeries = Array.Empty<UsageTrendSeries>();
         private EmailAccountViewModel? _editingEmailVm;
         private string _editingOAuthRefreshToken = string.Empty; // plaintext, in-memory only
         private McpServerViewModel? _editingMcpVm;

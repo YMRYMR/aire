@@ -102,6 +102,17 @@ namespace Aire.Data
             catch { /* column already exists — SQLite does not support IF NOT EXISTS on ALTER TABLE */ }
         }
 
+        private async Task MigrateMessageTokensAsync()
+        {
+            try
+            {
+                using var cmd = _connection!.CreateCommand();
+                cmd.CommandText = "ALTER TABLE Messages ADD COLUMN Tokens INTEGER";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch { /* column already exists — SQLite does not support IF NOT EXISTS on ALTER TABLE */ }
+        }
+
         private async Task MigrateEmailOAuthAsync()
         {
             foreach (var col in new[] { "UseOAuth INTEGER DEFAULT 0", "OAuthRefreshToken TEXT DEFAULT ''" })

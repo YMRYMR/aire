@@ -13,6 +13,7 @@ namespace Aire.Data
         public string Content { get; set; } = string.Empty;
         public string? ImagePath { get; set; }
         public string? AttachmentsJson { get; set; }
+        public int? Tokens { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
         public List<MessageAttachment> Attachments { get; set; } = new();
         public DateTime CreatedAt { get; set; }
