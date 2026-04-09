@@ -42,7 +42,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ### 2.2 Strengthen application-service tests `[~]`
 - Add direct tests for important application services instead of relying only on WPF-backed tests.
 - Focus first on chat orchestration, provider workflows, and settings persistence.
-- Recent progress: added direct provider-activation workflow tests that cover provider persistence and conversation routing without the WPF shell.
+- Recent progress: added direct provider-activation workflow tests and provider UI-state tests that cover provider persistence, conversation routing, cooldown messaging, and token-usage presentation without the WPF shell.
 
 ### 2.3 Reduce test fragility `[x]`
 - Remove remaining assumptions that depend on `GetUninitializedObject` or hidden WPF state.
