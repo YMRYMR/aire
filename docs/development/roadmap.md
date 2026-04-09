@@ -37,6 +37,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ### 2.1 Finish window decomposition `[~]`
 - Keep extracting logic from large window classes into small, testable partials or coordinators.
 - Prefer UI shells that forward to application services instead of owning workflow logic.
+- Recent progress: split main-window localization, settings localization, chat image generation, and capability-test result rendering into dedicated partials.
 
 ### 2.2 Strengthen application-service tests `[ ]`
 - Add direct tests for important application services instead of relying only on WPF-backed tests.
