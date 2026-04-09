@@ -255,6 +255,29 @@ namespace Aire.Data
                 ? null
                 : JsonSerializer.Serialize(attachments);
 
+            // System status lines are occasionally emitted twice when a provider change
+            // re-enters the conversation-selection flow. Keep the transcript stable by
+            // collapsing consecutive identical system rows at the persistence boundary.
+            if (string.Equals(role, "system", StringComparison.OrdinalIgnoreCase))
+            {
+                using var lastCmd = _connection!.CreateCommand();
+                lastCmd.CommandText = @"
+                    SELECT Role, Content
+                    FROM Messages
+                    WHERE ConversationId = @conversationId
+                    ORDER BY Id DESC
+                    LIMIT 1";
+                lastCmd.Parameters.AddWithValue("@conversationId", conversationId);
+
+                using var lastReader = await lastCmd.ExecuteReaderAsync();
+                if (await lastReader.ReadAsync() &&
+                    string.Equals(lastReader.GetString(0), role, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(lastReader.GetString(1), content, StringComparison.Ordinal))
+                {
+                    return;
+                }
+            }
+
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
                 INSERT INTO Messages (ConversationId, Role, Content, ImagePath, AttachmentsJson, CreatedAt)

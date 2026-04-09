@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Aire.AppLayer.Abstractions;
 using Aire.Domain.Providers;
+using Aire.Providers;
 using Aire.Services.Providers;
 
 namespace Aire.AppLayer.Providers
@@ -35,8 +36,8 @@ namespace Aire.AppLayer.Providers
         private readonly ProviderSetupApplicationService _providerSetupService = new();
 
         /// <summary>
-        /// Applies onboarding provider rules, performs duplicate-aware persistence when credentials are present,
-        /// and tells the UI whether the wizard should advance.
+        /// Applies onboarding provider rules, performs duplicate-aware persistence for credentialed and
+        /// credentialless local providers, and tells the UI whether the wizard should advance.
         /// </summary>
         /// <param name="providerRepository">Provider repository used for duplicate detection and insert.</param>
         /// <param name="request">Normalized step-three wizard values.</param>
@@ -53,7 +54,10 @@ namespace Aire.AppLayer.Providers
                 : request.StandardModel?.Trim() ?? string.Empty;
 
             bool claudeWebSession = type == "ClaudeWeb" && request.ClaudeWebSessionReady;
-            bool hasCredential = type == "Ollama"
+            bool credentiallessProvider = ProviderIdentityCatalog.TryGetDescriptor(type, out ProviderIdentityCatalog.ProviderIdentityDescriptor? descriptor)
+                && !descriptor.RequiresApiKey
+                && !descriptor.SupportsSessionCredential;
+            bool hasCredential = credentiallessProvider
                 || claudeWebSession
                 || !string.IsNullOrWhiteSpace(request.ApiKey);
 

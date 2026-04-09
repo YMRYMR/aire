@@ -54,7 +54,7 @@ namespace Aire
             if (conv == null) return false;
 
             _currentConversationId = conversationId;
-            await LoadConversationMessages(conversationId);
+            await LoadConversationMessages(conversationId, syncProviderSelection: false);
             if (_sidebarOpen)
                 await RefreshSidebarAsync();
             return true;
@@ -68,9 +68,15 @@ namespace Aire
             if (provider == null) return false;
 
             _suppressProviderChange = true;
-            ProviderComboBox.SelectedItem = provider;
-            _suppressProviderChange = false;
-            await UpdateCurrentProvider(showSwitchedMessage: false);
+            try
+            {
+                ProviderComboBox.SelectedItem = provider;
+                await UpdateCurrentProvider(showSwitchedMessage: false);
+            }
+            finally
+            {
+                _suppressProviderChange = false;
+            }
             return true;
         }
 

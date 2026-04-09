@@ -208,6 +208,9 @@ namespace Aire.Tests.UI
                 EnsureApplication();
                 OnboardingWindow window = new OnboardingWindow();
                 Assert.NotNull(window);
+                Assert.Equal(720d, window.Height);
+                Assert.Equal(640d, window.MinHeight);
+                Assert.Equal(ResizeMode.CanResize, window.ResizeMode);
                 window.Close();
             });
         }

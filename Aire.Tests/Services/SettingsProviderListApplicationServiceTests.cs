@@ -95,6 +95,23 @@ public sealed class SettingsProviderListApplicationServiceTests
     }
 
     [Fact]
+    public async Task LoadAsync_ReturnsClaudeCodeAndMistralProviders()
+    {
+        var service = new SettingsProviderListApplicationService();
+        var repository = new FakeProviderRepository();
+        repository.Providers.AddRange(
+            [
+                new Provider { Id = 11, Name = "Claude Code", Type = "ClaudeCode" },
+                new Provider { Id = 12, Name = "Mistral AI", Type = "Mistral" }
+            ]);
+
+        var state = await service.LoadAsync(repository);
+
+        Assert.Contains(state.Providers, provider => provider.Type == "ClaudeCode");
+        Assert.Contains(state.Providers, provider => provider.Type == "Mistral");
+    }
+
+    [Fact]
     public void Reorder_ReturnsNoChange_WhenDraggedOrTargetMissing()
     {
         var service = new SettingsProviderListApplicationService();
