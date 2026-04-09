@@ -24,6 +24,7 @@ namespace Aire.UI
                 "context" => TabContext,
                 "auto-accept" => TabAutoAccept,
                 "connections" => TabConnections,
+                "usage" => TabUsage,
                 _ => null
             };
 

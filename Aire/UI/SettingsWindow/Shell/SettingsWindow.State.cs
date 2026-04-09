@@ -15,7 +15,7 @@ namespace Aire.UI
         public static event Action<string?>? OpenRequested;
 
         /// <summary>Request the Settings window to open, optionally jumping to a tab.</summary>
-        /// <param name="tab">One of: providers, appearance, voice, context, auto-accept, connections.</param>
+        /// <param name="tab">One of: providers, appearance, voice, context, auto-accept, connections, usage.</param>
         public static void RequestOpen(string? tab = null) => OpenRequested?.Invoke(tab);
 
         /// <summary>

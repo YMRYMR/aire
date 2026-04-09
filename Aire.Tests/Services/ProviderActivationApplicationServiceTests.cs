@@ -199,7 +199,7 @@ public sealed class ProviderActivationApplicationServiceTests
         }
 
         public Task UpdateConversationAssistantModeAsync(int conversationId, string assistantModeKey) => Task.CompletedTask;
-        public Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null, IEnumerable<MessageAttachment>? attachments = null) => Task.CompletedTask;
+        public Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null, IEnumerable<MessageAttachment>? attachments = null, int? tokens = null) => Task.CompletedTask;
         public Task<List<Message>> GetMessagesAsync(int conversationId) => Task.FromResult(new List<Message>());
         public Task DeleteMessagesByConversationIdAsync(int conversationId) => Task.CompletedTask;
         public Task DeleteConversationAsync(int conversationId) => Task.CompletedTask;

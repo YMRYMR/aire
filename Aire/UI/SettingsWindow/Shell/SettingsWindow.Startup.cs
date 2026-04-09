@@ -31,6 +31,7 @@ namespace Aire.UI
             _appSettingsApplicationService = new AppSettingsApplicationService(_databaseService);
             _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
             _autoAcceptProfilesApplicationService = new AutoAcceptProfilesApplicationService(_databaseService);
+            _providerFactory = new ProviderFactory(_databaseService);
             _ttsService = ttsService ?? SpeechSynthesisService.Current;
 
             if (!initializeUi)
@@ -99,6 +100,8 @@ namespace Aire.UI
             HwndSource.FromHwnd(hwnd).AddHook(WndProc);
 
             ApplyLocalization();
+            UsageProvidersListView.ItemsSource = _usageProviderVms;
+            UsageConversationsListView.ItemsSource = _usageConversationVms;
 
             ModelComboBox.IsTextSearchEnabled = false;
             ModelComboBox.AddHandler(System.Windows.Controls.Primitives.TextBoxBase.TextChangedEvent, new TextChangedEventHandler(OnModelComboBoxTextChanged));
@@ -131,6 +134,7 @@ namespace Aire.UI
                 await LoadContextSettings();
                 await LoadAutoAcceptProfilesAsync();
                 await LoadAutoAcceptSettings();
+                await LoadUsageDashboardAsync();
                 HookAutoAcceptEvents();
             }
             catch

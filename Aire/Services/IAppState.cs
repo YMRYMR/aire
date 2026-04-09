@@ -39,6 +39,8 @@ public interface IAppState
 
     void SetLanguage(string code);
     string GetLanguage();
+    void SetPreferredCurrency(string code);
+    string GetPreferredCurrency();
 
     void SetApiAccessToken(string token);
     string GetApiAccessToken();

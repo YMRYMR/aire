@@ -640,8 +640,8 @@ namespace Aire.Tests.UI
             public Task DeleteMessagesByConversationIdAsync(int conversationId) => _databaseService.DeleteMessagesByConversationIdAsync(conversationId);
             public Task DeleteConversationAsync(int conversationId) => _databaseService.DeleteConversationAsync(conversationId);
             public Task DeleteAllConversationsAsync() => _databaseService.DeleteAllConversationsAsync();
-            public Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null, IEnumerable<Aire.Data.MessageAttachment>? attachments = null)
-                => _databaseService.SaveMessageAsync(conversationId, role, content, imagePath, attachments);
+            public Task SaveMessageAsync(int conversationId, string role, string content, string? imagePath = null, IEnumerable<Aire.Data.MessageAttachment>? attachments = null, int? tokens = null)
+                => _databaseService.SaveMessageAsync(conversationId, role, content, imagePath, attachments, tokens);
         }
     }
 }

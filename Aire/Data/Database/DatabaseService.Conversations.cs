@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Aire.Services;
@@ -249,7 +250,8 @@ namespace Aire.Data
             string role,
             string content,
             string? imagePath = null,
-            IEnumerable<MessageAttachment>? attachments = null)
+            IEnumerable<MessageAttachment>? attachments = null,
+            int? tokens = null)
         {
             var attachmentsJson = attachments == null
                 ? null
@@ -280,13 +282,14 @@ namespace Aire.Data
 
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO Messages (ConversationId, Role, Content, ImagePath, AttachmentsJson, CreatedAt)
-                VALUES (@conversationId, @role, @content, @imagePath, @attachmentsJson, CURRENT_TIMESTAMP)";
+                INSERT INTO Messages (ConversationId, Role, Content, ImagePath, AttachmentsJson, Tokens, CreatedAt)
+                VALUES (@conversationId, @role, @content, @imagePath, @attachmentsJson, @tokens, CURRENT_TIMESTAMP)";
             cmd.Parameters.AddWithValue("@conversationId", conversationId);
             cmd.Parameters.AddWithValue("@role", role);
             cmd.Parameters.AddWithValue("@content", content);
             cmd.Parameters.AddWithValue("@imagePath", (object?)imagePath ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@attachmentsJson", (object?)attachmentsJson ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@tokens", (object?)tokens ?? DBNull.Value);
             await cmd.ExecuteNonQueryAsync();
 
             using var updateCmd = _connection.CreateCommand();
@@ -308,7 +311,7 @@ namespace Aire.Data
             var messages = new List<Message>();
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                SELECT Id, ConversationId, Role, Content, ImagePath, AttachmentsJson, CreatedAt
+                SELECT Id, ConversationId, Role, Content, ImagePath, AttachmentsJson, Tokens, CreatedAt
                 FROM Messages
                 WHERE ConversationId = @conversationId
                 ORDER BY CreatedAt ASC";
@@ -324,11 +327,239 @@ namespace Aire.Data
                     Content = reader.GetString(3),
                     ImagePath = reader.IsDBNull(4) ? null : reader.GetString(4),
                     AttachmentsJson = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    Tokens = reader.IsDBNull(6) ? null : reader.GetInt32(6),
                     Attachments = DeserializeAttachments(reader.IsDBNull(5) ? null : reader.GetString(5)),
-                    CreatedAt = reader.GetDateTime(6)
+                    CreatedAt = reader.GetDateTime(7)
                 });
             }
             return messages;
+        }
+
+        /// <summary>
+        /// Builds the token-usage snapshot displayed in the settings dashboard.
+        /// </summary>
+        public async Task<UsageDashboardSnapshot> GetUsageDashboardSnapshotAsync()
+        {
+            using var totalsCmd = _connection!.CreateCommand();
+            totalsCmd.CommandText = @"
+                SELECT
+                    COALESCE(SUM(COALESCE(Tokens, 0)), 0) AS TotalTokens,
+                    COUNT(*) AS AssistantMessageCount,
+                    COUNT(DISTINCT ConversationId) AS ConversationCount
+                FROM Messages
+                WHERE Role = 'assistant'";
+
+            long totalTokens = 0;
+            int assistantMessageCount = 0;
+            int conversationCount = 0;
+            using (var reader = await totalsCmd.ExecuteReaderAsync())
+            {
+                if (await reader.ReadAsync())
+                {
+                    totalTokens = reader.GetInt64(0);
+                    assistantMessageCount = reader.GetInt32(1);
+                    conversationCount = reader.GetInt32(2);
+                }
+            }
+
+            var providers = await GetProvidersAsync();
+            var providerSummaries = new List<ProviderUsageSummary>(providers.Count);
+            foreach (var provider in providers)
+            {
+                providerSummaries.Add(await GetProviderUsageSummaryAsync(provider));
+            }
+
+            var conversations = await GetConversationUsageSummariesAsync();
+            var trendSeries = await GetUsageTrendSummariesAsync();
+
+            return new UsageDashboardSnapshot(
+                totalTokens,
+                providers.Count,
+                conversationCount,
+                assistantMessageCount,
+                providerSummaries,
+                conversations,
+                trendSeries);
+        }
+
+        /// <summary>
+        /// Aggregates stored assistant-token usage for one provider.
+        /// </summary>
+        public async Task<ProviderUsageSummary> GetProviderUsageSummaryAsync(Provider provider)
+        {
+            using var cmd = _connection!.CreateCommand();
+            cmd.CommandText = @"
+                SELECT
+                    COALESCE(SUM(COALESCE(m.Tokens, 0)), 0) AS TotalTokens,
+                    COUNT(m.Id) AS AssistantMessageCount,
+                    COUNT(DISTINCT c.Id) AS ConversationCount,
+                    MAX(m.CreatedAt) AS LastUsedAt
+                FROM Conversations c
+                LEFT JOIN Messages m
+                    ON m.ConversationId = c.Id
+                   AND m.Role = 'assistant'
+                WHERE c.ProviderId = @providerId";
+            cmd.Parameters.AddWithValue("@providerId", provider.Id);
+
+            long totalTokens = 0;
+            int assistantMessageCount = 0;
+            int providerConversationCount = 0;
+            DateTime? lastUsedAt = null;
+            using (var reader = await cmd.ExecuteReaderAsync())
+            {
+                if (await reader.ReadAsync())
+                {
+                    totalTokens = reader.GetInt64(0);
+                    assistantMessageCount = reader.GetInt32(1);
+                    providerConversationCount = reader.GetInt32(2);
+                    lastUsedAt = reader.IsDBNull(3) ? null : reader.GetDateTime(3);
+                }
+            }
+
+            return new ProviderUsageSummary(
+                provider.Id,
+                provider.Name,
+                provider.Type,
+                provider.Model,
+                provider.Color,
+                provider.IsEnabled,
+                totalTokens,
+                providerConversationCount,
+                assistantMessageCount,
+                lastUsedAt);
+        }
+
+        /// <summary>
+        /// Aggregates stored assistant-token usage for recent conversations.
+        /// </summary>
+        public async Task<List<ConversationUsageSummary>> GetConversationUsageSummariesAsync(int limit = 20)
+        {
+            var results = new List<ConversationUsageSummary>();
+            using var cmd = _connection!.CreateCommand();
+            cmd.CommandText = @"
+                SELECT
+                    c.Id,
+                    COALESCE(c.Title, 'Chat') AS Title,
+                    COALESCE(p.Name, '') AS ProviderName,
+                    COALESCE(p.Type, '') AS ProviderType,
+                    COALESCE(p.Model, '') AS Model,
+                    COALESCE(c.Color, p.Color, '#888888') AS Color,
+                    c.UpdatedAt,
+                    COALESCE(SUM(COALESCE(m.Tokens, 0)), 0) AS TotalTokens,
+                    COUNT(m.Id) AS AssistantMessageCount
+                FROM Conversations c
+                LEFT JOIN Providers p ON p.Id = c.ProviderId
+                LEFT JOIN Messages m
+                    ON m.ConversationId = c.Id
+                   AND m.Role = 'assistant'
+                GROUP BY c.Id, c.Title, c.UpdatedAt, p.Name, p.Type, p.Model, c.Color, p.Color
+                HAVING COALESCE(SUM(COALESCE(m.Tokens, 0)), 0) > 0 OR COUNT(m.Id) > 0
+                ORDER BY TotalTokens DESC, c.UpdatedAt DESC
+                LIMIT @limit";
+            cmd.Parameters.AddWithValue("@limit", Math.Max(1, limit));
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                results.Add(new ConversationUsageSummary(
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetString(4),
+                    reader.GetString(5),
+                    reader.GetDateTime(6),
+                    reader.GetInt64(7),
+                    reader.GetInt32(8)));
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Aggregates historical assistant-token usage by provider/model and day.
+        /// </summary>
+        public async Task<List<UsageTrendSeries>> GetUsageTrendSummariesAsync(int days = 30)
+        {
+            var window = Math.Max(1, days);
+            var startDate = DateOnly.FromDateTime(DateTime.UtcNow.Date.AddDays(-(window - 1)));
+            var endDate = DateOnly.FromDateTime(DateTime.UtcNow.Date);
+            var lookback = $"-{window - 1} days";
+
+            using var cmd = _connection!.CreateCommand();
+            cmd.CommandText = @"
+                SELECT
+                    c.ProviderId,
+                    COALESCE(p.Name, 'Unknown provider') AS ProviderName,
+                    COALESCE(p.Type, '') AS ProviderType,
+                    COALESCE(p.Model, '') AS Model,
+                    COALESCE(p.Color, '#888888') AS Color,
+                    date(m.CreatedAt) AS BucketDate,
+                    COALESCE(SUM(COALESCE(m.Tokens, 0)), 0) AS TokensUsed
+                FROM Messages m
+                INNER JOIN Conversations c ON c.Id = m.ConversationId
+                LEFT JOIN Providers p ON p.Id = c.ProviderId
+                WHERE m.Role = 'assistant'
+                  AND COALESCE(m.Tokens, 0) > 0
+                  AND date(m.CreatedAt) >= date('now', @lookback)
+                GROUP BY c.ProviderId, p.Name, p.Type, p.Model, p.Color, date(m.CreatedAt)
+                ORDER BY BucketDate ASC, TokensUsed DESC, ProviderName ASC, Model ASC";
+            cmd.Parameters.AddWithValue("@lookback", lookback);
+
+            var builders = new Dictionary<(int ProviderId, string ProviderName, string ProviderType, string Model, string Color), Dictionary<DateOnly, long>>();
+
+            using (var reader = await cmd.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    var providerId = reader.GetInt32(0);
+                    var providerName = reader.GetString(1);
+                    var providerType = reader.GetString(2);
+                    var model = reader.GetString(3);
+                    var color = reader.GetString(4);
+                    var bucketText = reader.GetString(5);
+                    var tokensUsed = reader.GetInt64(6);
+
+                    if (!DateOnly.TryParse(bucketText, CultureInfo.InvariantCulture, DateTimeStyles.None, out var bucket))
+                        continue;
+
+                    var key = (providerId, providerName, providerType, model, color);
+                    if (!builders.TryGetValue(key, out var points))
+                    {
+                        points = new Dictionary<DateOnly, long>();
+                        builders[key] = points;
+                    }
+
+                    points[bucket] = tokensUsed;
+                }
+            }
+
+            var series = new List<UsageTrendSeries>(builders.Count);
+            foreach (var (key, pointsByDate) in builders)
+            {
+                var points = new List<UsageTrendPoint>(window);
+                long totalTokens = 0;
+                for (var date = startDate; date <= endDate; date = date.AddDays(1))
+                {
+                    pointsByDate.TryGetValue(date, out var tokensUsed);
+                    totalTokens += tokensUsed;
+                    points.Add(new UsageTrendPoint(date, tokensUsed));
+                }
+
+                series.Add(new UsageTrendSeries(
+                    key.ProviderId,
+                    key.ProviderName,
+                    key.ProviderType,
+                    key.Model,
+                    key.Color,
+                    totalTokens,
+                    points));
+            }
+
+            return series
+                .OrderByDescending(item => item.TotalTokens)
+                .ThenBy(item => item.Label, StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         private static List<MessageAttachment> DeserializeAttachments(string? json)
