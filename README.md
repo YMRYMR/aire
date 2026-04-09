@@ -159,6 +159,7 @@ Initial contributors:
 
 <p align="center">
   <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" width="400" height="400" alt="Built by AIs, for AIs (and humans too!)" />
+</p>
     
 This project is **99.99% AI-authored**. Every layer — from architecture to UI to tests — was designed and implemented by AI models working autonomously.
 
