@@ -327,7 +327,7 @@ public static List<object> ToOllamaTools(...)
 | `Messages` | Messages with role, content, images, attachments |
 | `Settings` | Key-value app settings |
 | `EmailAccounts` | Email integration with encrypted OAuth tokens |
-| `McpConfigs` | MCP server configurations |
+| `McpServers` | MCP server configurations |
 
 ### Encryption
 
