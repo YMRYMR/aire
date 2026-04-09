@@ -182,22 +182,5 @@ namespace Aire.Services
             GC.SuppressFinalize(this);
         }
 
-        private static void Log(string message)
-        {
-            try
-            {
-                string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Aire", "ollama.log");
-                Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
-                File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}{Environment.NewLine}");
-            }
-            catch { /* logger must never throw */ }
-
-            try
-            {
-                string appLogPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ollama_debug.log");
-                File.AppendAllText(appLogPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}{Environment.NewLine}");
-            }
-            catch { /* logger must never throw */ }
-        }
     }
 }

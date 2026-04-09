@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using Aire.AppLayer.Abstractions;
+using Aire.Services;
 
 namespace Aire.AppLayer.Startup;
 
@@ -28,7 +28,10 @@ public sealed class StartupDecisionApplicationService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[WARN] [StartupDecisionApplicationService.ShouldShowOnboardingAsync] Failed to inspect providers; skipping onboarding. {ex.GetType().Name}: {ex.Message}");
+            AppLogger.Warn(
+                $"{nameof(StartupDecisionApplicationService)}.{nameof(ShouldShowOnboardingAsync)}",
+                "Failed to inspect providers; skipping onboarding.",
+                ex);
             return false;
         }
     }

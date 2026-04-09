@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -41,60 +42,70 @@ namespace Aire.Providers
 
                 var json = JsonSerializer.Serialize(request, SerializeOpts);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Post, $"{_baseUrl}/api/chat", content), cancellationToken);
+                HttpResponseMessage? response = null;
 
-                if (!response.IsSuccessStatusCode)
+                try
                 {
-                    var errorText = await response.Content.ReadAsStringAsync(cancellationToken);
+                    response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Post, $"{_baseUrl}/api/chat", content), cancellationToken);
 
-                    if ((int)response.StatusCode == 400 &&
-                        errorText.Contains("does not support tools", StringComparison.OrdinalIgnoreCase))
+                    if (!response.IsSuccessStatusCode)
                     {
-                        _noToolsModels.Add(Config.Model);
-                        request.Tools = null;
-                        var retryJson = JsonSerializer.Serialize(request, SerializeOpts);
-                        var retryContent = new StringContent(retryJson, Encoding.UTF8, "application/json");
-                        response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Post, $"{_baseUrl}/api/chat", retryContent), cancellationToken);
-                        if (!response.IsSuccessStatusCode)
+                        var errorText = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                        if ((int)response.StatusCode == 400 &&
+                            errorText.Contains("does not support tools", StringComparison.OrdinalIgnoreCase))
                         {
-                            errorText = await response.Content.ReadAsStringAsync(cancellationToken);
+                            _noToolsModels.Add(Config.Model);
+                            request.Tools = null;
+                            var retryJson = JsonSerializer.Serialize(request, SerializeOpts);
+                            var retryContent = new StringContent(retryJson, Encoding.UTF8, "application/json");
+                            response.Dispose();
+                            response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Post, $"{_baseUrl}/api/chat", retryContent), cancellationToken);
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                errorText = await response.Content.ReadAsStringAsync(cancellationToken);
+                                return Fail($"Ollama API error ({(int)response.StatusCode}): {errorText}", startTime);
+                            }
+                        }
+                        else
+                        {
                             return Fail($"Ollama API error ({(int)response.StatusCode}): {errorText}", startTime);
                         }
                     }
-                    else
+
+                    var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
+                    var ollamaResponse = JsonSerializer.Deserialize<OllamaChatResponse>(responseJson, DeserializeOpts);
+
+                    if (ollamaResponse == null)
+                        return Fail("Failed to parse Ollama response", startTime);
+
+                    if (ollamaResponse.Message?.ToolCalls?.Count > 0)
                     {
-                        return Fail($"Ollama API error ({(int)response.StatusCode}): {errorText}", startTime);
+                        return new AiResponse
+                        {
+                            Content = BuildToolCallText(ollamaResponse.Message.ToolCalls[0]),
+                            TokensUsed = ollamaResponse.EvalCount ?? 0,
+                            Duration = DateTime.UtcNow - startTime,
+                            IsSuccess = true
+                        };
                     }
-                }
 
-                var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
-                var ollamaResponse = JsonSerializer.Deserialize<OllamaChatResponse>(responseJson, DeserializeOpts);
-
-                if (ollamaResponse == null)
-                    return Fail("Failed to parse Ollama response", startTime);
-
-                if (ollamaResponse.Message?.ToolCalls?.Count > 0)
-                {
                     return new AiResponse
                     {
-                        Content = BuildToolCallText(ollamaResponse.Message.ToolCalls[0]),
+                        Content = ollamaResponse.Message?.Content ?? string.Empty,
                         TokensUsed = ollamaResponse.EvalCount ?? 0,
                         Duration = DateTime.UtcNow - startTime,
                         IsSuccess = true
                     };
                 }
-
-                return new AiResponse
+                finally
                 {
-                    Content = ollamaResponse.Message?.Content ?? string.Empty,
-                    TokensUsed = ollamaResponse.EvalCount ?? 0,
-                    Duration = DateTime.UtcNow - startTime,
-                    IsSuccess = true
-                };
+                    response?.Dispose();
+                }
             }
             catch (HttpRequestException ex)
             {
-                    System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Network error while contacting Ollama", ex);
                 return Fail($"Network error while contacting Ollama. Make sure Ollama is running at {_baseUrl}.", startTime);
             }
             catch (TaskCanceledException)
@@ -103,7 +114,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                    System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Ollama request failed", ex);
                 return Fail("Ollama request failed.", startTime);
             }
         }
@@ -134,73 +145,101 @@ namespace Aire.Providers
             var json = JsonSerializer.Serialize(request, SerializeOpts);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response;
+            HttpResponseMessage? response = null;
             try
             {
                 response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Post, $"{_baseUrl}/api/chat", content), cancellationToken);
             }
-            catch
+            catch (HttpRequestException ex)
+            {
+                AppLogger.Warn($"{GetType().Name}.StreamChat", "Network error while contacting Ollama", ex);
+                yield break;
+            }
+            catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
             {
                 yield break;
             }
-
-            if (!response.IsSuccessStatusCode)
+            catch (Exception ex)
             {
-                var errorText = await response.Content.ReadAsStringAsync(cancellationToken);
-                if ((int)response.StatusCode == 400 &&
-                    errorText.Contains("does not support tools", StringComparison.OrdinalIgnoreCase))
+                AppLogger.Warn($"{GetType().Name}.StreamChat", "Ollama streaming request failed", ex);
+                yield break;
+            }
+
+            try
+            {
+                if (!response.IsSuccessStatusCode)
                 {
-                    _noToolsModels.Add(Config.Model);
-                    request.Tools = null;
-                    var retryJson = JsonSerializer.Serialize(request, SerializeOpts);
-                    var retryContent = new StringContent(retryJson, Encoding.UTF8, "application/json");
+                    var errorText = await response.Content.ReadAsStringAsync(cancellationToken);
+                    if ((int)response.StatusCode == 400 &&
+                        errorText.Contains("does not support tools", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _noToolsModels.Add(Config.Model);
+                        request.Tools = null;
+                        var retryJson = JsonSerializer.Serialize(request, SerializeOpts);
+                        var retryContent = new StringContent(retryJson, Encoding.UTF8, "application/json");
+                        response.Dispose();
+                        try
+                        {
+                            response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Post, $"{_baseUrl}/api/chat", retryContent), cancellationToken);
+                        }
+                        catch (HttpRequestException ex)
+                        {
+                            AppLogger.Warn($"{GetType().Name}.StreamChat", "Network error while contacting Ollama", ex);
+                            yield break;
+                        }
+                        catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+                        {
+                            yield break;
+                        }
+                        catch (Exception ex)
+                        {
+                            AppLogger.Warn($"{GetType().Name}.StreamChat", "Ollama streaming retry failed", ex);
+                            yield break;
+                        }
+                    }
+
+                    if (!response.IsSuccessStatusCode)
+                        yield break;
+                }
+
+                using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+                using var reader = new StreamReader(stream);
+
+                OllamaToolCall? capturedToolCall = null;
+
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    var line = await reader.ReadLineAsync(cancellationToken);
+                    if (line == null)
+                        break;
+
+                    if (string.IsNullOrEmpty(line))
+                        continue;
+
+                    OllamaStreamChunk? chunk = null;
                     try
                     {
-                        response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Post, $"{_baseUrl}/api/chat", retryContent), cancellationToken);
+                        chunk = JsonSerializer.Deserialize<OllamaStreamChunk>(line, DeserializeOpts);
                     }
-                    catch
+                    catch (JsonException)
                     {
-                        yield break;
+                        continue;
                     }
+
+                    if (chunk?.Message?.ToolCalls?.Count > 0)
+                        capturedToolCall = chunk.Message.ToolCalls[0];
+
+                    if (chunk?.Message?.Content is { Length: > 0 } text)
+                        yield return text;
                 }
 
-                if (!response.IsSuccessStatusCode)
-                    yield break;
+                if (capturedToolCall != null)
+                    yield return BuildToolCallContent(capturedToolCall);
             }
-
-            using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-            using var reader = new StreamReader(stream);
-
-            OllamaToolCall? capturedToolCall = null;
-
-            while (!cancellationToken.IsCancellationRequested)
+            finally
             {
-                var line = await reader.ReadLineAsync(cancellationToken);
-                if (line == null)
-                    break;
-
-                if (string.IsNullOrEmpty(line))
-                    continue;
-
-                OllamaStreamChunk? chunk = null;
-                try
-                {
-                    chunk = JsonSerializer.Deserialize<OllamaStreamChunk>(line, DeserializeOpts);
-                }
-                catch (JsonException)
-                {
-                    continue;
-                }
-
-                if (chunk?.Message?.ToolCalls?.Count > 0)
-                    capturedToolCall = chunk.Message.ToolCalls[0];
-
-                if (chunk?.Message?.Content is { Length: > 0 } text)
-                    yield return text;
+                response?.Dispose();
             }
-
-            if (capturedToolCall != null)
-                yield return BuildToolCallContent(capturedToolCall);
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -63,7 +64,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            Debug.WriteLine($"Ollama live model fetch failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "Ollama live model fetch failed", ex);
                 return null;
             }
         }
@@ -107,7 +108,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.ValidateConfiguration", "Ollama configuration validation failed", ex);
                 return ProviderValidationResult.Fail("Ollama connection failed.");
             }
         }

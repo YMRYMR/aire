@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Aire.Services.Mcp;
@@ -146,7 +145,7 @@ namespace Aire.Services
             }
             catch
             {
-                Debug.WriteLine($"[ToolExecutionService] Unhandled error executing tool '{request.Tool}'.");
+                AppLogger.Warn(nameof(ToolExecutionService), $"Unhandled error executing tool '{request.Tool}'.");
                 return new ToolExecutionResult { TextResult = "ERROR: Tool execution failed." };
             }
         }
