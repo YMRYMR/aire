@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Aire.Services;
 using static Aire.Services.Tools.ToolHelpers;
 
 namespace Aire.Services.Tools
@@ -120,7 +121,7 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"System info retrieval failed: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(SystemToolService), "System info retrieval failed.", ex);
                 return new ToolExecutionResult { TextResult = "Error getting system info." };
             }
         }
@@ -160,7 +161,7 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Process listing failed: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(SystemToolService), "Process listing failed.", ex);
                 return new ToolExecutionResult { TextResult = "Error listing processes." };
             }
         }
@@ -185,7 +186,7 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Active window lookup failed: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(SystemToolService), "Active window lookup failed.", ex);
                 return new ToolExecutionResult { TextResult = "Error getting active window." };
             }
         }
@@ -239,7 +240,7 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Selected text retrieval failed: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(SystemToolService), "Selected text retrieval failed.", ex);
                 return new ToolExecutionResult { TextResult = "Error reading selected text." };
             }
         }
@@ -276,7 +277,7 @@ namespace Aire.Services.Tools
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Open file failed: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(SystemToolService), "Open file failed.", ex);
                 return new ToolExecutionResult { TextResult = "Error opening file." };
             }
         }

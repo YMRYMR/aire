@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Microsoft.Win32;
 
 namespace Aire.Services
@@ -35,7 +34,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Could not set Windows GPU preference: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(GpuPreferenceService), "Could not set Windows GPU preference.", ex);
             }
         }
 
@@ -58,7 +57,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Could not set WebView2 GPU hint: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(GpuPreferenceService), "Could not set WebView2 GPU hint.", ex);
             }
         }
     }

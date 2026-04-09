@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -133,7 +132,7 @@ public sealed class ProviderModelRefreshService : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[WARN] [ProviderModelRefreshService] Initial refresh failed: {ex.GetType().Name}");
+            AppLogger.Warn(nameof(ProviderModelRefreshService), "Initial refresh failed.", ex);
         }
 
         using var timer = new PeriodicTimer(_refreshInterval);
@@ -152,7 +151,7 @@ public sealed class ProviderModelRefreshService : IDisposable
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[WARN] [ProviderModelRefreshService] Periodic refresh failed: {ex.GetType().Name}");
+                AppLogger.Warn(nameof(ProviderModelRefreshService), "Periodic refresh failed.", ex);
             }
         }
     }
@@ -166,7 +165,7 @@ public sealed class ProviderModelRefreshService : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[WARN] [ProviderModelRefreshService] Could not load providers: {ex.GetType().Name}");
+            AppLogger.Warn(nameof(ProviderModelRefreshService), "Could not load providers.", ex);
             return;
         }
 
@@ -211,7 +210,7 @@ public sealed class ProviderModelRefreshService : IDisposable
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[WARN] [ProviderModelRefreshService] Refresh failed for {provider.Type}: {ex.GetType().Name}");
+            AppLogger.Warn(nameof(ProviderModelRefreshService), $"Refresh failed for {provider.Type}.", ex);
         }
     }
 

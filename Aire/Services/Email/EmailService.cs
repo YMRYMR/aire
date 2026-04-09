@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,7 +54,10 @@ namespace Aire.Services.Email
             catch (Exception firstEx)
             {
                 try { client?.Dispose(); } catch { }
-                Debug.WriteLine($"IMAP connect/auth failed with certificate revocation enabled, retrying without revocation check: {firstEx.GetType().Name}");
+                AppLogger.Warn(
+                    $"{nameof(EmailService)}.{nameof(ConnectImapClientAsync)}",
+                    "IMAP connect/auth failed with certificate revocation enabled, retrying without revocation check.",
+                    firstEx);
                 client = new ImapClient { CheckCertificateRevocation = false };
                 await client.ConnectAsync(_account.ImapHost, _account.ImapPort, SecureSocketOptions.SslOnConnect, ct);
                 await AuthenticateImapAsync(client, ct);
@@ -84,7 +86,10 @@ namespace Aire.Services.Email
             catch (Exception firstEx)
             {
                 try { client?.Dispose(); } catch { }
-                Debug.WriteLine($"SMTP connect/auth failed with certificate revocation enabled, retrying without revocation check: {firstEx.GetType().Name}");
+                AppLogger.Warn(
+                    $"{nameof(EmailService)}.{nameof(ConnectSmtpClientAsync)}",
+                    "SMTP connect/auth failed with certificate revocation enabled, retrying without revocation check.",
+                    firstEx);
                 client = new SmtpClient { CheckCertificateRevocation = false };
                 await client.ConnectAsync(_account.SmtpHost, _account.SmtpPort, SecureSocketOptions.StartTls, ct);
                 await AuthenticateSmtpAsync(client, ct);

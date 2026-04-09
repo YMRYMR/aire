@@ -91,10 +91,11 @@ namespace Aire.Services
                 {
                     break;
                 }
-                catch
+                catch (Exception ex)
                 {
                     if (token.IsCancellationRequested)
                         break;
+                    AppLogger.Warn("LocalApiService.Listen", "Unexpected listener error", ex);
                     await Task.Delay(100, token).ConfigureAwait(false);
                 }
                 finally
