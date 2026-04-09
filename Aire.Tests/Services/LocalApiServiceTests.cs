@@ -362,6 +362,33 @@ namespace Aire.Tests.Services
             });
         }
 
+        [Fact]
+        public void DispatchAsync_GetTraceAndClearTrace_WorkWithoutUiDispatch()
+        {
+            RunOnStaThread(async () =>
+            {
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
+
+                LocalApiService.ClearTrace();
+                var traceResponse = await service.DispatchAsync(new LocalApiRequest
+                {
+                    Method = "get_trace",
+                    Parameters = JsonDocument.Parse("{\"afterId\":0,\"limit\":5}").RootElement.Clone()
+                }, CancellationToken.None);
+
+                var clearResponse = await service.DispatchAsync(new LocalApiRequest
+                {
+                    Method = "clear_trace"
+                }, CancellationToken.None);
+
+                Assert.True(traceResponse.Ok);
+                Assert.NotNull(traceResponse.Result);
+                Assert.True(clearResponse.Ok);
+                Assert.Contains("cleared", clearResponse.Result!.ToString(), StringComparison.OrdinalIgnoreCase);
+            });
+        }
+
         private static async Task<string> RoundTripAsync(LocalApiService service, string requestLine)
         {
             var listener = new TcpListener(IPAddress.Loopback, 0);
@@ -391,5 +418,6 @@ namespace Aire.Tests.Services
                 listener.Stop();
             }
         }
+
     }
 }
