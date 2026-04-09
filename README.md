@@ -14,6 +14,11 @@
   <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" width="400" height="400" alt="Built by AIs, for AIs (and humans too!)" />
 </p>
 
+<p align="center"><strong>Built by AIs, for AIs (and humans too!)</strong></p>
+<p align="center">
+  <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" width="400" height="400" alt="Built by AIs, for AIs (and humans too!)" />
+</p>
+
 **Work in progress:** Aire is usable now, but it is still under active development and will continue to evolve.
 
 Aire is a Windows desktop AI workspace designed to be easy to use from day one. It lets you talk to different AI providers from one chat window, keep local conversation history, approve or deny tool use, connect MCP servers, use voice features, and expose a loopback local API for trusted local automation.
