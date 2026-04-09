@@ -55,13 +55,22 @@ public sealed class ProviderConnectionTestApplicationServiceTests
 
     private sealed class StubClaudeCodeProvider(bool installed) : ClaudeCodeProvider
     {
+        public IReadOnlyList<ChatMessage> LastMessages { get; private set; } = [];
+
         public override ClaudeCliStatus GetConnectionStatus()
             => installed
                 ? new ClaudeCliStatus(true, "claude", false, "Claude Code detected.")
                 : new ClaudeCliStatus(false, null, false, "Claude Code missing.");
 
         public override Task<AiResponse> SendChatAsync(IEnumerable<ChatMessage> messages, CancellationToken cancellationToken = default)
-            => throw new InvalidOperationException("Smoke test should not call SendChatAsync for Claude Code.");
+        {
+            LastMessages = messages is IReadOnlyList<ChatMessage> list ? list : [.. messages];
+            return Task.FromResult(new AiResponse
+            {
+                IsSuccess = true,
+                Content = "OK"
+            });
+        }
     }
 
     [Fact]
@@ -127,13 +136,16 @@ public sealed class ProviderConnectionTestApplicationServiceTests
     }
 
     [Fact]
-    public async Task RunAsync_ReturnsConnected_ForClaudeCodeWithoutInvokingChatProbe()
+    public async Task RunAsync_ReturnsConnected_ForClaudeCodeWithChatProbe()
     {
+        var provider = new StubClaudeCodeProvider(true);
         var service = new ProviderConnectionTestApplicationService();
 
-        var result = await service.RunAsync(new StubClaudeCodeProvider(true), CancellationToken.None);
+        var result = await service.RunAsync(provider, CancellationToken.None);
 
         Assert.True(result.Success);
         Assert.Equal("Connected!", result.Message);
+        Assert.Single(provider.LastMessages);
+        Assert.Equal("Reply with OK.", provider.LastMessages[0].Content);
     }
 }

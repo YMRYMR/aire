@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.IO;
+using System.Diagnostics;
 
 namespace Aire.Screenshots;
 
@@ -117,13 +118,9 @@ internal static class ScreenshotCli
         {
             Console.WriteLine($"--- Language: {lang} ---");
 
-            // Close any windows left open by the previous batch.
-            if (plan.LanguageBatch?.PreBatchActions is { Count: > 0 } preBatch)
-                await UiAutomationRunner.RunActionsAsync(preBatch);
+            await RestartAppForLanguageAsync(plan, lang);
 
-            // Switch language in the running app via Local API and wait for UI redraw.
-            LanguageHelper.SetAppStateLanguage(lang);
-            await UiAutomationRunner.SetLanguageAsync(lang);
+            // Give the fresh app instance time to settle before screenshots start.
             await Task.Delay(switchDelay);
 
             foreach (var request in plan.Screenshots)
@@ -137,9 +134,49 @@ internal static class ScreenshotCli
         }
     }
 
+    private static async Task RestartAppForLanguageAsync(ScreenshotPlan plan, string lang)
+    {
+        KillAireProcesses();
+
+        // Persist language so Aire picks it up on the fresh launch.
+        LanguageHelper.SetAppStateLanguage(lang);
+
+        // Start from a clean slate for each language so we don't carry over
+        // provider / conversation state from the previous batch.
+        await UiAutomationRunner.RunActionsAsync(plan.SetupActions);
+
+        await UiAutomationRunner.SetLanguageAsync(lang);
+    }
+
+    private static void KillAireProcesses()
+    {
+        foreach (var process in Process.GetProcessesByName("Aire"))
+        {
+            try
+            {
+                if (!process.HasExited)
+                    process.Kill(entireProcessTree: true);
+            }
+            catch
+            {
+                // Best-effort cleanup. The fresh launch below will fail fast if the old instance is still alive.
+            }
+            finally
+            {
+                try { process.Dispose(); } catch { }
+            }
+        }
+    }
+
     private static async Task CaptureWindowAsync(ScreenshotRequest request)
     {
+        if (IsMainWindowCapture(request))
+            await UiAutomationRunner.RunActionsAsync([new UiAutomationAction { Kind = "close-update-window", DelayMs = 250 }], request);
+
         await UiAutomationRunner.RunActionsAsync(request.Actions, request);
+
+        if (IsMainWindowCapture(request))
+            await UiAutomationRunner.RunActionsAsync([new UiAutomationAction { Kind = "close-update-window", DelayMs = 250 }], request);
 
         if (request.DelayMs > 0)
             await Task.Delay(request.DelayMs);
@@ -150,6 +187,11 @@ internal static class ScreenshotCli
         bitmap.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);
         Console.WriteLine(outputPath);
     }
+
+    private static bool IsMainWindowCapture(ScreenshotRequest request)
+        => string.Equals(request.ProcessName, "Aire", StringComparison.OrdinalIgnoreCase)
+           && (string.Equals(request.ExactTitle, "Aire", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(request.TitleContains, "Aire", StringComparison.OrdinalIgnoreCase));
 
     private static ScreenshotRequest ParseWindowRequest(string[] args)
     {

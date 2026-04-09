@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -150,6 +151,57 @@ public sealed class ProviderCapabilityTestApplicationServiceTests
         Assert.Single(progressUpdates);
         Assert.NotNull(result.TestedAt);
         Assert.NotNull(await repository.GetSettingAsync("capability_tests_7"));
+    }
+
+    [Fact]
+    public async Task RunSingleAndPersistAsync_ReplacesOnlyTheMatchingSavedResult()
+    {
+        var repository = new FakeSettingsRepository();
+        var sessionService = new ProviderCapabilityTestSessionService();
+        var provider = new StubProvider(validationSuccess: true);
+        var service = new ProviderCapabilityTestApplicationService(new ProviderSetupApplicationService());
+        var originalResults = new List<CapabilityTestResult>
+        {
+            new("ask_followup", "Ask follow-up question", "Agent", false, null, "old failure", 10L),
+            new("list_dir", "List directory", "File System", false, null, "stale failure", 15L),
+        };
+
+        await sessionService.SaveAsync(11, "stub-model", originalResults, DateTime.UtcNow.AddMinutes(-1), repository);
+
+        var rerunTest = new CapabilityTest(
+            "list_dir",
+            "List directory",
+            "File System",
+            "List all files and folders in the C:\\Windows directory.",
+            new[] { "list_directory", "execute_command" });
+
+        var rerunResult = await service.RunSingleAndPersistAsync(
+            provider,
+            providerId: 11,
+            model: "stub-model",
+            rerunTest,
+            (_, test, _) => Task.FromResult(new CapabilityTestResult(
+                test.Id,
+                test.Name,
+                test.Category,
+                true,
+                "list_directory",
+                null,
+                42L)),
+            repository,
+            CancellationToken.None);
+
+        Assert.Equal("list_directory", rerunResult.Result.ActualTool);
+
+        var loaded = await sessionService.LoadAsync(11, "stub-model", repository);
+        Assert.NotNull(loaded);
+        Assert.Equal(2, loaded!.Results.Count);
+        Assert.Equal("old failure", loaded.Results.Single(r => r.Id == "ask_followup").Error);
+
+        var updated = loaded.Results.Single(r => r.Id == "list_dir");
+        Assert.True(updated.Passed);
+        Assert.Equal("list_directory", updated.ActualTool);
+        Assert.Null(updated.Error);
     }
 
     private static async IAsyncEnumerable<CapabilityTestResult> RunOneResult(

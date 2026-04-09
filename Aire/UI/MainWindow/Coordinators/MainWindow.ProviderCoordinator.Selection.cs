@@ -43,7 +43,7 @@ namespace Aire
                 if (plan.ConversationAction == ProviderActivationWorkflowService.ConversationActionKind.LoadExistingConversation)
                 {
                     _owner._currentConversationId = plan.ConversationIdToLoad;
-                    await _owner.LoadConversationMessages(plan.ConversationIdToLoad!.Value);
+                    await _owner.LoadConversationMessages(plan.ConversationIdToLoad!.Value, syncProviderSelection: false);
                 }
                 else
                 {

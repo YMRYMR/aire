@@ -11,6 +11,8 @@ namespace Aire.UI
 {
     public partial class OnboardingWindow : Window
     {
+        public const int ProviderCardColumns = 4;
+
         public Action? OpenSettingsAction { get; set; }
 
         private int _step = 1;

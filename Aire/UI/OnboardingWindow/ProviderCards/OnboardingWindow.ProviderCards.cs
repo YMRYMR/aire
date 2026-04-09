@@ -32,12 +32,22 @@ namespace Aire.UI
 {
     public partial class OnboardingWindow
     {
-        private static readonly string[][] ProviderRows =
+        private static readonly string[] ProviderTags =
         [
-            ["OpenAI", "Mistral", "Codex", "Groq"],
-            ["Anthropic", "ClaudeWeb", "OpenRouter"],
-            ["Ollama", "DeepSeek", "Zai"],
-            ["Inception", "GoogleAI", "GoogleAIImage", "ClaudeCode"]
+            "OpenAI",
+            "Mistral",
+            "Codex",
+            "ClaudeCode",
+            "Groq",
+            "Anthropic",
+            "ClaudeWeb",
+            "OpenRouter",
+            "Ollama",
+            "DeepSeek",
+            "Zai",
+            "Inception",
+            "GoogleAI",
+            "GoogleAIImage"
         ];
 
         private sealed record ProviderCardDefinition(
@@ -58,7 +68,7 @@ namespace Aire.UI
 
             Dictionary<string, ProviderCardDefinition> cards = GetProviderCardDefinitions();
 
-            foreach (string tag in ProviderRows.SelectMany(row => row).Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)))
+            foreach (string tag in ProviderTags.Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)))
             {
                 if (cards.TryGetValue(tag, out ProviderCardDefinition? card))
                 {
@@ -79,25 +89,21 @@ namespace Aire.UI
                 .Where(button => button.Tag is string)
                 .ToDictionary(button => (string)button.Tag, button => (WpfUIElement)button, StringComparer.Ordinal);
 
-            if (ProviderRows.Any(row => row.Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)).Any(tag => !cardsByTag.ContainsKey(tag))))
+            if (ProviderTags.Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)).Any(tag => !cardsByTag.ContainsKey(tag)))
             {
                 return;
             }
 
-            var shuffledRows = ProviderRows
-                .Select(row => row.Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag)).ToArray())
-                .Where(row => row.Length > 0)
+            var shuffledTags = ProviderTags
+                .Where(tag => !ProviderVisibility.IsHiddenFromRelease(tag))
                 .OrderBy(_ => Random.Shared.Next())
                 .ToArray();
 
             ProviderCardGrid.Children.Clear();
 
-            foreach (string[] row in shuffledRows)
+            foreach (string tag in shuffledTags)
             {
-                foreach (string tag in row)
-                {
-                    ProviderCardGrid.Children.Add(cardsByTag[tag]);
-                }
+                ProviderCardGrid.Children.Add(cardsByTag[tag]);
             }
         }
 

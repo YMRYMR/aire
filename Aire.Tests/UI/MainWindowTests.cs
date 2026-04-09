@@ -447,6 +447,162 @@ namespace Aire.Tests.UI
             });
         }
 
+        [Fact]
+        public void MainWindow_ApiSetProviderAsync_SwitchesSilently_WithoutAppendingSystemMessage()
+        {
+            RunOnStaThread(async () =>
+            {
+                EnsureApplication();
+                AppStartupState.MarkReady();
+
+                string tempDir = Path.Combine(Path.GetTempPath(), "aire-provider-switch-" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(tempDir);
+                string originalAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA");
+                Environment.SetEnvironmentVariable("LOCALAPPDATA", tempDir);
+
+                try
+                {
+                    using var db = new DatabaseService();
+                    await db.InitializeAsync();
+
+                    Provider currentProvider = new Provider
+                    {
+                        Name = "Current",
+                        Type = "OpenAI",
+                        ApiKey = "k1",
+                        Model = "m1",
+                        IsEnabled = true,
+                        Color = "#336699"
+                    };
+                    currentProvider.Id = await db.InsertProviderAsync(currentProvider);
+
+                    Provider targetProvider = new Provider
+                    {
+                        Name = "Target",
+                        Type = "OpenAI",
+                        ApiKey = "k2",
+                        Model = "m2",
+                        IsEnabled = true,
+                        Color = "#993366"
+                    };
+                    targetProvider.Id = await db.InsertProviderAsync(targetProvider);
+
+                    int conversationId = await db.CreateConversationAsync(currentProvider.Id, "Current conversation");
+
+                    MainWindow window = new MainWindow(initializeUi: false);
+                    var header = new MainHeaderControl();
+                    header._testProviderComboBox = new ComboBox();
+                    header._testCheckAgainButton = new Button();
+                    header.ProviderComboBox.ItemsSource = new[] { currentProvider, targetProvider };
+                    header.ProviderComboBox.SelectedItem = currentProvider;
+
+                    window.HeaderControl = header;
+                    window.Messages = new ObservableCollection<UiModels.ChatMessage>();
+                    window._currentConversationId = conversationId;
+                    window._currentProviderId = currentProvider.Id;
+                    window._databaseService = db;
+                    window._providerFactory = new ProviderFactory(db);
+                    window._chatSessionApplicationService = new ChatSessionApplicationService(db, db);
+                    window._conversationApplicationService = new ConversationApplicationService(db);
+                    typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ChatService(window._providerFactory));
+
+                    bool switched = await window.ApiSetProviderAsync(targetProvider.Id);
+
+                    Assert.True(switched);
+                    Assert.Same(targetProvider, header.ProviderComboBox.SelectedItem);
+                    Assert.Equal(targetProvider.Id, window._currentProviderId);
+                    Assert.DoesNotContain(
+                        window.Messages,
+                        msg => msg.Sender == "System" && msg.Text.Contains("Switched to", StringComparison.OrdinalIgnoreCase));
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable("LOCALAPPDATA", originalAppData);
+                    try { Directory.Delete(tempDir, true); } catch { }
+                }
+            });
+        }
+
+        [Fact]
+        public void MainWindow_ApiSelectConversationAsync_LoadsConversation_WithoutChangingProvider()
+        {
+            RunOnStaThread(async () =>
+            {
+                EnsureApplication();
+                AppStartupState.MarkReady();
+
+                string tempDir = Path.Combine(Path.GetTempPath(), "aire-conversation-select-" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(tempDir);
+                string originalAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA");
+                Environment.SetEnvironmentVariable("LOCALAPPDATA", tempDir);
+
+                try
+                {
+                    using var db = new DatabaseService();
+                    await db.InitializeAsync();
+
+                    Provider currentProvider = new Provider
+                    {
+                        Name = "Current",
+                        Type = "OpenAI",
+                        ApiKey = "k1",
+                        Model = "m1",
+                        IsEnabled = true,
+                        Color = "#336699"
+                    };
+                    currentProvider.Id = await db.InsertProviderAsync(currentProvider);
+
+                    Provider targetProvider = new Provider
+                    {
+                        Name = "Target",
+                        Type = "OpenAI",
+                        ApiKey = "k2",
+                        Model = "m2",
+                        IsEnabled = true,
+                        Color = "#993366"
+                    };
+                    targetProvider.Id = await db.InsertProviderAsync(targetProvider);
+
+                    int conversationId = await db.CreateConversationAsync(targetProvider.Id, "Target conversation");
+                    await db.SaveMessageAsync(conversationId, "user", "hello");
+
+                    MainWindow window = new MainWindow(initializeUi: false);
+                    var header = new MainHeaderControl();
+                    header._testProviderComboBox = new ComboBox();
+                    header._testCheckAgainButton = new Button();
+                    header.ProviderComboBox.ItemsSource = new[] { currentProvider, targetProvider };
+                    header.ProviderComboBox.SelectedItem = currentProvider;
+                    var composer = new MainComposerControl();
+
+                    window.HeaderControl = header;
+                    window.Messages = new ObservableCollection<UiModels.ChatMessage>();
+                    window._currentConversationId = null;
+                    window._currentProviderId = currentProvider.Id;
+                    window._databaseService = db;
+                    window._providerFactory = new ProviderFactory(db);
+                    window._chatSessionApplicationService = new ChatSessionApplicationService(db, db);
+                    window._conversationApplicationService = new ConversationApplicationService(db);
+                    typeof(MainWindow).GetField("ComposerControl", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, composer);
+                    typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ChatService(window._providerFactory));
+
+                    bool selected = await window.ApiSelectConversationAsync(conversationId);
+
+                    Assert.True(selected);
+                    Assert.Same(currentProvider, header.ProviderComboBox.SelectedItem);
+                    Assert.Equal(currentProvider.Id, window._currentProviderId);
+                    Assert.Contains(window.Messages, msg => msg.Text == "hello");
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable("LOCALAPPDATA", originalAppData);
+                    try { Directory.Delete(tempDir, true); } catch { }
+                }
+            });
+        }
+
         private static TaskCompletionSource<bool> TaskCompletionSource_GetValue(bool value)
         {
             var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
