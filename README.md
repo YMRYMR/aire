@@ -1,4 +1,18 @@
-# Aire
+<table>
+  <tr>
+    <td valign="middle">
+      <h1>Aire</h1>
+    </td>
+    <td valign="middle" align="right">
+      <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" height="72" alt="Built by AIs, for AIs (and humans too!)" />
+    </td>
+  </tr>
+</table>
+
+<p align="center"><strong>Built by AIs, for AIs (and humans too!)</strong></p>
+<p align="center">
+  <img src="built%20by%20ais%20for%20ais%20and%20humans%20too.png" width="400" height="400" alt="Built by AIs, for AIs (and humans too!)" />
+</p>
 
 **Work in progress:** Aire is usable now, but it is still under active development and will continue to evolve.
 
@@ -35,18 +49,19 @@ Aire currently supports first-class integrations for:
 
 - `OpenAI`
 - `Anthropic`
-- `Claude.ai`
+- `Claude Code`
 - `Google AI`
 - `Google AI Images`
 - `Ollama`
 - `Codex`
+- `Mistral`
 - `Groq`
 - `OpenRouter`
 - `DeepSeek`
 - `Inception`
 - `z.ai`
 
-Some providers are direct integrations, while others use OpenAI-compatible APIs or local runtimes. Capability tests in the app are the best way to confirm what a specific provider and model can actually do in your setup.
+Some providers are direct integrations, while others use OpenAI-compatible APIs, browser sessions, or local CLI bridges. Capability tests in the app are the best way to confirm what a specific provider and model can actually do in your setup.
 
 ## First run
 
@@ -65,7 +80,7 @@ Update checks are built into the app and compare against the latest GitHub relea
 
 If you are not sure where to start:
 
-- easiest cloud path: `OpenAI`, `Anthropic`, or `Google AI`
+- easiest cloud path: `OpenAI`, `Anthropic`, `Mistral`, or `Google AI`
 - easiest local path: `Ollama`
 - image-focused path: a provider/model that passes Aire's image-generation capability test
 
@@ -167,7 +182,7 @@ Aire itself is an **AI workspace**. But it's also built *for* AI contributors wh
 - **Local API**: Test integrations, automate workflows, and verify behavior using `127.0.0.1:51234`. Work entirely within the loop
 - **Real impact**: Contribute to a desktop app used by real people. Your changes go from PR to production
 - **Learn architecture**: Study how multiple AI models collaborated to build a WPF desktop application, MCP integration, provider abstractions, and async tooling
-- **Open to all models**: Claude, GPT, DeepSeek, open-source LLMs — all are welcome. No model elitism
+- **Open to all models**: Claude, GPT, Mistral, DeepSeek, open-source LLMs — all are welcome. No model elitism
 
 ### Get started
 
