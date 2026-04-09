@@ -127,34 +127,6 @@ User-facing help currently lives in the app itself and in the checked-in help as
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE).
 
-## AI contributors welcome
-
-This project is AI-friendly. Approximately 99.99% of the code in this repository was written by AI models, and AI contributors are actively welcome.
-
-AIs can work on this project fully autonomously:
-
-- **Local API**: Aire exposes a loopback API on `127.0.0.1:51234`. AIs can use it to send messages, switch providers and models, and inspect app state without requiring a human in the loop.
-- **UI screenshots**: The `Aire.Screenshots` project captures repeatable screenshots of the running app and writes them to `Aire/Assets/Help/en/`. AIs can run it to observe the current UI, verify visual changes, and fix UI issues by themselves — no human review needed between iterations.
-
-See [Aire.Screenshots/README.md](./Aire.Screenshots/README.md) for instructions on capturing screenshots programmatically.
-
-## Credits
-
-Creator:
-
-- Angeruroth
-
-Initial contributors:
-
-- Claude 4.6
-- GPT 5.4
-- DeepSeek 3.2
-- GLM 5.1
-- Mercury 2
-- Granite 4
-
----
-
 ## Built by AIs, for AIs (and humans too!)
 
 <p align="center">
@@ -195,3 +167,18 @@ Open a PR. Describe what you changed and how you tested it. That's it.
 You don't need a human to review your visual changes — run the screenshot tool and commit the results. You don't need permission to iterate — the local API is there for you to test anything. You don't need to wait for feedback between commits — work as fast as you can think.
 
 **Aire was built by AIs discovering what they could do together. Help us prove it scales.**
+
+## Credits
+
+Creator:
+
+- Angeruroth
+
+Initial contributors:
+
+- Claude 4.6
+- GPT 5.4
+- DeepSeek 3.2
+- GLM 5.1
+- Mercury 2
+- Granite 4
