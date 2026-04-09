@@ -134,7 +134,8 @@ public sealed class ToolExecutionWorkflowServiceTests
             string role,
             string content,
             string? imagePath = null,
-            IEnumerable<Aire.Data.MessageAttachment>? attachments = null)
+            IEnumerable<Aire.Data.MessageAttachment>? attachments = null,
+            int? tokens = null)
         {
             SavedMessages.Add((conversationId, role, content));
             return Task.CompletedTask;
@@ -160,7 +161,8 @@ public sealed class ToolExecutionWorkflowServiceTests
             string role,
             string content,
             string? imagePath = null,
-            IEnumerable<Aire.Data.MessageAttachment>? attachments = null)
+            IEnumerable<Aire.Data.MessageAttachment>? attachments = null,
+            int? tokens = null)
             => throw new InvalidOperationException("conversation persistence failed");
     }
 

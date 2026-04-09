@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Aire.Data;
 using Aire.Providers;
 using Aire.Services;
 using Aire.Services.Workflows;
@@ -62,6 +64,7 @@ namespace Aire.AppLayer.Chat
         public async Task<SuccessTextResult> HandleSuccessTextAsync(
             string textContent,
             int? conversationId,
+            int? tokensUsed,
             bool isWindowVisible,
             int trayPreviewLength = 80)
         {
@@ -77,13 +80,15 @@ namespace Aire.AppLayer.Chat
                     await _chatSessionService.PersistAssistantMessageAsync(
                         conversationId.Value,
                         finalText,
-                        parsed.ImageReferences.Count == 1 ? parsed.ImageReferences[0] : null);
+                        parsed.ImageReferences.Count == 1 ? parsed.ImageReferences[0] : null,
+                        tokens: tokensUsed);
                 }
                 else
                 {
                     await _chatSessionService.PersistAssistantMessageAsync(
                         conversationId.Value,
-                        _imageResponseWorkflow.BuildPersistedContent(finalText, parsed.ImageReferences));
+                        _imageResponseWorkflow.BuildPersistedContent(finalText, parsed.ImageReferences),
+                        tokens: tokensUsed);
                 }
             }
 
@@ -93,6 +98,17 @@ namespace Aire.AppLayer.Chat
                 new ProviderChatMessage { Role = "assistant", Content = string.IsNullOrWhiteSpace(finalText) ? parsed.Text : finalText },
                 parsed.ImageReferences);
         }
+
+        /// <summary>
+        /// Persists an assistant turn from the coordinator layer when the branch is not a plain text response.
+        /// </summary>
+        public Task PersistAssistantMessageAsync(
+            int conversationId,
+            string content,
+            string? imagePath = null,
+            IEnumerable<MessageAttachment>? attachments = null,
+            int? tokens = null)
+            => _chatSessionService.PersistAssistantMessageAsync(conversationId, content, imagePath, attachments, tokens);
 
         /// <summary>
         /// Extracts the completion text from an <c>attempt_completion</c> tool call.

@@ -73,8 +73,9 @@ namespace Aire.AppLayer.Chat
             int conversationId,
             string content,
             string? imagePath = null,
-            IEnumerable<MessageAttachment>? attachments = null)
-            => _conversations.SaveMessageAsync(conversationId, "assistant", content, imagePath, attachments);
+            IEnumerable<MessageAttachment>? attachments = null,
+            int? tokens = null)
+            => _conversations.SaveMessageAsync(conversationId, "assistant", content, imagePath, attachments, tokens);
 
         /// <summary>
         /// Persists a tool status line such as approval or denial.

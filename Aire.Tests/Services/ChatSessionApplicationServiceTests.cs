@@ -101,7 +101,8 @@ public sealed class ChatSessionApplicationServiceTests
             string role,
             string content,
             string? imagePath = null,
-            IEnumerable<MessageAttachment>? attachments = null)
+            IEnumerable<MessageAttachment>? attachments = null,
+            int? tokens = null)
         {
             SavedMessages.Add((conversationId, role, content, imagePath));
             return Task.CompletedTask;

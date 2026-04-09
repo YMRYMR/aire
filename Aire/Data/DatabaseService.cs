@@ -63,6 +63,7 @@ namespace Aire.Data
             await MigrateEncryptApiKeysAsync();
             await MigrateClaudeSessionProvidersAsync();
             await MigrateMessagesAttachmentsJsonAsync();
+            await MigrateMessageTokensAsync();
             await MigrateEmailOAuthAsync();
             await MigrateEncryptEmailOAuthTokensAsync();
             await MigrateEncryptMcpEnvVarsAsync();

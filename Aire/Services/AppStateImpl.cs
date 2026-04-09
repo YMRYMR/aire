@@ -39,6 +39,8 @@ internal sealed class AppStateImpl : IAppState
 
     public void SetLanguage(string code)         => AppState.SetLanguage(code);
     public string GetLanguage()                  => AppState.GetLanguage();
+    public void SetPreferredCurrency(string code) => AppState.SetPreferredCurrency(code);
+    public string GetPreferredCurrency()         => AppState.GetPreferredCurrency();
     public void SetApiAccessToken(string token)  => AppState.SetApiAccessToken(token);
     public string GetApiAccessToken()            => AppState.GetApiAccessToken();
     public string EnsureApiAccessToken()         => AppState.EnsureApiAccessToken();

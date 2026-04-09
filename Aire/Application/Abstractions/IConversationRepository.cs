@@ -20,7 +20,8 @@ namespace Aire.AppLayer.Abstractions
             string role,
             string content,
             string? imagePath = null,
-            IEnumerable<MessageAttachment>? attachments = null);
+            IEnumerable<MessageAttachment>? attachments = null,
+            int? tokens = null);
         Task<List<Aire.Data.Message>> GetMessagesAsync(int conversationId);
         Task DeleteMessagesByConversationIdAsync(int conversationId);
         Task DeleteConversationAsync(int conversationId);

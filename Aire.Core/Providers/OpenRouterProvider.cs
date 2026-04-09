@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -50,6 +51,68 @@ namespace Aire.Providers
                     .ToList();
             }
             catch { return null; }
+        }
+
+        public override async Task<TokenUsage?> GetTokenUsageAsync(CancellationToken ct)
+        {
+            if (string.IsNullOrWhiteSpace(Config.ApiKey))
+                return null;
+
+            try
+            {
+                var url = Config.BaseUrl?.TrimEnd('/') ?? DefaultApiBaseUrl;
+                using var req = new HttpRequestMessage(HttpMethod.Get, $"{url}/v1/key");
+                req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
+
+                var res = await MetadataHttp.SendAsync(req, ct).ConfigureAwait(false);
+                if (!res.IsSuccessStatusCode)
+                    return null;
+
+                var json = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+                using var doc = JsonDocument.Parse(json);
+                var root = doc.RootElement;
+
+                if (!TryReadLong(root, "usage", out var used))
+                    return null;
+
+                long? limit = null;
+                if (TryReadLong(root, "limit", out var limitValue))
+                    limit = limitValue;
+                else if (TryReadLong(root, "limit_remaining", out var remainingValue))
+                    limit = used + remainingValue;
+
+                DateTime? resetDate = null;
+                if (root.TryGetProperty("reset_date", out var resetEl) &&
+                    DateTime.TryParse(resetEl.GetString(), out var reset))
+                    resetDate = reset;
+
+                return new TokenUsage
+                {
+                    Used = used,
+                    Limit = limit,
+                    ResetDate = resetDate,
+                    Unit = "credits"
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"OpenRouter usage lookup failed: {ex.GetType().Name}");
+                return null;
+            }
+        }
+
+        private static bool TryReadLong(JsonElement root, string propertyName, out long value)
+        {
+            value = 0;
+            if (!root.TryGetProperty(propertyName, out var el))
+                return false;
+
+            return el.ValueKind switch
+            {
+                JsonValueKind.Number => el.TryGetInt64(out value),
+                JsonValueKind.String => long.TryParse(el.GetString(), out value),
+                _ => false,
+            };
         }
     }
 }
