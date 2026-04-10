@@ -203,7 +203,8 @@ namespace Aire.Services
                 }
 
                 ApplyAccentResources(res);
-                ApplySemanticResources(res, tintHue, tintStrength);
+                ApplyNormalSemanticResources(res, tintHue, tintStrength);
+                ApplyAccentSemanticResources(res);
             }
 
             AppearanceChanged?.Invoke();
@@ -222,7 +223,7 @@ namespace Aire.Services
             if (Application.Current?.Resources is ResourceDictionary res)
             {
                 ApplyAccentResources(res);
-                ApplySemanticResources(res, TintPosition * 360.0, Math.Sin(TintPosition * Math.PI));
+                ApplyAccentSemanticResources(res);
             }
 
             AppearanceChanged?.Invoke();
@@ -385,14 +386,12 @@ namespace Aire.Services
             }
         }
 
-        private static void ApplySemanticResources(ResourceDictionary res, double tintHue, double tintStrength)
+        private static void ApplyNormalSemanticResources(ResourceDictionary res, double tintHue, double tintStrength)
         {
             var background = GetResourceColor(res, "BackgroundBrush");
             var surface = GetResourceColor(res, "SurfaceBrush");
             var surface2 = GetResourceColor(res, "Surface2Brush");
             var surface3 = GetResourceColor(res, "Surface3Brush");
-            var accentSurface = GetResourceColor(res, "AccentSurfaceBrush");
-            var accentSurface2 = GetResourceColor(res, "AccentSurface2Brush");
             var codeBackground = GetResourceColor(res, "CodeBackgroundBrush");
             var warningBackground = GetResourceColor(res, "WarningBackgroundBrush");
 
@@ -415,31 +414,9 @@ namespace Aire.Services
                 darkBase: C(0x1A, 0x1C, 0x22),
                 tintHue, tintStrength, tintMix: 0.05, minContrast: 7.0);
 
-            SetResourceBrush(res, "SidebarTextBrush",
-                AccessibleTintedForeground(background,
-                    lightBase: C(0xF7, 0xF8, 0xFA),
-                    darkBase: C(0x17, 0x1A, 0x22),
-                    tintHue, tintStrength, tintMix: 0.04, minContrast: 7.0));
-            SetResourceBrush(res, "SidebarTextSecondaryBrush",
-                AccessibleTintedForeground(background,
-                    lightBase: C(0xE2, 0xE7, 0xEE),
-                    darkBase: C(0x45, 0x4E, 0x61),
-                    tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
-
-            SetResourceBrush(res, "AccentTextBrush",
-                AccessibleTintedForeground(accentSurface,
-                    lightBase: C(0xFA, 0xFB, 0xFD),
-                    darkBase: C(0x13, 0x15, 0x1B),
-                    tintHue, tintStrength, tintMix: 0.02, minContrast: 7.0));
-            SetResourceBrush(res, "AccentTextSecondaryBrush",
-                AccessibleTintedForeground(accentSurface,
-                    lightBase: C(0xD8, 0xDE, 0xE8),
-                    darkBase: C(0x4B, 0x54, 0x66),
-                    tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
-
-            var assistantBubble = Blend(surface, accentSurface2, 0.08 + tintStrength * 0.04);
-            var userBubble = Blend(surface2, accentSurface, 0.10 + tintStrength * 0.05);
-            var systemBubble = Blend(surface3, accentSurface2, 0.05);
+            var assistantBubble = Blend(surface, surface2, 0.06 + tintStrength * 0.04);
+            var userBubble = Blend(surface2, surface3, 0.06 + tintStrength * 0.04);
+            var systemBubble = Blend(surface3, surface, 0.04);
             var errorBubble = Blend(warningBackground, C(0xF2, 0xD7, 0xD7), 0.14);
 
             SetResourceBrush(res, "AssistantMessageBrush", assistantBubble);
@@ -463,7 +440,7 @@ namespace Aire.Services
                     darkBase: C(0xE6, 0xBA, 0x82),
                     tintHue, tintStrength, tintMix: 0.08, minContrast: 4.5));
             SetResourceBrush(res, "CodeBackgroundBrush",
-                Blend(codeBackground, accentSurface2, 0.10));
+                Blend(codeBackground, surface, 0.10));
 
             SetResourceBrush(res, "WarningBackgroundBrush",
                 Blend(warningBackground, C(0xFF, 0xF1, 0xC9), Brightness < 0.5 ? 0.08 : 0.16));
@@ -488,6 +465,35 @@ namespace Aire.Services
             SetBrush(SystemFgBrush, GetResourceColor(res, "StatusTextBrush"));
             SetBrush(ErrorBgBrush, errorBubble);
             SetBrush(ErrorFgBrush, GetResourceColor(res, "ErrorBrush"));
+        }
+
+        private static void ApplyAccentSemanticResources(ResourceDictionary res)
+        {
+            var accentSurface = GetResourceColor(res, "AccentSurfaceBrush");
+            var accentSurface2 = GetResourceColor(res, "AccentSurface2Brush");
+
+            // Text that sits on accent surfaces must be derived from the accent palette only.
+            SetResourceBrush(res, "AccentTextBrush",
+                AccessibleTintedForeground(accentSurface,
+                    lightBase: C(0xFA, 0xFB, 0xFD),
+                    darkBase: C(0x13, 0x15, 0x1B),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 7.0));
+            SetResourceBrush(res, "AccentTextSecondaryBrush",
+                AccessibleTintedForeground(accentSurface,
+                    lightBase: C(0xD8, 0xDE, 0xE8),
+                    darkBase: C(0x4B, 0x54, 0x66),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 4.8));
+
+            SetResourceBrush(res, "SidebarTextBrush",
+                AccessibleTintedForeground(accentSurface2,
+                    lightBase: C(0xF7, 0xF8, 0xFA),
+                    darkBase: C(0x17, 0x1A, 0x22),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.04, minContrast: 7.0));
+            SetResourceBrush(res, "SidebarTextSecondaryBrush",
+                AccessibleTintedForeground(accentSurface2,
+                    lightBase: C(0xE2, 0xE7, 0xEE),
+                    darkBase: C(0x45, 0x4E, 0x61),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 4.8));
         }
 
         private static Color C(byte r, byte g, byte b) => Color.FromRgb(r, g, b);

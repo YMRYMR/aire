@@ -86,7 +86,8 @@ public class AppearanceServiceTests : TestBase
             AppearanceService.ResetForTesting();
             AppearanceService.Apply(0.15, 0.25);
 
-            Color assistantBubbleStart = ((SolidColorBrush)Application.Current.Resources["AssistantMessageBrush"]).Color;
+            Color textStart = ((SolidColorBrush)Application.Current!.Resources["TextBrush"]).Color;
+            Color accentSurfaceStart = ((SolidColorBrush)Application.Current.Resources["AccentSurfaceBrush"]).Color;
 
             int raised = 0;
             AppearanceService.AppearanceChanged += Handler;
@@ -100,12 +101,37 @@ public class AppearanceServiceTests : TestBase
             }
             Assert.Equal(0.0, AppearanceService.AccentBrightness);
             Assert.Equal(1.0, AppearanceService.AccentTintPosition);
-            Assert.NotEqual(assistantBubbleStart, ((SolidColorBrush)Application.Current.Resources["AssistantMessageBrush"]).Color);
+            Assert.Equal(textStart, ((SolidColorBrush)Application.Current.Resources["TextBrush"]).Color);
+            Assert.NotEqual(accentSurfaceStart, ((SolidColorBrush)Application.Current.Resources["AccentSurfaceBrush"]).Color);
+            Assert.True(ContrastRatio(
+                ((SolidColorBrush)Application.Current.Resources["AccentTextBrush"]).Color,
+                ((SolidColorBrush)Application.Current.Resources["AccentSurfaceBrush"]).Color) >= 4.5);
+            Assert.True(ContrastRatio(
+                ((SolidColorBrush)Application.Current.Resources["SidebarTextBrush"]).Color,
+                ((SolidColorBrush)Application.Current.Resources["AccentSurface2Brush"]).Color) >= 4.5);
             Assert.True(raised >= 1);
             void Handler()
             {
                 raised++;
             }
         });
+    }
+
+    private static double ContrastRatio(Color foreground, Color background)
+    {
+        static double Channel(byte v)
+        {
+            double x = v / 255.0;
+            return x <= 0.03928 ? x / 12.92 : Math.Pow((x + 0.055) / 1.055, 2.4);
+        }
+
+        static double RelativeLuminance(Color c)
+            => 0.2126 * Channel(c.R) + 0.7152 * Channel(c.G) + 0.0722 * Channel(c.B);
+
+        double l1 = RelativeLuminance(foreground);
+        double l2 = RelativeLuminance(background);
+        if (l1 < l2)
+            (l1, l2) = (l2, l1);
+        return (l1 + 0.05) / (l2 + 0.05);
     }
 }
