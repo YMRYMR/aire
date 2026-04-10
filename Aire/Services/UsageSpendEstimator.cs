@@ -74,7 +74,7 @@ namespace Aire.Services
                 return false;
             }
 
-            return providerPricing.TryGetValue(model.Trim(), out pricing);
+            return providerPricing.TryGetValue(model.Trim(), out pricing!);
         }
     }
 }

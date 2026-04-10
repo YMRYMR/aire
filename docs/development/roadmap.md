@@ -118,7 +118,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ### 4.8 Better context controls `[ ]`
 - Let users control context size, caching, and summarization more explicitly.
 
-### 4.9 Cleaner tool categories `[ ]`
+### 4.9 Cleaner tool categories `[x]`
 - Replace the current coarse tool toggles with category-based controls.
 
 ### 4.10 Better onboarding defaults `[ ]`
