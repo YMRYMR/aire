@@ -32,8 +32,13 @@ namespace Aire.Services
             sb.Append("- Call one tool at a time. After each result, call the next if the task is not done.\n");
             sb.Append("- When summarising news or articles, always include each article's full URL verbatim.\n\n");
 
-            sb.Append("SCRIPTING: Always write scripts to a temp file first, then execute. Never output large code blocks as plain text.\n\n");
-            sb.Append("LARGE FILES: read_file returns ≤100k chars. Check the 'Remaining' count in the result and re-call with increasing offset until done.\n\n");
+            bool hasFs = cats == null || cats.Contains("filesystem");
+
+            if (hasFs)
+            {
+                sb.Append("SCRIPTING: Always write scripts to a temp file first, then execute. Never output large code blocks as plain text.\n\n");
+                sb.Append("LARGE FILES: read_file returns ≤100k chars. Check the 'Remaining' count in the result and re-call with increasing offset until done.\n\n");
+            }
 
             if (hasBrowser)
                 sb.Append("BROWSER: To follow a link on an open page, call read_browser_tab(-1) first to find the real URL. Never guess or invent URLs.\n\n");
@@ -233,7 +238,8 @@ namespace Aire.Services
             if (hasAgent)
                 sb.Append("8. Agent / Task flow: new_task(task) — start a new subtask. attempt_completion(result) — signal the task is done. ask_followup_question(question) — ask the user for clarification. skill(name) — run a named skill (e.g. 'list_tools' lists all available tools). switch_mode(mode) — switch assistant mode. update_todo_list(todos) — update the to-do list. show_image(path_or_url, caption?) — display an image in the chat.\n");
 
-            sb.Append("9. Model switching: switch_model(model_name, reason, direction) — switch to a different AI model. direction: \"up\" (need more capability), \"down\" (scale back), \"lateral\" (change provider). model_name must exactly match an entry from the model list appended to this prompt.\n\n");
+            if (hasAgent)
+                sb.Append("9. Model switching: switch_model(model_name, reason, direction) — switch to a different AI model. direction: \"up\" (need more capability), \"down\" (scale back), \"lateral\" (change provider). model_name must exactly match an entry from the model list appended to this prompt.\n\n");
 
             sb.Append(
                 "SCRIPTING RULE:\n" +
