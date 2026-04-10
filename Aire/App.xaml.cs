@@ -16,6 +16,7 @@ namespace Aire
     {
         // ── Single-instance enforcement ───────────────────────────────────────
         private static Mutex? _instanceMutex;
+        private bool _ownsMutex;
         private EventWaitHandle? _activateEvent;
 
         // ── App state ─────────────────────────────────────────────────────────
@@ -34,6 +35,7 @@ namespace Aire
 
             // Try to claim the single-instance mutex.
             _instanceMutex = new Mutex(true, "Aire_SingleInstance_v1", out bool isFirstInstance);
+            _ownsMutex = isFirstInstance;
 
             if (!isFirstInstance)
             {
@@ -190,7 +192,7 @@ namespace Aire
             _localApiService?.Dispose();
             AppState.ApiAccessChanged -= OnApiAccessChanged;
             _activateEvent?.Dispose();
-            _instanceMutex?.ReleaseMutex();
+            if (_ownsMutex) _instanceMutex?.ReleaseMutex();
             _instanceMutex?.Dispose();
             base.OnExit(e);
         }
