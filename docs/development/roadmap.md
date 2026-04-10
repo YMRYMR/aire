@@ -52,24 +52,24 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Preserve the `UI -> Application -> Domain/Infrastructure` direction.
 - Keep new domain concepts out of window code-behind and out of ad-hoc helper files.
 
-### 2.5 Structured logging `[~]`
+### 2.5 Structured logging `[x]`
 - Replace `Debug.WriteLine` calls in production paths with a proper logging framework (Serilog or `Microsoft.Extensions.Logging`).
 - Essential for diagnosing issues in release builds where Debug output is unavailable.
 - Fix bare `catch` blocks in `OllamaProvider.Chat.cs` and `LocalApiService.cs` to log at minimum debug level.
-- Recent progress: the highest-signal production paths now route warnings through `AppLogger` instead of `Debug.WriteLine`, including provider validation, request handling, tool-call parsing, memory tools, setup persistence, MCP startup, and system tool helpers.
+- Recent progress: the highest-signal production paths now route warnings through `AppLogger` instead of `Debug.WriteLine`, including provider validation, request handling, tool-call parsing, memory tools, setup persistence, MCP startup, system tool helpers, Claude session calls, and Edge TTS; the remaining parser fallbacks are intentional and non-fatal.
 
-### 2.6 Fix resource and event leaks `[~]`
+### 2.6 Fix resource and event leaks `[x]`
 - Ensure `HttpResponseMessage` is disposed on all exception paths in streaming providers.
 - Unsubscribe event handlers in `ChatService` when the orchestrator is replaced or the service is disposed.
 - Audit remaining `IDisposable` implementations for completeness.
-- Recent progress: Ollama streaming responses are disposed on all paths, `ChatService` unsubscribes on dispose, `SpeechRecognitionService` now releases its mic/timer/factory resources, and the local API listener now logs unexpected failures instead of swallowing them.
+- Recent progress: Ollama streaming responses are disposed on all paths, `ChatService` unsubscribes on dispose, `SpeechRecognitionService` now releases its mic/timer/factory resources, the local API listener now logs unexpected failures instead of swallowing them, and `ProviderModelRefreshService` now shuts down cleanly before marking itself disposed.
 
 ## 3. Quality Bar
 
-### 3.1 Coverage on meaningful paths `[ ]`
+### 3.1 Coverage on meaningful paths `[~]`
 - Raise coverage on the workflows that matter most, not on trivial getters.
 - Prioritize provider validation, local API, tool approval, onboarding, and persistence.
-- Recent progress: added direct coverage for speech-recognition disposal, provider-model refresher lifetime cleanup, and local API approval routing while the broader UI-backed test project still has an unrelated appearance-test compile issue.
+- Recent progress: added direct coverage for speech-recognition disposal, provider-model refresher lifetime cleanup, local API approval routing, and dispatcher-aware STA pumping; the broad test suite now completes, with the remaining failures isolated to appearance contrast assertions.
 
 ### 3.2 Release readiness `[ ]`
 - Keep release builds clean.
