@@ -7,6 +7,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "read_emails", Category = "email",
+            ShortDescription = "Read recent emails from the configured account.",
             Description = "Read recent emails from the configured email account.",
             Parameters = new()
             {
@@ -18,6 +19,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "send_email", Category = "email",
+            ShortDescription = "Send an email.",
             Description = "Send an email.",
             Parameters = new()
             {
@@ -31,6 +33,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "search_emails", Category = "email",
+            ShortDescription = "Search emails by keyword.",
             Description = "Search emails by keyword.",
             Parameters = new()
             {
@@ -42,6 +45,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "reply_to_email", Category = "email",
+            ShortDescription = "Reply to an email by message ID.",
             Description = "Reply to an existing email by message ID.",
             Parameters = new()
             {

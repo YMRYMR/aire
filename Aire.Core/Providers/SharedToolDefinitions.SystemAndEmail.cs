@@ -8,6 +8,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "get_clipboard",
             Category    = "system",
+            ShortDescription = "Read the clipboard text.",
             Description = "Read the current text content of the system clipboard.",
             Parameters  = new(),
             Required    = Array.Empty<string>(),
@@ -16,6 +17,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "set_clipboard",
             Category    = "system",
+            ShortDescription = "Write text to the clipboard.",
             Description =
                 "Write text to the system clipboard so the user can paste it anywhere. " +
                 "Use this to hand off results, code, or content to the user.",
@@ -26,6 +28,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "show_notification",
             Category    = "system",
+            ShortDescription = "Show a Windows desktop notification.",
             Description =
                 "Show a Windows desktop notification (balloon tip from the system tray). " +
                 "Use this to signal task completion or to alert the user of something important " +
@@ -41,6 +44,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "get_system_info",
             Category    = "system",
+            ShortDescription = "Return OS, CPU, RAM, disk, and uptime info.",
             Description =
                 "Return OS version, CPU count, total RAM, available RAM, disk space, and system uptime. " +
                 "Use this before diagnosing performance issues or checking available resources.",
@@ -51,6 +55,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "get_running_processes",
             Category    = "system",
+            ShortDescription = "List running processes sorted by memory usage.",
             Description =
                 "List running processes sorted by memory usage. " +
                 "Useful for diagnosing slowdowns, finding hung apps, or checking if a program is running.",
@@ -65,6 +70,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "get_active_window",
             Category    = "system",
+            ShortDescription = "Return the title and process of the foreground window.",
             Description =
                 "Return the title and process name of the currently focused (foreground) window. " +
                 "Use this to understand which application the user is working in.",
@@ -75,6 +81,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "get_selected_text",
             Category    = "system",
+            ShortDescription = "Get the text currently selected in any application.",
             Description =
                 "Get the text currently selected in the active application by simulating Ctrl+C. " +
                 "This is the fastest way to have the user hand text to the AI without copy-pasting.",
@@ -85,6 +92,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "open_file",
             Category    = "system",
+            ShortDescription = "Open a file with its default application.",
             Description =
                 "Open a file with its default associated application, " +
                 "exactly like double-clicking it in Windows Explorer.",
@@ -95,6 +103,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "remember",
             Category    = "system",
+            ShortDescription = "Persist a named fact across conversations (empty value deletes it).",
             Description =
                 "Store a named fact or note that persists across conversations. " +
                 "Use this to remember user preferences, names, project details, etc. " +
@@ -110,6 +119,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "recall",
             Category    = "system",
+            ShortDescription = "Retrieve a stored fact by key (empty key lists all).",
             Description =
                 "Retrieve a previously stored fact by key. " +
                 "Pass an empty key to list all stored keys.",
@@ -120,6 +130,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "set_reminder",
             Category    = "system",
+            ShortDescription = "Show a desktop notification after a delay.",
             Description =
                 "Show a desktop notification after a delay. Returns immediately; fires in the background. " +
                 "Use for 'remind me in X minutes' requests.",
@@ -134,6 +145,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "http_request",
             Category    = "system",
+            ShortDescription = "Make a custom HTTP request (REST APIs, webhooks). Returns the raw response.",
             Description =
                 "Make an HTTP request with custom method, headers, and body. " +
                 "Use this for REST API calls, webhooks, or form submissions. " +
