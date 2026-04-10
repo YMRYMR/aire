@@ -26,7 +26,6 @@
                     Height="34"
                     Padding="0"
                     Margin="0 0 4 0"
-                    Foreground="{DynamicResource AccentTextBrush}"
                     Click="SidebarToggleButton_Click" />
             <Button x:Name="PART_HelpButton"
                     Grid.Column="1"
@@ -36,7 +35,6 @@
                     Height="34"
                     Padding="0"
                     Margin="0 0 4 0"
-                    Foreground="{DynamicResource AccentTextBrush}"
                     Click="HelpButton_Click" />
             <Button x:Name="PART_SettingsButton"
                     Grid.Column="2"
@@ -46,12 +44,11 @@
                     Height="34"
                     Padding="0"
                     Margin="0 0 8 0"
-                    Foreground="{DynamicResource AccentTextBrush}"
                     Click="SettingsButton_Click" />
             <ComboBox x:Name="PART_ProviderComboBox"
                       Grid.Column="3"
                       Margin="0"
-                      Foreground="{DynamicResource AccentTextBrush}"
+                      Foreground="{DynamicResource TextBrush}"
                       SelectionChanged="ProviderComboBox_SelectionChanged"
                       DropDownOpened="ProviderComboBox_DropDownOpened">
                 <ComboBox.ItemTemplate>
@@ -59,13 +56,13 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock x:Name="ProviderWarningIcon"
                                        Text="⚠ "
-                                       Foreground="{DynamicResource AccentTextBrush}"
+                                       Foreground="{DynamicResource TextBrush}"
                                        Visibility="Collapsed"
                                        ToolTip="Provider is on cooldown"
                                        VerticalAlignment="Center" />
                             <TextBlock Text="{Binding Name}"
                                        VerticalAlignment="Center"
-                                       Foreground="{DynamicResource AccentTextBrush}" />
+                                       Foreground="{DynamicResource TextBrush}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -90,7 +87,6 @@
                         Height="34"
                         Padding="10 0"
                         Margin="0 0 4 0"
-                        Foreground="{DynamicResource AccentTextBrush}"
                         Click="ModeButton_Click" />
                 <Button x:Name="PART_SearchButton"
                         Content="&#x1F50D;"
@@ -99,7 +95,6 @@
                         Height="34"
                         Padding="0"
                         Margin="0 0 4 0"
-                        Foreground="{DynamicResource AccentTextBrush}"
                         Click="SearchButton_Click" />
                 <Button x:Name="PART_PinButton"
                         Content="&#x1F4CC;"
@@ -108,7 +103,6 @@
                         Height="34"
                         Padding="0"
                         Margin="0 0 4 0"
-                        Foreground="{DynamicResource AccentTextBrush}"
                         Click="PinButton_Click" />
                 <Button x:Name="PART_VoiceOutputButton"
                         Content="&#x1F507;"
@@ -117,7 +111,6 @@
                         Height="34"
                         Padding="0"
                         Margin="0 0 4 0"
-                        Foreground="{DynamicResource AccentTextBrush}"
                         Click="VoiceOutputButton_Click" />
                 <Button x:Name="PART_BrowserButton"
                         Content="&#x1F310;"
@@ -126,7 +119,6 @@
                         Height="34"
                         Padding="0"
                         Margin="0"
-                        Foreground="{DynamicResource AccentTextBrush}"
                         Click="BrowserButton_Click" />
             </StackPanel>
         </Grid>
