@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Aire.Domain.Providers;
 using Aire.Data;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -249,7 +250,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            Debug.WriteLine($"{ProviderType} chat failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Google AI chat failed", ex);
                 return new AiResponse { IsSuccess = false, ErrorMessage = "Google AI request failed.", Duration = sw.Elapsed };
             }
         }
@@ -374,7 +375,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.ValidateConfiguration", "Google AI configuration validation failed", ex);
                 return ProviderValidationResult.Fail("Google AI configuration validation failed.");
             }
         }
@@ -502,7 +503,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.GenerateImage] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.GenerateImage", "Google AI image generation failed", ex);
                 return new ImageGenerationResult
                 {
                     IsSuccess = false,

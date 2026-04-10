@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -9,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 using OpenAI;
 using OpenAI.Managers;
 using OpenAI.ObjectModels;
@@ -170,7 +170,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{ProviderType} live model fetch failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.FetchLiveModels", $"{ProviderType} live model fetch failed", ex);
                 return null;
             }
         }
@@ -363,7 +363,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "OpenAI request failed", ex);
                 return new AiResponse
                 {
                     IsSuccess = false,
@@ -451,7 +451,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.ValidateConfiguration", "OpenAI configuration validation failed", ex);
                 return ProviderValidationResult.Fail("OpenAI configuration validation failed.");
             }
         }
@@ -497,7 +497,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateViaChatProbe] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.ValidateViaChatProbe", "OpenAI chat probe validation failed", ex);
                 return ProviderValidationResult.Fail("OpenAI configuration validation failed.");
             }
         }
@@ -634,7 +634,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.GenerateImage] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.GenerateImage", "OpenAI image generation failed", ex);
                 return new ImageGenerationResult
                 {
                     IsSuccess = false,

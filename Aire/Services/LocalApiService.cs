@@ -63,7 +63,7 @@ namespace Aire.Services
             if (task != null)
             {
                 try { await task.ConfigureAwait(false); }
-                catch { /* ignore shutdown races */ }
+                catch (Exception ex) { AppLogger.Warn("LocalApiService.Stop", "Shutdown race while stopping local API", ex); }
             }
 
             cts?.Dispose();

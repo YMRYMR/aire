@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -116,7 +117,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Codex request failed", ex);
                 return new AiResponse
                 {
                     IsSuccess = false,
@@ -160,7 +161,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.ValidateConfiguration", "Codex validation failed", ex);
                 return ProviderValidationResult.Fail("Codex validation failed.");
             }
         }
