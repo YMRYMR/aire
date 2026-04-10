@@ -51,6 +51,7 @@
             <ComboBox x:Name="PART_ProviderComboBox"
                       Grid.Column="3"
                       Margin="0"
+                      Foreground="{DynamicResource AccentTextBrush}"
                       SelectionChanged="ProviderComboBox_SelectionChanged"
                       DropDownOpened="ProviderComboBox_DropDownOpened">
                 <ComboBox.ItemTemplate>

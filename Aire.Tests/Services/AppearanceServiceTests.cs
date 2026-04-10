@@ -109,6 +109,12 @@ public class AppearanceServiceTests : TestBase
             Assert.True(ContrastRatio(
                 ((SolidColorBrush)Application.Current.Resources["SidebarTextBrush"]).Color,
                 ((SolidColorBrush)Application.Current.Resources["AccentSurface2Brush"]).Color) >= 4.5);
+            Assert.True(ContrastRatio(
+                ((SolidColorBrush)Application.Current.Resources["SidebarTextBrush"]).Color,
+                ((SolidColorBrush)Application.Current.Resources["AccentSurfaceBrush"]).Color) >= 4.5);
+            Assert.True(ContrastRatio(
+                ((SolidColorBrush)Application.Current.Resources["AccentTextBrush"]).Color,
+                ((SolidColorBrush)Application.Current.Resources["AccentSurface2Brush"]).Color) >= 4.5);
             Assert.True(raised >= 1);
             void Handler()
             {

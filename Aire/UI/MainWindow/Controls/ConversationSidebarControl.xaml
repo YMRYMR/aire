@@ -86,11 +86,11 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter TargetName="Bd" Property="Background"
-                                                    Value="{DynamicResource Surface2Brush}" />
+                                                    Value="{DynamicResource AccentSurfaceBrush}" />
                                         </Trigger>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter TargetName="Bd" Property="Background"
-                                                    Value="{DynamicResource Surface3Brush}" />
+                                                    Value="{DynamicResource AccentSurface2Brush}" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
