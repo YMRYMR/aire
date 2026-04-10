@@ -541,6 +541,408 @@
                     </ScrollViewer>
                 </TabItem>
 
+                <!--  ══ Usage tab ══  -->
+                <TabItem x:Name="TabUsage" Header="Usage">
+                    <ScrollViewer Margin="0,8,0,0"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="4,8,4,16">
+                            <Border Background="{DynamicResource Surface2Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="14,12"
+                                    Margin="0,0,0,16">
+                                <StackPanel>
+                                    <TextBlock x:Name="UsageOverviewTitleText"
+                                               Text="Usage overview"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               FontWeight="SemiBold"
+                                               FontSize="13"
+                                               Margin="0,0,0,10" />
+                                    <UniformGrid Columns="2" Rows="2">
+                                        <StackPanel Margin="0,0,16,12">
+                                            <TextBlock x:Name="UsageRecordedTokensLabel"
+                                                       Text="Recorded tokens"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11" />
+                                            <TextBlock x:Name="UsageTotalTokensText"
+                                                       Text="0"
+                                                       FontSize="22"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource TextBrush}" />
+                                        </StackPanel>
+                                        <StackPanel Margin="0,0,0,12">
+                                            <TextBlock x:Name="UsageConversationCountLabel"
+                                                       Text="Conversations with usage"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11" />
+                                            <TextBlock x:Name="UsageConversationCountText"
+                                                       Text="0"
+                                                       FontSize="22"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource TextBrush}" />
+                                        </StackPanel>
+                                        <StackPanel Margin="0,0,16,0">
+                                            <TextBlock x:Name="UsageProviderCountLabel"
+                                                       Text="Providers with usage"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11" />
+                                            <TextBlock x:Name="UsageProviderCountText"
+                                                       Text="0"
+                                                       FontSize="22"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource TextBrush}" />
+                                        </StackPanel>
+                                        <StackPanel>
+                                            <TextBlock x:Name="UsageAssistantTurnsLabel"
+                                                       Text="Assistant turns tracked"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11" />
+                                            <TextBlock x:Name="UsageAssistantMessageCountText"
+                                                       Text="0"
+                                                       FontSize="22"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource TextBrush}" />
+                                        </StackPanel>
+                                    </UniformGrid>
+                                    <TextBlock x:Name="UsageOverviewHintText"
+                                               Text="Tokens are recorded from assistant turns that return usage data. Some providers also expose live quota or spend separately."
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               FontSize="11"
+                                               TextWrapping="Wrap"
+                                               Margin="0,10,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="{DynamicResource Surface2Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="14,12"
+                                    Margin="0,0,0,16">
+                                <StackPanel>
+                                    <TextBlock x:Name="UsageTrustTitleText"
+                                               Text="What Aire tracks"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               FontWeight="SemiBold"
+                                               FontSize="13"
+                                               Margin="0,0,0,10" />
+                                    <UniformGrid Columns="3">
+                                        <StackPanel Margin="0,0,12,0">
+                                            <TextBlock x:Name="UsageRecordedSourceTitleText"
+                                                       Text="Recorded"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11" />
+                                            <TextBlock x:Name="UsageRecordedSourceText"
+                                                       Text="Stored assistant turns with token counts."
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       FontSize="12"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <StackPanel Margin="0,0,12,0">
+                                            <TextBlock x:Name="UsageLiveSourceTitleText"
+                                                       Text="Live-reported"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11" />
+                                            <TextBlock x:Name="UsageLiveSourceText"
+                                                       Text="Provider-reported quota or balance when the API exposes it."
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       FontSize="12"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <StackPanel>
+                                            <TextBlock x:Name="UsageEstimatedSourceTitleText"
+                                                       Text="Estimated"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11" />
+                                            <TextBlock x:Name="UsageEstimatedSourceText"
+                                                       Text="Not inferred automatically yet; Aire does not guess billing from model names."
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       FontSize="12"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="{DynamicResource Surface2Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="14,12"
+                                    Margin="0,0,0,16">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock x:Name="UsageLiveTitleText"
+                                                       Text="Live provider usage"
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="13" />
+                                            <TextBlock x:Name="UsageLiveProviderText"
+                                                       Text="No provider selected"
+                                                       Margin="0,2,0,0"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                            <Button x:Name="UsageRefreshButton"
+                                                    Width="34"
+                                                    Height="34"
+                                                    Padding="0"
+                                                    FontSize="16"
+                                                    Click="UsageRefreshButton_Click"
+                                                    ToolTip="Refresh usage data" />
+                                            <Button x:Name="UsageCurrencyButton"
+                                                    Width="34"
+                                                    Height="34"
+                                                    Margin="0,6,0,0"
+                                                    Padding="0"
+                                                    FontSize="14"
+                                                    Click="UsageCurrencyButton_Click"
+                                                    ToolTip="Preferred currency" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock x:Name="UsageLiveUsageText"
+                                               Text="Open Aire from the main window to see live quota or spend for the active provider."
+                                               Foreground="{DynamicResource TextBrush}"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock x:Name="UsageLiveUsageDetailText"
+                                               Text="If the provider exposes live usage, Aire will show it here. Otherwise the historical totals below still track stored assistant turns."
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               FontSize="11"
+                                               TextWrapping="Wrap"
+                                               Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="{DynamicResource Surface2Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="14,12"
+                                    Margin="0,0,0,16">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock x:Name="UsageTrendTitleText"
+                                                       Text="Recorded usage trend"
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="13" />
+                                            <TextBlock x:Name="UsageTrendHintText"
+                                                       Text="Line-spline chart of stored assistant tokens by provider and model."
+                                                       Margin="0,2,0,0"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <Border x:Name="UsageTrendChartHost"
+                                            Height="220"
+                                            Background="{DynamicResource SurfaceBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Margin="0,0,0,10"
+                                            SizeChanged="UsageTrendChartHost_SizeChanged">
+                                        <Grid>
+                                            <Canvas x:Name="UsageTrendCanvas"
+                                                    Background="Transparent" />
+                                            <TextBlock x:Name="UsageTrendEmptyText"
+                                                       Text="No recorded assistant tokens yet."
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="12"
+                                                       Visibility="Collapsed" />
+                                        </Grid>
+                                    </Border>
+                                    <ItemsControl x:Name="UsageTrendLegendItemsControl">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Margin="0,0,12,8"
+                                                            VerticalAlignment="Center">
+                                                    <Border Width="10"
+                                                            Height="10"
+                                                            CornerRadius="2"
+                                                            Background="{Binding ColorBrush}"
+                                                            Margin="0,3,6,0" />
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Label}"
+                                                                   Foreground="{DynamicResource TextBrush}"
+                                                                   FontSize="11"
+                                                                   FontWeight="SemiBold" />
+                                                        <TextBlock Text="{Binding TokensText}"
+                                                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                                                   FontSize="10" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock Text="By provider"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontWeight="SemiBold"
+                                       FontSize="13"
+                                       Margin="0,0,0,8" />
+                            <Border Background="{DynamicResource SurfaceBrush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="0">
+                                <ListView x:Name="UsageProvidersListView"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          IsHitTestVisible="False"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Padding" Value="12,10" />
+                                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.Column="0"
+                                                        Width="8"
+                                                        CornerRadius="4"
+                                                        Margin="0,2,10,2"
+                                                        Background="{Binding Color}" />
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding ProviderName}"
+                                                               Foreground="{DynamicResource TextBrush}"
+                                                               FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding ProviderDetail}"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                                               FontSize="11"
+                                                               Margin="0,2,0,0"
+                                                               TextWrapping="Wrap" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                                    <TextBlock Text="{Binding TokensText}"
+                                                               Foreground="{DynamicResource TextBrush}"
+                                                               FontFamily="Consolas, Courier New"
+                                                               HorizontalAlignment="Right" />
+                                                    <TextBlock Text="{Binding SpendText}"
+                                                               Foreground="{DynamicResource TextBrush}"
+                                                               FontFamily="Consolas, Courier New"
+                                                               HorizontalAlignment="Right"
+                                                               Margin="0,2,0,0" />
+                                                    <TextBlock Text="{Binding UsageDetailText}"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                                               FontSize="11"
+                                                               Margin="0,2,0,0"
+                                                               FontFamily="Consolas, Courier New"
+                                                               HorizontalAlignment="Right" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Border>
+
+                            <TextBlock Text="By conversation"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontWeight="SemiBold"
+                                       FontSize="13"
+                                       Margin="0,16,0,8" />
+                            <Border Background="{DynamicResource SurfaceBrush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="0">
+                                <ListView x:Name="UsageConversationsListView"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          IsHitTestVisible="False"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Padding" Value="12,10" />
+                                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.Column="0"
+                                                        Width="8"
+                                                        CornerRadius="4"
+                                                        Margin="0,2,10,2"
+                                                        Background="{Binding Color}" />
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding Title}"
+                                                               Foreground="{DynamicResource TextBrush}"
+                                                               FontWeight="SemiBold"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock Text="{Binding ConversationDetail}"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                                               FontSize="11"
+                                                               Margin="0,2,0,0"
+                                                               TextWrapping="Wrap" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                                    <TextBlock Text="{Binding TokensText}"
+                                                               Foreground="{DynamicResource TextBrush}"
+                                                               FontFamily="Consolas, Courier New"
+                                                               HorizontalAlignment="Right" />
+                                                    <TextBlock Text="{Binding SpendText}"
+                                                               Foreground="{DynamicResource TextBrush}"
+                                                               FontFamily="Consolas, Courier New"
+                                                               HorizontalAlignment="Right"
+                                                               Margin="0,2,0,0" />
+                                                    <TextBlock Text="{Binding UsageDetailText}"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                                               FontSize="11"
+                                                               Margin="0,2,0,0"
+                                                               FontFamily="Consolas, Courier New"
+                                                               HorizontalAlignment="Right" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
             </TabControl>
 
             <!--  ── Toast notification overlay ──  -->

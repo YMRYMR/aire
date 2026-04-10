@@ -46,7 +46,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ToolCallParser] Failed to parse tool‑call JSON: {ex.GetType().Name}\nRaw input: {raw}");
+                AppLogger.Warn(nameof(ToolCallParser) + ".ParseToolCallJson", "Failed to parse tool-call JSON", ex);
             }
 
             return results;
@@ -178,7 +178,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ToolCallParser] Failed to extract tool from JSON: {ex.GetType().Name}\nJSON input: {json}");
+                AppLogger.Warn(nameof(ToolCallParser) + ".TryExtractTool", "Failed to extract tool from JSON", ex);
                 return false;
             }
         }
@@ -211,7 +211,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ToolCallParser] Failed to flatten OpenAI-style tool call '{toolName}': {ex.GetType().Name}");
+                AppLogger.Warn(nameof(ToolCallParser) + ".FlattenOpenAiStyleToolCall", $"Failed to flatten OpenAI-style tool call '{toolName}'", ex);
                 return null;
             }
         }

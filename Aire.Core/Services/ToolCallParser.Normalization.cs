@@ -40,7 +40,7 @@ namespace Aire.Services
                 try { JsonDocument.Parse(inner); return $"\n<tool_call>{inner}</tool_call>"; }
                 catch (Exception ex)
                 {
-                Debug.WriteLine($"[ToolCallParser] Failed to parse bare JSON tool call in code fence: {ex.GetType().Name}\nInner JSON: {inner}");
+                    AppLogger.Warn(nameof(ToolCallParser) + ".NormalizeBareJsonToolCalls", "Failed to parse bare JSON tool call in code fence", ex);
                     return m.Value;
                 }
             });
@@ -75,7 +75,7 @@ namespace Aire.Services
                 }
                 catch (Exception ex)
                 {
-                Debug.WriteLine($"[ToolCallParser] Failed to parse bare JSON tool call in line: {ex.GetType().Name}\nJSON: {json}");
+                    AppLogger.Warn(nameof(ToolCallParser) + ".NormalizeBareJsonToolCalls", "Failed to parse bare JSON tool call in line", ex);
                 }
             }
 

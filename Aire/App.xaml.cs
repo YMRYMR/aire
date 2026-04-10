@@ -67,6 +67,7 @@ namespace Aire
             // Apply saved appearance settings before any window is shown so the
             // splash screen (and all subsequent windows) use the correct theme.
             AppearanceService.ApplySaved();
+            _ = CurrencyExchangeService.RefreshAsync();
 
             // Show a splash window and use it to host startup work until the main
             // window is ready to appear immediately after the splash closes.

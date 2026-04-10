@@ -103,6 +103,7 @@ namespace Aire
                     var success = await _owner._chatTurnApplicationService.HandleSuccessTextAsync(
                         outcome.TextContent,
                         _owner._currentConversationId,
+                        response.TokensUsed,
                         _owner.IsVisible);
                     var finalText = success.FinalText;
 
@@ -148,6 +149,16 @@ namespace Aire
 
                 _owner.IsThinking = false;
                 var parsed = outcome.ParsedResponse!;
+
+                if (_owner._currentConversationId.HasValue &&
+                    !string.IsNullOrWhiteSpace(outcome.TextContent) &&
+                    outcome.Kind != ChatTurnWorkflowService.OutcomeKind.SuccessText)
+                {
+                    await _owner._chatTurnApplicationService.PersistAssistantMessageAsync(
+                        _owner._currentConversationId.Value,
+                        outcome.TextContent,
+                        tokens: response.TokensUsed);
+                }
 
                 try
                 {

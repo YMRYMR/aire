@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Aire.Services;
 using static Aire.Services.Tools.ToolHelpers;
 
 namespace Aire.Services.Tools
@@ -46,8 +47,9 @@ namespace Aire.Services.Tools
 
                 return new ToolExecutionResult { TextResult = sb.ToString().TrimEnd() };
             }
-        catch
+            catch (Exception ex)
             {
+                AppLogger.Warn(nameof(SystemToolService) + ".ExecuteGetSystemInfo", "System info retrieval failed", ex);
             return new ToolExecutionResult { TextResult = "Error getting system info." };
             }
         }
@@ -82,8 +84,9 @@ namespace Aire.Services.Tools
 
                 return new ToolExecutionResult { TextResult = sb.ToString().TrimEnd() };
             }
-        catch
+            catch (Exception ex)
             {
+                AppLogger.Warn(nameof(SystemToolService) + ".ExecuteGetRunningProcesses", "Process listing failed", ex);
             return new ToolExecutionResult { TextResult = "Error listing processes." };
             }
         }
@@ -102,8 +105,9 @@ namespace Aire.Services.Tools
                 Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
                 return new ToolExecutionResult { TextResult = $"Opened: {path}" };
             }
-        catch
+        catch (Exception ex)
             {
+            AppLogger.Warn(nameof(SystemToolService) + ".ExecuteOpenFile", "Open file failed", ex);
             return new ToolExecutionResult { TextResult = "Error opening file." };
             }
         }
@@ -128,8 +132,9 @@ namespace Aire.Services.Tools
                     TextResult = $"Active window: \"{title}\"\nProcess: {procName} (PID {pid})"
                 };
             }
-        catch
+        catch (Exception ex)
             {
+            AppLogger.Warn(nameof(SystemToolService) + ".ExecuteGetActiveWindow", "Active window lookup failed", ex);
             return new ToolExecutionResult { TextResult = "System operation failed." };
             }
         }
@@ -144,9 +149,9 @@ namespace Aire.Services.Tools
             });
         }
 
-        public static void ShowSystemNotification(string title, string message)
-        {
-            Debug.WriteLine($"[Notification] {title}: {message}");
-        }
+    public static void ShowSystemNotification(string title, string message)
+    {
+        AppLogger.Info(nameof(SystemToolService), $"Notification: {title}: {message}");
     }
+}
 }

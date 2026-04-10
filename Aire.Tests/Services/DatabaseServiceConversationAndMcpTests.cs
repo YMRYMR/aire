@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Aire.Data;
 using Aire.Services.Mcp;
@@ -86,6 +87,46 @@ public class DatabaseServiceConversationAndMcpTests : IAsyncLifetime, IDisposabl
         Assert.Empty(await _db.GetMessagesAsync(conversationId));
         await _db.DeleteConversationAsync(conversationId);
         Assert.Null(await _db.GetConversationAsync(conversationId));
+    }
+
+    [Fact]
+    public async Task SaveMessageAsync_PersistsTokenCounts_AndUsageSnapshotAggregatesTotals()
+    {
+        int providerId = await _db.InsertProviderAsync(new Provider
+        {
+            Name = "Token Provider",
+            Type = "OpenAI",
+            ApiKey = "sk-token",
+            Model = "gpt-4o",
+            IsEnabled = true,
+            Color = "#654321"
+        });
+
+        int firstConversationId = await _db.CreateConversationAsync(providerId, "First usage");
+        int secondConversationId = await _db.CreateConversationAsync(providerId, "Second usage");
+
+        await _db.SaveMessageAsync(firstConversationId, "assistant", "first", tokens: 120);
+        await _db.SaveMessageAsync(firstConversationId, "assistant", "second", tokens: 80);
+        await _db.SaveMessageAsync(secondConversationId, "assistant", "third", tokens: 50);
+
+        var firstMessages = await _db.GetMessagesAsync(firstConversationId);
+        Assert.Equal(120, firstMessages[0].Tokens);
+
+        var snapshot = await _db.GetUsageDashboardSnapshotAsync();
+        var providerUsage = Assert.Single(snapshot.Providers.Where(row => row.ProviderId == providerId));
+        var conversationUsage = snapshot.Conversations.Where(row => row.ConversationId == firstConversationId).ToList();
+        var trendSeries = Assert.Single(snapshot.TrendSeries.Where(row => row.ProviderId == providerId));
+
+        Assert.Equal(250, snapshot.TotalTokens);
+        Assert.Equal(3, snapshot.AssistantMessageCount);
+        Assert.Equal(2, snapshot.ConversationCount);
+        Assert.Equal(250, providerUsage.TokensUsed);
+        Assert.Equal(3, providerUsage.AssistantMessageCount);
+        Assert.Equal(2, providerUsage.ConversationCount);
+        Assert.Equal(200, conversationUsage.Single(row => row.ConversationId == firstConversationId).TokensUsed);
+        Assert.Equal(2, conversationUsage.Single(row => row.ConversationId == firstConversationId).AssistantMessageCount);
+        Assert.Equal(250, trendSeries.TotalTokens);
+        Assert.NotEmpty(trendSeries.Points);
     }
 
     [Fact]

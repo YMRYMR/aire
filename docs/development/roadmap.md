@@ -56,7 +56,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Replace `Debug.WriteLine` calls in production paths with a proper logging framework (Serilog or `Microsoft.Extensions.Logging`).
 - Essential for diagnosing issues in release builds where Debug output is unavailable.
 - Fix bare `catch` blocks in `OllamaProvider.Chat.cs` and `LocalApiService.cs` to log at minimum debug level.
-- Recent progress: the highest-signal production paths now route warnings through `AppLogger` instead of `Debug.WriteLine`.
+- Recent progress: the highest-signal production paths now route warnings through `AppLogger` instead of `Debug.WriteLine`, including provider validation, request handling, tool-call parsing, memory tools, setup persistence, MCP startup, and system tool helpers.
 
 ### 2.6 Fix resource and event leaks `[~]`
 - Ensure `HttpResponseMessage` is disposed on all exception paths in streaming providers.

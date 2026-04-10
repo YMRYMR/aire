@@ -1,6 +1,7 @@
 using System.IO;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -265,7 +266,7 @@ namespace Aire.Providers
         {
             if (string.IsNullOrWhiteSpace(Config.ApiKey))
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] ApiKey is empty — validation skipped");
+                AppLogger.Warn($"{GetType().Name}.ValidateConfiguration", "ApiKey is empty; validation skipped");
                 return ProviderValidationResult.Fail("API key is required.");
             }
             try
@@ -276,7 +277,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.ValidateConfiguration] Validation failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.ValidateConfiguration", "Validation failed", ex);
                 return ProviderValidationResult.Fail("Configuration validation failed.");
             }
         }
