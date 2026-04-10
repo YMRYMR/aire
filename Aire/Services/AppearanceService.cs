@@ -456,6 +456,14 @@ namespace Aire.Services
                     darkBase: C(0xF3, 0xB7, 0xB7),
                     tintHue, tintStrength, tintMix: 0.03, minContrast: 4.5));
 
+            // Button text: computed against the default button surface (Surface2) so icons/labels
+            // always contrast against the button background regardless of the main theme tone.
+            SetResourceBrush(res, "ButtonTextBrush",
+                AccessibleTintedForeground(surface2,
+                    lightBase: C(0xF0, 0xF0, 0xF2),
+                    darkBase: C(0x1C, 0x1E, 0x24),
+                    tintHue, tintStrength, tintMix: 0.04, minContrast: 4.5));
+
             // Keep the message-role brushes in sync with the semantic resources.
             SetBrush(UserBgBrush, userBubble);
             SetBrush(UserFgBrush, GetResourceColor(res, "UserMessageTextBrush"));

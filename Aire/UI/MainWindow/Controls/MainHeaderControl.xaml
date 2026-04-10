@@ -26,6 +26,7 @@
                     Height="34"
                     Padding="0"
                     Margin="0 0 4 0"
+                    Background="{DynamicResource AccentSurface2Brush}"
                     Foreground="{DynamicResource AccentTextBrush}"
                     Click="SidebarToggleButton_Click" />
             <Button x:Name="PART_HelpButton"
@@ -36,6 +37,7 @@
                     Height="34"
                     Padding="0"
                     Margin="0 0 4 0"
+                    Background="{DynamicResource AccentSurface2Brush}"
                     Foreground="{DynamicResource AccentTextBrush}"
                     Click="HelpButton_Click" />
             <Button x:Name="PART_SettingsButton"
@@ -46,6 +48,7 @@
                     Height="34"
                     Padding="0"
                     Margin="0 0 8 0"
+                    Background="{DynamicResource AccentSurface2Brush}"
                     Foreground="{DynamicResource AccentTextBrush}"
                     Click="SettingsButton_Click" />
             <ComboBox x:Name="PART_ProviderComboBox"
@@ -89,6 +92,7 @@
                         Height="34"
                         Padding="10 0"
                         Margin="0 0 4 0"
+                        Background="{DynamicResource AccentSurface2Brush}"
                         Foreground="{DynamicResource AccentTextBrush}"
                         Click="ModeButton_Click" />
                 <Button x:Name="PART_SearchButton"
@@ -98,6 +102,7 @@
                         Height="34"
                         Padding="0"
                         Margin="0 0 4 0"
+                        Background="{DynamicResource AccentSurface2Brush}"
                         Foreground="{DynamicResource AccentTextBrush}"
                         Click="SearchButton_Click" />
                 <Button x:Name="PART_PinButton"
@@ -107,6 +112,7 @@
                         Height="34"
                         Padding="0"
                         Margin="0 0 4 0"
+                        Background="{DynamicResource AccentSurface2Brush}"
                         Foreground="{DynamicResource AccentTextBrush}"
                         Click="PinButton_Click" />
                 <Button x:Name="PART_VoiceOutputButton"
@@ -116,6 +122,7 @@
                         Height="34"
                         Padding="0"
                         Margin="0 0 4 0"
+                        Background="{DynamicResource AccentSurface2Brush}"
                         Foreground="{DynamicResource AccentTextBrush}"
                         Click="VoiceOutputButton_Click" />
                 <Button x:Name="PART_BrowserButton"
@@ -125,6 +132,7 @@
                         Height="34"
                         Padding="0"
                         Margin="0"
+                        Background="{DynamicResource AccentSurface2Brush}"
                         Foreground="{DynamicResource AccentTextBrush}"
                         Click="BrowserButton_Click" />
             </StackPanel>

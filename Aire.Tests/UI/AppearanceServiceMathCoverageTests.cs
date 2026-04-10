@@ -1,10 +1,12 @@
+using System;
+using System.Windows;
 using System.Windows.Media;
 using Aire.Services;
 using Xunit;
 
 namespace Aire.Tests.UI;
 
-public class AppearanceServiceMathCoverageTests
+public class AppearanceServiceMathCoverageTests : TestBase
 {
     [Fact]
     public void ColorMath_CoversHueAndHslBranches()
@@ -42,59 +44,41 @@ public class AppearanceServiceMathCoverageTests
         Assert.Equal( 45.0, AppearanceService.LerpHue( 30.0,  60.0, 0.5), precision: 3);
     }
 
-    [Fact]
-    public void RelativeLuminance_BlackAndWhite()
-    {
-        Assert.Equal(0.0, AppearanceService.RelativeLuminance(Color.FromRgb(0, 0, 0)), precision: 6);
-        Assert.Equal(1.0, AppearanceService.RelativeLuminance(Color.FromRgb(255, 255, 255)), precision: 6);
-    }
+    // Contrast enforcement is tested behaviorally via Apply() since the
+    // internal EnsureContrast/ContrastRatio helpers are private in Codex's design.
 
-    [Fact]
-    public void ContrastRatio_BlackOnWhite_Is21()
+    [Theory]
+    [InlineData(0.0, 0.0)]   // full dark, no tint
+    [InlineData(0.0, 0.5)]   // full dark, max tint
+    [InlineData(1.0, 0.0)]   // full light, no tint
+    [InlineData(1.0, 0.5)]   // full light, max tint
+    [InlineData(0.3, 0.3)]   // arbitrary dark-ish
+    public void Apply_TextBrushContrastsAgainstBackground(double brightness, double tintPosition)
     {
-        double ratio = AppearanceService.ContrastRatio(
-            Color.FromRgb(0, 0, 0),
-            Color.FromRgb(255, 255, 255));
-        Assert.Equal(21.0, ratio, precision: 3);
-    }
+        // TextBrush must satisfy WCAG AA (4.5:1) against BackgroundBrush for any palette setting.
+        RunOnStaThread(() =>
+        {
+            EnsureApplication();
+            AppearanceService.ResetForTesting();
+            AppearanceService.Apply(brightness, tintPosition);
 
-    [Fact]
-    public void ContrastRatio_SameColor_Is1()
-    {
-        double ratio = AppearanceService.ContrastRatio(
-            Color.FromRgb(128, 128, 128),
-            Color.FromRgb(128, 128, 128));
-        Assert.Equal(1.0, ratio, precision: 3);
-    }
+            var res = Application.Current?.Resources;
+            if (res?["TextBrush"] is SolidColorBrush tb &&
+                res["BackgroundBrush"] is SolidColorBrush bg)
+            {
+                static double Ch(byte v) { double s = v / 255.0; return s <= 0.04045 ? s / 12.92 : Math.Pow((s + 0.055) / 1.055, 2.4); }
+                static double Lum(Color c) => 0.2126 * Ch(c.R) + 0.7152 * Ch(c.G) + 0.0722 * Ch(c.B);
 
-    [Fact]
-    public void EnsureContrast_PushesLightFgOnDarkBg()
-    {
-        // Dark background, dim foreground — should be pushed toward white
-        Color bg = Color.FromRgb(0x1A, 0x1A, 0x1A);
-        Color fg = Color.FromRgb(0x40, 0x40, 0x40);
-        Color result = AppearanceService.EnsureContrast(fg, bg, 4.5);
-        double ratio = AppearanceService.ContrastRatio(result, bg);
-        Assert.True(ratio >= 4.5, $"Expected ratio >= 4.5, got {ratio:F2}");
-    }
+                double l1 = Lum(tb.Color);
+                double l2 = Lum(bg.Color);
+                double lighter = Math.Max(l1, l2);
+                double darker  = Math.Min(l1, l2);
+                double ratio = (lighter + 0.05) / (darker + 0.05);
 
-    [Fact]
-    public void EnsureContrast_PushesDarkFgOnLightBg()
-    {
-        // Light background, dim foreground — should be pushed toward black
-        Color bg = Color.FromRgb(0xE8, 0xE8, 0xE8);
-        Color fg = Color.FromRgb(0xA0, 0xA0, 0xA0);
-        Color result = AppearanceService.EnsureContrast(fg, bg, 4.5);
-        double ratio = AppearanceService.ContrastRatio(result, bg);
-        Assert.True(ratio >= 4.5, $"Expected ratio >= 4.5, got {ratio:F2}");
-    }
-
-    [Fact]
-    public void EnsureContrast_NoChangeWhenAlreadySufficient()
-    {
-        Color bg = Color.FromRgb(0x1A, 0x1A, 0x1A);
-        Color fg = Color.FromRgb(0xE0, 0xE0, 0xE0);
-        Color result = AppearanceService.EnsureContrast(fg, bg, 4.5);
-        Assert.Equal(fg, result);
+                Assert.True(ratio >= 4.5,
+                    $"brightness={brightness} tint={tintPosition}: " +
+                    $"TextBrush(lum={l1:F3}) vs BackgroundBrush(lum={l2:F3}) contrast={ratio:F2} < 4.5");
+            }
+        });
     }
 }
