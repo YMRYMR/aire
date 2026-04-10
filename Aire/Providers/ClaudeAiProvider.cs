@@ -339,22 +339,23 @@ namespace Aire.Providers
 
         private static string ConvertAnthropicToolUseToToolCall(string toolName, string inputJson)
         {
-            var dict = new Dictionary<string, object?> { ["tool"] = toolName };
             try
             {
+                using var ms = new System.IO.MemoryStream();
+                using var writer = new Utf8JsonWriter(ms);
+                writer.WriteStartObject();
+                writer.WriteString("tool", toolName);
                 if (!string.IsNullOrEmpty(inputJson))
                 {
                     using var doc = JsonDocument.Parse(inputJson);
                     foreach (var prop in doc.RootElement.EnumerateObject())
-                    {
-                        dict[prop.Name] = prop.Value.ValueKind == JsonValueKind.String
-                            ? (object?)prop.Value.GetString()
-                            : (object?)prop.Value.GetRawText();
-                    }
+                        prop.WriteTo(writer); // preserves exact JSON type (bool, number, array, object)
                 }
+                writer.WriteEndObject();
+                writer.Flush();
+                return $"\n<tool_call>{System.Text.Encoding.UTF8.GetString(ms.ToArray())}</tool_call>";
             }
-            catch { }
-            return $"\n<tool_call>{JsonSerializer.Serialize(dict)}</tool_call>";
+            catch { return string.Empty; }
         }
 
         // ── Validation ────────────────────────────────────────────────────────

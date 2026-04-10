@@ -211,8 +211,15 @@ namespace Aire.Services
                     "   To open a link on the current page: read_browser_tab(-1) FIRST → find the real URL → open_browser_tab(url=FOUND_URL). NEVER invent a URL.\n");
             }
 
-            if (hasMouse || hasKeyboard)
-                sb.Append("5. System Control: take_screenshot, begin_keyboard_session, end_keyboard_session, key_combo, key_press, type_text, begin_mouse_session, end_mouse_session, mouse_move, mouse_click, mouse_double_click, mouse_drag.\n");
+            if (hasKeyboard || hasMouse)
+            {
+                sb.Append("5. System Control: take_screenshot");
+                if (hasKeyboard)
+                    sb.Append(", begin_keyboard_session, end_keyboard_session, key_combo, key_press, type_text");
+                if (hasMouse)
+                    sb.Append(", begin_mouse_session, end_mouse_session, mouse_move, mouse_click, mouse_double_click, mouse_drag");
+                sb.Append(".\n");
+            }
 
             if (hasSystem)
                 sb.Append(
