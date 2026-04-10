@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.Data;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -46,7 +47,6 @@ namespace Aire.Providers
                 if (!res.IsSuccessStatusCode) return null;
 
                 var json = await res.Content.ReadAsStringAsync(ct);
-                Debug.WriteLine($"DeepSeek raw models response: {json}");
                 using var doc = JsonDocument.Parse(json);
                 if (!doc.RootElement.TryGetProperty("data", out var dataEl)) return null;
 
@@ -59,12 +59,11 @@ namespace Aire.Providers
                     .OrderByDescending(id => id)
                     .Select(id => new ModelDefinition { Id = id, DisplayName = id })
                     .ToList();
-                Debug.WriteLine($"DeepSeek filtered models: {string.Join(", ", models.Select(m => m.Id))}");
                 return models;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"DeepSeek live model fetch failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "DeepSeek live model fetch failed", ex);
                 return null;
             }
         }
@@ -84,7 +83,6 @@ namespace Aire.Providers
                     return null;
 
                 var json = await response.Content.ReadAsStringAsync(ct);
-                Console.WriteLine($"DeepSeek raw JSON: {json}");
                 using var doc = JsonDocument.Parse(json);
                 var root = doc.RootElement;
 
@@ -103,8 +101,6 @@ namespace Aire.Providers
                 var grantedBalanceStr = grantedBalanceEl.GetString();
                 var toppedUpBalanceStr = toppedUpBalanceEl.GetString();
                 var currency = currencyEl.GetString() ?? "USD";
-                Console.WriteLine($"DeepSeek raw strings: total='{totalBalanceStr}', granted='{grantedBalanceStr}', toppedUp='{toppedUpBalanceStr}', currency='{currency}'");
-
                 if (!decimal.TryParse(totalBalanceStr, NumberStyles.Number, CultureInfo.InvariantCulture, out var totalBalanceDecimal) ||
                     !decimal.TryParse(grantedBalanceStr, NumberStyles.Number, CultureInfo.InvariantCulture, out var grantedBalanceDecimal) ||
                     !decimal.TryParse(toppedUpBalanceStr, NumberStyles.Number, CultureInfo.InvariantCulture, out var toppedUpBalanceDecimal))
@@ -116,13 +112,10 @@ namespace Aire.Providers
                 var grantedCents = ToCents(grantedBalanceDecimal);
                 var toppedUpCents = ToCents(toppedUpBalanceDecimal);
 
-                Console.WriteLine($"DeepSeek balance parsing: totalBalance={totalBalanceDecimal}, granted={grantedBalanceDecimal}, toppedUp={toppedUpBalanceDecimal}");
-                Console.WriteLine($"DeepSeek cents: total={totalCents}, granted={grantedCents}, toppedUp={toppedUpCents}");
-
                 var initialBalanceCents = grantedCents + toppedUpCents;
                 var usedCents = initialBalanceCents - totalCents;
 
-                Debug.WriteLine($"DeepSeek token usage: Used={usedCents}, Limit={initialBalanceCents}, Currency={currency}");
+                AppLogger.Info(nameof(DeepSeekProvider), $"DeepSeek token usage: Used={usedCents}, Limit={initialBalanceCents}, Currency={currency}");
 
                 return new TokenUsage
                 {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -83,7 +84,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Claude Code request failed", ex);
                 return new AiResponse
                 {
                     IsSuccess = false,

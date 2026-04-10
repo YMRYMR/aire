@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Aire.Services;
 
 namespace Aire.Services.Mcp
 {
@@ -51,7 +52,7 @@ namespace Aire.Services.Mcp
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"McpManager: failed to start '{config.Name}': {ex.GetType().Name}");
+                    AppLogger.Warn(nameof(McpManager), $"Failed to start '{config.Name}'", ex);
                 }
             }
 
@@ -95,7 +96,7 @@ namespace Aire.Services.Mcp
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"McpManager.StartSingleAsync '{config.Name}': {ex.GetType().Name}");
+                AppLogger.Warn($"{nameof(McpManager)}.StartSingleAsync", $"Failed to start '{config.Name}'", ex);
                 throw;
             }
         }
