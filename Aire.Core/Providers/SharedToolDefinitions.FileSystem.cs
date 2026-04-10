@@ -8,6 +8,7 @@ public static partial class SharedToolDefinitions
         {
             Name = "execute_command",
             Category = "filesystem",
+            ShortDescription = "Execute a shell command or launch any application on the user's system.",
             Description =
                 "Execute a command or launch any application on the user's system. " +
                 "This tool can launch GUI desktop applications (e.g. gimp, notepad, chrome, vlc) " +
@@ -26,6 +27,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "list_directory", Category = "filesystem",
+            ShortDescription = "List the contents of a directory.",
             Description = "List the contents of a directory on the user's file system.",
             Parameters = new() { { "path", new ToolParam("string", "Absolute path to the directory") } },
             Required = ["path"],
@@ -33,6 +35,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "read_file", Category = "filesystem",
+            ShortDescription = "Read file contents. Supports chunked reading via offset/length for large files (≤100k chars per call).",
             Description = "Read the contents of a file. Supports chunked reading for large files via offset and length. " +
                           "The result always reports total file size and how many characters were returned, so you know if more remains. " +
                           "For files larger than 100 000 chars, read in chunks: call read_file repeatedly with increasing offset until done.",
@@ -47,6 +50,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "write_file", Category = "filesystem",
+            ShortDescription = "Write or append content to a file.",
             Description = "Write content to a file. By default overwrites the file. " +
                           "Set append=true to add content to the end of an existing file instead of replacing it. " +
                           "Use append mode to write large content in multiple chunks.",
@@ -61,6 +65,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "create_directory", Category = "filesystem",
+            ShortDescription = "Create a directory (and any missing parents).",
             Description = "Create a new directory (including any missing parent directories).",
             Parameters = new() { { "path", new ToolParam("string", "Absolute path of the directory to create") } },
             Required = ["path"],
@@ -68,6 +73,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "delete_file", Category = "filesystem",
+            ShortDescription = "Delete a file or directory.",
             Description = "Delete a file or directory.",
             Parameters = new() { { "path", new ToolParam("string", "Absolute path to the file or directory") } },
             Required = ["path"],
@@ -75,6 +81,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "move_file", Category = "filesystem",
+            ShortDescription = "Move or rename a file or directory.",
             Description = "Move or rename a file or directory.",
             Parameters = new()
             {
@@ -86,6 +93,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "search_files", Category = "filesystem",
+            ShortDescription = "Find files matching a glob pattern.",
             Description = "Search for files matching a glob pattern inside a directory.",
             Parameters = new()
             {
@@ -99,6 +107,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "search_file_content",
             Category    = "filesystem",
+            ShortDescription = "Search file contents for a text or regex pattern (like grep). Returns matching lines with file paths.",
             Description =
                 "Search for text or a regex pattern inside the CONTENT of files (like grep/ripgrep). " +
                 "Returns file paths and the matching lines with line numbers. " +

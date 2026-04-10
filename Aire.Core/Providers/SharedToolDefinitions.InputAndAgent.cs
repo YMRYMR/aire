@@ -7,6 +7,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "begin_keyboard_session", Category = "keyboard",
+            ShortDescription = "Start a keyboard control session (required before key_press, key_combo, type_text).",
             Description = "Request permission to control the keyboard for a limited time. Must be called before key_press, key_combo, or type_text.",
             Parameters = new() { { "duration_minutes", new ToolParam("integer", "Session length in minutes (default: 10)") } },
             Required = Array.Empty<string>(),
@@ -14,6 +15,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "end_keyboard_session", Category = "keyboard",
+            ShortDescription = "End the active keyboard session.",
             Description = "End the active keyboard control session.",
             Parameters = new(),
             Required = Array.Empty<string>(),
@@ -21,6 +23,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "key_press", Category = "keyboard",
+            ShortDescription = "Press a single key. Requires an active keyboard session.",
             Description = "Press a single keyboard key. Requires an active keyboard session.",
             Parameters = new() { { "key", new ToolParam("string", "Key name: Enter, Tab, Escape, Backspace, Delete, Home, End, PageUp, PageDown, Left, Up, Right, Down, Ctrl, Alt, Shift, Win, Space, F1-F12, or any single character.") } },
             Required = ["key"],
@@ -28,6 +31,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "key_combo", Category = "keyboard",
+            ShortDescription = "Press a keyboard shortcut (e.g. Ctrl+C). Requires an active keyboard session.",
             Description = "Press a keyboard shortcut / key combination simultaneously (e.g. Ctrl+N, Alt+Tab, Ctrl+Shift+S). " +
                           "PREFER this over mouse clicks whenever possible. " +
                           "Pass keys as an array in the order they should be held down.",
@@ -37,6 +41,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "type_text", Category = "keyboard",
+            ShortDescription = "Type text as keyboard input. Requires an active keyboard session.",
             Description = "Type a string of text as keyboard input. Requires an active keyboard session.",
             Parameters = new() { { "text", new ToolParam("string", "The text to type") } },
             Required = ["text"],
@@ -48,6 +53,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "begin_mouse_session", Category = "mouse",
+            ShortDescription = "Start a mouse control session.",
             Description = "Request permission to control the mouse and keyboard for a limited time. " +
                           "The user must approve once. After approval, use mouse/keyboard tools freely until end_mouse_session.",
             Parameters = new() { { "duration_minutes", new ToolParam("integer", "How long the session should last (default: 5 minutes)") } },
@@ -56,6 +62,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "end_mouse_session", Category = "mouse",
+            ShortDescription = "End the active mouse session.",
             Description = "End the active mouse control session.",
             Parameters = new(),
             Required = Array.Empty<string>(),
@@ -63,6 +70,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "take_screenshot", Category = "mouse",
+            ShortDescription = "Capture a screenshot of the screen for analysis.",
             Description = "Capture a screenshot of the current screen and return it for analysis. Use this to see the current state before and after interactions.",
             Parameters = new(),
             Required = Array.Empty<string>(),
@@ -70,6 +78,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "mouse_move", Category = "mouse",
+            ShortDescription = "Move the mouse cursor to screen coordinates.",
             Description = "Move the mouse cursor to screen coordinates (pixels, top-left = 0,0). Requires an active mouse session.",
             Parameters = new()
             {
@@ -81,6 +90,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "mouse_click", Category = "mouse",
+            ShortDescription = "Click the mouse at screen coordinates.",
             Description = "Click the mouse at screen coordinates. button: left (default), right, middle. Requires an active mouse session.",
             Parameters = new()
             {
@@ -93,6 +103,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "mouse_double_click", Category = "mouse",
+            ShortDescription = "Double-click at screen coordinates.",
             Description = "Double-click at screen coordinates. Requires an active mouse session.",
             Parameters = new()
             {
@@ -104,6 +115,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "mouse_drag", Category = "mouse",
+            ShortDescription = "Click and drag between two screen positions.",
             Description = "Click and drag from one screen position to another. Requires an active mouse session.",
             Parameters = new()
             {
@@ -117,6 +129,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name = "mouse_scroll", Category = "mouse",
+            ShortDescription = "Scroll the mouse wheel at screen coordinates.",
             Description =
                 "Scroll the mouse wheel at screen coordinates. " +
                 "Positive delta scrolls up, negative scrolls down. " +
@@ -137,6 +150,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "switch_model",
             Category    = "agent",
+            ShortDescription = "Switch to a different AI model mid-conversation (up/down/lateral).",
             Description =
                 "Switch to a different AI model mid-conversation. " +
                 "Use direction=\"up\" when the task needs more capability (complex reasoning, coding), " +
@@ -155,6 +169,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "update_todo_list",
             Category    = "agent",
+            ShortDescription = "Replace the to-do list displayed in chat. Use for multi-step tasks.",
             Description =
                 "Replace the current to-do list shown in the chat with the supplied items. " +
                 "Call this at the start of a multi-step task to show progress, then update statuses as steps complete. " +
@@ -170,6 +185,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "ask_followup_question",
             Category    = "agent",
+            ShortDescription = "Ask the user a clarifying question before proceeding.",
             Description =
                 "Ask the user a clarifying question and wait for their answer before continuing. " +
                 "Provide predefined options so the user can click a button instead of typing. " +
@@ -186,6 +202,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "attempt_completion",
             Category    = "agent",
+            ShortDescription = "Signal that the task is fully complete. Include a brief summary.",
             Description =
                 "Signal that the user's entire request is now fulfilled. " +
                 "Include a short summary of what was accomplished. " +
@@ -200,6 +217,7 @@ public static partial class SharedToolDefinitions
         {
             Name        = "show_image",
             Category    = "agent",
+            ShortDescription = "Display an image (local path or URL) in the chat.",
             Description =
                 "Display an image in the chat for the user to see. " +
                 "Accepts a local file path (e.g. C:/images/photo.png) or a public image URL. " +

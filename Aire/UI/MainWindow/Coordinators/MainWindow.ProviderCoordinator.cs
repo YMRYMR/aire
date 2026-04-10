@@ -80,6 +80,7 @@ namespace Aire
                 _owner._suppressProviderChange = true;
                 _owner._providerFactory.ClearCache();
                 await LoadProvidersAsync(autoSelect: false);
+                _owner._suppressProviderChange = true; // re-assert: LoadProvidersAsync resets the flag internally
 
                 if (selectedId.HasValue)
                 {

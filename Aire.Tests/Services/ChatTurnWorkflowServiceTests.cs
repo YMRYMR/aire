@@ -129,6 +129,26 @@ public sealed class ChatTurnWorkflowServiceTests
     }
 
     [Fact]
+    public void BuildRequestMessages_UsesCompactPrompt_ForNativeProviderWithCompactEnabled()
+    {
+        var service = new ChatTurnWorkflowService();
+        var provider = new FakeCompactProvider
+        {
+            ToolOutputFormatValue = ToolOutputFormat.NativeToolCalls,
+            CapabilitiesValue = ProviderCapabilities.TextChat | ProviderCapabilities.ToolCalling
+        };
+
+        var messages = service.BuildRequestMessages(provider, string.Empty, []);
+
+        Assert.Single(messages);
+        Assert.Equal("system", messages[0].Role);
+        // Compact prompt is much shorter — it does NOT contain tool listing sequences
+        Assert.DoesNotContain("TOOL CALL SEQUENCES", messages[0].Content, StringComparison.Ordinal);
+        // But must still contain core behavioral rules
+        Assert.Contains("function calling", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public void BuildFailureOutcome_ClassifiesCooldown()
     {
         var service = new ChatTurnWorkflowService();
@@ -233,6 +253,47 @@ public sealed class ChatTurnWorkflowServiceTests
         Assert.Equal("Service unavailable.", outcome.ErrorMessage);
     }
 
+    /// <summary>A fake provider that uses compact native prompts (simulates OpenAI/Anthropic/Gemini).</summary>
+    private sealed class FakeCompactProvider : IAiProvider
+    {
+        public string ProviderType => "FakeCompact";
+        public string DisplayName => "Fake Compact";
+        public ProviderCapabilities CapabilitiesValue { get; init; } = ProviderCapabilities.TextChat;
+        public ToolOutputFormat ToolOutputFormatValue { get; init; } = ToolOutputFormat.NativeToolCalls;
+
+        public ProviderCapabilities Capabilities => CapabilitiesValue;
+        public ToolCallMode ToolCallMode => ToolCallMode.NativeFunctionCalling;
+        public ToolOutputFormat ToolOutputFormat => ToolOutputFormatValue;
+
+        public bool Has(ProviderCapabilities cap) => (Capabilities & cap) == cap;
+        public void Initialize(ProviderConfig config) { }
+        public System.Threading.Tasks.Task<AiResponse> SendChatAsync(IEnumerable<ChatMessage> messages, System.Threading.CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+        public void PrepareForCapabilityTesting() { }
+        public void SetToolsEnabled(bool enabled) { }
+        public void SetEnabledToolCategories(IEnumerable<string>? categories) { }
+        public async IAsyncEnumerable<string> StreamChatAsync(IEnumerable<ChatMessage> messages, [System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default)
+        {
+            await System.Threading.Tasks.Task.CompletedTask;
+            yield break;
+        }
+        public System.Threading.Tasks.Task<ProviderValidationResult> ValidateConfigurationAsync(System.Threading.CancellationToken cancellationToken = default)
+            => System.Threading.Tasks.Task.FromResult(ProviderValidationResult.Ok());
+        public System.Threading.Tasks.Task<TokenUsage?> GetTokenUsageAsync(System.Threading.CancellationToken cancellationToken = default)
+            => System.Threading.Tasks.Task.FromResult<TokenUsage?>(null);
+
+        public string BuildToolSystemPrompt(string modelListSection, string? modePromptSection, string? mcpSection)
+        {
+            // Compact mode — simulates what OpenAI/Anthropic/Gemini providers do
+            var basePrompt = Aire.Services.FileSystemSystemPrompt.BuildNativeCompact();
+            var sb = new System.Text.StringBuilder(basePrompt);
+            if (!string.IsNullOrEmpty(modelListSection)) sb.Append(modelListSection);
+            if (!string.IsNullOrWhiteSpace(modePromptSection)) sb.Append(modePromptSection);
+            if (!string.IsNullOrWhiteSpace(mcpSection)) sb.Append(mcpSection);
+            return sb.ToString();
+        }
+    }
+
     private sealed class FakeProvider : IAiProvider
     {
         public string ProviderType => "Fake";
@@ -260,5 +321,21 @@ public sealed class ChatTurnWorkflowServiceTests
             => System.Threading.Tasks.Task.FromResult(ProviderValidationResult.Ok());
         public System.Threading.Tasks.Task<TokenUsage?> GetTokenUsageAsync(System.Threading.CancellationToken cancellationToken = default)
             => System.Threading.Tasks.Task.FromResult<TokenUsage?>(null);
+
+        public string BuildToolSystemPrompt(string modelListSection, string? modePromptSection, string? mcpSection)
+        {
+            var basePrompt = ToolOutputFormat switch
+            {
+                ToolOutputFormat.Hermes          => Aire.Services.FileSystemSystemPrompt.HermesToolCallingText,
+                ToolOutputFormat.React           => Aire.Services.FileSystemSystemPrompt.ReactToolCallingText,
+                ToolOutputFormat.NativeToolCalls => Aire.Services.FileSystemSystemPrompt.NativeToolCallingText,
+                _                                => Aire.Services.FileSystemSystemPrompt.Text,
+            };
+            var sb = new System.Text.StringBuilder(basePrompt);
+            if (!string.IsNullOrEmpty(modelListSection)) sb.Append(modelListSection);
+            if (!string.IsNullOrWhiteSpace(modePromptSection)) sb.Append(modePromptSection);
+            if (!string.IsNullOrWhiteSpace(mcpSection)) sb.Append(mcpSection);
+            return sb.ToString();
+        }
     }
 }

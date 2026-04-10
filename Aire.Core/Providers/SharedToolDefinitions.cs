@@ -72,12 +72,12 @@ public static partial class SharedToolDefinitions
     /// <summary>
     /// Converts the canonical tool catalog into the OpenAI-compatible function schema format.
     /// </summary>
-    public static IReadOnlyList<object> ToOpenAiFunctions(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null)
+    public static IReadOnlyList<object> ToOpenAiFunctions(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null, bool compact = false)
     {
         return GetFilteredTools(capabilities, enabledCategories).Select(t => (object)new
         {
             name = t.Name,
-            description = t.Description,
+            description = t.GetDescription(compact),
             parameters = BuildJsonSchema(t),
         }).ToList();
     }
@@ -85,12 +85,12 @@ public static partial class SharedToolDefinitions
     /// <summary>
     /// Converts the canonical tool catalog into Anthropic's tool schema format.
     /// </summary>
-    public static IReadOnlyList<object> ToAnthropicTools(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null)
+    public static IReadOnlyList<object> ToAnthropicTools(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null, bool compact = false)
     {
         return GetFilteredTools(capabilities, enabledCategories).Select(t => (object)new
         {
             name = t.Name,
-            description = t.Description,
+            description = t.GetDescription(compact),
             input_schema = BuildJsonSchema(t),
         }).ToList();
     }
@@ -98,12 +98,12 @@ public static partial class SharedToolDefinitions
     /// <summary>
     /// Converts the canonical tool catalog into Gemini function declarations.
     /// </summary>
-    public static IReadOnlyList<object> ToGeminiFunctionDeclarations(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null)
+    public static IReadOnlyList<object> ToGeminiFunctionDeclarations(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null, bool compact = false)
     {
         return GetFilteredTools(capabilities, enabledCategories).Select(t => (object)new
         {
             name = t.Name,
-            description = t.Description,
+            description = t.GetDescription(compact),
             parameters = BuildJsonSchema(t),
         }).ToList();
     }
@@ -111,7 +111,7 @@ public static partial class SharedToolDefinitions
     /// <summary>
     /// Converts the canonical tool catalog into Ollama's native tool schema format.
     /// </summary>
-    public static List<object> ToOllamaTools(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null)
+    public static List<object> ToOllamaTools(IEnumerable<string>? capabilities = null, IEnumerable<string>? enabledCategories = null, bool compact = false)
     {
         return GetFilteredTools(capabilities, enabledCategories).Select(t => (object)new
         {
@@ -119,7 +119,7 @@ public static partial class SharedToolDefinitions
             function = new
             {
                 name = t.Name,
-                description = t.Description,
+                description = t.GetDescription(compact),
                 parameters = BuildJsonSchema(t),
             }
         }).ToList();
@@ -150,9 +150,18 @@ public class ToolDescriptor
 {
     public string Name { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
+    /// <summary>
+    /// Concise 1-2 sentence description used when compact tool schemas are requested.
+    /// Falls back to <see cref="Description"/> when empty.
+    /// </summary>
+    public string ShortDescription { get; init; } = string.Empty;
     public string Category { get; init; } = string.Empty;
     public Dictionary<string, ToolParam> Parameters { get; init; } = new();
     public string[] Required { get; init; } = Array.Empty<string>();
+
+    /// <summary>Returns <see cref="ShortDescription"/> when set; otherwise <see cref="Description"/>.</summary>
+    public string GetDescription(bool compact) =>
+        compact && !string.IsNullOrEmpty(ShortDescription) ? ShortDescription : Description;
 }
 
 /// <summary>

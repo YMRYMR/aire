@@ -62,21 +62,11 @@ namespace Aire.Services.Workflows
                 (provider?.Has(ProviderCapabilities.ToolCalling) == true ||
                  provider?.Has(ProviderCapabilities.SystemPrompt) == true))
             {
-                var sysPrompt = provider.ToolOutputFormat switch
-                {
-                    ToolOutputFormat.Hermes          => FileSystemSystemPrompt.HermesToolCallingText,
-                    ToolOutputFormat.React           => FileSystemSystemPrompt.ReactToolCallingText,
-                    ToolOutputFormat.NativeToolCalls => FileSystemSystemPrompt.NativeToolCallingText,
-                    _                                => FileSystemSystemPrompt.Text,   // AireText
-                };
+                var mcpSection = mcpTools != null && mcpTools.Count > 0
+                    ? McpToolPromptBuilder.BuildSection(mcpTools)
+                    : null;
 
-                sysPrompt += modelListSection;
-                if (!string.IsNullOrWhiteSpace(modePromptSection))
-                    sysPrompt += modePromptSection;
-
-                if (mcpTools != null && mcpTools.Count > 0)
-                    sysPrompt += McpToolPromptBuilder.BuildSection(mcpTools);
-
+                var sysPrompt = provider.BuildToolSystemPrompt(modelListSection, modePromptSection, mcpSection);
                 messages.Add(new ProviderChatMessage { Role = "system", Content = sysPrompt });
             }
 

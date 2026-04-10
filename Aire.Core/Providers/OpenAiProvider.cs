@@ -41,6 +41,7 @@ namespace Aire.Providers
 
         protected override ToolCallMode DefaultToolCallMode => ToolCallMode.NativeFunctionCalling;
         protected override ToolOutputFormat DefaultToolOutputFormat => ToolOutputFormat.NativeToolCalls;
+        protected override bool PreferCompactToolDescriptions => true;
 
         protected virtual string DefaultApiBaseUrl => "https://api.openai.com";
 
@@ -119,6 +120,7 @@ namespace Aire.Providers
         protected virtual IList<ToolDefinition> GetFunctionDefinitions()
         {
             var filteredTools = GetFilteredTools(Config.ModelCapabilities, Config.EnabledToolCategories);
+            var compact = PreferCompactToolDescriptions;
             var tools = new List<ToolDefinition>();
             foreach (var tool in filteredTools)
             {
@@ -129,7 +131,7 @@ namespace Aire.Providers
                     Function = new FunctionDefinition
                     {
                         Name = tool.Name,
-                        Description = tool.Description,
+                        Description = tool.GetDescription(compact),
                         Parameters = rootSchema
                     }
                 });

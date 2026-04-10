@@ -24,8 +24,8 @@ public sealed class ClaudeAiProviderTests
                 {
                     Content = new StringContent(
                         """
-                        data: {"type":"content_block_delta","delta":{"text":"Hello "}}
-                        data: {"type":"content_block_delta","delta":{"text":"Claude"}}
+                        data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"Hello "}}
+                        data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"Claude"}}
                         data: [DONE]
 
                         """,
@@ -131,6 +131,89 @@ public sealed class ClaudeAiProviderTests
         Assert.False(validation.IsValid);
         Assert.Equal("Anthropic configuration validation failed.", validation.Error);
         Assert.DoesNotContain("internal-host", validation.Error, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task StreamChatAsync_ParsesNativeToolUseBlock()
+    {
+        var handler = new RecordingClaudeHandler(request =>
+        {
+            if (request.Method == HttpMethod.Post && request.RequestUri?.AbsolutePath == "/v1/messages")
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        """
+                        data: {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"toolu_01","name":"read_file","input":{}}}
+                        data: {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"path\":"}}
+                        data: {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"C:/test.txt\"}"}}
+                        data: {"type":"content_block_stop","index":0}
+                        data: [DONE]
+
+                        """,
+                        Encoding.UTF8,
+                        "text/event-stream")
+                };
+            }
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
+        });
+
+        var provider = CreateProvider(handler);
+        var chunks = new List<string>();
+
+        await foreach (var chunk in provider.StreamChatAsync(
+            [new ChatMessage { Role = "user", Content = "Read the file" }],
+            CancellationToken.None))
+        {
+            chunks.Add(chunk);
+        }
+
+        var combined = string.Concat(chunks);
+        Assert.Contains("<tool_call>", combined, StringComparison.Ordinal);
+        Assert.Contains("read_file", combined, StringComparison.Ordinal);
+        Assert.Contains("C:/test.txt", combined, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task StreamChatAsync_InjectsToolsIntoRequestBody_WhenToolsEnabled()
+    {
+        var handler = new RecordingClaudeHandler(request =>
+        {
+            if (request.Method == HttpMethod.Post && request.RequestUri?.AbsolutePath == "/v1/messages")
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        "data: {\"type\":\"content_block_delta\",\"delta\":{\"type\":\"text_delta\",\"text\":\"Hi\"}}\r\ndata: [DONE]\r\n\r\n",
+                        Encoding.UTF8,
+                        "text/event-stream")
+                };
+            }
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
+        });
+
+        var provider = new ClaudeAiProvider();
+        provider.Initialize(new ProviderConfig
+        {
+            ApiKey = "test-key",
+            Model = "claude-sonnet-4-5",
+            MaxTokens = 256,
+            TimeoutMinutes = 2,
+            ModelCapabilities = ["tools"],   // enable tool calling
+        });
+        var httpField = typeof(ClaudeAiProvider).GetField("_http", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!;
+        httpField.SetValue(provider, new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(5) });
+
+        var chunks = new List<string>();
+        await foreach (var chunk in provider.StreamChatAsync(
+            [new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None))
+        {
+            chunks.Add(chunk);
+        }
+
+        // Tools should be in the request body
+        Assert.NotNull(handler.LastBody);
+        Assert.Contains("\"tools\"", handler.LastBody, StringComparison.Ordinal);
     }
 
     private static ClaudeAiProvider CreateProvider(RecordingClaudeHandler handler)
