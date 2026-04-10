@@ -341,6 +341,26 @@ namespace Aire.Services
             return best;
         }
 
+        private static Color EnsureContrastAgainstAll(Color candidate, double minimumContrast, params Color[] backgrounds)
+        {
+            var result = candidate;
+            for (int pass = 0; pass < 4; pass++)
+            {
+                var updated = result;
+                foreach (var background in backgrounds)
+                {
+                    updated = EnsureContrast(updated, background, minimumContrast);
+                }
+
+                if (updated == result)
+                    break;
+
+                result = updated;
+            }
+
+            return result;
+        }
+
         private static Color AccessibleTintedForeground(
             Color background,
             Color lightBase,
@@ -485,15 +505,23 @@ namespace Aire.Services
                     AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 4.8));
 
             SetResourceBrush(res, "SidebarTextBrush",
-                AccessibleTintedForeground(accentSurface2,
+                EnsureContrastAgainstAll(
+                    AccessibleTintedForeground(accentSurface2,
                     lightBase: C(0xF7, 0xF8, 0xFA),
                     darkBase: C(0x17, 0x1A, 0x22),
-                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.04, minContrast: 7.0));
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.04, minContrast: 7.0),
+                    7.0,
+                    accentSurface,
+                    accentSurface2));
             SetResourceBrush(res, "SidebarTextSecondaryBrush",
-                AccessibleTintedForeground(accentSurface2,
+                EnsureContrastAgainstAll(
+                    AccessibleTintedForeground(accentSurface2,
                     lightBase: C(0xE2, 0xE7, 0xEE),
                     darkBase: C(0x45, 0x4E, 0x61),
-                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 4.8));
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 4.8),
+                    4.8,
+                    accentSurface,
+                    accentSurface2));
         }
 
         private static Color C(byte r, byte g, byte b) => Color.FromRgb(r, g, b);
