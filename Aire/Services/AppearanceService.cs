@@ -196,7 +196,9 @@ namespace Aire.Services
                     if (key.StartsWith("Accent", StringComparison.Ordinal))
                         continue;
                     var base_ = LerpColor(dark, light, Brightness);
-                    res[key] = new SolidColorBrush(Tinted(base_, tintHue, tintStrength));
+                    res[key] = new SolidColorBrush(ShouldTintResource(key)
+                        ? Tinted(base_, tintHue, tintStrength)
+                        : base_);
                 }
 
                 ApplyAccentResources(res);
@@ -205,9 +207,9 @@ namespace Aire.Services
             // Message brushes
             var msg = MsgSlots;
             SetBrush(UserBgBrush,   Tinted(LerpColor(msg[0].Dark, msg[0].Light, Brightness), tintHue, tintStrength));
-            SetBrush(UserFgBrush,   Tinted(LerpColor(msg[1].Dark, msg[1].Light, Brightness), tintHue, tintStrength));
+            SetBrush(UserFgBrush,   LerpColor(msg[1].Dark, msg[1].Light, Brightness));
             SetBrush(AiBgBrush,     Tinted(LerpColor(msg[2].Dark, msg[2].Light, Brightness), tintHue, tintStrength));
-            SetBrush(AiFgBrush,     Tinted(LerpColor(msg[3].Dark, msg[3].Light, Brightness), tintHue, tintStrength));
+            SetBrush(AiFgBrush,     LerpColor(msg[3].Dark, msg[3].Light, Brightness));
             SetBrush(SystemBgBrush, Tinted(LerpColor(msg[4].Dark, msg[4].Light, Brightness), tintHue, tintStrength));
             SetBrush(SystemFgBrush, LerpColor(msg[5].Dark, msg[5].Light, Brightness));   // no tint â€” must stay readable against any background
             // Error brushes: preserve their red identity; tint background only slightly
@@ -266,6 +268,19 @@ namespace Aire.Services
         {
             if (!b.IsFrozen) b.Color = c;
         }
+
+        private static bool ShouldTintResource(string key) =>
+            key switch
+            {
+                "TextBrush" => false,
+                "TextSecondaryBrush" => false,
+                "UserMessageTextBrush" => false,
+                "AssistantMessageTextBrush" => false,
+                "StatusTextBrush" => false,
+                "LinkBrush" => false,
+                "CodeForegroundBrush" => false,
+                _ => true,
+            };
 
         private static void ApplyAccentResources(ResourceDictionary res)
         {

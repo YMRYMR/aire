@@ -36,6 +36,30 @@ public class AppearanceServiceTests : TestBase
     }
 
     [Fact]
+    public void Apply_KeepsTextBrushesNeutralWhenTintChanges()
+    {
+        RunOnStaThread(() =>
+        {
+            EnsureApplication();
+            AppearanceService.ResetForTesting();
+
+            AppearanceService.Apply(0.1, 0.0);
+            Color textStart = ((SolidColorBrush)Application.Current!.Resources["TextBrush"]).Color;
+            Color userTextStart = ((SolidColorBrush)Application.Current.Resources["UserMessageTextBrush"]).Color;
+            Color surfaceStart = ((SolidColorBrush)Application.Current.Resources["SurfaceBrush"]).Color;
+
+            AppearanceService.Apply(0.1, 0.75);
+            Color textEnd = ((SolidColorBrush)Application.Current.Resources["TextBrush"]).Color;
+            Color userTextEnd = ((SolidColorBrush)Application.Current.Resources["UserMessageTextBrush"]).Color;
+            Color surfaceEnd = ((SolidColorBrush)Application.Current.Resources["SurfaceBrush"]).Color;
+
+            Assert.Equal(textStart, textEnd);
+            Assert.Equal(userTextStart, userTextEnd);
+            Assert.NotEqual(surfaceStart, surfaceEnd);
+        });
+    }
+
+    [Fact]
     public void Apply_BooleanOverloadAndSetFontSize_ClampValues()
     {
         RunOnStaThread(() =>
