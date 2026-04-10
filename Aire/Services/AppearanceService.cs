@@ -185,6 +185,7 @@ namespace Aire.Services
             UsesDarkPalette = Brightness < 0.5;
             TintPosition = Math.Clamp(tintPosition, 0, 1);
 
+            double themeTone     = ThemeTone(Brightness);
             double tintHue      = TintPosition * 360.0;
             double tintStrength = Math.Sin(TintPosition * Math.PI); // 0 at ends, 1 at 0.5
 
@@ -195,7 +196,7 @@ namespace Aire.Services
                 {
                     if (key.StartsWith("Accent", StringComparison.Ordinal))
                         continue;
-                    var base_ = LerpColor(dark, light, Brightness);
+                    var base_ = LerpColor(dark, light, themeTone);
                     res[key] = new SolidColorBrush(ShouldTintResource(key)
                         ? Tinted(base_, tintHue, tintStrength)
                         : base_);
@@ -206,15 +207,15 @@ namespace Aire.Services
 
             // Message brushes
             var msg = MsgSlots;
-            SetBrush(UserBgBrush,   Tinted(LerpColor(msg[0].Dark, msg[0].Light, Brightness), tintHue, tintStrength));
-            SetBrush(UserFgBrush,   LerpColor(msg[1].Dark, msg[1].Light, Brightness));
-            SetBrush(AiBgBrush,     Tinted(LerpColor(msg[2].Dark, msg[2].Light, Brightness), tintHue, tintStrength));
-            SetBrush(AiFgBrush,     LerpColor(msg[3].Dark, msg[3].Light, Brightness));
-            SetBrush(SystemBgBrush, Tinted(LerpColor(msg[4].Dark, msg[4].Light, Brightness), tintHue, tintStrength));
-            SetBrush(SystemFgBrush, LerpColor(msg[5].Dark, msg[5].Light, Brightness));   // no tint â€” must stay readable against any background
+            SetBrush(UserBgBrush,   Tinted(LerpColor(msg[0].Dark, msg[0].Light, themeTone), tintHue, tintStrength));
+            SetBrush(UserFgBrush,   LerpColor(msg[1].Dark, msg[1].Light, themeTone));
+            SetBrush(AiBgBrush,     Tinted(LerpColor(msg[2].Dark, msg[2].Light, themeTone), tintHue, tintStrength));
+            SetBrush(AiFgBrush,     LerpColor(msg[3].Dark, msg[3].Light, themeTone));
+            SetBrush(SystemBgBrush, Tinted(LerpColor(msg[4].Dark, msg[4].Light, themeTone), tintHue, tintStrength));
+            SetBrush(SystemFgBrush, LerpColor(msg[5].Dark, msg[5].Light, themeTone));   // no tint â€” must stay readable against any background
             // Error brushes: preserve their red identity; tint background only slightly
-            SetBrush(ErrorBgBrush,  Tinted(LerpColor(msg[6].Dark, msg[6].Light, Brightness), tintHue, tintStrength * 0.25));
-            SetBrush(ErrorFgBrush,  LerpColor(msg[7].Dark, msg[7].Light, Brightness));   // no tint â€” always red-ish
+            SetBrush(ErrorBgBrush,  Tinted(LerpColor(msg[6].Dark, msg[6].Light, themeTone), tintHue, tintStrength * 0.25));
+            SetBrush(ErrorFgBrush,  LerpColor(msg[7].Dark, msg[7].Light, themeTone));   // no tint â€” always red-ish
 
             AppearanceChanged?.Invoke();
         }
@@ -268,6 +269,9 @@ namespace Aire.Services
         {
             if (!b.IsFrozen) b.Color = c;
         }
+
+        private static double ThemeTone(double value) =>
+            Math.Pow(Math.Clamp(value, 0, 1), 1.25);
 
         private static bool ShouldTintResource(string key) =>
             key switch
