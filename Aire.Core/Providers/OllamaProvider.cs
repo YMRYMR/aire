@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 
 namespace Aire.Providers;
 
@@ -87,7 +88,7 @@ public sealed class PortableOllamaProvider : BaseAiProvider
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.FetchLiveModels] Ollama local fetch failed: {ex.GetType().Name}");
+            AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "Ollama local fetch failed", ex);
             return null;
         }
 
@@ -108,7 +109,7 @@ public sealed class PortableOllamaProvider : BaseAiProvider
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.FetchLiveModels] Ollama web catalog fetch failed: {ex.GetType().Name}");
+            AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "Ollama web catalog fetch failed", ex);
         }
 
         // ── 3. Merge: installed → web catalog → static defaults ─────────────
@@ -225,7 +226,7 @@ public sealed class PortableOllamaProvider : BaseAiProvider
         }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[WARN] [{GetType().Name}.SendChat] Ollama request failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Ollama request failed", ex);
                 return new AiResponse
                 {
                     IsSuccess = false,

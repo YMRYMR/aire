@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text.Json;
+using Aire.Services;
 
 namespace Aire.Bootstrap;
 
@@ -51,7 +52,7 @@ public static class SetupPreferencesStore
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[WARN] [SetupPreferencesStore.Load] Failed to load setup preferences; using defaults. {ex.GetType().Name}: {ex.Message}");
+            AppLogger.Warn(nameof(SetupPreferencesStore) + ".Load", "Failed to load setup preferences; using defaults", ex);
             return new SetupPreferences();
         }
     }
@@ -77,7 +78,7 @@ public static class SetupPreferencesStore
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[WARN] [SetupPreferencesStore.Save] Failed to save setup preferences. {ex.GetType().Name}: {ex.Message}");
+            AppLogger.Warn(nameof(SetupPreferencesStore) + ".Save", "Failed to save setup preferences", ex);
             throw;
         }
     }

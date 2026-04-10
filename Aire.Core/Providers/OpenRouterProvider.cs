@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.Data;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -96,7 +97,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"OpenRouter usage lookup failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.GetTokenUsage", "OpenRouter usage lookup failed", ex);
                 return null;
             }
         }
