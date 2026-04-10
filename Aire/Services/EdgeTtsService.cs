@@ -172,8 +172,15 @@ namespace Aire.Services
                 var mp3 = audio.ToArray();
                 return mp3.Length > 0 ? mp3 : null;
             }
-            catch (OperationCanceledException) { return null; }
-            catch { return null; }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Warn("EdgeTtsService.Synthesize", "Edge TTS synthesis failed", ex);
+                return null;
+            }
         }
 
         private static string Timestamp() =>

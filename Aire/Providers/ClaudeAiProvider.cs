@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -64,7 +65,7 @@ namespace Aire.Providers
                 using var req = new HttpRequestMessage(HttpMethod.Get, "https://api.anthropic.com/v1/models");
                 req.Headers.Add("x-api-key", apiKey);
                 req.Headers.Add("anthropic-version", "2023-06-01");
-                var res = await _metaHttp.SendAsync(req, ct);
+                using var res = await _metaHttp.SendAsync(req, ct);
                 if (!res.IsSuccessStatusCode) return null;
 
                 var json = await res.Content.ReadAsStringAsync(ct);
@@ -84,7 +85,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Anthropic live model fetch failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "Anthropic live model fetch failed", ex);
                 return null;
             }
         }
@@ -100,7 +101,7 @@ namespace Aire.Providers
                 using var req = new HttpRequestMessage(HttpMethod.Get, "https://api.anthropic.com/v1/usage");
                 req.Headers.Add("x-api-key", apiKey);
                 req.Headers.Add("anthropic-version", "2023-06-01");
-                var response = await _metaHttp.SendAsync(req, ct);
+                using var response = await _metaHttp.SendAsync(req, ct);
                 if (!response.IsSuccessStatusCode)
                     return null;
 
@@ -158,7 +159,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{GetType().Name} chat failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Anthropic chat failed", ex);
                 return new AiResponse { IsSuccess = false, ErrorMessage = "Anthropic request failed.", Duration = sw.Elapsed };
             }
         }
@@ -369,14 +370,14 @@ namespace Aire.Providers
                     using var req = new HttpRequestMessage(HttpMethod.Get, $"{ApiBase}/v1/models");
                     req.Headers.Add("x-api-key", key);
                     req.Headers.Add("anthropic-version", AnthropicVersion);
-                    var res = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
+                    using var res = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
                     return res.IsSuccessStatusCode
                         ? ProviderValidationResult.Ok()
                         : ProviderValidationResult.Fail($"HTTP {(int)res.StatusCode} {res.ReasonPhrase}");
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"{GetType().Name} validation failed: {ex.GetType().Name}");
+                    AppLogger.Warn($"{GetType().Name}.ValidateConfiguration", "Anthropic validation failed", ex);
                     return ProviderValidationResult.Fail("Anthropic configuration validation failed.");
                 }
             }

@@ -132,7 +132,11 @@ namespace Aire.Services
             if (_waveIn == null) return;
             _waveIn.DataAvailable -= OnDataAvailable;
             _waveIn.RecordingStopped -= OnRecordingStopped;
-            try { _waveIn.StopRecording(); } catch { }
+            try { _waveIn.StopRecording(); }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(SpeechRecognitionService) + ".CleanupWaveIn", "Failed to stop recording", ex);
+            }
             _waveIn.Dispose();
             _waveIn = null;
         }

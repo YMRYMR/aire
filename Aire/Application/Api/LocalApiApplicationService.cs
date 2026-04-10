@@ -151,6 +151,7 @@ namespace Aire.AppLayer.Api
         /// <param name="hasApiAccessToken">Whether a local API access token is configured.</param>
         /// <param name="currentConversationId">Currently active conversation id, if any.</param>
         /// <param name="provider">Currently selected provider, if any.</param>
+        /// <param name="selectedWindow">Currently selected top-level window, if any.</param>
         /// <param name="pendingApprovals">Current number of pending approval prompts.</param>
         /// <returns>The normalized API state snapshot.</returns>
         public ApiStateSnapshot BuildStateSnapshot(
@@ -163,6 +164,7 @@ namespace Aire.AppLayer.Api
             bool hasApiAccessToken,
             int? currentConversationId,
             Provider? provider,
+            TopLevelWindowInfo? selectedWindow,
             int pendingApprovals)
             => new()
             {
@@ -177,6 +179,9 @@ namespace Aire.AppLayer.Api
                 CurrentProviderId = provider?.Id,
                 CurrentProviderName = provider?.Name,
                 CurrentProviderModel = provider?.Model,
+                SelectedWindowId = selectedWindow?.WindowId,
+                SelectedWindowTitle = selectedWindow?.Title,
+                SelectedWindowProcessName = selectedWindow?.ProcessName,
                 PendingApprovals = pendingApprovals
             };
 

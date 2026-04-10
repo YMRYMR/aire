@@ -223,7 +223,10 @@ namespace Aire.Services.Mcp
                 }
             }
             catch (OperationCanceledException) { }
-            catch { /* process died — pending requests will time out */ }
+            catch (Exception ex)
+            {
+                AppLogger.Warn($"{nameof(McpClient)}.ReadLoop", $"MCP server '{_config.Name}' stopped unexpectedly", ex);
+            }
             finally
             {
                 foreach (var tcs2 in _pending.Values)
@@ -237,7 +240,11 @@ namespace Aire.Services.Mcp
         public void Stop()
         {
             _cts.Cancel();
-            try { _process?.Kill(entireProcessTree: true); } catch { }
+            try { _process?.Kill(entireProcessTree: true); }
+            catch (Exception ex)
+            {
+                AppLogger.Warn($"{nameof(McpClient)}.Stop", $"Failed to terminate MCP server '{_config.Name}'", ex);
+            }
             _initialized = false;
         }
 

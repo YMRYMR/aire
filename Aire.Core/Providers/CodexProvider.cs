@@ -667,7 +667,10 @@ namespace Aire.Providers
                     return results;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(CodexProvider) + ".GetWhereResults", "Failed to run where.exe for Codex discovery", ex);
+            }
 
             return Array.Empty<string>();
         }

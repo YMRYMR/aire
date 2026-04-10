@@ -81,8 +81,8 @@
                   Margin="0 8 0 0">
         <StackPanel x:Name="PART_AppearanceSection" Margin="8 8 8 16" HorizontalAlignment="Stretch">
             <Grid Margin="0 0 0 2">
-                <TextBlock x:Name="PART_BrightnessLabel" Text="Brightness" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" />
-                <TextBlock x:Name="PART_BrightnessValueLabel" HorizontalAlignment="Right" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock x:Name="PART_BrightnessLabel" Text="Brightness" Foreground="{DynamicResource TextBrush}" FontSize="11" VerticalAlignment="Center" />
+                <TextBlock x:Name="PART_BrightnessValueLabel" HorizontalAlignment="Right" FontSize="11" Foreground="{DynamicResource TextBrush}" />
             </Grid>
             <Slider x:Name="PART_BrightnessSlider"
                     Minimum="0"
@@ -94,8 +94,8 @@
                     ValueChanged="BrightnessSlider_ValueChanged" />
 
             <Grid Margin="0 0 0 2">
-                <TextBlock x:Name="PART_ColorTintLabel" Text="Color tint" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" />
-                <TextBlock x:Name="PART_TintValueLabel" HorizontalAlignment="Right" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock x:Name="PART_ColorTintLabel" Text="Color tint" Foreground="{DynamicResource TextBrush}" FontSize="11" VerticalAlignment="Center" />
+                <TextBlock x:Name="PART_TintValueLabel" HorizontalAlignment="Right" FontSize="11" Foreground="{DynamicResource TextBrush}" />
             </Grid>
             <Slider x:Name="PART_TintSlider"
                     Minimum="0"
@@ -106,11 +106,11 @@
                     Template="{StaticResource GradientSliderTemplate}"
                     ValueChanged="TintSlider_ValueChanged" />
             <Grid Margin="0 3 0 20">
-                <TextBlock x:Name="PART_NeutralLeftLabel" Text="← Neutral" HorizontalAlignment="Left" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" />
-                <TextBlock x:Name="PART_NeutralRightLabel" Text="Neutral →" HorizontalAlignment="Right" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock x:Name="PART_NeutralLeftLabel" Text="← Neutral" HorizontalAlignment="Left" FontSize="10" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock x:Name="PART_NeutralRightLabel" Text="Neutral →" HorizontalAlignment="Right" FontSize="10" Foreground="{DynamicResource TextBrush}" />
             </Grid>
 
-            <TextBlock x:Name="PART_AccentBrightnessLabel" Text="Accent brightness" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0 0 0 6" />
+            <TextBlock x:Name="PART_AccentBrightnessLabel" Text="Accent brightness" Foreground="{DynamicResource TextBrush}" FontSize="11" Margin="0 0 0 6" />
             <Slider x:Name="PART_AccentBrightnessSlider"
                     Minimum="0"
                     Maximum="1"
@@ -120,7 +120,7 @@
                     Template="{StaticResource GradientSliderTemplate}"
                     ValueChanged="AccentBrightnessSlider_ValueChanged" />
 
-            <TextBlock x:Name="PART_AccentTintLabel" Text="Accent color" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0 12 0 6" />
+            <TextBlock x:Name="PART_AccentTintLabel" Text="Accent color" Foreground="{DynamicResource TextBrush}" FontSize="11" Margin="0 12 0 6" />
             <Slider x:Name="PART_AccentTintSlider"
                     Minimum="0"
                     Maximum="1"
@@ -130,13 +130,13 @@
                     Template="{StaticResource GradientSliderTemplate}"
                     ValueChanged="AccentTintSlider_ValueChanged" />
             <Grid Margin="0 3 0 20">
-                <TextBlock x:Name="PART_AccentNeutralLeftLabel" Text="← Neutral" HorizontalAlignment="Left" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" />
-                <TextBlock x:Name="PART_AccentNeutralRightLabel" Text="Neutral →" HorizontalAlignment="Right" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock x:Name="PART_AccentNeutralLeftLabel" Text="← Neutral" HorizontalAlignment="Left" FontSize="10" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock x:Name="PART_AccentNeutralRightLabel" Text="Neutral →" HorizontalAlignment="Right" FontSize="10" Foreground="{DynamicResource TextBrush}" />
             </Grid>
 
             <Grid Margin="0 0 0 2">
-                <TextBlock x:Name="PART_FontSizeLabel" Text="Font size" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" />
-                <TextBlock x:Name="PART_FontSizeDisplay" HorizontalAlignment="Right" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock x:Name="PART_FontSizeLabel" Text="Font size" Foreground="{DynamicResource TextBrush}" FontSize="11" VerticalAlignment="Center" />
+                <TextBlock x:Name="PART_FontSizeDisplay" HorizontalAlignment="Right" FontSize="11" Foreground="{DynamicResource TextBrush}" />
             </Grid>
             <Slider x:Name="PART_FontSizeSlider"
                     Minimum="8"
@@ -150,7 +150,7 @@
                     Template="{StaticResource GradientSliderTemplate}"
                     ValueChanged="FontSizeSlider_ValueChanged" />
 
-            <TextBlock x:Name="PART_LanguageLabel" Text="Language" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0 12 0 6" />
+            <TextBlock x:Name="PART_LanguageLabel" Text="Language" Foreground="{DynamicResource TextBrush}" FontSize="11" Margin="0 12 0 6" />
             <ComboBox x:Name="PART_LanguageComboBox" HorizontalAlignment="Stretch" FontFamily="Segoe UI, Segoe UI Emoji" SelectionChanged="LanguageComboBox_SelectionChanged" />
         </StackPanel>
     </ScrollViewer>

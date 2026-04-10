@@ -32,7 +32,7 @@ namespace Aire.Providers
                 var url = string.IsNullOrWhiteSpace(baseUrl) ? DefaultApiBaseUrl : baseUrl.TrimEnd('/');
                 using var req = new HttpRequestMessage(HttpMethod.Get, $"{url}/v1/models");
                 req.Headers.Add("Authorization", $"Bearer {apiKey}");
-                var res = await MetadataHttp.SendAsync(req, ct).ConfigureAwait(false);
+                using var res = await MetadataHttp.SendAsync(req, ct).ConfigureAwait(false);
                 if (!res.IsSuccessStatusCode) return null;
                 var json = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
                 using var doc = JsonDocument.Parse(json);
@@ -66,7 +66,7 @@ namespace Aire.Providers
                 using var req = new HttpRequestMessage(HttpMethod.Get, $"{url}/v1/key");
                 req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
 
-                var res = await MetadataHttp.SendAsync(req, ct).ConfigureAwait(false);
+                using var res = await MetadataHttp.SendAsync(req, ct).ConfigureAwait(false);
                 if (!res.IsSuccessStatusCode)
                     return null;
 

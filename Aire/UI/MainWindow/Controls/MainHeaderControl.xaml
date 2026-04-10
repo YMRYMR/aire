@@ -48,6 +48,7 @@
             <ComboBox x:Name="PART_ProviderComboBox"
                       Grid.Column="3"
                       Margin="0"
+                      Foreground="{DynamicResource TextBrush}"
                       SelectionChanged="ProviderComboBox_SelectionChanged"
                       DropDownOpened="ProviderComboBox_DropDownOpened">
                 <ComboBox.ItemTemplate>
@@ -55,11 +56,13 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock x:Name="ProviderWarningIcon"
                                        Text="⚠ "
-                                       Foreground="#FFCC00"
+                                       Foreground="{DynamicResource TextBrush}"
                                        Visibility="Collapsed"
                                        ToolTip="Provider is on cooldown"
                                        VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Name}"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextBrush}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

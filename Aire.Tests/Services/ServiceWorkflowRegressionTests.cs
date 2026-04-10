@@ -1557,7 +1557,7 @@ public class ServiceWorkflowRegressionTests
         Assert.Equal("C:\\temp", apiToolExecutionResult2.DirectoryPath);
         Assert.Equal("1 folder, 1 file", apiToolExecutionResult2.DirectorySummary);
         Assert.Equal("C:\\temp\\capture.png", apiToolExecutionResult2.ScreenshotPath);
-        ApiStateSnapshot apiStateSnapshot = localApiApplicationService.BuildStateSnapshot(8200, isStartupReady: true, isMainWindowVisible: false, isSettingsOpen: true, isBrowserOpen: false, apiAccessEnabled: true, hasApiAccessToken: true, 12, provider, 3);
+        ApiStateSnapshot apiStateSnapshot = localApiApplicationService.BuildStateSnapshot(8200, isStartupReady: true, isMainWindowVisible: false, isSettingsOpen: true, isBrowserOpen: false, apiAccessEnabled: true, hasApiAccessToken: true, 12, provider, null, 3);
         Assert.Equal(8200, apiStateSnapshot.LocalApiPort);
         Assert.Equal(12, apiStateSnapshot.CurrentConversationId);
         Assert.Equal(provider.Id, apiStateSnapshot.CurrentProviderId);

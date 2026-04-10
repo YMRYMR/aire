@@ -101,11 +101,48 @@ namespace Aire.Services
         /// </summary>
         public void Dispose()
         {
-            if (_disposed) return;
+            if (_disposed)
+                return;
+
             _disposed = true;
-            StopListening();
-            _factory?.Dispose();
-            _pcmBuffer.Dispose();
+
+            try
+            {
+                StopListening();
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                StopCountdown();
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                _factory?.Dispose();
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                _pcmBuffer.Dispose();
+            }
+            catch
+            {
+            }
+
+            _countdownTimer = null;
+            _activeElapsedHandler = null;
+            _factory = null;
+            _waveIn = null;
+            GC.SuppressFinalize(this);
         }
     }
 }

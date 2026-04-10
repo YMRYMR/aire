@@ -30,6 +30,9 @@ namespace Aire
 
         internal void CloseSearch()
         {
+            if (SearchPanelControl is null)
+                return;
+
             SearchPanel.Visibility = Visibility.Collapsed;
             SearchTextBox.Text = string.Empty;
             ClearSearchHighlights();

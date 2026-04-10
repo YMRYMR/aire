@@ -80,12 +80,13 @@ namespace Aire
             return true;
         }
 
-        public Task<ApiStateSnapshot> ApiGetStateAsync()
-        {
-            var provider = ProviderComboBox.SelectedItem as Provider;
-            var pendingCount = Messages.Count(m => m.IsApprovalPending && m.ApprovalTcs != null && !m.ApprovalTcs.Task.IsCompleted);
+    public Task<ApiStateSnapshot> ApiGetStateAsync()
+    {
+        var provider = ProviderComboBox.SelectedItem as Provider;
+        var selectedWindow = WindowCaptureService.GetSelectedWindow();
+        var pendingCount = Messages.Count(m => m.IsApprovalPending && m.ApprovalTcs != null && !m.ApprovalTcs.Task.IsCompleted);
 
-            return Task.FromResult((_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
+        return Task.FromResult((_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
                 .BuildStateSnapshot(
                     LocalApiService.Port,
                     AppStartupState.IsReady,
@@ -96,7 +97,8 @@ namespace Aire
                     !string.IsNullOrWhiteSpace(AppState.GetApiAccessToken()),
                     _currentConversationId,
                     provider,
+                    selectedWindow,
                     pendingCount));
-        }
     }
+}
 }

@@ -9,22 +9,22 @@ namespace Aire.Services;
 /// Studio Output and tools like DebugView) and to a rolling log file in LocalAppData.
 /// No external dependencies — suitable for use anywhere in the process.
 /// </summary>
-internal static class AppLogger
+public static class AppLogger
 {
     private static readonly string _logPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Aire", "aire.log");
 
     /// <summary>Logs a diagnostic message at informational level.</summary>
-    internal static void Info(string context, string message)
+    public static void Info(string context, string message)
         => Write("INFO", context, message, exception: null);
 
     /// <summary>Logs a warning — something unexpected but recoverable.</summary>
-    internal static void Warn(string context, string message, Exception? exception = null)
+    public static void Warn(string context, string message, Exception? exception = null)
         => Write("WARN", context, message, exception);
 
     /// <summary>Logs a caught exception that was handled gracefully.</summary>
-    internal static void Error(string context, string message, Exception? exception = null)
+    public static void Error(string context, string message, Exception? exception = null)
         => Write("ERROR", context, message, exception);
 
     // ── internals ─────────────────────────────────────────────────────────────

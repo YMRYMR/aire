@@ -146,6 +146,84 @@ namespace Aire.Tests.Services
         }
 
         [Fact]
+        public void TraceLoggingHelpers_ShapesWindowCaptureAndSelectionMethods()
+        {
+            var captureResult = new WindowCaptureResult
+            {
+                Ok = true,
+                WindowId = "0000000000000123",
+                WindowTitle = "Settings — Aire",
+                ProcessName = "Aire",
+                PngPath = "C:/shot.png",
+                PngBase64 = "abc"
+            };
+
+            dynamic? captureTrace = LocalApiService.GetTraceDataForLogging("capture_window", captureResult);
+            Assert.NotNull(captureTrace);
+            Assert.True((bool)captureTrace!.Ok);
+            Assert.Equal("0000000000000123", captureTrace!.WindowId);
+            Assert.Equal("Settings — Aire", captureTrace!.WindowTitle);
+            Assert.True((bool)captureTrace!.HasPath);
+            Assert.True((bool)captureTrace!.HasBase64);
+
+            dynamic? listTrace = LocalApiService.GetTraceDataForLogging(
+                "list_windows",
+                new[]
+                {
+                    new TopLevelWindowInfo { WindowId = "1", Title = "A", ProcessName = "P" }
+                });
+            Assert.NotNull(listTrace);
+            Assert.Equal(1, (int)listTrace!.Count);
+
+            dynamic? selectedTrace = LocalApiService.GetTraceDataForLogging(
+                "get_selected_window",
+                new TopLevelWindowInfo
+                {
+                    WindowId = "0000000000000123",
+                    Title = "Settings — Aire",
+                    ProcessName = "Aire"
+                });
+            Assert.NotNull(selectedTrace);
+            Assert.Equal("Settings — Aire", selectedTrace!.Title);
+        }
+
+        [Fact]
+        public void WindowCaptureService_ResolveWindowCandidate_UsesSelectedWindow_WhenNoFiltersAreProvided()
+        {
+            var selected = new TopLevelWindowInfo
+            {
+                WindowId = "0000000000000001",
+                Title = "A",
+                ProcessName = "SelectedApp",
+                IsSelected = true
+            };
+
+            var active = new TopLevelWindowInfo
+            {
+                WindowId = "0000000000000002",
+                Title = "A much longer active window title",
+                ProcessName = "ActiveApp",
+                IsActive = true
+            };
+
+            var distractor = new TopLevelWindowInfo
+            {
+                WindowId = "0000000000000003",
+                Title = "This is the longest distractor title",
+                ProcessName = "DistractorApp"
+            };
+
+            var resolved = WindowCaptureService.ResolveWindowCandidate(
+                new WindowSelectionRequest(),
+                new[] { selected, active, distractor },
+                selected,
+                active);
+
+            Assert.Equal(selected.WindowId, resolved.WindowId);
+            Assert.Equal(selected.Title, resolved.Title);
+        }
+
+        [Fact]
         public void IsAuthorized_DeniesMissingAndWrongTokens()
         {
             RunOnStaThread(() =>
@@ -386,6 +464,66 @@ namespace Aire.Tests.Services
                 Assert.NotNull(traceResponse.Result);
                 Assert.True(clearResponse.Ok);
                 Assert.Contains("cleared", clearResponse.Result!.ToString(), StringComparison.OrdinalIgnoreCase);
+            });
+        }
+
+        [Fact]
+        public void DispatchAsync_ApproveAndDenyToolCalls_RouteThroughMainWindowApprovalState()
+        {
+            RunOnStaThread(async () =>
+            {
+                AppStartupState.MarkReady();
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
+
+                var approveTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                var denyTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                window.Messages = new System.Collections.ObjectModel.ObservableCollection<Aire.UI.MainWindow.Models.ChatMessage>
+                {
+                    new()
+                    {
+                        IsApprovalPending = true,
+                        PendingToolCall = new ToolCallRequest
+                        {
+                            Tool = "read_file",
+                            Description = "read",
+                            RawJson = "{}"
+                        },
+                        ApprovalTcs = approveTcs,
+                        Timestamp = "10:00"
+                    },
+                    new()
+                    {
+                        IsApprovalPending = true,
+                        PendingToolCall = new ToolCallRequest
+                        {
+                            Tool = "write_file",
+                            Description = "write",
+                            RawJson = "{}"
+                        },
+                        ApprovalTcs = denyTcs,
+                        Timestamp = "10:01"
+                    }
+                };
+
+                var approve = await service.DispatchAsync(new LocalApiRequest
+                {
+                    Method = "approve_tool_call",
+                    Parameters = JsonDocument.Parse("{\"index\":0}").RootElement.Clone()
+                }, CancellationToken.None);
+
+                var deny = await service.DispatchAsync(new LocalApiRequest
+                {
+                    Method = "deny_tool_call",
+                    Parameters = JsonDocument.Parse("{\"index\":1}").RootElement.Clone()
+                }, CancellationToken.None);
+
+                Assert.True(approve.Ok);
+                Assert.True(deny.Ok);
+                Assert.True(approveTcs.Task.IsCompletedSuccessfully);
+                Assert.True(denyTcs.Task.IsCompletedSuccessfully);
+                Assert.True(approveTcs.Task.Result);
+                Assert.False(denyTcs.Task.Result);
             });
         }
 

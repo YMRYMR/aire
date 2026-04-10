@@ -50,7 +50,7 @@ namespace Aire.Services.Tools
             catch (Exception ex)
             {
                 AppLogger.Warn(nameof(SystemToolService) + ".ExecuteGetSystemInfo", "System info retrieval failed", ex);
-            return new ToolExecutionResult { TextResult = "Error getting system info." };
+                return new ToolExecutionResult { TextResult = "Error getting system info." };
             }
         }
 
@@ -87,7 +87,7 @@ namespace Aire.Services.Tools
             catch (Exception ex)
             {
                 AppLogger.Warn(nameof(SystemToolService) + ".ExecuteGetRunningProcesses", "Process listing failed", ex);
-            return new ToolExecutionResult { TextResult = "Error listing processes." };
+                return new ToolExecutionResult { TextResult = "Error listing processes." };
             }
         }
 
@@ -105,10 +105,10 @@ namespace Aire.Services.Tools
                 Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
                 return new ToolExecutionResult { TextResult = $"Opened: {path}" };
             }
-        catch (Exception ex)
+            catch (Exception ex)
             {
-            AppLogger.Warn(nameof(SystemToolService) + ".ExecuteOpenFile", "Open file failed", ex);
-            return new ToolExecutionResult { TextResult = "Error opening file." };
+                AppLogger.Warn(nameof(SystemToolService) + ".ExecuteOpenFile", "Open file failed", ex);
+                return new ToolExecutionResult { TextResult = "Error opening file." };
             }
         }
 
@@ -125,17 +125,20 @@ namespace Aire.Services.Tools
                 GetWindowThreadProcessId(hwnd, out uint pid);
 
                 string procName = string.Empty;
-                try { procName = Process.GetProcessById((int)pid).ProcessName; } catch { }
+                try { procName = Process.GetProcessById((int)pid).ProcessName; }
+                catch
+                {
+                }
 
                 return new ToolExecutionResult
                 {
                     TextResult = $"Active window: \"{title}\"\nProcess: {procName} (PID {pid})"
                 };
             }
-        catch (Exception ex)
+            catch (Exception ex)
             {
-            AppLogger.Warn(nameof(SystemToolService) + ".ExecuteGetActiveWindow", "Active window lookup failed", ex);
-            return new ToolExecutionResult { TextResult = "System operation failed." };
+                AppLogger.Warn(nameof(SystemToolService) + ".ExecuteGetActiveWindow", "Active window lookup failed", ex);
+                return new ToolExecutionResult { TextResult = "System operation failed." };
             }
         }
 
@@ -149,9 +152,9 @@ namespace Aire.Services.Tools
             });
         }
 
-    public static void ShowSystemNotification(string title, string message)
-    {
-        AppLogger.Info(nameof(SystemToolService), $"Notification: {title}: {message}");
+        public static void ShowSystemNotification(string title, string message)
+        {
+            AppLogger.Info(nameof(SystemToolService), $"Notification: {title}: {message}");
+        }
     }
-}
 }
