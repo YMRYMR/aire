@@ -41,4 +41,60 @@ public class AppearanceServiceMathCoverageTests
         Assert.Equal(  0.0, AppearanceService.LerpHue(350.0,  10.0, 0.5), precision: 3);
         Assert.Equal( 45.0, AppearanceService.LerpHue( 30.0,  60.0, 0.5), precision: 3);
     }
+
+    [Fact]
+    public void RelativeLuminance_BlackAndWhite()
+    {
+        Assert.Equal(0.0, AppearanceService.RelativeLuminance(Color.FromRgb(0, 0, 0)), precision: 6);
+        Assert.Equal(1.0, AppearanceService.RelativeLuminance(Color.FromRgb(255, 255, 255)), precision: 6);
+    }
+
+    [Fact]
+    public void ContrastRatio_BlackOnWhite_Is21()
+    {
+        double ratio = AppearanceService.ContrastRatio(
+            Color.FromRgb(0, 0, 0),
+            Color.FromRgb(255, 255, 255));
+        Assert.Equal(21.0, ratio, precision: 3);
+    }
+
+    [Fact]
+    public void ContrastRatio_SameColor_Is1()
+    {
+        double ratio = AppearanceService.ContrastRatio(
+            Color.FromRgb(128, 128, 128),
+            Color.FromRgb(128, 128, 128));
+        Assert.Equal(1.0, ratio, precision: 3);
+    }
+
+    [Fact]
+    public void EnsureContrast_PushesLightFgOnDarkBg()
+    {
+        // Dark background, dim foreground — should be pushed toward white
+        Color bg = Color.FromRgb(0x1A, 0x1A, 0x1A);
+        Color fg = Color.FromRgb(0x40, 0x40, 0x40);
+        Color result = AppearanceService.EnsureContrast(fg, bg, 4.5);
+        double ratio = AppearanceService.ContrastRatio(result, bg);
+        Assert.True(ratio >= 4.5, $"Expected ratio >= 4.5, got {ratio:F2}");
+    }
+
+    [Fact]
+    public void EnsureContrast_PushesDarkFgOnLightBg()
+    {
+        // Light background, dim foreground — should be pushed toward black
+        Color bg = Color.FromRgb(0xE8, 0xE8, 0xE8);
+        Color fg = Color.FromRgb(0xA0, 0xA0, 0xA0);
+        Color result = AppearanceService.EnsureContrast(fg, bg, 4.5);
+        double ratio = AppearanceService.ContrastRatio(result, bg);
+        Assert.True(ratio >= 4.5, $"Expected ratio >= 4.5, got {ratio:F2}");
+    }
+
+    [Fact]
+    public void EnsureContrast_NoChangeWhenAlreadySufficient()
+    {
+        Color bg = Color.FromRgb(0x1A, 0x1A, 0x1A);
+        Color fg = Color.FromRgb(0xE0, 0xE0, 0xE0);
+        Color result = AppearanceService.EnsureContrast(fg, bg, 4.5);
+        Assert.Equal(fg, result);
+    }
 }

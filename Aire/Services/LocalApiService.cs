@@ -242,6 +242,25 @@ namespace Aire.Services
                         GetIntOrDefault(request.Parameters, "approval_timeout_seconds", 300))).ConfigureAwait(false)),
                     "get_trace" => LocalApiResponse.OkResult(ApiTraceLog.GetSince(GetLong(request.Parameters, "afterId"), GetIntOrDefault(request.Parameters, "limit", 100))),
                     "clear_trace" => LocalApiResponse.OkResult(ClearTrace()),
+                    "get_appearance" => LocalApiResponse.OkResult(new {
+                        brightness = AppearanceService.Brightness,
+                        tintPosition = AppearanceService.TintPosition,
+                        accentBrightness = AppearanceService.AccentBrightness,
+                        accentTintPosition = AppearanceService.AccentTintPosition,
+                        fontSize = AppearanceService.FontSize,
+                    }),
+                    "set_appearance" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() =>
+                    {
+                        double brightness = GetDoubleOrDefault(request.Parameters, "brightness", AppearanceService.Brightness);
+                        double tint       = GetDoubleOrDefault(request.Parameters, "tintPosition", AppearanceService.TintPosition);
+                        double ab         = GetDoubleOrDefault(request.Parameters, "accentBrightness", AppearanceService.AccentBrightness);
+                        double at_        = GetDoubleOrDefault(request.Parameters, "accentTintPosition", AppearanceService.AccentTintPosition);
+                        AppearanceService.Apply(brightness, tint);
+                        AppearanceService.ApplyAccent(ab, at_);
+                        double fs = GetDoubleOrDefault(request.Parameters, "fontSize", -1);
+                        if (fs > 0) AppearanceService.SetFontSize(fs);
+                        return Task.CompletedTask;
+                    }).ConfigureAwait(false)),
                     _ => LocalApiResponse.Error($"Unknown method: {request.Method}")
                 };
             }
@@ -359,6 +378,16 @@ namespace Aire.Services
                     return parsed;
             }
 
+            return defaultValue;
+        }
+
+        internal static double GetDoubleOrDefault(JsonElement? element, string name, double defaultValue)
+        {
+            if (element.HasValue &&
+                element.Value.ValueKind == JsonValueKind.Object &&
+                element.Value.TryGetProperty(name, out var prop) &&
+                prop.TryGetDouble(out var value))
+                return value;
             return defaultValue;
         }
 

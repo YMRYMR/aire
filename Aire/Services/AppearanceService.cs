@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Color = System.Windows.Media.Color;
@@ -15,7 +16,7 @@ namespace Aire.Services
     /// </summary>
     public static class AppearanceService
     {
-        // â”€â”€ Current state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // â"€â"€ Current state â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
         public static bool   UsesDarkPalette { get; private set; } = false;
         public static double Brightness   { get; private set; } = 0.9311106847612285; // default first-run palette
@@ -37,8 +38,8 @@ namespace Aire.Services
             remove => AppearanceChanged -= value;
         }
 
-        // â”€â”€ Message brushes (used directly by MainWindow chat rendering) â”€â”€â”€â”€â”€â”€
-        // These are NOT in Application.Current.Resources â€” MainWindow references
+        // â"€â"€ Message brushes (used directly by MainWindow chat rendering) â"€â"€â"€â"€â"€â"€
+        // These are NOT in Application.Current.Resources â€" MainWindow references
         // them by name.  Apply() updates their Color so existing messages repaint.
 
         public static SolidColorBrush UserBgBrush { get; private set; } = new();
@@ -62,7 +63,7 @@ namespace Aire.Services
             ErrorFgBrush = new();
         }
 
-        // â”€â”€ Palettes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // â"€â"€ Palettes â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
         // Each entry: (resourceKey, darkBaseRGB, lightBaseRGB)
 
         private static readonly (string Key, Color Dark, Color Light)[] ResourceSlots =
@@ -79,7 +80,7 @@ namespace Aire.Services
             ("PrimaryPressedBrush",       C(0x3D,0x3D,0x3D), C(0x8A,0x8A,0x8A)),
             ("SecondaryBrush",            C(0x28,0x28,0x28), C(0xDE,0xDE,0xDE)),
             ("TextBrush",                 C(0xD2,0xD2,0xD2), C(0x28,0x28,0x28)),
-            ("TextSecondaryBrush",        C(0x70,0x70,0x70), C(0x68,0x68,0x68)),
+            ("TextSecondaryBrush",        C(0xA0,0xA0,0xA0), C(0x50,0x50,0x50)),
             ("BorderBrush",               C(0x3A,0x3A,0x3A), C(0xC0,0xC0,0xC0)),
             ("UserMessageBrush",          C(0x32,0x32,0x32), C(0xD0,0xD0,0xD0)),
             ("UserMessageTextBrush",      C(0xE2,0xE2,0xE2), C(0x28,0x28,0x28)),
@@ -110,7 +111,7 @@ namespace Aire.Services
             /* ErrorFg  */ (C(0xAA,0x66,0x66), C(0x88,0x22,0x22)),
         ];
 
-        // â”€â”€ Public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // â"€â"€ Public API â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
         /// <summary>
         /// Reads appearance settings from the saved window-state JSON and calls
@@ -181,22 +182,41 @@ namespace Aire.Services
         /// </summary>
         public static void Apply(double brightness, double tintPosition)
         {
-            Brightness   = Math.Clamp(brightness, 0, 1);
+            Brightness      = Math.Clamp(brightness, 0, 1);
             UsesDarkPalette = Brightness < 0.5;
-            TintPosition = Math.Clamp(tintPosition, 0, 1);
+            TintPosition    = Math.Clamp(tintPosition, 0, 1);
 
+            double themeTone    = ThemeTone(Brightness);
             double tintHue      = TintPosition * 360.0;
             double tintStrength = Math.Sin(TintPosition * Math.PI); // 0 at ends, 1 at 0.5
 
-            // Resource brushes â€” replace the object so {DynamicResource} bindings update
+            // Resource brushes
             if (Application.Current?.Resources is ResourceDictionary res)
             {
+                // First pass: compute background colors so text can contrast against them.
+                var bgColor = LerpColor(ResourceSlots[0].Dark, ResourceSlots[0].Light, themeTone); // BackgroundBrush
+
                 foreach (var (key, dark, light) in ResourceSlots)
                 {
                     if (key.StartsWith("Accent", StringComparison.Ordinal))
                         continue;
-                    var base_ = LerpColor(dark, light, Brightness);
-                    res[key] = new SolidColorBrush(Tinted(base_, tintHue, tintStrength));
+
+                    var base_ = LerpColor(dark, light, themeTone);
+                    Color final;
+                    if (ShouldTintResource(key))
+                    {
+                        final = Tinted(base_, tintHue, tintStrength);
+                    }
+                    else
+                    {
+                        // Text/link/code fg: don't tint, but enforce contrast against background.
+                        Color bg = key is "CodeForegroundBrush" ? LerpColor(
+                            ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Dark,
+                            ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Light,
+                            themeTone) : bgColor;
+                        final = EnsureContrast(base_, bg, 4.5);
+                    }
+                    res[key] = new SolidColorBrush(final);
                 }
 
                 ApplyAccentResources(res);
@@ -204,15 +224,19 @@ namespace Aire.Services
 
             // Message brushes
             var msg = MsgSlots;
-            SetBrush(UserBgBrush,   Tinted(LerpColor(msg[0].Dark, msg[0].Light, Brightness), tintHue, tintStrength));
-            SetBrush(UserFgBrush,   Tinted(LerpColor(msg[1].Dark, msg[1].Light, Brightness), tintHue, tintStrength));
-            SetBrush(AiBgBrush,     Tinted(LerpColor(msg[2].Dark, msg[2].Light, Brightness), tintHue, tintStrength));
-            SetBrush(AiFgBrush,     Tinted(LerpColor(msg[3].Dark, msg[3].Light, Brightness), tintHue, tintStrength));
-            SetBrush(SystemBgBrush, Tinted(LerpColor(msg[4].Dark, msg[4].Light, Brightness), tintHue, tintStrength));
-            SetBrush(SystemFgBrush, LerpColor(msg[5].Dark, msg[5].Light, Brightness));   // no tint â€” must stay readable against any background
-            // Error brushes: preserve their red identity; tint background only slightly
-            SetBrush(ErrorBgBrush,  Tinted(LerpColor(msg[6].Dark, msg[6].Light, Brightness), tintHue, tintStrength * 0.25));
-            SetBrush(ErrorFgBrush,  LerpColor(msg[7].Dark, msg[7].Light, Brightness));   // no tint â€” always red-ish
+            Color userBg   = Tinted(LerpColor(msg[0].Dark, msg[0].Light, themeTone), tintHue, tintStrength);
+            Color aiBg     = Tinted(LerpColor(msg[2].Dark, msg[2].Light, themeTone), tintHue, tintStrength);
+            Color systemBg = Tinted(LerpColor(msg[4].Dark, msg[4].Light, themeTone), tintHue, tintStrength);
+            Color errorBg  = Tinted(LerpColor(msg[6].Dark, msg[6].Light, themeTone), tintHue, tintStrength * 0.25);
+
+            SetBrush(UserBgBrush,   userBg);
+            SetBrush(UserFgBrush,   EnsureContrast(LerpColor(msg[1].Dark, msg[1].Light, themeTone), userBg, 4.5));
+            SetBrush(AiBgBrush,     aiBg);
+            SetBrush(AiFgBrush,     EnsureContrast(LerpColor(msg[3].Dark, msg[3].Light, themeTone), aiBg, 4.5));
+            SetBrush(SystemBgBrush, systemBg);
+            SetBrush(SystemFgBrush, EnsureContrast(LerpColor(msg[5].Dark, msg[5].Light, themeTone), systemBg, 4.5));
+            SetBrush(ErrorBgBrush,  errorBg);
+            SetBrush(ErrorFgBrush,  EnsureContrast(LerpColor(msg[7].Dark, msg[7].Light, themeTone), errorBg, 4.5));
 
             AppearanceChanged?.Invoke();
         }
@@ -233,7 +257,7 @@ namespace Aire.Services
             AppearanceChanged?.Invoke();
         }
 
-        // â”€â”€ Colour math â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // â"€â"€ Colour math â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
         /// <summary>
         /// Shifts the base colour's hue toward tintHue while preserving luminance.
@@ -267,6 +291,84 @@ namespace Aire.Services
             if (!b.IsFrozen) b.Color = c;
         }
 
+        /// <summary>
+        /// Applies a power curve to the raw brightness value so the dark half of the
+        /// slider covers more perceptually useful tones.  1.25 exponent keeps the full
+        /// range reachable while expanding the dark region.
+        /// </summary>
+        private static double ThemeTone(double value) =>
+            Math.Pow(Math.Clamp(value, 0, 1), 1.25);
+
+        /// <summary>
+        /// Returns false for text / foreground resources that must not be hue-tinted
+        /// (tinting a foreground color independently of its background destroys contrast).
+        /// </summary>
+        private static bool ShouldTintResource(string key) =>
+            key switch
+            {
+                "TextBrush"               => false,
+                "TextSecondaryBrush"      => false,
+                "UserMessageTextBrush"    => false,
+                "AssistantMessageTextBrush" => false,
+                "StatusTextBrush"         => false,
+                "LinkBrush"               => false,
+                "CodeForegroundBrush"     => false,
+                _                         => true,
+            };
+
+        /// <summary>
+        /// Adjusts <paramref name="fg"/> lightness so the WCAG contrast ratio against
+        /// <paramref name="bg"/> is at least <paramref name="minRatio"/> (4.5 = AA level).
+        /// Hue and saturation are preserved; only luminance is pushed toward black or white.
+        /// </summary>
+        internal static Color EnsureContrast(Color fg, Color bg, double minRatio)
+        {
+            if (ContrastRatio(fg, bg) >= minRatio)
+                return fg;
+
+            var (h, s, _) = ToHsl(fg);
+            double bgL    = RelativeLuminance(bg);
+
+            // Decide direction: push fg darker if bg is light, lighter if bg is dark.
+            bool pushLight = bgL < 0.18; // bg is dark → fg should go lighter
+
+            // Binary search on HSL lightness to hit the target contrast.
+            double lo = 0, hi = 1;
+            for (int i = 0; i < 24; i++)
+            {
+                double mid = (lo + hi) / 2;
+                double l   = pushLight ? (0.5 + mid / 2) : (0.5 - mid / 2); // upper or lower half
+                var candidate = FromHsl(h, s, l);
+                if (ContrastRatio(candidate, bg) >= minRatio)
+                    hi = mid;
+                else
+                    lo = mid;
+            }
+            double finalL = pushLight ? (0.5 + hi / 2) : (0.5 - hi / 2);
+            return FromHsl(h, s, Math.Clamp(finalL, 0, 1));
+        }
+
+        /// <summary>WCAG relative luminance (IEC 61966-2-1).</summary>
+        internal static double RelativeLuminance(Color c)
+        {
+            static double Ch(byte v)
+            {
+                double s = v / 255.0;
+                return s <= 0.04045 ? s / 12.92 : Math.Pow((s + 0.055) / 1.055, 2.4);
+            }
+            return 0.2126 * Ch(c.R) + 0.7152 * Ch(c.G) + 0.0722 * Ch(c.B);
+        }
+
+        /// <summary>WCAG contrast ratio between two colors.</summary>
+        internal static double ContrastRatio(Color a, Color b)
+        {
+            double l1 = RelativeLuminance(a);
+            double l2 = RelativeLuminance(b);
+            double lighter = Math.Max(l1, l2);
+            double darker  = Math.Min(l1, l2);
+            return (lighter + 0.05) / (darker + 0.05);
+        }
+
         private static void ApplyAccentResources(ResourceDictionary res)
         {
             double tintHue = AccentTintPosition * 360.0;
@@ -284,7 +386,7 @@ namespace Aire.Services
 
         private static Color C(byte r, byte g, byte b) => Color.FromRgb(r, g, b);
 
-        // â”€â”€ HSL conversions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // â"€â"€ HSL conversions â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
         internal static (double h, double s, double l) ToHsl(Color c)
         {

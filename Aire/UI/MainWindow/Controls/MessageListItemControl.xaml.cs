@@ -25,9 +25,18 @@ namespace Aire.UI.MainWindow.Controls
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
             Loaded += (_, _) => ApplyLocalization();
-            Unloaded += (_, _) => LocalizationService.LanguageChanged -= OnLanguageChanged;
+            Unloaded += OnUnloaded;
             LocalizationService.LanguageChanged += OnLanguageChanged;
+            AppearanceService.AppearanceChanged += OnAppearanceChanged;
         }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            LocalizationService.LanguageChanged -= OnLanguageChanged;
+            AppearanceService.AppearanceChanged -= OnAppearanceChanged;
+        }
+
+        private void OnAppearanceChanged() => UpdateVisualState();
 
         private void OnLanguageChanged()
             => Dispatcher.Invoke(ApplyLocalization);
