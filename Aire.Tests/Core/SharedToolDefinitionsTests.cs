@@ -47,4 +47,64 @@ public class SharedToolDefinitionsTests
             }
         }
     }
+
+    [Fact]
+    public void GetDescription_ReturnsShortDescription_WhenCompactAndShortDescriptionSet()
+    {
+        var tool = new ToolDescriptor
+        {
+            Name = "test_tool",
+            Description = "Long verbose description with coaching text.",
+            ShortDescription = "Short description.",
+            Category = "filesystem",
+        };
+
+        Assert.Equal("Short description.", tool.GetDescription(compact: true));
+        Assert.Equal("Long verbose description with coaching text.", tool.GetDescription(compact: false));
+    }
+
+    [Fact]
+    public void GetDescription_FallsBackToDescription_WhenShortDescriptionEmpty()
+    {
+        var tool = new ToolDescriptor
+        {
+            Name = "test_tool",
+            Description = "Full description.",
+            ShortDescription = string.Empty,
+            Category = "filesystem",
+        };
+
+        Assert.Equal("Full description.", tool.GetDescription(compact: true));
+        Assert.Equal("Full description.", tool.GetDescription(compact: false));
+    }
+
+    [Fact]
+    public void AllTools_HaveNonEmptyShortDescriptions()
+    {
+        foreach (var tool in SharedToolDefinitions.AllTools)
+        {
+            Assert.False(string.IsNullOrWhiteSpace(tool.ShortDescription),
+                $"Tool '{tool.Name}' is missing a ShortDescription.");
+        }
+    }
+
+    [Fact]
+    public void ToOpenAiFunctions_Compact_UsesShortDescriptions()
+    {
+        var functions = SharedToolDefinitions.ToOpenAiFunctions(
+            capabilities: ["tools"],
+            compact: true);
+
+        Assert.NotEmpty(functions);
+    }
+
+    [Fact]
+    public void ToAnthropicTools_Compact_UsesShortDescriptions()
+    {
+        var tools = SharedToolDefinitions.ToAnthropicTools(
+            capabilities: ["tools"],
+            compact: true);
+
+        Assert.NotEmpty(tools);
+    }
 }

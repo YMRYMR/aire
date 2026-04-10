@@ -1,6 +1,8 @@
 using System.IO;
+using System.Text;
 using Aire.Data;
 using Aire.Domain.Providers;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -142,6 +144,34 @@ namespace Aire.Providers
         /// <param name="cancellationToken">Cancellation token for the usage lookup.</param>
         /// <returns>Usage details, or <see langword="null"/> when unavailable.</returns>
         Task<TokenUsage?> GetTokenUsageAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Builds the system prompt to inject for this provider's next request.
+        /// Providers override this to select a compact vs verbose prompt, apply category filtering,
+        /// and append the model list / mode / MCP sections.
+        /// The default implementation mirrors the pre-optimization behaviour (no category filtering,
+        /// verbose prompts) so that test fakes and non-<see cref="BaseAiProvider"/> implementations
+        /// continue to compile without changes.
+        /// </summary>
+        /// <param name="modelListSection">Model-switch section already rendered by the UI coordinator.</param>
+        /// <param name="modePromptSection">Assistant mode section, or <see langword="null"/>.</param>
+        /// <param name="mcpSection">Pre-rendered MCP tool section, or <see langword="null"/>.</param>
+        /// <returns>The complete system prompt string.</returns>
+        string BuildToolSystemPrompt(string modelListSection, string? modePromptSection, string? mcpSection)
+        {
+            var basePrompt = ToolOutputFormat switch
+            {
+                ToolOutputFormat.Hermes          => FileSystemSystemPrompt.HermesToolCallingText,
+                ToolOutputFormat.React           => FileSystemSystemPrompt.ReactToolCallingText,
+                ToolOutputFormat.NativeToolCalls => FileSystemSystemPrompt.NativeToolCallingText,
+                _                                => FileSystemSystemPrompt.Text,
+            };
+            var sb = new StringBuilder(basePrompt);
+            if (!string.IsNullOrEmpty(modelListSection)) sb.Append(modelListSection);
+            if (!string.IsNullOrWhiteSpace(modePromptSection)) sb.Append(modePromptSection);
+            if (!string.IsNullOrWhiteSpace(mcpSection)) sb.Append(mcpSection);
+            return sb.ToString();
+        }
     }
 
     /// <summary>
@@ -315,6 +345,41 @@ namespace Aire.Providers
 
         public virtual Task<TokenUsage?> GetTokenUsageAsync(CancellationToken ct)
             => Task.FromResult<TokenUsage?>(null);
+
+        /// <summary>
+        /// When <see langword="true"/>, this provider requests compact (short) tool descriptions
+        /// in the native schema payload. Models that handle tools well need far less coaching.
+        /// Defaults to <see langword="false"/> (full verbose descriptions).
+        /// Override to <see langword="true"/> in providers like OpenAI, Anthropic, and Gemini
+        /// where models reliably infer correct usage from the parameter schema alone.
+        /// </summary>
+        protected virtual bool PreferCompactToolDescriptions => false;
+
+        /// <inheritdoc/>
+        public virtual string BuildToolSystemPrompt(string modelListSection, string? modePromptSection, string? mcpSection)
+        {
+            var enabledCategories = Config.EnabledToolCategories;
+
+            string basePrompt = ToolOutputFormat switch
+            {
+                ToolOutputFormat.Hermes          => FileSystemSystemPrompt.HermesToolCallingText,
+                ToolOutputFormat.React           => FileSystemSystemPrompt.ReactToolCallingText,
+                ToolOutputFormat.NativeToolCalls => PreferCompactToolDescriptions
+                                                    ? FileSystemSystemPrompt.BuildNativeCompact(enabledCategories)
+                                                    : FileSystemSystemPrompt.NativeToolCallingText,
+                _                                => FileSystemSystemPrompt.BuildTextBased(enabledCategories),
+            };
+
+            var sb = new StringBuilder(basePrompt.Length + (modelListSection?.Length ?? 0) + 256);
+            sb.Append(basePrompt);
+            if (!string.IsNullOrEmpty(modelListSection))
+                sb.Append(modelListSection);
+            if (!string.IsNullOrWhiteSpace(modePromptSection))
+                sb.Append(modePromptSection);
+            if (!string.IsNullOrWhiteSpace(mcpSection))
+                sb.Append(mcpSection);
+            return sb.ToString();
+        }
 
         public virtual ProviderFieldHints FieldHints => new();
         public virtual IReadOnlyList<ProviderAction> Actions => Array.Empty<ProviderAction>();

@@ -23,6 +23,7 @@ namespace Aire.Providers
         public override string ProviderType => "GoogleAI";
         public override string DisplayName  => "Google AI (Gemini)";
         protected override ToolCallMode DefaultToolCallMode => ToolCallMode.NativeFunctionCalling;
+        protected override bool PreferCompactToolDescriptions => true;
         protected override ProviderCapabilities GetBaseCapabilities() =>
             ProviderCapabilities.TextChat    |
             ProviderCapabilities.Streaming   |
@@ -100,7 +101,8 @@ namespace Aire.Providers
                         {
                             function_declarations = SharedToolDefinitions.ToGeminiFunctionDeclarations(
                                 Config.ModelCapabilities,
-                                Config.EnabledToolCategories)
+                                Config.EnabledToolCategories,
+                                compact: PreferCompactToolDescriptions)
                         }
                     };
                 }
@@ -141,7 +143,8 @@ namespace Aire.Providers
 
             var functionDeclarations = SharedToolDefinitions.ToGeminiFunctionDeclarations(
                 Config.ModelCapabilities,
-                Config.EnabledToolCategories);
+                Config.EnabledToolCategories,
+                compact: PreferCompactToolDescriptions);
             if (functionDeclarations.Count > 0)
             {
                 cacheBody["tools"] = new[]
@@ -184,7 +187,8 @@ namespace Aire.Providers
         {
             var functionDeclarations = SharedToolDefinitions.ToGeminiFunctionDeclarations(
                 Config.ModelCapabilities,
-                Config.EnabledToolCategories);
+                Config.EnabledToolCategories,
+                compact: PreferCompactToolDescriptions);
 
             var payload = JsonSerializer.Serialize(new
             {

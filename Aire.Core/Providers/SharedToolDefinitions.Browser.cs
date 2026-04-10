@@ -8,6 +8,7 @@ public static partial class SharedToolDefinitions
         {
             Name = "open_url",
             Category = "browser",
+            ShortDescription = "Fetch a web page and return its readable text content (background HTTP fetch, no browser window).",
             Description =
                 "Fetch a web page and return its readable text content. " +
                 "Use this to read articles, documentation, Wikipedia, Stack Overflow, GitHub pages, " +
@@ -26,6 +27,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "open_browser_tab",
             Category = "browser",
+            ShortDescription = "Open a URL in the Aire visible browser window.",
             Description =
                 "Opens a URL in the Aire in-app browser window (WebView). " +
                 "Use this whenever the user wants to visually open or navigate to a page. " +
@@ -42,6 +44,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "list_browser_tabs",
             Category = "browser",
+            ShortDescription = "List all open browser tabs (index, URL, title).",
             Description =
                 "Lists all tabs currently open in the Aire browser window. " +
                 "Returns the index, URL, and title of each tab, and which one is active. " +
@@ -53,6 +56,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "read_browser_tab",
             Category = "browser",
+            ShortDescription = "Read the rendered text of a browser tab the user has open.",
             Description =
                 "Reads the full visible text content of a browser tab that the user has open. " +
                 "Use list_browser_tabs first to see available tabs. " +
@@ -69,6 +73,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "switch_browser_tab",
             Category = "browser",
+            ShortDescription = "Switch the active browser tab by index.",
             Description =
                 "Switch the active browser tab by index. " +
                 "Use list_browser_tabs first to get the correct index.",
@@ -82,6 +87,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "close_browser_tab",
             Category = "browser",
+            ShortDescription = "Close a browser tab (-1 for active tab).",
             Description =
                 "Close a browser tab by index (-1 or omit for the active tab). " +
                 "If it is the last tab the browser window closes.",
@@ -95,6 +101,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "get_browser_html",
             Category = "browser",
+            ShortDescription = "Get the full HTML source of a browser tab.",
             Description =
                 "Get the full HTML source of a browser tab. " +
                 "Unlike read_browser_tab (which returns plain text), this returns the raw HTML " +
@@ -109,6 +116,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "execute_browser_script",
             Category = "browser",
+            ShortDescription = "Execute JavaScript in a browser tab and return the result.",
             Description =
                 "Execute JavaScript in a browser tab and return the result. " +
                 "Use this to read DOM state, manipulate the page, fill forms, submit forms, " +
@@ -126,6 +134,7 @@ public static partial class SharedToolDefinitions
         {
             Name     = "get_browser_cookies",
             Category = "browser",
+            ShortDescription = "List cookies for the active browser tab's domain.",
             Description =
                 "List all cookies for the active tab's domain. " +
                 "Returns name, value, domain, path, secure flag, and httpOnly flag for each cookie.",

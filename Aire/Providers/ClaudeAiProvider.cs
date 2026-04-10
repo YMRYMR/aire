@@ -36,6 +36,10 @@ namespace Aire.Providers
             ProviderCapabilities.ToolCalling |
             ProviderCapabilities.SystemPrompt;
 
+        protected override ToolCallMode DefaultToolCallMode => ToolCallMode.NativeFunctionCalling;
+        protected override ToolOutputFormat DefaultToolOutputFormat => ToolOutputFormat.NativeToolCalls;
+        protected override bool PreferCompactToolDescriptions => true;
+
         // ── IProviderMetadata overrides ─────────────────────────────────────
 
         public override ProviderFieldHints FieldHints => new()
@@ -233,6 +237,17 @@ namespace Aire.Providers
                     new { type = "text", text = systemContent, cache_control = new { type = "ephemeral" } }
                 };
 
+            // Inject native tool schemas when tools are enabled
+            if (!Config!.SkipNativeTools && ToolCallMode == ToolCallMode.NativeFunctionCalling)
+            {
+                var tools = SharedToolDefinitions.ToAnthropicTools(
+                    Config.ModelCapabilities,
+                    Config.EnabledToolCategories,
+                    compact: PreferCompactToolDescriptions);
+                if (tools.Count > 0)
+                    bodyObj["tools"] = tools;
+            }
+
             var jsonBody = JsonSerializer.Serialize(bodyObj);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, $"{ApiBase}/v1/messages");
@@ -254,6 +269,11 @@ namespace Aire.Providers
                 .ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
             using var reader = new StreamReader(stream);
 
+            // State for accumulating tool_use blocks
+            string? currentToolName = null;
+            var currentToolJson = new StringBuilder();
+            bool inToolUseBlock = false;
+
             string? line;
             while ((line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false)) != null)
             {
@@ -267,16 +287,74 @@ namespace Aire.Providers
                 try { using var doc = JsonDocument.Parse(data); root = doc.RootElement.Clone(); }
                 catch { continue; }
 
-                if (root.TryGetProperty("type", out var typeEl) &&
-                    typeEl.GetString() == "content_block_delta" &&
-                    root.TryGetProperty("delta", out var delta) &&
-                    delta.TryGetProperty("text", out var text))
+                if (!root.TryGetProperty("type", out var typeEl)) continue;
+                var eventType = typeEl.GetString();
+
+                if (eventType == "content_block_start")
                 {
-                    var chunk = text.GetString();
-                    if (!string.IsNullOrEmpty(chunk))
-                        yield return chunk;
+                    if (root.TryGetProperty("content_block", out var cb) &&
+                        cb.TryGetProperty("type", out var cbType) &&
+                        cbType.GetString() == "tool_use")
+                    {
+                        currentToolName = cb.TryGetProperty("name", out var n) ? n.GetString() : null;
+                        currentToolJson.Clear();
+                        inToolUseBlock = true;
+                    }
+                }
+                else if (eventType == "content_block_delta" &&
+                         root.TryGetProperty("delta", out var delta))
+                {
+                    var deltaType = delta.TryGetProperty("type", out var dt) ? dt.GetString() : null;
+
+                    if (deltaType == "text_delta" &&
+                        delta.TryGetProperty("text", out var text))
+                    {
+                        var chunk = text.GetString();
+                        if (!string.IsNullOrEmpty(chunk))
+                            yield return chunk;
+                    }
+                    else if (deltaType == "input_json_delta" &&
+                             inToolUseBlock &&
+                             delta.TryGetProperty("partial_json", out var pj))
+                    {
+                        currentToolJson.Append(pj.GetString());
+                    }
+                }
+                else if (eventType == "content_block_stop" && inToolUseBlock)
+                {
+                    if (!string.IsNullOrEmpty(currentToolName))
+                    {
+                        var toolCall = ConvertAnthropicToolUseToToolCall(currentToolName, currentToolJson.ToString());
+                        if (!string.IsNullOrEmpty(toolCall))
+                            yield return toolCall;
+                    }
+                    inToolUseBlock = false;
+                    currentToolName = null;
+                    currentToolJson.Clear();
                 }
             }
+        }
+
+        // ── Tool call conversion ─────────────────────────────────────────────
+
+        private static string ConvertAnthropicToolUseToToolCall(string toolName, string inputJson)
+        {
+            var dict = new Dictionary<string, object?> { ["tool"] = toolName };
+            try
+            {
+                if (!string.IsNullOrEmpty(inputJson))
+                {
+                    using var doc = JsonDocument.Parse(inputJson);
+                    foreach (var prop in doc.RootElement.EnumerateObject())
+                    {
+                        dict[prop.Name] = prop.Value.ValueKind == JsonValueKind.String
+                            ? (object?)prop.Value.GetString()
+                            : (object?)prop.Value.GetRawText();
+                    }
+                }
+            }
+            catch { }
+            return $"\n<tool_call>{JsonSerializer.Serialize(dict)}</tool_call>";
         }
 
         // ── Validation ────────────────────────────────────────────────────────
