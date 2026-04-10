@@ -24,6 +24,9 @@ namespace Aire.Services
         public int? CurrentProviderId { get; set; }
         public string? CurrentProviderName { get; set; }
         public string? CurrentProviderModel { get; set; }
+        public string? SelectedWindowId { get; set; }
+        public string? SelectedWindowTitle { get; set; }
+        public string? SelectedWindowProcessName { get; set; }
         public int PendingApprovals { get; set; }
     }
 

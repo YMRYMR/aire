@@ -159,8 +159,9 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Ollama + local embeddings for fully offline operation.
 - Configurable index scope (directories, file types, update frequency).
 
-### 5.7 Better automation ergonomics `[ ]`
+### 5.7 Better automation ergonomics `[~]`
 - Make provider selection, tool approval, and local API usage easier to script and test.
+- Recent progress: the local API now exposes top-level window listing, selection, and screenshot capture, and the screenshots project reuses the same capture path instead of owning a separate one.
 
 ### 5.8 Plugin system `[ ]`
 - Formalize MCP + tool categories into a plugin architecture.

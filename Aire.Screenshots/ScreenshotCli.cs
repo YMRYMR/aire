@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.IO;
 using System.Diagnostics;
+using Aire.Services;
 
 namespace Aire.Screenshots;
 
@@ -56,7 +57,7 @@ internal static class ScreenshotCli
 
     private static void ListWindows()
     {
-        foreach (var window in NativeWindowFinder.ListWindows())
+        foreach (var window in WindowCaptureService.ListWindows())
             Console.WriteLine($"{window.ProcessName}\t{window.Title}");
     }
 
@@ -181,11 +182,23 @@ internal static class ScreenshotCli
         if (request.DelayMs > 0)
             await Task.Delay(request.DelayMs);
 
-        using var bitmap = WindowCaptureService.Capture(request);
-        var outputPath = Path.GetFullPath(request.OutputPath);
-        Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
-        bitmap.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);
-        Console.WriteLine(outputPath);
+        var capture = WindowCaptureService.CaptureWindow(
+            new WindowSelectionRequest
+            {
+                ExactTitle = request.ExactTitle,
+                TitleContains = request.TitleContains,
+                ProcessName = request.ProcessName,
+                UseActiveWindow = request.UseActiveWindow
+            },
+            new WindowCaptureOptions
+            {
+                OutputPath = request.OutputPath,
+                Padding = request.Padding,
+                ActivateWindow = request.ActivateWindow,
+                ReturnBase64 = false
+            });
+
+        Console.WriteLine(capture.PngPath ?? request.OutputPath);
     }
 
     private static bool IsMainWindowCapture(ScreenshotRequest request)

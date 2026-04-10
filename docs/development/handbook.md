@@ -557,11 +557,13 @@ Intended for trusted local automation and AI agent integration.
 ### Local API
 
 AIs can interact with the running app via `http://127.0.0.1:51234` to send
-messages, switch providers, and inspect state without a human in the loop.
+messages, switch providers, inspect state, select top-level windows, and capture
+the selected window without a human in the loop.
 
 ### Screenshot Automation
 
-The `Aire.Screenshots` project captures repeatable screenshots of the running app:
+The `Aire.Screenshots` project captures repeatable screenshots of the running app
+and shares the same top-level window capture path that the local API uses:
 
 ```powershell
 dotnet run --project .\Aire.Screenshots\Aire.Screenshots.csproj -- run-plan --plan ".\Aire.Screenshots\help-assets-plan.json"

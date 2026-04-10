@@ -205,6 +205,14 @@ namespace Aire.Services
                 {
                     "ping" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiStateSnapshot>(() => _mainWindow.ApiGetStateAsync()).ConfigureAwait(false)),
                     "get_state" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiStateSnapshot>(() => _mainWindow.ApiGetStateAsync()).ConfigureAwait(false)),
+                    "list_windows" => LocalApiResponse.OkResult(WindowCaptureService.ListWindows()),
+                    "get_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.GetSelectedWindow()),
+                    "select_window" => LocalApiResponse.OkResult(WindowCaptureService.SelectWindow(BuildWindowSelectionRequest(request.Parameters)
+                        ?? throw new InvalidOperationException("select_window requires window selection parameters."))),
+                    "capture_window" => LocalApiResponse.OkResult(WindowCaptureService.CaptureWindow(
+                        BuildWindowSelectionRequest(request.Parameters) ?? new WindowSelectionRequest(),
+                        BuildWindowCaptureOptions(request.Parameters))),
+                    "capture_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.CaptureSelectedWindow(BuildWindowCaptureOptions(request.Parameters))),
                     "show_main_window" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.ShowMainWindowAsync()).ConfigureAwait(false)),
                     "hide_main_window" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.HideMainWindowAsync()).ConfigureAwait(false)),
                     "open_settings" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.ShowSettingsWindowAsync()).ConfigureAwait(false)),
@@ -430,10 +438,68 @@ namespace Aire.Services
                         HasScreenshot = !string.IsNullOrEmpty(toolResult.ScreenshotPath)
                     }
                     : null,
+                "capture_window" or "capture_selected_window" => result is WindowCaptureResult captureResult
+                    ? new
+                    {
+                        captureResult.Ok,
+                        captureResult.WindowId,
+                        captureResult.WindowTitle,
+                        captureResult.ProcessName,
+                        HasPath = !string.IsNullOrWhiteSpace(captureResult.PngPath),
+                        HasBase64 = !string.IsNullOrWhiteSpace(captureResult.PngBase64)
+                    }
+                    : null,
+                "list_windows" => result is IEnumerable<TopLevelWindowInfo> windows
+                    ? new { Count = windows.Count() }
+                    : null,
+                "select_window" or "get_selected_window" => result is TopLevelWindowInfo window
+                    ? new
+                    {
+                        window.WindowId,
+                        window.Title,
+                        window.ProcessName,
+                        window.IsActive,
+                        window.IsSelected
+                    }
+                    : null,
                 "send_message" or "get_messages" or "get_trace" => null,
                 _ => result
             };
         }
+
+        private static WindowSelectionRequest? BuildWindowSelectionRequest(JsonElement? parameters)
+        {
+            var windowId = GetNullableString(parameters, "windowId");
+            var exactTitle = GetNullableString(parameters, "exactTitle");
+            var titleContains = GetNullableString(parameters, "titleContains");
+            var processName = GetNullableString(parameters, "processName");
+            var useActiveWindow = GetBoolOrDefault(parameters, "useActiveWindow", false);
+
+            if (string.IsNullOrWhiteSpace(windowId) &&
+                string.IsNullOrWhiteSpace(exactTitle) &&
+                string.IsNullOrWhiteSpace(titleContains) &&
+                string.IsNullOrWhiteSpace(processName) &&
+                !useActiveWindow)
+                return null;
+
+            return new WindowSelectionRequest
+            {
+                WindowId = windowId,
+                ExactTitle = exactTitle,
+                TitleContains = titleContains,
+                ProcessName = processName,
+                UseActiveWindow = useActiveWindow
+            };
+        }
+
+        private static WindowCaptureOptions BuildWindowCaptureOptions(JsonElement? parameters)
+            => new()
+            {
+                OutputPath = GetNullableString(parameters, "outputPath"),
+                Padding = GetIntOrDefault(parameters, "padding", 16),
+                ActivateWindow = GetBoolOrDefault(parameters, "activateWindow", true),
+                ReturnBase64 = GetBoolOrDefault(parameters, "returnBase64", false)
+            };
 
         /// <summary>
         /// Validates the bearer-style token supplied with a local API request.

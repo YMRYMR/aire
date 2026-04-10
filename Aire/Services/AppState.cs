@@ -81,6 +81,10 @@ internal static class AppState
     public static void SetPreferredCurrency(string code) => SetString("preferredCurrency", code);
     /// <summary>Returns the preferred currency code, or empty when none was saved.</summary>
     public static string GetPreferredCurrency() => GetString("preferredCurrency");
+    /// <summary>Persists the selected top-level window id for screenshot capture.</summary>
+    public static void SetSelectedWindowId(string windowId) => SetString("selectedWindowId", windowId);
+    /// <summary>Returns the selected top-level window id, or empty when none was saved.</summary>
+    public static string GetSelectedWindowId() => GetString("selectedWindowId");
     /// <summary>Encrypts and persists the local API token.</summary>
     public static void SetApiAccessToken(string token) => SetSecureString("apiAccessToken", token);
     /// <summary>Loads and decrypts the persisted local API token.</summary>

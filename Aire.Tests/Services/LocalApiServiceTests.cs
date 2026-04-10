@@ -146,6 +146,48 @@ namespace Aire.Tests.Services
         }
 
         [Fact]
+        public void TraceLoggingHelpers_ShapesWindowCaptureAndSelectionMethods()
+        {
+            var captureResult = new WindowCaptureResult
+            {
+                Ok = true,
+                WindowId = "0000000000000123",
+                WindowTitle = "Settings — Aire",
+                ProcessName = "Aire",
+                PngPath = "C:/shot.png",
+                PngBase64 = "abc"
+            };
+
+            dynamic? captureTrace = LocalApiService.GetTraceDataForLogging("capture_window", captureResult);
+            Assert.NotNull(captureTrace);
+            Assert.True((bool)captureTrace!.Ok);
+            Assert.Equal("0000000000000123", captureTrace!.WindowId);
+            Assert.Equal("Settings — Aire", captureTrace!.WindowTitle);
+            Assert.True((bool)captureTrace!.HasPath);
+            Assert.True((bool)captureTrace!.HasBase64);
+
+            dynamic? listTrace = LocalApiService.GetTraceDataForLogging(
+                "list_windows",
+                new[]
+                {
+                    new TopLevelWindowInfo { WindowId = "1", Title = "A", ProcessName = "P" }
+                });
+            Assert.NotNull(listTrace);
+            Assert.Equal(1, (int)listTrace!.Count);
+
+            dynamic? selectedTrace = LocalApiService.GetTraceDataForLogging(
+                "get_selected_window",
+                new TopLevelWindowInfo
+                {
+                    WindowId = "0000000000000123",
+                    Title = "Settings — Aire",
+                    ProcessName = "Aire"
+                });
+            Assert.NotNull(selectedTrace);
+            Assert.Equal("Settings — Aire", selectedTrace!.Title);
+        }
+
+        [Fact]
         public void IsAuthorized_DeniesMissingAndWrongTokens()
         {
             RunOnStaThread(() =>
