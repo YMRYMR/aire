@@ -257,19 +257,21 @@ namespace Aire.Services
                 "- When a tool result begins with SUCCESS, that specific step succeeded. Check if the task is complete; if not, continue to the next step (e.g., calling begin_keyboard_session after launching an app).\n" +
                 "- Only stop when the user's entire request is fully satisfied.\n\n");
 
-            if (hasFs || hasBrowser)
+            if ((hasFs && hasKeyboard) || hasBrowser)
             {
-                sb.Append(
-                    "EXAMPLES:\n" +
-                    "User: 'Open notepad and write hello world'\n" +
-                    "You: I'll open notepad and write that for you.\n" +
-                    "     <tool_call>{\"tool\": \"execute_command\", \"command\": \"notepad\"}</tool_call>\n" +
-                    "Tool result: SUCCESS: 'notepad' opened (PID: 5678).\n" +
-                    "You: I've opened Notepad. Now, I'll start a keyboard session to type the text.\n" +
-                    "     <tool_call>{\"tool\": \"begin_keyboard_session\", \"duration_minutes\": 5}</tool_call>\n" +
-                    "Tool result: SUCCESS: Keyboard session started.\n" +
-                    "You: Typing the text...\n" +
-                    "     <tool_call>{\"tool\": \"type_text\", \"text\": \"hello world\"}</tool_call>\n\n");
+                sb.Append("EXAMPLES:\n");
+
+                if (hasFs && hasKeyboard)
+                    sb.Append(
+                        "User: 'Open notepad and write hello world'\n" +
+                        "You: I'll open notepad and write that for you.\n" +
+                        "     <tool_call>{\"tool\": \"execute_command\", \"command\": \"notepad\"}</tool_call>\n" +
+                        "Tool result: SUCCESS: 'notepad' opened (PID: 5678).\n" +
+                        "You: I've opened Notepad. Now, I'll start a keyboard session to type the text.\n" +
+                        "     <tool_call>{\"tool\": \"begin_keyboard_session\", \"duration_minutes\": 5}</tool_call>\n" +
+                        "Tool result: SUCCESS: Keyboard session started.\n" +
+                        "You: Typing the text...\n" +
+                        "     <tool_call>{\"tool\": \"type_text\", \"text\": \"hello world\"}</tool_call>\n\n");
 
                 if (hasBrowser)
                     sb.Append(
@@ -295,16 +297,21 @@ namespace Aire.Services
                     "4. Valid key names: Enter, Tab, Escape, Backspace, Delete, Home, End, PageUp, PageDown, Left, Up, Right, Down, Ctrl, Alt, Shift, Win, Space, F1-F12, or any single character.\n\n");
             }
 
-            sb.Append(
-                "ADDITIONAL RULES:\n" +
-                "- Use Windows-style paths (e.g. C:/Users/username/Documents).\n" +
-                "- Put the tool call at the very end of your message.\n" +
-                "- Always read a file before editing it.\n" +
-                "- To READ a web page: open_url(url=\"URL\"). Returns the plain text. Ideal for looking things up, reading docs, news, Wikipedia, etc.\n" +
-                "- If open_url fails with 403/429: retry with the site's RSS feed (/rss or /feed). Do NOT tell the user to open a browser.\n" +
-                "- To open a URL visibly in the Aire browser: open_browser_tab(url=\"URL\").\n" +
-                "- To check if an app is installed: execute_command with command=\"where appname\". To list all installed apps: execute_command with command=\"winget list\".\n" +
-                "- REMEMBER: You CAN run commands, open applications, fetch web pages, and interact with the system. The user will approve each operation before it executes.");
+            sb.Append("ADDITIONAL RULES:\n");
+            sb.Append("- Put the tool call at the very end of your message.\n");
+            if (hasFs)
+            {
+                sb.Append("- Use Windows-style paths (e.g. C:/Users/username/Documents).\n");
+                sb.Append("- Always read a file before editing it.\n");
+                sb.Append("- To check if an app is installed: execute_command with command=\"where appname\". To list all installed apps: execute_command with command=\"winget list\".\n");
+            }
+            if (hasBrowser)
+            {
+                sb.Append("- To READ a web page: open_url(url=\"URL\"). Returns the plain text. Ideal for looking things up, reading docs, news, Wikipedia, etc.\n");
+                sb.Append("- If open_url fails with 403/429: retry with the site's RSS feed (/rss or /feed). Do NOT tell the user to open a browser.\n");
+                sb.Append("- To open a URL visibly in the Aire browser: open_browser_tab(url=\"URL\").\n");
+            }
+            sb.Append("- The user will approve each operation before it executes.");
 
             return sb.ToString();
         }
