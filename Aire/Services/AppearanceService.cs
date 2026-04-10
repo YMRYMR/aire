@@ -75,6 +75,8 @@ namespace Aire.Services
             ("AccentSurfaceBrush",        C(0x1D,0x24,0x30), C(0xD9,0xE3,0xEE)),
             ("AccentSurface2Brush",       C(0x24,0x2D,0x3A), C(0xCF,0xDB,0xE8)),
             ("AccentBorderBrush",         C(0x34,0x41,0x52), C(0xB8,0xC7,0xD8)),
+            // Text for title bars — computed against AccentSurfaceBrush in Apply()
+            ("AccentTextBrush",           C(0xE8,0xE8,0xE8), C(0x14,0x14,0x14)),
             ("PrimaryBrush",              C(0x4D,0x4D,0x4D), C(0x9E,0x9E,0x9E)),
             ("PrimaryHoverBrush",         C(0x5C,0x5C,0x5C), C(0xB2,0xB2,0xB2)),
             ("PrimaryPressedBrush",       C(0x3D,0x3D,0x3D), C(0x8A,0x8A,0x8A)),
@@ -91,11 +93,11 @@ namespace Aire.Services
             ("WarningBorderBrush",        C(0x70,0x50,0x00), C(0xC8,0x90,0x00)),
             // Status text (between bubbles): must always contrast against the background
             ("StatusTextBrush",           C(0xC0,0xC0,0xC0), C(0x30,0x30,0x30)),
-            // Links: muted sky-blue on dark â†’ deep blue on light
+            // Links: muted sky-blue on dark → deep blue on light
             ("LinkBrush",                 C(0x6B,0x9F,0xD4), C(0x1A,0x5C,0xB8)),
-            // Inline code: warm tan on dark â†’ burnt sienna on light
+            // Inline code: warm tan on dark → burnt sienna on light
             ("CodeForegroundBrush",       C(0xE0,0xA8,0x72), C(0x7A,0x38,0x10)),
-            // Inline code background: very dark on dark â†’ light warm gray on light
+            // Inline code background: very dark on dark → light warm gray on light
             ("CodeBackgroundBrush",       C(0x22,0x1D,0x19), C(0xD8,0xD2,0xCC)),
         ];
 
@@ -193,12 +195,18 @@ namespace Aire.Services
             // Resource brushes
             if (Application.Current?.Resources is ResourceDictionary res)
             {
-                // First pass: compute background colors so text can contrast against them.
-                var bgColor = LerpColor(ResourceSlots[0].Dark, ResourceSlots[0].Light, themeTone); // BackgroundBrush
+                // Compute the *tinted* background — this is what the user actually sees.
+                var bgColor        = Tinted(LerpColor(ResourceSlots[0].Dark, ResourceSlots[0].Light, themeTone), tintHue, tintStrength);
+                var accentBgColor  = Tinted(LerpColor(ResourceSlots[4].Dark, ResourceSlots[4].Light, themeTone), tintHue, tintStrength); // AccentSurfaceBrush
+                var codeBgColor    = Tinted(LerpColor(ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Dark,
+                                                      ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Light, themeTone),
+                                            tintHue, tintStrength * 0.3); // code bg gets a hint of tint
 
                 foreach (var (key, dark, light) in ResourceSlots)
                 {
-                    if (key.StartsWith("Accent", StringComparison.Ordinal))
+                    // Skip accent bg/border resources — handled by ApplyAccentResources.
+                    // AccentTextBrush starts with "Accent" but IS processed here (fg text).
+                    if (key.StartsWith("Accent", StringComparison.Ordinal) && key != "AccentTextBrush")
                         continue;
 
                     var base_ = LerpColor(dark, light, themeTone);
@@ -209,11 +217,16 @@ namespace Aire.Services
                     }
                     else
                     {
-                        // Text/link/code fg: don't tint, but enforce contrast against background.
-                        Color bg = key is "CodeForegroundBrush" ? LerpColor(
-                            ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Dark,
-                            ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Light,
-                            themeTone) : bgColor;
+                        // Text/fg resources: don't tint; push lightness until WCAG 4.5:1 is met.
+                        // AccentTextBrush is checked against the accent surface (title bar bg).
+                        // CodeForegroundBrush is checked against the code background.
+                        // Everything else is checked against the main (tinted) background.
+                        Color bg = key switch
+                        {
+                            "AccentTextBrush"   => accentBgColor,
+                            "CodeForegroundBrush" => codeBgColor,
+                            _                   => bgColor,
+                        };
                         final = EnsureContrast(base_, bg, 4.5);
                     }
                     res[key] = new SolidColorBrush(final);
@@ -308,6 +321,7 @@ namespace Aire.Services
             {
                 "TextBrush"               => false,
                 "TextSecondaryBrush"      => false,
+                "AccentTextBrush"         => false,
                 "UserMessageTextBrush"    => false,
                 "AssistantMessageTextBrush" => false,
                 "StatusTextBrush"         => false,
@@ -377,6 +391,9 @@ namespace Aire.Services
             foreach (var (key, dark, light) in ResourceSlots)
             {
                 if (!key.StartsWith("Accent", StringComparison.Ordinal))
+                    continue;
+                // AccentTextBrush is a fg color computed in Apply() — don't overwrite it here.
+                if (key == "AccentTextBrush")
                     continue;
 
                 var base_ = LerpColor(dark, light, AccentBrightness);

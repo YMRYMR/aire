@@ -39,7 +39,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
                                Text="Image Viewer"
-                               Foreground="{DynamicResource TextBrush}"
+                               Foreground="{DynamicResource AccentTextBrush}"
                                FontWeight="SemiBold"
                                VerticalAlignment="Center" />
                     <Button Grid.Column="1"

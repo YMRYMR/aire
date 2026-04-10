@@ -36,7 +36,7 @@
                     <TextBlock x:Name="TitleText"
                                Grid.Column="0"
                                Text="Aire update available"
-                               Foreground="{DynamicResource TextBrush}"
+                               Foreground="{DynamicResource AccentTextBrush}"
                                FontWeight="SemiBold"
                                VerticalAlignment="Center" />
                     <Button x:Name="CloseButton"

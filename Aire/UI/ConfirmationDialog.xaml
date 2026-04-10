@@ -29,7 +29,7 @@
                     MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                 <TextBlock x:Name="TitleText"
                            Text="Clear all messages?"
-                           Foreground="{DynamicResource TextBrush}"
+                           Foreground="{DynamicResource AccentTextBrush}"
                            FontWeight="SemiBold" />
             </Border>
 
