@@ -11,4 +11,8 @@
     <AssemblyName>Aire.Screenshots</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Aire\Aire.csproj" />
+  </ItemGroup>
+
 </Project>

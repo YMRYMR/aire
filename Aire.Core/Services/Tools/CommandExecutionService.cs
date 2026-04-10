@@ -125,7 +125,11 @@ namespace Aire.Services
 
                 if (!completed)
                 {
-                    try { process.Kill(entireProcessTree: true); } catch { }
+                    try { process.Kill(entireProcessTree: true); }
+                    catch (Exception ex)
+                    {
+                        AppLogger.Warn(nameof(CommandExecutionService) + ".Execute", $"Failed to kill timed-out command '{shellPath}'", ex);
+                    }
                     result.TimedOut      = true;
                     result.StandardError = $"Command timed out after {timeoutSeconds} seconds";
                 }
@@ -140,8 +144,9 @@ namespace Aire.Services
                     result.StandardError = TruncateString(errorBuilder.ToString(), MaxOutputLength);
                 result.DurationMs = stopwatch.ElapsedMilliseconds;
             }
-            catch
+            catch (Exception ex)
             {
+                AppLogger.Warn(nameof(CommandExecutionService) + ".Execute", $"Command execution failed for '{shellPath}'", ex);
                 stopwatch.Stop();
                 result.ExitCode      = -1;
                 result.StandardError = "Execution error: command failed.";

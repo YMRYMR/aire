@@ -80,7 +80,7 @@ public sealed class PortableOllamaProvider : BaseAiProvider
             using var req = new HttpRequestMessage(HttpMethod.Get, $"{url}/api/tags");
             if (!string.IsNullOrWhiteSpace(apiKey))
                 req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
-            var resp = await _httpClient.SendAsync(req, ct).ConfigureAwait(false);
+            using var resp = await _httpClient.SendAsync(req, ct).ConfigureAwait(false);
             if (!resp.IsSuccessStatusCode)
                 return null;
             var json = await resp.Content.ReadAsStringAsync(ct).ConfigureAwait(false);

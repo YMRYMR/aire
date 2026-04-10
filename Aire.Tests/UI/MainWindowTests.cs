@@ -603,6 +603,154 @@ namespace Aire.Tests.UI
             });
         }
 
+        [Fact]
+        public void MainWindow_ClearConversationAsync_LoadsNextConversation_WhenCurrentIsDeleted()
+        {
+            RunOnStaThread(async () =>
+            {
+                EnsureApplication();
+                AppStartupState.MarkReady();
+
+                string tempDir = Path.Combine(Path.GetTempPath(), "aire-conversation-delete-" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(tempDir);
+                string originalAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA");
+                Environment.SetEnvironmentVariable("LOCALAPPDATA", tempDir);
+
+                try
+                {
+                    using var db = new DatabaseService();
+                    await db.InitializeAsync();
+
+                    Provider provider = new Provider
+                    {
+                        Name = "Current",
+                        Type = "OpenAI",
+                        ApiKey = "k1",
+                        Model = "m1",
+                        IsEnabled = true,
+                        Color = "#336699"
+                    };
+                    provider.Id = await db.InsertProviderAsync(provider);
+
+                    int firstConversationId = await db.CreateConversationAsync(provider.Id, "First conversation");
+                    await db.SaveMessageAsync(firstConversationId, "user", "first message");
+
+                    int secondConversationId = await db.CreateConversationAsync(provider.Id, "Second conversation");
+                    await db.SaveMessageAsync(secondConversationId, "user", "second message");
+
+                    MainWindow window = new MainWindow(initializeUi: false);
+                    var header = new MainHeaderControl();
+                    header._testProviderComboBox = new ComboBox();
+                    header._testCheckAgainButton = new Button();
+                    header.ProviderComboBox.ItemsSource = new[] { provider };
+                    header.ProviderComboBox.SelectedItem = provider;
+
+                    window.HeaderControl = header;
+                    window.ConversationSidebar = new ConversationSidebarControl();
+                    window.MessagesScrollViewer = new ScrollViewer();
+                    window.Messages = new ObservableCollection<UiModels.ChatMessage>();
+                    window._currentConversationId = firstConversationId;
+                    window._currentProviderId = provider.Id;
+                    window._databaseService = db;
+                    window._providerFactory = new ProviderFactory(db);
+                    window._chatSessionApplicationService = new ChatSessionApplicationService(db, db);
+                    window._conversationApplicationService = new ConversationApplicationService(db);
+                    window._conversationHistory = new List<ProviderChatMessage>();
+                    typeof(MainWindow).GetField("_assistantModeApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new AssistantModeApplicationService());
+                    typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ChatService(window._providerFactory));
+
+                    var clearTask = (Task)typeof(MainWindow).GetMethod("DoClearConversationAsync", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .Invoke(window, null)!;
+                    await clearTask;
+
+                    Assert.Equal(secondConversationId, window._currentConversationId);
+                    Assert.Contains(window.Messages, msg => msg.Text == "second message");
+                    Assert.Equal(secondConversationId, ((ConversationSummary)window.ConversationSidebar.SelectedItem).Id);
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable("LOCALAPPDATA", originalAppData);
+                    try { Directory.Delete(tempDir, true); } catch { }
+                }
+            });
+        }
+
+        [Fact]
+        public void MainWindow_DeleteAllConversationsAsync_ResetsUiState()
+        {
+            RunOnStaThread(async () =>
+            {
+                EnsureApplication();
+                AppStartupState.MarkReady();
+
+                string tempDir = Path.Combine(Path.GetTempPath(), "aire-conversation-delete-all-" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(tempDir);
+                string originalAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA");
+                Environment.SetEnvironmentVariable("LOCALAPPDATA", tempDir);
+
+                try
+                {
+                    using var db = new DatabaseService();
+                    await db.InitializeAsync();
+
+                    Provider provider = new Provider
+                    {
+                        Name = "Current",
+                        Type = "OpenAI",
+                        ApiKey = "k1",
+                        Model = "m1",
+                        IsEnabled = true,
+                        Color = "#336699"
+                    };
+                    provider.Id = await db.InsertProviderAsync(provider);
+
+                    int conversationId = await db.CreateConversationAsync(provider.Id, "Conversation");
+                    await db.SaveMessageAsync(conversationId, "user", "message");
+
+                    MainWindow window = new MainWindow(initializeUi: false);
+                    var header = new MainHeaderControl();
+                    header._testProviderComboBox = new ComboBox();
+                    header._testCheckAgainButton = new Button();
+                    header.ProviderComboBox.ItemsSource = new[] { provider };
+                    header.ProviderComboBox.SelectedItem = provider;
+
+                    window.HeaderControl = header;
+                    window.ConversationSidebar = new ConversationSidebarControl();
+                    window.MessagesScrollViewer = new ScrollViewer();
+                    window.Messages = new ObservableCollection<UiModels.ChatMessage>();
+                    window._currentConversationId = conversationId;
+                    window._currentProviderId = provider.Id;
+                    window._databaseService = db;
+                    window._providerFactory = new ProviderFactory(db);
+                    window._chatSessionApplicationService = new ChatSessionApplicationService(db, db);
+                    window._conversationApplicationService = new ConversationApplicationService(db);
+                    window._conversationHistory = new List<ProviderChatMessage>();
+                    typeof(MainWindow).GetField("_assistantModeApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new AssistantModeApplicationService());
+                    typeof(MainWindow).GetField("_chatService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .SetValue(window, new ChatService(window._providerFactory));
+
+                    var flow = typeof(MainWindow).GetProperty("ConversationFlow", BindingFlags.Instance | BindingFlags.NonPublic)!
+                        .GetValue(window)!;
+                    var deleteAllTask = (Task)flow.GetType()
+                        .GetMethod("DeleteAllConversationsAsync", BindingFlags.Instance | BindingFlags.Public)!
+                        .Invoke(flow, null)!;
+                    await deleteAllTask;
+
+                    Assert.Null(window._currentConversationId);
+                    Assert.DoesNotContain(window.Messages, msg => msg.Sender == "User" || msg.Sender == "AI");
+                    Assert.Contains(window.Messages, msg => msg.Sender == "System" && msg.Text.Contains("Welcome", StringComparison.OrdinalIgnoreCase));
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable("LOCALAPPDATA", originalAppData);
+                    try { Directory.Delete(tempDir, true); } catch { }
+                }
+            });
+        }
+
         private static TaskCompletionSource<bool> TaskCompletionSource_GetValue(bool value)
         {
             var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);

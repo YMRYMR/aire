@@ -165,8 +165,17 @@ namespace Aire.Services
 
             if (player != null)
             {
-                try { player.Stop();    } catch { }
-                try { player.Dispose(); } catch { }
+                try { player.Stop(); }
+                catch (Exception ex)
+                {
+                    AppLogger.Warn(nameof(SpeechSynthesisService) + ".StopSpeaking", "Failed to stop audio playback", ex);
+                }
+
+                try { player.Dispose(); }
+                catch (Exception ex)
+                {
+                    AppLogger.Warn(nameof(SpeechSynthesisService) + ".StopSpeaking", "Failed to dispose audio playback", ex);
+                }
             }
         }
 

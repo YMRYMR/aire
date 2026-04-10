@@ -86,6 +86,29 @@ public sealed class ProviderModelRefreshServiceTests : IDisposable
         Assert.Equal(2, ModelCatalog.GetDefaults("OpenAI").Count);
     }
 
+    [Fact]
+    public async Task Dispose_StopsRunningLoop_AndIsIdempotent()
+    {
+        var service = CreateService(
+            new[]
+            {
+                new Provider { Type = "OpenAI", Name = "OpenAI", Model = "gpt-1", IsEnabled = false }
+            },
+            new FakeProviderMetadata(new[]
+            {
+                new ModelDefinition { Id = "gpt-1", DisplayName = "GPT 1" }
+            }),
+            notifications: []);
+
+        service.Start();
+        await Task.Delay(25);
+
+        service.Dispose();
+        service.Dispose();
+
+        Assert.False(service.IsRunning);
+    }
+
     private static ProviderModelRefreshService CreateService(
         IReadOnlyList<Provider> providers,
         IProviderMetadata metadata,

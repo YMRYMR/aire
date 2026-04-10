@@ -116,7 +116,7 @@
                                 <Grid>
                                     <TextBlock x:Name="TitleDisplay"
                                                Text="{Binding Title}"
-                                               Foreground="{DynamicResource TextBrush}"
+                                               Foreground="{DynamicResource SidebarTextBrush}"
                                                FontWeight="SemiBold"
                                                TextTrimming="CharacterEllipsis"
                                                MouseDown="ConversationTitle_MouseDown">
@@ -132,7 +132,7 @@
                                              Padding="0"
                                              Margin="0"
                                              Background="Transparent"
-                                             Foreground="{DynamicResource TextBrush}"
+                                             Foreground="{DynamicResource SidebarTextBrush}"
                                              FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                              IsVisibleChanged="TitleEditor_IsVisibleChanged"
                                              KeyDown="TitleEditor_KeyDown"
@@ -140,23 +140,23 @@
                                 </Grid>
                                 <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                     <TextBlock Text="{Binding ProviderName}"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="·"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="{Binding AssistantModeDisplayName}"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="·"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="{Binding RelativeDate}"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}" />
                                 </StackPanel>
                             </StackPanel>

@@ -161,9 +161,8 @@ namespace Aire
             {
                 if (_owner._currentConversationId.HasValue)
                 {
-                    var deleted = await DeleteConversationAsync(_owner._currentConversationId.Value);
-                    if (!deleted)
-                        return;
+                    await DeleteConversationAsync(_owner._currentConversationId.Value);
+                    return;
                 }
 
                 ResetConversationUiState();
@@ -185,7 +184,22 @@ namespace Aire
                 }
 
                 if (_owner._currentConversationId == conversationId)
+                {
+                    var search = _owner.ConversationSidebar?.SearchText.Trim();
+                    var remainingConversations = await _owner._conversationApplicationService.ListConversationsAsync(search);
+
+                    if (remainingConversations.Count > 0)
+                    {
+                        var nextConversation = remainingConversations.First();
+                        _owner._currentConversationId = nextConversation.Id;
+                        await SyncConversationSelectionStateAsync(nextConversation.Id);
+                        await LoadConversationMessagesAsync(nextConversation.Id);
+                        await _owner.RefreshSidebarAsync(search);
+                        return true;
+                    }
+
                     ResetConversationUiState();
+                }
 
                 return true;
             }

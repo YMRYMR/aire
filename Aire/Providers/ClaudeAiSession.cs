@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
+using Aire.Services;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Application = System.Windows.Application;
@@ -127,7 +128,7 @@ namespace Aire.Providers
                 try { await _view!.CoreWebView2.ExecuteScriptAsync(js); }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Claude session script execution failed: {ex.GetType().Name}");
+                    AppLogger.Warn("ClaudeAiSession.Request", "Claude session script execution failed", ex);
                     ch.Writer.TryWrite("[ERR]Claude session request failed.");
                 }
             });
@@ -201,7 +202,7 @@ namespace Aire.Providers
                 try { await _view!.CoreWebView2.ExecuteScriptAsync(js); }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Claude session streaming script failed: {ex.GetType().Name}");
+                    AppLogger.Warn("ClaudeAiSession.Stream", "Claude session streaming script failed", ex);
                     ch.Writer.TryWrite("[ERR]Claude session streaming failed.");
                 }
             });

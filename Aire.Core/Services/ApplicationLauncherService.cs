@@ -94,7 +94,12 @@ namespace Aire.Services
                 if (File.Exists(direct)) return direct;
 
                 IEnumerable<string> subs;
-                try { subs = Directory.EnumerateDirectories(baseDir); } catch { continue; }
+                try { subs = Directory.EnumerateDirectories(baseDir); }
+                catch (Exception ex)
+                {
+                    AppLogger.Warn(nameof(ApplicationLauncherService) + ".FindApplicationWindows", $"Failed to enumerate '{baseDir}'", ex);
+                    continue;
+                }
                 foreach (var sub in subs)
                 {
                     if (!Path.GetFileName(sub).Contains(dirKey, StringComparison.OrdinalIgnoreCase))
@@ -125,7 +130,10 @@ namespace Aire.Services
                         .FirstOrDefault(IsExecutable);
                     if (match != null) return match;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    AppLogger.Warn(nameof(ApplicationLauncherService) + ".FindApplicationLinux", $"Failed to scan '{baseDir}'", ex);
+                }
             }
 
             return FindViaDesktopFile(appName);
@@ -161,7 +169,10 @@ namespace Aire.Services
                         }
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    AppLogger.Warn(nameof(ApplicationLauncherService) + ".FindApplicationMac", $"Failed to scan '{baseDir}'", ex);
+                }
             }
 
             return null;
@@ -186,7 +197,11 @@ namespace Aire.Services
                 });
                 return proc?.Id;
             }
-            catch { return null; }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(ApplicationLauncherService) + ".LaunchApplication", $"Failed to launch '{appName}'", ex);
+                return null;
+            }
         }
 
         public int? OpenFileWithDefaultApplication(string filePath)
@@ -197,7 +212,11 @@ namespace Aire.Services
                 var proc = Process.Start(new ProcessStartInfo { FileName = filePath, UseShellExecute = true });
                 return proc?.Id;
             }
-            catch { return null; }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(ApplicationLauncherService) + ".OpenFileWithDefaultApplication", $"Failed to open '{filePath}'", ex);
+                return null;
+            }
         }
 
         // ── Helpers ───────────────────────────────────────────────────────────
@@ -209,10 +228,18 @@ namespace Aire.Services
                 var match = Directory.EnumerateFiles(root, pattern).FirstOrDefault();
                 if (match != null) return match;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(ApplicationLauncherService) + ".SearchDirRobust", $"Failed to enumerate '{root}'", ex);
+            }
 
             IEnumerable<string> subs;
-            try { subs = Directory.EnumerateDirectories(root); } catch { return null; }
+            try { subs = Directory.EnumerateDirectories(root); }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(ApplicationLauncherService) + ".SearchDirRobust", $"Failed to enumerate subdirectories under '{root}'", ex);
+                return null;
+            }
             foreach (var sub in subs)
             {
                 var found = SearchDirRobust(sub, pattern);
@@ -250,7 +277,11 @@ namespace Aire.Services
                 var mode = File.GetUnixFileMode(path);
                 return (mode & (UnixFileMode.UserExecute | UnixFileMode.GroupExecute | UnixFileMode.OtherExecute)) != 0;
             }
-            catch { return false; }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(ApplicationLauncherService) + ".IsExecutable", $"Failed to inspect '{path}'", ex);
+                return false;
+            }
         }
 
         private string? FindViaDesktopFile(string appName)
@@ -275,7 +306,10 @@ namespace Aire.Services
                         if (exec != null) return exec;
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    AppLogger.Warn(nameof(ApplicationLauncherService) + ".FindViaDesktopFile", $"Failed to scan '{dir}'", ex);
+                }
             }
             return null;
         }
@@ -299,7 +333,10 @@ namespace Aire.Services
                     return FindInPathEnv(cmd);
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                AppLogger.Warn(nameof(ApplicationLauncherService) + ".ParseDesktopExec", $"Failed to parse '{desktopFile}'", ex);
+            }
             return null;
         }
 

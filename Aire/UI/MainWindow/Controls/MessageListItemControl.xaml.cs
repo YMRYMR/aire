@@ -14,6 +14,7 @@ namespace Aire.UI.MainWindow.Controls
     public partial class MessageListItemControl : System.Windows.Controls.UserControl
     {
         private ChatMessage? _message;
+        private bool _appearanceSubscribed;
 
         public event MouseButtonEventHandler? ChatImageMouseLeftButtonUp;
         public event RoutedEventHandler? AnswerButtonClick;
@@ -25,21 +26,36 @@ namespace Aire.UI.MainWindow.Controls
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
             Loaded += (_, _) => ApplyLocalization();
+            Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            Unloaded += (_, _) => LocalizationService.LanguageChanged -= OnLanguageChanged;
             LocalizationService.LanguageChanged += OnLanguageChanged;
-            AppearanceService.AppearanceChanged += OnAppearanceChanged;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!_appearanceSubscribed)
+            {
+                AppearanceService.AppearanceChanged += OnAppearanceChanged;
+                _appearanceSubscribed = true;
+            }
+            UpdateVisualState();
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            LocalizationService.LanguageChanged -= OnLanguageChanged;
-            AppearanceService.AppearanceChanged -= OnAppearanceChanged;
+            if (_appearanceSubscribed)
+            {
+                AppearanceService.AppearanceChanged -= OnAppearanceChanged;
+                _appearanceSubscribed = false;
+            }
         }
-
-        private void OnAppearanceChanged() => UpdateVisualState();
 
         private void OnLanguageChanged()
             => Dispatcher.Invoke(ApplyLocalization);
+
+        private void OnAppearanceChanged()
+            => Dispatcher.Invoke(UpdateVisualState);
 
         private void ApplyLocalization()
         {

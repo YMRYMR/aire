@@ -247,7 +247,6 @@ public sealed class ProviderModelRefreshService : IDisposable
         if (_disposed)
             return;
 
-        _disposed = true;
         try
         {
             StopAsync().GetAwaiter().GetResult();
@@ -256,6 +255,7 @@ public sealed class ProviderModelRefreshService : IDisposable
         {
             // Dispose should never throw during process shutdown.
         }
+        _disposed = true;
         _refreshGate.Dispose();
         GC.SuppressFinalize(this);
     }

@@ -28,7 +28,7 @@ namespace Aire.Services
             {
                 Content = content
             };
-            var response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            using var response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -78,7 +78,7 @@ namespace Aire.Services
             {
                 Content = content
             };
-            var response = await _httpClient.SendAsync(requestMessage, cancellationToken);
+            using var response = await _httpClient.SendAsync(requestMessage, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -168,7 +168,11 @@ namespace Aire.Services
             }
             finally
             {
-                try { File.Delete(tempPath); } catch { }
+                try { File.Delete(tempPath); }
+                catch (Exception ex)
+                {
+                    AppLogger.Warn(nameof(OllamaService) + ".PullModelAsync", $"Failed to delete temporary installer '{tempPath}'", ex);
+                }
             }
         }
 

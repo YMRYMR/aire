@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Color = System.Windows.Media.Color;
@@ -16,7 +15,7 @@ namespace Aire.Services
     /// </summary>
     public static class AppearanceService
     {
-        // â"€â"€ Current state â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+        // â”€â”€ Current state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         public static bool   UsesDarkPalette { get; private set; } = false;
         public static double Brightness   { get; private set; } = 0.9311106847612285; // default first-run palette
@@ -38,8 +37,8 @@ namespace Aire.Services
             remove => AppearanceChanged -= value;
         }
 
-        // â"€â"€ Message brushes (used directly by MainWindow chat rendering) â"€â"€â"€â"€â"€â"€
-        // These are NOT in Application.Current.Resources â€" MainWindow references
+        // â”€â”€ Message brushes (used directly by MainWindow chat rendering) â”€â”€â”€â”€â”€â”€
+        // These are NOT in Application.Current.Resources â€” MainWindow references
         // them by name.  Apply() updates their Color so existing messages repaint.
 
         public static SolidColorBrush UserBgBrush { get; private set; } = new();
@@ -63,7 +62,7 @@ namespace Aire.Services
             ErrorFgBrush = new();
         }
 
-        // â"€â"€ Palettes â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+        // â”€â”€ Palettes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Each entry: (resourceKey, darkBaseRGB, lightBaseRGB)
 
         private static readonly (string Key, Color Dark, Color Light)[] ResourceSlots =
@@ -75,14 +74,12 @@ namespace Aire.Services
             ("AccentSurfaceBrush",        C(0x1D,0x24,0x30), C(0xD9,0xE3,0xEE)),
             ("AccentSurface2Brush",       C(0x24,0x2D,0x3A), C(0xCF,0xDB,0xE8)),
             ("AccentBorderBrush",         C(0x34,0x41,0x52), C(0xB8,0xC7,0xD8)),
-            // Text for title bars — computed against AccentSurfaceBrush in Apply()
-            ("AccentTextBrush",           C(0xE8,0xE8,0xE8), C(0x14,0x14,0x14)),
             ("PrimaryBrush",              C(0x4D,0x4D,0x4D), C(0x9E,0x9E,0x9E)),
             ("PrimaryHoverBrush",         C(0x5C,0x5C,0x5C), C(0xB2,0xB2,0xB2)),
             ("PrimaryPressedBrush",       C(0x3D,0x3D,0x3D), C(0x8A,0x8A,0x8A)),
             ("SecondaryBrush",            C(0x28,0x28,0x28), C(0xDE,0xDE,0xDE)),
             ("TextBrush",                 C(0xD2,0xD2,0xD2), C(0x28,0x28,0x28)),
-            ("TextSecondaryBrush",        C(0xA0,0xA0,0xA0), C(0x50,0x50,0x50)),
+            ("TextSecondaryBrush",        C(0x70,0x70,0x70), C(0x68,0x68,0x68)),
             ("BorderBrush",               C(0x3A,0x3A,0x3A), C(0xC0,0xC0,0xC0)),
             ("UserMessageBrush",          C(0x32,0x32,0x32), C(0xD0,0xD0,0xD0)),
             ("UserMessageTextBrush",      C(0xE2,0xE2,0xE2), C(0x28,0x28,0x28)),
@@ -93,11 +90,11 @@ namespace Aire.Services
             ("WarningBorderBrush",        C(0x70,0x50,0x00), C(0xC8,0x90,0x00)),
             // Status text (between bubbles): must always contrast against the background
             ("StatusTextBrush",           C(0xC0,0xC0,0xC0), C(0x30,0x30,0x30)),
-            // Links: muted sky-blue on dark → deep blue on light
+            // Links: muted sky-blue on dark â†’ deep blue on light
             ("LinkBrush",                 C(0x6B,0x9F,0xD4), C(0x1A,0x5C,0xB8)),
-            // Inline code: warm tan on dark → burnt sienna on light
+            // Inline code: warm tan on dark â†’ burnt sienna on light
             ("CodeForegroundBrush",       C(0xE0,0xA8,0x72), C(0x7A,0x38,0x10)),
-            // Inline code background: very dark on dark → light warm gray on light
+            // Inline code background: very dark on dark â†’ light warm gray on light
             ("CodeBackgroundBrush",       C(0x22,0x1D,0x19), C(0xD8,0xD2,0xCC)),
         ];
 
@@ -113,7 +110,7 @@ namespace Aire.Services
             /* ErrorFg  */ (C(0xAA,0x66,0x66), C(0x88,0x22,0x22)),
         ];
 
-        // â"€â"€ Public API â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+        // â”€â”€ Public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         /// <summary>
         /// Reads appearance settings from the saved window-state JSON and calls
@@ -184,72 +181,31 @@ namespace Aire.Services
         /// </summary>
         public static void Apply(double brightness, double tintPosition)
         {
-            Brightness      = Math.Clamp(brightness, 0, 1);
+            Brightness   = Math.Clamp(brightness, 0, 1);
             UsesDarkPalette = Brightness < 0.5;
-            TintPosition    = Math.Clamp(tintPosition, 0, 1);
+            TintPosition = Math.Clamp(tintPosition, 0, 1);
 
-            double themeTone    = ThemeTone(Brightness);
+            double themeTone     = ThemeTone(Brightness);
             double tintHue      = TintPosition * 360.0;
             double tintStrength = Math.Sin(TintPosition * Math.PI); // 0 at ends, 1 at 0.5
 
-            // Resource brushes
+            // Resource brushes â€” replace the object so {DynamicResource} bindings update
             if (Application.Current?.Resources is ResourceDictionary res)
             {
-                // Compute the *tinted* background — this is what the user actually sees.
-                var bgColor        = Tinted(LerpColor(ResourceSlots[0].Dark, ResourceSlots[0].Light, themeTone), tintHue, tintStrength);
-                var accentBgColor  = Tinted(LerpColor(ResourceSlots[4].Dark, ResourceSlots[4].Light, themeTone), tintHue, tintStrength); // AccentSurfaceBrush
-                var codeBgColor    = Tinted(LerpColor(ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Dark,
-                                                      ResourceSlots.First(s => s.Key == "CodeBackgroundBrush").Light, themeTone),
-                                            tintHue, tintStrength * 0.3); // code bg gets a hint of tint
-
                 foreach (var (key, dark, light) in ResourceSlots)
                 {
-                    // Skip accent bg/border resources — handled by ApplyAccentResources.
-                    // AccentTextBrush starts with "Accent" but IS processed here (fg text).
-                    if (key.StartsWith("Accent", StringComparison.Ordinal) && key != "AccentTextBrush")
+                    if (key.StartsWith("Accent", StringComparison.Ordinal))
                         continue;
-
                     var base_ = LerpColor(dark, light, themeTone);
-                    Color final;
-                    if (ShouldTintResource(key))
-                    {
-                        final = Tinted(base_, tintHue, tintStrength);
-                    }
-                    else
-                    {
-                        // Text/fg resources: don't tint; push lightness until WCAG 4.5:1 is met.
-                        // AccentTextBrush is checked against the accent surface (title bar bg).
-                        // CodeForegroundBrush is checked against the code background.
-                        // Everything else is checked against the main (tinted) background.
-                        Color bg = key switch
-                        {
-                            "AccentTextBrush"   => accentBgColor,
-                            "CodeForegroundBrush" => codeBgColor,
-                            _                   => bgColor,
-                        };
-                        final = EnsureContrast(base_, bg, 4.5);
-                    }
-                    res[key] = new SolidColorBrush(final);
+                    res[key] = new SolidColorBrush(ShouldTintResource(key)
+                        ? Tinted(base_, tintHue, tintStrength)
+                        : base_);
                 }
 
                 ApplyAccentResources(res);
+                ApplyNormalSemanticResources(res, tintHue, tintStrength);
+                ApplyAccentSemanticResources(res);
             }
-
-            // Message brushes
-            var msg = MsgSlots;
-            Color userBg   = Tinted(LerpColor(msg[0].Dark, msg[0].Light, themeTone), tintHue, tintStrength);
-            Color aiBg     = Tinted(LerpColor(msg[2].Dark, msg[2].Light, themeTone), tintHue, tintStrength);
-            Color systemBg = Tinted(LerpColor(msg[4].Dark, msg[4].Light, themeTone), tintHue, tintStrength);
-            Color errorBg  = Tinted(LerpColor(msg[6].Dark, msg[6].Light, themeTone), tintHue, tintStrength * 0.25);
-
-            SetBrush(UserBgBrush,   userBg);
-            SetBrush(UserFgBrush,   EnsureContrast(LerpColor(msg[1].Dark, msg[1].Light, themeTone), userBg, 4.5));
-            SetBrush(AiBgBrush,     aiBg);
-            SetBrush(AiFgBrush,     EnsureContrast(LerpColor(msg[3].Dark, msg[3].Light, themeTone), aiBg, 4.5));
-            SetBrush(SystemBgBrush, systemBg);
-            SetBrush(SystemFgBrush, EnsureContrast(LerpColor(msg[5].Dark, msg[5].Light, themeTone), systemBg, 4.5));
-            SetBrush(ErrorBgBrush,  errorBg);
-            SetBrush(ErrorFgBrush,  EnsureContrast(LerpColor(msg[7].Dark, msg[7].Light, themeTone), errorBg, 4.5));
 
             AppearanceChanged?.Invoke();
         }
@@ -265,12 +221,15 @@ namespace Aire.Services
             AccentTintPosition = Math.Clamp(tintPosition, 0, 1);
 
             if (Application.Current?.Resources is ResourceDictionary res)
+            {
                 ApplyAccentResources(res);
+                ApplyAccentSemanticResources(res);
+            }
 
             AppearanceChanged?.Invoke();
         }
 
-        // â"€â"€ Colour math â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+        // â”€â”€ Colour math â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         /// <summary>
         /// Shifts the base colour's hue toward tintHue while preserving luminance.
@@ -304,84 +263,113 @@ namespace Aire.Services
             if (!b.IsFrozen) b.Color = c;
         }
 
-        /// <summary>
-        /// Applies a power curve to the raw brightness value so the dark half of the
-        /// slider covers more perceptually useful tones.  1.25 exponent keeps the full
-        /// range reachable while expanding the dark region.
-        /// </summary>
-        private static double ThemeTone(double value) =>
-            Math.Pow(Math.Clamp(value, 0, 1), 1.25);
-
-        /// <summary>
-        /// Returns false for text / foreground resources that must not be hue-tinted
-        /// (tinting a foreground color independently of its background destroys contrast).
-        /// </summary>
-        private static bool ShouldTintResource(string key) =>
-            key switch
-            {
-                "TextBrush"               => false,
-                "TextSecondaryBrush"      => false,
-                "AccentTextBrush"         => false,
-                "UserMessageTextBrush"    => false,
-                "AssistantMessageTextBrush" => false,
-                "StatusTextBrush"         => false,
-                "LinkBrush"               => false,
-                "CodeForegroundBrush"     => false,
-                _                         => true,
-            };
-
-        /// <summary>
-        /// Adjusts <paramref name="fg"/> lightness so the WCAG contrast ratio against
-        /// <paramref name="bg"/> is at least <paramref name="minRatio"/> (4.5 = AA level).
-        /// Hue and saturation are preserved; only luminance is pushed toward black or white.
-        /// </summary>
-        internal static Color EnsureContrast(Color fg, Color bg, double minRatio)
+        private static void SetResourceBrush(ResourceDictionary res, string key, Color color)
         {
-            if (ContrastRatio(fg, bg) >= minRatio)
-                return fg;
-
-            var (h, s, _) = ToHsl(fg);
-            double bgL    = RelativeLuminance(bg);
-
-            // Decide direction: push fg darker if bg is light, lighter if bg is dark.
-            bool pushLight = bgL < 0.18; // bg is dark → fg should go lighter
-
-            // Binary search on HSL lightness to hit the target contrast.
-            double lo = 0, hi = 1;
-            for (int i = 0; i < 24; i++)
+            if (res[key] is SolidColorBrush brush && !brush.IsFrozen)
             {
-                double mid = (lo + hi) / 2;
-                double l   = pushLight ? (0.5 + mid / 2) : (0.5 - mid / 2); // upper or lower half
-                var candidate = FromHsl(h, s, l);
-                if (ContrastRatio(candidate, bg) >= minRatio)
-                    hi = mid;
-                else
-                    lo = mid;
+                brush.Color = color;
             }
-            double finalL = pushLight ? (0.5 + hi / 2) : (0.5 - hi / 2);
-            return FromHsl(h, s, Math.Clamp(finalL, 0, 1));
+            else
+            {
+                res[key] = new SolidColorBrush(color);
+            }
         }
 
-        /// <summary>WCAG relative luminance (IEC 61966-2-1).</summary>
-        internal static double RelativeLuminance(Color c)
+        private static Color GetResourceColor(ResourceDictionary res, string key)
         {
-            static double Ch(byte v)
-            {
-                double s = v / 255.0;
-                return s <= 0.04045 ? s / 12.92 : Math.Pow((s + 0.055) / 1.055, 2.4);
-            }
-            return 0.2126 * Ch(c.R) + 0.7152 * Ch(c.G) + 0.0722 * Ch(c.B);
+            if (res[key] is SolidColorBrush brush)
+                return brush.Color;
+
+            return Colors.Transparent;
         }
 
-        /// <summary>WCAG contrast ratio between two colors.</summary>
-        internal static double ContrastRatio(Color a, Color b)
+        private static Color Blend(Color a, Color b, double t) => Color.FromRgb(
+            (byte)Math.Round(a.R + (b.R - a.R) * t),
+            (byte)Math.Round(a.G + (b.G - a.G) * t),
+            (byte)Math.Round(a.B + (b.B - a.B) * t));
+
+        private static double RelativeLuminance(Color c)
+        {
+            static double Channel(byte v)
+            {
+                double x = v / 255.0;
+                return x <= 0.03928 ? x / 12.92 : Math.Pow((x + 0.055) / 1.055, 2.4);
+            }
+
+            return 0.2126 * Channel(c.R) + 0.7152 * Channel(c.G) + 0.0722 * Channel(c.B);
+        }
+
+        private static double ContrastRatio(Color a, Color b)
         {
             double l1 = RelativeLuminance(a);
             double l2 = RelativeLuminance(b);
-            double lighter = Math.Max(l1, l2);
-            double darker  = Math.Min(l1, l2);
-            return (lighter + 0.05) / (darker + 0.05);
+            if (l1 < l2)
+            {
+                (l1, l2) = (l2, l1);
+            }
+
+            return (l1 + 0.05) / (l2 + 0.05);
         }
+
+        private static Color EnsureContrast(Color candidate, Color background, double minimumContrast)
+        {
+            if (ContrastRatio(candidate, background) >= minimumContrast)
+                return candidate;
+
+            var target = RelativeLuminance(background) < 0.5
+                ? C(0xF5, 0xF7, 0xFA)
+                : C(0x1A, 0x1D, 0x22);
+
+            Color best = candidate;
+            double low = 0.0;
+            double high = 1.0;
+            for (int i = 0; i < 14; i++)
+            {
+                double mid = (low + high) / 2.0;
+                var mixed = Blend(candidate, target, mid);
+                if (ContrastRatio(mixed, background) >= minimumContrast)
+                {
+                    best = mixed;
+                    high = mid;
+                }
+                else
+                {
+                    low = mid;
+                }
+            }
+
+            return best;
+        }
+
+        private static Color AccessibleTintedForeground(
+            Color background,
+            Color lightBase,
+            Color darkBase,
+            double tintHue,
+            double tintStrength,
+            double tintMix,
+            double minContrast)
+        {
+            var preferred = RelativeLuminance(background) < 0.5 ? lightBase : darkBase;
+            var tinted = Tinted(preferred, tintHue, tintStrength * tintMix);
+            return EnsureContrast(tinted, background, minContrast);
+        }
+
+        private static double ThemeTone(double value) =>
+            Math.Pow(Math.Clamp(value, 0, 1), 1.25);
+
+        private static bool ShouldTintResource(string key) =>
+            key switch
+            {
+                "TextBrush" => false,
+                "TextSecondaryBrush" => false,
+                "UserMessageTextBrush" => false,
+                "AssistantMessageTextBrush" => false,
+                "StatusTextBrush" => false,
+                "LinkBrush" => false,
+                "CodeForegroundBrush" => false,
+                _ => true,
+            };
 
         private static void ApplyAccentResources(ResourceDictionary res)
         {
@@ -392,18 +380,125 @@ namespace Aire.Services
             {
                 if (!key.StartsWith("Accent", StringComparison.Ordinal))
                     continue;
-                // AccentTextBrush is a fg color computed in Apply() — don't overwrite it here.
-                if (key == "AccentTextBrush")
-                    continue;
 
                 var base_ = LerpColor(dark, light, AccentBrightness);
                 res[key] = new SolidColorBrush(Tinted(base_, tintHue, tintStrength));
             }
         }
 
+        private static void ApplyNormalSemanticResources(ResourceDictionary res, double tintHue, double tintStrength)
+        {
+            var background = GetResourceColor(res, "BackgroundBrush");
+            var surface = GetResourceColor(res, "SurfaceBrush");
+            var surface2 = GetResourceColor(res, "Surface2Brush");
+            var surface3 = GetResourceColor(res, "Surface3Brush");
+            var codeBackground = GetResourceColor(res, "CodeBackgroundBrush");
+            var warningBackground = GetResourceColor(res, "WarningBackgroundBrush");
+
+            // Keep semantic text readable regardless of palette. Subtle tinting is allowed
+            // only after contrast has been enforced.
+            SetResourceBrush(res, "TextBrush",
+                AccessibleTintedForeground(background,
+                    lightBase: C(0xF4, 0xF4, 0xF6),
+                    darkBase: C(0x1B, 0x1D, 0x22),
+                    tintHue, tintStrength, tintMix: 0.06, minContrast: 7.0));
+
+            SetResourceBrush(res, "TextSecondaryBrush",
+                AccessibleTintedForeground(surface,
+                    lightBase: C(0xD5, 0xD7, 0xDD),
+                    darkBase: C(0x4C, 0x52, 0x60),
+                    tintHue, tintStrength, tintMix: 0.04, minContrast: 4.5));
+
+            var chatText = AccessibleTintedForeground(background,
+                lightBase: C(0xF7, 0xF8, 0xFA),
+                darkBase: C(0x1A, 0x1C, 0x22),
+                tintHue, tintStrength, tintMix: 0.05, minContrast: 7.0);
+
+            var assistantBubble = Blend(surface, surface2, 0.06 + tintStrength * 0.04);
+            var userBubble = Blend(surface2, surface3, 0.06 + tintStrength * 0.04);
+            var systemBubble = Blend(surface3, surface, 0.04);
+            var errorBubble = Blend(warningBackground, C(0xF2, 0xD7, 0xD7), 0.14);
+
+            SetResourceBrush(res, "AssistantMessageBrush", assistantBubble);
+            SetResourceBrush(res, "UserMessageBrush", userBubble);
+            SetResourceBrush(res, "StatusTextBrush",
+                AccessibleTintedForeground(background,
+                    lightBase: C(0xC6, 0xCA, 0xD3),
+                    darkBase: C(0x5A, 0x60, 0x6D),
+                    tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
+
+            SetResourceBrush(res, "AssistantMessageTextBrush", chatText);
+            SetResourceBrush(res, "UserMessageTextBrush", chatText);
+            SetResourceBrush(res, "LinkBrush",
+                AccessibleTintedForeground(surface,
+                    lightBase: C(0x1A, 0x5C, 0xB8),
+                    darkBase: C(0x8B, 0xC6, 0xFF),
+                    tintHue, tintStrength, tintMix: 0.10, minContrast: 4.5));
+            SetResourceBrush(res, "CodeForegroundBrush",
+                AccessibleTintedForeground(codeBackground,
+                    lightBase: C(0x7A, 0x38, 0x10),
+                    darkBase: C(0xE6, 0xBA, 0x82),
+                    tintHue, tintStrength, tintMix: 0.08, minContrast: 4.5));
+            SetResourceBrush(res, "CodeBackgroundBrush",
+                Blend(codeBackground, surface, 0.10));
+
+            SetResourceBrush(res, "WarningBackgroundBrush",
+                Blend(warningBackground, C(0xFF, 0xF1, 0xC9), Brightness < 0.5 ? 0.08 : 0.16));
+            SetResourceBrush(res, "WarningBorderBrush",
+                AccessibleTintedForeground(warningBackground,
+                    lightBase: C(0x95, 0x62, 0x00),
+                    darkBase: C(0xE0, 0xA0, 0x2A),
+                    tintHue, tintStrength, tintMix: 0.03, minContrast: 3.5));
+
+            SetResourceBrush(res, "ErrorBrush",
+                AccessibleTintedForeground(errorBubble,
+                    lightBase: C(0x8E, 0x2F, 0x2F),
+                    darkBase: C(0xF3, 0xB7, 0xB7),
+                    tintHue, tintStrength, tintMix: 0.03, minContrast: 4.5));
+
+            // Keep the message-role brushes in sync with the semantic resources.
+            SetBrush(UserBgBrush, userBubble);
+            SetBrush(UserFgBrush, GetResourceColor(res, "UserMessageTextBrush"));
+            SetBrush(AiBgBrush, assistantBubble);
+            SetBrush(AiFgBrush, GetResourceColor(res, "AssistantMessageTextBrush"));
+            SetBrush(SystemBgBrush, systemBubble);
+            SetBrush(SystemFgBrush, GetResourceColor(res, "StatusTextBrush"));
+            SetBrush(ErrorBgBrush, errorBubble);
+            SetBrush(ErrorFgBrush, GetResourceColor(res, "ErrorBrush"));
+        }
+
+        private static void ApplyAccentSemanticResources(ResourceDictionary res)
+        {
+            var accentSurface = GetResourceColor(res, "AccentSurfaceBrush");
+            var accentSurface2 = GetResourceColor(res, "AccentSurface2Brush");
+
+            // Text that sits on accent surfaces must be derived from the accent palette only.
+            SetResourceBrush(res, "AccentTextBrush",
+                AccessibleTintedForeground(accentSurface,
+                    lightBase: C(0xFA, 0xFB, 0xFD),
+                    darkBase: C(0x13, 0x15, 0x1B),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 7.0));
+            SetResourceBrush(res, "AccentTextSecondaryBrush",
+                AccessibleTintedForeground(accentSurface,
+                    lightBase: C(0xD8, 0xDE, 0xE8),
+                    darkBase: C(0x4B, 0x54, 0x66),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 4.8));
+
+            SetResourceBrush(res, "SidebarTextBrush",
+                AccessibleTintedForeground(accentSurface2,
+                    lightBase: C(0xF7, 0xF8, 0xFA),
+                    darkBase: C(0x17, 0x1A, 0x22),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.04, minContrast: 7.0));
+            SetResourceBrush(res, "SidebarTextSecondaryBrush",
+                AccessibleTintedForeground(accentSurface2,
+                    lightBase: C(0xE2, 0xE7, 0xEE),
+                    darkBase: C(0x45, 0x4E, 0x61),
+                    AccentTintPosition * 360.0, Math.Sin(AccentTintPosition * Math.PI), tintMix: 0.02, minContrast: 4.8));
+        }
+
         private static Color C(byte r, byte g, byte b) => Color.FromRgb(r, g, b);
 
-        // â"€â"€ HSL conversions â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+        // â”€â”€ HSL conversions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         internal static (double h, double s, double l) ToHsl(Color c)
         {
