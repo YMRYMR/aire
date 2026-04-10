@@ -38,7 +38,7 @@
                     <TextBlock x:Name="TitleText"
                                Grid.Column="0"
                                Text="Help — Aire"
-                               Foreground="{DynamicResource TextBrush}"
+                               Foreground="{DynamicResource AccentTextBrush}"
                                FontWeight="SemiBold"
                                VerticalAlignment="Center" />
                     <Button x:Name="CloseButton"
@@ -47,6 +47,7 @@
                             ToolTip="Close"
                             Width="34" Height="34"
                             Padding="0"
+                            Foreground="{DynamicResource AccentTextBrush}"
                             Click="CloseButton_Click" />
                 </Grid>
             </Border>

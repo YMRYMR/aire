@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aire.Services
 {
@@ -8,7 +9,7 @@ namespace Aire.Services
     /// </summary>
     public static class UsageSpendEstimator
     {
-        private sealed record PricingTier(decimal InputUsdPerMillionTokens, decimal OutputUsdPerMillionTokens);
+        private readonly record struct PricingTier(decimal InputUsdPerMillionTokens, decimal OutputUsdPerMillionTokens);
 
         private static readonly Dictionary<string, Dictionary<string, PricingTier>> PricingByProvider =
             new(StringComparer.OrdinalIgnoreCase)
@@ -24,6 +25,16 @@ namespace Aire.Services
                 {
                     ["claude-sonnet-4-5"] = new(3.00m, 15.00m),
                     ["claude-3-7-sonnet-latest"] = new(3.00m, 15.00m),
+                    ["claude-3-5-haiku-latest"] = new(0.80m, 4.00m),
+                },
+                ["Anthropic"] = new Dictionary<string, PricingTier>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["claude-opus-4-6"] = new(5.00m, 25.00m),
+                    ["claude-sonnet-4-6"] = new(3.00m, 15.00m),
+                    ["claude-sonnet-4-5"] = new(3.00m, 15.00m),
+                    ["claude-3-7-sonnet-latest"] = new(3.00m, 15.00m),
+                    ["claude-haiku-4-5"] = new(1.00m, 5.00m),
+                    ["claude-haiku-4-5-20251001"] = new(1.00m, 5.00m),
                     ["claude-3-5-haiku-latest"] = new(0.80m, 4.00m),
                 },
                 ["Zai"] = new Dictionary<string, PricingTier>(StringComparer.OrdinalIgnoreCase)
@@ -65,7 +76,7 @@ namespace Aire.Services
 
         private static bool TryGetPricing(string providerType, string model, out PricingTier pricing)
         {
-            pricing = default!;
+            pricing = default;
 
             if (string.IsNullOrWhiteSpace(providerType) ||
                 string.IsNullOrWhiteSpace(model) ||
@@ -74,7 +85,22 @@ namespace Aire.Services
                 return false;
             }
 
-            return providerPricing.TryGetValue(model.Trim(), out pricing);
+            var normalizedModel = model.Trim();
+            if (providerPricing.TryGetValue(normalizedModel, out pricing))
+                return true;
+
+            foreach (var candidate in providerPricing
+                         .OrderByDescending(entry => entry.Key.Length)
+                         .ThenBy(entry => entry.Key, StringComparer.OrdinalIgnoreCase))
+            {
+                if (normalizedModel.StartsWith(candidate.Key, StringComparison.OrdinalIgnoreCase))
+                {
+                    pricing = candidate.Value;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

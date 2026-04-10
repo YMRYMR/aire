@@ -24,7 +24,7 @@ namespace Aire.Providers
                 if (!string.IsNullOrWhiteSpace(apiKey))
                     req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
-                var res = await _metaHttp.SendAsync(req, ct);
+                using var res = await _metaHttp.SendAsync(req, ct);
                 if (!res.IsSuccessStatusCode)
                     return null;
 
@@ -91,7 +91,7 @@ namespace Aire.Providers
         {
             try
             {
-                var response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Get, $"{_baseUrl}/api/tags"), cancellationToken);
+                using var response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Get, $"{_baseUrl}/api/tags"), cancellationToken);
                 if (!response.IsSuccessStatusCode)
                     return ProviderValidationResult.Fail($"Ollama returned HTTP {response.StatusCode}.");
 

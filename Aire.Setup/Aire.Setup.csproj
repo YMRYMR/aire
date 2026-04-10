@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Compile Include="..\Aire\Application\Chat\AssistantModeApplicationService.cs" Link="Application\Chat\AssistantModeApplicationService.cs" />
+    <Compile Include="..\Aire\Services\AppLogger.cs" Link="Services\AppLogger.cs" />
   </ItemGroup>
 
   <ItemGroup>

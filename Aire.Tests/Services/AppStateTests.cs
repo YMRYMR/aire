@@ -62,6 +62,13 @@ public class AppStateTests : IDisposable
     }
 
     [Fact]
+    public void SelectedWindowId_RoundTrips()
+    {
+        AppState.SetSelectedWindowId("0000000000ABCDEF");
+        Assert.Equal("0000000000ABCDEF", AppState.GetSelectedWindowId());
+    }
+
+    [Fact]
     public void ApiAccessHelpers_GenerateTokensAndRaiseEvents()
     {
         int changes = 0;

@@ -74,11 +74,15 @@
                         <Setter Property="Margin" Value="4 1" />
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
                                     <Border x:Name="Bd"
                                             Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
                                             CornerRadius="6"
                                             Padding="{TemplateBinding Padding}">
                                         <ContentPresenter />
@@ -86,11 +90,17 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter TargetName="Bd" Property="Background"
-                                                    Value="{DynamicResource Surface2Brush}" />
+                                                    Value="{DynamicResource AccentSurfaceBrush}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush"
+                                                    Value="{DynamicResource AccentBorderBrush}" />
                                         </Trigger>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter TargetName="Bd" Property="Background"
-                                                    Value="{DynamicResource Surface3Brush}" />
+                                                    Value="{DynamicResource AccentSurfaceBrush}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush"
+                                                    Value="{DynamicResource AccentBorderBrush}" />
+                                            <Setter TargetName="Bd" Property="BorderThickness"
+                                                    Value="1.5" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -103,20 +113,28 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Border Grid.Column="0"
-                                    Width="6"
-                                    CornerRadius="3"
+                                    Width="4"
+                                    CornerRadius="2"
                                     Margin="0 0 8 0"
                                     Background="{Binding ProviderColor}"
                                     Opacity="0.95" />
-                            <StackPanel Grid.Column="1">
+                            <Border x:Name="SelectionIndicator"
+                                    Grid.Column="1"
+                                    Width="5"
+                                    CornerRadius="3"
+                                    Margin="0 0 8 0"
+                                    Background="{DynamicResource AccentBorderBrush}"
+                                    Visibility="Collapsed" />
+                            <StackPanel Grid.Column="2">
                                 <Grid>
                                     <TextBlock x:Name="TitleDisplay"
                                                Text="{Binding Title}"
-                                               Foreground="{DynamicResource TextBrush}"
+                                               Foreground="{DynamicResource SidebarTextBrush}"
                                                FontWeight="SemiBold"
                                                TextTrimming="CharacterEllipsis"
                                                MouseDown="ConversationTitle_MouseDown">
@@ -132,35 +150,35 @@
                                              Padding="0"
                                              Margin="0"
                                              Background="Transparent"
-                                             Foreground="{DynamicResource TextBrush}"
+                                             Foreground="{DynamicResource SidebarTextBrush}"
                                              FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                              IsVisibleChanged="TitleEditor_IsVisibleChanged"
                                              KeyDown="TitleEditor_KeyDown"
-                                             LostFocus="TitleEditor_LostFocus" />
+                                            LostFocus="TitleEditor_LostFocus" />
                                 </Grid>
                                 <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                     <TextBlock Text="{Binding ProviderName}"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="·"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="{Binding AssistantModeDisplayName}"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="·"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
                                     <TextBlock Text="{Binding RelativeDate}"
-                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}" />
                                 </StackPanel>
                             </StackPanel>
-                            <Button Grid.Column="2"
+                            <Button Grid.Column="3"
                                     Content="✕"
                                     Tag="{Binding}"
                                     Click="DeleteConversationButton_Click"
@@ -175,6 +193,12 @@
                                     Opacity="0.75" />
                         </Grid>
                         <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                <Setter TargetName="TitleDisplay" Property="FontWeight" Value="Bold" />
+                                <Setter TargetName="TitleDisplay" Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
+                                <Setter TargetName="TitleEditor" Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
+                                <Setter TargetName="SelectionIndicator" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding IsEditing}" Value="True">
                                 <Setter TargetName="TitleDisplay" Property="Visibility" Value="Collapsed" />
                                 <Setter TargetName="TitleEditor" Property="Visibility" Value="Visible" />

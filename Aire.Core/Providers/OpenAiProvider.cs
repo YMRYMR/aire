@@ -153,7 +153,7 @@ namespace Aire.Providers
 
                 using var req = new HttpRequestMessage(HttpMethod.Get, BuildModelsUrl(url));
                 req.Headers.Add("Authorization", $"Bearer {apiKey}");
-                var res = await MetadataHttp.SendAsync(req, ct);
+                using var res = await MetadataHttp.SendAsync(req, ct);
                 if (!res.IsSuccessStatusCode) return null;
 
                 var json = await res.Content.ReadAsStringAsync(ct);
@@ -188,7 +188,7 @@ namespace Aire.Providers
             {
                 using var req = new HttpRequestMessage(HttpMethod.Get, BuildTokenUsageUrl(baseUrl));
                 req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
-                var response = await MetadataHttp.SendAsync(req, ct);
+                using var response = await MetadataHttp.SendAsync(req, ct);
                 if (!response.IsSuccessStatusCode)
                     return null;
 
@@ -429,7 +429,7 @@ namespace Aire.Providers
                 var url = BuildModelsUrl(EffectiveBaseUrl);
                 using var req = new HttpRequestMessage(HttpMethod.Get, url);
                 req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
-                var res = await MetadataHttp.SendAsync(req, cancellationToken);
+                using var res = await MetadataHttp.SendAsync(req, cancellationToken);
 
                 if (res.IsSuccessStatusCode)
                     return ProviderValidationResult.Ok();
@@ -477,7 +477,7 @@ namespace Aire.Providers
                 req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
                 req.Content = new System.Net.Http.StringContent(payload, System.Text.Encoding.UTF8, "application/json");
 
-                var res = await MetadataHttp.SendAsync(req, cancellationToken);
+                using var res = await MetadataHttp.SendAsync(req, cancellationToken);
                 var body = await res.Content.ReadAsStringAsync(cancellationToken);
 
                 if (res.IsSuccessStatusCode)
@@ -575,7 +575,7 @@ namespace Aire.Providers
                 req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
                 req.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-                var response = await MetadataHttp.SendAsync(req, cancellationToken).ConfigureAwait(false);
+                using var response = await MetadataHttp.SendAsync(req, cancellationToken).ConfigureAwait(false);
                 var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {

@@ -162,7 +162,7 @@ namespace Aire.Providers
                 Content = new StringContent(JsonSerializer.Serialize(cacheBody), Encoding.UTF8, "application/json")
             };
 
-            var resp = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
+            using var resp = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
             if (!resp.IsSuccessStatusCode)
                 return null;
 
@@ -282,12 +282,12 @@ namespace Aire.Providers
                 requestBody = BuildBody(messageList);
             }
 
-            var req = new HttpRequestMessage(HttpMethod.Post, StreamUrl)
+            using var req = new HttpRequestMessage(HttpMethod.Post, StreamUrl)
             {
                 Content = new StringContent(requestBody, Encoding.UTF8, "application/json")
             };
 
-            var resp = await _http
+            using var resp = await _http
                 .SendAsync(req, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
                 .ConfigureAwait(false);
             if (!resp.IsSuccessStatusCode)
@@ -368,7 +368,7 @@ namespace Aire.Providers
             {
                 var req  = new HttpRequestMessage(HttpMethod.Get,
                                $"{ApiBase}/v1beta/models?key={Config.ApiKey}");
-                var resp = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
+                using var resp = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
                 return resp.IsSuccessStatusCode
                     ? ProviderValidationResult.Ok()
                     : ProviderValidationResult.Fail($"HTTP {(int)resp.StatusCode} {resp.ReasonPhrase}");
@@ -478,7 +478,7 @@ namespace Aire.Providers
                 req.Headers.Add("x-goog-api-key", Config.ApiKey);
                 req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var response = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
+                using var response = await _http.SendAsync(req, cancellationToken).ConfigureAwait(false);
                 var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {

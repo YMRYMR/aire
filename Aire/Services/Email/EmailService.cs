@@ -53,7 +53,11 @@ namespace Aire.Services.Email
             catch (OperationCanceledException) { throw; }
             catch (Exception firstEx)
             {
-                try { client?.Dispose(); } catch { }
+                try { client?.Dispose(); }
+                catch (Exception disposeEx)
+                {
+                    AppLogger.Warn($"{nameof(EmailService)}.{nameof(ConnectImapClientAsync)}", "Failed to dispose IMAP client during reconnect", disposeEx);
+                }
                 AppLogger.Warn(
                     $"{nameof(EmailService)}.{nameof(ConnectImapClientAsync)}",
                     "IMAP connect/auth failed with certificate revocation enabled, retrying without revocation check.",
@@ -85,7 +89,11 @@ namespace Aire.Services.Email
             catch (OperationCanceledException) { throw; }
             catch (Exception firstEx)
             {
-                try { client?.Dispose(); } catch { }
+                try { client?.Dispose(); }
+                catch (Exception disposeEx)
+                {
+                    AppLogger.Warn($"{nameof(EmailService)}.{nameof(ConnectSmtpClientAsync)}", "Failed to dispose SMTP client during reconnect", disposeEx);
+                }
                 AppLogger.Warn(
                     $"{nameof(EmailService)}.{nameof(ConnectSmtpClientAsync)}",
                     "SMTP connect/auth failed with certificate revocation enabled, retrying without revocation check.",

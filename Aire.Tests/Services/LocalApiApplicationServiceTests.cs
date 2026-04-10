@@ -91,6 +91,7 @@ public sealed class LocalApiApplicationServiceTests
             hasApiAccessToken: true,
             currentConversationId: 42,
             provider: provider,
+            selectedWindow: null,
             pendingApprovals: 3);
 
         Assert.Equal(8123, snapshot.LocalApiPort);
@@ -104,6 +105,7 @@ public sealed class LocalApiApplicationServiceTests
         Assert.Equal(17, snapshot.CurrentProviderId);
         Assert.Equal("qwen2.5:7b", snapshot.CurrentProviderName);
         Assert.Equal("qwen2.5:7b", snapshot.CurrentProviderModel);
+        Assert.Null(snapshot.SelectedWindowId);
         Assert.Equal(3, snapshot.PendingApprovals);
     }
 }

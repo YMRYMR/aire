@@ -174,4 +174,15 @@ public class EdgeAndSpeechCoverageTests
             Assert.False(string.IsNullOrWhiteSpace(startResult));
         }
     }
+
+    [Fact]
+    public void SpeechRecognitionService_Dispose_IsIdempotent_AndRejectsUse()
+    {
+        var service = new SpeechRecognitionService();
+
+        service.Dispose();
+        service.Dispose();
+
+        Assert.Equal("Service is disposed.", service.StartListening());
+    }
 }

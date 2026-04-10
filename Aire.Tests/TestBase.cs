@@ -55,7 +55,24 @@ namespace Aire.Tests
 
         protected static void RunOnStaThread(Func<Task> action)
         {
-            RunOnStaThread(() => action().GetAwaiter().GetResult());
+            RunOnStaThread(() =>
+            {
+                var task = action();
+                if (task.IsCompleted)
+                {
+                    task.GetAwaiter().GetResult();
+                    return;
+                }
+
+                var frame = new DispatcherFrame();
+                task.ContinueWith(
+                    _ => frame.Continue = false,
+                    CancellationToken.None,
+                    TaskContinuationOptions.ExecuteSynchronously,
+                    TaskScheduler.Default);
+                Dispatcher.PushFrame(frame);
+                task.GetAwaiter().GetResult();
+            });
         }
 
         protected static void SelectComboTag(ComboBox comboBox, string tag)
