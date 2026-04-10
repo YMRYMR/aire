@@ -159,7 +159,9 @@ public static class WindowCaptureService
         if (!string.IsNullOrWhiteSpace(options.OutputPath))
         {
             outputPath = Path.GetFullPath(options.OutputPath);
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+            var outputDirectory = Path.GetDirectoryName(outputPath);
+            if (!string.IsNullOrWhiteSpace(outputDirectory))
+                Directory.CreateDirectory(outputDirectory);
             File.WriteAllBytes(outputPath, pngBytes);
         }
         else if (!options.ReturnBase64)
@@ -168,7 +170,9 @@ public static class WindowCaptureService
                 Path.GetTempPath(),
                 "Aire",
                 $"capture-{window.ProcessName}-{DateTime.UtcNow:yyyyMMdd-HHmmssfff}.png");
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+            var outputDirectory = Path.GetDirectoryName(outputPath);
+            if (!string.IsNullOrWhiteSpace(outputDirectory))
+                Directory.CreateDirectory(outputDirectory);
             File.WriteAllBytes(outputPath, pngBytes);
         }
 

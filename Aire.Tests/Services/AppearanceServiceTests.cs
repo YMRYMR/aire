@@ -82,7 +82,12 @@ public class AppearanceServiceTests : TestBase
     {
         RunOnStaThread(() =>
         {
+            EnsureApplication();
             AppearanceService.ResetForTesting();
+            AppearanceService.Apply(0.15, 0.25);
+
+            Color assistantBubbleStart = ((SolidColorBrush)Application.Current.Resources["AssistantMessageBrush"]).Color;
+
             int raised = 0;
             AppearanceService.AppearanceChanged += Handler;
             try
@@ -95,6 +100,7 @@ public class AppearanceServiceTests : TestBase
             }
             Assert.Equal(0.0, AppearanceService.AccentBrightness);
             Assert.Equal(1.0, AppearanceService.AccentTintPosition);
+            Assert.NotEqual(assistantBubbleStart, ((SolidColorBrush)Application.Current.Resources["AssistantMessageBrush"]).Color);
             Assert.True(raised >= 1);
             void Handler()
             {

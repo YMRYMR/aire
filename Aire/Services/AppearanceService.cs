@@ -203,110 +203,7 @@ namespace Aire.Services
                 }
 
                 ApplyAccentResources(res);
-
-                var background = GetResourceColor(res, "BackgroundBrush");
-                var surface = GetResourceColor(res, "SurfaceBrush");
-                var surface2 = GetResourceColor(res, "Surface2Brush");
-                var surface3 = GetResourceColor(res, "Surface3Brush");
-                var accentSurface = GetResourceColor(res, "AccentSurfaceBrush");
-                var accentSurface2 = GetResourceColor(res, "AccentSurface2Brush");
-                var codeBackground = GetResourceColor(res, "CodeBackgroundBrush");
-                var warningBackground = GetResourceColor(res, "WarningBackgroundBrush");
-
-                // Keep semantic text readable regardless of palette. Subtle tinting is allowed
-                // only after contrast has been enforced.
-                SetResourceBrush(res, "TextBrush",
-                    AccessibleTintedForeground(background,
-                        lightBase: C(0xF4, 0xF4, 0xF6),
-                        darkBase: C(0x1B, 0x1D, 0x22),
-                        tintHue, tintStrength, tintMix: 0.06, minContrast: 7.0));
-
-                SetResourceBrush(res, "TextSecondaryBrush",
-                    AccessibleTintedForeground(surface,
-                        lightBase: C(0xD5, 0xD7, 0xDD),
-                        darkBase: C(0x4C, 0x52, 0x60),
-                        tintHue, tintStrength, tintMix: 0.04, minContrast: 4.5));
-
-                var chatText = AccessibleTintedForeground(background,
-                    lightBase: C(0xF7, 0xF8, 0xFA),
-                    darkBase: C(0x1A, 0x1C, 0x22),
-                    tintHue, tintStrength, tintMix: 0.05, minContrast: 7.0);
-
-                SetResourceBrush(res, "SidebarTextBrush",
-                    AccessibleTintedForeground(background,
-                        lightBase: C(0xF7, 0xF8, 0xFA),
-                        darkBase: C(0x17, 0x1A, 0x22),
-                        tintHue, tintStrength, tintMix: 0.04, minContrast: 7.0));
-                SetResourceBrush(res, "SidebarTextSecondaryBrush",
-                    AccessibleTintedForeground(background,
-                        lightBase: C(0xE2, 0xE7, 0xEE),
-                        darkBase: C(0x45, 0x4E, 0x61),
-                        tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
-
-                SetResourceBrush(res, "AccentTextBrush",
-                    AccessibleTintedForeground(accentSurface,
-                        lightBase: C(0xFA, 0xFB, 0xFD),
-                        darkBase: C(0x13, 0x15, 0x1B),
-                        tintHue, tintStrength, tintMix: 0.02, minContrast: 7.0));
-                SetResourceBrush(res, "AccentTextSecondaryBrush",
-                    AccessibleTintedForeground(accentSurface,
-                        lightBase: C(0xD8, 0xDE, 0xE8),
-                        darkBase: C(0x4B, 0x54, 0x66),
-                        tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
-
-                var assistantBubble = Blend(surface, accentSurface2, 0.08 + tintStrength * 0.04);
-                var userBubble = Blend(surface2, accentSurface, 0.10 + tintStrength * 0.05);
-                var systemBubble = Blend(surface3, accentSurface2, 0.05);
-                var errorBubble = Blend(warningBackground, C(0xF2, 0xD7, 0xD7), 0.14);
-
-                SetResourceBrush(res, "AssistantMessageBrush", assistantBubble);
-                SetResourceBrush(res, "UserMessageBrush", userBubble);
-                SetResourceBrush(res, "StatusTextBrush",
-                    AccessibleTintedForeground(background,
-                        lightBase: C(0xC6, 0xCA, 0xD3),
-                        darkBase: C(0x5A, 0x60, 0x6D),
-                        tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
-
-                SetResourceBrush(res, "AssistantMessageTextBrush",
-                    chatText);
-                SetResourceBrush(res, "UserMessageTextBrush",
-                    chatText);
-                SetResourceBrush(res, "LinkBrush",
-                    AccessibleTintedForeground(surface,
-                        lightBase: C(0x1A, 0x5C, 0xB8),
-                        darkBase: C(0x8B, 0xC6, 0xFF),
-                        tintHue, tintStrength, tintMix: 0.10, minContrast: 4.5));
-                SetResourceBrush(res, "CodeForegroundBrush",
-                    AccessibleTintedForeground(codeBackground,
-                        lightBase: C(0x7A, 0x38, 0x10),
-                        darkBase: C(0xE6, 0xBA, 0x82),
-                        tintHue, tintStrength, tintMix: 0.08, minContrast: 4.5));
-                SetResourceBrush(res, "CodeBackgroundBrush",
-                    Blend(codeBackground, accentSurface2, 0.10));
-
-                SetResourceBrush(res, "WarningBackgroundBrush",
-                    Blend(warningBackground, C(0xFF, 0xF1, 0xC9), Brightness < 0.5 ? 0.08 : 0.16));
-                SetResourceBrush(res, "WarningBorderBrush",
-                    AccessibleTintedForeground(warningBackground,
-                        lightBase: C(0x95, 0x62, 0x00),
-                        darkBase: C(0xE0, 0xA0, 0x2A),
-                        tintHue, tintStrength, tintMix: 0.03, minContrast: 3.5));
-
-                SetResourceBrush(res, "ErrorBrush",
-                    AccessibleTintedForeground(errorBubble,
-                        lightBase: C(0x8E, 0x2F, 0x2F),
-                        darkBase: C(0xF3, 0xB7, 0xB7),
-                        tintHue, tintStrength, tintMix: 0.03, minContrast: 4.5));
-
-                // Keep the message-role brushes in sync with the semantic resources.
-                SetBrush(UserBgBrush, userBubble);
-                SetBrush(UserFgBrush, GetResourceColor(res, "UserMessageTextBrush"));
-                SetBrush(AiBgBrush, assistantBubble);
-                SetBrush(AiFgBrush, GetResourceColor(res, "AssistantMessageTextBrush"));
-                SetBrush(SystemBgBrush, systemBubble);
-                SetBrush(SystemFgBrush, GetResourceColor(res, "StatusTextBrush"));
-                SetBrush(ErrorBgBrush, errorBubble);
-                SetBrush(ErrorFgBrush, GetResourceColor(res, "ErrorBrush"));
+                ApplySemanticResources(res, tintHue, tintStrength);
             }
 
             AppearanceChanged?.Invoke();
@@ -323,7 +220,10 @@ namespace Aire.Services
             AccentTintPosition = Math.Clamp(tintPosition, 0, 1);
 
             if (Application.Current?.Resources is ResourceDictionary res)
+            {
                 ApplyAccentResources(res);
+                ApplySemanticResources(res, TintPosition * 360.0, Math.Sin(TintPosition * Math.PI));
+            }
 
             AppearanceChanged?.Invoke();
         }
@@ -483,6 +383,111 @@ namespace Aire.Services
                 var base_ = LerpColor(dark, light, AccentBrightness);
                 res[key] = new SolidColorBrush(Tinted(base_, tintHue, tintStrength));
             }
+        }
+
+        private static void ApplySemanticResources(ResourceDictionary res, double tintHue, double tintStrength)
+        {
+            var background = GetResourceColor(res, "BackgroundBrush");
+            var surface = GetResourceColor(res, "SurfaceBrush");
+            var surface2 = GetResourceColor(res, "Surface2Brush");
+            var surface3 = GetResourceColor(res, "Surface3Brush");
+            var accentSurface = GetResourceColor(res, "AccentSurfaceBrush");
+            var accentSurface2 = GetResourceColor(res, "AccentSurface2Brush");
+            var codeBackground = GetResourceColor(res, "CodeBackgroundBrush");
+            var warningBackground = GetResourceColor(res, "WarningBackgroundBrush");
+
+            // Keep semantic text readable regardless of palette. Subtle tinting is allowed
+            // only after contrast has been enforced.
+            SetResourceBrush(res, "TextBrush",
+                AccessibleTintedForeground(background,
+                    lightBase: C(0xF4, 0xF4, 0xF6),
+                    darkBase: C(0x1B, 0x1D, 0x22),
+                    tintHue, tintStrength, tintMix: 0.06, minContrast: 7.0));
+
+            SetResourceBrush(res, "TextSecondaryBrush",
+                AccessibleTintedForeground(surface,
+                    lightBase: C(0xD5, 0xD7, 0xDD),
+                    darkBase: C(0x4C, 0x52, 0x60),
+                    tintHue, tintStrength, tintMix: 0.04, minContrast: 4.5));
+
+            var chatText = AccessibleTintedForeground(background,
+                lightBase: C(0xF7, 0xF8, 0xFA),
+                darkBase: C(0x1A, 0x1C, 0x22),
+                tintHue, tintStrength, tintMix: 0.05, minContrast: 7.0);
+
+            SetResourceBrush(res, "SidebarTextBrush",
+                AccessibleTintedForeground(background,
+                    lightBase: C(0xF7, 0xF8, 0xFA),
+                    darkBase: C(0x17, 0x1A, 0x22),
+                    tintHue, tintStrength, tintMix: 0.04, minContrast: 7.0));
+            SetResourceBrush(res, "SidebarTextSecondaryBrush",
+                AccessibleTintedForeground(background,
+                    lightBase: C(0xE2, 0xE7, 0xEE),
+                    darkBase: C(0x45, 0x4E, 0x61),
+                    tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
+
+            SetResourceBrush(res, "AccentTextBrush",
+                AccessibleTintedForeground(accentSurface,
+                    lightBase: C(0xFA, 0xFB, 0xFD),
+                    darkBase: C(0x13, 0x15, 0x1B),
+                    tintHue, tintStrength, tintMix: 0.02, minContrast: 7.0));
+            SetResourceBrush(res, "AccentTextSecondaryBrush",
+                AccessibleTintedForeground(accentSurface,
+                    lightBase: C(0xD8, 0xDE, 0xE8),
+                    darkBase: C(0x4B, 0x54, 0x66),
+                    tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
+
+            var assistantBubble = Blend(surface, accentSurface2, 0.08 + tintStrength * 0.04);
+            var userBubble = Blend(surface2, accentSurface, 0.10 + tintStrength * 0.05);
+            var systemBubble = Blend(surface3, accentSurface2, 0.05);
+            var errorBubble = Blend(warningBackground, C(0xF2, 0xD7, 0xD7), 0.14);
+
+            SetResourceBrush(res, "AssistantMessageBrush", assistantBubble);
+            SetResourceBrush(res, "UserMessageBrush", userBubble);
+            SetResourceBrush(res, "StatusTextBrush",
+                AccessibleTintedForeground(background,
+                    lightBase: C(0xC6, 0xCA, 0xD3),
+                    darkBase: C(0x5A, 0x60, 0x6D),
+                    tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
+
+            SetResourceBrush(res, "AssistantMessageTextBrush", chatText);
+            SetResourceBrush(res, "UserMessageTextBrush", chatText);
+            SetResourceBrush(res, "LinkBrush",
+                AccessibleTintedForeground(surface,
+                    lightBase: C(0x1A, 0x5C, 0xB8),
+                    darkBase: C(0x8B, 0xC6, 0xFF),
+                    tintHue, tintStrength, tintMix: 0.10, minContrast: 4.5));
+            SetResourceBrush(res, "CodeForegroundBrush",
+                AccessibleTintedForeground(codeBackground,
+                    lightBase: C(0x7A, 0x38, 0x10),
+                    darkBase: C(0xE6, 0xBA, 0x82),
+                    tintHue, tintStrength, tintMix: 0.08, minContrast: 4.5));
+            SetResourceBrush(res, "CodeBackgroundBrush",
+                Blend(codeBackground, accentSurface2, 0.10));
+
+            SetResourceBrush(res, "WarningBackgroundBrush",
+                Blend(warningBackground, C(0xFF, 0xF1, 0xC9), Brightness < 0.5 ? 0.08 : 0.16));
+            SetResourceBrush(res, "WarningBorderBrush",
+                AccessibleTintedForeground(warningBackground,
+                    lightBase: C(0x95, 0x62, 0x00),
+                    darkBase: C(0xE0, 0xA0, 0x2A),
+                    tintHue, tintStrength, tintMix: 0.03, minContrast: 3.5));
+
+            SetResourceBrush(res, "ErrorBrush",
+                AccessibleTintedForeground(errorBubble,
+                    lightBase: C(0x8E, 0x2F, 0x2F),
+                    darkBase: C(0xF3, 0xB7, 0xB7),
+                    tintHue, tintStrength, tintMix: 0.03, minContrast: 4.5));
+
+            // Keep the message-role brushes in sync with the semantic resources.
+            SetBrush(UserBgBrush, userBubble);
+            SetBrush(UserFgBrush, GetResourceColor(res, "UserMessageTextBrush"));
+            SetBrush(AiBgBrush, assistantBubble);
+            SetBrush(AiFgBrush, GetResourceColor(res, "AssistantMessageTextBrush"));
+            SetBrush(SystemBgBrush, systemBubble);
+            SetBrush(SystemFgBrush, GetResourceColor(res, "StatusTextBrush"));
+            SetBrush(ErrorBgBrush, errorBubble);
+            SetBrush(ErrorFgBrush, GetResourceColor(res, "ErrorBrush"));
         }
 
         private static Color C(byte r, byte g, byte b) => Color.FromRgb(r, g, b);
