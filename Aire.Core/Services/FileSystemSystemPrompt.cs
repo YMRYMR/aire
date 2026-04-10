@@ -20,7 +20,8 @@ namespace Aire.Services
                 : null;
 
             bool hasBrowser  = cats == null || cats.Contains("browser");
-            bool hasInput    = cats == null || cats.Contains("keyboard") || cats.Contains("mouse");
+            bool hasKeyboard = cats == null || cats.Contains("keyboard");
+            bool hasMouse    = cats == null || cats.Contains("mouse");
             bool hasEmail    = cats == null || cats.Contains("email");
 
             var sb = new StringBuilder(512);
@@ -43,7 +44,7 @@ namespace Aire.Services
             if (hasBrowser)
                 sb.Append("BROWSER: To follow a link on an open page, call read_browser_tab(-1) first to find the real URL. Never guess or invent URLs.\n\n");
 
-            if (hasInput)
+            if (hasKeyboard)
                 sb.Append("KEYBOARD-FIRST: Prefer keyboard shortcuts over mouse. Use begin_keyboard_session before any key/type tools.\n\n");
 
             sb.Append("TOOL RESULTS: A result starting with SUCCESS means that step is done. Continue with the next step if the task is not fully complete.\n\n");
@@ -179,16 +180,24 @@ namespace Aire.Services
 
                 "CRITICAL RULES — you MUST follow these without exception:\n" +
                 "1. NEVER say 'I cannot', 'I am unable to', or 'I'm just an AI' when asked to perform system tasks. You HAVE tools. Use them.\n" +
-                "1a. When summarising news or articles, ALWAYS include each article's full URL from the feed's Link: field verbatim in your reply — the user can click links in the chat.\n" +
+                "1a. When summarising news or articles, ALWAYS include each article's full URL from the feed's Link: field verbatim in your reply — the user can click links in the chat.\n");
+            if (hasFs)
+                sb.Append(
                 "2. NEVER say you cannot launch, open, or start applications. You CAN launch any installed application — including GUI apps like GIMP, Notepad, Chrome, VLC — by using execute_command with just the app name (e.g. command=\"gimp\").\n" +
                 "3. When the user asks you to list, read, find, create, edit, move, or delete anything on the file system, you MUST emit a tool call immediately.\n" +
-                "4. When the user asks you to run commands, open applications, or perform any system operation, you MUST use the execute_command tool.\n" +
+                "4. When the user asks you to run commands, open applications, or perform any system operation, you MUST use the execute_command tool.\n");
+            sb.Append(
                 "5. After receiving a tool result, you MUST respond with a summary AND then IMMEDIATELY call the next tool if the user's task is not yet fully complete. NEVER wait for the user to tell you to continue if you have more tools to run.\n" +
-                "5a. If the user is asking a capability or product question (for example: what you can do, whether you support something, how Aire works, which mode/provider can do something, or whether image generation is available), answer directly in plain language. Do NOT call tools unless the user explicitly asks you to perform the action now.\n" +
+                "5a. If the user is asking a capability or product question (for example: what you can do, whether you support something, how Aire works, which mode/provider can do something, or whether image generation is available), answer directly in plain language. Do NOT call tools unless the user explicitly asks you to perform the action now.\n");
+            if (hasBrowser)
+                sb.Append(
                 "6. To READ a web page use: open_url(url=\"URL\"). This fetches the page and returns its readable text. Use this for any task that requires information from the internet (articles, docs, search results, weather, etc.).\n" +
                 "7. If open_url returns FAILED with 403 or 429 (bot protection), IMMEDIATELY retry with the site's RSS or Atom feed URL (e.g. /rss, /feed, /rss.xml, /atom.xml). Never tell the user to open a browser — just retry.\n" +
-                "8. To open a URL visibly in the Aire browser window use: open_browser_tab(url=\"URL\"). Use this whenever the user says 'open', 'show', 'navigate to', or wants to see a page.\n" +
-                "9. To check if an app is installed use: execute_command with command=\"where appname\" (fast) or \"winget list --name appname\" (detailed). To list all installed apps use \"winget list\".\n\n" +
+                "8. To open a URL visibly in the Aire browser window use: open_browser_tab(url=\"URL\"). Use this whenever the user says 'open', 'show', 'navigate to', or wants to see a page.\n");
+            if (hasFs)
+                sb.Append(
+                "9. To check if an app is installed use: execute_command with command=\"where appname\" (fast) or \"winget list --name appname\" (detailed). To list all installed apps use \"winget list\".\n");
+            sb.Append("\n" +
 
                 "To call a tool, place EXACTLY ONE of the following at the END of your message:\n\n" +
                 "<tool_call>{\"tool\": \"TOOL_NAME\", ...parameters}</tool_call>\n\n" +
