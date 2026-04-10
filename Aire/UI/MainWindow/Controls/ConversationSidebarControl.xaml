@@ -113,16 +113,24 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Border Grid.Column="0"
-                                    Width="6"
-                                    CornerRadius="3"
+                                    Width="4"
+                                    CornerRadius="2"
                                     Margin="0 0 8 0"
                                     Background="{Binding ProviderColor}"
                                     Opacity="0.95" />
-                            <StackPanel Grid.Column="1">
+                            <Border x:Name="SelectionIndicator"
+                                    Grid.Column="1"
+                                    Width="5"
+                                    CornerRadius="3"
+                                    Margin="0 0 8 0"
+                                    Background="{DynamicResource AccentBorderBrush}"
+                                    Visibility="Collapsed" />
+                            <StackPanel Grid.Column="2">
                                 <Grid>
                                     <TextBlock x:Name="TitleDisplay"
                                                Text="{Binding Title}"
@@ -146,7 +154,7 @@
                                              FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                              IsVisibleChanged="TitleEditor_IsVisibleChanged"
                                              KeyDown="TitleEditor_KeyDown"
-                                             LostFocus="TitleEditor_LostFocus" />
+                                            LostFocus="TitleEditor_LostFocus" />
                                 </Grid>
                                 <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                     <TextBlock Text="{Binding ProviderName}"
@@ -170,7 +178,7 @@
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}" />
                                 </StackPanel>
                             </StackPanel>
-                            <Button Grid.Column="2"
+                            <Button Grid.Column="3"
                                     Content="✕"
                                     Tag="{Binding}"
                                     Click="DeleteConversationButton_Click"
@@ -185,6 +193,12 @@
                                     Opacity="0.75" />
                         </Grid>
                         <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                <Setter TargetName="TitleDisplay" Property="FontWeight" Value="Bold" />
+                                <Setter TargetName="TitleDisplay" Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
+                                <Setter TargetName="TitleEditor" Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
+                                <Setter TargetName="SelectionIndicator" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding IsEditing}" Value="True">
                                 <Setter TargetName="TitleDisplay" Property="Visibility" Value="Collapsed" />
                                 <Setter TargetName="TitleEditor" Property="Visibility" Value="Visible" />
