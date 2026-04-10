@@ -547,6 +547,9 @@ Loopback-only HTTP listener on `127.0.0.1:51234`. Provides:
 - Send messages
 - Switch providers and models
 - Inspect app state
+- List top-level windows
+- Select a window for the current session
+- Capture the selected window as a PNG path or base64 payload
 
 Intended for trusted local automation and AI agent integration.
 
@@ -560,6 +563,24 @@ AIs can interact with the running app via `http://127.0.0.1:51234` to send
 messages, switch providers, inspect state, select top-level windows, and capture
 the selected window without a human in the loop.
 
+Recommended flow for autonomous use:
+
+1. Read the local API token from `Aire/appstate_strings.json`.
+2. Call `list_windows` to discover the current top-level windows.
+3. Call `select_window` with a `windowId`, or use `show_main_window` and then
+   `select_window` for the Aire window.
+4. Call `capture_selected_window` to save a PNG to disk, or `capture_window`
+   with `returnBase64=true` to get the image inline.
+
+Useful methods:
+
+- `get_state`
+- `list_windows`
+- `get_selected_window`
+- `select_window`
+- `capture_window`
+- `capture_selected_window`
+
 ### Screenshot Automation
 
 The `Aire.Screenshots` project captures repeatable screenshots of the running app
@@ -571,6 +592,10 @@ dotnet run --project .\Aire.Screenshots\Aire.Screenshots.csproj -- run-plan --pl
 
 Screenshots are written to `Aire/Assets/Help/{locale}/` and can be committed
 directly. AIs can use this to verify UI changes visually.
+
+When the goal is autonomous agent behavior rather than docs capture, prefer the
+local API methods above so the agent can reuse the same window-selection and
+capture flow without depending on the separate automation runner.
 
 ---
 
