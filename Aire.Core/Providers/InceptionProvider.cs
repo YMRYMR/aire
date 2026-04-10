@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Aire.Data;
+using Aire.Services;
 
 namespace Aire.Providers
 {
@@ -60,7 +61,7 @@ namespace Aire.Providers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Inception live model fetch failed: {ex.GetType().Name}");
+                AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "Inception live model fetch failed", ex);
                 return null;
             }
         }
