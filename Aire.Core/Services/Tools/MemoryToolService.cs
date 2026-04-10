@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Aire.Services;
 using static Aire.Services.Tools.ToolHelpers;
 
 namespace Aire.Services.Tools
@@ -45,8 +46,9 @@ namespace Aire.Services.Tools
                 SaveMemory(dict);
                 return new ToolExecutionResult { TextResult = $"Remembered: {key} = {value}" };
             }
-        catch
+        catch (Exception ex)
             {
+            AppLogger.Warn(nameof(MemoryToolService) + ".ExecuteRemember", "Memory operation failed", ex);
             return new ToolExecutionResult { TextResult = "Memory operation failed." };
             }
         }
@@ -71,8 +73,9 @@ namespace Aire.Services.Tools
                         : $"No memory found for key: {key}"
                 };
             }
-        catch
+        catch (Exception ex)
             {
+            AppLogger.Warn(nameof(MemoryToolService) + ".ExecuteRecall", "Memory operation failed", ex);
             return new ToolExecutionResult { TextResult = "Memory operation failed." };
             }
         }
@@ -100,7 +103,7 @@ namespace Aire.Services.Tools
                 if (delayMs > 0) await Task.Delay(delayMs);
                 // Notification will be injected via IUserNotificationService in the future.
                 // For now, just log the reminder.
-                System.Diagnostics.Debug.WriteLine($"[Reminder] {message}");
+                AppLogger.Info(nameof(MemoryToolService), $"Reminder: {message}");
             });
 
             return new ToolExecutionResult
