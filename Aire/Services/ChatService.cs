@@ -166,9 +166,10 @@ namespace Aire.Services
             {
                 throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 const string message = "An unexpected error occurred. Please try again.";
+                AppLogger.Warn("ChatService.SendMessageWithHistory", "Unexpected chat service failure", ex);
                 _errorOccurred?.Invoke(this, message);
                 return new AiResponse
                 {

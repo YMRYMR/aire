@@ -389,6 +389,66 @@ namespace Aire.Tests.Services
             });
         }
 
+        [Fact]
+        public void DispatchAsync_ApproveAndDenyToolCalls_RouteThroughMainWindowApprovalState()
+        {
+            RunOnStaThread(async () =>
+            {
+                AppStartupState.MarkReady();
+                var window = new MainWindow(initializeUi: false);
+                var service = new LocalApiService(window);
+
+                var approveTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                var denyTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                window.Messages = new System.Collections.ObjectModel.ObservableCollection<Aire.UI.MainWindow.Models.ChatMessage>
+                {
+                    new()
+                    {
+                        IsApprovalPending = true,
+                        PendingToolCall = new ToolCallRequest
+                        {
+                            Tool = "read_file",
+                            Description = "read",
+                            RawJson = "{}"
+                        },
+                        ApprovalTcs = approveTcs,
+                        Timestamp = "10:00"
+                    },
+                    new()
+                    {
+                        IsApprovalPending = true,
+                        PendingToolCall = new ToolCallRequest
+                        {
+                            Tool = "write_file",
+                            Description = "write",
+                            RawJson = "{}"
+                        },
+                        ApprovalTcs = denyTcs,
+                        Timestamp = "10:01"
+                    }
+                };
+
+                var approve = await service.DispatchAsync(new LocalApiRequest
+                {
+                    Method = "approve_tool_call",
+                    Parameters = JsonDocument.Parse("{\"index\":0}").RootElement.Clone()
+                }, CancellationToken.None);
+
+                var deny = await service.DispatchAsync(new LocalApiRequest
+                {
+                    Method = "deny_tool_call",
+                    Parameters = JsonDocument.Parse("{\"index\":1}").RootElement.Clone()
+                }, CancellationToken.None);
+
+                Assert.True(approve.Ok);
+                Assert.True(deny.Ok);
+                Assert.True(approveTcs.Task.IsCompletedSuccessfully);
+                Assert.True(denyTcs.Task.IsCompletedSuccessfully);
+                Assert.True(approveTcs.Task.Result);
+                Assert.False(denyTcs.Task.Result);
+            });
+        }
+
         private static async Task<string> RoundTripAsync(LocalApiService service, string requestLine)
         {
             var listener = new TcpListener(IPAddress.Loopback, 0);

@@ -62,13 +62,14 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Ensure `HttpResponseMessage` is disposed on all exception paths in streaming providers.
 - Unsubscribe event handlers in `ChatService` when the orchestrator is replaced or the service is disposed.
 - Audit remaining `IDisposable` implementations for completeness.
-- Recent progress: Ollama streaming responses are disposed on all paths, `ChatService` unsubscribes on dispose, and the local API listener now logs unexpected failures instead of swallowing them.
+- Recent progress: Ollama streaming responses are disposed on all paths, `ChatService` unsubscribes on dispose, `SpeechRecognitionService` now releases its mic/timer/factory resources, and the local API listener now logs unexpected failures instead of swallowing them.
 
 ## 3. Quality Bar
 
 ### 3.1 Coverage on meaningful paths `[ ]`
 - Raise coverage on the workflows that matter most, not on trivial getters.
 - Prioritize provider validation, local API, tool approval, onboarding, and persistence.
+- Recent progress: added direct coverage for speech-recognition disposal, provider-model refresher lifetime cleanup, and local API approval routing while the broader UI-backed test project still has an unrelated appearance-test compile issue.
 
 ### 3.2 Release readiness `[ ]`
 - Keep release builds clean.

@@ -203,19 +203,111 @@ namespace Aire.Services
                 }
 
                 ApplyAccentResources(res);
-            }
 
-            // Message brushes
-            var msg = MsgSlots;
-            SetBrush(UserBgBrush,   Tinted(LerpColor(msg[0].Dark, msg[0].Light, themeTone), tintHue, tintStrength));
-            SetBrush(UserFgBrush,   LerpColor(msg[1].Dark, msg[1].Light, themeTone));
-            SetBrush(AiBgBrush,     Tinted(LerpColor(msg[2].Dark, msg[2].Light, themeTone), tintHue, tintStrength));
-            SetBrush(AiFgBrush,     LerpColor(msg[3].Dark, msg[3].Light, themeTone));
-            SetBrush(SystemBgBrush, Tinted(LerpColor(msg[4].Dark, msg[4].Light, themeTone), tintHue, tintStrength));
-            SetBrush(SystemFgBrush, LerpColor(msg[5].Dark, msg[5].Light, themeTone));   // no tint â€” must stay readable against any background
-            // Error brushes: preserve their red identity; tint background only slightly
-            SetBrush(ErrorBgBrush,  Tinted(LerpColor(msg[6].Dark, msg[6].Light, themeTone), tintHue, tintStrength * 0.25));
-            SetBrush(ErrorFgBrush,  LerpColor(msg[7].Dark, msg[7].Light, themeTone));   // no tint â€” always red-ish
+                var background = GetResourceColor(res, "BackgroundBrush");
+                var surface = GetResourceColor(res, "SurfaceBrush");
+                var surface2 = GetResourceColor(res, "Surface2Brush");
+                var surface3 = GetResourceColor(res, "Surface3Brush");
+                var accentSurface = GetResourceColor(res, "AccentSurfaceBrush");
+                var accentSurface2 = GetResourceColor(res, "AccentSurface2Brush");
+                var codeBackground = GetResourceColor(res, "CodeBackgroundBrush");
+                var warningBackground = GetResourceColor(res, "WarningBackgroundBrush");
+
+                // Keep semantic text readable regardless of palette. Subtle tinting is allowed
+                // only after contrast has been enforced.
+                SetResourceBrush(res, "TextBrush",
+                    AccessibleTintedForeground(background,
+                        lightBase: C(0xF4, 0xF4, 0xF6),
+                        darkBase: C(0x1B, 0x1D, 0x22),
+                        tintHue, tintStrength, tintMix: 0.06, minContrast: 7.0));
+
+                SetResourceBrush(res, "TextSecondaryBrush",
+                    AccessibleTintedForeground(surface,
+                        lightBase: C(0xD5, 0xD7, 0xDD),
+                        darkBase: C(0x4C, 0x52, 0x60),
+                        tintHue, tintStrength, tintMix: 0.04, minContrast: 4.5));
+
+                var chatText = AccessibleTintedForeground(background,
+                    lightBase: C(0xF7, 0xF8, 0xFA),
+                    darkBase: C(0x1A, 0x1C, 0x22),
+                    tintHue, tintStrength, tintMix: 0.05, minContrast: 7.0);
+
+                SetResourceBrush(res, "SidebarTextBrush",
+                    AccessibleTintedForeground(background,
+                        lightBase: C(0xF7, 0xF8, 0xFA),
+                        darkBase: C(0x17, 0x1A, 0x22),
+                        tintHue, tintStrength, tintMix: 0.04, minContrast: 7.0));
+                SetResourceBrush(res, "SidebarTextSecondaryBrush",
+                    AccessibleTintedForeground(background,
+                        lightBase: C(0xE2, 0xE7, 0xEE),
+                        darkBase: C(0x45, 0x4E, 0x61),
+                        tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
+
+                SetResourceBrush(res, "AccentTextBrush",
+                    AccessibleTintedForeground(accentSurface,
+                        lightBase: C(0xFA, 0xFB, 0xFD),
+                        darkBase: C(0x13, 0x15, 0x1B),
+                        tintHue, tintStrength, tintMix: 0.02, minContrast: 7.0));
+                SetResourceBrush(res, "AccentTextSecondaryBrush",
+                    AccessibleTintedForeground(accentSurface,
+                        lightBase: C(0xD8, 0xDE, 0xE8),
+                        darkBase: C(0x4B, 0x54, 0x66),
+                        tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
+
+                var assistantBubble = Blend(surface, accentSurface2, 0.08 + tintStrength * 0.04);
+                var userBubble = Blend(surface2, accentSurface, 0.10 + tintStrength * 0.05);
+                var systemBubble = Blend(surface3, accentSurface2, 0.05);
+                var errorBubble = Blend(warningBackground, C(0xF2, 0xD7, 0xD7), 0.14);
+
+                SetResourceBrush(res, "AssistantMessageBrush", assistantBubble);
+                SetResourceBrush(res, "UserMessageBrush", userBubble);
+                SetResourceBrush(res, "StatusTextBrush",
+                    AccessibleTintedForeground(background,
+                        lightBase: C(0xC6, 0xCA, 0xD3),
+                        darkBase: C(0x5A, 0x60, 0x6D),
+                        tintHue, tintStrength, tintMix: 0.02, minContrast: 4.8));
+
+                SetResourceBrush(res, "AssistantMessageTextBrush",
+                    chatText);
+                SetResourceBrush(res, "UserMessageTextBrush",
+                    chatText);
+                SetResourceBrush(res, "LinkBrush",
+                    AccessibleTintedForeground(surface,
+                        lightBase: C(0x1A, 0x5C, 0xB8),
+                        darkBase: C(0x8B, 0xC6, 0xFF),
+                        tintHue, tintStrength, tintMix: 0.10, minContrast: 4.5));
+                SetResourceBrush(res, "CodeForegroundBrush",
+                    AccessibleTintedForeground(codeBackground,
+                        lightBase: C(0x7A, 0x38, 0x10),
+                        darkBase: C(0xE6, 0xBA, 0x82),
+                        tintHue, tintStrength, tintMix: 0.08, minContrast: 4.5));
+                SetResourceBrush(res, "CodeBackgroundBrush",
+                    Blend(codeBackground, accentSurface2, 0.10));
+
+                SetResourceBrush(res, "WarningBackgroundBrush",
+                    Blend(warningBackground, C(0xFF, 0xF1, 0xC9), Brightness < 0.5 ? 0.08 : 0.16));
+                SetResourceBrush(res, "WarningBorderBrush",
+                    AccessibleTintedForeground(warningBackground,
+                        lightBase: C(0x95, 0x62, 0x00),
+                        darkBase: C(0xE0, 0xA0, 0x2A),
+                        tintHue, tintStrength, tintMix: 0.03, minContrast: 3.5));
+
+                SetResourceBrush(res, "ErrorBrush",
+                    AccessibleTintedForeground(errorBubble,
+                        lightBase: C(0x8E, 0x2F, 0x2F),
+                        darkBase: C(0xF3, 0xB7, 0xB7),
+                        tintHue, tintStrength, tintMix: 0.03, minContrast: 4.5));
+
+                // Keep the message-role brushes in sync with the semantic resources.
+                SetBrush(UserBgBrush, userBubble);
+                SetBrush(UserFgBrush, GetResourceColor(res, "UserMessageTextBrush"));
+                SetBrush(AiBgBrush, assistantBubble);
+                SetBrush(AiFgBrush, GetResourceColor(res, "AssistantMessageTextBrush"));
+                SetBrush(SystemBgBrush, systemBubble);
+                SetBrush(SystemFgBrush, GetResourceColor(res, "StatusTextBrush"));
+                SetBrush(ErrorBgBrush, errorBubble);
+                SetBrush(ErrorFgBrush, GetResourceColor(res, "ErrorBrush"));
+            }
 
             AppearanceChanged?.Invoke();
         }
@@ -268,6 +360,98 @@ namespace Aire.Services
         private static void SetBrush(SolidColorBrush b, Color c)
         {
             if (!b.IsFrozen) b.Color = c;
+        }
+
+        private static void SetResourceBrush(ResourceDictionary res, string key, Color color)
+        {
+            if (res[key] is SolidColorBrush brush && !brush.IsFrozen)
+            {
+                brush.Color = color;
+            }
+            else
+            {
+                res[key] = new SolidColorBrush(color);
+            }
+        }
+
+        private static Color GetResourceColor(ResourceDictionary res, string key)
+        {
+            if (res[key] is SolidColorBrush brush)
+                return brush.Color;
+
+            return Colors.Transparent;
+        }
+
+        private static Color Blend(Color a, Color b, double t) => Color.FromRgb(
+            (byte)Math.Round(a.R + (b.R - a.R) * t),
+            (byte)Math.Round(a.G + (b.G - a.G) * t),
+            (byte)Math.Round(a.B + (b.B - a.B) * t));
+
+        private static double RelativeLuminance(Color c)
+        {
+            static double Channel(byte v)
+            {
+                double x = v / 255.0;
+                return x <= 0.03928 ? x / 12.92 : Math.Pow((x + 0.055) / 1.055, 2.4);
+            }
+
+            return 0.2126 * Channel(c.R) + 0.7152 * Channel(c.G) + 0.0722 * Channel(c.B);
+        }
+
+        private static double ContrastRatio(Color a, Color b)
+        {
+            double l1 = RelativeLuminance(a);
+            double l2 = RelativeLuminance(b);
+            if (l1 < l2)
+            {
+                (l1, l2) = (l2, l1);
+            }
+
+            return (l1 + 0.05) / (l2 + 0.05);
+        }
+
+        private static Color EnsureContrast(Color candidate, Color background, double minimumContrast)
+        {
+            if (ContrastRatio(candidate, background) >= minimumContrast)
+                return candidate;
+
+            var target = RelativeLuminance(background) < 0.5
+                ? C(0xF5, 0xF7, 0xFA)
+                : C(0x1A, 0x1D, 0x22);
+
+            Color best = candidate;
+            double low = 0.0;
+            double high = 1.0;
+            for (int i = 0; i < 14; i++)
+            {
+                double mid = (low + high) / 2.0;
+                var mixed = Blend(candidate, target, mid);
+                if (ContrastRatio(mixed, background) >= minimumContrast)
+                {
+                    best = mixed;
+                    high = mid;
+                }
+                else
+                {
+                    low = mid;
+                }
+            }
+
+            return best;
+        }
+
+        private static Color AccessibleTintedForeground(
+            Color background,
+            Color lightBase,
+            Color darkBase,
+            double tintHue,
+            double tintStrength,
+            double tintMix,
+            double minContrast)
+        {
+            var preferred = RelativeLuminance(background) < 0.5 ? lightBase : darkBase;
+            var tinted = Tinted(preferred, tintHue, tintStrength * tintMix);
+            return EnsureContrast(tinted, background, minContrast);
         }
 
         private static double ThemeTone(double value) =>

@@ -55,7 +55,7 @@
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextBrush}"
+                        Foreground="{DynamicResource AccentTextBrush}"
                         Text="Settings — Aire" />
                     <Button
                         x:Name="CloseButton"
