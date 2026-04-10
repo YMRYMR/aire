@@ -188,6 +188,42 @@ namespace Aire.Tests.Services
         }
 
         [Fact]
+        public void WindowCaptureService_ResolveWindowCandidate_UsesSelectedWindow_WhenNoFiltersAreProvided()
+        {
+            var selected = new TopLevelWindowInfo
+            {
+                WindowId = "0000000000000001",
+                Title = "A",
+                ProcessName = "SelectedApp",
+                IsSelected = true
+            };
+
+            var active = new TopLevelWindowInfo
+            {
+                WindowId = "0000000000000002",
+                Title = "A much longer active window title",
+                ProcessName = "ActiveApp",
+                IsActive = true
+            };
+
+            var distractor = new TopLevelWindowInfo
+            {
+                WindowId = "0000000000000003",
+                Title = "This is the longest distractor title",
+                ProcessName = "DistractorApp"
+            };
+
+            var resolved = WindowCaptureService.ResolveWindowCandidate(
+                new WindowSelectionRequest(),
+                new[] { selected, active, distractor },
+                selected,
+                active);
+
+            Assert.Equal(selected.WindowId, resolved.WindowId);
+            Assert.Equal(selected.Title, resolved.Title);
+        }
+
+        [Fact]
         public void IsAuthorized_DeniesMissingAndWrongTokens()
         {
             RunOnStaThread(() =>

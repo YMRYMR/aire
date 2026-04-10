@@ -189,37 +189,25 @@ public static class WindowCaptureService
 
     private static NativeWindowRecord ResolveWindow(WindowSelectionRequest request)
     {
-        if (request.UseActiveWindow)
-            return GetActiveWindow();
+        var activeHandle = GetForegroundWindow();
+        if (activeHandle == IntPtr.Zero)
+            throw new InvalidOperationException("No active window was found.");
 
-        if (!string.IsNullOrWhiteSpace(request.WindowId))
-            return FindWindowById(request.WindowId)
-                ?? throw new InvalidOperationException($"No window found with id '{request.WindowId}'.");
-
-        var matches = EnumerateTopLevelWindowRecords()
-            .Where(window => Matches(window, request))
+        var selectedId = AppState.GetSelectedWindowId();
+        var nativeWindows = EnumerateTopLevelWindowRecords().ToList();
+        var windowInfos = nativeWindows
+            .Select(window => ToInfo(window, activeHandle, selectedId))
             .ToList();
 
-        if (matches.Count > 0)
-        {
-            var nonUpdateMatches = matches
-                .Where(window => !window.Title.Contains("Update", StringComparison.OrdinalIgnoreCase))
-                .ToList();
+        var selected = windowInfos.FirstOrDefault(window => window.IsSelected);
+        var active = windowInfos.FirstOrDefault(window => window.IsActive);
+        var resolved = ResolveWindowCandidate(request, windowInfos, selected, active);
 
-            var candidates = nonUpdateMatches.Count > 0 ? nonUpdateMatches : matches;
-            return candidates
-                .OrderByDescending(window => window.Title.Length)
-                .First();
-        }
-
-        if (HasSelectionCriteria(request))
-            throw new InvalidOperationException("No window matched the requested filters.");
-
-        var selected = GetSelectedNativeWindow();
-        if (selected != null)
-            return selected;
-
-        return GetActiveWindow();
+        return nativeWindows.FirstOrDefault(window => string.Equals(
+                GetWindowId(window.Handle),
+                resolved.WindowId,
+                StringComparison.OrdinalIgnoreCase))
+            ?? throw new InvalidOperationException($"No window found with id '{resolved.WindowId}'.");
     }
 
     private static NativeWindowRecord? GetSelectedNativeWindow()
@@ -304,18 +292,55 @@ public static class WindowCaptureService
         };
     }
 
-    private static bool Matches(NativeWindowRecord window, WindowSelectionRequest request)
+    internal static TopLevelWindowInfo ResolveWindowCandidate(
+        WindowSelectionRequest request,
+        IReadOnlyList<TopLevelWindowInfo> windows,
+        TopLevelWindowInfo? selected,
+        TopLevelWindowInfo? active)
+    {
+        if (request.UseActiveWindow)
+            return active ?? throw new InvalidOperationException("No active window was found.");
+
+        if (!string.IsNullOrWhiteSpace(request.WindowId))
+        {
+            return windows.FirstOrDefault(window => string.Equals(window.WindowId, request.WindowId, StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidOperationException($"No window found with id '{request.WindowId}'.");
+        }
+
+        if (!HasSelectionCriteria(request))
+            return selected ?? active ?? throw new InvalidOperationException("No window is currently selected.");
+
+        var matches = windows
+            .Where(window => Matches(window.Title, window.ProcessName, request))
+            .ToList();
+
+        if (matches.Count > 0)
+        {
+            var nonUpdateMatches = matches
+                .Where(window => !window.Title.Contains("Update", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            var candidates = nonUpdateMatches.Count > 0 ? nonUpdateMatches : matches;
+            return candidates
+                .OrderByDescending(window => window.Title.Length)
+                .First();
+        }
+
+        throw new InvalidOperationException("No window matched the requested filters.");
+    }
+
+    private static bool Matches(string title, string processName, WindowSelectionRequest request)
     {
         if (!string.IsNullOrWhiteSpace(request.ExactTitle) &&
-            !string.Equals(window.Title, request.ExactTitle, StringComparison.OrdinalIgnoreCase))
+            !string.Equals(title, request.ExactTitle, StringComparison.OrdinalIgnoreCase))
             return false;
 
         if (!string.IsNullOrWhiteSpace(request.TitleContains) &&
-            window.Title.IndexOf(request.TitleContains, StringComparison.OrdinalIgnoreCase) < 0)
+            title.IndexOf(request.TitleContains, StringComparison.OrdinalIgnoreCase) < 0)
             return false;
 
         if (!string.IsNullOrWhiteSpace(request.ProcessName) &&
-            !string.Equals(window.ProcessName, request.ProcessName, StringComparison.OrdinalIgnoreCase))
+            !string.Equals(processName, request.ProcessName, StringComparison.OrdinalIgnoreCase))
             return false;
 
         return true;
