@@ -250,18 +250,20 @@ namespace Aire.Services
             if (hasAgent)
                 sb.Append("9. Model switching: switch_model(model_name, reason, direction) — switch to a different AI model. direction: \"up\" (need more capability), \"down\" (scale back), \"lateral\" (change provider). model_name must exactly match an entry from the model list appended to this prompt.\n\n");
 
+            if (hasFs)
+                sb.Append(
+                    "SCRIPTING RULE:\n" +
+                    "- When a task requires writing any script, program, or block of code (PowerShell, Python, batch, etc.), ALWAYS use write_file to save it to a temp file FIRST, then execute_command to run it.\n" +
+                    "- NEVER output large code blocks as plain text in the chat — the chat window has limited capacity and the response will be cut off or break the conversation.\n" +
+                    "- Example sequence: write_file(path=\"C:/Temp/task.ps1\", content=\"...\") → execute_command(command=\"powershell -File C:/Temp/task.ps1\").\n" +
+                    "- If the script is too large for one write_file call, write it in parts: write_file(path, firstPart) → write_file(path, nextPart, append=true) → ... → execute_command.\n\n" +
+
+                    "LARGE FILE RULE:\n" +
+                    "- read_file returns at most 100 000 chars per call. The result header tells you the total file size and how many chars remain.\n" +
+                    "- If more remains, call read_file again with offset=<nextOffset>. Repeat until the result says the read is complete.\n" +
+                    "- Example: read_file(path, offset=0) → result says 'Remaining: 45000 — call with offset=100000' → read_file(path, offset=100000).\n\n");
+
             sb.Append(
-                "SCRIPTING RULE:\n" +
-                "- When a task requires writing any script, program, or block of code (PowerShell, Python, batch, etc.), ALWAYS use write_file to save it to a temp file FIRST, then execute_command to run it.\n" +
-                "- NEVER output large code blocks as plain text in the chat — the chat window has limited capacity and the response will be cut off or break the conversation.\n" +
-                "- Example sequence: write_file(path=\"C:/Temp/task.ps1\", content=\"...\") → execute_command(command=\"powershell -File C:/Temp/task.ps1\").\n" +
-                "- If the script is too large for one write_file call, write it in parts: write_file(path, firstPart) → write_file(path, nextPart, append=true) → ... → execute_command.\n\n" +
-
-                "LARGE FILE RULE:\n" +
-                "- read_file returns at most 100 000 chars per call. The result header tells you the total file size and how many chars remain.\n" +
-                "- If more remains, call read_file again with offset=<nextOffset>. Repeat until the result says the read is complete.\n" +
-                "- Example: read_file(path, offset=0) → result says 'Remaining: 45000 — call with offset=100000' → read_file(path, offset=100000).\n\n" +
-
                 "CRITICAL RULE ABOUT TOOL RESULTS:\n" +
                 "- When a tool result begins with SUCCESS, that specific step succeeded. Check if the task is complete; if not, continue to the next step (e.g., calling begin_keyboard_session after launching an app).\n" +
                 "- Only stop when the user's entire request is fully satisfied.\n\n");
@@ -299,11 +301,15 @@ namespace Aire.Services
                     "ALWAYS try keyboard shortcuts before touching the mouse. Mouse coordinates are fragile.\n" +
                     "Only request begin_mouse_session when there is absolutely no keyboard alternative.\n\n" +
 
-                    "WORKFLOW — follow exactly:\n" +
-                    "1. To open an app and type: call execute_command → (after success) call begin_keyboard_session → (after success) call type_text/key_combo → end_keyboard_session.\n" +
-                    "2. ALWAYS call take_screenshot after opening an app or finishing a type task to verify progress.\n" +
-                    "3. Chains calls one at a time. Do NOT stop until the user's entire request is satisfied.\n" +
-                    "4. Valid key names: Enter, Tab, Escape, Backspace, Delete, Home, End, PageUp, PageDown, Left, Up, Right, Down, Ctrl, Alt, Shift, Win, Space, F1-F12, or any single character.\n\n");
+                    "WORKFLOW — follow exactly:\n");
+                if (hasFs && hasKeyboard)
+                    sb.Append("- To open an app and type: call execute_command → (after success) call begin_keyboard_session → (after success) call type_text/key_combo → end_keyboard_session.\n");
+                if (hasMouse)
+                    sb.Append("- ALWAYS call take_screenshot after opening an app or finishing a mouse task to verify progress.\n");
+                sb.Append("- Chain calls one at a time. Do NOT stop until the user's entire request is satisfied.\n");
+                if (hasKeyboard)
+                    sb.Append("- Valid key names: Enter, Tab, Escape, Backspace, Delete, Home, End, PageUp, PageDown, Left, Up, Right, Down, Ctrl, Alt, Shift, Win, Space, F1-F12, or any single character.\n");
+                sb.Append("\n");
             }
 
             sb.Append("ADDITIONAL RULES:\n");
