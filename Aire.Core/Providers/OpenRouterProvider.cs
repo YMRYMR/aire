@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -61,7 +62,7 @@ namespace Aire.Providers
 
             try
             {
-                var url = Config.BaseUrl?.TrimEnd('/') ?? DefaultApiBaseUrl;
+                var url = EffectiveBaseUrl;
                 using var req = new HttpRequestMessage(HttpMethod.Get, $"{url}/v1/key");
                 req.Headers.Add("Authorization", $"Bearer {Config.ApiKey}");
 
@@ -72,18 +73,23 @@ namespace Aire.Providers
                 var json = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
                 using var doc = JsonDocument.Parse(json);
                 var root = doc.RootElement;
+                var payload = root;
+                if (root.TryGetProperty("data", out var dataEl) && dataEl.ValueKind == JsonValueKind.Object)
+                    payload = dataEl;
 
-                if (!TryReadLong(root, "usage", out var used))
+                if (!TryReadDecimal(payload, "usage", out var usedCredits))
                     return null;
 
                 long? limit = null;
-                if (TryReadLong(root, "limit", out var limitValue))
-                    limit = limitValue;
-                else if (TryReadLong(root, "limit_remaining", out var remainingValue))
-                    limit = used + remainingValue;
+                var used = CreditsToMinorUnits(usedCredits);
+
+                if (TryReadDecimal(payload, "limit", out var limitValue))
+                    limit = CreditsToMinorUnits(limitValue);
+                else if (TryReadDecimal(payload, "limit_remaining", out var remainingValue))
+                    limit = used + CreditsToMinorUnits(remainingValue);
 
                 DateTime? resetDate = null;
-                if (root.TryGetProperty("reset_date", out var resetEl) &&
+                if (payload.TryGetProperty("reset_date", out var resetEl) &&
                     DateTime.TryParse(resetEl.GetString(), out var reset))
                     resetDate = reset;
 
@@ -102,7 +108,10 @@ namespace Aire.Providers
             }
         }
 
-        private static bool TryReadLong(JsonElement root, string propertyName, out long value)
+        private static long CreditsToMinorUnits(decimal value)
+            => (long)decimal.Round(value * 100m, 0, MidpointRounding.AwayFromZero);
+
+        private static bool TryReadDecimal(JsonElement root, string propertyName, out decimal value)
         {
             value = 0;
             if (!root.TryGetProperty(propertyName, out var el))
@@ -110,8 +119,12 @@ namespace Aire.Providers
 
             return el.ValueKind switch
             {
-                JsonValueKind.Number => el.TryGetInt64(out value),
-                JsonValueKind.String => long.TryParse(el.GetString(), out value),
+                JsonValueKind.Number => el.TryGetDecimal(out value),
+                JsonValueKind.String => decimal.TryParse(
+                    el.GetString(),
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture,
+                    out value),
                 _ => false,
             };
         }
