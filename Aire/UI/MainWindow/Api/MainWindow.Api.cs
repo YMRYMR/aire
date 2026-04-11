@@ -12,93 +12,147 @@ namespace Aire
 {
     public partial class MainWindow
     {
-        public async Task<List<ApiProviderSnapshot>> ApiListProvidersAsync()
+        /// <summary>
+        /// Marshals an async operation to the WPF Dispatcher thread and awaits the result.
+        /// </summary>
+        private async Task<T> DispatchAsync<T>(Func<Task<T>> action)
         {
-            await AppStartupState.WaitUntilReadyAsync();
-            var providers = await _providerFactory.GetConfiguredProvidersAsync();
-            return (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
-                .BuildProviderSnapshots(providers);
+            var op = Dispatcher.InvokeAsync(action);
+            var task = await op.Task.ConfigureAwait(false);
+            return await task.ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Marshals a synchronous operation to the WPF Dispatcher thread and awaits the result.
+        /// </summary>
+        private async Task<T> DispatchAsync<T>(Func<T> action)
+        {
+            var op = Dispatcher.InvokeAsync(action);
+            return await op.Task.ConfigureAwait(false);
+        }
+
+        public async Task<List<ApiProviderSnapshot>> ApiListProvidersAsync()
+            => await DispatchAsync(async () =>
+            {
+                await AppStartupState.WaitUntilReadyAsync();
+                var providers = await _providerFactory.GetConfiguredProvidersAsync();
+                return (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
+                    .BuildProviderSnapshots(providers);
+            });
 
         public async Task<List<ConversationSummary>> ApiListConversationsAsync(string? search = null)
-        {
-            await AppStartupState.WaitUntilReadyAsync();
-            return await _conversationApplicationService.ListConversationsAsync(search);
-        }
+            => await DispatchAsync(async () =>
+            {
+                await AppStartupState.WaitUntilReadyAsync();
+                return await _conversationApplicationService.ListConversationsAsync(search);
+            });
 
         public async Task<List<Aire.Data.Message>> ApiGetMessagesAsync(int conversationId)
-        {
-            await AppStartupState.WaitUntilReadyAsync();
-            return await _conversationApplicationService.GetMessagesAsync(conversationId);
-        }
+            => await DispatchAsync(async () =>
+            {
+                await AppStartupState.WaitUntilReadyAsync();
+                return await _conversationApplicationService.GetMessagesAsync(conversationId);
+            });
 
-        public async Task<int> ApiCreateConversationAsync(string? title = null)
-        {
-            await AppStartupState.WaitUntilReadyAsync();
-            var sel = ProviderComboBox.SelectedItem as Provider;
-            if (sel == null)
-                throw new InvalidOperationException("No provider is selected.");
+        public async Task<int> ApiCreateConversationAsync(string? title = null, int? providerId = null)
+            => await DispatchAsync(async () =>
+            {
+                await AppStartupState.WaitUntilReadyAsync();
 
-            var plan = (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
-                .BuildConversationCreationPlan(sel.Name, title);
-            var id = await ConversationFlow.CreateConversationAsync(sel, plan.Title, plan.SystemMessage);
-            if (_sidebarOpen)
-                await RefreshSidebarAsync();
-            return id;
-        }
+                Provider sel;
+                if (providerId.HasValue)
+                {
+                    // Switch provider directly without reassigning any existing conversation.
+                    sel = ProviderComboBox.Items.OfType<Provider>()
+                        .FirstOrDefault(p => p.Id == providerId.Value)
+                        ?? throw new InvalidOperationException($"Provider with ID {providerId.Value} not found.");
+
+                    _suppressProviderChange = true;
+                    try
+                    {
+                        try { _currentProvider = _providerFactory.CreateProvider(sel); }
+                        catch { _currentProvider = null; }
+
+                        ProviderComboBox.SelectedItem = sel;
+                        _currentProviderId = sel.Id;
+                        await _chatService.SetProviderAsync(sel.Id);
+                        await _chatSessionApplicationService.SaveSelectedProviderAsync(sel.Id);
+                        UpdateCapabilityUI();
+                    }
+                    finally
+                    {
+                        _suppressProviderChange = false;
+                    }
+                }
+                else
+                {
+                    sel = ProviderComboBox.SelectedItem as Provider
+                        ?? throw new InvalidOperationException("No provider is selected.");
+                }
+
+                var plan = (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
+                    .BuildConversationCreationPlan(sel.Name, title);
+                var id = await ConversationFlow.CreateConversationAsync(sel, plan.Title, plan.SystemMessage);
+                if (_sidebarOpen)
+                    await RefreshSidebarAsync();
+                return id;
+            });
 
         public async Task<bool> ApiSelectConversationAsync(int conversationId)
-        {
-            await AppStartupState.WaitUntilReadyAsync();
-            var conv = await _conversationApplicationService.GetConversationAsync(conversationId);
-            if (conv == null) return false;
+            => await DispatchAsync(async () =>
+            {
+                await AppStartupState.WaitUntilReadyAsync();
+                var conv = await _conversationApplicationService.GetConversationAsync(conversationId);
+                if (conv == null) return false;
 
-            _currentConversationId = conversationId;
-            await LoadConversationMessages(conversationId, syncProviderSelection: false);
-            if (_sidebarOpen)
-                await RefreshSidebarAsync();
-            return true;
-        }
+                _currentConversationId = conversationId;
+                await LoadConversationMessages(conversationId, syncProviderSelection: false);
+                if (_sidebarOpen)
+                    await RefreshSidebarAsync();
+                return true;
+            });
 
         public async Task<bool> ApiSetProviderAsync(int providerId)
-        {
-            await AppStartupState.WaitUntilReadyAsync();
-            var provider = ProviderComboBox.Items.OfType<Provider>()
-                .FirstOrDefault(p => p.Id == providerId);
-            if (provider == null) return false;
-
-            _suppressProviderChange = true;
-            try
+            => await DispatchAsync(async () =>
             {
-                ProviderComboBox.SelectedItem = provider;
-                await UpdateCurrentProvider(showSwitchedMessage: false);
-            }
-            finally
+                await AppStartupState.WaitUntilReadyAsync();
+                var provider = ProviderComboBox.Items.OfType<Provider>()
+                    .FirstOrDefault(p => p.Id == providerId);
+                if (provider == null) return false;
+
+                _suppressProviderChange = true;
+                try
+                {
+                    ProviderComboBox.SelectedItem = provider;
+                    await UpdateCurrentProvider(showSwitchedMessage: false);
+                }
+                finally
+                {
+                    _suppressProviderChange = false;
+                }
+                return true;
+            });
+
+        public Task<ApiStateSnapshot> ApiGetStateAsync()
+            => DispatchAsync(() =>
             {
-                _suppressProviderChange = false;
-            }
-            return true;
-        }
+                var provider = ProviderComboBox.SelectedItem as Provider;
+                var selectedWindow = WindowCaptureService.GetSelectedWindow();
+                var pendingCount = Messages.Count(m => m.IsApprovalPending && m.ApprovalTcs != null && !m.ApprovalTcs.Task.IsCompleted);
 
-    public Task<ApiStateSnapshot> ApiGetStateAsync()
-    {
-        var provider = ProviderComboBox.SelectedItem as Provider;
-        var selectedWindow = WindowCaptureService.GetSelectedWindow();
-        var pendingCount = Messages.Count(m => m.IsApprovalPending && m.ApprovalTcs != null && !m.ApprovalTcs.Task.IsCompleted);
-
-        return Task.FromResult((_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
-                .BuildStateSnapshot(
-                    LocalApiService.Port,
-                    AppStartupState.IsReady,
-                    IsVisible,
-                    _settingsWindow != null,
-                    UI.WebViewWindow.Current != null,
-                    AppState.GetApiAccessEnabled(),
-                    !string.IsNullOrWhiteSpace(AppState.GetApiAccessToken()),
-                    _currentConversationId,
-                    provider,
-                    selectedWindow,
-                    pendingCount));
+                return (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
+                        .BuildStateSnapshot(
+                            LocalApiService.Port,
+                            AppStartupState.IsReady,
+                            IsVisible,
+                            _settingsWindow != null,
+                            UI.WebViewWindow.Current != null,
+                            AppState.GetApiAccessEnabled(),
+                            !string.IsNullOrWhiteSpace(AppState.GetApiAccessToken()),
+                            _currentConversationId,
+                            provider,
+                            selectedWindow,
+                            pendingCount);
+            });
     }
-}
 }

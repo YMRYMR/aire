@@ -43,11 +43,10 @@
                                VerticalAlignment="Center" />
                     <Button x:Name="CloseButton"
                             Grid.Column="1"
-                            Content="&#x2715;"
+                            Content="&#x00D7;"
                             ToolTip="Close"
                             Width="34" Height="34"
                             Padding="0"
-                            Foreground="{DynamicResource AccentTextBrush}"
                             Click="CloseButton_Click" />
                 </Grid>
             </Border>

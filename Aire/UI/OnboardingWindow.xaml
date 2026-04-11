@@ -37,7 +37,7 @@
                            Foreground="{DynamicResource TextSecondaryBrush}"
                            VerticalAlignment="Center" />
                 <Button Grid.Column="1"
-                        Content="&#x2715;"
+                        Content="&#x00D7;"
                         Width="28" Height="28"
                         Padding="0"
                         Margin="0"

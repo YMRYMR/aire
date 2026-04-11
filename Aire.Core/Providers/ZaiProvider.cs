@@ -16,6 +16,19 @@ namespace Aire.Providers
     /// </summary>
     public class ZaiProvider : OpenAiProvider
     {
+        /// <summary>
+        /// z.ai coding-plan API caps max_tokens at 4095 (default 1024).
+        /// Applies to all GLM models on the coding endpoint.
+        /// </summary>
+        protected override int GetModelMaxOutputTokens(string modelId) => 4095;
+
+        /// <summary>
+        /// The z.ai coding-plan endpoint does not reliably return native
+        /// tool_calls in the OpenAI response format, so we use Aire's
+        /// text-based format (embedded in the system prompt) instead.
+        /// </summary>
+        protected override ToolOutputFormat DefaultToolOutputFormat => ToolOutputFormat.AireText;
+
         public override string ProviderType => "Zai";
         public override string DisplayName => "Zhipu AI (z.ai)";
 

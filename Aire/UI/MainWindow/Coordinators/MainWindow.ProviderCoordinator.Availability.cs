@@ -41,9 +41,9 @@ namespace Aire
                 _owner.ProviderComboBox.ToolTip = state.ProviderToolTip;
 
                 bool canTools = _owner._currentProvider?.Has(ProviderCapabilities.ToolCalling) == true;
-                _owner.ToolsButton.Visibility = canTools ? Visibility.Visible : Visibility.Collapsed;
-                if (!canTools)
-                    _owner.UpdateToolsButtonState();
+                _owner._toolsSupportedByProvider = canTools;
+                _owner.UpdateToolsButtonState();
+                _owner.RefreshToolsCategoryMenuChecks();
             }
 
             public static List<ProviderChatMessage> WindowConversation(

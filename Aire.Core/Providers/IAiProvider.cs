@@ -188,7 +188,7 @@ namespace Aire.Providers
             get
             {
                 var caps = GetBaseCapabilities();
-                if (Config?.ModelCapabilities != null)
+                if (Config?.ModelCapabilities != null && Config.ModelCapabilities.Count > 0)
                 {
                     var mcSet = new HashSet<string>(Config.ModelCapabilities, StringComparer.OrdinalIgnoreCase);
                     if (!mcSet.Contains("vision") && !mcSet.Contains("imageinput"))
@@ -201,6 +201,28 @@ namespace Aire.Providers
         }
 
         protected abstract ProviderCapabilities GetBaseCapabilities();
+
+        /// <summary>
+        /// Returns the maximum output tokens the specified model can produce.
+        /// Subclasses override to enforce model-specific limits (e.g. z.ai caps
+        /// at 4095, Claude Haiku at 8192).  The default returns <see cref="int.MaxValue"/>
+        /// so the user's configured value is used as-is when no override exists.
+        /// </summary>
+        protected virtual int GetModelMaxOutputTokens(string modelId) => int.MaxValue;
+
+        /// <summary>
+        /// Effective max_tokens for API requests: the configured value clamped to
+        /// the current model's documented output ceiling.
+        /// </summary>
+        protected int? EffectiveMaxTokens
+        {
+            get
+            {
+                if (Config.MaxTokens <= 0) return null;
+                return Math.Min(Config.MaxTokens, GetModelMaxOutputTokens(Config.Model));
+            }
+        }
+
         protected virtual ToolCallMode DefaultToolCallMode => ToolCallMode.TextBased;
         protected virtual ToolOutputFormat DefaultToolOutputFormat => ToolOutputFormat.AireText;
 

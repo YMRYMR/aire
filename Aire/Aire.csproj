@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <PackageReference Include="Betalgo.OpenAI" Version="8.7.2" />
+    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.5" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.4" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2651.64" />
     <PackageReference Include="NAudio" Version="2.3.0" />

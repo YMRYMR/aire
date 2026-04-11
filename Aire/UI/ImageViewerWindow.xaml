@@ -43,7 +43,7 @@
                                FontWeight="SemiBold"
                                VerticalAlignment="Center" />
                     <Button Grid.Column="1"
-                            Content="&#x2715;"
+                            Content="&#x00D7;"
                             ToolTip="Close (Esc)"
                             Width="34" Height="34"
                             Padding="0"

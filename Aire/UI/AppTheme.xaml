@@ -51,6 +51,7 @@
     <SolidColorBrush x:Key="UserMessageTextBrush"       Color="{StaticResource UserMessageTextColor}" />
     <SolidColorBrush x:Key="AssistantMessageBrush"      Color="{StaticResource AssistantMessageColor}" />
     <SolidColorBrush x:Key="AssistantMessageTextBrush"  Color="{StaticResource AssistantMessageTextColor}" />
+    <SolidColorBrush x:Key="AccentTextBrush"            Color="{StaticResource TextColor}" />
 
     <!-- ===== HYPERLINK ===== -->
     <!-- Themed link colour; hand cursor; underline appears on hover -->

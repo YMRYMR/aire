@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Aire.AppLayer.Abstractions;
+using Aire.Services;
 
 namespace Aire.Services.Workflows
 {
@@ -51,7 +52,7 @@ namespace Aire.Services.Workflows
             if (approved)
             {
                 var executionResult = await _toolExecutionService.ExecuteAsync(request);
-                var status = $"\u2713 {request.Description}";
+                var status = string.Format(LocalizationService.S("toolStatus.approved", "\u2713 {0}"), request.Description);
 
                 if (conversationId.HasValue)
                     await _conversations.SaveMessageAsync(conversationId.Value, "tool", status);
@@ -68,7 +69,7 @@ namespace Aire.Services.Workflows
             }
 
             const string deniedResult = "[Operation denied by user]";
-            const string deniedStatus = "\u2717 Denied";
+            var deniedStatus = LocalizationService.S("toolStatus.denied", "\u2717 Denied");
             if (conversationId.HasValue)
                 await _conversations.SaveMessageAsync(conversationId.Value, "tool", deniedStatus);
 

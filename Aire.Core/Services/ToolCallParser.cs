@@ -95,6 +95,26 @@ namespace Aire.Services
             if (response.Contains("<tool_call", StringComparison.OrdinalIgnoreCase) &&
                 !Regex.IsMatch(response, @"</(?:tool_call|tool_code|tool_use|tool)>", RegexOptions.IgnoreCase))
             {
+                // The model left the tag open (e.g. <tool_call{"tool":"read_file",...}) —
+                // try to extract valid JSON from the unclosed tag before declaring it cut off.
+                var unclosedMatch = Regex.Match(response,
+                    @"<(?:tool_call|tool_code|tool_use|tool)>?\s*(\{[\s\S]*\})",
+                    RegexOptions.IgnoreCase);
+                if (unclosedMatch.Success)
+                {
+                    var rawJson = unclosedMatch.Groups[1].Value.Trim();
+                    var unclosedCalls = ParseToolCallJson(rawJson);
+                    if (unclosedCalls.Count > 0)
+                    {
+                        var textBefore = response.Substring(0, response.IndexOf("<tool_call", StringComparison.OrdinalIgnoreCase)).Trim();
+                        return new ParsedAiResponse
+                        {
+                            TextContent = textBefore,
+                            ToolCalls = unclosedCalls
+                        };
+                    }
+                }
+
                 return new ParsedAiResponse
                 {
                     TextContent = "⚠️ The response was cut off before the tool call could complete (max_tokens limit reached). " +
