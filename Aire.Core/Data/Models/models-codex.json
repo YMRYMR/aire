@@ -1,10 +1,10 @@
 {
   "providerType": "Codex",
   "models": [
-    { "id": "default",     "displayName": "Default (managed by Codex)", "capabilities": ["tools", "toolcallmode:text", "toolformat:text"] },
-    { "id": "gpt-5-codex", "displayName": "GPT-5 Codex",                "capabilities": ["tools", "toolcallmode:text", "toolformat:text"] },
-    { "id": "gpt-5-mini",  "displayName": "GPT-5 Mini",                 "capabilities": ["tools", "toolcallmode:text", "toolformat:text"] },
-    { "id": "gpt-5.4",     "displayName": "GPT-5.4",                    "capabilities": ["tools", "toolcallmode:text", "toolformat:text"] },
-    { "id": "gpt-5.4-mini","displayName": "GPT-5.4 Mini",               "capabilities": ["tools", "toolcallmode:text", "toolformat:text"] }
+    { "id": "default",     "displayName": "Default (managed by Codex)", "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 },
+    { "id": "gpt-5-codex", "displayName": "GPT-5 Codex",                "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 },
+    { "id": "gpt-5-mini",  "displayName": "GPT-5 Mini",                 "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 },
+    { "id": "gpt-5.4",     "displayName": "GPT-5.4",                    "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 },
+    { "id": "gpt-5.4-mini","displayName": "GPT-5.4 Mini",               "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 }
   ]
 }

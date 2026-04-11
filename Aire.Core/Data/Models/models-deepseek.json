@@ -1,7 +1,7 @@
 {
   "providerType": "DeepSeek",
   "models": [
-    { "id": "deepseek-chat", "displayName": "DeepSeek Chat", "capabilities": ["tools"] },
-    { "id": "deepseek-reasoner", "displayName": "DeepSeek Reasoner", "capabilities": ["tools"] }
+    { "id": "deepseek-chat", "displayName": "DeepSeek Chat", "capabilities": ["tools"], "contextLength": 128000 },
+    { "id": "deepseek-reasoner", "displayName": "DeepSeek Reasoner", "capabilities": ["tools"], "contextLength": 128000 }
   ]
 }
