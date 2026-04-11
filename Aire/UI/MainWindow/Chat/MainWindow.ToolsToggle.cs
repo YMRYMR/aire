@@ -108,14 +108,23 @@ namespace Aire
             if (_toolsCategoryMenu == null)
                 return;
 
+            var supported = _toolsSupportedByProvider;
+
             foreach (var item in _toolsCategoryMenu.Items.OfType<System.Windows.Controls.MenuItem>())
             {
+                item.IsEnabled = supported;
                 if (item.Tag is string category)
-                    item.IsChecked = _enabledToolCategories.Contains(category);
+                    item.IsChecked = supported && _enabledToolCategories.Contains(category);
             }
 
             if (_noToolsMenuItem != null)
-                _noToolsMenuItem.IsChecked = _enabledToolCategories.Count == 0;
+            {
+                _noToolsMenuItem.IsEnabled = supported;
+                _noToolsMenuItem.IsChecked = supported && _enabledToolCategories.Count == 0;
+            }
+
+            if (_enableAllToolsMenuItem != null)
+                _enableAllToolsMenuItem.IsEnabled = supported;
         }
 
         private async Task PersistToolCategoriesAsync()
@@ -130,6 +139,15 @@ namespace Aire
                 .Where(option => _enabledToolCategories.Contains(option.Id))
                 .Select(option => LocalizationService.S($"toolCategory.{option.Id}.label", option.Label))
                 .ToList();
+
+            if (!_toolsSupportedByProvider)
+            {
+                ToolsButton.ToolTip = LocalizationService.S(
+                    "tooltip.toolsNotSupported",
+                    "This model does not support tool calling");
+                ToolsButton.Opacity = 0.4;
+                return;
+            }
 
             ToolsButton.ToolTip = enabledLabels.Count == 0
                 ? LocalizationService.S("tooltip.toolsDisabled", "Tools disabled — click to choose tool categories")

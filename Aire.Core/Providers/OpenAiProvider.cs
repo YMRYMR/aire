@@ -315,12 +315,12 @@ namespace Aire.Providers
                     Messages = chatMessages,
                     Model = Config.Model,
                     Temperature = (float?)Config.Temperature,
-                    MaxTokens = Config.MaxTokens > 0 ? Config.MaxTokens : null,
+                    MaxTokens = EffectiveMaxTokens,
                     Stream = false
                 };
 
                 if (!Config.SkipNativeTools &&
-                    ToolCallMode == ToolCallMode.NativeFunctionCalling && Has(ProviderCapabilities.ToolCalling))
+                    ToolOutputFormat == ToolOutputFormat.NativeToolCalls && Has(ProviderCapabilities.ToolCalling))
                 {
                     var tools = GetFunctionDefinitions();
                     if (tools.Count > 0)
@@ -386,12 +386,12 @@ namespace Aire.Providers
                 Messages = chatMessages,
                 Model = Config.Model,
                 Temperature = (float?)Config.Temperature,
-                MaxTokens = Config.MaxTokens > 0 ? Config.MaxTokens : null,
+                MaxTokens = EffectiveMaxTokens,
                 Stream = true
             };
 
             if (!Config.SkipNativeTools &&
-                ToolCallMode == ToolCallMode.NativeFunctionCalling && Has(ProviderCapabilities.ToolCalling))
+                ToolOutputFormat == ToolOutputFormat.NativeToolCalls && Has(ProviderCapabilities.ToolCalling))
             {
                 request.Tools = GetFunctionDefinitions();
             }

@@ -51,7 +51,7 @@
                             Height="34"
                             Padding="0"
                             Click="CloseButton_Click"
-                            Content="&#x2715;"
+                            Content="&#x00D7;"
                             ToolTip="Close" />
                 </Grid>
             </Border>

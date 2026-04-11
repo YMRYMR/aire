@@ -107,7 +107,7 @@
                 </Border>
 
                 <Button x:Name="PART_RemoveImageButton"
-                        Content="✕"
+                        Content="×"
                         ToolTip="Remove attachment"
                         Width="28"
                         Height="28"
@@ -165,7 +165,6 @@
                         Padding="0"
                         Margin="6 0 0 0"
                         FontSize="13"
-                        Visibility="Collapsed"
                         Click="ToolsButton_Click" />
 
                 <Border x:Name="PART_ProgressOverlay"

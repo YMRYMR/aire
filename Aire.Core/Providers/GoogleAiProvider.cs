@@ -75,7 +75,7 @@ namespace Aire.Providers
                 });
             }
 
-            var genConfig = new { temperature = Config.Temperature, maxOutputTokens = Config.MaxTokens };
+            var genConfig = new { temperature = Config.Temperature, maxOutputTokens = (EffectiveMaxTokens ?? Config.MaxTokens) };
             object body;
             if (!string.IsNullOrWhiteSpace(cachedContentName))
             {

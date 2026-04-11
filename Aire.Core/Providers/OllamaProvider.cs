@@ -176,7 +176,7 @@ public sealed class PortableOllamaProvider : BaseAiProvider
                 Options = new OllamaOptions
                 {
                     Temperature = Config.Temperature,
-                    NumPredict = Config.MaxTokens > 0 ? Config.MaxTokens : null
+                    NumPredict = EffectiveMaxTokens
                 }
             };
 

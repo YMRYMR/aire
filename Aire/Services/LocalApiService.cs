@@ -4,8 +4,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Aire;
-using System.Windows;
 using Aire.Data;
 
 namespace Aire.Services
@@ -17,16 +15,16 @@ namespace Aire.Services
     {
         public const int Port = 51234;
 
-        private readonly MainWindow _mainWindow;
+        private readonly IApiCommandHandler _handler;
         private CancellationTokenSource? _listenerCts;
         private Task? _listenerTask;
         private TcpListener? _listener;
         private int _consecutiveInvalidAuthCount;
         private bool _disposed;
 
-        public LocalApiService(MainWindow mainWindow)
+        public LocalApiService(IApiCommandHandler handler)
         {
-            _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
         public bool IsRunning => _listenerTask != null && !_listenerTask.IsCompleted;
@@ -191,7 +189,7 @@ namespace Aire.Services
         }
 
         /// <summary>
-        /// Routes a validated API method to the corresponding MainWindow integration point.
+        /// Routes a validated API method to the corresponding command handler.
         /// </summary>
         /// <param name="request">Parsed local API request.</param>
         /// <param name="token">Cancellation token from the listener loop.</param>
@@ -203,8 +201,8 @@ namespace Aire.Services
                 var method = request.Method?.Trim().ToLowerInvariant() ?? string.Empty;
                 return method switch
                 {
-                    "ping" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiStateSnapshot>(() => _mainWindow.ApiGetStateAsync()).ConfigureAwait(false)),
-                    "get_state" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiStateSnapshot>(() => _mainWindow.ApiGetStateAsync()).ConfigureAwait(false)),
+                    "ping" => LocalApiResponse.OkResult(await _handler.ApiGetStateAsync().ConfigureAwait(false)),
+                    "get_state" => LocalApiResponse.OkResult(await _handler.ApiGetStateAsync().ConfigureAwait(false)),
                     "list_windows" => LocalApiResponse.OkResult(WindowCaptureService.ListWindows()),
                     "get_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.GetSelectedWindow()),
                     "select_window" => LocalApiResponse.OkResult(WindowCaptureService.SelectWindow(BuildWindowSelectionRequest(request.Parameters)
@@ -213,12 +211,12 @@ namespace Aire.Services
                         BuildWindowSelectionRequest(request.Parameters) ?? new WindowSelectionRequest(),
                         BuildWindowCaptureOptions(request.Parameters))),
                     "capture_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.CaptureSelectedWindow(BuildWindowCaptureOptions(request.Parameters))),
-                    "show_main_window" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.ShowMainWindowAsync()).ConfigureAwait(false)),
-                    "hide_main_window" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.HideMainWindowAsync()).ConfigureAwait(false)),
-                    "open_settings" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.ShowSettingsWindowAsync()).ConfigureAwait(false)),
-                    "open_browser" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => _mainWindow.ShowBrowserWindowAsync()).ConfigureAwait(false)),
-                    "list_providers" => LocalApiResponse.OkResult(await InvokeOnUiAsync<List<ApiProviderSnapshot>>(() => _mainWindow.ApiListProvidersAsync()).ConfigureAwait(false)),
-                    "create_provider" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiProviderSnapshot>(() => _mainWindow.ApiCreateProviderAsync(
+                    "show_main_window" => await VoidToOkAsync(_handler.ShowMainWindowAsync()),
+                    "hide_main_window" => await VoidToOkAsync(_handler.HideMainWindowAsync()),
+                    "open_settings" => await VoidToOkAsync(_handler.ShowSettingsWindowAsync()),
+                    "open_browser" => await VoidToOkAsync(_handler.ShowBrowserWindowAsync()),
+                    "list_providers" => LocalApiResponse.OkResult(await _handler.ApiListProvidersAsync().ConfigureAwait(false)),
+                    "create_provider" => LocalApiResponse.OkResult(await _handler.ApiCreateProviderAsync(
                         GetNullableString(request.Parameters, "name"),
                         GetString(request.Parameters, "type"),
                         GetNullableString(request.Parameters, "apiKey"),
@@ -227,27 +225,34 @@ namespace Aire.Services
                         GetBoolOrDefault(request.Parameters, "isEnabled", true),
                         GetNullableString(request.Parameters, "color"),
                         GetBoolOrDefault(request.Parameters, "selectAfterCreate", false),
-                        GetNullableInt(request.Parameters, "inheritCredentialsFromProviderId"))).ConfigureAwait(false)),
-                    "list_conversations" => LocalApiResponse.OkResult(await InvokeOnUiAsync<List<ConversationSummary>>(() => _mainWindow.ApiListConversationsAsync(GetString(request.Parameters, "search"))).ConfigureAwait(false)),
-                    "create_conversation" => LocalApiResponse.OkResult(await InvokeOnUiAsync<int>(() => _mainWindow.ApiCreateConversationAsync(GetString(request.Parameters, "title"))).ConfigureAwait(false)),
-                    "select_conversation" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSelectConversationAsync(GetInt(request.Parameters, "conversationId"))).ConfigureAwait(false)),
-                    "get_messages" => LocalApiResponse.OkResult(await InvokeOnUiAsync<List<Aire.Data.Message>>(() => _mainWindow.ApiGetMessagesAsync(GetInt(request.Parameters, "conversationId"))).ConfigureAwait(false)),
-                    "set_provider" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetProviderAsync(GetInt(request.Parameters, "providerId"))).ConfigureAwait(false)),
-                    "set_provider_model" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetProviderModelAsync(GetInt(request.Parameters, "providerId"), GetString(request.Parameters, "model"))).ConfigureAwait(false)),
-                    "set_language" => LocalApiResponse.OkResult(await InvokeOnUiAsync(() => { LocalizationService.SetLanguage(GetString(request.Parameters, "languageCode")); return Task.CompletedTask; }).ConfigureAwait(false)),
-                    "send_message" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSendMessageAsync(GetString(request.Parameters, "text"))).ConfigureAwait(false)),
-                    "list_pending_approvals" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiPendingApproval[]>(() => _mainWindow.ApiListPendingApprovalsAsync()).ConfigureAwait(false)),
+                        GetNullableInt(request.Parameters, "inheritCredentialsFromProviderId")).ConfigureAwait(false)),
+                    "list_conversations" => LocalApiResponse.OkResult(await _handler.ApiListConversationsAsync(GetString(request.Parameters, "search")).ConfigureAwait(false)),
+                    "create_conversation" => LocalApiResponse.OkResult(await _handler.ApiCreateConversationAsync(GetString(request.Parameters, "title"), GetNullableInt(request.Parameters, "providerId")).ConfigureAwait(false)),
+                    "select_conversation" => LocalApiResponse.OkResult(await _handler.ApiSelectConversationAsync(GetInt(request.Parameters, "conversationId")).ConfigureAwait(false)),
+                    "delete_conversation" => LocalApiResponse.OkResult(await _handler.ApiDeleteConversationAsync(GetInt(request.Parameters, "conversationId")).ConfigureAwait(false)),
+                    "rename_conversation" => LocalApiResponse.OkResult(await _handler.ApiRenameConversationAsync(GetInt(request.Parameters, "conversationId"), GetString(request.Parameters, "title")).ConfigureAwait(false)),
+                    "get_messages" => LocalApiResponse.OkResult(await _handler.ApiGetMessagesAsync(GetInt(request.Parameters, "conversationId")).ConfigureAwait(false)),
+                    "set_provider" => LocalApiResponse.OkResult(await _handler.ApiSetProviderAsync(GetInt(request.Parameters, "providerId")).ConfigureAwait(false)),
+                    "set_provider_model" => LocalApiResponse.OkResult(await _handler.ApiSetProviderModelAsync(GetInt(request.Parameters, "providerId"), GetString(request.Parameters, "model")).ConfigureAwait(false)),
+                    "set_language" => LocalApiResponse.OkResult(await Task.Run(() => { LocalizationService.SetLanguage(GetString(request.Parameters, "languageCode")); return true; }).ConfigureAwait(false)),
+                    "set_assistant_mode" => LocalApiResponse.OkResult(await _handler.ApiSetAssistantModeAsync(GetString(request.Parameters, "mode")).ConfigureAwait(false)),
+                    "list_assistant_modes" => LocalApiResponse.OkResult(await _handler.ApiListAssistantModesAsync().ConfigureAwait(false)),
+                    "list_tool_categories" => LocalApiResponse.OkResult(await _handler.ApiListToolCategoriesAsync().ConfigureAwait(false)),
+                    "set_tool_categories" => LocalApiResponse.OkResult(await _handler.ApiSetToolCategoriesAsync(GetStringList(request.Parameters, "categories")).ConfigureAwait(false)),
+                    "send_message" => LocalApiResponse.OkResult(await _handler.ApiSendMessageAsync(GetString(request.Parameters, "text"), GetNullableInt(request.Parameters, "conversationId")).ConfigureAwait(false)),
+                    "stop_ai" => await VoidToOkAsync(_handler.StopAiAsync()).ConfigureAwait(false),
+                    "list_pending_approvals" => LocalApiResponse.OkResult(await _handler.ApiListPendingApprovalsAsync().ConfigureAwait(false)),
                     "wait_for_pending_approval" => LocalApiResponse.OkResult(await WaitForPendingApprovalAsync(
-                        () => InvokeOnUiAsync<ApiPendingApproval?>(() => _mainWindow.ApiGetFirstPendingApprovalAsync()),
+                        () => _handler.ApiGetFirstPendingApprovalAsync(),
                         GetIntOrDefault(request.Parameters, "timeout_seconds", 30),
                         token).ConfigureAwait(false)),
-                    "approve_tool_call" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetPendingApprovalAsync(GetInt(request.Parameters, "index"), true)).ConfigureAwait(false)),
-                    "deny_tool_call" => LocalApiResponse.OkResult(await InvokeOnUiAsync<bool>(() => _mainWindow.ApiSetPendingApprovalAsync(GetInt(request.Parameters, "index"), false)).ConfigureAwait(false)),
-                    "execute_tool" => LocalApiResponse.OkResult(await InvokeOnUiAsync<ApiToolExecutionResult>(() => _mainWindow.ApiExecuteToolAsync(
+                    "approve_tool_call" => LocalApiResponse.OkResult(await _handler.ApiSetPendingApprovalAsync(GetInt(request.Parameters, "index"), true).ConfigureAwait(false)),
+                    "deny_tool_call" => LocalApiResponse.OkResult(await _handler.ApiSetPendingApprovalAsync(GetInt(request.Parameters, "index"), false).ConfigureAwait(false)),
+                    "execute_tool" => LocalApiResponse.OkResult(await _handler.ApiExecuteToolAsync(
                         GetString(request.Parameters, "tool"),
                         GetObject(request.Parameters, "parameters"),
                         GetBoolOrDefault(request.Parameters, "wait_for_approval", true),
-                        GetIntOrDefault(request.Parameters, "approval_timeout_seconds", 300))).ConfigureAwait(false)),
+                        GetIntOrDefault(request.Parameters, "approval_timeout_seconds", 300)).ConfigureAwait(false)),
                     "get_trace" => LocalApiResponse.OkResult(ApiTraceLog.GetSince(GetLong(request.Parameters, "afterId"), GetIntOrDefault(request.Parameters, "limit", 100))),
                     "clear_trace" => LocalApiResponse.OkResult(ClearTrace()),
                     _ => LocalApiResponse.Error($"Unknown method: {request.Method}")
@@ -264,30 +269,10 @@ namespace Aire.Services
             }
         }
 
-        /// <summary>
-        /// Executes an asynchronous UI operation that returns a value on the WPF dispatcher thread.
-        /// </summary>
-        /// <typeparam name="T">Result type returned by the UI operation.</typeparam>
-        /// <param name="action">Asynchronous UI action to run.</param>
-        /// <returns>The value returned by the UI action.</returns>
-        private async Task<T> InvokeOnUiAsync<T>(Func<Task<T>> action)
+        private static async Task<LocalApiResponse> VoidToOkAsync(Task task)
         {
-            var op = _mainWindow.Dispatcher.InvokeAsync(action);
-            var task = await op.Task.ConfigureAwait(false);
-            return await task.ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Executes an asynchronous UI operation with no meaningful return value on the WPF dispatcher thread.
-        /// </summary>
-        /// <param name="action">Asynchronous UI action to run.</param>
-        /// <returns>Always returns <see langword="true"/> when the action completes.</returns>
-        private async Task<bool> InvokeOnUiAsync(Func<Task> action)
-        {
-            var op = _mainWindow.Dispatcher.InvokeAsync(action);
-            var task = await op.Task.ConfigureAwait(false);
             await task.ConfigureAwait(false);
-            return true;
+            return LocalApiResponse.OkResult(true);
         }
 
         internal static async Task<ApiPendingApproval?> WaitForPendingApprovalAsync(
@@ -397,6 +382,19 @@ namespace Aire.Services
         {
             var value = GetString(element, name);
             return string.IsNullOrWhiteSpace(value) ? null : value;
+        }
+
+        internal static List<string>? GetStringList(JsonElement? element, string name)
+        {
+            if (!element.HasValue ||
+                element.Value.ValueKind != JsonValueKind.Object ||
+                !element.Value.TryGetProperty(name, out var prop))
+                return null;
+
+            if (prop.ValueKind == JsonValueKind.Array)
+                return prop.EnumerateArray().Select(e => e.GetString() ?? "").Where(s => s.Length > 0).ToList();
+
+            return null;
         }
 
         internal static JsonElement GetObject(JsonElement? element, string name)

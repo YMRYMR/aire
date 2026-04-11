@@ -33,7 +33,7 @@ using Microsoft.Win32;
 
 namespace Aire
 {
-    public partial class MainWindow
+    public partial class MainWindow : IApiCommandHandler
     {
         internal void ApplyContextWindowSettings(ContextWindowSettings settings)
         {
@@ -84,6 +84,7 @@ namespace Aire
         internal ProviderAvailabilityTracker _availabilityTracker = ProviderAvailabilityTracker.Instance;
         private Task? _startupInitializationTask;
         private HashSet<string> _enabledToolCategories = new(StringComparer.OrdinalIgnoreCase);
+        internal bool _toolsSupportedByProvider = true;
         private ContextWindowSettings _contextWindowSettings = ContextWindowSettings.Default;
         private string _assistantModeKey = "general";
         private string _assistantModeDisplayName = "General";
