@@ -12,6 +12,9 @@
     <PackageReference Include="Betalgo.OpenAI" Version="8.7.2" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="2.0.0" />
+    <PackageReference Include="LLMSharp.Anthropic.Tokenizer" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>

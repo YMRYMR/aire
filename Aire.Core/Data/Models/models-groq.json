@@ -1,11 +1,11 @@
 {
   "providerType": "Groq",
   "models": [
-    { "id": "llama-3.3-70b-versatile",  "displayName": "Llama 3.3 70B  ·  free",       "capabilities": ["tools"] },
-    { "id": "llama-3.1-8b-instant",     "displayName": "Llama 3.1 8B Instant  ·  free", "capabilities": ["tools"] },
-    { "id": "llama3-70b-8192",          "displayName": "Llama 3 70B  ·  free",           "capabilities": ["tools"] },
-    { "id": "llama3-8b-8192",           "displayName": "Llama 3 8B  ·  free",            "capabilities": ["tools"] },
-    { "id": "mixtral-8x7b-32768",       "displayName": "Mixtral 8x7B  ·  free",          "capabilities": ["tools"] },
-    { "id": "gemma2-9b-it",             "displayName": "Gemma 2 9B  ·  free",            "capabilities": []        }
+    { "id": "llama-3.3-70b-versatile",  "displayName": "Llama 3.3 70B  ·  free",       "capabilities": ["tools"], "contextLength": 8192 },
+    { "id": "llama-3.1-8b-instant",     "displayName": "Llama 3.1 8B Instant  ·  free", "capabilities": ["tools"], "contextLength": 8192 },
+    { "id": "llama3-70b-8192",          "displayName": "Llama 3 70B  ·  free",           "capabilities": ["tools"], "contextLength": 8192 },
+    { "id": "llama3-8b-8192",           "displayName": "Llama 3 8B  ·  free",            "capabilities": ["tools"], "contextLength": 8192 },
+    { "id": "mixtral-8x7b-32768",       "displayName": "Mixtral 8x7B  ·  free",          "capabilities": ["tools"], "contextLength": 32768 },
+    { "id": "gemma2-9b-it",             "displayName": "Gemma 2 9B  ·  free",            "capabilities": [], "contextLength": 8192 }
   ]
 }

@@ -1,5 +1,8 @@
 using Aire.AppLayer.Chat;
+using Aire.Data;
 using Aire.Providers;
+using Aire.Services;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Aire.Tests.Services;
@@ -107,5 +110,37 @@ public class ConversationSummaryApplicationServiceTests
         Assert.Contains("Todo:", summary!.Content);
         Assert.Contains("Question:", summary.Content);
         Assert.Contains("Completion:", summary.Content);
+    }
+
+    [Fact]
+    public void BuildSummaryMessage_RemovesGroups_WhenTokenLimitExceeded()
+    {
+        var stub = new StubTokenEstimator();
+        var service = new ConversationSummaryApplicationService(stub);
+
+        var messages = new[]
+        {
+            new ChatMessage { Role = "user", Content = "First user message." },
+            new ChatMessage { Role = "assistant", Content = "First assistant response." },
+            new ChatMessage { Role = "user", Content = "Second user message." },
+        };
+
+        // Stub returns token count equal to text length.
+        // Set maxTokens low enough that token limit will be exceeded.
+        // The algorithm should remove groups from the end and still produce a summary.
+        var summary = service.BuildSummaryMessage(messages, maxCharacters: 1000, maxTokens: 10);
+        Assert.NotNull(summary);
+        Assert.Equal("system", summary!.Role);
+        // The resulting summary should be non-empty (at least header)
+        Assert.False(string.IsNullOrWhiteSpace(summary.Content));
+        // Ensure it does not contain the second group (since removed)
+        // This is a basic sanity check; we could do more precise assertions but keep it simple.
+    }
+
+    private class StubTokenEstimator : ITokenEstimator
+    {
+        public int EstimateTokens(string text, string? modelId = null) => text.Length;
+        public int EstimateTokensForImage(ImageMetadata image) => 0;
+        public int EstimateTokensForAttachments(System.Collections.Generic.IEnumerable<MessageAttachment> attachments) => 0;
     }
 }

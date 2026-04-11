@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Aire.AppLayer.Chat
 {
     /// <summary>
@@ -10,7 +12,16 @@ namespace Aire.AppLayer.Chat
         int UncachedRecentMessages,
         bool EnablePromptCaching,
         bool EnableConversationSummaries,
-        int SummaryMaxCharacters)
+        int SummaryMaxCharacters,
+        int? MaxTokens = null,
+        int AnchorTokens = 0,
+        int TailTokens = 0,
+        bool EnableTokenAwareTruncation = false,
+        bool EnableToolFocusWindow = false,
+        bool EnableRetryFollowUpWindow = false,
+        bool EnableGradualCompaction = false,
+        int CompactionTokenThreshold = 0,
+        IReadOnlyDictionary<string, int>? PerMessageTypeLimits = null)
     {
         public static readonly ContextWindowSettings Default = new(
             MaxMessages: 40,
@@ -18,6 +29,15 @@ namespace Aire.AppLayer.Chat
             UncachedRecentMessages: 12,
             EnablePromptCaching: true,
             EnableConversationSummaries: true,
-            SummaryMaxCharacters: 900);
+            SummaryMaxCharacters: 900,
+            MaxTokens: null,
+            AnchorTokens: 0,
+            TailTokens: 0,
+            EnableTokenAwareTruncation: false,
+            EnableToolFocusWindow: false,
+            EnableRetryFollowUpWindow: false,
+            EnableGradualCompaction: false,
+            CompactionTokenThreshold: 0,
+            PerMessageTypeLimits: null);
     }
 }

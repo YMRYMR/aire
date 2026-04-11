@@ -33,5 +33,24 @@ namespace Aire.UI
         private TextBlock AutoSummariseLabel => ContextPane.AutoSummariseLabel;
         private TextBlock AutoSummariseSubLabel => ContextPane.AutoSummariseSubLabel;
         private TextBlock SummaryMaxCharactersSubLabel => ContextPane.SummaryMaxCharactersSubLabel;
+        private TextBlock ContextCompactionHeader => ContextPane.ContextCompactionHeader;
+        private TextBlock TokenAwareTruncationLabel => ContextPane.TokenAwareTruncationLabel;
+        private TextBlock TokenAwareTruncationSubLabel => ContextPane.TokenAwareTruncationSubLabel;
+        private TextBlock MaxTokensLabel => ContextPane.MaxTokensLabel;
+        private TextBlock MaxTokensSubLabel => ContextPane.MaxTokensSubLabel;
+        private TextBlock AnchorTokensLabel => ContextPane.AnchorTokensLabel;
+        private TextBlock AnchorTokensSubLabel => ContextPane.AnchorTokensSubLabel;
+        private TextBlock TailTokensLabel => ContextPane.TailTokensLabel;
+        private TextBlock TailTokensSubLabel => ContextPane.TailTokensSubLabel;
+        private TextBlock ToolFocusWindowLabel => ContextPane.ToolFocusWindowLabel;
+        private TextBlock ToolFocusWindowSubLabel => ContextPane.ToolFocusWindowSubLabel;
+        private TextBlock RetryFollowUpWindowLabel => ContextPane.RetryFollowUpWindowLabel;
+        private TextBlock RetryFollowUpWindowSubLabel => ContextPane.RetryFollowUpWindowSubLabel;
+        private CheckBox EnableTokenAwareTruncationCheckBox => ContextPane.EnableTokenAwareTruncationCheckBox;
+        private TextBox MaxTokensTextBox => ContextPane.MaxTokensTextBox;
+        private TextBox AnchorTokensTextBox => ContextPane.AnchorTokensTextBox;
+        private TextBox TailTokensTextBox => ContextPane.TailTokensTextBox;
+        private CheckBox EnableToolFocusWindowCheckBox => ContextPane.EnableToolFocusWindowCheckBox;
+        private CheckBox EnableRetryFollowUpWindowCheckBox => ContextPane.EnableRetryFollowUpWindowCheckBox;
     }
 }

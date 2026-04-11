@@ -119,6 +119,25 @@ public static class ModelCatalog
         return result;
     }
 
+    /// <summary>
+    /// Returns the context length (in tokens) of a specific model, if defined in the catalog.
+    /// </summary>
+    /// <param name="providerType">Provider type (e.g., "OpenAI", "Anthropic").</param>
+    /// <param name="modelId">Model identifier (e.g., "gpt-4-turbo").</param>
+    /// <returns>
+    /// The model's context length, or null if the model is not found or does not have a
+    /// <see cref="ModelDefinition.ContextLength"/> defined.
+    /// </returns>
+    public static int? GetContextLength(string providerType, string modelId)
+    {
+        if (string.IsNullOrWhiteSpace(providerType) || string.IsNullOrWhiteSpace(modelId))
+            return null;
+
+        var models = GetDefaults(providerType);
+        var match = models.FirstOrDefault(m => string.Equals(m.Id, modelId, StringComparison.OrdinalIgnoreCase));
+        return match?.ContextLength;
+    }
+
     public static int ImportFile(string sourcePath)
     {
         try

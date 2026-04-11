@@ -39,7 +39,16 @@ namespace Aire.Services.Workflows
                 settings.UncachedRecentMessages,
                 settings.EnablePromptCaching,
                 settings.EnableConversationSummaries,
-                settings.SummaryMaxCharacters);
+                settings.SummaryMaxCharacters,
+                settings.MaxTokens,
+                settings.AnchorTokens,
+                settings.TailTokens,
+                settings.EnableTokenAwareTruncation,
+                settings.EnableToolFocusWindow,
+                settings.EnableRetryFollowUpWindow,
+                settings.PerMessageTypeLimits,
+                providerType: null,
+                modelId: null);
 
         /// <summary>
         /// Builds the model-switch helper text presented to tool-calling models.
