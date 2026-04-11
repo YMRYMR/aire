@@ -64,6 +64,13 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Audit remaining `IDisposable` implementations for completeness.
 - Recent progress: Ollama streaming responses are disposed on all paths, `ChatService` unsubscribes on dispose, `SpeechRecognitionService` now releases its mic/timer/factory resources, the local API listener now logs unexpected failures instead of swallowing them, and `ProviderModelRefreshService` now shuts down cleanly before marking itself disposed.
 
+### 2.7 Token‑Estimation Accuracy `[~]`
+- Research and integrate Anthropic tokenizer library. ✅
+- Research and integrate Google tokenizer library.
+- Replace hardcoded image‑token values with provider‑specific formulas where available. ✅
+- Unify image‑token estimation in `ConversationCompactionService` with the provider estimators. ✅
+- Implement item‑wise truncation in `ConversationSummaryApplicationService`. ✅
+
 ## 3. Quality Bar
 
 ### 3.1 Coverage on meaningful paths `[~]`

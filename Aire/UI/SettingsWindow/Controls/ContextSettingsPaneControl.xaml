@@ -207,7 +207,198 @@
                          LostFocus="ContextSettingChanged" />
             </Grid>
 
-            <!-- Hint note -->
+           <!-- ── Compaction ─────────────────────────────────────── -->
+           <TextBlock x:Name="PART_ContextCompactionHeader"
+                      Text="COMPACTION"
+                      Foreground="{DynamicResource TextSecondaryBrush}"
+                      FontSize="10"
+                      FontWeight="SemiBold"
+                      Margin="0 0 0 8" />
+           <Border BorderBrush="{DynamicResource BorderBrush}"
+                   BorderThickness="0 0 0 1"
+                   Margin="0 0 0 12" />
+
+           <!-- Token‑aware truncation toggle -->
+           <Grid Margin="0 0 0 12">
+               <Grid.ColumnDefinitions>
+                   <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="Auto" />
+               </Grid.ColumnDefinitions>
+               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                   <TextBlock x:Name="PART_TokenAwareTruncationLabel"
+                              Text="Token‑aware truncation"
+                              Foreground="{DynamicResource TextBrush}"
+                              FontSize="12" />
+                   <TextBlock x:Name="PART_TokenAwareTruncationSubLabel"
+                              Text="Trim history based on token counts instead of message counts"
+                              Foreground="{DynamicResource TextSecondaryBrush}"
+                              FontSize="11"
+                              Margin="0 2 0 0"
+                              TextWrapping="Wrap" />
+               </StackPanel>
+               <CheckBox x:Name="PART_EnableTokenAwareTruncationCheckBox"
+                         Grid.Column="1"
+                         VerticalAlignment="Center"
+                         Checked="ContextSettingChanged"
+                         Unchecked="ContextSettingChanged" />
+           </Grid>
+
+           <!-- Max tokens row (visible when token‑aware truncation enabled) -->
+           <Grid x:Name="PART_MaxTokensRow" Margin="0 0 0 12">
+               <Grid.Style>
+                   <Style TargetType="Grid">
+                       <Style.Triggers>
+                           <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
+                               <Setter Property="Visibility" Value="Collapsed"/>
+                           </DataTrigger>
+                       </Style.Triggers>
+                   </Style>
+               </Grid.Style>
+               <Grid.ColumnDefinitions>
+                   <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="Auto" />
+               </Grid.ColumnDefinitions>
+               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                   <TextBlock x:Name="PART_MaxTokensLabel"
+                              Text="Max tokens"
+                              Foreground="{DynamicResource TextBrush}"
+                              FontSize="12" />
+                   <TextBlock x:Name="PART_MaxTokensSubLabel"
+                              Text="Maximum token count for the conversation window (leave empty for model default)"
+                              Foreground="{DynamicResource TextSecondaryBrush}"
+                              FontSize="11"
+                              Margin="0 2 0 0"
+                              TextWrapping="Wrap" />
+               </StackPanel>
+               <TextBox x:Name="PART_MaxTokensTextBox"
+                        Grid.Column="1"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        TextAlignment="Center"
+                        LostFocus="ContextSettingChanged" />
+           </Grid>
+
+           <!-- Anchor tokens row -->
+           <Grid x:Name="PART_AnchorTokensRow" Margin="0 0 0 12">
+               <Grid.Style>
+                   <Style TargetType="Grid">
+                       <Style.Triggers>
+                           <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
+                               <Setter Property="Visibility" Value="Collapsed"/>
+                           </DataTrigger>
+                       </Style.Triggers>
+                   </Style>
+               </Grid.Style>
+               <Grid.ColumnDefinitions>
+                   <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="Auto" />
+               </Grid.ColumnDefinitions>
+               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                   <TextBlock x:Name="PART_AnchorTokensLabel"
+                              Text="Anchor tokens"
+                              Foreground="{DynamicResource TextBrush}"
+                              FontSize="12" />
+                   <TextBlock x:Name="PART_AnchorTokensSubLabel"
+                              Text="Tokens reserved for early messages"
+                              Foreground="{DynamicResource TextSecondaryBrush}"
+                              FontSize="11"
+                              Margin="0 2 0 0"
+                              TextWrapping="Wrap" />
+               </StackPanel>
+               <TextBox x:Name="PART_AnchorTokensTextBox"
+                        Grid.Column="1"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        TextAlignment="Center"
+                        LostFocus="ContextSettingChanged" />
+           </Grid>
+
+           <!-- Tail tokens row -->
+           <Grid x:Name="PART_TailTokensRow" Margin="0 0 0 12">
+               <Grid.Style>
+                   <Style TargetType="Grid">
+                       <Style.Triggers>
+                           <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
+                               <Setter Property="Visibility" Value="Collapsed"/>
+                           </DataTrigger>
+                       </Style.Triggers>
+                   </Style>
+               </Grid.Style>
+               <Grid.ColumnDefinitions>
+                   <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="Auto" />
+               </Grid.ColumnDefinitions>
+               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                   <TextBlock x:Name="PART_TailTokensLabel"
+                              Text="Tail tokens"
+                              Foreground="{DynamicResource TextBrush}"
+                              FontSize="12" />
+                   <TextBlock x:Name="PART_TailTokensSubLabel"
+                              Text="Tokens reserved for recent messages"
+                              Foreground="{DynamicResource TextSecondaryBrush}"
+                              FontSize="11"
+                              Margin="0 2 0 0"
+                              TextWrapping="Wrap" />
+               </StackPanel>
+               <TextBox x:Name="PART_TailTokensTextBox"
+                        Grid.Column="1"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        TextAlignment="Center"
+                        LostFocus="ContextSettingChanged" />
+           </Grid>
+
+           <!-- Tool‑focus window toggle -->
+           <Grid Margin="0 0 0 12">
+               <Grid.ColumnDefinitions>
+                   <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="Auto" />
+               </Grid.ColumnDefinitions>
+               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                   <TextBlock x:Name="PART_ToolFocusWindowLabel"
+                              Text="Tool‑focus window"
+                              Foreground="{DynamicResource TextBrush}"
+                              FontSize="12" />
+                   <TextBlock x:Name="PART_ToolFocusWindowSubLabel"
+                              Text="Tighten context window when tool‑use is detected"
+                              Foreground="{DynamicResource TextSecondaryBrush}"
+                              FontSize="11"
+                              Margin="0 2 0 0"
+                              TextWrapping="Wrap" />
+               </StackPanel>
+               <CheckBox x:Name="PART_EnableToolFocusWindowCheckBox"
+                         Grid.Column="1"
+                         VerticalAlignment="Center"
+                         Checked="ContextSettingChanged"
+                         Unchecked="ContextSettingChanged" />
+           </Grid>
+
+           <!-- Retry‑follow‑up window toggle -->
+           <Grid Margin="0 0 0 20">
+               <Grid.ColumnDefinitions>
+                   <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="Auto" />
+               </Grid.ColumnDefinitions>
+               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                   <TextBlock x:Name="PART_RetryFollowUpWindowLabel"
+                              Text="Retry‑follow‑up window"
+                              Foreground="{DynamicResource TextBrush}"
+                              FontSize="12" />
+                   <TextBlock x:Name="PART_RetryFollowUpWindowSubLabel"
+                              Text="Expand context window for retry/follow‑up detection"
+                              Foreground="{DynamicResource TextSecondaryBrush}"
+                              FontSize="11"
+                              Margin="0 2 0 0"
+                              TextWrapping="Wrap" />
+               </StackPanel>
+               <CheckBox x:Name="PART_EnableRetryFollowUpWindowCheckBox"
+                         Grid.Column="1"
+                         VerticalAlignment="Center"
+                         Checked="ContextSettingChanged"
+                         Unchecked="ContextSettingChanged" />
+           </Grid>
+
+           <!-- Hint note -->
             <Border Background="{DynamicResource Surface2Brush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1"

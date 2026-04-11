@@ -127,4 +127,38 @@ public class ConversationContextApplicationServiceTests
 
         Assert.DoesNotContain(result, m => m.Role == "system" && m.Content.StartsWith("Conversation summary of earlier omitted context:", StringComparison.Ordinal));
     }
+
+    [Fact]
+    public void BuildContextWindow_TokenAwareTruncation_DoesNotThrow()
+    {
+        var service = new ConversationContextApplicationService();
+        var history = Enumerable.Range(1, 10)
+            .Select(i => new ChatMessage
+            {
+                Role = i % 2 == 0 ? "assistant" : "user",
+                Content = $"message {i}"
+            })
+            .ToList();
+
+        var result = service.BuildContextWindow(
+            history,
+            maxMessages: 5,
+            anchorMessages: 2,
+            uncachedRecentMessages: 2,
+            enablePromptCaching: true,
+            enableConversationSummaries: false,
+            summaryMaxCharacters: 300,
+            maxTokens: 1000,
+            anchorTokens: 200,
+            tailTokens: 300,
+            enableTokenAwareTruncation: true,
+            enableToolFocusWindow: false,
+            enableRetryFollowUpWindow: false,
+            perMessageTypeLimits: null,
+            providerType: null,
+            modelId: null);
+
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+    }
 }

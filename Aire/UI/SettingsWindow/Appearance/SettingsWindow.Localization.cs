@@ -109,6 +109,19 @@ namespace Aire.UI
             SummaryMaxCharactersSubLabel.Text = L("settings.contextSummaryMaxCharactersDescription", "Maximum characters the condensed summary may occupy");
             ContextHintText.Text = L("settings.contextHint", "System messages and anchor turns are always kept. Cached prefixes only reduce cost on providers that explicitly support prompt caching.");
             RestoreDefaultsButton.Content = L("settings.contextRestoreDefaults", "Restore defaults");
+            ContextCompactionHeader.Text = L("settings.contextCompaction", "COMPACTION");
+            TokenAwareTruncationLabel.Text = L("settings.contextTokenAwareTruncation", "Token‑aware truncation");
+            TokenAwareTruncationSubLabel.Text = L("settings.contextTokenAwareTruncationDescription", "Trim history based on token counts instead of message counts");
+            MaxTokensLabel.Text = L("settings.contextMaxTokens", "Max tokens");
+            MaxTokensSubLabel.Text = L("settings.contextMaxTokensDescription", "Maximum token count for the conversation window (leave empty for model default)");
+            AnchorTokensLabel.Text = L("settings.contextAnchorTokens", "Anchor tokens");
+            AnchorTokensSubLabel.Text = L("settings.contextAnchorTokensDescription", "Tokens reserved for early messages");
+            TailTokensLabel.Text = L("settings.contextTailTokens", "Tail tokens");
+            TailTokensSubLabel.Text = L("settings.contextTailTokensDescription", "Tokens reserved for recent messages");
+            ToolFocusWindowLabel.Text = L("settings.contextToolFocusWindow", "Tool‑focus window");
+            ToolFocusWindowSubLabel.Text = L("settings.contextToolFocusWindowDescription", "Tighten context window when tool‑use is detected");
+            RetryFollowUpWindowLabel.Text = L("settings.contextRetryFollowUpWindow", "Retry‑follow‑up window");
+            RetryFollowUpWindowSubLabel.Text = L("settings.contextRetryFollowUpWindowDescription", "Expand context window for retry/follow‑up detection");
             FlowDirection = LocalizationService.IsRightToLeftLanguage(LocalizationService.CurrentCode)
                 ? System.Windows.FlowDirection.RightToLeft
                 : System.Windows.FlowDirection.LeftToRight;

@@ -2,12 +2,12 @@
   "providerType": "OpenAI",
   "models": [
     { "id": "gpt-image-1", "displayName": "GPT Image 1", "capabilities": ["imagegeneration"] },
-    { "id": "gpt-4o",        "displayName": "GPT-4o", "capabilities": ["vision", "tools", "keyboard", "mouse"] },
-    { "id": "gpt-4o-mini",   "displayName": "GPT-4o Mini", "capabilities": ["vision", "tools"] },
-    { "id": "o3-mini",       "displayName": "o3 Mini", "capabilities": ["tools"] },
-    { "id": "o1",            "displayName": "o1", "capabilities": ["vision", "tools"] },
-    { "id": "o1-mini",       "displayName": "o1 Mini", "capabilities": ["tools"] },
-    { "id": "gpt-4-turbo",   "displayName": "GPT-4 Turbo", "capabilities": ["vision", "tools"] },
-    { "id": "gpt-3.5-turbo", "displayName": "GPT-3.5 Turbo", "capabilities": ["tools"] }
+    { "id": "gpt-4o", "displayName": "GPT-4o", "capabilities": ["vision", "tools", "keyboard", "mouse"], "contextLength": 128000 },
+    { "id": "gpt-4o-mini", "displayName": "GPT-4o Mini", "capabilities": ["vision", "tools"], "contextLength": 128000 },
+    { "id": "o3-mini", "displayName": "o3 Mini", "capabilities": ["tools"] },
+    { "id": "o1", "displayName": "o1", "capabilities": ["vision", "tools"], "contextLength": 128000 },
+    { "id": "o1-mini", "displayName": "o1 Mini", "capabilities": ["tools"], "contextLength": 128000 },
+    { "id": "gpt-4-turbo", "displayName": "GPT-4 Turbo", "capabilities": ["vision", "tools"], "contextLength": 128000 },
+    { "id": "gpt-3.5-turbo", "displayName": "GPT-3.5 Turbo", "capabilities": ["tools"], "contextLength": 16384 }
   ]
 }

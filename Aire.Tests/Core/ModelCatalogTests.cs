@@ -80,4 +80,35 @@ public class ModelCatalogTests : IDisposable
         ModelCatalog.EnsureDefaults();
         Assert.True(Directory.Exists(_modelsDir));
     }
+
+    [Fact]
+    public void GetContextLength_ReturnsNullForUnknownModel()
+    {
+        var result = ModelCatalog.GetContextLength("OpenAI", "unknown-model");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetContextLength_ReturnsNullForEmptyProvider()
+    {
+        var result = ModelCatalog.GetContextLength("", "gpt-4o");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetContextLength_ReturnsNullForEmptyModelId()
+    {
+        var result = ModelCatalog.GetContextLength("OpenAI", "");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetContextLength_ReturnsValueWhenDefined()
+    {
+        // Ensure default JSON files are present (they contain contextLength after our updates).
+        ModelCatalog.EnsureDefaults();
+        // For OpenAI's gpt-4o we added contextLength 128000.
+        var result = ModelCatalog.GetContextLength("OpenAI", "gpt-4o");
+        Assert.Equal(128000, result);
+    }
 }

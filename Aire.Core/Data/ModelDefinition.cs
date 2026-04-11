@@ -15,6 +15,9 @@ public class ModelDefinition
 
     /// <summary>Optional list of capabilities this model supports (e.g. "vision", "tools", "mouse", "keyboard").</summary>
     public List<string>? Capabilities { get; set; }
+
+    /// <summary>Maximum context length in tokens supported by the model, if known.</summary>
+    public int? ContextLength { get; set; }
 }
 
 /// <summary>
