@@ -122,6 +122,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Button x:Name="PART_StopAiButton"
                         Grid.Column="0"
@@ -166,6 +167,16 @@
                         Margin="6 0 0 0"
                         FontSize="13"
                         Click="ToolsButton_Click" />
+                <ToggleButton x:Name="PART_AgentModeButton"
+                              Grid.Column="4"
+                              Content="&#x1F916;"
+                              ToolTip="Agent mode — click to activate"
+                              Width="40"
+                              Height="40"
+                              Padding="0"
+                              Margin="6 0 0 0"
+                              FontSize="13"
+                              Click="AgentModeButton_Click" />
 
                 <Border x:Name="PART_ProgressOverlay"
                         Grid.Column="1"

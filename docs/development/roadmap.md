@@ -102,9 +102,10 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## 4. User-Facing Features (Prioritized)
 
-### 4.1 Keyboard-first UX `[ ]`
-- Global hotkey to summon the chat window from any app.
-- Ctrl+K command palette for switching providers, models, and conversations mid-flow.
+### 4.1 Keyboard-first UX `[~]`
+- Global hotkey to summon the chat window from any app. ✅ `GlobalHotkeyService` (Alt+Space)
+- Ctrl+K command palette for switching providers, models, and conversations mid-flow. ✅ `CommandPaletteControl`
+- Keyboard navigation for dialogs (Enter/Escape/Left/Right arrows). ✅ `ConfirmationDialog`, `UpdateAvailableDialog`
 - Keyboard shortcuts for tool approval/denial, message navigation, and conversation actions.
 - Power users shouldn't need the mouse for common workflows.
 
@@ -147,11 +148,13 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## 5. AI-Facing Features (Prioritized)
 
-### 5.1 Agent mode `[ ]`
-- A mode where the AI can autonomously chain tool calls without per-call approval.
-- Configurable scope (which tool categories) and token budget.
-- Auto-accept profiles are the foundation; this extends them into a full agent loop.
-- Session-level budget tracking with automatic stop when limit is reached.
+### 5.1 Agent mode `[~]`
+- A mode where the AI can autonomously chain tool calls without per-call approval. ✅ `AgentModeService`
+- Configurable scope (which tool categories) and token budget. ✅ `Start(tokenBudget, allowedCategories)`
+- Auto-accept profiles are the foundation; this extends them into a full agent loop. ✅ Integrated in `ToolApprovalCoordinator`
+- Session-level budget tracking with automatic stop when limit is reached. ✅ `RecordTokenUsage` + `BudgetExhausted` event
+- UI toggle button in composer (🤖). ✅ `MainComposerControl`
+- Remaining: budget configuration dialog, visual budget indicator, agent mode status in header.
 
 ### 5.2 Structured context injection `[ ]`
 - Let AIs declare what context they need (files, URLs, clipboard, recent messages) via a schema.
@@ -213,3 +216,6 @@ Work is happening on branch `glm/aire`. Implementation order:
 | P1 | Extract MainWindow composition root into `App.xaml.cs` | 2.4 | `[~]` |
 | P2 | Cover untested Application services (19 services) | 3.1 | `[~]` (15/19 done) |
 | P2 | Human-readable errors for provider failures | 3.3 | `[~]` |
+| P3 | Keyboard-first UX (global hotkey, command palette, dialog nav) | 4.1 | `[~]` |
+| P3 | Agent mode (auto-approve tool chains + budget tracking) | 5.1 | `[~]` |
+| P3 | Configurable local API port | 2.4 | `[x]` |
