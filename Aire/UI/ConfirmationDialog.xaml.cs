@@ -31,6 +31,45 @@ namespace Aire.UI
             if (e.ButtonState == MouseButtonState.Pressed) DragMove();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            YesButton.Focus();
+        }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    e.Handled = true;
+                    if (NoButton.Visibility == Visibility.Visible)
+                        NoButton_Click(sender, e);
+                    else
+                        YesButton_Click(sender, e);
+                    break;
+
+                case Key.Enter:
+                    e.Handled = true;
+                    if (Keyboard.FocusedElement is System.Windows.Controls.Button focusedBtn)
+                        focusedBtn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
+                    else
+                        YesButton_Click(sender, e);
+                    break;
+
+                case Key.Left:
+                case Key.Right:
+                    if (NoButton.Visibility == Visibility.Visible)
+                    {
+                        e.Handled = true;
+                        if (Keyboard.FocusedElement == NoButton)
+                            YesButton.Focus();
+                        else
+                            NoButton.Focus();
+                    }
+                    break;
+            }
+        }
+
         internal void YesButton_Click(object sender, RoutedEventArgs e)
         {
             Result = true;

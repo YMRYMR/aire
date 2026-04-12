@@ -15,6 +15,7 @@ public partial class UpdateAvailableDialog
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         ApplyLocalization();
+        InstallButton.Focus();
 
         try
         {
@@ -30,6 +31,46 @@ public partial class UpdateAvailableDialog
         {
             // Non-fatal. The dialog still works without the backdrop attribute.
         }
+    }
+
+    private System.Windows.Controls.Button[] _buttons => [LaterButton, ReleaseNotesButton, InstallButton];
+
+    private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Key.Escape:
+                e.Handled = true;
+                LaterButton_Click(sender, e);
+                break;
+
+            case Key.Enter:
+                e.Handled = true;
+                if (Keyboard.FocusedElement is System.Windows.Controls.Button focused)
+                    focused.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
+                else
+                    InstallButton.Focus();
+                break;
+
+            case Key.Left:
+                e.Handled = true;
+                CycleFocus(-1);
+                break;
+
+            case Key.Right:
+                e.Handled = true;
+                CycleFocus(1);
+                break;
+        }
+    }
+
+    private void CycleFocus(int direction)
+    {
+        var current = Keyboard.FocusedElement as System.Windows.Controls.Button;
+        var index = current != null ? Array.IndexOf(_buttons, current) : -1;
+        if (index < 0) index = _buttons.Length - 1;
+        var next = (index + direction + _buttons.Length) % _buttons.Length;
+        _buttons[next].Focus();
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
