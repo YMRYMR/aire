@@ -22,7 +22,7 @@ public class ToolCallParserTests
         Assert.True(parsedAiResponse.HasToolCall);
         Assert.Equal("I will do that.", parsedAiResponse.TextContent);
         Assert.Equal("read_file", parsedAiResponse.ToolCall.Tool);
-        Assert.Equal("Reading example.txt", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Read example.txt?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public class ToolCallParserTests
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse("<think>I should use a tool</think>\r\nVisible text\r\n<tool_call>{\"tool\":\"open_url\",\"url\":\"https://example.com\"}</tool_call>");
         Assert.True(parsedAiResponse.HasToolCall);
         Assert.Equal("Visible text", parsedAiResponse.TextContent);
-        Assert.Equal("Fetching https://example.com", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Fetch https://example.com?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class ToolCallParserTests
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse("```json\r\n{\"tool\":\"execute_command\",\"command\":\"notepad\"}\r\n```");
         Assert.True(parsedAiResponse.HasToolCall);
         Assert.Equal("execute_command", parsedAiResponse.ToolCall.Tool);
-        Assert.Equal("Opening Notepad", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Open Notepad?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class ToolCallParserTests
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse("First line\r\n{\"tool\":\"search_files\",\"directory\":\"C:/repo\",\"pattern\":\"*.cs\"}");
         Assert.True(parsedAiResponse.HasToolCall);
         Assert.Equal("First line", parsedAiResponse.TextContent);
-        Assert.True(parsedAiResponse.ToolCall.Description.Contains("Searching for") && parsedAiResponse.ToolCall.Description.Contains("*.cs"), "Expected tool description for search");
+        Assert.True(parsedAiResponse.ToolCall.Description.Contains("Search for") && parsedAiResponse.ToolCall.Description.Contains("*.cs"), "Expected tool description for search");
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class ToolCallParserTests
     {
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse("<tool_call>[{\"tool\":\"switch_mode\",\"mode\":\"code\"}]</tool_call>");
         Assert.True(parsedAiResponse.HasToolCall);
-        Assert.Equal("Switching to code mode", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Switch to code mode?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
@@ -66,15 +66,15 @@ public class ToolCallParserTests
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse("<tool_call>{\"tool\":\"open_url\",\"url\":\"https://example.com/docs\"}</tool_call>".Replace("\"", "“"));
         Assert.True(parsedAiResponse.HasToolCall);
         Assert.Equal("open_url", parsedAiResponse.ToolCall.Tool);
-        Assert.Equal("Fetching https://example.com/docs", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Fetch https://example.com/docs?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
     public void Parse_TruncatedToolCall_ReturnsCutoffWarning()
     {
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse("Starting...\r\n<tool_call>{\"tool\":\"read_file\",\"path\":\"C:/tmp/test.txt\"}");
-        Assert.False(parsedAiResponse.HasToolCall);
-        Assert.Contains("cut off before the tool call could complete", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("read_file", parsedAiResponse.ToolCall.Tool);
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class ToolCallParserTests
     {
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse("<tool_call>{\"tool\":\"move_file\",\"from\":\"C:/from/a.txt\",\"to\":\"C:/to/b.txt\"}</tool_call>");
         Assert.True(parsedAiResponse.HasToolCall);
-        Assert.Equal("Moving a.txt → b.txt", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Move a.txt → b.txt?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]

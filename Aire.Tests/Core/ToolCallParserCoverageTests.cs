@@ -13,7 +13,7 @@ public class ToolCallParserCoverageTests
         Assert.Equal("I will read the file.", parsedAiResponse.TextContent);
         Assert.NotNull(parsedAiResponse.ToolCall);
         Assert.Equal("read_file", parsedAiResponse.ToolCall.Tool);
-        Assert.Equal("Reading example.txt", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Read example.txt?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class ToolCallParserCoverageTests
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
         Assert.NotNull(parsedAiResponse.ToolCall);
         Assert.Equal("execute_command", parsedAiResponse.ToolCall.Tool);
-        Assert.Equal("Opening Notepad", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Open Notepad?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class ToolCallParserCoverageTests
         Assert.Equal("First I will do this.", parsedAiResponse.TextContent);
         Assert.NotNull(parsedAiResponse.ToolCall);
         Assert.Equal("search_files", parsedAiResponse.ToolCall.Tool);
-        Assert.Contains("Searching for", parsedAiResponse.ToolCall.Description);
+        Assert.Contains("Search for", parsedAiResponse.ToolCall.Description);
         Assert.Contains("repo/", parsedAiResponse.ToolCall.Description);
     }
 
@@ -55,7 +55,7 @@ public class ToolCallParserCoverageTests
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
         Assert.NotNull(parsedAiResponse.ToolCall);
         Assert.Equal("open_url", parsedAiResponse.ToolCall.Tool);
-        Assert.Equal("Fetching https://example.com", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Fetch https://example.com?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class ToolCallParserCoverageTests
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
         Assert.NotNull(parsedAiResponse.ToolCall);
         Assert.Equal("read_file", parsedAiResponse.ToolCall.Tool);
-        Assert.Equal("Reading demo.txt", parsedAiResponse.ToolCall.Description);
+        Assert.Equal("Read demo.txt?", parsedAiResponse.ToolCall.Description);
     }
 
     [Fact]
