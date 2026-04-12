@@ -19,8 +19,8 @@ public class ToolCallParserEdgeCaseTests
     {
         string response = "Here is the start of a tool call: <tool_call>{\"tool\":\"test\"}";
         ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
-        Assert.False(parsedAiResponse.HasToolCall);
-        Assert.Contains("cut off", parsedAiResponse.TextContent);
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("test", parsedAiResponse.ToolCall.Tool);
     }
 
     [Fact]
