@@ -25,6 +25,31 @@
                       ToolTip="Lets other local apps control Aire. Leave off unless you trust the caller."
                       Checked="ApiAccessEnabledCheckBox_Changed"
                       Unchecked="ApiAccessEnabledCheckBox_Changed" />
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                    <TextBlock x:Name="PART_ApiPortTitle"
+                               Text="Port"
+                               Foreground="{DynamicResource TextBrush}"
+                               FontSize="12" />
+                    <TextBlock x:Name="PART_ApiPortDescription"
+                               Text="TCP port for the local API. Change takes effect on restart."
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="11"
+                               Margin="0 2 0 0"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+                <TextBox x:Name="PART_ApiPortBox"
+                         Grid.Column="1"
+                         Width="80"
+                         VerticalAlignment="Center"
+                         TextAlignment="Center"
+                         MaxLength="5"
+                         LostFocus="ApiPortBox_Changed" />
+            </Grid>
             <TextBlock x:Name="PART_ApiAccessTokenTitle"
                        Text="Auth token"
                        FontWeight="SemiBold"

@@ -13,7 +13,9 @@ namespace Aire.Services
     /// </summary>
     internal sealed class LocalApiService : IDisposable
     {
-        public const int Port = 51234;
+        public const int DefaultPort = 51234;
+
+        public int EffectivePort { get; private set; } = DefaultPort;
 
         private readonly IApiCommandHandler _handler;
         private CancellationTokenSource? _listenerCts;
@@ -38,7 +40,8 @@ namespace Aire.Services
             // Guarantee a token exists so the screenshots tool can authenticate immediately after
             // the window appears — even if a previous run wiped the persisted token.
             AppState.EnsureApiAccessToken();
-            ApiTraceLog.Record("service", "start", $"Local API listener started on 127.0.0.1:{Port}", true);
+            EffectivePort = AppState.GetApiPort();
+            ApiTraceLog.Record("service", "start", $"Local API listener started on 127.0.0.1:{EffectivePort}", true);
             _listenerCts = new CancellationTokenSource();
             _listenerTask = Task.Run(() => ListenAsync(_listenerCts.Token));
         }
@@ -74,7 +77,7 @@ namespace Aire.Services
         /// <param name="token">Cancellation token used to stop the listener loop.</param>
         private async Task ListenAsync(CancellationToken token)
         {
-            _listener = new TcpListener(IPAddress.Loopback, Port);
+            _listener = new TcpListener(IPAddress.Loopback, EffectivePort);
             _listener.Start();
 
             while (!token.IsCancellationRequested)

@@ -15,6 +15,7 @@ namespace Aire.UI
         private TextBlock ApiAccessTokenTitle => LocalApiAccessPane.ApiAccessTokenTitle;
         private TextBlock ApiAccessTokenDescription => LocalApiAccessPane.ApiAccessTokenDescription;
         private TextBox ApiAccessTokenBox => LocalApiAccessPane.ApiAccessTokenBox;
+        private TextBox ApiPortBox => LocalApiAccessPane.ApiPortBox;
         private Button CopyApiAccessTokenButton => LocalApiAccessPane.CopyApiAccessTokenButton;
         private Button RegenerateApiAccessTokenButton => LocalApiAccessPane.RegenerateApiAccessTokenButton;
     }

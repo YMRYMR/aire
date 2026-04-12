@@ -142,7 +142,7 @@ namespace Aire
 
                 return (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
                         .BuildStateSnapshot(
-                            LocalApiService.Port,
+                            AppState.GetApiPort(),
                             AppStartupState.IsReady,
                             IsVisible,
                             _settingsWindow != null,
