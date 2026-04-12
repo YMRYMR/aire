@@ -52,7 +52,7 @@ jobs:
           'providers' { 'FullyQualifiedName~Aire.Tests.Providers' }
           'services' { 'FullyQualifiedName~Aire.Tests.Services' }
           'ui' { 'FullyQualifiedName~Aire.Tests.UI' }
-          default { '' }
+          default { 'FullyQualifiedName!~Aire.Tests.UI.MainWindowTests' }
         }
 
         $resultsRoot = Join-Path $PWD 'TestResults'
