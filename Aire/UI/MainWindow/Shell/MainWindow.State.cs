@@ -66,6 +66,7 @@ namespace Aire
         private readonly FileSystemService _fileSystemService;
         internal ToolExecutionService _toolExecutionService;
         private readonly Aire.Services.Tools.EmailToolService _emailToolService;
+        internal AgentModeService? _agentModeService;
         internal SpeechRecognitionService _speechService;
         private List<Aire.Data.Provider> _providers = new();
         internal int? _currentConversationId;

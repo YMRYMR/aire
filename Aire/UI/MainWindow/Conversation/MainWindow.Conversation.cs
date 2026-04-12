@@ -90,6 +90,22 @@ namespace Aire
 
         private void MainWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            // Ctrl+K → command palette
+            if (e.Key == Key.K && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                ToggleCommandPalette();
+                e.Handled = true;
+                return;
+            }
+
+            // Close command palette on Escape
+            if (e.Key == Key.Escape && CommandPalettePopup.IsOpen)
+            {
+                CommandPalettePopup.IsOpen = false;
+                e.Handled = true;
+                return;
+            }
+
             if (InputTextBox.IsKeyboardFocused)
             {
                 if (e.Key == Key.Up && _inputHistory.Count > 0)

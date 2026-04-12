@@ -36,12 +36,23 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" GlassFrameThickness="0" ResizeBorderThickness="4" UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <!-- Command Palette popup (Ctrl+K) -->
+        <Popup x:Name="CommandPalettePopup"
+               Placement="Center"
+               AllowsTransparency="True"
+               PopupAnimation="Fade"
+               StaysOpen="False"
+               Width="420">
+            <mw:CommandPaletteControl x:Name="CommandPaletteControl" />
+        </Popup>
 
         <mw:MainHeaderControl x:Name="HeaderControl"
                               Grid.Row="0"
@@ -131,6 +142,7 @@
                                 InputPreviewDrop="InputTextBox_Drop"
                                 InputPreviewDragOver="InputTextBox_DragOver"
                                 MicClicked="MicButton_Click"
-                                ToolsClicked="ToolsButton_Click" />
+                                ToolsClicked="ToolsButton_Click"
+                                AgentModeClicked="AgentModeButton_Click" />
     </Grid>
 </Window>

@@ -24,6 +24,7 @@ namespace Aire
         private LocalApiService? _localApiService;
         private ProviderModelRefreshService? _providerModelRefreshService;
         private GitHubReleaseUpdateService? _updateService;
+        private GlobalHotkeyService? _globalHotkeyService;
         private readonly StartupDecisionApplicationService _startupDecisionService = new();
         private readonly StartupWindowCoordinator _startupWindowCoordinator = new();
         private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
@@ -108,6 +109,11 @@ namespace Aire
             _mainWindow.TrayService = _trayService;
             _mainWindow.IsVisibleChanged += OnMainWindowVisibilityChanged;
 
+            // Global hotkey (Alt+Space) to toggle window from any application.
+            _globalHotkeyService = new GlobalHotkeyService(_mainWindow);
+            _globalHotkeyService.ToggleCallback = () => _trayService.ToggleMainWindow();
+            _globalHotkeyService.Start();
+
             _localApiService = new LocalApiService(_mainWindow);
             AppState.ApiAccessChanged += OnApiAccessChanged;
             UpdateLocalApiServiceState();
@@ -187,6 +193,7 @@ namespace Aire
             _mainWindow?.Cleanup();
             _providerModelRefreshService?.Dispose();
             _trayService?.Dispose();
+            _globalHotkeyService?.Dispose();
             _localApiService?.Dispose();
             AppState.ApiAccessChanged -= OnApiAccessChanged;
             _activateEvent?.Dispose();

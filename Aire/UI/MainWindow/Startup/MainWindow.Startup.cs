@@ -86,6 +86,8 @@ namespace Aire
             _ttsService = new SpeechSynthesisService();
             _ttsService.SpeakingCompleted += OnTtsSpeakingCompleted;
 
+            _agentModeService = new AgentModeService();
+
             if (!initializeUi)
                 return;
 
@@ -119,6 +121,8 @@ namespace Aire
             _ttsService.SettingsChanged += SaveWindowSize;
 
             Loaded += OnWindowLoaded;
+            InitializeAgentModeHandlers();
+            InitializeCommandPalette();
             IsVisibleChanged += (_, e) => { if ((bool)e.NewValue) InputTextBox.Focus(); };
             IsVisibleChanged += (s, e) => { if ((bool)e.NewValue) ScrollToBottom(); };
             _availabilityTracker.AvailabilityChanged += _ => Dispatcher.Invoke(RefreshProviderAvailabilityUI);
