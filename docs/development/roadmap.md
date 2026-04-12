@@ -48,9 +48,11 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Remove remaining assumptions that depend on `GetUninitializedObject` or hidden WPF state.
 - Prefer test seams that construct the real object graph when feasible.
 
-### 2.4 Keep layering honest `[ ]`
+### 2.4 Keep layering honest `[~]`
 - Preserve the `UI -> Application -> Domain/Infrastructure` direction.
 - Keep new domain concepts out of window code-behind and out of ad-hoc helper files.
+- **GLM-5.1 finding (2026-04-11):** `LocalApiService` now depends on `IApiCommandHandler` interface (already decoupled from MainWindow). ✅
+- **GLM-5.1 finding:** `MainWindow.State.cs` has 69 instance fields and 25+ service dependencies. The window acts as composition root, service locator, and UI controller simultaneously. Need to extract composition into `App.xaml.cs` or a dedicated bootstrapper.
 
 ### 2.5 Structured logging `[x]`
 - Replace `Debug.WriteLine` calls in production paths with a proper logging framework (Serilog or `Microsoft.Extensions.Logging`).
@@ -71,21 +73,32 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Unify image‑token estimation in `ConversationCompactionService` with the provider estimators. ✅
 - Implement item‑wise truncation in `ConversationSummaryApplicationService`. ✅
 
+### 2.8 Consolidate test infrastructure `[x]` *(GLM-5.1, 2026-04-11)*
+- Extract the duplicated `SimpleJsonServer` / `OllamaTestServer` / `GoogleAiTestServer` classes into a shared `Aire.Tests/Infrastructure/` directory.
+- Currently copy-pasted across 8 provider test files. A single shared implementation reduces maintenance burden and ensures consistent behavior.
+
+### 2.9 Fix known dependency vulnerability `[x]` *(GLM-5.1, 2026-04-11)*
+- `Microsoft.Bcl.Memory` 9.0.4 has a known high-severity vulnerability (NU1903 / GHSA-73j8-2gch-69rq).
+- Update to the latest patched version in both `Aire.csproj` and `Aire.Core.csproj`.
+
 ## 3. Quality Bar
 
 ### 3.1 Coverage on meaningful paths `[~]`
 - Raise coverage on the workflows that matter most, not on trivial getters.
 - Prioritize provider validation, local API, tool approval, onboarding, and persistence.
 - Recent progress: added direct coverage for speech-recognition disposal, provider-model refresher lifetime cleanup, local API approval routing, and dispatcher-aware STA pumping; the broad test suite now completes, with the remaining failures isolated to appearance contrast assertions.
+- **GLM-5.1 finding (2026-04-11):** 19 Application-layer services have zero dedicated test coverage, including all MCP services, all onboarding services, `ChatTurnApplicationService`, `ConversationApplicationService`, `ChatInteractionApplicationService`, and 7 provider workflow services.
+- **Progress (2026-04-12):** Added dedicated test coverage for 15 of 19 previously untested services (~150 new tests): all 3 MCP services, both onboarding services, 6 provider workflow services (`ProviderSetup`, `ProviderEditorSave`, `ProviderModelCatalog`, `ProviderCapabilityTestSession`, `CodexAction`, `OllamaAction`, `OllamaModelCatalog`), 2 tool approval services (`ToolApprovalPrompt`, `ToolApprovalExecution`), `ChatTurnApplicationService`, `AppSettingsApplicationService`, and `EmailAccountApplicationService`. Remaining: `SwitchModelApplicationService` and `ProviderSetupApplicationService` runtime delegation.
 
 ### 3.2 Release readiness `[ ]`
 - Keep release builds clean.
 - Keep screenshot assets current for every supported locale.
 - Keep public-repo hygiene and contributor docs current.
 
-### 3.3 Human-readable errors `[ ]`
+### 3.3 Human-readable errors `[~]`
 - Prefer errors that explain what went wrong and what the user should do next.
 - Avoid leaking unnecessary internals when the message can stay short and useful.
+- **Progress (2026-04-12):** Replaced generic catch-all error messages with descriptive ones in `OpenAiProvider`, `GoogleAiProvider`, and `OllamaProvider`. Added authentication-specific errors ("Check your API key"), model-not-found errors, network-error sanitization (strips IP/port details), and streaming-failure error markers. Added `ProviderErrorClassifier.SanitizeNetworkError()` utility.
 
 ## 4. User-Facing Features (Prioritized)
 
@@ -186,3 +199,17 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ## 7. Analysis Reports
 
 - [Project analysis by Opus 4.6 (2026-04-09)](./project-analysis-opus-4.6-2026-04-09.md)
+- [GLM-5.1 evaluation (2026-04-11)](./project-analysis-glm-5.1-2026-04-11.md) *(to be created)*
+
+## 8. GLM-5.1 Sprint Priorities (2026-04-11)
+
+Work is happening on branch `glm/aire`. Implementation order:
+
+| Priority | Task | Roadmap Ref | Status |
+|----------|------|-------------|--------|
+| P0 | Fix NU1903 `Microsoft.Bcl.Memory` vulnerability | 2.9 | `[x]` |
+| P0 | Consolidate `SimpleJsonServer` into shared test utility | 2.8 | `[x]` |
+| P1 | Decouple `LocalApiService` from `MainWindow` via `IApiCommandHandler` | 2.4 | `[x]` |
+| P1 | Extract MainWindow composition root into `App.xaml.cs` | 2.4 | `[~]` |
+| P2 | Cover untested Application services (19 services) | 3.1 | `[~]` (15/19 done) |
+| P2 | Human-readable errors for provider failures | 3.3 | `[~]` |

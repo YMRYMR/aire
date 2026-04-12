@@ -1,14 +1,12 @@
-using System.Threading;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text;
-using System.Net;
-using System.Net.Sockets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Aire.Providers;
+using Aire.Tests.Infrastructure;
 using Xunit;
 
 namespace Aire.Tests.Providers;
@@ -139,12 +137,12 @@ public class GoogleAiProviderTests
     [Fact]
     public async Task ValidateConfigurationAsync_UsesConfiguredBaseUrl()
     {
-        using var server = new GoogleAiTestServer((method, path, _) =>
+        using var server = new SimpleJsonServer((method, path, _) =>
         {
             if (method == "GET" && path.StartsWith("/v1beta/models", StringComparison.Ordinal))
-                return GoogleAiTestServer.Json(200, """{"models":[{"name":"models/gemini-2.0-flash"}]}""");
+                return SimpleJsonServer.Json(200, """{"models":[{"name":"models/gemini-2.0-flash"}]}""");
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -174,8 +172,9 @@ public class GoogleAiProviderTests
         var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
 
         Assert.False(response.IsSuccess);
-        Assert.Equal("Google AI request failed.", response.ErrorMessage);
+        Assert.NotNull(response.ErrorMessage);
         Assert.DoesNotContain("127.0.0.1", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(":1", response.ErrorMessage);
     }
 
     [Fact]
@@ -199,11 +198,11 @@ public class GoogleAiProviderTests
     [Fact]
     public async Task FetchLiveModelsAsync_FiltersToGeminiModelsWithGenerateContent()
     {
-        using var server = new GoogleAiTestServer((method, path, _) =>
+        using var server = new SimpleJsonServer((method, path, _) =>
         {
             if (method == "GET" && path.StartsWith("/v1beta/models", StringComparison.Ordinal))
             {
-                return GoogleAiTestServer.Json(200,
+                return SimpleJsonServer.Json(200,
                     """
                     {
                       "models": [
@@ -216,7 +215,7 @@ public class GoogleAiProviderTests
                     """);
             }
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -232,11 +231,11 @@ public class GoogleAiProviderTests
     [Fact]
     public async Task StreamChatAsync_ParsesTextAndFunctionCalls_FromSse()
     {
-        using var server = new GoogleAiTestServer((method, path, _) =>
+        using var server = new SimpleJsonServer((method, path, _) =>
         {
             if (method == "POST" && path.StartsWith("/v1beta/models/gemini-2.0-flash:streamGenerateContent", StringComparison.Ordinal))
             {
-                return GoogleAiTestServer.Sse(200,
+                return SimpleJsonServer.Sse(200,
                 [
                     """data: {"candidates":[{"content":{"parts":[{"text":"Hello "}]}}]}""",
                     """data: {"candidates":[{"content":{"parts":[{"functionCall":{"name":"read_file","args":{"path":"C:\\repo\\file.txt"}}}]}}]}""",
@@ -244,7 +243,7 @@ public class GoogleAiProviderTests
                 ]);
             }
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -273,26 +272,26 @@ public class GoogleAiProviderTests
         string? cacheCreateBody = null;
         string? streamBody = null;
 
-        using var server = new GoogleAiTestServer((method, path, body) =>
+        using var server = new SimpleJsonServer((method, path, body) =>
         {
             if (method == "POST" && path.StartsWith("/v1beta/cachedContents", StringComparison.Ordinal))
             {
                 cacheCreateCount++;
                 cacheCreateBody = body;
-                return GoogleAiTestServer.Json(200, """{"name":"cachedContents/prefix-1"}""");
+                return SimpleJsonServer.Json(200, """{"name":"cachedContents/prefix-1"}""");
             }
 
             if (method == "POST" && path.StartsWith("/v1beta/models/gemini-2.0-flash:streamGenerateContent", StringComparison.Ordinal))
             {
                 streamBody = body;
-                return GoogleAiTestServer.Sse(200,
+                return SimpleJsonServer.Sse(200,
                 [
                     """data: {"candidates":[{"content":{"parts":[{"text":"Cached hello"}]}}]}""",
                     "data: [DONE]"
                 ]);
             }
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -348,22 +347,22 @@ public class GoogleAiProviderTests
     {
         string? streamBody = null;
 
-        using var server = new GoogleAiTestServer((method, path, body) =>
+        using var server = new SimpleJsonServer((method, path, body) =>
         {
             if (method == "POST" && path.StartsWith("/v1beta/cachedContents", StringComparison.Ordinal))
-                return GoogleAiTestServer.Json(500, """{"error":"cache failed"}""");
+                return SimpleJsonServer.Json(500, """{"error":"cache failed"}""");
 
             if (method == "POST" && path.StartsWith("/v1beta/models/gemini-2.0-flash:streamGenerateContent", StringComparison.Ordinal))
             {
                 streamBody = body;
-                return GoogleAiTestServer.Sse(200,
+                return SimpleJsonServer.Sse(200,
                 [
                     """data: {"candidates":[{"content":{"parts":[{"text":"Fallback hello"}]}}]}""",
                     "data: [DONE]"
                 ]);
             }
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -396,12 +395,12 @@ public class GoogleAiProviderTests
     [Fact]
     public async Task SendChatAsync_ReturnsError_WhenStreamingEndpointFails()
     {
-        using var server = new GoogleAiTestServer((method, path, _) =>
+        using var server = new SimpleJsonServer((method, path, _) =>
         {
             if (method == "POST" && path.StartsWith("/v1beta/models/gemini-2.0-flash:streamGenerateContent", StringComparison.Ordinal))
-                return GoogleAiTestServer.Json(500, """{"error":"boom"}""");
+                return SimpleJsonServer.Json(500, """{"error":"boom"}""");
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -415,17 +414,17 @@ public class GoogleAiProviderTests
         var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
 
         Assert.False(response.IsSuccess);
-        Assert.Equal("Google AI request failed.", response.ErrorMessage);
+        Assert.Contains("500", response.ErrorMessage);
     }
 
     [Fact]
     public async Task GenerateImageAsync_ReturnsInlineImageBytes_ForImageGenerationModel()
     {
-        using var server = new GoogleAiTestServer((method, path, _) =>
+        using var server = new SimpleJsonServer((method, path, _) =>
         {
             if (method == "POST" && path == "/v1beta/models/gemini-2.5-flash-image:generateContent")
             {
-                return GoogleAiTestServer.Json(200,
+                return SimpleJsonServer.Json(200,
                     """
                     {
                       "candidates": [
@@ -447,7 +446,7 @@ public class GoogleAiProviderTests
                     """);
             }
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -471,11 +470,11 @@ public class GoogleAiProviderTests
     [Fact]
     public async Task GenerateImageAsync_Fails_WhenImageGenerationModelReturnsNoInlineData()
     {
-        using var server = new GoogleAiTestServer((method, path, _) =>
+        using var server = new SimpleJsonServer((method, path, _) =>
         {
             if (method == "POST" && path == "/v1beta/models/gemini-2.5-flash-image:generateContent")
             {
-                return GoogleAiTestServer.Json(200,
+                return SimpleJsonServer.Json(200,
                     """
                     {
                       "candidates": [
@@ -491,7 +490,7 @@ public class GoogleAiProviderTests
                     """);
             }
 
-            return GoogleAiTestServer.Json(404, """{"error":"missing"}""");
+            return SimpleJsonServer.Json(404, """{"error":"missing"}""");
         });
 
         GoogleAiProvider provider = new GoogleAiProvider();
@@ -527,90 +526,4 @@ public class GoogleAiProviderTests
         Assert.Equal("Google AI image generation failed.", result.ErrorMessage);
     }
 
-    private sealed class GoogleAiTestServer : IDisposable
-    {
-        private readonly TcpListener _listener;
-        private readonly Func<string, string, string, Response> _handler;
-        private readonly Task _serveLoop;
-
-        public GoogleAiTestServer(Func<string, string, string, Response> handler)
-        {
-            _handler = handler;
-            _listener = new TcpListener(IPAddress.Loopback, 0);
-            _listener.Start();
-            var port = ((IPEndPoint)_listener.LocalEndpoint).Port;
-            BaseUrl = $"http://127.0.0.1:{port}";
-            _serveLoop = Task.Run(ServeAsync);
-        }
-
-        public string BaseUrl { get; }
-
-        public static Response Json(int statusCode, string json) =>
-            new(statusCode, "application/json", Encoding.UTF8.GetBytes(json));
-
-        public static Response Sse(int statusCode, IEnumerable<string> lines) =>
-            new(statusCode, "text/event-stream", Encoding.UTF8.GetBytes(string.Join("\n", lines) + "\n\n"));
-
-        private async Task ServeAsync()
-        {
-            try
-            {
-                while (true)
-                {
-                    using var client = await _listener.AcceptTcpClientAsync();
-                    using var stream = client.GetStream();
-                    using var reader = new StreamReader(stream, leaveOpen: true);
-
-                    var requestLine = await reader.ReadLineAsync();
-                    if (requestLine == null)
-                        continue;
-
-                    var parts = requestLine.Split(' ');
-                    var method = parts[0];
-                    var path = parts[1];
-                    int contentLength = 0;
-
-                    string? line;
-                    while (!string.IsNullOrEmpty(line = await reader.ReadLineAsync()))
-                    {
-                        if (line.StartsWith("Content-Length:", StringComparison.OrdinalIgnoreCase))
-                            contentLength = int.Parse(line[15..].Trim());
-                    }
-
-                    string body = string.Empty;
-                    if (contentLength > 0)
-                    {
-                        var buffer = new char[contentLength];
-                        var read = 0;
-                        while (read < contentLength)
-                            read += await reader.ReadAsync(buffer, read, contentLength - read);
-                        body = new string(buffer);
-                    }
-
-                    var response = _handler(method, path, body);
-                    var statusText = response.StatusCode == 200 ? "OK" : "Error";
-                    var header =
-                        $"HTTP/1.1 {response.StatusCode} {statusText}\r\n" +
-                        $"Content-Type: {response.ContentType}\r\n" +
-                        $"Content-Length: {response.Body.Length}\r\n" +
-                        "Connection: close\r\n\r\n";
-
-                    await stream.WriteAsync(Encoding.ASCII.GetBytes(header));
-                    await stream.WriteAsync(response.Body);
-                    await stream.FlushAsync();
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        public void Dispose()
-        {
-            try { _listener.Stop(); } catch { }
-            try { _serveLoop.Wait(1000); } catch { }
-        }
-
-        public sealed record Response(int StatusCode, string ContentType, byte[] Body);
-    }
 }

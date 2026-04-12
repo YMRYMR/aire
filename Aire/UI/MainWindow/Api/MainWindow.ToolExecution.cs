@@ -13,28 +13,29 @@ namespace Aire;
 public partial class MainWindow
 {
     public async Task<ApiPendingApproval[]> ApiListPendingApprovalsAsync()
-    {
-        await AppStartupState.WaitUntilReadyAsync();
-
-        var pending = new List<ApiPendingApproval>();
-        for (int i = 0; i < Messages.Count; i++)
+        => await DispatchAsync(async () =>
         {
-            var msg = Messages[i];
-            if (!msg.IsApprovalPending || msg.PendingToolCall == null || msg.ApprovalTcs == null || msg.ApprovalTcs.Task.IsCompleted)
-                continue;
+            await AppStartupState.WaitUntilReadyAsync();
 
-            pending.Add(new ApiPendingApproval
+            var pending = new List<ApiPendingApproval>();
+            for (int i = 0; i < Messages.Count; i++)
             {
-                Index = i,
-                Tool = msg.PendingToolCall.Tool,
-                Description = msg.PendingToolCall.Description,
-                RawJson = msg.PendingToolCall.RawJson,
-                Timestamp = msg.Timestamp
-            });
-        }
+                var msg = Messages[i];
+                if (!msg.IsApprovalPending || msg.PendingToolCall == null || msg.ApprovalTcs == null || msg.ApprovalTcs.Task.IsCompleted)
+                    continue;
 
-        return pending.ToArray();
-    }
+                pending.Add(new ApiPendingApproval
+                {
+                    Index = i,
+                    Tool = msg.PendingToolCall.Tool,
+                    Description = msg.PendingToolCall.Description,
+                    RawJson = msg.PendingToolCall.RawJson,
+                    Timestamp = msg.Timestamp
+                });
+            }
+
+            return pending.ToArray();
+        });
 
     public async Task<ApiPendingApproval?> ApiGetFirstPendingApprovalAsync()
     {
@@ -43,22 +44,30 @@ public partial class MainWindow
     }
 
     public async Task<bool> ApiSetPendingApprovalAsync(int index, bool approved)
-    {
-        await AppStartupState.WaitUntilReadyAsync();
+        => await DispatchAsync(async () =>
+        {
+            await AppStartupState.WaitUntilReadyAsync();
 
-        if (index < 0 || index >= Messages.Count) return false;
-        var msg = Messages[index];
-        if (!msg.IsApprovalPending || msg.ApprovalTcs == null || msg.ApprovalTcs.Task.IsCompleted)
-            return false;
+            if (index < 0 || index >= Messages.Count) return false;
+            var msg = Messages[index];
+            if (!msg.IsApprovalPending || msg.ApprovalTcs == null || msg.ApprovalTcs.Task.IsCompleted)
+                return false;
 
-        msg.ApprovalTcs.TrySetResult(approved);
-        return true;
-    }
+            msg.ApprovalTcs.TrySetResult(approved);
+            return true;
+        });
 
     public Task<ApiToolExecutionResult> ApiExecuteToolAsync(string tool, JsonElement parameters)
         => ApiExecuteToolAsync(tool, parameters, waitForApproval: true, approvalTimeoutSeconds: 300);
 
     public async Task<ApiToolExecutionResult> ApiExecuteToolAsync(
+        string tool,
+        JsonElement parameters,
+        bool waitForApproval,
+        int approvalTimeoutSeconds)
+        => await DispatchAsync(async () => await ExecuteToolCoreAsync(tool, parameters, waitForApproval, approvalTimeoutSeconds));
+
+    private async Task<ApiToolExecutionResult> ExecuteToolCoreAsync(
         string tool,
         JsonElement parameters,
         bool waitForApproval,

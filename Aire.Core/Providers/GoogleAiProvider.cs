@@ -75,7 +75,7 @@ namespace Aire.Providers
                 });
             }
 
-            var genConfig = new { temperature = Config.Temperature, maxOutputTokens = Config.MaxTokens };
+            var genConfig = new { temperature = Config.Temperature, maxOutputTokens = (EffectiveMaxTokens ?? Config.MaxTokens) };
             object body;
             if (!string.IsNullOrWhiteSpace(cachedContentName))
             {
@@ -248,10 +248,17 @@ namespace Aire.Providers
                     sb.Append(chunk);
                 return new AiResponse { Content = sb.ToString(), IsSuccess = true, Duration = sw.Elapsed };
             }
+            catch (System.Net.Http.HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException or System.Net.WebSockets.WebSocketException || ex.Message.Contains("connection", StringComparison.OrdinalIgnoreCase) || ex.Message.Contains("refused", StringComparison.OrdinalIgnoreCase))
+            {
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Network error", ex);
+                return new AiResponse { IsSuccess = false, ErrorMessage = ProviderErrorClassifier.SanitizeNetworkError(ex.Message, DisplayName), Duration = sw.Elapsed };
+            }
             catch (Exception ex)
             {
+                var readable = ProviderErrorClassifier.ExtractReadableMessage(ex.Message) ?? ex.Message;
+                if (readable.Length > 200) readable = readable[..200] + "…";
                 AppLogger.Warn($"{GetType().Name}.SendChat", "Google AI chat failed", ex);
-                return new AiResponse { IsSuccess = false, ErrorMessage = "Google AI request failed.", Duration = sw.Elapsed };
+                return new AiResponse { IsSuccess = false, ErrorMessage = string.IsNullOrWhiteSpace(readable) ? "Google AI request failed." : readable, Duration = sw.Elapsed };
             }
         }
 
@@ -293,8 +300,8 @@ namespace Aire.Providers
             if (!resp.IsSuccessStatusCode)
             {
                 var errBody = await resp.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-                throw new HttpRequestException(
-                    $"Gemini API {(int)resp.StatusCode}: {errBody}", null, resp.StatusCode);
+                var readable = ProviderErrorClassifier.ExtractReadableMessage(errBody) ?? $"HTTP {(int)resp.StatusCode} {resp.ReasonPhrase}";
+                throw new HttpRequestException(readable, null, resp.StatusCode);
             }
 
             using var stream = await resp.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);

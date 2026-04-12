@@ -125,7 +125,7 @@
                             Click="OpenExternalButton_Click" />
 
                     <Button Grid.Column="7" x:Name="CloseButton"
-                            Content="✕" ToolTip="Close browser"
+                            Content="×" ToolTip="Close browser"
                             Width="30" Height="30" Padding="0"
                             Margin="3 0 0 0"
                             Click="CloseButton_Click" />

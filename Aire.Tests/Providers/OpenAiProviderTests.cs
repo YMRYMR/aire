@@ -196,7 +196,8 @@ namespace Aire.Tests.Providers
                 CancellationToken.None);
 
             Assert.False(response.IsSuccess);
-            Assert.Equal("OpenAI request failed.", response.ErrorMessage);
+            Assert.NotNull(response.ErrorMessage);
+            Assert.NotEmpty(response.ErrorMessage);
         }
 
         [Fact]

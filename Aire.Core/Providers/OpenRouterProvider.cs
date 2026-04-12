@@ -47,8 +47,7 @@ namespace Aire.Providers
                         string display = isFree
                             ? $"{id[..^":free".Length]}  ·  free"
                             : $"{id}  ·  paid";
-                        var caps = isFree ? new List<string>() : new List<string> { "tools" };
-                        return new ModelDefinition { Id = id, DisplayName = display, Capabilities = caps };
+                        return new ModelDefinition { Id = id, DisplayName = display, Capabilities = new List<string> { "tools" } };
                     })
                     .ToList();
             }

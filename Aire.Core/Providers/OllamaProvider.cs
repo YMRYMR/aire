@@ -176,7 +176,7 @@ public sealed class PortableOllamaProvider : BaseAiProvider
                 Options = new OllamaOptions
                 {
                     Temperature = Config.Temperature,
-                    NumPredict = Config.MaxTokens > 0 ? Config.MaxTokens : null
+                    NumPredict = EffectiveMaxTokens
                 }
             };
 
@@ -189,10 +189,11 @@ public sealed class PortableOllamaProvider : BaseAiProvider
             var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
+                var readable = ProviderErrorClassifier.ExtractReadableMessage(body) ?? $"HTTP {(int)response.StatusCode} {response.ReasonPhrase}";
                 return new AiResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = $"Ollama API error ({(int)response.StatusCode}): {body}",
+                    ErrorMessage = readable,
                     Duration = DateTime.UtcNow - startedAt
                 };
             }
