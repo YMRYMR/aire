@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Betalgo.OpenAI" Version="8.7.2" />
-    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.5" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
     <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
@@ -19,16 +18,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.Memory" Version="9.0.14" />
     <EmbeddedResource Include="Data\Models\models-openai.json" />
-    <EmbeddedResource Include="Data\Models\models-codex.json" />
-    <EmbeddedResource Include="Data\Models\models-anthropic.json" />
-    <EmbeddedResource Include="Data\Models\models-google.json" />
-    <EmbeddedResource Include="Data\Models\models-ollama.json" />
-    <EmbeddedResource Include="Data\Models\models-deepseek.json" />
-    <EmbeddedResource Include="Data\Models\models-mistral.json" />
-    <EmbeddedResource Include="Data\Models\models-groq.json" />
-    <EmbeddedResource Include="Data\Models\models-openrouter.json" />
-    <EmbeddedResource Include="Data\Models\models-inception.json" />
+    <EmbeddedResource Include="Data\Models/models-codex.json" />
+    <EmbeddedResource Include="Data\Models/models-anthropic.json" />
+    <EmbeddedResource Include="Data\Models/models-google.json" />
+    <EmbeddedResource Include="Data\Models/models-ollama.json" />
+    <EmbeddedResource Include="Data\Models/models-deepseek.json" />
+    <EmbeddedResource Include="Data\Models/models-mistral.json" />
+    <EmbeddedResource Include="Data\Models/models-groq.json" />
+    <EmbeddedResource Include="Data\Models/models-openrouter.json" />
+    <EmbeddedResource Include="Data\Models/models-inception.json" />
     <EmbeddedResource Include="Data\Models/models-zai.json" />
   </ItemGroup>
 
