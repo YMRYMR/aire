@@ -71,6 +71,15 @@ internal static class AppState
     /// <summary>Returns whether the chat sidebar should be shown.</summary>
     public static bool GetSidebarOpen()            => !GetBool("sidebarHidden"); // default true
 
+    // ── Int values ─────────────────────────────────────────────────────────
+
+    private const int DefaultApiPort = 51234;
+
+    /// <summary>Persists the local API port. Takes effect on next API start.</summary>
+    public static void SetApiPort(int port) => SetString("apiPort", port.ToString());
+    /// <summary>Returns the configured local API port (default 51234).</summary>
+    public static int GetApiPort() => int.TryParse(GetString("apiPort"), out var p) ? p : DefaultApiPort;
+
     // ── String values ─────────────────────────────────────────────────────────
 
     /// <summary>Persists the selected UI language code.</summary>
