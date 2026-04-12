@@ -172,8 +172,9 @@ public class GoogleAiProviderTests
         var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
 
         Assert.False(response.IsSuccess);
-        Assert.Equal("Google AI request failed.", response.ErrorMessage);
+        Assert.NotNull(response.ErrorMessage);
         Assert.DoesNotContain("127.0.0.1", response.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(":1", response.ErrorMessage);
     }
 
     [Fact]
@@ -413,7 +414,7 @@ public class GoogleAiProviderTests
         var response = await provider.SendChatAsync([new ChatMessage { Role = "user", Content = "Hello" }], CancellationToken.None);
 
         Assert.False(response.IsSuccess);
-        Assert.Equal("Google AI request failed.", response.ErrorMessage);
+        Assert.Contains("500", response.ErrorMessage);
     }
 
     [Fact]

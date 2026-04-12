@@ -124,6 +124,28 @@ namespace Aire.Services
             }
         }
 
+        /// <summary>
+        /// Strips internal connection details (IP addresses, ports) from network error messages.
+        /// Falls back to a generic network error when the message would expose internals.
+        /// </summary>
+        public static string SanitizeNetworkError(string rawMessage, string providerName)
+        {
+            if (string.IsNullOrWhiteSpace(rawMessage))
+                return $"Could not connect to {providerName}. Check your network connection.";
+
+            // If the message contains an IP address or port pattern, sanitize it
+            if (rawMessage.Contains("127.0.0.1") || rawMessage.Contains("localhost") ||
+                rawMessage.Contains("0.0.0.0") || System.Text.RegularExpressions.Regex.IsMatch(rawMessage, @"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+\b"))
+            {
+                return $"Could not connect to {providerName}. The server may be offline or unreachable.";
+            }
+
+            if (rawMessage.Length > 200)
+                rawMessage = rawMessage[..200] + "…";
+
+            return rawMessage;
+        }
+
         private static bool ContainsAny(string haystack, params string[] needles)
         {
             foreach (var needle in needles)

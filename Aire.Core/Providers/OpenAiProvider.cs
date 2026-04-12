@@ -361,13 +361,63 @@ namespace Aire.Providers
                     IsSuccess = true
                 };
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex) when (ex.StatusCode is System.Net.HttpStatusCode.Unauthorized or System.Net.HttpStatusCode.Forbidden)
             {
-                AppLogger.Warn($"{GetType().Name}.SendChat", "OpenAI request failed", ex);
+                var hint = string.IsNullOrWhiteSpace(Config.BaseUrl) ? "Check your API key." : "Check your API key and base URL.";
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Auth error", ex);
                 return new AiResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = "OpenAI request failed.",
+                    ErrorMessage = $"Authentication failed. {hint}",
+                    Duration = DateTime.UtcNow - startTime
+                };
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode is System.Net.HttpStatusCode.NotFound)
+            {
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Model not found", ex);
+                return new AiResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = $"Model \"{Config.Model}\" was not found. Check the model name in settings.",
+                    Duration = DateTime.UtcNow - startTime
+                };
+            }
+            catch (HttpRequestException ex) when (ex.InnerException is System.Net.Sockets.SocketException || ex.Message.Contains("connection", StringComparison.OrdinalIgnoreCase) || ex.Message.Contains("refused", StringComparison.OrdinalIgnoreCase))
+            {
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Network error", ex);
+                return new AiResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ProviderErrorClassifier.SanitizeNetworkError(ex.Message, DisplayName),
+                    Duration = DateTime.UtcNow - startTime
+                };
+            }
+            catch (TaskCanceledException)
+            {
+                throw;
+            }
+            catch (HttpRequestException ex)
+            {
+                var readable = ProviderErrorClassifier.ExtractReadableMessage(ex.Message)
+                    ?? ex.Message.Replace("\n", " ").Trim();
+                if (readable.Length > 200) readable = readable[..200] + "…";
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Request failed", ex);
+                return new AiResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = readable,
+                    Duration = DateTime.UtcNow - startTime
+                };
+            }
+            catch (Exception ex)
+            {
+                var readable = ProviderErrorClassifier.ExtractReadableMessage(ex.Message) ?? ex.Message;
+                if (readable.Length > 200) readable = readable[..200] + "…";
+                AppLogger.Warn($"{GetType().Name}.SendChat", "Request failed", ex);
+                return new AiResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = string.IsNullOrWhiteSpace(readable) ? $"{DisplayName} request failed." : readable,
                     Duration = DateTime.UtcNow - startTime
                 };
             }
@@ -401,7 +451,12 @@ namespace Aire.Providers
             await foreach (var chunk in stream.WithCancellation(cancellationToken))
             {
                 if (!chunk.Successful)
+                {
+                    var error = chunk.Error?.Message;
+                    if (!string.IsNullOrWhiteSpace(error))
+                        yield return $"\n[Error: {ProviderErrorClassifier.ExtractReadableMessage(error) ?? error}]";
                     yield break;
+                }
 
                 var content = chunk.Choices.FirstOrDefault()?.Delta.Content;
                 if (!string.IsNullOrEmpty(content))
