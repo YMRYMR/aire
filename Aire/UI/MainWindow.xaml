@@ -143,6 +143,7 @@
                                 InputPreviewDragOver="InputTextBox_DragOver"
                                 MicClicked="MicButton_Click"
                                 ToolsClicked="ToolsButton_Click"
-                                AgentModeClicked="AgentModeButton_Click" />
+                                AgentModeClicked="AgentModeButton_Click"
+                                StopAgentClicked="StopAgentButton_Click" />
     </Grid>
 </Window>
