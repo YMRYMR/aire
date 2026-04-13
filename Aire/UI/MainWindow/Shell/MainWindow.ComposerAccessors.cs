@@ -18,6 +18,9 @@ namespace Aire
         private System.Windows.Controls.Button MicButton => ComposerControl.MicButton;
         private System.Windows.Controls.Button ToolsButton => ComposerControl.ToolsButton;
         private System.Windows.Controls.Primitives.ToggleButton AgentModeButton => ComposerControl.AgentModeButton;
+        private System.Windows.Controls.Border AgentModeBanner => ComposerControl.AgentModeBanner;
+        private System.Windows.Controls.TextBlock AgentModeStatusText => ComposerControl.AgentModeStatusText;
+        private System.Windows.Controls.Button StopAgentButton => ComposerControl.StopAgentButton;
         private System.Windows.Controls.Border ProgressOverlay => ComposerControl.ProgressOverlay;
         private System.Windows.Controls.TextBlock ThinkingText => ComposerControl.ThinkingText;
     }

@@ -38,6 +38,7 @@ namespace Aire.Services.Tools
                 "move_file"              => $"Move: {GetString(request, "from")} \u2192 {GetString(request, "to")}",
                 "search_files"           => $"Search \u2018{GetString(request, "pattern")}\u2019 in: {GetString(request, "directory")}",
                 "new_task"               => $"New task: {GetString(request, "task")}",
+                "request_context"        => $"Request context: {GetString(request, "type")}",
                 "attempt_completion"     => $"Complete task: {GetString(request, "result")}",
                 "ask_followup_question"  => $"Ask: {GetString(request, "question")}",
                 "skill"                  => $"Run skill: {GetString(request, "name")}",

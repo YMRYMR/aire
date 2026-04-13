@@ -21,6 +21,7 @@ namespace Aire.Services
         internal readonly SystemToolService       _systemTool;
         private readonly MemoryToolService       _memoryTool;
         private readonly AgentToolService        _agentTool;
+        private readonly ContextInjectionToolService _contextTool;
         private readonly McpManager              _mcpManager;
         private readonly EmailToolService        _emailTool;
 
@@ -68,6 +69,7 @@ namespace Aire.Services
             _systemTool  = new SystemToolService();
             _memoryTool  = new MemoryToolService();
             _agentTool   = new AgentToolService();
+            _contextTool = new ContextInjectionToolService();
             _mcpManager  = mcpManager ?? McpManager.Instance;
             _emailTool   = emailTool  ?? new EmailToolService(new Aire.Data.DatabaseService());
         }
@@ -135,6 +137,7 @@ namespace Aire.Services
                     "recall"                 => _memoryTool.ExecuteRecall(request),
                     "set_reminder"           => _memoryTool.ExecuteSetReminder(request),
                     "show_image"             => await _agentTool.ExecuteShowImageAsync(request),
+                    "request_context"        => await _contextTool.ExecuteAsync(request),
                     "skill"                  => BuiltinToolSkillService.Execute(request),
                     "read_emails" or "send_email" or "search_emails" or "reply_to_email"
                                              => await _emailTool.ExecuteAsync(request),

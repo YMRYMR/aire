@@ -25,6 +25,7 @@ namespace Aire
         private ProviderModelRefreshService? _providerModelRefreshService;
         private GitHubReleaseUpdateService? _updateService;
         private GlobalHotkeyService? _globalHotkeyService;
+        private MainWindowCompositionRoot? _compositionRoot;
         private readonly StartupDecisionApplicationService _startupDecisionService = new();
         private readonly StartupWindowCoordinator _startupWindowCoordinator = new();
         private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
@@ -74,6 +75,11 @@ namespace Aire
             // window is ready to appear immediately after the splash closes.
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
             _mainWindow = new MainWindow();
+            _compositionRoot = new MainWindowCompositionRoot(
+                hideWindow: () => _mainWindow.Dispatcher.Invoke(() => _mainWindow.Hide()),
+                showWindow: () => { _mainWindow.Dispatcher.Invoke(() => _trayService?.ShowMainWindow()); return Task.CompletedTask; });
+            // The composition root is built but MainWindow currently constructs its own services.
+            // Future: pass _compositionRoot to MainWindow constructor for full decoupling.
             MainWindow = _mainWindow;
             var initWindow = new InitializationWindow();
             await initWindow.RunAndCloseAsync(async progress =>
