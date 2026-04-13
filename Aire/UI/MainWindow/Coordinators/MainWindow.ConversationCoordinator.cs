@@ -78,6 +78,7 @@ namespace Aire
 
                     var chatMsg = new ChatMessage
                     {
+                        DbMessageId = entry.MessageId,
                         Sender = entry.Sender,
                         Text = entry.Text,
                         Timestamp = entry.CreatedAt.ToString("HH:mm"),
@@ -219,6 +220,24 @@ namespace Aire
                 _owner.Messages.Clear();
                 await _owner.AddSystemMessageAsync(systemMessage);
                 return id;
+            }
+
+            /// <summary>
+            /// Branches the current conversation from a specific message, creating a new
+            /// conversation with all messages up to and including that point.
+            /// </summary>
+            public async Task BranchFromMessageAsync(int upToMessageId)
+            {
+                if (!_owner._currentConversationId.HasValue) return;
+
+                var conversationId = _owner._currentConversationId.Value;
+                var newId = await _owner._databaseService.BranchConversationAsync(conversationId, upToMessageId);
+
+                _owner._currentConversationId = newId;
+                await LoadConversationMessagesAsync(newId);
+                await _owner.RefreshSidebarAsync();
+                await _owner.AddSystemMessageAsync(
+                    LocalizationService.S("branch.created", "Branched conversation — messages after the branch point were removed."));
             }
 
             private void ResetConversationUiState()

@@ -116,7 +116,8 @@
                         <mw:MessageListItemControl ChatImageMouseLeftButtonUp="ChatImage_MouseLeftButtonUp"
                                                    AnswerButtonClick="AnswerButton_Click"
                                                    ApproveToolCallClick="ApproveToolCall_Click"
-                                                   DenyToolCallClick="DenyToolCall_Click" />
+                                                   DenyToolCallClick="DenyToolCall_Click"
+                                                   BranchFromHereClick="BranchFromMessage_Click" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
