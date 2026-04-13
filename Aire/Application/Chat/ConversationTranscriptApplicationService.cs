@@ -30,6 +30,7 @@ namespace Aire.AppLayer.Chat
         /// One transcript entry ready for UI rendering.
         /// </summary>
         public sealed record TranscriptEntry(
+            int MessageId,
             TranscriptRole Role,
             string Sender,
             string Text,
@@ -121,6 +122,7 @@ namespace Aire.AppLayer.Chat
                 }
 
                 entries.Add(new TranscriptEntry(
+                    msg.Id,
                     role,
                     sender,
                     entryText,

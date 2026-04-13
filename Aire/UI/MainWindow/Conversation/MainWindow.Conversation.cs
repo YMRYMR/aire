@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -50,6 +51,27 @@ namespace Aire
         {
             if (Aire.UI.ConfirmationDialog.ShowCentered(this))
                 await DoClearConversationAsync();
+        }
+
+        private async void BranchFromMessage_Click(object sender, RoutedEventArgs e)
+        {
+            // Walk up the visual tree to find the MessageListItemControl and its ChatMessage DataContext.
+            if (sender is not FrameworkElement fe) return;
+            DependencyObject el = fe;
+            ChatMessage? msg = null;
+            while (el != null)
+            {
+                if (el is FrameworkElement { DataContext: ChatMessage m })
+                {
+                    msg = m;
+                    break;
+                }
+                el = VisualTreeHelper.GetParent(el);
+            }
+
+            if (msg == null || msg.DbMessageId <= 0) return;
+
+            await ConversationFlow.BranchFromMessageAsync(msg.DbMessageId);
         }
 
         private async Task DoClearConversationAsync()
