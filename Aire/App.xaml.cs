@@ -74,12 +74,16 @@ namespace Aire
             // Show a splash window and use it to host startup work until the main
             // window is ready to appear immediately after the splash closes.
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            _mainWindow = new MainWindow();
-            _compositionRoot = new MainWindowCompositionRoot(
-                hideWindow: () => _mainWindow.Dispatcher.Invoke(() => _mainWindow.Hide()),
-                showWindow: () => { _mainWindow.Dispatcher.Invoke(() => _trayService?.ShowMainWindow()); return Task.CompletedTask; });
-            // The composition root is built but MainWindow currently constructs its own services.
-            // Future: pass _compositionRoot to MainWindow constructor for full decoupling.
+
+            // Build the composition root first so MainWindow receives pre-wired services.
+            // The hide/show callbacks will be bound after MainWindow is created.
+            _compositionRoot = new MainWindowCompositionRoot();
+
+            _mainWindow = new MainWindow(_compositionRoot, initializeUi: true);
+
+            // Wire the composition root's hide/show callbacks to the actual window.
+            _compositionRoot.HideWindow = () => _mainWindow.Dispatcher.Invoke(() => _mainWindow.Hide());
+            _compositionRoot.ShowWindow = () => { _mainWindow.Dispatcher.Invoke(() => _trayService?.ShowMainWindow()); return Task.CompletedTask; };
             MainWindow = _mainWindow;
             var initWindow = new InitializationWindow();
             await initWindow.RunAndCloseAsync(async progress =>

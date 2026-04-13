@@ -128,6 +128,32 @@ namespace Aire
                 return;
             }
 
+            // Global tool approval shortcuts: Enter approves, Escape denies.
+            if (!InputTextBox.IsKeyboardFocused || string.IsNullOrEmpty(InputTextBox.Text))
+            {
+                if (e.Key == Key.Enter)
+                {
+                    var pending = GetPendingApproval();
+                    if (pending != null)
+                    {
+                        pending.ApprovalTcs?.TrySetResult(true);
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+                if (e.Key == Key.Escape)
+                {
+                    var pending = GetPendingApproval();
+                    if (pending != null)
+                    {
+                        pending.ApprovalTcs?.TrySetResult(false);
+                        e.Handled = true;
+                        return;
+                    }
+                }
+            }
+
             if (InputTextBox.IsKeyboardFocused)
             {
                 if (e.Key == Key.Up && _inputHistory.Count > 0)
