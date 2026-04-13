@@ -51,8 +51,8 @@ namespace Aire.Bootstrap
         public AgentModeService AgentModeService { get; }
         public SpeechRecognitionService SpeechService { get; }
         public SpeechSynthesisService TtsService { get; }
-        public Action HideWindow { get; }
-        public Func<Task> ShowWindow { get; }
+        public Action HideWindow { get; set; }
+        public Func<Task> ShowWindow { get; set; }
 
         public MainWindowCompositionRoot(
             Action? hideWindow = null,
