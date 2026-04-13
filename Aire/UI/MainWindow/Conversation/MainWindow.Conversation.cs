@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Aire.Providers;
+using Aire.Services;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
 
 namespace Aire
@@ -71,7 +72,16 @@ namespace Aire
 
             if (msg == null || msg.DbMessageId <= 0) return;
 
-            await ConversationFlow.BranchFromMessageAsync(msg.DbMessageId);
+            try
+            {
+                await ConversationFlow.BranchFromMessageAsync(msg.DbMessageId);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Warn("BranchFromMessage", "Failed to branch conversation", ex);
+                await AddErrorMessageAsync(
+                    LocalizationService.S("branch.error", "Failed to branch conversation. Please try again."));
+            }
         }
 
         private async Task DoClearConversationAsync()
