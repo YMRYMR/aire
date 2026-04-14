@@ -8,7 +8,8 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        PreviewKeyDown="Window_PreviewKeyDown">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" GlassFrameThickness="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
@@ -46,7 +47,6 @@
                             Width="34"
                             Height="34"
                             Padding="0"
-                            Foreground="{DynamicResource AccentTextBrush}"
                             Click="LaterButton_Click" />
                 </Grid>
             </Border>

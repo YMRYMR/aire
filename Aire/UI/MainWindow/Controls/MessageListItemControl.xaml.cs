@@ -144,7 +144,7 @@ namespace Aire.UI.MainWindow.Controls
                 Header = LocalizationService.S("menu.branchFromHere", "Branch from here"),
                 Tag = _message
             };
-            branchItem.Click += (s, _) => BranchFromHereClick?.Invoke(this, new RoutedEventArgs());
+            branchItem.Click += (s, _) => BranchFromHereClick?.Invoke(this, new RoutedEventArgs { Source = this });
             menu.Items.Add(branchItem);
 
             menu.IsOpen = true;

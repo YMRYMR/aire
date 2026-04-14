@@ -107,6 +107,10 @@ namespace Aire
                         _owner.IsVisible);
                     var finalText = success.FinalText;
 
+                    // Record token usage for agent mode budget tracking.
+                    if (_owner._agentModeService?.IsActive == true && response.TokensUsed > 0)
+                        _owner._agentModeService.RecordTokenUsage(response.TokensUsed);
+
                     _owner._conversationHistory.Add(success.AssistantHistoryMessage);
 
                     if (streamedMessage != null)
@@ -158,6 +162,10 @@ namespace Aire
                         _owner._currentConversationId.Value,
                         outcome.TextContent,
                         tokens: response.TokensUsed);
+
+                    // Record token usage for agent mode budget tracking.
+                    if (_owner._agentModeService?.IsActive == true && response.TokensUsed > 0)
+                        _owner._agentModeService.RecordTokenUsage(response.TokensUsed);
                 }
 
                 try

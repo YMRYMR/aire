@@ -24,6 +24,8 @@ namespace Aire
         private LocalApiService? _localApiService;
         private ProviderModelRefreshService? _providerModelRefreshService;
         private GitHubReleaseUpdateService? _updateService;
+        private GlobalHotkeyService? _globalHotkeyService;
+        private MainWindowCompositionRoot? _compositionRoot;
         private readonly StartupDecisionApplicationService _startupDecisionService = new();
         private readonly StartupWindowCoordinator _startupWindowCoordinator = new();
         private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
@@ -72,7 +74,16 @@ namespace Aire
             // Show a splash window and use it to host startup work until the main
             // window is ready to appear immediately after the splash closes.
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            _mainWindow = new MainWindow();
+
+            // Build the composition root first so MainWindow receives pre-wired services.
+            // The hide/show callbacks will be bound after MainWindow is created.
+            _compositionRoot = new MainWindowCompositionRoot();
+
+            _mainWindow = new MainWindow(_compositionRoot, initializeUi: true);
+
+            // Wire the composition root's hide/show callbacks to the actual window.
+            _compositionRoot.HideWindow = () => _mainWindow.Dispatcher.Invoke(() => _mainWindow.Hide());
+            _compositionRoot.ShowWindow = () => { _mainWindow.Dispatcher.Invoke(() => _trayService?.ShowMainWindow()); return Task.CompletedTask; };
             MainWindow = _mainWindow;
             var initWindow = new InitializationWindow();
             await initWindow.RunAndCloseAsync(async progress =>
@@ -107,6 +118,11 @@ namespace Aire
             };
             _mainWindow.TrayService = _trayService;
             _mainWindow.IsVisibleChanged += OnMainWindowVisibilityChanged;
+
+            // Global hotkey (Alt+Space) to toggle window from any application.
+            _globalHotkeyService = new GlobalHotkeyService(_mainWindow);
+            _globalHotkeyService.ToggleCallback = () => _trayService.ToggleMainWindow();
+            _globalHotkeyService.Start();
 
             _localApiService = new LocalApiService(_mainWindow);
             AppState.ApiAccessChanged += OnApiAccessChanged;
@@ -187,6 +203,7 @@ namespace Aire
             _mainWindow?.Cleanup();
             _providerModelRefreshService?.Dispose();
             _trayService?.Dispose();
+            _globalHotkeyService?.Dispose();
             _localApiService?.Dispose();
             AppState.ApiAccessChanged -= OnApiAccessChanged;
             _activateEvent?.Dispose();

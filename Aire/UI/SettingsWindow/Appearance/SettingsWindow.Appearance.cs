@@ -102,6 +102,22 @@ namespace Aire.UI
             ApiAccessTokenBox.Text = AppState.EnsureApiAccessToken();
         }
 
+        private void ApiPort_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_suppressApiAccess)
+                return;
+
+            var text = ApiPortBox.Text?.Trim() ?? string.Empty;
+            if (int.TryParse(text, out var port) && port >= 1 && port <= 65535)
+            {
+                AppState.SetApiPort(port);
+            }
+            else
+            {
+                ApiPortBox.Text = AppState.GetApiPort().ToString();
+            }
+        }
+
         private void CopyApiAccessTokenButton_Click(object sender, RoutedEventArgs e)
         {
             var token = AppState.GetApiAccessToken().Trim();

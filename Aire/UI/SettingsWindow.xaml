@@ -63,7 +63,6 @@
                         Width="34"
                         Height="34"
                         Padding="0"
-                        Foreground="{DynamicResource AccentTextBrush}"
                         Click="CloseButton_Click"
                         Content="&#x00D7;"
                         ToolTip="Close" />

@@ -30,6 +30,10 @@ namespace Aire
             /// <returns><see langword="true"/> when the tool should run without showing an approval prompt.</returns>
             public async Task<bool> DetermineAutoApproveAsync(string toolName)
             {
+                // Agent mode: auto-approve allowed tools without session check.
+                if (_owner._agentModeService is { IsActive: true } && _owner._agentModeService.ShouldAutoApprove(toolName))
+                    return true;
+
                 var sessionService = GetSessionService();
                 var decision = await sessionService.DetermineAutoApproveAsync(toolName, DateTime.Now);
                 if (!string.IsNullOrWhiteSpace(decision.SessionStatusMessage))

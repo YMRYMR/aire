@@ -4,6 +4,7 @@ using Aire.AppLayer.Api;
 using Aire.AppLayer.Chat;
 using Aire.AppLayer.Mcp;
 using Aire.AppLayer.Providers;
+using Aire.AppLayer.Settings;
 using Aire.AppLayer.Tools;
 using Aire.Bootstrap;
 using Aire.Data;
@@ -17,6 +18,7 @@ namespace Aire
     public partial class MainWindow
     {
         private ToolAutoAcceptPolicyService? _toolAutoAcceptPolicy;
+        private MainWindowCompositionRoot? _compositionRoot;
 
         internal Task<bool> IsToolAutoAcceptedAsync(string toolName)
             => (_toolAutoAcceptPolicy ??= new ToolAutoAcceptPolicyService(
@@ -24,66 +26,99 @@ namespace Aire
                 .IsAutoAcceptedAsync(toolName, UI.SettingsWindow.AutoAcceptJsonCache);
 
         public MainWindow()
-            : this(initializeUi: true)
+            : this(compositionRoot: null, initializeUi: true)
         {
         }
 
-        internal MainWindow(bool initializeUi)
+        internal MainWindow(MainWindowCompositionRoot? compositionRoot = null, bool initializeUi = true)
         {
-            _databaseService = new DatabaseService();
-            _localApiApplicationService = new LocalApiApplicationService();
-            _assistantModeApplicationService = new AssistantModeApplicationService();
-            _chatSessionApplicationService = new ChatSessionApplicationService(_databaseService, _databaseService);
-            _generatedImageApplicationService = new GeneratedImageApplicationService(_chatSessionApplicationService);
-            _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
-            _conversationApplicationService = new ConversationApplicationService(_databaseService);
-            _conversationAssetApplicationService = new ConversationAssetApplicationService(_databaseService);
-            _conversationTranscriptApplicationService = new ConversationTranscriptApplicationService();
-            _chatInteractionApplicationService = new ChatInteractionApplicationService();
-            _providerFactory = new ProviderFactory(_databaseService);
-            _chatService = new ChatService(_providerFactory);
-            _providerActivationApplicationService = new ProviderActivationApplicationService(
-                _chatService,
-                _providerFactory,
-                _chatSessionApplicationService);
-            _providerCatalogApplicationService = new ProviderCatalogApplicationService(_databaseService);
-            _providerUiStateApplicationService = new ProviderUiStateApplicationService();
-            _switchModelApplicationService = new SwitchModelApplicationService(
-                _providerFactory,
-                _chatService,
-                _chatSessionApplicationService);
-            _fileSystemService = new FileSystemService();
-            _toolApprovalApplicationService = new ToolApprovalApplicationService(
-                new ToolAutoAcceptPolicyService(() => Task.FromResult(UI.SettingsWindow.AutoAcceptJsonCache)));
-            _toolControlSessionApplicationService = new ToolControlSessionApplicationService(_toolApprovalApplicationService);
-            _toolApprovalPromptApplicationService = new ToolApprovalPromptApplicationService();
-            _toolCategorySettingsApplicationService = new ToolCategorySettingsApplicationService(_databaseService);
+            _compositionRoot = compositionRoot;
 
-            var commandService = new CommandExecutionService();
-            _emailToolService = new Aire.Services.Tools.EmailToolService(_databaseService);
-            _toolExecutionService = new ToolExecutionService(
-                _fileSystemService, commandService,
-                hideWindowAsync: () => { Dispatcher.Invoke(Hide); return Task.CompletedTask; },
-                showWindowAsync: () => { Dispatcher.Invoke(() => TrayService?.ShowMainWindow()); return Task.CompletedTask; },
-                mcpManager: Aire.Services.Mcp.McpManager.Instance,
-                emailTool: _emailToolService);
-            var toolExecutionWorkflow = new ToolExecutionWorkflowService(_toolExecutionService, _databaseService, _databaseService);
-            _chatTurnApplicationService = new ChatTurnApplicationService(
-                _chatSessionApplicationService,
-                toolExecutionWorkflow);
-            _toolApprovalExecutionApplicationService = new ToolApprovalExecutionApplicationService(
-                _toolApprovalPromptApplicationService,
-                toolExecutionWorkflow);
-            _mcpStartupApplicationService = new McpStartupApplicationService(_databaseService);
+            if (compositionRoot != null)
+            {
+                _databaseService = compositionRoot.DatabaseService;
+                _localApiApplicationService = compositionRoot.LocalApiApplicationService;
+                _assistantModeApplicationService = compositionRoot.AssistantModeApplicationService;
+                _chatSessionApplicationService = compositionRoot.ChatSessionApplicationService;
+                _generatedImageApplicationService = compositionRoot.GeneratedImageApplicationService;
+                _contextSettingsApplicationService = compositionRoot.ContextSettingsApplicationService;
+                _conversationApplicationService = compositionRoot.ConversationApplicationService;
+                _conversationAssetApplicationService = compositionRoot.ConversationAssetApplicationService;
+                _conversationTranscriptApplicationService = compositionRoot.ConversationTranscriptApplicationService;
+                _chatInteractionApplicationService = compositionRoot.ChatInteractionApplicationService;
+                _chatTurnApplicationService = compositionRoot.ChatTurnApplicationService;
+                _providerFactory = compositionRoot.ProviderFactory;
+                _chatService = compositionRoot.ChatService;
+                _providerActivationApplicationService = compositionRoot.ProviderActivationApplicationService;
+                _providerCatalogApplicationService = compositionRoot.ProviderCatalogApplicationService;
+                _providerUiStateApplicationService = compositionRoot.ProviderUiStateApplicationService;
+                _switchModelApplicationService = compositionRoot.SwitchModelApplicationService;
+                _fileSystemService = compositionRoot.FileSystemService;
+                _toolApprovalApplicationService = compositionRoot.ToolApprovalApplicationService;
+                _toolControlSessionApplicationService = compositionRoot.ToolControlSessionApplicationService;
+                _toolApprovalPromptApplicationService = compositionRoot.ToolApprovalPromptApplicationService;
+                _toolApprovalExecutionApplicationService = compositionRoot.ToolApprovalExecutionApplicationService;
+                _toolCategorySettingsApplicationService = compositionRoot.ToolCategorySettingsApplicationService;
+                _mcpStartupApplicationService = compositionRoot.McpStartupApplicationService;
+                _emailToolService = compositionRoot.EmailToolService;
+                _toolExecutionService = compositionRoot.ToolExecutionService;
+                _speechService = compositionRoot.SpeechService;
+                _ttsService = compositionRoot.TtsService;
+                _agentModeService = compositionRoot.AgentModeService;
+            }
+            else
+            {
+                // Fallback: build inline (backward compat for tests, old call sites).
+                _databaseService = new DatabaseService();
+                _localApiApplicationService = new LocalApiApplicationService();
+                _assistantModeApplicationService = new AssistantModeApplicationService();
+                _chatSessionApplicationService = new ChatSessionApplicationService(_databaseService, _databaseService);
+                _generatedImageApplicationService = new GeneratedImageApplicationService(_chatSessionApplicationService);
+                _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
+                _conversationApplicationService = new ConversationApplicationService(_databaseService);
+                _conversationAssetApplicationService = new ConversationAssetApplicationService(_databaseService);
+                _conversationTranscriptApplicationService = new ConversationTranscriptApplicationService();
+                _chatInteractionApplicationService = new ChatInteractionApplicationService();
+                _providerFactory = new ProviderFactory(_databaseService);
+                _chatService = new ChatService(_providerFactory);
+                _providerActivationApplicationService = new ProviderActivationApplicationService(
+                    _chatService, _providerFactory, _chatSessionApplicationService);
+                _providerCatalogApplicationService = new ProviderCatalogApplicationService(_databaseService);
+                _providerUiStateApplicationService = new ProviderUiStateApplicationService();
+                _switchModelApplicationService = new SwitchModelApplicationService(
+                    _providerFactory, _chatService, _chatSessionApplicationService);
+                _fileSystemService = new FileSystemService();
+                _toolApprovalApplicationService = new ToolApprovalApplicationService(
+                    new ToolAutoAcceptPolicyService(() => Task.FromResult(UI.SettingsWindow.AutoAcceptJsonCache)));
+                _toolControlSessionApplicationService = new ToolControlSessionApplicationService(_toolApprovalApplicationService);
+                _toolApprovalPromptApplicationService = new ToolApprovalPromptApplicationService();
+                _toolCategorySettingsApplicationService = new ToolCategorySettingsApplicationService(_databaseService);
 
-            _speechService = new SpeechRecognitionService();
+                var commandService = new CommandExecutionService();
+                _emailToolService = new Aire.Services.Tools.EmailToolService(_databaseService);
+                _toolExecutionService = new ToolExecutionService(
+                    _fileSystemService, commandService,
+                    hideWindowAsync: () => { Dispatcher.Invoke(Hide); return Task.CompletedTask; },
+                    showWindowAsync: () => { Dispatcher.Invoke(() => TrayService?.ShowMainWindow()); return Task.CompletedTask; },
+                    mcpManager: Aire.Services.Mcp.McpManager.Instance,
+                    emailTool: _emailToolService);
+                var toolExecutionWorkflow = new ToolExecutionWorkflowService(_toolExecutionService, _databaseService, _databaseService);
+                _chatTurnApplicationService = new ChatTurnApplicationService(
+                    _chatSessionApplicationService, toolExecutionWorkflow);
+                _toolApprovalExecutionApplicationService = new ToolApprovalExecutionApplicationService(
+                    _toolApprovalPromptApplicationService, toolExecutionWorkflow);
+                _mcpStartupApplicationService = new McpStartupApplicationService(_databaseService);
+
+                _speechService = new SpeechRecognitionService();
+                _ttsService = new SpeechSynthesisService();
+                _agentModeService = new AgentModeService();
+            }
+
             _speechService.PhraseRecognized += OnPhraseRecognized;
             _speechService.CommandRecognized += OnCommandRecognized;
             _speechService.CountdownTick += OnCountdownTick;
             _speechService.SilenceTimeout += OnSilenceTimeout;
             _speechService.Stopped += OnRecognitionStopped;
-
-            _ttsService = new SpeechSynthesisService();
             _ttsService.SpeakingCompleted += OnTtsSpeakingCompleted;
 
             if (!initializeUi)
@@ -119,6 +154,8 @@ namespace Aire
             _ttsService.SettingsChanged += SaveWindowSize;
 
             Loaded += OnWindowLoaded;
+            InitializeAgentModeHandlers();
+            InitializeCommandPalette();
             IsVisibleChanged += (_, e) => { if ((bool)e.NewValue) InputTextBox.Focus(); };
             IsVisibleChanged += (s, e) => { if ((bool)e.NewValue) ScrollToBottom(); };
             _availabilityTracker.AvailabilityChanged += _ => Dispatcher.Invoke(RefreshProviderAvailabilityUI);

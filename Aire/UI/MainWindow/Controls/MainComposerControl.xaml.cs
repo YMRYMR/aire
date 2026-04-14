@@ -24,6 +24,10 @@ namespace Aire.UI.MainWindow.Controls
         public System.Windows.Controls.TextBox InputTextBox => PART_InputTextBox;
         public System.Windows.Controls.Button MicButton => PART_MicButton;
         public System.Windows.Controls.Button ToolsButton => PART_ToolsButton;
+        public System.Windows.Controls.Primitives.ToggleButton AgentModeButton => PART_AgentModeButton;
+        public System.Windows.Controls.Border AgentModeBanner => PART_AgentModeBanner;
+        public System.Windows.Controls.TextBlock AgentModeStatusText => PART_AgentModeStatusText;
+        public System.Windows.Controls.Button StopAgentButton => PART_StopAgentButton;
         public System.Windows.Controls.Border ProgressOverlay => PART_ProgressOverlay;
         public System.Windows.Controls.TextBlock ThinkingText => PART_ThinkingText;
 
@@ -36,6 +40,8 @@ namespace Aire.UI.MainWindow.Controls
         public event System.Windows.DragEventHandler? InputPreviewDragOver;
         public event RoutedEventHandler? MicClicked;
         public event RoutedEventHandler? ToolsClicked;
+        public event RoutedEventHandler? AgentModeClicked;
+        public event RoutedEventHandler? StopAgentClicked;
 
         private void EndSessionButton_Click(object sender, RoutedEventArgs e)
             => EndSessionClicked?.Invoke(sender, e);
@@ -63,5 +69,11 @@ namespace Aire.UI.MainWindow.Controls
 
         private void ToolsButton_Click(object sender, RoutedEventArgs e)
             => ToolsClicked?.Invoke(sender, e);
+
+        private void AgentModeButton_Click(object sender, RoutedEventArgs e)
+            => AgentModeClicked?.Invoke(sender, e);
+
+        private void StopAgentButton_Click(object sender, RoutedEventArgs e)
+            => StopAgentClicked?.Invoke(sender, e);
     }
 }

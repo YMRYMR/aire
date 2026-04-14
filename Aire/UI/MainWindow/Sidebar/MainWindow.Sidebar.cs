@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Aire.AppLayer.Chat;
 using Aire.Data;
 using Aire.Services;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
@@ -164,13 +165,16 @@ namespace Aire
 
             var menu = new System.Windows.Controls.ContextMenu();
             var rename = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.rename", "Rename") };
+            var export = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.export", "Export as Markdown") };
             var delete = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.delete", "Delete") };
             var sep = new Separator();
             var deleteAll = new System.Windows.Controls.MenuItem { Header = LocalizationService.S("menu.deleteAllConversations", "Delete all conversations") };
             rename.Click += RenameConversation_Click;
+            export.Click += ExportConversation_Click;
             delete.Click += DeleteConversation_Click;
             deleteAll.Click += DeleteAllConversations_Click;
             menu.Items.Add(rename);
+            menu.Items.Add(export);
             menu.Items.Add(delete);
             menu.Items.Add(sep);
             menu.Items.Add(deleteAll);
@@ -184,6 +188,42 @@ namespace Aire
             if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
             summary.EditingTitle = summary.Title;
             summary.IsEditing = true;
+        }
+
+        private async void ExportConversation_Click(object sender, RoutedEventArgs e)
+        {
+            if (ConversationSidebar.SelectedItem is not ConversationSummary summary) return;
+
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = SanitizeFileName(summary.Title),
+                DefaultExt = ".md",
+                Filter = "Markdown files (*.md)|*.md|All files (*.*)|*.*"
+            };
+
+            if (dialog.ShowDialog() != true) return;
+
+            try
+            {
+                var exportService = new ConversationExportService(_databaseService, _databaseService);
+                await exportService.ExportToFileAsync(summary.Id, dialog.FileName);
+                await AddSystemMessageAsync(string.Format(
+                    LocalizationService.S("export.success", "Conversation exported to {0}"),
+                    dialog.FileName));
+            }
+            catch (Exception ex)
+            {
+                await AddErrorMessageAsync(string.Format(
+                    LocalizationService.S("export.error", "Export failed: {0}"),
+                    ex.Message));
+            }
+        }
+
+        private static string SanitizeFileName(string name)
+        {
+            var invalids = System.IO.Path.GetInvalidFileNameChars();
+            var sanitized = string.Join("_", name.Split(invalids));
+            return string.IsNullOrWhiteSpace(sanitized) ? "conversation" : sanitized;
         }
 
         private void ConversationTitle_MouseDown(object sender, MouseButtonEventArgs e)

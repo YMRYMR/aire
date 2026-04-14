@@ -89,6 +89,7 @@ namespace Aire.UI
             _suppressApiAccess = true;
             ApiAccessEnabledCheckBox.IsChecked = AppState.GetApiAccessEnabled();
             ApiAccessTokenBox.Text = AppState.EnsureApiAccessToken();
+            ApiPortBox.Text = AppState.GetApiPort().ToString();
             _suppressApiAccess = false;
 
             PopulateLanguageComboBox();

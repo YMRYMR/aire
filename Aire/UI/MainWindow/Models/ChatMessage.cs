@@ -17,6 +17,9 @@ public class ChatMessage : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    /// <summary>Database row id for this message (0 if not persisted or synthetic like Date separators).</summary>
+    public int DbMessageId { get; set; }
+
     public string Sender { get; set; } = string.Empty;
 
     private string _text = string.Empty;

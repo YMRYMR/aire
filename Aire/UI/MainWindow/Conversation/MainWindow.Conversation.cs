@@ -1,9 +1,11 @@
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Aire.Providers;
+using Aire.Services;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
 
 namespace Aire
@@ -52,6 +54,36 @@ namespace Aire
                 await DoClearConversationAsync();
         }
 
+        private async void BranchFromMessage_Click(object sender, RoutedEventArgs e)
+        {
+            // Walk up the visual tree to find the MessageListItemControl and its ChatMessage DataContext.
+            if (sender is not FrameworkElement fe) return;
+            DependencyObject el = fe;
+            ChatMessage? msg = null;
+            while (el != null)
+            {
+                if (el is FrameworkElement { DataContext: ChatMessage m })
+                {
+                    msg = m;
+                    break;
+                }
+                el = VisualTreeHelper.GetParent(el);
+            }
+
+            if (msg == null || msg.DbMessageId <= 0) return;
+
+            try
+            {
+                await ConversationFlow.BranchFromMessageAsync(msg.DbMessageId);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Warn("BranchFromMessage", "Failed to branch conversation", ex);
+                await AddErrorMessageAsync(
+                    LocalizationService.S("branch.error", "Failed to branch conversation. Please try again."));
+            }
+        }
+
         private async Task DoClearConversationAsync()
             => await ConversationFlow.ClearConversationAsync();
 
@@ -90,6 +122,48 @@ namespace Aire
 
         private void MainWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            // Ctrl+K → command palette
+            if (e.Key == Key.K && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                ToggleCommandPalette();
+                e.Handled = true;
+                return;
+            }
+
+            // Close command palette on Escape
+            if (e.Key == Key.Escape && CommandPalettePopup.IsOpen)
+            {
+                CommandPalettePopup.IsOpen = false;
+                e.Handled = true;
+                return;
+            }
+
+            // Global tool approval shortcuts: Enter approves, Escape denies.
+            if (!InputTextBox.IsKeyboardFocused || string.IsNullOrEmpty(InputTextBox.Text))
+            {
+                if (e.Key == Key.Enter)
+                {
+                    var pending = GetPendingApproval();
+                    if (pending != null)
+                    {
+                        pending.ApprovalTcs?.TrySetResult(true);
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+                if (e.Key == Key.Escape)
+                {
+                    var pending = GetPendingApproval();
+                    if (pending != null)
+                    {
+                        pending.ApprovalTcs?.TrySetResult(false);
+                        e.Handled = true;
+                        return;
+                    }
+                }
+            }
+
             if (InputTextBox.IsKeyboardFocused)
             {
                 if (e.Key == Key.Up && _inputHistory.Count > 0)

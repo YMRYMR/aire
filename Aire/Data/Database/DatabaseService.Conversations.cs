@@ -562,6 +562,39 @@ namespace Aire.Data
                 .ToList();
         }
 
+        /// <summary>
+        /// Creates a new conversation that branches from a specific message.
+        /// Copies all messages up to and including <paramref name="upToMessageId"/>
+        /// from the source conversation into the new one.
+        /// </summary>
+        /// <returns>The id of the newly created branched conversation.</returns>
+        public async Task<int> BranchConversationAsync(int sourceConversationId, int upToMessageId)
+        {
+            var sourceConversation = await GetConversationAsync(sourceConversationId)
+                ?? throw new ArgumentException($"Conversation {sourceConversationId} not found.");
+
+            var branchedTitle = string.IsNullOrWhiteSpace(sourceConversation.Title)
+                ? "Branched chat"
+                : $"{sourceConversation.Title} (branch)";
+
+            var newId = await CreateConversationAsync(sourceConversation.ProviderId, branchedTitle);
+
+            using var copyCmd = _connection!.CreateCommand();
+            copyCmd.CommandText = @"
+                INSERT INTO Messages (ConversationId, Role, Content, ImagePath, AttachmentsJson, Tokens, CreatedAt)
+                SELECT @newId, Role, Content, ImagePath, AttachmentsJson, Tokens, CreatedAt
+                FROM Messages
+                WHERE ConversationId = @sourceId
+                  AND Id <= @upToId
+                ORDER BY Id ASC";
+            copyCmd.Parameters.AddWithValue("@newId", newId);
+            copyCmd.Parameters.AddWithValue("@sourceId", sourceConversationId);
+            copyCmd.Parameters.AddWithValue("@upToId", upToMessageId);
+            await copyCmd.ExecuteNonQueryAsync();
+
+            return newId;
+        }
+
         private static List<MessageAttachment> DeserializeAttachments(string? json)
         {
             if (string.IsNullOrWhiteSpace(json))
