@@ -20,16 +20,16 @@ namespace Aire.UI.MainWindow.Controls
         public event RoutedEventHandler? AnswerButtonClick;
         public event RoutedEventHandler? ApproveToolCallClick;
         public event RoutedEventHandler? DenyToolCallClick;
+        public event RoutedEventHandler? BranchFromHereClick;
 
         public MessageListItemControl()
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
-            Loaded += (_, _) => ApplyLocalization();
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
-            Unloaded += (_, _) => LocalizationService.LanguageChanged -= OnLanguageChanged;
-            LocalizationService.LanguageChanged += OnLanguageChanged;
+
+            MessageBorder.MouseRightButtonUp += MessageBorder_RightClick;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -37,8 +37,10 @@ namespace Aire.UI.MainWindow.Controls
             if (!_appearanceSubscribed)
             {
                 AppearanceService.AppearanceChanged += OnAppearanceChanged;
+                LocalizationService.LanguageChanged += OnLanguageChanged;
                 _appearanceSubscribed = true;
             }
+            ApplyLocalization();
             UpdateVisualState();
         }
 
@@ -47,6 +49,7 @@ namespace Aire.UI.MainWindow.Controls
             if (_appearanceSubscribed)
             {
                 AppearanceService.AppearanceChanged -= OnAppearanceChanged;
+                LocalizationService.LanguageChanged -= OnLanguageChanged;
                 _appearanceSubscribed = false;
             }
         }
@@ -128,6 +131,25 @@ namespace Aire.UI.MainWindow.Controls
 
         private void DenyToolButton_Click(object sender, RoutedEventArgs e) =>
             DenyToolCallClick?.Invoke(sender, e);
+
+        private void MessageBorder_RightClick(object sender, MouseButtonEventArgs e)
+        {
+            if (_message == null || _message.DbMessageId <= 0) return;
+            if (_message.Sender is "System" or "Date") return;
+
+            var menu = new System.Windows.Controls.ContextMenu();
+
+            var branchItem = new System.Windows.Controls.MenuItem
+            {
+                Header = LocalizationService.S("menu.branchFromHere", "Branch from here"),
+                Tag = _message
+            };
+            branchItem.Click += (s, _) => BranchFromHereClick?.Invoke(this, new RoutedEventArgs());
+            menu.Items.Add(branchItem);
+
+            menu.IsOpen = true;
+            e.Handled = true;
+        }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {

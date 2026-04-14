@@ -16,8 +16,9 @@
     <Color x:Key="TextSecondaryColor">#707070</Color>
     <Color x:Key="BorderColor">#3A3A3A</Color>
     <Color x:Key="ErrorColor">#AA6666</Color>
-    <Color x:Key="WarningColor">#B8860B</Color>
-    <Color x:Key="WarningBackgroundColor">#FFF8E1</Color>
+    <Color x:Key="WarningColor">#FFCC44</Color>
+    <Color x:Key="WarningBackgroundColor">#302800</Color>
+    <Color x:Key="WarningBorderColor">#705800</Color>
     <Color x:Key="LinkColor">#6B9FD4</Color>
     <Color x:Key="CodeForegroundColor">#E0A872</Color>
     <Color x:Key="CodeBackgroundColor">#221D19</Color>
@@ -44,6 +45,7 @@
     <SolidColorBrush x:Key="ErrorBrush"                 Color="{StaticResource ErrorColor}" />
     <SolidColorBrush x:Key="WarningBrush"               Color="{StaticResource WarningColor}" />
     <SolidColorBrush x:Key="WarningBackgroundBrush"     Color="{StaticResource WarningBackgroundColor}" />
+    <SolidColorBrush x:Key="WarningBorderBrush"         Color="{StaticResource WarningBorderColor}" />
     <SolidColorBrush x:Key="LinkBrush"                  Color="{StaticResource LinkColor}" />
     <SolidColorBrush x:Key="CodeForegroundBrush"        Color="{StaticResource CodeForegroundColor}" />
     <SolidColorBrush x:Key="CodeBackgroundBrush"        Color="{StaticResource CodeBackgroundColor}" />
@@ -150,6 +152,16 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- ===== TOGGLEBUTTON ===== -->
+    <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type Button}}">
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background"  Value="{DynamicResource AccentSurfaceBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentBorderBrush}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- ===== TEXTBOX ===== -->

@@ -114,29 +114,41 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0"
+                            <!-- Branch indent + tree line -->
+                            <Border x:Name="BranchIndent"
+                                    Grid.Column="0"
+                                    Width="16"
+                                    Visibility="Collapsed">
+                                <Border Width="1"
+                                        Background="{DynamicResource AccentBorderBrush}"
+                                        Opacity="0.4"
+                                        HorizontalAlignment="Center" />
+                            </Border>
+                            <Border Grid.Column="1"
                                     Width="4"
                                     CornerRadius="2"
                                     Margin="0 0 8 0"
                                     Background="{Binding ProviderColor}"
                                     Opacity="0.95" />
                             <Border x:Name="SelectionIndicator"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Width="5"
                                     CornerRadius="3"
                                     Margin="0 0 8 0"
                                     Background="{DynamicResource AccentBorderBrush}"
                                     Visibility="Collapsed" />
-                            <StackPanel Grid.Column="2">
+                            <StackPanel Grid.Column="3">
                                 <Grid>
                                     <TextBlock x:Name="TitleDisplay"
                                                Text="{Binding Title}"
                                                Foreground="{DynamicResource SidebarTextBrush}"
                                                FontWeight="SemiBold"
                                                TextTrimming="CharacterEllipsis"
+                                               Cursor="Hand"
                                                MouseDown="ConversationTitle_MouseDown">
                                         <TextBlock.ToolTip>
                                             <ToolTip Content="{Binding Title}" />
@@ -178,7 +190,7 @@
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}" />
                                 </StackPanel>
                             </StackPanel>
-                            <Button Grid.Column="3"
+                            <Button Grid.Column="4"
                                     Content="×"
                                     Tag="{Binding}"
                                     Click="DeleteConversationButton_Click"
@@ -193,6 +205,9 @@
                                     Opacity="0.75" />
                         </Grid>
                         <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsBranch}" Value="True">
+                                <Setter TargetName="BranchIndent" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
                                 <Setter TargetName="TitleDisplay" Property="FontWeight" Value="Bold" />
                                 <Setter TargetName="TitleDisplay" Property="Foreground" Value="{DynamicResource AccentTextBrush}" />

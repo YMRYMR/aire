@@ -17,10 +17,48 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border x:Name="PART_MouseSessionBanner"
+            <!-- Agent mode status banner -->
+            <Border x:Name="PART_AgentModeBanner"
                     Grid.Row="0"
+                    Visibility="Collapsed"
+                    Background="{DynamicResource AccentSurfaceBrush}"
+                    BorderBrush="{DynamicResource AccentBorderBrush}"
+                    BorderThickness="0 0 0 1"
+                    CornerRadius="6"
+                    Padding="10 6"
+                    Margin="0 0 0 8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="&#x1F916;"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               Margin="0 0 8 0" />
+                    <TextBlock x:Name="PART_AgentModeStatusText"
+                               Grid.Column="1"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="12"
+                               VerticalAlignment="Center"
+                               Text="Agent mode active" />
+                    <Button x:Name="PART_StopAgentButton"
+                            Grid.Column="2"
+                            Content="Stop"
+                            Click="StopAgentButton_Click"
+                            Height="26"
+                            Padding="10 0"
+                            FontSize="11" />
+                </Grid>
+            </Border>
+
+            <Border x:Name="PART_MouseSessionBanner"
+                    Grid.Row="1"
                     Visibility="Collapsed"
                     Background="{DynamicResource Surface2Brush}"
                     BorderBrush="{DynamicResource BorderBrush}"
@@ -50,7 +88,7 @@
             </Border>
 
             <StackPanel x:Name="PART_ImagePreviewPanel"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Orientation="Horizontal"
                         Margin="0 0 0 8"
                         Visibility="Collapsed"
@@ -93,8 +131,8 @@
                 </Border>
 
                 <Border x:Name="PART_LargeFileWarning"
-                        Background="#302800"
-                        BorderBrush="#705800"
+                        Background="{DynamicResource WarningBackgroundBrush}"
+                        BorderBrush="{DynamicResource WarningBorderBrush}"
                         BorderThickness="1"
                         CornerRadius="4"
                         Padding="6 4"
@@ -102,7 +140,7 @@
                         Visibility="Collapsed"
                         VerticalAlignment="Center">
                     <TextBlock Text="⚠ Large file — provider may reject"
-                               Foreground="#FFCC44"
+                               Foreground="{DynamicResource WarningBrush}"
                                FontSize="11" />
                 </Border>
 
@@ -116,10 +154,11 @@
                         Click="RemoveImageButton_Click" />
             </StackPanel>
 
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
@@ -166,6 +205,16 @@
                         Margin="6 0 0 0"
                         FontSize="13"
                         Click="ToolsButton_Click" />
+                <ToggleButton x:Name="PART_AgentModeButton"
+                              Grid.Column="4"
+                              Content="&#x1F916;"
+                              ToolTip="Agent mode — click to activate"
+                              Width="40"
+                              Height="40"
+                              Padding="0"
+                              Margin="6 0 0 0"
+                              FontSize="13"
+                              Click="AgentModeButton_Click" />
 
                 <Border x:Name="PART_ProgressOverlay"
                         Grid.Column="1"
