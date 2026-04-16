@@ -286,6 +286,37 @@ namespace Aire.Data
             catch { }
         }
 
+        private async Task MigrateProviderColorsAsync()
+        {
+            try
+            {
+                using var cmd = _connection!.CreateCommand();
+                cmd.CommandText = "ALTER TABLE Providers ADD COLUMN Color TEXT DEFAULT '#007ACC'";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch { }
+
+            using var normalizeCmd = _connection!.CreateCommand();
+            normalizeCmd.CommandText = @"
+                UPDATE Providers
+                SET Color = CASE (abs(Id) % 10)
+                    WHEN 0 THEN '#E6B800'
+                    WHEN 1 THEN '#2FBF71'
+                    WHEN 2 THEN '#3B82F6'
+                    WHEN 3 THEN '#EC4899'
+                    WHEN 4 THEN '#F97316'
+                    WHEN 5 THEN '#8B5CF6'
+                    WHEN 6 THEN '#14B8A6'
+                    WHEN 7 THEN '#EF4444'
+                    WHEN 8 THEN '#06B6D4'
+                    ELSE '#A3A948'
+                END
+                WHERE Color IS NULL
+                   OR trim(Color) = ''
+                   OR lower(Color) IN ('#007acc', '#888888', '#808080', '#7a7a7a')";
+            await normalizeCmd.ExecuteNonQueryAsync();
+        }
+
         private async Task MigrateConversationAssistantModesAsync()
         {
             try
@@ -386,13 +417,13 @@ namespace Aire.Data
 
             var defaultProviders = new[]
             {
-                (Name: "OpenAI (ChatGPT)", Type: "OpenAI", Model: "gpt-4o", Color: "#10A37F", BaseUrl: (string?)null),
-                (Name: "Anthropic API", Type: "Anthropic", Model: "claude-sonnet-4-5", Color: "#D4A059", BaseUrl: (string?)null),
-                (Name: "Google AI (Gemini)", Type: "GoogleAI", Model: "gemini-2.0-flash", Color: "#4285F4", BaseUrl: (string?)null),
-                (Name: "DeepSeek (OpenAI-compatible)", Type: "DeepSeek", Model: "deepseek-chat", Color: "#00B4D8", BaseUrl: "https://api.deepseek.com"),
-                (Name: "Mistral AI (OpenAI-compatible)", Type: "Mistral", Model: "mistral-large-latest", Color: "#FF6D00", BaseUrl: "https://api.mistral.ai"),
-                (Name: "Inception (OpenAI-compatible)", Type: "Inception", Model: "mercury-latest", Color: "#FF6B6B", BaseUrl: "https://api.inceptionlabs.ai"),
-                (Name: "Ollama (Local AI)", Type: "Ollama", Model: "qwen2.5-coder:7b", Color: "#8A2BE2", BaseUrl: "http://localhost:11434")
+                (Name: "OpenAI (ChatGPT)", Type: "OpenAI", Model: "gpt-4o", BaseUrl: (string?)null),
+                (Name: "Anthropic API", Type: "Anthropic", Model: "claude-sonnet-4-5", BaseUrl: (string?)null),
+                (Name: "Google AI (Gemini)", Type: "GoogleAI", Model: "gemini-2.0-flash", BaseUrl: (string?)null),
+                (Name: "DeepSeek (OpenAI-compatible)", Type: "DeepSeek", Model: "deepseek-chat", BaseUrl: "https://api.deepseek.com"),
+                (Name: "Mistral AI (OpenAI-compatible)", Type: "Mistral", Model: "mistral-large-latest", BaseUrl: "https://api.mistral.ai"),
+                (Name: "Inception (OpenAI-compatible)", Type: "Inception", Model: "mercury-latest", BaseUrl: "https://api.inceptionlabs.ai"),
+                (Name: "Ollama (Local AI)", Type: "Ollama", Model: "qwen2.5-coder:7b", BaseUrl: "http://localhost:11434")
             };
 
             foreach (var provider in defaultProviders)
@@ -404,7 +435,7 @@ namespace Aire.Data
                 cmd.Parameters.AddWithValue("@name", provider.Name);
                 cmd.Parameters.AddWithValue("@type", provider.Type);
                 cmd.Parameters.AddWithValue("@model", provider.Model);
-                cmd.Parameters.AddWithValue("@color", provider.Color);
+                cmd.Parameters.AddWithValue("@color", ProviderColorPalette.GetColorForText(provider.Type));
                 cmd.Parameters.AddWithValue("@baseUrl", (object?)provider.BaseUrl ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@timeoutMinutes", Provider.DefaultTimeoutMinutes);
                 await cmd.ExecuteNonQueryAsync();

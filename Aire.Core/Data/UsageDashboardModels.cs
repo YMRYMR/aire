@@ -31,6 +31,7 @@ namespace Aire.Data
     /// Aggregated token usage for one conversation.
     /// </summary>
     public sealed record ConversationUsageSummary(
+        int ProviderId,
         int ConversationId,
         string Title,
         string ProviderName,

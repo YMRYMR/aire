@@ -9,26 +9,6 @@ namespace Aire.Data
 {
     public partial class DatabaseService
     {
-        private static readonly string[] ConversationPalette =
-        {
-            "#E6B800",
-            "#2FBF71",
-            "#3B82F6",
-            "#EC4899",
-            "#F97316",
-            "#8B5CF6",
-            "#14B8A6",
-            "#EF4444",
-            "#06B6D4",
-            "#A3A948",
-        };
-
-        private static string PickConversationColor(long seed)
-        {
-            var index = (int)(Math.Abs(seed) % ConversationPalette.Length);
-            return ConversationPalette[index];
-        }
-
         /// <summary>
         /// Deletes all message rows that belong to one conversation.
         /// </summary>
@@ -76,7 +56,7 @@ namespace Aire.Data
         /// <returns>The new conversation id.</returns>
         public async Task<int> CreateConversationAsync(int providerId, string title = "New Chat")
         {
-            var color = PickConversationColor(DateTime.UtcNow.Ticks ^ providerId ^ (title?.GetHashCode() ?? 0));
+            var color = ProviderColorPalette.GetColorForSeed(providerId);
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
                 INSERT INTO Conversations (ProviderId, Title, AssistantModeKey, IsOrchestratorMode, Color, CreatedAt, UpdatedAt)
@@ -134,7 +114,7 @@ namespace Aire.Data
             if (string.IsNullOrWhiteSpace(search))
             {
                 cmd.CommandText = @"
-                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey, c.IsOrchestratorMode, c.ParentConversationId
+                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(p.Color, c.Color, '#888888'), c.AssistantModeKey, c.IsOrchestratorMode, c.ParentConversationId
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     ORDER BY c.UpdatedAt DESC
@@ -143,7 +123,7 @@ namespace Aire.Data
             else
             {
                 cmd.CommandText = @"
-                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey, c.IsOrchestratorMode, c.ParentConversationId
+                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(p.Color, c.Color, '#888888'), c.AssistantModeKey, c.IsOrchestratorMode, c.ParentConversationId
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     LEFT JOIN Messages  m ON m.ConversationId = c.Id
@@ -472,12 +452,13 @@ namespace Aire.Data
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
                 SELECT
+                    c.ProviderId,
                     c.Id,
                     COALESCE(c.Title, 'Chat') AS Title,
                     COALESCE(p.Name, '') AS ProviderName,
                     COALESCE(p.Type, '') AS ProviderType,
                     COALESCE(p.Model, '') AS Model,
-                    COALESCE(c.Color, p.Color, '#888888') AS Color,
+                    COALESCE(p.Color, c.Color, '#888888') AS Color,
                     c.UpdatedAt,
                     COALESCE(SUM(COALESCE(m.Tokens, 0)), 0) AS TotalTokens,
                     COUNT(m.Id) AS AssistantMessageCount
@@ -497,14 +478,15 @@ namespace Aire.Data
             {
                 results.Add(new ConversationUsageSummary(
                     reader.GetInt32(0),
-                    reader.GetString(1),
+                    reader.GetInt32(1),
                     reader.GetString(2),
                     reader.GetString(3),
                     reader.GetString(4),
                     reader.GetString(5),
-                    reader.GetDateTime(6),
-                    reader.GetInt64(7),
-                    reader.GetInt32(8)));
+                    reader.GetString(6),
+                    reader.GetDateTime(7),
+                    reader.GetInt64(8),
+                    reader.GetInt32(9)));
             }
 
             return results;
