@@ -25,6 +25,7 @@ namespace Aire.UI
         internal EmailAccountApplicationService _emailAccountApplicationService;
         internal AppSettingsApplicationService _appSettingsApplicationService;
         internal ContextSettingsApplicationService _contextSettingsApplicationService;
+        internal CustomInstructionsService _customInstructionsService;
         internal AutoAcceptProfilesApplicationService _autoAcceptProfilesApplicationService;
         internal ProviderFactory _providerFactory;
         private readonly SpeechSynthesisService? _ttsService;

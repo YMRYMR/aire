@@ -40,6 +40,11 @@ namespace Aire
             _contextWindowSettings = settings;
         }
 
+        internal void ApplyCustomInstructions(string instructions)
+        {
+            _customInstructions = instructions;
+        }
+
         internal DatabaseService _databaseService;
         internal ProviderFactory _providerFactory;
         internal readonly ChatService _chatService;
@@ -66,6 +71,7 @@ namespace Aire
         private readonly FileSystemService _fileSystemService;
         internal ToolExecutionService _toolExecutionService;
         private readonly Aire.Services.Tools.EmailToolService _emailToolService;
+        internal AgentModeService? _agentModeService;
         internal SpeechRecognitionService _speechService;
         private List<Aire.Data.Provider> _providers = new();
         internal int? _currentConversationId;
@@ -86,6 +92,7 @@ namespace Aire
         private HashSet<string> _enabledToolCategories = new(StringComparer.OrdinalIgnoreCase);
         internal bool _toolsSupportedByProvider = true;
         private ContextWindowSettings _contextWindowSettings = ContextWindowSettings.Default;
+        private string _customInstructions = string.Empty;
         private string _assistantModeKey = "general";
         private string _assistantModeDisplayName = "General";
         private TokenUsage? _cachedTokenUsage;
@@ -96,6 +103,7 @@ namespace Aire
         internal readonly List<string> _inputHistory = new();
         private int _historyIndex = -1;
         private string _inputDraft = string.Empty;
+        private string _orchestratorInputDraft = string.Empty;
         private readonly List<int> _searchMatchIndices = new();
         private int _searchCurrentIndex = -1;
         private static SolidColorBrush UserBgBrush => Aire.Services.AppearanceService.UserBgBrush;

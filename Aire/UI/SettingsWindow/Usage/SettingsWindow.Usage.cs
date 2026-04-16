@@ -22,6 +22,22 @@ namespace Aire.UI
 {
     public partial class SettingsWindow
     {
+        private static readonly string[] UsageTrendPalette =
+        {
+            "#E6B800",
+            "#2FBF71",
+            "#3B82F6",
+            "#EC4899",
+            "#F97316",
+            "#8B5CF6",
+            "#14B8A6",
+            "#EF4444",
+            "#06B6D4",
+            "#A3A948",
+        };
+
+        private static readonly double UsageTrendShadeStep = 0.14;
+
         private async void UsageRefreshButton_Click(object sender, RoutedEventArgs e)
             => await LoadUsageDashboardAsync();
 
@@ -91,9 +107,20 @@ namespace Aire.UI
                 RenderUsageTrendChart();
                 await LoadLiveProviderUsageAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                ShowToast(LocalizationService.S("settings.usageRefreshFailed", "Could not refresh usage data."), isError: true);
+                AppLogger.Warn("SettingsWindow.LoadUsageDashboardAsync", "Could not refresh usage data", ex);
+                var L = LocalizationService.S;
+                UsageTotalTokensText.Text = "0";
+                UsageProviderCountText.Text = "0";
+                UsageConversationCountText.Text = "0";
+                UsageAssistantMessageCountText.Text = "0";
+                UsageProvidersListView.ItemsSource = null;
+                UsageConversationsListView.ItemsSource = null;
+                UsageTrendLegendItemsControl.ItemsSource = null;
+                UsageLiveProviderText.Text = L("settings.usageNoProviderSelected", "No provider selected");
+                UsageLiveUsageText.Text = L("settings.usageLiveUnavailable", "Unavailable: live usage unavailable");
+                UsageLiveUsageDetailText.Text = L("settings.usageLiveUnavailableDetail", "Aire could not fetch live usage for the selected provider.");
             }
         }
 
@@ -241,9 +268,12 @@ namespace Aire.UI
             DrawGridLines(leftPadding, topPadding, plotWidth, plotHeight, maxTokens);
             DrawAxisLabels(leftPadding, topPadding, plotWidth, plotHeight, minBucket, maxBucket);
 
-            foreach (var trend in series)
+            var brushes = BuildUsageTrendBrushes(series);
+
+            for (var index = 0; index < series.Count; index++)
             {
-                var brush = CreateBrush(trend.Color);
+                var trend = series[index];
+                var brush = brushes[index];
                 var points = trend.Points
                     .Select(point =>
                     {
@@ -270,22 +300,29 @@ namespace Aire.UI
                     StrokeEndLineCap = PenLineCap.Round,
                     StrokeLineJoin = PenLineJoin.Round,
                     SnapsToDevicePixels = true,
+                    ToolTip = BuildTrendSeriesToolTip(trend),
                 };
 
                 UsageTrendCanvas.Children.Add(path);
 
-                foreach (var point in points.Where((_, index) => index == 0 || index == points.Count - 1))
-                    AddPointMarker(point, brush);
+                for (var pointIndex = 0; pointIndex < points.Count; pointIndex++)
+                {
+                    var point = points[pointIndex];
+                    var trendPoint = trend.Points[pointIndex];
+                    AddPointMarker(point, brush, BuildTrendPointToolTip(trend, trendPoint));
+                }
             }
         }
 
         private static ObservableCollection<UsageTrendLegendItemViewModel> BuildUsageTrendLegendItems(IEnumerable<UsageTrendSeries> series)
         {
+            var items = series.ToList();
+            var brushes = BuildUsageTrendBrushes(items);
             return new ObservableCollection<UsageTrendLegendItemViewModel>(
-                series.Select(item => new UsageTrendLegendItemViewModel(
+                items.Select((item, index) => new UsageTrendLegendItemViewModel(
                     item.Label,
                     FormatTokens(item.TotalTokens),
-                    CreateBrush(item.Color))));
+                    brushes[index])));
         }
 
         private void DrawGridLines(double leftPadding, double topPadding, double plotWidth, double plotHeight, long maxTokens)
@@ -345,19 +382,80 @@ namespace Aire.UI
             UsageTrendCanvas.Children.Add(rightLabel);
         }
 
-        private void AddPointMarker(WpfPoint point, WpfBrush brush)
+        private static object BuildTrendSeriesToolTip(UsageTrendSeries series)
+        {
+            var panel = new StackPanel
+            {
+                Orientation = System.Windows.Controls.Orientation.Vertical,
+                Margin = new Thickness(4, 2, 4, 2),
+            };
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = series.Label,
+                FontWeight = FontWeights.SemiBold,
+                Margin = new Thickness(0, 0, 0, 2),
+            });
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = string.Format(
+                    LocalizationService.S("settings.usageTrendTooltipTotal", "Total tokens: {0}"),
+                    FormatTokens(series.TotalTokens)),
+            });
+
+            return panel;
+        }
+
+        private static object BuildTrendPointToolTip(UsageTrendSeries series, UsageTrendPoint point)
+        {
+            var panel = new StackPanel
+            {
+                Orientation = System.Windows.Controls.Orientation.Vertical,
+                Margin = new Thickness(4, 2, 4, 2),
+            };
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = series.Label,
+                FontWeight = FontWeights.SemiBold,
+                Margin = new Thickness(0, 0, 0, 2),
+            });
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = string.Format(
+                    LocalizationService.S("settings.usageTrendTooltipDate", "Date: {0}"),
+                    point.Bucket.ToString("yyyy-MM-dd")),
+            });
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = string.Format(
+                    LocalizationService.S("settings.usageTrendTooltipTokens", "Tokens: {0}"),
+                    FormatTokens(point.TokensUsed)),
+            });
+
+            return panel;
+        }
+
+        private void AddPointMarker(WpfPoint point, WpfBrush brush, object? toolTip = null)
         {
             var marker = new Ellipse
             {
-                Width = 6,
-                Height = 6,
+                Width = 9,
+                Height = 9,
                 Fill = brush,
-                Stroke = new WpfSolidColorBrush(WpfColor.FromArgb(210, 32, 32, 32)),
-                StrokeThickness = 1,
+                Stroke = new WpfSolidColorBrush(WpfColor.FromArgb(230, 255, 255, 255)),
+                StrokeThickness = 1.25,
+                Opacity = 0.98,
+                ToolTip = toolTip,
+                IsHitTestVisible = true,
             };
 
-            Canvas.SetLeft(marker, point.X - 3);
-            Canvas.SetTop(marker, point.Y - 3);
+            System.Windows.Controls.Panel.SetZIndex(marker, 10);
+            Canvas.SetLeft(marker, point.X - 4.5);
+            Canvas.SetTop(marker, point.Y - 4.5);
             UsageTrendCanvas.Children.Add(marker);
         }
 
@@ -411,6 +509,88 @@ namespace Aire.UI
             return new WpfSolidColorBrush(WpfColor.FromRgb(96, 165, 250));
         }
 
+        private static WpfSolidColorBrush ResolveTrendBrush(string color, int index)
+            => CreateBrush(ProviderColorPalette.Resolve(color, index));
+
+        private static IReadOnlyList<WpfSolidColorBrush> BuildUsageTrendBrushes(IReadOnlyList<UsageTrendSeries> series)
+        {
+            var brushes = new WpfSolidColorBrush[series.Count];
+            var indexedSeries = series
+                .Select((item, index) => (item, index))
+                .ToList();
+
+            foreach (var group in indexedSeries.GroupBy(item => item.item.ProviderId))
+            {
+                var ordered = group
+                    .OrderByDescending(item => item.item.TotalTokens)
+                    .ThenBy(item => item.item.Label, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                var providerSeed = ordered[0].item.ProviderId;
+                var providerBase = ResolveProviderTrendBrush(ordered[0].item.Color, providerSeed);
+
+                for (var modelIndex = 0; modelIndex < ordered.Count; modelIndex++)
+                {
+                    var brush = ShadeTrendBrush(providerBase, modelIndex);
+                    var seriesItem = ordered[modelIndex];
+                    var sourceIndex = seriesItem.index;
+                    if (sourceIndex >= 0)
+                        brushes[sourceIndex] = brush;
+                }
+            }
+
+            for (var i = 0; i < brushes.Length; i++)
+            {
+                if (brushes[i] != null)
+                    continue;
+
+                var fallback = series[i];
+                brushes[i] = ShadeTrendBrush(ResolveProviderTrendBrush(fallback.Color, fallback.ProviderId), 0);
+            }
+
+            return brushes;
+        }
+
+        private static WpfSolidColorBrush ResolveProviderTrendBrush(string color, int providerId)
+        {
+            return CreateBrush(ProviderColorPalette.Resolve(color, providerId));
+        }
+
+        private static WpfSolidColorBrush ShadeTrendBrush(WpfSolidColorBrush brush, int variantIndex)
+        {
+            if (variantIndex <= 0)
+                return CloneBrush(brush);
+
+            var shadeIndex = ((variantIndex - 1) / 2) + 1;
+            var shadeAmount = Math.Min(0.42, UsageTrendShadeStep * shadeIndex);
+            var shaded = variantIndex % 2 == 1
+                ? BlendColors(brush.Color, WpfColor.FromRgb(255, 255, 255), shadeAmount)
+                : BlendColors(brush.Color, WpfColor.FromRgb(0, 0, 0), shadeAmount);
+
+            return new WpfSolidColorBrush(shaded);
+        }
+
+        private static WpfSolidColorBrush CloneBrush(WpfSolidColorBrush brush)
+        {
+            var clone = brush.CloneCurrentValue();
+            clone.Freeze();
+            return clone;
+        }
+
+        private static WpfColor BlendColors(WpfColor source, WpfColor target, double ratio)
+        {
+            var clamped = Math.Clamp(ratio, 0.0, 1.0);
+            byte Mix(byte a, byte b) => (byte)Math.Round(a + ((b - a) * clamped));
+            return WpfColor.FromArgb(source.A, Mix(source.R, target.R), Mix(source.G, target.G), Mix(source.B, target.B));
+        }
+
+        private static bool IsMutedGray(WpfColor color)
+        {
+            var maxChannel = Math.Max(color.R, Math.Max(color.G, color.B));
+            var minChannel = Math.Min(color.R, Math.Min(color.G, color.B));
+            return maxChannel - minChannel < 18 && maxChannel < 190;
+        }
+
         private static WpfBrush GetThemeBrush(string key, WpfBrush fallback)
             => System.Windows.Application.Current?.TryFindResource(key) as WpfBrush ?? fallback;
 
@@ -431,21 +611,30 @@ namespace Aire.UI
             TokenUsage? liveUsage,
             string preferredCurrency)
         {
+            var L = LocalizationService.S;
             var detail = $"{summary.ProviderType}";
             if (!string.IsNullOrWhiteSpace(summary.Model))
                 detail += $" · {summary.Model}";
-            detail += $" · {summary.ConversationCount} conv";
-            detail += summary.AssistantMessageCount == 1 ? " · 1 assistant turn" : $" · {summary.AssistantMessageCount} assistant turns";
-            detail += summary.LastUsedAt.HasValue ? $" · last used {summary.LastUsedAt.Value:g}" : " · never used";
+            detail += summary.ConversationCount == 1
+                ? $" · {L("settings.usageConversationSingular", "1 conversation")}"
+                : $" · {summary.ConversationCount} {L("settings.usageConversationPlural", "conversations")}";
+            detail += summary.AssistantMessageCount == 1
+                ? $" · {L("settings.usageAssistantTurnSingular", "1 assistant turn")}"
+                : $" · {summary.AssistantMessageCount} {L("settings.usageAssistantTurnPlural", "assistant turns")}";
+            detail += summary.LastUsedAt.HasValue
+                ? $" · {string.Format(L("settings.usageLastUsed", "last used {0}"), summary.LastUsedAt.Value.ToString("g"))}"
+                : $" · {L("settings.usageNeverUsed", "never used")}";
 
-            var usageDetail = summary.IsEnabled ? "enabled" : "disabled";
+            var usageDetail = summary.IsEnabled
+                ? L("settings.usageEnabled", "enabled")
+                : L("settings.usageDisabled", "disabled");
             var tokensText = FormatTokens(summary.TokensUsed);
             var spendText = BuildSpendText(summary, liveUsage, preferredCurrency);
             return new UsageProviderRowViewModel(
                 summary.ProviderId,
                 summary.ProviderName,
                 detail,
-                summary.Color,
+                ProviderColorPalette.Resolve(summary.Color, summary.ProviderId, summary.ProviderName),
                 tokensText,
                 spendText,
                 usageDetail);
@@ -453,22 +642,25 @@ namespace Aire.UI
 
         private static UsageConversationRowViewModel BuildConversationRow(ConversationUsageSummary summary, string preferredCurrency)
         {
+            var L = LocalizationService.S;
             var detail = $"{summary.ProviderName}";
             if (!string.IsNullOrWhiteSpace(summary.Model))
                 detail += $" · {summary.Model}";
-            detail += summary.AssistantMessageCount == 1 ? " · 1 assistant turn" : $" · {summary.AssistantMessageCount} assistant turns";
-            detail += $" · updated {summary.UpdatedAt:g}";
+            detail += summary.AssistantMessageCount == 1
+                ? $" · {L("settings.usageAssistantTurnSingular", "1 assistant turn")}"
+                : $" · {summary.AssistantMessageCount} {L("settings.usageAssistantTurnPlural", "assistant turns")}";
+            detail += $" · {string.Format(L("settings.usageUpdated", "updated {0}"), summary.UpdatedAt.ToString("g"))}";
 
             var usageDetail = summary.TokensUsed > 0
-                ? $"updated {summary.UpdatedAt:g}"
-                : "no tokens recorded";
+                ? string.Format(L("settings.usageUpdated", "updated {0}"), summary.UpdatedAt.ToString("g"))
+                : L("settings.usageNoTokensRecorded", "no tokens recorded");
             var spendText = BuildSpendText(summary, preferredCurrency);
 
             return new UsageConversationRowViewModel(
                 summary.ConversationId,
                 summary.Title,
                 detail,
-                summary.Color,
+                ProviderColorPalette.Resolve(summary.Color, summary.ProviderId, summary.ProviderName),
                 FormatTokens(summary.TokensUsed),
                 spendText,
                 usageDetail);

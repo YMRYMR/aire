@@ -14,6 +14,9 @@ namespace Aire.Providers
         private readonly IProviderRepository _providerRepository;
         private readonly Dictionary<string, IAiProvider> _providerCache = new();
 
+        /// <summary>Exposes the provider repository for read-only queries.</summary>
+        public IProviderRepository Repository => _providerRepository;
+
         /// <summary>
         /// Creates the factory used by the WPF app to materialize configured providers on demand.
         /// </summary>

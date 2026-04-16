@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Aire.Services.Mcp;
 using static Aire.Services.Tools.ToolHelpers;
 
@@ -38,6 +39,7 @@ namespace Aire.Services.Tools
                 "move_file"              => $"Move: {GetString(request, "from")} \u2192 {GetString(request, "to")}",
                 "search_files"           => $"Search \u2018{GetString(request, "pattern")}\u2019 in: {GetString(request, "directory")}",
                 "new_task"               => $"New task: {GetString(request, "task")}",
+                "request_context"        => $"Request context: {GetString(request, "type")}",
                 "attempt_completion"     => $"Complete task: {GetString(request, "result")}",
                 "ask_followup_question"  => $"Ask: {GetString(request, "question")}",
                 "skill"                  => $"Run skill: {GetString(request, "name")}",
@@ -55,7 +57,7 @@ namespace Aire.Services.Tools
                 "switch_browser_tab"     => $"Switch to browser tab {GetString(request, "index")}",
                 "close_browser_tab"      => $"Close browser tab {GetString(request, "index")}",
                 "get_browser_html"       => "Get browser tab HTML",
-                "execute_browser_script" => $"Run JS: {GetString(request, "script")}",
+                "execute_browser_script" => DescribeBrowserScript(request),
                 "get_browser_cookies"    => "Get browser cookies",
                 "get_clipboard"          => "Read clipboard",
                 "set_clipboard"          => $"Copy to clipboard: {GetString(request, "text")}",
@@ -79,6 +81,26 @@ namespace Aire.Services.Tools
                 var t when mcpManager.IsToolMcp(t) => $"MCP: {request.Tool}",
                 _                        => $"Run tool: {request.Tool}"
             };
+        }
+
+        private static string DescribeBrowserScript(ToolCallRequest request)
+        {
+            var script = GetString(request, "script");
+            if (string.IsNullOrWhiteSpace(script))
+                return "Run browser script";
+
+            return $"Run browser script:\n\n{FormatCodeBlock(script)}";
+        }
+
+        private static string FormatCodeBlock(string script)
+        {
+            const int maxLength = 700;
+            var trimmed = script.Trim();
+            if (trimmed.Length <= maxLength)
+                return $"```js\n{trimmed}\n```";
+
+            var truncated = trimmed[..maxLength].TrimEnd();
+            return $"```js\n{truncated}\n...\n```";
         }
 
         /// <summary>

@@ -50,6 +50,12 @@ namespace Aire.AppLayer.Chat
             => _conversations.UpdateConversationAssistantModeAsync(conversationId, assistantModeKey);
 
         /// <summary>
+        /// Updates whether one conversation is currently marked as orchestrated.
+        /// </summary>
+        public Task UpdateConversationOrchestratorModeAsync(int conversationId, bool isOrchestratorMode)
+            => _conversations.UpdateConversationOrchestratorModeAsync(conversationId, isOrchestratorMode);
+
+        /// <summary>
         /// Deletes one conversation and all of its stored messages.
         /// </summary>
         public async Task DeleteConversationAsync(int conversationId)

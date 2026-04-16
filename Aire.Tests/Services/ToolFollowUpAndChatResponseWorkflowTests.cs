@@ -99,6 +99,19 @@ public sealed class ToolFollowUpAndChatResponseWorkflowTests
     }
 
     [Fact]
+    public void BuildToolResultHistoryContent_TrimsVeryLargeResults()
+    {
+        var service = new ToolFollowUpWorkflowService();
+        var largeResult = new string('x', 15_000);
+
+        var history = service.BuildToolResultHistoryContent("get_browser_html", largeResult);
+
+        Assert.Contains("[truncated", history, StringComparison.Ordinal);
+        Assert.Contains("get_browser_html", history, StringComparison.Ordinal);
+        Assert.True(history.Length < largeResult.Length);
+    }
+
+    [Fact]
     public void ChatResponseWorkflowService_HandlesWhitespacePreviewAndMissingCompletionResult()
     {
         var service = new ChatResponseWorkflowService();

@@ -51,6 +51,8 @@ namespace Aire.UI
             TabAppearance.Header = L("settings.tab.appearance", "Appearance");
             TabVoice.Header = L("settings.tab.voice", "Voice");
             TabContext.Header = L("settings.tab.context", "Context");
+            TabTemplates.Header = L("settings.tab.templates", "Templates");
+            TemplatePane.ApplyLocalization();
             TabAutoAccept.Header = L("settings.tab.autoAccept", "Auto-accept");
             TabConnections.Header = L("settings.tab.connections", "Connections");
             TabUsage.Header = L("settings.tab.usage", "Usage");
@@ -64,6 +66,7 @@ namespace Aire.UI
             AccentNeutralRightLabel.Text = L("settings.neutralRight", "Neutral →");
             FontSizeLabel.Text = L("settings.fontSize", "Font size");
             LanguageLabel.Text = L("settings.language", "Language");
+            PopulateLanguageComboBox();
             ApiAccessTitle.Text = L("settings.apiAccessTitle", "Local API access");
             ApiAccessDescription.Text = L("settings.apiAccessDescription",
                 "Allow trusted local apps to open Aire, read chat history, and request actions through the local API.");
@@ -131,6 +134,7 @@ namespace Aire.UI
             UsageLiveUsageText.Text = L("settings.usageNoProviderUsage", "Select a provider in the AI Providers tab to see live quota or spend.");
             UsageLiveUsageDetailText.Text = L("settings.usageHistoricalNote", "Historical totals below still track stored assistant turns.");
             TabUsage.Header = L("settings.tab.usage", "Usage");
+            _ = LoadUsageDashboardAsync();
 
             // Auto-accept
             AutoAcceptCautionTitle.Text = L("settings.autoAcceptCautionTitle", "⚠  Caution");

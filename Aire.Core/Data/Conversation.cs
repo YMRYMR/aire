@@ -9,7 +9,9 @@ namespace Aire.Data
         public int ProviderId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string AssistantModeKey { get; set; } = "general";
+        public bool IsOrchestratorMode { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public int? ParentConversationId { get; set; }
     }
 }

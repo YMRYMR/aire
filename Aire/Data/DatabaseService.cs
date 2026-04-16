@@ -58,7 +58,9 @@ namespace Aire.Data
             await MigrateProviderBaseUrlsAsync();
             await MigrateAddSortOrderAsync();
             await MigrateProviderTimeoutsAsync();
+            await MigrateProviderColorsAsync();
             await MigrateConversationAssistantModesAsync();
+            await MigrateConversationOrchestratorModesAsync();
             await MigrateConversationColorsAsync();
             await MigrateEncryptApiKeysAsync();
             await MigrateClaudeSessionProvidersAsync();
@@ -68,6 +70,7 @@ namespace Aire.Data
             await MigrateEncryptEmailOAuthTokensAsync();
             await MigrateEncryptMcpEnvVarsAsync();
             await MigrateRemoveLegacySwitchedProviderMessagesAsync();
+            await MigrateConversationParentIdAsync();
             await SeedDefaultProvidersAsync();
         }
 

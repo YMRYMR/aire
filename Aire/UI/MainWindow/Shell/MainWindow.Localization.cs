@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Aire.Services;
+using Aire.UI;
 
 namespace Aire
 {
@@ -14,6 +15,17 @@ namespace Aire
             BrowserButton.ToolTip = L("tooltip.browser", "Open browser  (AI can read open tabs)");
             SearchButton.ToolTip = L("tooltip.searchChat", "Find in chat  (Ctrl+F)");
             ModeButton.ToolTip = L("tooltip.mode", "Assistant mode");
+            ComposerControl.StopAiButton.ToolTip = L("tooltip.stopThinking", "Stop AI thinking");
+            ComposerControl.MicButton.ToolTip = _speechService.ModelExists
+                ? L("tooltip.mic", "Start voice input")
+                : L("tooltip.downloadWhisper", "Click to download Whisper model (~150 MB)");
+            ComposerControl.ToolsButton.ToolTip = ToolsEnabled
+                ? L("tooltip.toolsEnabled", "Tools enabled — click to disable")
+                : L("tooltip.toolsDisabled", "Tools disabled — click to choose tool categories");
+            ComposerControl.AgentModeButton.ToolTip = _agentModeService?.IsActive == true
+                ? L("tooltip.orchestratorOn", "Orchestrator Mode active — goals are being worked and allowed tools run automatically")
+                : L("tooltip.orchestratorOff", "Orchestrator Mode — click to start a goal-driven session");
+            TextEntryLanguageHelper.Apply(ComposerControl.InputTextBox);
             MouseSessionLabel.Text = L("main.sessionActive", "Session active");
             EndSessionButton.Content = L("main.endSession", "End session");
             ThinkingText.Text = L("main.thinking", "Thinking\u2026");
@@ -59,6 +71,7 @@ namespace Aire
             // mode button label and tooltip reflect the active language immediately.
             _assistantModeDisplayName = _assistantModeApplicationService.ResolveMode(_assistantModeKey).DisplayName;
             UpdateModeButtonState();
+            UpdateAgentModeTooltip();
             UpdateVoiceOutputButton();
             SetMicButtonState(_speechService.IsListening ? MicState.Recording : MicState.Idle);
             RefreshToolsCategoryMenuLocalization();

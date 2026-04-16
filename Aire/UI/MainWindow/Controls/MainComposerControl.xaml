@@ -7,6 +7,74 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Style x:Key="OrchestratorModeButtonStyle"
+               TargetType="ToggleButton"
+               BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Background" Value="{DynamicResource Surface2Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontFamily" Value="Segoe UI Symbol, Segoe UI Emoji, Segoe UI" />
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource PrimaryHoverBrush}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource PrimaryPressedBrush}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryPressedBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#D73A49" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#8B1F2B" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard x:Name="OrchestratorHeartbeatStoryboard">
+                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                                             To="1.08"
+                                                             Duration="0:0:0.45" />
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                                             To="1.08"
+                                                             Duration="0:0:0.45" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="OrchestratorHeartbeatStoryboard" />
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Border Background="{DynamicResource SurfaceBrush}"
             BorderBrush="{DynamicResource BorderBrush}"
@@ -17,10 +85,48 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border x:Name="PART_MouseSessionBanner"
+            <!-- Orchestrator mode status banner -->
+            <Border x:Name="PART_AgentModeBanner"
                     Grid.Row="0"
+                    Visibility="Collapsed"
+                    Background="{DynamicResource AccentSurfaceBrush}"
+                    BorderBrush="{DynamicResource AccentBorderBrush}"
+                    BorderThickness="0 0 0 1"
+                    CornerRadius="6"
+                    Padding="10 6"
+                    Margin="0 0 0 8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="⚙"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               Margin="0 0 8 0" />
+                    <TextBlock x:Name="PART_AgentModeStatusText"
+                               Grid.Column="1"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="12"
+                               VerticalAlignment="Center"
+                               Text="Orchestrator active" />
+                    <Button x:Name="PART_StopAgentButton"
+                            Grid.Column="2"
+                            Content="Stop"
+                            Click="StopAgentButton_Click"
+                            Height="26"
+                            Padding="10 0"
+                            FontSize="11" />
+                </Grid>
+            </Border>
+
+            <Border x:Name="PART_MouseSessionBanner"
+                    Grid.Row="1"
                     Visibility="Collapsed"
                     Background="{DynamicResource Surface2Brush}"
                     BorderBrush="{DynamicResource BorderBrush}"
@@ -50,7 +156,7 @@
             </Border>
 
             <StackPanel x:Name="PART_ImagePreviewPanel"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Orientation="Horizontal"
                         Margin="0 0 0 8"
                         Visibility="Collapsed"
@@ -93,8 +199,8 @@
                 </Border>
 
                 <Border x:Name="PART_LargeFileWarning"
-                        Background="#302800"
-                        BorderBrush="#705800"
+                        Background="{DynamicResource WarningBackgroundBrush}"
+                        BorderBrush="{DynamicResource WarningBorderBrush}"
                         BorderThickness="1"
                         CornerRadius="4"
                         Padding="6 4"
@@ -102,7 +208,7 @@
                         Visibility="Collapsed"
                         VerticalAlignment="Center">
                     <TextBlock Text="⚠ Large file — provider may reject"
-                               Foreground="#FFCC44"
+                               Foreground="{DynamicResource WarningBrush}"
                                FontSize="11" />
                 </Border>
 
@@ -116,17 +222,17 @@
                         Click="RemoveImageButton_Click" />
             </StackPanel>
 
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Button x:Name="PART_StopAiButton"
                         Grid.Column="0"
                         Content="⏹️"
-                        ToolTip="Stop AI thinking"
                         Width="40"
                         Height="40"
                         Padding="0"
@@ -138,7 +244,7 @@
                          AcceptsReturn="True"
                          TextWrapping="Wrap"
                          VerticalScrollBarVisibility="Auto"
-                         VerticalContentAlignment="Center"
+                         VerticalContentAlignment="Top"
                          MinHeight="40"
                          MaxHeight="120"
                          Padding="10 8"
@@ -149,7 +255,6 @@
                 <Button x:Name="PART_MicButton"
                         Grid.Column="2"
                         Content="&#x1F3A4;"
-                        ToolTip="Start voice input"
                         Width="40"
                         Height="40"
                         Padding="0"
@@ -159,13 +264,21 @@
                 <Button x:Name="PART_ToolsButton"
                         Grid.Column="3"
                         Content="&#x1F527;"
-                        ToolTip="Tools enabled — click to disable"
                         Width="40"
                         Height="40"
                         Padding="0"
                         Margin="6 0 0 0"
                         FontSize="13"
                         Click="ToolsButton_Click" />
+                <ToggleButton x:Name="PART_AgentModeButton"
+                              Grid.Column="4"
+                              Content="⦿"
+                              Width="40"
+                              Height="40"
+                              Margin="6 0 0 0"
+                              Padding="0"
+                              Style="{StaticResource OrchestratorModeButtonStyle}"
+                              Click="AgentModeButton_Click" />
 
                 <Border x:Name="PART_ProgressOverlay"
                         Grid.Column="1"

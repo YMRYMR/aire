@@ -326,9 +326,9 @@ public sealed class ChatTurnWorkflowServiceTests
         {
             var basePrompt = ToolOutputFormat switch
             {
-                ToolOutputFormat.Hermes          => Aire.Services.FileSystemSystemPrompt.HermesToolCallingText,
-                ToolOutputFormat.React           => Aire.Services.FileSystemSystemPrompt.ReactToolCallingText,
-                ToolOutputFormat.NativeToolCalls => Aire.Services.FileSystemSystemPrompt.NativeToolCallingText,
+                ToolOutputFormat.Hermes          => Aire.Services.FileSystemSystemPrompt.BuildHermes(),
+                ToolOutputFormat.React           => Aire.Services.FileSystemSystemPrompt.BuildReact(),
+                ToolOutputFormat.NativeToolCalls => Aire.Services.FileSystemSystemPrompt.BuildNativeVerbose(),
                 _                                => Aire.Services.FileSystemSystemPrompt.Text,
             };
             var sb = new System.Text.StringBuilder(basePrompt);

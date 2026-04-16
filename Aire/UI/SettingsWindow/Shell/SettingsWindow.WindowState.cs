@@ -22,6 +22,7 @@ namespace Aire.UI
                 "appearance" => TabAppearance,
                 "voice" => TabVoice,
                 "context" => TabContext,
+                "templates" => TabTemplates,
                 "auto-accept" => TabAutoAccept,
                 "connections" => TabConnections,
                 "usage" => TabUsage,

@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Aire.Services.Mcp;
 
 namespace Aire.Services.Policies
 {
@@ -10,14 +13,28 @@ namespace Aire.Services.Policies
     public sealed class ToolAutoAcceptPolicyService
     {
         private readonly Func<Task<string?>> _loadSettingsJsonAsync;
+        private readonly Func<Task<IReadOnlyList<string>?>> _loadRuntimeToolsAsync;
 
         /// <summary>
         /// Creates the policy service with a callback that returns the current serialized settings payload.
         /// </summary>
         /// <param name="loadSettingsJsonAsync">Callback used to load the saved auto-accept settings JSON.</param>
         public ToolAutoAcceptPolicyService(Func<Task<string?>> loadSettingsJsonAsync)
+            : this(loadSettingsJsonAsync, null)
+        {
+        }
+
+        /// <summary>
+        /// Creates the policy service with a callback that returns the current serialized settings payload.
+        /// </summary>
+        /// <param name="loadSettingsJsonAsync">Callback used to load the saved auto-accept settings JSON.</param>
+        /// <param name="loadRuntimeToolsAsync">Optional callback that returns runtime tool names to treat as auto-accepted.</param>
+        public ToolAutoAcceptPolicyService(
+            Func<Task<string?>> loadSettingsJsonAsync,
+            Func<Task<IReadOnlyList<string>?>>? loadRuntimeToolsAsync)
         {
             _loadSettingsJsonAsync = loadSettingsJsonAsync;
+            _loadRuntimeToolsAsync = loadRuntimeToolsAsync ?? LoadInstalledMcpToolNamesAsync;
         }
 
         /// <summary>
@@ -30,9 +47,10 @@ namespace Aire.Services.Policies
         {
             try
             {
+                toolName = ToolExecutionService.NormalizeToolName(toolName);
                 var json = cachedJson ?? await _loadSettingsJsonAsync();
                 if (string.IsNullOrEmpty(json))
-                    return false;
+                    return await IsRuntimeToolAutoAcceptedAsync(toolName);
 
                 using var doc = JsonDocument.Parse(json);
                 var root = doc.RootElement;
@@ -65,13 +83,31 @@ namespace Aire.Services.Policies
                     return true;
                 }
 
-                return false;
+                return await IsRuntimeToolAutoAcceptedAsync(toolName);
             }
             catch
             {
                 return false;
             }
         }
+
+        private async Task<bool> IsRuntimeToolAutoAcceptedAsync(string toolName)
+        {
+            if (string.IsNullOrWhiteSpace(toolName))
+                return false;
+
+            var runtimeTools = await _loadRuntimeToolsAsync().ConfigureAwait(false);
+            if (runtimeTools == null || runtimeTools.Count == 0)
+                return false;
+
+            return runtimeTools.Contains(toolName, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static Task<IReadOnlyList<string>?> LoadInstalledMcpToolNamesAsync()
+            => Task.FromResult<IReadOnlyList<string>?>(McpManager.Instance
+                .GetAllTools()
+                .Select(tool => tool.Name)
+                .ToList());
 
         /// <summary>
         /// Treats known aliases as equivalent so saved policy entries survive naming variations.
@@ -99,7 +135,7 @@ namespace Aire.Services.Policies
         /// </summary>
         private static bool IsMouseTool(string toolName)
             => toolName.StartsWith("mouse_", StringComparison.Ordinal)
-            || toolName is "move_mouse" or "click" or "scroll";
+            || toolName is "move_mouse" or "click" or "scroll" or "take_screenshot";
 
         /// <summary>
         /// Determines whether a tool belongs to the keyboard-input family.

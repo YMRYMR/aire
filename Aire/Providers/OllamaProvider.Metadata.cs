@@ -91,11 +91,14 @@ namespace Aire.Providers
         {
             try
             {
-                using var response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Get, $"{_baseUrl}/api/tags"), cancellationToken);
+                using var probeCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                probeCts.CancelAfter(TimeSpan.FromSeconds(8));
+
+                using var response = await _httpClient.SendAsync(BuildRequest(HttpMethod.Get, $"{_baseUrl}/api/tags"), probeCts.Token);
                 if (!response.IsSuccessStatusCode)
                     return ProviderValidationResult.Fail($"Ollama returned HTTP {response.StatusCode}.");
 
-                var json = await response.Content.ReadAsStringAsync(cancellationToken);
+                var json = await response.Content.ReadAsStringAsync(probeCts.Token);
                 var tagsResponse = JsonSerializer.Deserialize<OllamaTagsResponse>(json, DeserializeOpts);
 
                 var modelFound = tagsResponse?.Models?.Any(m =>

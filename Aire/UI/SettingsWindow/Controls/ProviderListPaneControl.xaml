@@ -93,19 +93,25 @@
                                            Margin="0 2 0 0" />
                             </StackPanel>
                             <Border Grid.Column="2"
-                                    Width="7" Height="7"
-                                    CornerRadius="4"
+                                    Width="10"
+                                    Height="10"
+                                    CornerRadius="5"
                                     VerticalAlignment="Center"
                                     Margin="8 0 4 0"
                                     Cursor="Hand"
                                     Tag="{Binding}"
-                                    MouseLeftButtonUp="EnabledDot_Click">
+                                    MouseLeftButtonUp="EnabledDot_Click"
+                                    ToolTip="{Binding DisplayType}">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
+                                        <Setter Property="Background" Value="{Binding Color}" />
+                                        <Setter Property="Opacity" Value="0.9" />
                                         <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                <Setter Property="Opacity" Value="0.35" />
+                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding IsEnabled}" Value="True">
-                                                <Setter Property="Background" Value="{DynamicResource TextSecondaryBrush}" />
+                                                <Setter Property="Opacity" Value="1" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

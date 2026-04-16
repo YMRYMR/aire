@@ -70,8 +70,12 @@ namespace Aire.Services.Workflows
 
             const string deniedResult = "[Operation denied by user]";
             var deniedStatus = LocalizationService.S("toolStatus.denied", "\u2717 Denied");
+            var deniedAction = string.IsNullOrWhiteSpace(request.Description)
+                ? request.Tool.Replace('_', ' ')
+                : request.Description;
+            var deniedTranscript = $"{deniedStatus}\nAction: {deniedAction}";
             if (conversationId.HasValue)
-                await _conversations.SaveMessageAsync(conversationId.Value, "tool", deniedStatus);
+                await _conversations.SaveMessageAsync(conversationId.Value, "tool", deniedTranscript);
 
             await _settings.LogFileAccessAsync(request.Tool, toolPath, false);
 

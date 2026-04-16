@@ -96,17 +96,19 @@ namespace Aire.AppLayer.Api
             var paramElement = parameters.ValueKind == JsonValueKind.Object
                 ? parameters.Clone()
                 : JsonDocument.Parse("{}").RootElement.Clone();
+            var rawJson = JsonSerializer.Serialize(new
+            {
+                tool = normalized,
+                parameters = JsonSerializer.Deserialize<JsonElement>(paramElement.GetRawText())
+            });
+            var parsed = ToolCallParser.Parse(rawJson);
 
             return new ToolCallRequest
             {
                 Tool = normalized,
                 Parameters = paramElement,
-                Description = normalized,
-                RawJson = JsonSerializer.Serialize(new
-                {
-                    tool = normalized,
-                    parameters = JsonSerializer.Deserialize<JsonElement>(paramElement.GetRawText())
-                })
+                Description = parsed.ToolCall?.Description ?? normalized,
+                RawJson = rawJson
             };
         }
 
@@ -165,7 +167,21 @@ namespace Aire.AppLayer.Api
             int? currentConversationId,
             Provider? provider,
             TopLevelWindowInfo? selectedWindow,
-            int pendingApprovals)
+            int pendingApprovals,
+            bool isSidebarVisible = false,
+            bool isSearchOpen = false,
+            bool isAgentModeActive = false,
+            bool isOrchestratorModeActive = false,
+            int orchestratorHeartbeatCount = 0,
+            string? orchestratorStopReason = null,
+            List<string>? orchestratorGoals = null,
+            bool isVoiceOutputEnabled = false,
+            bool isWindowPinned = false,
+            string? inputText = null,
+            bool hasAttachment = false,
+            int messageCount = 0,
+            string assistantMode = "general",
+            List<string>? activeToolCategories = null)
             => new()
             {
                 LocalApiPort = localApiPort,
@@ -179,10 +195,24 @@ namespace Aire.AppLayer.Api
                 CurrentProviderId = provider?.Id,
                 CurrentProviderName = provider?.Name,
                 CurrentProviderModel = provider?.Model,
+                MessageCount = messageCount,
+                IsSidebarVisible = isSidebarVisible,
+                IsSearchOpen = isSearchOpen,
+                IsAgentModeActive = isAgentModeActive,
+                IsOrchestratorModeActive = isOrchestratorModeActive,
+                OrchestratorHeartbeatCount = orchestratorHeartbeatCount,
+                OrchestratorStopReason = orchestratorStopReason,
+                OrchestratorGoals = orchestratorGoals ?? new List<string>(),
+                IsVoiceOutputEnabled = isVoiceOutputEnabled,
+                IsWindowPinned = isWindowPinned,
+                InputText = inputText,
+                HasAttachment = hasAttachment,
+                AssistantMode = assistantMode,
+                ActiveToolCategories = activeToolCategories ?? new List<string>(),
+                PendingApprovals = pendingApprovals,
                 SelectedWindowId = selectedWindow?.WindowId,
                 SelectedWindowTitle = selectedWindow?.Title,
                 SelectedWindowProcessName = selectedWindow?.ProcessName,
-                PendingApprovals = pendingApprovals
             };
 
     }

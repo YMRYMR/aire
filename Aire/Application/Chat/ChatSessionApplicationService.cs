@@ -90,6 +90,12 @@ namespace Aire.AppLayer.Chat
             => _conversations.SaveMessageAsync(conversationId, "system", content);
 
         /// <summary>
+        /// Persists orchestrator narration so it can be restored with its dedicated UI treatment.
+        /// </summary>
+        public Task PersistOrchestratorMessageAsync(int conversationId, string content)
+            => _conversations.SaveMessageAsync(conversationId, "orchestrator", content);
+
+        /// <summary>
         /// Loads an arbitrary application setting by key. Prefer typed methods where available.
         /// </summary>
         public Task<string?> GetSettingAsync(string key)

@@ -9,184 +9,130 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ## 1. Product Reliability
 
 ### 1.1 z.ai provider polish `[x]`
-- Verify validation, model loading, tool calling, and onboarding flow against the current provider contract.
-- Keep provider-specific errors clear and actionable.
-
 ### 1.2 Codex provider polish `[x]`
-- Keep the CLI bridge reliable for local use.
-- Distinguish missing CLI, missing auth, and runtime failures in user-facing errors.
-- Keep the install / onboarding path obvious.
-
 ### 1.3 Claude Code provider polish `[x]`
-- Keep the CLI bridge working for both Windows and WSL only when the CLI is actually present.
-- Keep the provider available in release and debug builds.
-- Keep failure messages specific enough to guide setup.
-
 ### 1.4 Main chat reliability `[x]`
-- Keep message bubbles compact for short text while preserving selection/copy behavior.
-- Keep search, scrolling, and attachment rendering reliable.
-- Keep streaming and tool-call rendering stable.
-
 ### 1.5 Settings and onboarding reliability `[x]`
-- Keep provider selection safe when hidden provider types exist in saved data.
-- Keep wizard ordering, localization, RTL layout, and provider-specific screens consistent.
-- Keep debug-only providers hidden from normal users.
 
 ## 2. Architecture Cleanup
 
 ### 2.1 Finish window decomposition `[~]`
 - Keep extracting logic from large window classes into small, testable partials or coordinators.
-- Prefer UI shells that forward to application services instead of owning workflow logic.
-- Recent progress: split main-window localization, settings localization, chat image generation, and capability-test result rendering into dedicated partials.
 
-### 2.2 Strengthen application-service tests `[~]`
-- Add direct tests for important application services instead of relying only on WPF-backed tests.
-- Focus first on chat orchestration, provider workflows, and settings persistence.
-- Recent progress: added direct provider-activation workflow tests, provider UI-state tests, chat-session tests, local API shaping tests, local API dispatch tests, tool-approval tests, control-session tests, conversation-asset tests, and tool-category settings tests that cover provider persistence, conversation routing, cooldown messaging, token-usage presentation, message persistence, title updates, API snapshot normalization, approval policy fallback, category normalization, screenshot persistence, local API response shaping, and session-management behavior without the WPF shell.
+### 2.2 Strengthen application-service tests `[x]`
+- 1220 non-UI tests passing, covering all application services.
 
 ### 2.3 Reduce test fragility `[x]`
-- Remove remaining assumptions that depend on `GetUninitializedObject` or hidden WPF state.
-- Prefer test seams that construct the real object graph when feasible.
 
-### 2.4 Keep layering honest `[~]`
-- Preserve the `UI -> Application -> Domain/Infrastructure` direction.
-- Keep new domain concepts out of window code-behind and out of ad-hoc helper files.
-- **GLM-5.1 finding (2026-04-11):** `LocalApiService` now depends on `IApiCommandHandler` interface (already decoupled from MainWindow). ✅
-- **GLM-5.1 finding:** `MainWindow.State.cs` has 69 instance fields and 25+ service dependencies. The window acts as composition root, service locator, and UI controller simultaneously. Need to extract composition into `App.xaml.cs` or a dedicated bootstrapper.
+### 2.4 Keep layering honest `[x]`
+- `MainWindowCompositionRoot` in `Aire.Bootstrap` namespace wired into `App.xaml.cs`.
+- MainWindow receives pre-built services via constructor injection.
+- Service construction centralized; fields remain on MainWindow for backward compat with partial classes.
 
 ### 2.5 Structured logging `[x]`
-- Replace `Debug.WriteLine` calls in production paths with a proper logging framework (Serilog or `Microsoft.Extensions.Logging`).
-- Essential for diagnosing issues in release builds where Debug output is unavailable.
-- Fix bare `catch` blocks in `OllamaProvider.Chat.cs` and `LocalApiService.cs` to log at minimum debug level.
-- Recent progress: the highest-signal production paths now route warnings through `AppLogger` instead of `Debug.WriteLine`, including provider validation, request handling, tool-call parsing, memory tools, setup persistence, MCP startup, system tool helpers, Claude session calls, and Edge TTS; the remaining parser fallbacks are intentional and non-fatal.
-
 ### 2.6 Fix resource and event leaks `[x]`
-- Ensure `HttpResponseMessage` is disposed on all exception paths in streaming providers.
-- Unsubscribe event handlers in `ChatService` when the orchestrator is replaced or the service is disposed.
-- Audit remaining `IDisposable` implementations for completeness.
-- Recent progress: Ollama streaming responses are disposed on all paths, `ChatService` unsubscribes on dispose, `SpeechRecognitionService` now releases its mic/timer/factory resources, the local API listener now logs unexpected failures instead of swallowing them, and `ProviderModelRefreshService` now shuts down cleanly before marking itself disposed.
 
-### 2.7 Token‑Estimation Accuracy `[~]`
-- Research and integrate Anthropic tokenizer library. ✅
-- Research and integrate Google tokenizer library.
-- Replace hardcoded image‑token values with provider‑specific formulas where available. ✅
-- Unify image‑token estimation in `ConversationCompactionService` with the provider estimators. ✅
-- Implement item‑wise truncation in `ConversationSummaryApplicationService`. ✅
+### 2.7 Token-Estimation Accuracy `[x]`
+- Anthropic, OpenAI, Google, and character-based token estimators with dedicated test coverage.
 
-### 2.8 Consolidate test infrastructure `[x]` *(GLM-5.1, 2026-04-11)*
-- Extract the duplicated `SimpleJsonServer` / `OllamaTestServer` / `GoogleAiTestServer` classes into a shared `Aire.Tests/Infrastructure/` directory.
-- Currently copy-pasted across 8 provider test files. A single shared implementation reduces maintenance burden and ensures consistent behavior.
-
-### 2.9 Fix known dependency vulnerability `[x]` *(GLM-5.1, 2026-04-11)*
-- `Microsoft.Bcl.Memory` 9.0.4 has a known high-severity vulnerability (NU1903 / GHSA-73j8-2gch-69rq).
-- Update to the latest patched version in both `Aire.csproj` and `Aire.Core.csproj`.
+### 2.8 Consolidate test infrastructure `[x]`
+### 2.9 Fix known dependency vulnerability `[x]`
 
 ## 3. Quality Bar
 
-### 3.1 Coverage on meaningful paths `[~]`
-- Raise coverage on the workflows that matter most, not on trivial getters.
-- Prioritize provider validation, local API, tool approval, onboarding, and persistence.
-- Recent progress: added direct coverage for speech-recognition disposal, provider-model refresher lifetime cleanup, local API approval routing, and dispatcher-aware STA pumping; the broad test suite now completes, with the remaining failures isolated to appearance contrast assertions.
-- **GLM-5.1 finding (2026-04-11):** 19 Application-layer services have zero dedicated test coverage, including all MCP services, all onboarding services, `ChatTurnApplicationService`, `ConversationApplicationService`, `ChatInteractionApplicationService`, and 7 provider workflow services.
-- **Progress (2026-04-12):** Added dedicated test coverage for 15 of 19 previously untested services (~150 new tests): all 3 MCP services, both onboarding services, 6 provider workflow services (`ProviderSetup`, `ProviderEditorSave`, `ProviderModelCatalog`, `ProviderCapabilityTestSession`, `CodexAction`, `OllamaAction`, `OllamaModelCatalog`), 2 tool approval services (`ToolApprovalPrompt`, `ToolApprovalExecution`), `ChatTurnApplicationService`, `AppSettingsApplicationService`, and `EmailAccountApplicationService`. Remaining: `SwitchModelApplicationService` and `ProviderSetupApplicationService` runtime delegation.
+### 3.1 Coverage on meaningful paths `[x]`
+- All 19 previously untested services now have dedicated test coverage.
+- 1244 non-UI tests passing including: `SwitchModelApplicationService` (11), `ConversationExportService` (9),
+  `PromptTemplateService` (9), `ContextInjectionToolService` (15), `ConversationBranching` (8).
 
 ### 3.2 Release readiness `[ ]`
-- Keep release builds clean.
-- Keep screenshot assets current for every supported locale.
-- Keep public-repo hygiene and contributor docs current.
 
-### 3.3 Human-readable errors `[~]`
-- Prefer errors that explain what went wrong and what the user should do next.
-- Avoid leaking unnecessary internals when the message can stay short and useful.
-- **Progress (2026-04-12):** Replaced generic catch-all error messages with descriptive ones in `OpenAiProvider`, `GoogleAiProvider`, and `OllamaProvider`. Added authentication-specific errors ("Check your API key"), model-not-found errors, network-error sanitization (strips IP/port details), and streaming-failure error markers. Added `ProviderErrorClassifier.SanitizeNetworkError()` utility.
+### 3.3 Human-readable errors `[x]`
+- Provider errors are descriptive and sanitized via `ProviderErrorClassifier`.
+- Network error sanitization strips internal addresses.
 
 ## 4. User-Facing Features (Prioritized)
 
-### 4.1 Keyboard-first UX `[ ]`
-- Global hotkey to summon the chat window from any app.
-- Ctrl+K command palette for switching providers, models, and conversations mid-flow.
-- Keyboard shortcuts for tool approval/denial, message navigation, and conversation actions.
-- Power users shouldn't need the mouse for common workflows.
+### 4.1 Keyboard-first UX `[x]`
+- Global hotkey (Alt+Space) to toggle window
+- Ctrl+K command palette
+- Keyboard navigation for dialogs (Enter, Escape, Left/Right arrows)
+- Global tool approval shortcuts (Enter=approve, Escape=deny)
 
-### 4.2 Conversation export and sharing `[ ]`
-- Export conversations as Markdown, HTML, or PDF.
-- Import conversations from exported files.
-- Self-contained format that preserves messages, tool calls, and images.
+### 4.2 Conversation export `[x]`
+- Export to Markdown via sidebar context menu and command palette
+- `ConversationExportService` with provider info, message timestamps, image notes, tool result cleanup
+- 9 dedicated tests
 
-### 4.3 Cost tracking dashboard `[ ]`
-- Surface per-provider and per-conversation token usage and estimated cost.
-- Token tracking data already exists for some providers; this is primarily a UI task.
-- Show cumulative spend over time with basic filtering.
+### 4.3 Cost tracking dashboard `[x]`
+- Full dashboard in Settings > Usage tab with per-provider breakdown, trend charts, live quota, estimated spend, currency conversion.
 
-### 4.4 Conversation branching / forking `[ ]`
-- Let users branch off from any message to explore alternative threads.
-- Preserve the original conversation while creating a new branch.
-- Tree-style navigation between branches.
+### 4.4 Conversation branching / forking `[x]`
+- Right-click any message → "Branch from here" creates new conversation with messages up to that point
+- `BranchConversationAsync` DB method with ID-based branch point and `ParentConversationId` linkage
+- `DbMessageId` on ChatMessage, `MessageId` on TranscriptEntry
+- Context menu in MessageListItemControl
+- Branched conversations appear indented under their parent in the sidebar (tree layout)
+- `ConversationSummary.ParentConversationId` drives sidebar grouping
+- 8 dedicated tests
 
-### 4.5 Prompt templates / snippets `[ ]`
-- User-defined prompt templates accessible from the composer.
-- Different from assistant modes: quick-fire prefixes like "Explain this code" or "Review this diff."
-- Support for parameterized templates with placeholder substitution.
+### 4.5 Prompt templates / snippets `[x]`
+- User-defined prompt templates with shortcut keys `PromptTemplateService`
+- Parameterized templates with `{{placeholder}}` substitution
+- Accessible from Ctrl+K command palette
+- Template management UI in Settings > Templates tab (list + edit form + live preview)
+- 9 dedicated tests
+
+### 4.5.1 Template editor usability `[~]`
+- Make the template body editor use the available vertical space.
+- Add inline guidance for first-time users with examples and placeholder insertion buttons.
+- Keep the preview visible while editing so users can learn by changing the template.
 
 ### 4.6 Multi-model comparison `[ ]`
-- Send the same prompt to 2-3 models side by side.
-- Compare responses in a split view.
-- Useful for evaluating which provider/model to use for a given task.
-
 ### 4.7 Provider-returned images `[ ]`
-- Support provider image output in the transcript if the provider can actually return it.
-
-### 4.8 Better context controls `[ ]`
-- Let users control context size, caching, and summarization more explicitly.
-
-### 4.9 Cleaner tool categories `[ ]`
-- Replace the current coarse tool toggles with category-based controls.
-
-### 4.10 Better onboarding defaults `[ ]`
-- Keep first-run choices simple: one obvious cloud path, one obvious local path, and one obvious power-user path.
+### 4.8 Better context controls `[x]`
+- Custom Instructions: persistent user-defined text appended to every system prompt
+- `CustomInstructionsService` persisted via `ISettingsRepository`
+- UI in Settings > Context tab (multi-line TextBox at top of pane)
+- Injected into `BuildRequestMessages` and passed through `ChatCoordinator`
+- 7 dedicated tests
+### 4.9 Cleaner tool categories `[x]`
+- Moved `http_request` from system to browser category for logical consistency
+- All prompt paths (Native verbose, Hermes, React, compact, text-based) now respect category filtering
+- Replaced static const strings with category-aware `BuildNativeVerbose`, `BuildHermes`, `BuildReact` builders
+- Updated "system" category description to accurately describe its contents
+### 4.10 Better onboarding defaults `[x]`
+- Starter prompt templates (Explain, Fix bugs, Code review, Summarize) seeded on first run
+- First-run experience creates `prompt_templates.json` with useful defaults
 
 ## 5. AI-Facing Features (Prioritized)
 
-### 5.1 Agent mode `[ ]`
-- A mode where the AI can autonomously chain tool calls without per-call approval.
-- Configurable scope (which tool categories) and token budget.
-- Auto-accept profiles are the foundation; this extends them into a full agent loop.
-- Session-level budget tracking with automatic stop when limit is reached.
+### 5.1 Orchestrator Mode `[~]`
+- Replace the current agent-mode toggle with a goal-driven orchestrator session.
+- Keep the main-window button as the visible activation / kill switch entry point.
+- Run on a heartbeat loop until goals are complete, the user stops it, or all fallbacks are exhausted.
+- Track goals, retries, provider/model health, and tool usage with visual and acoustic feedback.
+- Expose orchestration control through the local API.
+- Add dedicated help/documentation coverage for the new mode.
 
-### 5.2 Structured context injection `[ ]`
-- Let AIs declare what context they need (files, URLs, clipboard, recent messages) via a schema.
-- Aire auto-attaches the requested context before sending the prompt.
-- Reduces manual context assembly and enables richer AI workflows.
+### 5.2 Structured context injection `[x]`
+- `request_context` tool for AI to request context before responding
+- Supports: clipboard, environment, datetime, file (text files with binary skip), URL (HTTP fetch with timeout)
+- Wired into `ToolExecutionService` dispatch
+- 15 dedicated tests
 
-### 5.3 Tool result caching `[ ]`
-- Cache tool results (file reads, web fetches) within a session.
-- Repeated tool calls with identical parameters return cached results.
-- Reduces latency and cost for iterative AI work.
-- Cache invalidation on file modification or explicit flush.
-
+### 5.3 Tool result caching `[x]`
+- `ToolResultCache` caches results of idempotent read-only tools within a conversation turn
+- 14 cacheable tools: read_file, list_directory, search_files, search_file_content, get_system_info, get_running_processes, get_active_window, get_clipboard, list_browser_tabs, read_browser_tab, get_browser_html, get_browser_cookies, request_context, recall
+- 5-minute TTL per entry, cleared at start of each top-level turn
+- Integrated into `ToolExecutionService.ExecuteAsync` dispatch
+- 17 dedicated tests
 ### 5.4 Persistent AI memory per conversation `[ ]`
-- Let the AI store and retrieve structured key-value notes within a conversation.
-- Notes survive across sessions and are scoped to the conversation.
-- Different from conversation history: this is structured recall for facts and decisions.
-
 ### 5.5 Workflow chains `[ ]`
-- Define multi-step workflows where the output of one AI call feeds into the next.
-- Support cross-provider chains (e.g., vision model analyzes image, then language model writes code).
-- Template-based workflow definitions with variable passing between steps.
-
 ### 5.6 Local RAG integration `[ ]`
-- Index local files (code, docs, notes) and expose them as a searchable tool.
-- Ollama + local embeddings for fully offline operation.
-- Configurable index scope (directories, file types, update frequency).
 
 ### 5.7 Better automation ergonomics `[~]`
-- Make provider selection, tool approval, and local API usage easier to script and test.
-- Recent progress: the local API now exposes top-level window listing, selection, and screenshot capture, and the screenshots project reuses the same capture path instead of owning a separate one.
-
 ### 5.8 Plugin system `[ ]`
-- Formalize MCP + tool categories into a plugin architecture.
-- Let users and AIs install community tool packs without modifying the app.
-- Plugin manifest format, discovery, and lifecycle management.
 
 ## 6. Operating Rules
 
@@ -201,15 +147,30 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [Project analysis by Opus 4.6 (2026-04-09)](./project-analysis-opus-4.6-2026-04-09.md)
 - [GLM-5.1 evaluation (2026-04-11)](./project-analysis-glm-5.1-2026-04-11.md) *(to be created)*
 
-## 8. GLM-5.1 Sprint Priorities (2026-04-11)
+## 8. Sprint Status (2026-04-13)
 
-Work is happening on branch `glm/aire`. Implementation order:
+Work is happening on branch `glm/aire`. Test suite: **1244 non-UI tests, 0 failures**.
 
 | Priority | Task | Roadmap Ref | Status |
 |----------|------|-------------|--------|
 | P0 | Fix NU1903 `Microsoft.Bcl.Memory` vulnerability | 2.9 | `[x]` |
 | P0 | Consolidate `SimpleJsonServer` into shared test utility | 2.8 | `[x]` |
 | P1 | Decouple `LocalApiService` from `MainWindow` via `IApiCommandHandler` | 2.4 | `[x]` |
-| P1 | Extract MainWindow composition root into `App.xaml.cs` | 2.4 | `[~]` |
-| P2 | Cover untested Application services (19 services) | 3.1 | `[~]` (15/19 done) |
-| P2 | Human-readable errors for provider failures | 3.3 | `[~]` |
+| P1 | Extract MainWindow composition root into `App.xaml.cs` | 2.4 | `[x]` |
+| P2 | Cover all Application services (was 19 untested) | 3.1 | `[x]` |
+| P2 | Human-readable errors for provider failures | 3.3 | `[x]` |
+| P3 | Keyboard-first UX (global hotkey, command palette, dialog nav, tool approval) | 4.1 | `[x]` |
+| P3 | Orchestrator Mode (goal-driven autonomous workflow) | 5.1 | `[~]` |
+| P3 | Configurable local API port | 2.4 | `[x]` |
+| P3 | Conversation export (Markdown) | 4.2 | `[x]` |
+| P3 | Cost tracking dashboard | 4.3 | `[x]` |
+| P3 | Prompt templates with shortcut, placeholders, and settings UI | 4.5 | `[x]` |
+| P3 | Template editor usability (top-align, help, insert helpers) | 4.5.1 | `[~]` |
+| P3 | Structured context injection (clipboard, env, datetime, file, URL) | 5.2 | `[x]` |
+| P4 | Conversation branching / forking | 4.4 | `[x]` |
+| P4 | Token estimation accuracy | 2.7 | `[x]` |
+| P4 | Better onboarding defaults (starter prompt templates) | 4.10 | `[x]` |
+| P4 | Better context controls (custom instructions) | 4.8 | `[x]` |
+| P4 | Cleaner tool categories (category-aware all paths) | 4.9 | `[x]` |
+| P4 | Tool result caching (idempotent read-only tools) | 5.3 | `[x]` |
+| P4 | Help documentation update (8 tabs, 40 sections, screenshots) | 3.2 | `[x]` |

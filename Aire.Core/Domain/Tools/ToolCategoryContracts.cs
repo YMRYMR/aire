@@ -27,7 +27,7 @@ namespace Aire.Domain.Tools
             new ToolCategoryOption("agent", "Agent", "Use planning, follow-up, and task-management tools."),
             new ToolCategoryOption("mouse", "Mouse", "Move the mouse, click, drag, scroll, and take screenshots."),
             new ToolCategoryOption("keyboard", "Keyboard", "Type text and send key presses."),
-            new ToolCategoryOption("system", "System", "Inspect processes, open apps, and launch local system actions."),
+            new ToolCategoryOption("system", "System", "Clipboard, notifications, processes, memory, reminders, and system info."),
             new ToolCategoryOption("email", "Email", "Read, search, send, and reply to email."),
         };
 

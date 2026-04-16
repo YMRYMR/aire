@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
@@ -24,9 +25,15 @@ namespace Aire
         private LocalApiService? _localApiService;
         private ProviderModelRefreshService? _providerModelRefreshService;
         private GitHubReleaseUpdateService? _updateService;
+        private GlobalHotkeyService? _globalHotkeyService;
+        private MainWindowCompositionRoot? _compositionRoot;
         private readonly StartupDecisionApplicationService _startupDecisionService = new();
         private readonly StartupWindowCoordinator _startupWindowCoordinator = new();
         private readonly WindowVisibilityCoordinator _windowVisibilityCoordinator = new();
+        private const int UiDefaultsVersion = 2;
+        private static readonly string UiDefaultsVersionPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Aire", "ui-defaults.version");
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -64,6 +71,11 @@ namespace Aire
 
             base.OnStartup(e);
 
+            // Load UI languages before any window builds language pickers.
+            LocalizationService.LoadAll();
+
+            EnsureUiDefaultsApplied();
+
             // Apply saved appearance settings before any window is shown so the
             // splash screen (and all subsequent windows) use the correct theme.
             AppearanceService.ApplySaved();
@@ -72,7 +84,16 @@ namespace Aire
             // Show a splash window and use it to host startup work until the main
             // window is ready to appear immediately after the splash closes.
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            _mainWindow = new MainWindow();
+
+            // Build the composition root first so MainWindow receives pre-wired services.
+            // The hide/show callbacks will be bound after MainWindow is created.
+            _compositionRoot = new MainWindowCompositionRoot();
+
+            _mainWindow = new MainWindow(_compositionRoot, initializeUi: true);
+
+            // Wire the composition root's hide/show callbacks to the actual window.
+            _compositionRoot.HideWindow = () => _mainWindow.Dispatcher.Invoke(() => _mainWindow.Hide());
+            _compositionRoot.ShowWindow = () => { _mainWindow.Dispatcher.Invoke(() => _trayService?.ShowMainWindow()); return Task.CompletedTask; };
             MainWindow = _mainWindow;
             var initWindow = new InitializationWindow();
             await initWindow.RunAndCloseAsync(async progress =>
@@ -82,7 +103,6 @@ namespace Aire
             },
             async () =>
             {
-                _startupWindowCoordinator.ShowInitialMainWindow(_mainWindow, _trayService, Dispatcher);
                 await Dispatcher.InvokeAsync(() => { }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
             });
             ShutdownMode = ShutdownMode.OnLastWindowClose;
@@ -107,6 +127,11 @@ namespace Aire
             };
             _mainWindow.TrayService = _trayService;
             _mainWindow.IsVisibleChanged += OnMainWindowVisibilityChanged;
+
+            // Global hotkey (Alt+Space) to toggle window from any application.
+            _globalHotkeyService = new GlobalHotkeyService(_mainWindow);
+            _globalHotkeyService.ToggleCallback = () => _trayService.ToggleMainWindow();
+            StartGlobalHotkeyWhenReady();
 
             _localApiService = new LocalApiService(_mainWindow);
             AppState.ApiAccessChanged += OnApiAccessChanged;
@@ -147,6 +172,7 @@ namespace Aire
                 wizard.ShowDialog();
             }
 
+            _startupWindowCoordinator.ShowInitialMainWindow(_mainWindow, _trayService, Dispatcher);
             _startupWindowCoordinator.RestoreWindowsFromState(_mainWindow, _mainWindow);
 
             _providerModelRefreshService = new ProviderModelRefreshService(
@@ -187,6 +213,7 @@ namespace Aire
             _mainWindow?.Cleanup();
             _providerModelRefreshService?.Dispose();
             _trayService?.Dispose();
+            _globalHotkeyService?.Dispose();
             _localApiService?.Dispose();
             AppState.ApiAccessChanged -= OnApiAccessChanged;
             _activateEvent?.Dispose();
@@ -208,6 +235,30 @@ namespace Aire
                 _localApiService.Start();
             else
                 _ = _localApiService.StopAsync();
+        }
+
+        private void StartGlobalHotkeyWhenReady()
+        {
+            if (_mainWindow == null || _globalHotkeyService == null)
+                return;
+
+            void StartNow()
+            {
+                try
+                {
+                    _globalHotkeyService.Start();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    AppLogger.Warn("App.GlobalHotkey", "Deferring hotkey registration until the main window is ready", ex);
+                    _mainWindow.Dispatcher.BeginInvoke((Action)StartNow, System.Windows.Threading.DispatcherPriority.Loaded);
+                }
+            }
+
+            if (_mainWindow.IsLoaded)
+                _mainWindow.Dispatcher.BeginInvoke((Action)StartNow, System.Windows.Threading.DispatcherPriority.Loaded);
+            else
+                _mainWindow.Loaded += (_, _) => StartNow();
         }
 
         private async Task CheckForUpdatesAsync()
@@ -241,6 +292,46 @@ namespace Aire
             catch (Exception ex)
             {
                 AppLogger.Warn("App.Update", "Update check or installation failed", ex);
+            }
+        }
+
+        private static void EnsureUiDefaultsApplied()
+        {
+            try
+            {
+                var currentVersion = UiDefaultsVersion.ToString();
+                var storedVersion = File.Exists(UiDefaultsVersionPath)
+                    ? File.ReadAllText(UiDefaultsVersionPath).Trim()
+                    : string.Empty;
+
+                if (string.Equals(storedVersion, currentVersion, StringComparison.Ordinal))
+                    return;
+
+                Directory.CreateDirectory(Path.GetDirectoryName(UiDefaultsVersionPath)!);
+
+                DeleteIfExists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Aire", "windowstate.json"));
+                DeleteIfExists(UI.SettingsWindow.StatePath);
+                DeleteIfExists(UI.HelpWindow.StatePath);
+                DeleteIfExists(UI.WebViewWindow.StatePath);
+
+                File.WriteAllText(UiDefaultsVersionPath, currentVersion);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Warn("App.UiDefaults", "Failed to apply UI defaults migration", ex);
+            }
+        }
+
+        private static void DeleteIfExists(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
+            catch
+            {
+                // Ignore individual failures; the app still falls back to XAML defaults.
             }
         }
     }

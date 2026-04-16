@@ -5,77 +5,156 @@
                   HorizontalScrollBarVisibility="Disabled"
                   Margin="0 8 0 0">
         <StackPanel x:Name="PART_VoiceSection"
-                    Margin="4 8 4 16" MaxWidth="480" HorizontalAlignment="Left">
+                    Margin="4 8 4 24"
+                    HorizontalAlignment="Stretch"
+                    MaxWidth="760">
 
-            <TextBlock x:Name="PART_VoiceVoiceLabel"
-                       Text="Voice"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="11"
-                       Margin="0 0 0 6" />
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 8">
-                <ComboBox x:Name="PART_VoiceComboBox"
-                          Width="290"
-                          SelectionChanged="VoiceComboBox_SelectionChanged" />
-                <Button x:Name="PART_TestVoiceButton"
-                        Content="&#x1F50A;"
-                        Width="34" Height="34"
-                        Padding="0"
-                        Margin="4 0 0 0"
-                        ToolTip="Test selected voice"
-                        Click="TestVoiceButton_Click" />
-            </StackPanel>
-
-            <Border x:Name="PART_VoiceTestErrorBorder"
-                    Visibility="Collapsed"
-                    Background="{DynamicResource Surface2Brush}"
+            <Border Background="{DynamicResource SurfaceBrush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1"
-                    CornerRadius="4"
-                    Padding="10 8"
-                    Margin="0 0 0 12">
-                <TextBlock x:Name="PART_VoiceTestErrorText"
-                           Foreground="{DynamicResource TextSecondaryBrush}"
-                           FontSize="11"
-                           TextWrapping="Wrap" />
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock Text="Voice"
+                               Foreground="{DynamicResource TextBrush}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 4" />
+                    <TextBlock Text="Pick how Aire speaks, then press the sound button to hear it."
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="11"
+                               TextWrapping="Wrap" />
+                </StackPanel>
             </Border>
 
-            <CheckBox x:Name="PART_VoiceLocalOnlyCheckBox"
-                      Content="Use local voices only (no internet required)"
-                      Margin="0 0 0 4"
-                      Checked="VoiceLocalOnlyCheckBox_Changed"
-                      Unchecked="VoiceLocalOnlyCheckBox_Changed" />
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_VoiceVoiceLabel"
+                               Text="Voice"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <Grid Margin="0 0 0 8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="PART_VoiceComboBox"
+                                  Grid.Column="0"
+                                  MinWidth="280"
+                                  HorizontalAlignment="Stretch"
+                                  SelectionChanged="VoiceComboBox_SelectionChanged" />
+                        <Button x:Name="PART_TestVoiceButton"
+                                Grid.Column="1"
+                                Content="&#x1F50A;"
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                Margin="8 0 0 0"
+                                ToolTip="Test selected voice"
+                                Click="TestVoiceButton_Click" />
+                    </Grid>
 
-            <Button x:Name="PART_DownloadVoicesButton"
-                    Content="Download Windows voices..."
-                    HorizontalAlignment="Left"
-                    Padding="10 6"
-                    Margin="0 0 0 20"
-                    Click="DownloadVoicesButton_Click" />
+                    <Border x:Name="PART_VoiceTestErrorBorder"
+                            Visibility="Collapsed"
+                            Background="{DynamicResource Surface2Brush}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Padding="10 8"
+                            Margin="0 2 0 0">
+                        <TextBlock x:Name="PART_VoiceTestErrorText"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   FontSize="11"
+                                   TextWrapping="Wrap" />
+                    </Border>
+                </StackPanel>
+            </Border>
 
-            <TextBlock x:Name="PART_VoiceSpeedLabel"
-                       Text="Speed"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="11"
-                       Margin="0 0 0 6" />
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="PART_VoiceSpeedDecreaseButton"
-                        Content="&#x2212;"
-                        Width="34" Height="34"
-                        Padding="0"
-                        Margin="0 0 4 0"
-                        Click="VoiceSpeedDecreaseButton_Click" />
-                <TextBlock x:Name="PART_VoiceSpeedDisplay"
-                           Width="44"
-                           TextAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="{DynamicResource TextBrush}" />
-                <Button x:Name="PART_VoiceSpeedIncreaseButton"
-                        Content="+"
-                        Width="34" Height="34"
-                        Padding="0"
-                        Margin="4 0 0 0"
-                        Click="VoiceSpeedIncreaseButton_Click" />
-            </StackPanel>
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock Text="Voice source"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <CheckBox x:Name="PART_VoiceLocalOnlyCheckBox"
+                              Content="Use local voices only"
+                              Margin="0 0 0 4"
+                              Checked="VoiceLocalOnlyCheckBox_Changed"
+                              Unchecked="VoiceLocalOnlyCheckBox_Changed" />
+                    <TextBlock Text="Keeps speech offline and avoids downloading or using cloud voices."
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="11"
+                               TextWrapping="Wrap"
+                               Margin="20 2 0 10" />
+
+                    <Button x:Name="PART_DownloadVoicesButton"
+                            Content="Download Windows voices..."
+                            HorizontalAlignment="Left"
+                            Padding="12 7"
+                            Click="DownloadVoicesButton_Click" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_VoiceSpeedLabel"
+                               Text="Speed"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="PART_VoiceSpeedDecreaseButton"
+                                Grid.Column="0"
+                                Content="&#x2212;"
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                Margin="0 0 6 0"
+                                Click="VoiceSpeedDecreaseButton_Click" />
+                        <TextBlock x:Name="PART_VoiceSpeedDisplay"
+                                   Grid.Column="1"
+                                   Width="52"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   FontWeight="SemiBold" />
+                        <Button x:Name="PART_VoiceSpeedIncreaseButton"
+                                Grid.Column="2"
+                                Content="+"
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                Margin="6 0 0 0"
+                                Click="VoiceSpeedIncreaseButton_Click" />
+                    </Grid>
+                </StackPanel>
+            </Border>
 
         </StackPanel>
     </ScrollViewer>

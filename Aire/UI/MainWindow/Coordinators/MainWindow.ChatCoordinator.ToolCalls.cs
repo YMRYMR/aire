@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Aire.Services;
 using Aire.Services.Workflows;
@@ -29,6 +30,79 @@ namespace Aire
                 {
                     await _owner.AddErrorMessageAsync(outcome.ErrorMessage ?? string.Empty);
                 }
+            }
+
+            private static bool IsOrchestratorToolCallCutOff(ChatTurnWorkflowService.ChatTurnOutcome outcome)
+            {
+                var text = string.Join(' ', new[] { outcome.ErrorMessage, outcome.TextContent }.Where(value => !string.IsNullOrWhiteSpace(value)));
+                if (string.IsNullOrWhiteSpace(text))
+                    return false;
+
+                return text.Contains("cut off before the tool call could complete", StringComparison.OrdinalIgnoreCase)
+                    || text.Contains("max_tokens limit reached", StringComparison.OrdinalIgnoreCase)
+                    || text.Contains("response was cut off", StringComparison.OrdinalIgnoreCase)
+                    || text.Contains("tool call could complete", StringComparison.OrdinalIgnoreCase);
+            }
+
+            private static bool IsOrchestratorCutOffOutcome(ChatTurnWorkflowService.ChatTurnOutcome outcome)
+            {
+                if (IsOrchestratorToolCallCutOff(outcome))
+                    return true;
+
+                var text = string.Join(' ', new[] { outcome.ErrorMessage, outcome.TextContent }.Where(value => !string.IsNullOrWhiteSpace(value)));
+                return text.Contains("response was cut off", StringComparison.OrdinalIgnoreCase)
+                    || text.Contains("max_tokens limit reached", StringComparison.OrdinalIgnoreCase)
+                    || text.Contains("try asking the model to break the task into smaller steps", StringComparison.OrdinalIgnoreCase);
+            }
+
+            private async Task<bool> TryRecoverOrchestratorModelCutoffAsync(
+                ChatTurnWorkflowService.ChatTurnOutcome outcome,
+                int iteration,
+                bool wasVoice,
+                CancellationToken cancellationToken,
+                bool recoveryTurn)
+            {
+                if (_owner._agentModeService?.IsActive != true)
+                    return false;
+
+                if (!IsOrchestratorCutOffOutcome(outcome))
+                    return false;
+
+                if (!_owner._currentProviderId.HasValue)
+                    return false;
+
+                var currentProviderId = _owner._currentProviderId.Value;
+                if (recoveryTurn)
+                {
+                    await _owner.AddErrorMessageAsync(
+                        "The model cut off again while retrying. Orchestrator Mode has been paused so you can raise max_tokens, simplify the goal, or try a different provider.");
+                    _owner.StopOrchestratorMode("model cut off repeatedly");
+                    return true;
+                }
+
+                var narration = "The current model cut off before it could finish the step. I’m switching to another model, raising the retry budget, and trying again.";
+                await _owner.AddOrchestratorNarrativeAsync(narration);
+
+                _owner._agentModeService?.RecordTaskFailure(
+                    "provider-response",
+                    $"{currentProviderId}:{outcome.ErrorMessage ?? outcome.TextContent ?? "provider cut off"}");
+
+                var switched = await _owner.TrySwitchOrchestratorFallbackProviderAsync(currentProviderId);
+
+                if (!switched)
+                {
+                    await _owner.AddErrorMessageAsync(
+                        "The current model cut off before it could finish the step, and no fallback model was available.\n\nTry increasing max_tokens in Settings or enabling another provider.");
+                    return true;
+                }
+
+                if (_owner._agentModeService?.IsActive == true)
+                {
+                    await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken, recoveryTurn: true);
+                    return true;
+                }
+
+                return true;
             }
 
             private string HandleUpdateTodoList(ParsedAiResponse parsed)

@@ -45,6 +45,7 @@ namespace Aire.UI
             Loaded += (_, _) =>
             {
                 PruneHiddenProviderChoices();
+                LocalizationService.LoadAll();
                 BuildLanguageButtons();
                 DetectAndSelectLanguage();
                 BuildProviderCards();

@@ -117,6 +117,26 @@ public static class WindowCaptureService
         return Capture(window, options ?? new WindowCaptureOptions());
     }
 
+    public static TopLevelWindowInfo CloseWindow(WindowSelectionRequest request)
+    {
+        var window = ResolveWindow(request);
+        var active = GetForegroundWindow();
+        var selectedId = AppState.GetSelectedWindowId();
+        var info = ToInfo(window, active, selectedId);
+
+        CloseWindow(window.Handle);
+        if (string.Equals(info.WindowId, selectedId, StringComparison.OrdinalIgnoreCase))
+            AppState.SetSelectedWindowId(string.Empty);
+
+        return info;
+    }
+
+    public static TopLevelWindowInfo CloseWindow(string windowId)
+        => CloseWindow(new WindowSelectionRequest { WindowId = windowId });
+
+    public static TopLevelWindowInfo CloseActiveWindow()
+        => CloseWindow(new WindowSelectionRequest { UseActiveWindow = true });
+
     public static WindowCaptureResult CaptureActiveWindow(WindowCaptureOptions? options = null)
         => Capture(GetActiveWindow(), options ?? new WindowCaptureOptions { ActivateWindow = false });
 

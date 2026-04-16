@@ -137,4 +137,27 @@ public class ConversationTranscriptApplicationServiceTests
         Assert.Empty(transcript.Entries[0].FileAttachments);
         Assert.Empty(transcript.Entries[0].ImageReferences);
     }
+
+    [Fact]
+    public void BuildTranscript_RestoresOrchestratorMessagesAsDedicatedSender()
+    {
+        var service = new ConversationTranscriptApplicationService();
+        var messages = new[]
+        {
+            new Message
+            {
+                Role = "orchestrator",
+                Content = "I’m resuming the saved session.",
+                CreatedAt = DateTime.UtcNow
+            }
+        };
+
+        var transcript = service.BuildTranscript(messages);
+
+        Assert.Single(transcript.Entries);
+        var entry = transcript.Entries[0];
+        Assert.Equal("Orchestrator", entry.Sender);
+        Assert.Equal(ConversationTranscriptApplicationService.TranscriptRole.Orchestrator, entry.Role);
+        Assert.Empty(transcript.ConversationHistory);
+    }
 }

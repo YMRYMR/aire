@@ -10,8 +10,8 @@
         xmlns:l="clr-namespace:Aire.Services"
         mc:Ignorable="d"
         Title="Aire"
-        Height="620"
-        Width="460"
+        Height="700"
+        Width="900"
         MinHeight="420"
         MinWidth="360"
         WindowStartupLocation="Manual"
@@ -36,12 +36,23 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" GlassFrameThickness="0" ResizeBorderThickness="4" UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <!-- Command Palette popup (Ctrl+K) -->
+        <Popup x:Name="CommandPalettePopup"
+               Placement="Center"
+               AllowsTransparency="True"
+               PopupAnimation="Fade"
+               StaysOpen="False"
+               Width="420">
+            <mw:CommandPaletteControl x:Name="CommandPaletteControl" />
+        </Popup>
 
         <mw:MainHeaderControl x:Name="HeaderControl"
                               Grid.Row="0"
@@ -105,7 +116,8 @@
                         <mw:MessageListItemControl ChatImageMouseLeftButtonUp="ChatImage_MouseLeftButtonUp"
                                                    AnswerButtonClick="AnswerButton_Click"
                                                    ApproveToolCallClick="ApproveToolCall_Click"
-                                                   DenyToolCallClick="DenyToolCall_Click" />
+                                                   DenyToolCallClick="DenyToolCall_Click"
+                                                   BranchFromHereClick="BranchFromMessage_Click" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -131,6 +143,8 @@
                                 InputPreviewDrop="InputTextBox_Drop"
                                 InputPreviewDragOver="InputTextBox_DragOver"
                                 MicClicked="MicButton_Click"
-                                ToolsClicked="ToolsButton_Click" />
+                                ToolsClicked="ToolsButton_Click"
+                                AgentModeClicked="AgentModeButton_Click"
+                                StopAgentClicked="StopAgentButton_Click" />
     </Grid>
 </Window>

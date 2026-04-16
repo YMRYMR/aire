@@ -197,7 +197,7 @@ contributors.
 10. **Tool result caching** -- Cache tool results (file reads, web fetches) within a session
     so repeated tool calls don't re-execute. Reduces latency and cost for iterative work.
 
-11. **Agent mode** -- A mode where the AI can autonomously chain tool calls without per-call
+11. **Orchestrator Mode** -- A mode where the AI can autonomously chain tool calls without per-call
     approval, within a configurable scope and token budget. The auto-accept profiles are a
     start, but a full agent loop would unlock real automation.
 

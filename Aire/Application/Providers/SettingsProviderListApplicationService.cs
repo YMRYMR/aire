@@ -66,7 +66,7 @@ namespace Aire.AppLayer.Providers
                 Type = descriptor.Type,
                 Model = defaultModel,
                 IsEnabled = true,
-                Color = "#888888"
+                Color = ProviderColorPalette.GetColorForText(descriptor.Type)
             };
             provider.Id = await providers.InsertProviderAsync(provider);
             return provider;

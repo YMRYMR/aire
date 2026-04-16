@@ -30,6 +30,7 @@ namespace Aire.UI
             _emailAccountApplicationService = new EmailAccountApplicationService(_databaseService);
             _appSettingsApplicationService = new AppSettingsApplicationService(_databaseService);
             _contextSettingsApplicationService = new ContextSettingsApplicationService(_databaseService);
+            _customInstructionsService = new CustomInstructionsService(_databaseService);
             _autoAcceptProfilesApplicationService = new AutoAcceptProfilesApplicationService(_databaseService);
             _providerFactory = new ProviderFactory(_databaseService);
             _ttsService = ttsService ?? SpeechSynthesisService.Current;
@@ -47,6 +48,7 @@ namespace Aire.UI
             WireVoicePaneEvents();
             WireContextPaneEvents();
             WireAutoAcceptPaneEvents();
+            WireTemplatePaneEvents();
             OllamaModelPicker.ModelSelectionChanged += (_, _) => _ = PerformAutoSave();
 
             Current = this;
@@ -89,6 +91,7 @@ namespace Aire.UI
             _suppressApiAccess = true;
             ApiAccessEnabledCheckBox.IsChecked = AppState.GetApiAccessEnabled();
             ApiAccessTokenBox.Text = AppState.EnsureApiAccessToken();
+            ApiPortBox.Text = AppState.GetApiPort().ToString();
             _suppressApiAccess = false;
 
             PopulateLanguageComboBox();
@@ -133,6 +136,7 @@ namespace Aire.UI
                 await RefreshProvidersList();
                 await LoadContextSettings();
                 await LoadAutoAcceptProfilesAsync();
+                LoadTemplates();
                 await LoadAutoAcceptSettings();
                 await LoadUsageDashboardAsync();
                 HookAutoAcceptEvents();

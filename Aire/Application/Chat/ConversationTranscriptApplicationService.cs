@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Aire.Data;
+using Aire.Services;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
 
 namespace Aire.AppLayer.Chat
@@ -23,6 +24,7 @@ namespace Aire.AppLayer.Chat
             User,
             Assistant,
             Tool,
+            Orchestrator,
             System
         }
 
@@ -30,6 +32,7 @@ namespace Aire.AppLayer.Chat
         /// One transcript entry ready for UI rendering.
         /// </summary>
         public sealed record TranscriptEntry(
+            int MessageId,
             TranscriptRole Role,
             string Sender,
             string Text,
@@ -56,6 +59,7 @@ namespace Aire.AppLayer.Chat
             var entries = new List<TranscriptEntry>(messages.Count);
             var history = new List<ProviderChatMessage>();
             var inputHistory = new List<string>();
+            var pendingToolDescriptions = new Queue<string>();
             DateTime? lastDate = null;
 
             foreach (var msg in messages)
@@ -65,6 +69,7 @@ namespace Aire.AppLayer.Chat
                     "user" => TranscriptRole.User,
                     "assistant" => TranscriptRole.Assistant,
                     "tool" => TranscriptRole.Tool,
+                    "orchestrator" => TranscriptRole.Orchestrator,
                     _ => TranscriptRole.System
                 };
 
@@ -73,6 +78,7 @@ namespace Aire.AppLayer.Chat
                     TranscriptRole.User => "You",
                     TranscriptRole.Assistant => "AI",
                     TranscriptRole.Tool => "AI",
+                    TranscriptRole.Orchestrator => "Orchestrator",
                     _ => "System"
                 };
 
@@ -84,8 +90,15 @@ namespace Aire.AppLayer.Chat
                 }
                 else if (role == TranscriptRole.Assistant)
                 {
-                    var parsedAssistant = _assistantImageResponse.Parse(msg.Content);
-                    history.Add(new ProviderChatMessage { Role = "assistant", Content = parsedAssistant.Text });
+                    var parsedAssistant = ToolCallParser.Parse(msg.Content);
+                    var assistantText = _assistantImageResponse.Parse(msg.Content).Text;
+                    history.Add(new ProviderChatMessage { Role = "assistant", Content = assistantText });
+
+                    foreach (var toolCall in parsedAssistant.ToolCalls)
+                    {
+                        if (!string.IsNullOrWhiteSpace(toolCall.Description))
+                            pendingToolDescriptions.Enqueue(toolCall.Description);
+                    }
                 }
 
                 bool startsNewDateSection =
@@ -119,8 +132,20 @@ namespace Aire.AppLayer.Chat
                     if (parsedAssistant.ImageReferences.Count > 0)
                         imageReferences = parsedAssistant.ImageReferences;
                 }
+                else if (role == TranscriptRole.Tool && pendingToolDescriptions.Count > 0)
+                {
+                    var detail = pendingToolDescriptions.Dequeue();
+                    if (!string.IsNullOrWhiteSpace(detail) &&
+                        !string.Equals(detail, entryText, StringComparison.Ordinal))
+                    {
+                        entryText = string.IsNullOrWhiteSpace(entryText)
+                            ? detail
+                            : $"{entryText}\n\n{detail}";
+                    }
+                }
 
                 entries.Add(new TranscriptEntry(
+                    msg.Id,
                     role,
                     sender,
                     entryText,

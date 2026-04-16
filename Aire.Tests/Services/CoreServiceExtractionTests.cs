@@ -178,6 +178,8 @@ public class CoreServiceExtractionTests
     {
         Assert.True(ToolExecutionMetadata.IsKeyboardTool("type_text"));
         Assert.True(ToolExecutionMetadata.IsMouseTool("mouse_click"));
+        Assert.True(ToolExecutionMetadata.IsMouseTool("take_screenshot"));
+        Assert.False(ToolExecutionMetadata.IsKeyboardTool("take_screenshot"));
         Assert.True(ToolExecutionMetadata.IsSessionTool("take_screenshot"));
         Assert.False(ToolExecutionMetadata.IsSessionTool("open_url"));
     }

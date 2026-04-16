@@ -6,7 +6,9 @@
         Width="320"
         WindowStyle="None"
         ResizeMode="NoResize"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Loaded="Window_Loaded">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" GlassFrameThickness="0" ResizeBorderThickness="0" UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>

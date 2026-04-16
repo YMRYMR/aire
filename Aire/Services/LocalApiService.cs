@@ -13,7 +13,9 @@ namespace Aire.Services
     /// </summary>
     internal sealed class LocalApiService : IDisposable
     {
-        public const int Port = 51234;
+        public const int DefaultPort = 51234;
+
+        public int EffectivePort { get; private set; } = DefaultPort;
 
         private readonly IApiCommandHandler _handler;
         private CancellationTokenSource? _listenerCts;
@@ -38,7 +40,9 @@ namespace Aire.Services
             // Guarantee a token exists so the screenshots tool can authenticate immediately after
             // the window appears — even if a previous run wiped the persisted token.
             AppState.EnsureApiAccessToken();
-            ApiTraceLog.Record("service", "start", $"Local API listener started on 127.0.0.1:{Port}", true);
+            EffectivePort = AppState.GetApiPort();
+            AppLogger.Info("LocalApiService.Start", $"Starting local API listener on 127.0.0.1:{EffectivePort}");
+            ApiTraceLog.Record("service", "start", $"Local API listener started on 127.0.0.1:{EffectivePort}", true);
             _listenerCts = new CancellationTokenSource();
             _listenerTask = Task.Run(() => ListenAsync(_listenerCts.Token));
         }
@@ -74,8 +78,17 @@ namespace Aire.Services
         /// <param name="token">Cancellation token used to stop the listener loop.</param>
         private async Task ListenAsync(CancellationToken token)
         {
-            _listener = new TcpListener(IPAddress.Loopback, Port);
-            _listener.Start();
+            try
+            {
+                _listener = new TcpListener(IPAddress.Loopback, EffectivePort);
+                _listener.Start();
+                AppLogger.Info("LocalApiService.Listen", $"Local API listener bound to 127.0.0.1:{EffectivePort}");
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error("LocalApiService.Listen", $"Failed to start local API listener on 127.0.0.1:{EffectivePort}", ex);
+                throw;
+            }
 
             while (!token.IsCancellationRequested)
             {
@@ -207,13 +220,17 @@ namespace Aire.Services
                     "get_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.GetSelectedWindow()),
                     "select_window" => LocalApiResponse.OkResult(WindowCaptureService.SelectWindow(BuildWindowSelectionRequest(request.Parameters)
                         ?? throw new InvalidOperationException("select_window requires window selection parameters."))),
+                    "close_window" => LocalApiResponse.OkResult(WindowCaptureService.CloseWindow(
+                        BuildWindowSelectionRequest(request.Parameters)
+                        ?? throw new InvalidOperationException("close_window requires window selection parameters."))),
+                    "close_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.CloseActiveWindow()),
                     "capture_window" => LocalApiResponse.OkResult(WindowCaptureService.CaptureWindow(
                         BuildWindowSelectionRequest(request.Parameters) ?? new WindowSelectionRequest(),
                         BuildWindowCaptureOptions(request.Parameters))),
                     "capture_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.CaptureSelectedWindow(BuildWindowCaptureOptions(request.Parameters))),
                     "show_main_window" => await VoidToOkAsync(_handler.ShowMainWindowAsync()),
                     "hide_main_window" => await VoidToOkAsync(_handler.HideMainWindowAsync()),
-                    "open_settings" => await VoidToOkAsync(_handler.ShowSettingsWindowAsync()),
+                    "open_settings" => await VoidToOkAsync(_handler.ShowSettingsWindowAsync(GetNullableString(request.Parameters, "tab"))),
                     "open_browser" => await VoidToOkAsync(_handler.ShowBrowserWindowAsync()),
                     "list_providers" => LocalApiResponse.OkResult(await _handler.ApiListProvidersAsync().ConfigureAwait(false)),
                     "create_provider" => LocalApiResponse.OkResult(await _handler.ApiCreateProviderAsync(
@@ -255,12 +272,64 @@ namespace Aire.Services
                         GetIntOrDefault(request.Parameters, "approval_timeout_seconds", 300)).ConfigureAwait(false)),
                     "get_trace" => LocalApiResponse.OkResult(ApiTraceLog.GetSince(GetLong(request.Parameters, "afterId"), GetIntOrDefault(request.Parameters, "limit", 100))),
                     "clear_trace" => LocalApiResponse.OkResult(ClearTrace()),
+                    "toggle_sidebar" => LocalApiResponse.OkResult(await _handler.ApiToggleSidebarAsync(
+                        GetNullableBool(request.Parameters, "open")).ConfigureAwait(false)),
+                    "open_sidebar" => LocalApiResponse.OkResult(await _handler.ApiToggleSidebarAsync(true).ConfigureAwait(false)),
+                    "close_sidebar" => LocalApiResponse.OkResult(await _handler.ApiToggleSidebarAsync(false).ConfigureAwait(false)),
+                    "toggle_voice_output" => LocalApiResponse.OkResult(await _handler.ApiToggleVoiceOutputAsync(
+                        GetNullableBool(request.Parameters, "enabled")).ConfigureAwait(false)),
+                    "open_search" => LocalApiResponse.OkResult(await _handler.ApiOpenSearchAsync(
+                        GetNullableString(request.Parameters, "query")).ConfigureAwait(false)),
+                    "set_search" => LocalApiResponse.OkResult(await _handler.ApiOpenSearchAsync(
+                        GetNullableString(request.Parameters, "query")).ConfigureAwait(false)),
+                    "navigate_search" => LocalApiResponse.OkResult(await _handler.ApiNavigateSearchAsync(
+                        GetString(request.Parameters, "direction")).ConfigureAwait(false)),
+                    "search_next" => LocalApiResponse.OkResult(await _handler.ApiNavigateSearchAsync("next").ConfigureAwait(false)),
+                    "search_prev" => LocalApiResponse.OkResult(await _handler.ApiNavigateSearchAsync("prev").ConfigureAwait(false)),
+                    "close_search" => LocalApiResponse.OkResult(await _handler.ApiCloseSearchAsync().ConfigureAwait(false)),
+                    "pin_window" => LocalApiResponse.OkResult(await _handler.ApiPinWindowAsync(
+                        GetNullableBool(request.Parameters, "pinned")).ConfigureAwait(false)),
+                    "toggle_orchestrator_mode" => LocalApiResponse.OkResult(await _handler.ApiToggleOrchestratorModeAsync(
+                        GetNullableBool(request.Parameters, "enabled"),
+                        GetNullableInt(request.Parameters, "budget"),
+                        GetStringList(request.Parameters, "categories"),
+                        GetStringList(request.Parameters, "goals")).ConfigureAwait(false)),
+                    "start_orchestrator_mode" => LocalApiResponse.OkResult(await _handler.ApiToggleOrchestratorModeAsync(
+                        true,
+                        GetNullableInt(request.Parameters, "budget"),
+                        GetStringList(request.Parameters, "categories"),
+                        GetStringList(request.Parameters, "goals")).ConfigureAwait(false)),
+                    "stop_orchestrator_mode" => LocalApiResponse.OkResult(await _handler.ApiToggleOrchestratorModeAsync(false).ConfigureAwait(false)),
+                    "set_orchestrator_goals" => LocalApiResponse.OkResult(await _handler.ApiSetOrchestratorGoalsAsync(GetStringList(request.Parameters, "goals") ?? new List<string>()).ConfigureAwait(false)),
+                    "toggle_agent_mode" => LocalApiResponse.OkResult(await _handler.ApiToggleAgentModeAsync(
+                        GetNullableBool(request.Parameters, "enabled"),
+                        GetNullableInt(request.Parameters, "budget"),
+                        GetStringList(request.Parameters, "categories")).ConfigureAwait(false)),
+                    "start_agent_mode" => LocalApiResponse.OkResult(await _handler.ApiToggleAgentModeAsync(
+                        true,
+                        GetNullableInt(request.Parameters, "budget"),
+                        GetStringList(request.Parameters, "categories")).ConfigureAwait(false)),
+                    "stop_agent_mode" => LocalApiResponse.OkResult(await _handler.ApiToggleAgentModeAsync(false).ConfigureAwait(false)),
+                    "set_input" => LocalApiResponse.OkResult(await _handler.ApiSetInputAsync(
+                        GetString(request.Parameters, "text")).ConfigureAwait(false)),
+                    "attach_file" => LocalApiResponse.OkResult(await _handler.ApiAttachFileAsync(
+                        GetString(request.Parameters, "filePath")).ConfigureAwait(false)),
+                    "remove_attachment" => LocalApiResponse.OkResult(await _handler.ApiRemoveAttachmentAsync().ConfigureAwait(false)),
+                    "branch_from_message" => LocalApiResponse.OkResult(await _handler.ApiBranchFromMessageAsync(
+                        GetInt(request.Parameters, "messageId")).ConfigureAwait(false)),
+                    "branch_conversation" => LocalApiResponse.OkResult(await _handler.ApiBranchConversationAsync(
+                        GetInt(request.Parameters, "conversationId"),
+                        GetInt(request.Parameters, "upToMessageId")).ConfigureAwait(false)),
                     _ => LocalApiResponse.Error($"Unknown method: {request.Method}")
                 };
             }
             catch (InvalidOperationException)
             {
                 return LocalApiResponse.Error("Invalid local API request.");
+            }
+            catch (ArgumentException ex)
+            {
+                return LocalApiResponse.Error(ex.Message);
             }
             catch (Exception ex)
             {
@@ -353,6 +422,21 @@ namespace Aire.Services
             }
 
             return defaultValue;
+        }
+
+        internal static bool? GetNullableBool(JsonElement? element, string name)
+        {
+            if (element.HasValue &&
+                element.Value.ValueKind == JsonValueKind.Object &&
+                element.Value.TryGetProperty(name, out var prop))
+            {
+                if (prop.ValueKind == JsonValueKind.True) return true;
+                if (prop.ValueKind == JsonValueKind.False) return false;
+                if (prop.ValueKind == JsonValueKind.String && bool.TryParse(prop.GetString(), out var parsed))
+                    return parsed;
+            }
+
+            return null;
         }
 
         internal static long GetLong(JsonElement? element, string name)

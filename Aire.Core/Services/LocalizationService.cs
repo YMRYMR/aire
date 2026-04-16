@@ -69,30 +69,30 @@ namespace Aire.Services
                         using var doc = JsonDocument.Parse(json);
                         var root = doc.RootElement;
 
-                        var code = root.GetProperty("code").GetString() ?? "";
-                        var name = root.GetProperty("nativeName").GetString() ?? code;
-                        var flag = root.TryGetProperty("flag", out var f) ? f.GetString() ?? "" : "";
+                        var code = ReadText(root.GetProperty("code"));
+                        var name = ReadText(root.GetProperty("nativeName"), fallback: code);
+                        var flag = root.TryGetProperty("flag", out var f) ? ReadText(f) : "";
 
                         var strings = new Dictionary<string, string>();
                         if (root.TryGetProperty("strings", out var strEl))
                             foreach (var prop in strEl.EnumerateObject())
-                                strings[prop.Name] = prop.Value.GetString() ?? "";
+                                strings[prop.Name] = ReadText(prop.Value);
 
                         var helpSections = new List<HelpSection>();
                         if (root.TryGetProperty("help", out var helpEl))
                         {
                             foreach (var section in helpEl.EnumerateArray())
                             {
-                                var type  = section.TryGetProperty("type",  out var typeEl)  ? typeEl.GetString()  ?? "text" : "text";
-                                var title = section.TryGetProperty("title", out var titleEl) ? titleEl.GetString() ?? ""     : "";
+                                var type  = section.TryGetProperty("type",  out var typeEl)  ? ReadText(typeEl, "text") : "text";
+                                var title = section.TryGetProperty("title", out var titleEl) ? ReadText(titleEl) : "";
 
-                                var tab = section.TryGetProperty("tab", out var tabEl) ? tabEl.GetString() : null;
-                                var imagePath = section.TryGetProperty("imagePath", out var imagePathEl) ? imagePathEl.GetString() : null;
-                                var imageCaption = section.TryGetProperty("imageCaption", out var imageCaptionEl) ? imageCaptionEl.GetString() : null;
+                                var tab = section.TryGetProperty("tab", out var tabEl) ? ReadText(tabEl) : null;
+                                var imagePath = section.TryGetProperty("imagePath", out var imagePathEl) ? ReadText(imagePathEl) : null;
+                                var imageCaption = section.TryGetProperty("imageCaption", out var imageCaptionEl) ? ReadText(imageCaptionEl) : null;
 
                                 if (type == "table")
                                 {
-                                    var intro = section.TryGetProperty("intro", out var iEl) ? iEl.GetString() : null;
+                                    var intro = section.TryGetProperty("intro", out var iEl) ? ReadText(iEl) : null;
 
                                     string[]? cols = null;
                                     if (section.TryGetProperty("cols", out var colsEl))
@@ -121,8 +121,8 @@ namespace Aire.Services
                                 }
                                 else
                                 {
-                                    var content = section.TryGetProperty("content", out var c) ? c.GetString() ?? "" : "";
-                                    var intro   = section.TryGetProperty("intro", out var introEl) ? introEl.GetString() : null;
+                                    var content = section.TryGetProperty("content", out var c) ? ReadText(c) : "";
+                                    var intro   = section.TryGetProperty("intro", out var introEl) ? ReadText(introEl) : null;
                                     helpSections.Add(new HelpSection(type, title, Tab: tab, Content: content, Intro: intro, Links: ParseLinks(section), ImagePath: imagePath, ImageCaption: imageCaption));
                                 }
                             }
@@ -134,7 +134,10 @@ namespace Aire.Services
                             langs.Add(new LanguageInfo(code, name, flag));
                         }
                     }
-                    catch { /* skip malformed files */ }
+                    catch (Exception ex)
+                    {
+                        AppLogger.Warn("LocalizationService.LoadAll", $"Skipping language file '{Path.GetFileName(file)}'", ex);
+                    }
                 }
             }
 
@@ -158,6 +161,22 @@ namespace Aire.Services
                     list.Add(new LinkItem(label, action));
             }
             return list.Count > 0 ? list.ToArray() : null;
+        }
+
+        private static string ReadText(JsonElement element, string fallback = "")
+        {
+            return element.ValueKind switch
+            {
+                JsonValueKind.String => element.GetString() ?? fallback,
+                JsonValueKind.Number or JsonValueKind.True or JsonValueKind.False => element.ToString(),
+                JsonValueKind.Array => string.Join(
+                    "\n",
+                    element.EnumerateArray()
+                           .Select(item => ReadText(item))
+                           .Where(value => !string.IsNullOrWhiteSpace(value))),
+                JsonValueKind.Null or JsonValueKind.Undefined => fallback,
+                _ => element.ToString(),
+            };
         }
 
         public static void SetLanguage(string code)
