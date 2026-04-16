@@ -24,30 +24,48 @@ namespace Aire.UI
 
         internal void BuildLanguageButtons()
         {
+            LangPanel.Children.Clear();
+
             foreach (var lang in LocalizationService.AvailableLanguages)
             {
-                var btn = new WpfButton
+                WpfButton btn;
+                try
                 {
-                    Tag = lang.Code,
-                    Margin = new Thickness(3),
-                    Padding = new Thickness(8, 5, 8, 5),
-                    Cursor = WpfCursors.Hand,
-                };
+                    btn = new WpfButton
+                    {
+                        Tag = lang.Code,
+                        Margin = new Thickness(3),
+                        Padding = new Thickness(8, 5, 8, 5),
+                        Cursor = WpfCursors.Hand,
+                    };
 
-                var flag = FlagPainter.Create(lang.Code, 22, 14);
-                ((FrameworkElement)flag).Margin = new Thickness(0, 0, 6, 0);
-                ((FrameworkElement)flag).VerticalAlignment = VerticalAlignment.Center;
+                    var flag = FlagPainter.Create(lang.Code, 22, 14);
+                    ((FrameworkElement)flag).Margin = new Thickness(0, 0, 6, 0);
+                    ((FrameworkElement)flag).VerticalAlignment = VerticalAlignment.Center;
 
-                var panel = new WpfStackPanel { Orientation = WpfOrientation.Horizontal };
-                panel.Children.Add(flag);
-                panel.Children.Add(new WpfTextBlock
+                    var panel = new WpfStackPanel { Orientation = WpfOrientation.Horizontal };
+                    panel.Children.Add(flag);
+                    panel.Children.Add(new WpfTextBlock
+                    {
+                        Text = lang.NativeName,
+                        FontSize = 12,
+                        VerticalAlignment = VerticalAlignment.Center,
+                    });
+
+                    btn.Content = panel;
+                }
+                catch
                 {
-                    Text = lang.NativeName,
-                    FontSize = 12,
-                    VerticalAlignment = VerticalAlignment.Center,
-                });
+                    btn = new WpfButton
+                    {
+                        Tag = lang.Code,
+                        Margin = new Thickness(3),
+                        Padding = new Thickness(8, 5, 8, 5),
+                        Cursor = WpfCursors.Hand,
+                        Content = lang.NativeName,
+                    };
+                }
 
-                btn.Content = panel;
                 btn.Click += LangButton_Click;
                 LangPanel.Children.Add(btn);
             }

@@ -69,6 +69,7 @@ namespace Aire.UI
             {
                 "Getting Started" => LocalizationService.S("help.tab.gettingStarted", "Getting Started"),
                 "Tools & Voice" => LocalizationService.S("help.tab.toolsVoice", "Tools & Voice"),
+                "Context & Templates" => LocalizationService.S("help.tab.contextTemplates", "Context & Templates"),
                 "Providers" => LocalizationService.S("help.tab.providers", "Providers"),
                 "Local API" => LocalizationService.S("help.tab.localApi", "Local API"),
                 _ => tabName

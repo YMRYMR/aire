@@ -105,7 +105,9 @@ namespace Aire
                 var conv = await _conversationApplicationService.GetConversationAsync(conversationId);
                 if (conv == null) return false;
 
+                var previousConversationId = _currentConversationId;
                 _currentConversationId = conversationId;
+                await ConversationFlow.SyncConversationSelectionStateAsync(conversationId, previousConversationId);
                 await LoadConversationMessages(conversationId, syncProviderSelection: false);
                 if (_sidebarOpen)
                     await RefreshSidebarAsync();
@@ -152,7 +154,21 @@ namespace Aire
                             _currentConversationId,
                             provider,
                             selectedWindow,
-                            pendingCount);
+                            pendingCount,
+                            isSidebarVisible: _sidebarOpen,
+                            isSearchOpen: SearchPanel.Visibility == System.Windows.Visibility.Visible,
+                            isAgentModeActive: _agentModeService?.IsActive ?? false,
+                            isOrchestratorModeActive: _agentModeService?.IsActive ?? false,
+                            orchestratorHeartbeatCount: _agentModeService?.HeartbeatCount ?? 0,
+                            orchestratorStopReason: _agentModeService?.StopReason,
+                            orchestratorGoals: _agentModeService?.Goals?.ToList() ?? new List<string>(),
+                            isVoiceOutputEnabled: _ttsService.VoiceEnabled,
+                            isWindowPinned: TrayService?.IsAttachedToTray ?? _isAttached,
+                            inputText: InputTextBox.Text,
+                            hasAttachment: _attachedImagePath != null || _attachedFilePath != null,
+                            messageCount: Messages.Count(m => m.Sender is not ("Date" or "System")),
+                            assistantMode: _assistantModeKey,
+                            activeToolCategories: _enabledToolCategories.ToList());
             });
     }
 }

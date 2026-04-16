@@ -9,7 +9,6 @@ namespace Aire.Services
         {
             "begin_keyboard_session",
             "end_keyboard_session",
-            "take_screenshot",
             "type_text",
             "key_press",
             "key_combo"
@@ -19,6 +18,7 @@ namespace Aire.Services
         {
             "begin_mouse_session",
             "end_mouse_session",
+            "take_screenshot",
             "mouse_move",
             "mouse_click",
             "mouse_double_click",

@@ -60,23 +60,30 @@ namespace Aire
             _ = ShowSettingsWindowAsync();
         }
 
-        public Task ShowSettingsWindowAsync()
+        public Task ShowSettingsWindowAsync(string? tab = null)
         {
-            if (_settingsWindow != null)
+            Dispatcher.Invoke(() =>
             {
-                _settingsWindow.Activate();
-                return Task.CompletedTask;
-            }
+                if (_settingsWindow != null)
+                {
+                    _settingsWindow.Activate();
+                    if (tab != null)
+                        _settingsWindow.NavigateTo(tab);
+                    return;
+                }
 
-            _settingsWindow = new UI.SettingsWindow(_ttsService) { Owner = this };
-            _settingsWindow.ProvidersChanged += async () => await RefreshProvidersAsync();
-            _settingsWindow.AppearanceChanged += SaveWindowSize;
-            _settingsWindow.Closed += async (_, _) =>
-            {
-                _settingsWindow = null;
-                await RefreshProvidersAsync();
-            };
-            _settingsWindow.Show();
+                _settingsWindow = new UI.SettingsWindow(_ttsService) { Owner = this };
+                _settingsWindow.ProvidersChanged += async () => await RefreshProvidersAsync();
+                _settingsWindow.AppearanceChanged += SaveWindowSize;
+                _settingsWindow.Closed += async (_, _) =>
+                {
+                    _settingsWindow = null;
+                    await RefreshProvidersAsync();
+                };
+                _settingsWindow.Show();
+                if (tab != null)
+                    _settingsWindow.NavigateTo(tab);
+            });
             return Task.CompletedTask;
         }
 
@@ -151,14 +158,14 @@ namespace Aire
         private void RestoreWindowSizes_Click(object sender, RoutedEventArgs e)
         {
             // ── Reset MainWindow ──
-            Width  = 460;
-            Height = 620;
+            Width  = 900;
+            Height = 700;
             TrayService?.ShowMainWindow(); // re-snap to taskbar position
 
             // ── Reset SettingsWindow if open ──
             if (Aire.UI.SettingsWindow.Current is { } sw)
             {
-                sw.Width  = 760;
+                sw.Width  = 900;
                 sw.Height = 700;
                 sw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 sw.Left   = (SystemParameters.WorkArea.Width  - sw.Width)  / 2;

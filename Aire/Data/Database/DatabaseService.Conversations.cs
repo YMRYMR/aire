@@ -79,8 +79,8 @@ namespace Aire.Data
             var color = PickConversationColor(DateTime.UtcNow.Ticks ^ providerId ^ (title?.GetHashCode() ?? 0));
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO Conversations (ProviderId, Title, AssistantModeKey, Color, CreatedAt, UpdatedAt)
-                VALUES (@providerId, @title, 'general', @color, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+                INSERT INTO Conversations (ProviderId, Title, AssistantModeKey, IsOrchestratorMode, Color, CreatedAt, UpdatedAt)
+                VALUES (@providerId, @title, 'general', 0, @color, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
                 SELECT last_insert_rowid();";
             cmd.Parameters.AddWithValue("@providerId", providerId);
             cmd.Parameters.AddWithValue("@title", title);
@@ -98,7 +98,7 @@ namespace Aire.Data
         {
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                SELECT Id, ProviderId, Title, AssistantModeKey, CreatedAt, UpdatedAt
+                SELECT Id, ProviderId, Title, AssistantModeKey, IsOrchestratorMode, CreatedAt, UpdatedAt
                 FROM Conversations
                 WHERE ProviderId = @providerId
                 ORDER BY UpdatedAt DESC
@@ -113,8 +113,9 @@ namespace Aire.Data
                     ProviderId = reader.GetInt32(1),
                     Title = reader.GetString(2),
                     AssistantModeKey = reader.IsDBNull(3) ? "general" : reader.GetString(3),
-                    CreatedAt = reader.GetDateTime(4),
-                    UpdatedAt = reader.GetDateTime(5)
+                    IsOrchestratorMode = !reader.IsDBNull(4) && reader.GetInt32(4) != 0,
+                    CreatedAt = reader.GetDateTime(5),
+                    UpdatedAt = reader.GetDateTime(6)
                 };
             }
             return null;
@@ -127,13 +128,13 @@ namespace Aire.Data
         /// <returns>Conversation summaries ordered by most recently updated.</returns>
         public async Task<List<ConversationSummary>> ListConversationsAsync(string? search = null)
         {
-            var results = new List<ConversationSummary>();
+            var flat = new List<ConversationSummary>();
             using var cmd = _connection!.CreateCommand();
 
             if (string.IsNullOrWhiteSpace(search))
             {
                 cmd.CommandText = @"
-                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey
+                    SELECT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey, c.IsOrchestratorMode, c.ParentConversationId
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     ORDER BY c.UpdatedAt DESC
@@ -142,7 +143,7 @@ namespace Aire.Data
             else
             {
                 cmd.CommandText = @"
-                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey
+                    SELECT DISTINCT c.Id, c.Title, c.UpdatedAt, p.Name, COALESCE(c.Color, p.Color), c.AssistantModeKey, c.IsOrchestratorMode, c.ParentConversationId
                     FROM Conversations c
                     LEFT JOIN Providers p ON c.ProviderId = p.Id
                     LEFT JOIN Messages  m ON m.ConversationId = c.Id
@@ -155,16 +156,36 @@ namespace Aire.Data
             using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                results.Add(new ConversationSummary
+                flat.Add(new ConversationSummary
                 {
                     Id = reader.GetInt32(0),
                     Title = reader.IsDBNull(1) ? "Chat" : reader.GetString(1),
                     UpdatedAt = reader.IsDBNull(2) ? DateTime.Now : reader.GetDateTime(2),
                     ProviderName = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
                     ProviderColor = reader.IsDBNull(4) ? "#888888" : reader.GetString(4),
-                    AssistantModeKey = reader.IsDBNull(5) ? "general" : reader.GetString(5)
+                    AssistantModeKey = reader.IsDBNull(5) ? "general" : reader.GetString(5),
+                    IsOrchestratorMode = !reader.IsDBNull(6) && reader.GetInt32(6) != 0,
+                    ParentConversationId = reader.IsDBNull(7) ? null : (int?)reader.GetInt32(7)
                 });
             }
+
+            // Reorder: branches appear directly under their parent conversation
+            var branchLookup = flat
+                .Where(r => r.ParentConversationId.HasValue)
+                .ToLookup(r => r.ParentConversationId!.Value);
+
+            var results = new List<ConversationSummary>();
+            foreach (var root in flat.Where(r => !r.ParentConversationId.HasValue))
+            {
+                results.Add(root);
+                results.AddRange(branchLookup[root.Id]);
+            }
+
+            // Append orphaned branches (parent deleted)
+            var rootedIds = new HashSet<int>(flat.Where(r => !r.ParentConversationId.HasValue).Select(r => r.Id));
+            foreach (var orphan in flat.Where(r => r.ParentConversationId.HasValue && !rootedIds.Contains(r.ParentConversationId.Value)))
+                results.Add(orphan);
+
             return results;
         }
 
@@ -177,7 +198,7 @@ namespace Aire.Data
         {
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = @"
-                SELECT Id, ProviderId, Title, AssistantModeKey, CreatedAt, UpdatedAt
+                SELECT Id, ProviderId, Title, AssistantModeKey, IsOrchestratorMode, CreatedAt, UpdatedAt
                 FROM Conversations
                 WHERE Id = @id";
             cmd.Parameters.AddWithValue("@id", conversationId);
@@ -192,8 +213,9 @@ namespace Aire.Data
                 ProviderId = reader.GetInt32(1),
                 Title = reader.IsDBNull(2) ? "Chat" : reader.GetString(2),
                 AssistantModeKey = reader.IsDBNull(3) ? "general" : reader.GetString(3),
-                CreatedAt = reader.GetDateTime(4),
-                UpdatedAt = reader.GetDateTime(5),
+                IsOrchestratorMode = !reader.IsDBNull(4) && reader.GetInt32(4) != 0,
+                CreatedAt = reader.GetDateTime(5),
+                UpdatedAt = reader.GetDateTime(6),
             };
         }
 
@@ -233,6 +255,18 @@ namespace Aire.Data
             using var cmd = _connection!.CreateCommand();
             cmd.CommandText = "UPDATE Conversations SET AssistantModeKey = @assistantModeKey WHERE Id = @id";
             cmd.Parameters.AddWithValue("@assistantModeKey", string.IsNullOrWhiteSpace(assistantModeKey) ? "general" : assistantModeKey.Trim());
+            cmd.Parameters.AddWithValue("@id", conversationId);
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        /// <summary>
+        /// Updates whether one conversation is currently marked as orchestrated.
+        /// </summary>
+        public async Task UpdateConversationOrchestratorModeAsync(int conversationId, bool isOrchestratorMode)
+        {
+            using var cmd = _connection!.CreateCommand();
+            cmd.CommandText = "UPDATE Conversations SET IsOrchestratorMode = @isOrchestratorMode WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@isOrchestratorMode", isOrchestratorMode ? 1 : 0);
             cmd.Parameters.AddWithValue("@id", conversationId);
             await cmd.ExecuteNonQueryAsync();
         }
@@ -579,7 +613,14 @@ namespace Aire.Data
 
             var newId = await CreateConversationAsync(sourceConversation.ProviderId, branchedTitle);
 
-            using var copyCmd = _connection!.CreateCommand();
+            // Link the branch to its parent
+            using var linkCmd = _connection!.CreateCommand();
+            linkCmd.CommandText = "UPDATE Conversations SET ParentConversationId = @parentId WHERE Id = @id";
+            linkCmd.Parameters.AddWithValue("@parentId", sourceConversationId);
+            linkCmd.Parameters.AddWithValue("@id", newId);
+            await linkCmd.ExecuteNonQueryAsync();
+
+            using var copyCmd = _connection.CreateCommand();
             copyCmd.CommandText = @"
                 INSERT INTO Messages (ConversationId, Role, Content, ImagePath, AttachmentsJson, Tokens, CreatedAt)
                 SELECT @newId, Role, Content, ImagePath, AttachmentsJson, Tokens, CreatedAt

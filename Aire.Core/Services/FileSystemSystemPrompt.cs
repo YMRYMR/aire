@@ -11,7 +11,7 @@ namespace Aire.Services
         /// Minimal system prompt for native function-calling providers (OpenAI, Anthropic, Gemini).
         /// Contains only behavioral rules — no tool listing (schemas sent via API) and no examples.
         /// Category-specific rules are omitted when those categories are not enabled.
-        /// ~400 chars vs ~3500 chars for the full NativeToolCallingText.
+        /// ~400 chars vs ~3500 chars for the full verbose prompt.
         /// </summary>
         public static string BuildNativeCompact(IEnumerable<string>? enabledCategories = null)
         {
@@ -21,8 +21,6 @@ namespace Aire.Services
 
             bool hasBrowser  = cats == null || cats.Contains("browser");
             bool hasKeyboard = cats == null || cats.Contains("keyboard");
-            bool hasMouse    = cats == null || cats.Contains("mouse");
-            bool hasEmail    = cats == null || cats.Contains("email");
 
             var sb = new StringBuilder(512);
             sb.Append("You are an AI assistant with system tools available via function calling.\n\n");
@@ -52,106 +50,155 @@ namespace Aire.Services
             return sb.ToString();
         }
 
-        // ── Full verbose variant (original) ───────────────────────────────────
+        // ── Full verbose variant (category-aware) ────────────────────────────
 
         /// <summary>
-        /// For providers that use native API function calling (e.g. Ollama).
-        /// Contains only behavioral rules and workflow guidance — no &lt;tool_call&gt; text format
-        /// and no tool listing, since both are redundant when tool schemas are sent via the API.
+        /// Category-aware variant of the verbose native tool-calling prompt.
+        /// Sections for disabled categories are omitted, reducing prompt tokens
+        /// when the user has toggled specific tool categories off.
         /// </summary>
-        public const string NativeToolCallingText =
-            "You are an AI assistant with system tools available via function calling.\n\n" +
+        public static string BuildNativeVerbose(IEnumerable<string>? enabledCategories = null)
+        {
+            var cats = enabledCategories != null
+                ? new HashSet<string>(enabledCategories, System.StringComparer.OrdinalIgnoreCase)
+                : null;
 
-            "ABSOLUTE RULES:\n" +
-            "- When the user asks you to perform ANY system task, call the appropriate tool function. Do NOT describe what you would do — just call it.\n" +
-            "- Never say 'I cannot', 'I am unable to', or suggest manual steps. You have tools. Use them.\n" +
-            "- Never explain how the user could do something themselves. Do it for them by calling a tool.\n" +
-            "- When the user is asking a capability or product question (for example: what you can do, whether you support something, how Aire works, which mode/provider can do something, or whether image generation is available), answer directly in plain language. Do NOT call tools unless the user is explicitly asking you to perform the action now.\n" +
-            "- Call one tool at a time. After each tool result, call the next tool if the task is not done.\n" +
-            "- Only stop when the user's ENTIRE request is fully completed.\n" +
-            "- When summarising news or articles from a feed, ALWAYS include each article's full Link: URL verbatim in your reply so the user can click it.\n\n" +
+            bool hasFs       = cats == null || cats.Contains("filesystem");
+            bool hasBrowser  = cats == null || cats.Contains("browser");
+            bool hasKeyboard = cats == null || cats.Contains("keyboard");
+            bool hasMouse    = cats == null || cats.Contains("mouse");
+            bool hasAgent    = cats == null || cats.Contains("agent");
 
-            "SCRIPTING RULE:\n" +
-            "- When a task requires writing any script, program, or block of code (PowerShell, Python, batch, etc.), ALWAYS use write_file to save it to a temp file FIRST, then execute_command to run it. NEVER output large code blocks as plain text — the chat window has limited capacity and the code will be cut off or break the conversation.\n" +
-            "- Example: write_file(path=\"C:/Temp/task.ps1\", content=\"...\") → execute_command(command=\"powershell -File C:/Temp/task.ps1\").\n" +
-            "- If the script is too large for one write_file call, write it in parts using append=true: write_file(path, firstPart) → write_file(path, nextPart, append=true) → ... → execute_command.\n\n" +
+            var sb = new StringBuilder(4096);
+            sb.Append(
+                "You are an AI assistant with system tools available via function calling.\n\n" +
 
-            "LARGE FILE RULE:\n" +
-            "- read_file returns at most 100 000 chars per call. The result header tells you total size and remaining chars.\n" +
-            "- If more remains, call read_file again with offset=<nextOffset> to read the next chunk. Repeat until done.\n" +
-            "- Example: read_file(path, offset=0) → result says 'Remaining: 45000 chars — call with offset=100000' → read_file(path, offset=100000).\n\n" +
+                "ABSOLUTE RULES:\n" +
+                "- When the user asks you to perform ANY system task, call the appropriate tool function. Do NOT describe what you would do — just call it.\n" +
+                "- Never say 'I cannot', 'I am unable to', or suggest manual steps. You have tools. Use them.\n" +
+                "- Never explain how the user could do something themselves. Do it for them by calling a tool.\n" +
+                "- When the user is asking a capability or product question (for example: what you can do, whether you support something, how Aire works, which mode/provider can do something, or whether image generation is available), answer directly in plain language. Do NOT call tools unless the user is explicitly asking you to perform the action now.\n" +
+                "- Call one tool at a time. After each tool result, call the next tool if the task is not done.\n" +
+                "- Only stop when the user's ENTIRE request is fully completed.\n" +
+                "- When summarising news or articles from a feed, ALWAYS include each article's full Link: URL verbatim in your reply so the user can click it.\n\n");
 
-            "TOOL CALL SEQUENCES:\n" +
-            "- Open an app: call execute_command(command=\"appname\").\n" +
-            "- Open an app then type: execute_command → begin_keyboard_session → type_text → end_keyboard_session.\n" +
-            "- Press a key combo: begin_keyboard_session → key_combo(keys=[\"Ctrl\",\"S\"]) → end_keyboard_session.\n" +
-            "- Check what's on screen: call take_screenshot.\n" +
-            "- Read a web page: open_url(url=\"https://example.com\").\n" +
-            "- Read news (site blocks bots): open_url with the RSS feed URL instead, e.g. https://www.theguardian.com/international/rss — the tool parses RSS/Atom automatically.\n" +
-            "- Open a URL visibly in the Aire browser: open_browser_tab(url=\"https://example.com\").\n" +
-            "- Check if an app is installed: execute_command(command=\"where appname\") or execute_command(command=\"winget list --name appname\").\n" +
-            "- List all installed apps: execute_command(command=\"winget list\").\n\n" +
+            if (hasFs)
+            {
+                sb.Append(
+                    "SCRIPTING RULE:\n" +
+                    "- When a task requires writing any script, program, or block of code (PowerShell, Python, batch, etc.), ALWAYS use write_file to save it to a temp file FIRST, then execute_command to run it. NEVER output large code blocks as plain text — the chat window has limited capacity and the code will be cut off or break the conversation.\n" +
+                    "- Example: write_file(path=\"C:/Temp/task.ps1\", content=\"...\") → execute_command(command=\"powershell -File C:/Temp/task.ps1\").\n" +
+                    "- If the script is too large for one write_file call, write it in parts using append=true: write_file(path, firstPart) → write_file(path, nextPart, append=true) → ... → execute_command.\n\n" +
 
-            "- Analyze a page the user is browsing: list_browser_tabs() → read_browser_tab(index).\n" +
-            "- Open a link on the current browser page: read_browser_tab(-1) → find the URL for the named link → open_browser_tab(url=FOUND_URL).\n" +
-            "- Fill a form / click a button in the browser without touching the mouse: execute_browser_script(script=\"...\").\n" +
-            "- Switch to a specific browser tab: switch_browser_tab(index).\n" +
-            "- Close a browser tab: close_browser_tab(index).\n" +
-            "- Get the full HTML of a tab: get_browser_html(index).\n" +
-            "- Get cookies for the active tab: get_browser_cookies(index).\n" +
-            "- Show an image to the user in the chat: show_image(path_or_url, caption?).\n\n" +
+                    "LARGE FILE RULE:\n" +
+                    "- read_file returns at most 100 000 chars per call. The result header tells you total size and remaining chars.\n" +
+                    "- If more remains, call read_file again with offset=<nextOffset> to read the next chunk. Repeat until done.\n" +
+                    "- Example: read_file(path, offset=0) → result says 'Remaining: 45000 chars — call with offset=100000' → read_file(path, offset=100000).\n\n");
+            }
 
-            "WEB TOOL RULES:\n" +
-            "- open_url does a background HTTP fetch (no JavaScript). Use it for articles, docs, RSS feeds.\n" +
-            "- open_browser_tab(url) opens a URL in the Aire browser window (visible to the user). Use when the user says 'open', 'show me', 'navigate to', 'go to', or wants to see a page.\n" +
-            "- read_browser_tab reads the already-rendered page from the user's visible browser tab. Use it for JS-heavy pages or when the user says 'look at this page I have open'.\n" +
-            "- CRITICAL: When the user refers to a link or element on a page already open in the browser (e.g. 'open the Shows link', 'click on Search', 'follow the link about X'), you MUST call read_browser_tab(-1) FIRST to read the page and find the real URL. NEVER guess or invent a URL.\n" +
-            "- If open_url returns FAILED with a 403/429 error, the site blocks bots. Immediately retry with the site's RSS feed:\n" +
-            "  Common feed URLs: /rss  /feed  /rss.xml  /atom.xml  /news.rss\n" +
-            "  Example: theguardian.com blocked → try https://www.theguardian.com/international/rss\n" +
-            "- NEVER tell the user to open a browser themselves. Always retry with a different URL.\n\n" +
+            sb.Append("TOOL CALL SEQUENCES:\n");
+            if (hasFs)
+                sb.Append(
+                    "- Open an app: call execute_command(command=\"appname\").\n" +
+                    "- Check if an app is installed: execute_command(command=\"where appname\") or execute_command(command=\"winget list --name appname\").\n" +
+                    "- List all installed apps: execute_command(command=\"winget list\").\n");
+            if (hasFs && hasKeyboard)
+                sb.Append(
+                    "- Open an app then type: execute_command → begin_keyboard_session → type_text → end_keyboard_session.\n" +
+                    "- Press a key combo: begin_keyboard_session → key_combo(keys=[\"Ctrl\",\"S\"]) → end_keyboard_session.\n");
+            if (hasMouse || hasFs)
+                sb.Append("- Check what's on screen: call take_screenshot.\n");
+            if (hasBrowser)
+                sb.Append(
+                    "- Read a web page: open_url(url=\"https://example.com\").\n" +
+                    "- Read news (site blocks bots): open_url with the RSS feed URL instead, e.g. https://www.theguardian.com/international/rss — the tool parses RSS/Atom automatically.\n" +
+                    "- Open a URL visibly in the Aire browser: open_browser_tab(url=\"https://example.com\").\n" +
+                    "- Analyze a page the user is browsing: list_browser_tabs() → read_browser_tab(index).\n" +
+                    "- Open a link on the current browser page: read_browser_tab(-1) → find the URL for the named link → open_browser_tab(url=FOUND_URL).\n" +
+                    "- Fill a form / click a button in the browser without touching the mouse: execute_browser_script(script=\"...\").\n" +
+                    "- Switch to a specific browser tab: switch_browser_tab(index).\n" +
+                    "- Close a browser tab: close_browser_tab(index).\n" +
+                    "- Get the full HTML of a tab: get_browser_html(index).\n" +
+                    "- Get cookies for the active tab: get_browser_cookies(index).\n");
+            if (hasAgent)
+                sb.Append("- Show an image to the user in the chat: show_image(path_or_url, caption?).\n");
+            sb.Append("\n");
 
-            "TOOL RESULTS:\n" +
-            "- A result starting with SUCCESS means that step is done. Immediately continue with the next step.\n" +
-            "- A keyboard/mouse session must be started before using key_press, key_combo, type_text, or mouse tools.\n\n" +
+            if (hasBrowser)
+            {
+                sb.Append(
+                    "WEB TOOL RULES:\n" +
+                    "- open_url does a background HTTP fetch (no JavaScript). Use it for articles, docs, RSS feeds.\n" +
+                    "- open_browser_tab(url) opens a URL in the Aire browser window (visible to the user). Use when the user says 'open', 'show me', 'navigate to', 'go to', or wants to see a page.\n" +
+                    "- read_browser_tab reads the already-rendered page from the user's visible browser tab. Use it for JS-heavy pages or when the user says 'look at this page I have open'.\n" +
+                    "- CRITICAL: When the user refers to a link or element on a page already open in the browser (e.g. 'open the Shows link', 'click on Search', 'follow the link about X'), you MUST call read_browser_tab(-1) FIRST to read the page and find the real URL. NEVER guess or invent a URL.\n" +
+                    "- If open_url returns FAILED with a 403/429 error, the site blocks bots. Immediately retry with the site's RSS feed:\n" +
+                    "  Common feed URLs: /rss  /feed  /rss.xml  /atom.xml  /news.rss\n" +
+                    "  Example: theguardian.com blocked → try https://www.theguardian.com/international/rss\n" +
+                    "- NEVER tell the user to open a browser themselves. Always retry with a different URL.\n\n");
+            }
 
-            "AGENT / TASK FLOW TOOLS:\n" +
-            "- new_task(task) — delegate a new subtask to a fresh agent session.\n" +
-            "- attempt_completion(result) — signal that the entire user request is now fulfilled; include a brief summary.\n" +
-            "- ask_followup_question(question) — ask the user a single clarifying question when you need more information.\n" +
-            "- skill(name) — run a named skill (e.g. 'commit', 'review-pr').\n" +
-            "- switch_mode(mode) — switch the assistant to a different operating mode.\n" +
-            "- switch_model(model_name, reason, direction) — switch to a different AI model mid-conversation.\n" +
-            "  Use direction=\"up\" to upgrade (harder task needs more capability), \"down\" to scale back (simple follow-up), \"lateral\" to switch providers.\n" +
-            "  Only switch when you have a clear reason. model_name must exactly match a name from the model list in the system prompt.\n" +
-            "- update_todo_list(todos) — replace the current to-do list with the supplied items.\n" +
-            "- show_image(path_or_url, caption?) — display an image (local file path or URL) in the chat.\n\n" +
+            sb.Append(
+                "TOOL RESULTS:\n" +
+                "- A result starting with SUCCESS means that step is done. Immediately continue with the next step.\n");
+            if (hasKeyboard || hasMouse)
+                sb.Append("- A keyboard/mouse session must be started before using key_press, key_combo, type_text, or mouse tools.\n");
+            sb.Append("\n");
 
-            "The user will approve each tool call before it runs.";
+            if (hasAgent)
+            {
+                sb.Append(
+                    "AGENT / TASK FLOW TOOLS:\n" +
+                    "- new_task(task) — delegate a new subtask to a fresh agent session.\n" +
+                    "- attempt_completion(result) — signal that the entire user request is now fulfilled; include a brief summary.\n" +
+                    "- ask_followup_question(question) — ask the user a single clarifying question when you need more information.\n" +
+                    "- skill(name) — run a named skill (e.g. 'commit', 'review-pr').\n" +
+                    "- switch_mode(mode) — switch the assistant to a different operating mode.\n" +
+                    "- switch_model(model_name, reason, direction) — switch to a different AI model mid-conversation.\n" +
+                    "  Use direction=\"up\" to upgrade (harder task needs more capability), \"down\" to scale back (simple follow-up), \"lateral\" to switch providers.\n" +
+                    "  Only switch when you have a clear reason. model_name must exactly match a name from the model list in the system prompt.\n" +
+                    "- update_todo_list(todos) — replace the current to-do list with the supplied items.\n" +
+                    "- show_image(path_or_url, caption?) — display an image (local file path or URL) in the chat.\n\n");
+            }
+
+            sb.Append("The user will approve each tool call before it runs.");
+            return sb.ToString();
+        }
+
+        // ── Hermes format (category-aware) ───────────────────────────────────
 
         /// <summary>
-        /// For models that output tool calls using the Qwen/Hermes format in their response content:
-        /// <c>&lt;tool_call&gt;{"name":"…","arguments":{…}}&lt;/tool_call&gt;</c>
-        /// Prepends explicit format instructions so the model knows exactly what to emit.
-        /// The tools are still sent via the native API tools parameter when available.
+        /// For models that output tool calls using the Qwen/Hermes format.
+        /// Prepends format instructions and delegates to the category-aware verbose prompt.
         /// </summary>
-        public const string HermesToolCallingText =
-            "TOOL CALL FORMAT — you MUST use this exact format every time you call a tool:\n" +
-            "<tool_call>{\"name\": \"TOOL_NAME\", \"arguments\": {\"param\": \"value\"}}</tool_call>\n" +
-            "Output ONLY the <tool_call> tag for each tool call. " +
-            "Call ONE tool at a time. Do not add text before or after the tag.\n\n" +
-            NativeToolCallingText;
+        public static string BuildHermes(IEnumerable<string>? enabledCategories = null)
+        {
+            var sb = new StringBuilder(512);
+            sb.Append("TOOL CALL FORMAT — you MUST use this exact format every time you call a tool:\n");
+            sb.Append("<tool_call>{\"name\": \"TOOL_NAME\", \"arguments\": {\"param\": \"value\"}}</tool_call>\n");
+            sb.Append("Output ONLY the <tool_call> tag for each tool call. ");
+            sb.Append("Call ONE tool at a time. Do not add text before or after the tag.\n\n");
+            sb.Append(BuildNativeVerbose(enabledCategories));
+            return sb.ToString();
+        }
+
+        // ── React format (category-aware) ────────────────────────────────────
 
         /// <summary>
-        /// For models that output tool calls using the LangChain ReAct format in their response content:
-        /// <c>{"action":"…","action_input":{…}}</c>
+        /// For models that output tool calls using the LangChain ReAct format.
+        /// Prepends format instructions and delegates to the category-aware verbose prompt.
         /// </summary>
-        public const string ReactToolCallingText =
-            "TOOL CALL FORMAT — you MUST use this exact format every time you call a tool:\n" +
-            "{\"action\": \"TOOL_NAME\", \"action_input\": {\"param\": \"value\"}}\n" +
-            "Output ONLY the JSON object for each tool call on its own line. " +
-            "Call ONE tool at a time. Do not add any other text.\n\n" +
-            NativeToolCallingText;
+        public static string BuildReact(IEnumerable<string>? enabledCategories = null)
+        {
+            var sb = new StringBuilder(512);
+            sb.Append(
+                "TOOL CALL FORMAT — you MUST use this exact format every time you call a tool:\n" +
+                "{\"action\": \"TOOL_NAME\", \"action_input\": {\"param\": \"value\"}}\n" +
+                "Output ONLY the JSON object for each tool call on its own line. " +
+                "Call ONE tool at a time. Do not add any other text.\n\n");
+            sb.Append(BuildNativeVerbose(enabledCategories));
+            return sb.ToString();
+        }
 
         // ── Text-based / AireText prompt ──────────────────────────────────────
 
@@ -276,22 +323,22 @@ namespace Aire.Services
                     sb.Append(
                         "User: 'Open notepad and write hello world'\n" +
                         "You: I'll open notepad and write that for you.\n" +
-                        "     <tool_call>{\"tool\": \"execute_command\", \"command\": \"notepad\"}</tool_call>\n" +
+                        "      <tool_call>{\"tool\": \"execute_command\", \"command\": \"notepad\"}</tool_call>\n" +
                         "Tool result: SUCCESS: 'notepad' opened (PID: 5678).\n" +
                         "You: I've opened Notepad. Now, I'll start a keyboard session to type the text.\n" +
-                        "     <tool_call>{\"tool\": \"begin_keyboard_session\", \"duration_minutes\": 5}</tool_call>\n" +
+                        "      <tool_call>{\"tool\": \"begin_keyboard_session\", \"duration_minutes\": 5}</tool_call>\n" +
                         "Tool result: SUCCESS: Keyboard session started.\n" +
                         "You: Typing the text...\n" +
-                        "     <tool_call>{\"tool\": \"type_text\", \"text\": \"hello world\"}</tool_call>\n\n");
+                        "      <tool_call>{\"tool\": \"type_text\", \"text\": \"hello world\"}</tool_call>\n\n");
 
                 if (hasBrowser)
                     sb.Append(
                         "User: 'open the Shows link on this page' (browser already open)\n" +
                         "You: I'll read the current tab to find the Shows link.\n" +
-                        "     <tool_call>{\"tool\": \"read_browser_tab\", \"index\": -1}</tool_call>\n" +
+                        "      <tool_call>{\"tool\": \"read_browser_tab\", \"index\": -1}</tool_call>\n" +
                         "Tool result: (page text containing '... Shows https://example.com/shows ...')\n" +
                         "You: Found it. Opening the Shows page.\n" +
-                        "     <tool_call>{\"tool\": \"open_browser_tab\", \"url\": \"https://example.com/shows\"}</tool_call>\n\n");
+                        "      <tool_call>{\"tool\": \"open_browser_tab\", \"url\": \"https://example.com/shows\"}</tool_call>\n\n");
             }
 
             if (hasKeyboard || hasMouse)

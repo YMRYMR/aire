@@ -34,6 +34,7 @@ namespace Aire.Data
                     ProviderId INTEGER,
                     Title TEXT,
                     AssistantModeKey TEXT NOT NULL DEFAULT 'general',
+                    IsOrchestratorMode INTEGER NOT NULL DEFAULT 0,
                     CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (ProviderId) REFERENCES Providers (Id)
@@ -303,6 +304,24 @@ namespace Aire.Data
             await normalizeCmd.ExecuteNonQueryAsync();
         }
 
+        private async Task MigrateConversationOrchestratorModesAsync()
+        {
+            try
+            {
+                using var cmd = _connection!.CreateCommand();
+                cmd.CommandText = "ALTER TABLE Conversations ADD COLUMN IsOrchestratorMode INTEGER NOT NULL DEFAULT 0";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch { }
+
+            using var normalizeCmd = _connection!.CreateCommand();
+            normalizeCmd.CommandText = @"
+                UPDATE Conversations
+                SET IsOrchestratorMode = 0
+                WHERE IsOrchestratorMode IS NULL";
+            await normalizeCmd.ExecuteNonQueryAsync();
+        }
+
         private async Task MigrateConversationColorsAsync()
         {
             try
@@ -345,6 +364,17 @@ namespace Aire.Data
             await cmd.ExecuteNonQueryAsync();
 
             await SetSettingAsync(DatabaseService.LegacySwitchedProviderMessagesCleanupSettingKey, "1");
+        }
+
+        private async Task MigrateConversationParentIdAsync()
+        {
+            try
+            {
+                using var cmd = _connection!.CreateCommand();
+                cmd.CommandText = "ALTER TABLE Conversations ADD COLUMN ParentConversationId INTEGER NULL";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch { }
         }
 
         private async Task SeedDefaultProvidersAsync()

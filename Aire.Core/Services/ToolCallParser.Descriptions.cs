@@ -27,6 +27,14 @@ namespace Aire.Services
             "open_browser_tab" => Format("toolDesc.open_browser_tab", "Open {0}?", GetStr(root, "url")),
             "list_browser_tabs" => T("toolDesc.list_browser_tabs", "List open browser tabs?"),
             "read_browser_tab" => T("toolDesc.read_browser_tab", "Read current browser tab?"),
+            "execute_browser_script" => DescribeBrowserScript(GetStr(root, "script")),
+            "get_clipboard" => T("toolDesc.get_clipboard", "Ask Aire to read the clipboard?"),
+            "set_clipboard" => Format("toolDesc.set_clipboard", "Ask Aire to copy this text to the clipboard: {0}?", Truncate(GetStr(root, "text"), 60)),
+            "show_notification" => Format("toolDesc.show_notification", "Ask Aire to show a notification: {0}?", Truncate(GetStr(root, "title"), 40)),
+            "get_system_info" => T("toolDesc.get_system_info", "Ask Aire to check this computer's system information?"),
+            "get_running_processes" => T("toolDesc.get_running_processes", "Ask Aire to list the running processes?"),
+            "get_active_window" => T("toolDesc.get_active_window", "Ask Aire which window is currently active?"),
+            "get_selected_text" => T("toolDesc.get_selected_text", "Ask Aire to read the selected text?"),
             "new_task" => Format("toolDesc.new_task", "Start task: {0}?", Truncate(GetStr(root, "task"), 60)),
             "attempt_completion" => T("toolDesc.attempt_completion", "Finish up?"),
             "ask_followup_question" => Format("toolDesc.ask_followup_question", "Ask: {0}?", Truncate(GetStr(root, "question"), 60)),
@@ -46,7 +54,13 @@ namespace Aire.Services
             "mouse_click" => Format("toolDesc.mouse_click", "Click at ({0}, {1})?", GetStr(root, "x"), GetStr(root, "y")),
             "mouse_double_click" => Format("toolDesc.mouse_double_click", "Double-click at ({0}, {1})?", GetStr(root, "x"), GetStr(root, "y")),
             "mouse_drag" => Format("toolDesc.mouse_drag", "Drag ({0},{1}) → ({2},{3})?", GetStr(root, "from_x"), GetStr(root, "from_y"), GetStr(root, "to_x"), GetStr(root, "to_y")),
-            _ => Format("toolDesc.default", "Run '{0}'?", tool)
+            "show_image" => Format("toolDesc.show_image", "Show image {0}?", Truncate(GetStr(root, "path_or_url"), 60)),
+            "read_emails" => T("toolDesc.read_emails", "Ask Aire to read emails?"),
+            "send_email" => Format("toolDesc.send_email", "Ask Aire to send an email to {0}?", Truncate(GetStr(root, "to"), 40)),
+            "search_emails" => Format("toolDesc.search_emails", "Ask Aire to search emails for '{0}'?", Truncate(GetStr(root, "query"), 40)),
+            "reply_to_email" => T("toolDesc.reply_to_email", "Ask Aire to reply to an email?"),
+            _ when tool.StartsWith("mcp:", StringComparison.OrdinalIgnoreCase) => Format("toolDesc.mcp", "Ask Aire to use MCP tool '{0}'?", tool),
+            _ => Format("toolDesc.default", "Ask Aire to use tool '{0}'?", tool)
         };
 
         private static string Format(string key, string fallback, params object[] args) =>
@@ -77,6 +91,14 @@ namespace Aire.Services
             }
 
             return Format("toolDesc.execute_command_run", "Run: {0}?", Truncate(trimmed, 60));
+        }
+
+        private static string DescribeBrowserScript(string script)
+        {
+            if (string.IsNullOrWhiteSpace(script))
+                return T("toolDesc.execute_browser_script_default", "Run browser script?");
+
+            return T("toolDesc.execute_browser_script", $"Run browser script:\n\n```js\n{script.Trim()}\n```");
         }
 
         private static string Capitalize(string s) =>

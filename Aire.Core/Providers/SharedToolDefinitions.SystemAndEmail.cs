@@ -144,7 +144,7 @@ public static partial class SharedToolDefinitions
         new()
         {
             Name        = "http_request",
-            Category    = "system",
+            Category    = "browser",
             ShortDescription = "Make a custom HTTP request (REST APIs, webhooks). Returns the raw response.",
             Description =
                 "Make an HTTP request with custom method, headers, and body. " +

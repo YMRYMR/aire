@@ -15,6 +15,7 @@ namespace Aire.AppLayer.Abstractions
         Task UpdateConversationTitleAsync(int conversationId, string title);
         Task UpdateConversationProviderAsync(int conversationId, int providerId);
         Task UpdateConversationAssistantModeAsync(int conversationId, string assistantModeKey);
+        Task UpdateConversationOrchestratorModeAsync(int conversationId, bool isOrchestratorMode) => Task.CompletedTask;
         Task SaveMessageAsync(
             int conversationId,
             string role,

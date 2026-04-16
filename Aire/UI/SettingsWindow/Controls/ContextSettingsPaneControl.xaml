@@ -6,399 +6,462 @@
                   Margin="0 8 0 0">
         <StackPanel x:Name="PART_ContextSection"
                     Margin="4 8 4 24"
-                    MaxWidth="520"
-                    HorizontalAlignment="Left">
+                    HorizontalAlignment="Stretch"
+                    MaxWidth="760">
 
-            <!-- Description -->
-            <TextBlock x:Name="PART_ContextDescriptionText"
-                       Text="Control how much conversation history Aire sends to the provider on each turn, and how caching and summarisation are applied."
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="12"
-                       TextWrapping="Wrap"
-                       Margin="0 0 0 20" />
-
-            <!-- ── History ───────────────────────────────────────────── -->
-            <TextBlock x:Name="PART_ContextHistoryHeader"
-                       Text="HISTORY"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="10"
-                       FontWeight="SemiBold"
-
-                       Margin="0 0 0 8" />
-            <Border BorderBrush="{DynamicResource BorderBrush}"
-                    BorderThickness="0 0 0 1"
-                    Margin="0 0 0 12" />
-
-            <!-- Max messages row -->
-            <Grid Margin="0 0 0 12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock x:Name="PART_MaxMessagesLabel"
-                               Text="Window size"
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_ContextDescriptionText"
+                               Text="Control how Aire remembers the conversation, keeps prompts short, and reuses stable text safely."
                                Foreground="{DynamicResource TextBrush}"
-                               FontSize="12" />
-                    <TextBlock x:Name="PART_MaxMessagesSubLabel"
-                               Text="Maximum messages sent to the provider per turn"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"
+                               Margin="0 0 0 8" />
+                    <TextBlock Text="Everything here is about helping Aire stay useful without making the chat confusing or expensive."
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
-                               Margin="0 2 0 0"
                                TextWrapping="Wrap" />
                 </StackPanel>
-                <TextBox x:Name="PART_MaxMessagesTextBox"
-                         Grid.Column="1"
-                         Width="72"
-                         VerticalAlignment="Center"
-                         TextAlignment="Center"
-                         LostFocus="ContextSettingChanged" />
-            </Grid>
+            </Border>
 
-            <!-- Anchor messages row -->
-            <Grid Margin="0 0 0 20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock x:Name="PART_AnchorMessagesLabel"
-                               Text="Anchor messages"
-                               Foreground="{DynamicResource TextBrush}"
-                               FontSize="12" />
-                    <TextBlock x:Name="PART_AnchorMessagesSubLabel"
-                               Text="Early messages always kept, even when trimming older history"
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_CustomInstructionsHeader"
+                               Text="CUSTOM INSTRUCTIONS"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <Border BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="0 0 0 1"
+                            Margin="0 0 0 12" />
+
+                    <TextBlock x:Name="PART_CustomInstructionsSubLabel"
+                               Text="A short note Aire always sees before it answers. Good for personality, tone, or stable rules."
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
-                               Margin="0 2 0 0"
-                               TextWrapping="Wrap" />
+                               TextWrapping="Wrap"
+                               Margin="0 0 0 8" />
+                    <TextBox x:Name="PART_CustomInstructionsTextBox"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             Height="120"
+                             VerticalScrollBarVisibility="Auto"
+                             VerticalContentAlignment="Top"
+                             Padding="8 6"
+                             LostFocus="ContextSettingChanged" />
                 </StackPanel>
-                <TextBox x:Name="PART_AnchorMessagesTextBox"
-                         Grid.Column="1"
-                         Width="72"
-                         VerticalAlignment="Center"
-                         TextAlignment="Center"
-                         LostFocus="ContextSettingChanged" />
-            </Grid>
+            </Border>
 
-            <!-- ── Caching ──────────────────────────────────────────── -->
-            <TextBlock x:Name="PART_ContextCachingHeader"
-                       Text="CACHING"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="10"
-                       FontWeight="SemiBold"
-
-                       Margin="0 0 0 8" />
-            <Border BorderBrush="{DynamicResource BorderBrush}"
-                    BorderThickness="0 0 0 1"
-                    Margin="0 0 0 12" />
-
-            <!-- Prompt caching toggle -->
-            <Grid Margin="0 0 0 12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock x:Name="PART_PromptCachingLabel"
-                               Text="Prompt caching"
-                               Foreground="{DynamicResource TextBrush}"
-                               FontSize="12" />
-                    <TextBlock x:Name="PART_PromptCachingSubLabel"
-                               Text="Mark stable prefixes cache-friendly when the provider supports it"
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_ContextHistoryHeader"
+                               Text="HISTORY"
                                Foreground="{DynamicResource TextSecondaryBrush}"
-                               FontSize="11"
-                               Margin="0 2 0 0"
-                               TextWrapping="Wrap" />
-                </StackPanel>
-                <CheckBox x:Name="PART_EnablePromptCachingCheckBox"
-                          Grid.Column="1"
-                          VerticalAlignment="Center"
-                          Checked="ContextSettingChanged"
-                          Unchecked="ContextSettingChanged" />
-            </Grid>
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <Border BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="0 0 0 1"
+                            Margin="0 0 0 12" />
 
-            <!-- Uncached recent messages row -->
-            <Grid Margin="0 0 0 20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock x:Name="PART_UncachedRecentMessagesLabel"
-                               Text="Uncached tail"
-                               Foreground="{DynamicResource TextBrush}"
-                               FontSize="12" />
-                    <TextBlock x:Name="PART_UncachedRecentMessagesSubLabel"
-                               Text="Most recent messages always sent fresh, never cache-marked"
+                    <Grid Margin="0 0 0 12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_MaxMessagesLabel"
+                                       Text="Window size"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_MaxMessagesSubLabel"
+                                       Text="How many messages Aire keeps when sending history"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox x:Name="PART_MaxMessagesTextBox"
+                                 Grid.Column="1"
+                                 Width="72"
+                                 VerticalAlignment="Center"
+                                 TextAlignment="Center"
+                                 LostFocus="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_AnchorMessagesLabel"
+                                       Text="Anchor messages"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_AnchorMessagesSubLabel"
+                                       Text="The first messages that stay even when older ones are trimmed"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox x:Name="PART_AnchorMessagesTextBox"
+                                 Grid.Column="1"
+                                 Width="72"
+                                 VerticalAlignment="Center"
+                                 TextAlignment="Center"
+                                 LostFocus="ContextSettingChanged" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_ContextCachingHeader"
+                               Text="CACHING"
                                Foreground="{DynamicResource TextSecondaryBrush}"
-                               FontSize="11"
-                               Margin="0 2 0 0"
-                               TextWrapping="Wrap" />
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <Border BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="0 0 0 1"
+                            Margin="0 0 0 12" />
+
+                    <Grid Margin="0 0 0 12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_PromptCachingLabel"
+                                       Text="Prompt caching"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_PromptCachingSubLabel"
+                                       Text="Mark stable prefixes cache-friendly when the provider supports it"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <CheckBox x:Name="PART_EnablePromptCachingCheckBox"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Center"
+                                  Checked="ContextSettingChanged"
+                                  Unchecked="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_UncachedRecentMessagesLabel"
+                                       Text="Uncached tail"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_UncachedRecentMessagesSubLabel"
+                                       Text="Most recent messages always sent fresh"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox x:Name="PART_UncachedRecentMessagesTextBox"
+                                 Grid.Column="1"
+                                 Width="72"
+                                 VerticalAlignment="Center"
+                                 TextAlignment="Center"
+                                 LostFocus="ContextSettingChanged" />
+                    </Grid>
                 </StackPanel>
-                <TextBox x:Name="PART_UncachedRecentMessagesTextBox"
-                         Grid.Column="1"
-                         Width="72"
-                         VerticalAlignment="Center"
-                         TextAlignment="Center"
-                         LostFocus="ContextSettingChanged" />
-            </Grid>
+            </Border>
 
-            <!-- ── Summaries ────────────────────────────────────────── -->
-            <TextBlock x:Name="PART_ContextSummariesHeader"
-                       Text="SUMMARIES"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="10"
-                       FontWeight="SemiBold"
-
-                       Margin="0 0 0 8" />
-            <Border BorderBrush="{DynamicResource BorderBrush}"
-                    BorderThickness="0 0 0 1"
-                    Margin="0 0 0 12" />
-
-            <!-- Summaries toggle -->
-            <Grid Margin="0 0 0 12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock x:Name="PART_AutoSummariseLabel"
-                               Text="Auto-summarise"
-                               Foreground="{DynamicResource TextBrush}"
-                               FontSize="12" />
-                    <TextBlock x:Name="PART_AutoSummariseSubLabel"
-                               Text="Condense trimmed turns into a brief summary kept in context"
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_ContextSummariesHeader"
+                               Text="SUMMARIES"
                                Foreground="{DynamicResource TextSecondaryBrush}"
-                               FontSize="11"
-                               Margin="0 2 0 0"
-                               TextWrapping="Wrap" />
-                </StackPanel>
-                <CheckBox x:Name="PART_EnableConversationSummariesCheckBox"
-                          Grid.Column="1"
-                          VerticalAlignment="Center"
-                          Checked="ContextSettingChanged"
-                          Unchecked="ContextSettingChanged" />
-            </Grid>
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <Border BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="0 0 0 1"
+                            Margin="0 0 0 12" />
 
-            <!-- Summary max characters row -->
-            <Grid Margin="0 0 0 24">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                    <TextBlock x:Name="PART_SummaryMaxCharactersLabel"
-                               Text="Summary limit"
-                               Foreground="{DynamicResource TextBrush}"
-                               FontSize="12" />
-                    <TextBlock x:Name="PART_SummaryMaxCharactersSubLabel"
-                               Text="Maximum characters the condensed summary may occupy"
+                    <Grid Margin="0 0 0 12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_AutoSummariseLabel"
+                                       Text="Auto-summarise"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_AutoSummariseSubLabel"
+                                       Text="Condense trimmed turns into a brief summary kept in context"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <CheckBox x:Name="PART_EnableConversationSummariesCheckBox"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Center"
+                                  Checked="ContextSettingChanged"
+                                  Unchecked="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid Margin="0 0 0 12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_SummaryMaxCharactersLabel"
+                                       Text="Summary limit"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_SummaryMaxCharactersSubLabel"
+                                       Text="Maximum characters the condensed summary may occupy"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox x:Name="PART_SummaryMaxCharactersTextBox"
+                                 Grid.Column="1"
+                                 Width="72"
+                                 VerticalAlignment="Center"
+                                 TextAlignment="Center"
+                                 LostFocus="ContextSettingChanged" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16 14"
+                    Margin="0 0 0 16">
+                <StackPanel>
+                    <TextBlock x:Name="PART_ContextCompactionHeader"
+                               Text="COMPACTION"
                                Foreground="{DynamicResource TextSecondaryBrush}"
-                               FontSize="11"
-                               Margin="0 2 0 0"
-                               TextWrapping="Wrap" />
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8" />
+                    <Border BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="0 0 0 1"
+                            Margin="0 0 0 12" />
+
+                    <Grid Margin="0 0 0 12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_TokenAwareTruncationLabel"
+                                       Text="Token-aware truncation"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_TokenAwareTruncationSubLabel"
+                                       Text="Trim history based on token counts instead of message counts"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <CheckBox x:Name="PART_EnableTokenAwareTruncationCheckBox"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Center"
+                                  Checked="ContextSettingChanged"
+                                  Unchecked="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid x:Name="PART_MaxTokensRow" Margin="0 0 0 12">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_MaxTokensLabel"
+                                       Text="Max tokens"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_MaxTokensSubLabel"
+                                       Text="Maximum token count for the window"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox x:Name="PART_MaxTokensTextBox"
+                                 Grid.Column="1"
+                                 Width="72"
+                                 VerticalAlignment="Center"
+                                 TextAlignment="Center"
+                                 LostFocus="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid x:Name="PART_AnchorTokensRow" Margin="0 0 0 12">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_AnchorTokensLabel"
+                                       Text="Anchor tokens"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_AnchorTokensSubLabel"
+                                       Text="Tokens reserved for early messages"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox x:Name="PART_AnchorTokensTextBox"
+                                 Grid.Column="1"
+                                 Width="72"
+                                 VerticalAlignment="Center"
+                                 TextAlignment="Center"
+                                 LostFocus="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid x:Name="PART_TailTokensRow" Margin="0 0 0 12">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_TailTokensLabel"
+                                       Text="Tail tokens"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_TailTokensSubLabel"
+                                       Text="Tokens reserved for recent messages"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBox x:Name="PART_TailTokensTextBox"
+                                 Grid.Column="1"
+                                 Width="72"
+                                 VerticalAlignment="Center"
+                                 TextAlignment="Center"
+                                 LostFocus="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid Margin="0 0 0 12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_ToolFocusWindowLabel"
+                                       Text="Tool-focus window"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_ToolFocusWindowSubLabel"
+                                       Text="Tighten the window when tool-use is detected"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <CheckBox x:Name="PART_EnableToolFocusWindowCheckBox"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Center"
+                                  Checked="ContextSettingChanged"
+                                  Unchecked="ContextSettingChanged" />
+                    </Grid>
+
+                    <Grid Margin="0 0 0 4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
+                            <TextBlock x:Name="PART_RetryFollowUpWindowLabel"
+                                       Text="Retry-follow-up window"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       FontSize="12" />
+                            <TextBlock x:Name="PART_RetryFollowUpWindowSubLabel"
+                                       Text="Expand the window for retry or follow-up detection"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 2 0 0"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                        <CheckBox x:Name="PART_EnableRetryFollowUpWindowCheckBox"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Center"
+                                  Checked="ContextSettingChanged"
+                                  Unchecked="ContextSettingChanged" />
+                    </Grid>
                 </StackPanel>
-                <TextBox x:Name="PART_SummaryMaxCharactersTextBox"
-                         Grid.Column="1"
-                         Width="72"
-                         VerticalAlignment="Center"
-                         TextAlignment="Center"
-                         LostFocus="ContextSettingChanged" />
-            </Grid>
+            </Border>
 
-           <!-- ── Compaction ─────────────────────────────────────── -->
-           <TextBlock x:Name="PART_ContextCompactionHeader"
-                      Text="COMPACTION"
-                      Foreground="{DynamicResource TextSecondaryBrush}"
-                      FontSize="10"
-                      FontWeight="SemiBold"
-                      Margin="0 0 0 8" />
-           <Border BorderBrush="{DynamicResource BorderBrush}"
-                   BorderThickness="0 0 0 1"
-                   Margin="0 0 0 12" />
-
-           <!-- Token‑aware truncation toggle -->
-           <Grid Margin="0 0 0 12">
-               <Grid.ColumnDefinitions>
-                   <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="Auto" />
-               </Grid.ColumnDefinitions>
-               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                   <TextBlock x:Name="PART_TokenAwareTruncationLabel"
-                              Text="Token‑aware truncation"
-                              Foreground="{DynamicResource TextBrush}"
-                              FontSize="12" />
-                   <TextBlock x:Name="PART_TokenAwareTruncationSubLabel"
-                              Text="Trim history based on token counts instead of message counts"
-                              Foreground="{DynamicResource TextSecondaryBrush}"
-                              FontSize="11"
-                              Margin="0 2 0 0"
-                              TextWrapping="Wrap" />
-               </StackPanel>
-               <CheckBox x:Name="PART_EnableTokenAwareTruncationCheckBox"
-                         Grid.Column="1"
-                         VerticalAlignment="Center"
-                         Checked="ContextSettingChanged"
-                         Unchecked="ContextSettingChanged" />
-           </Grid>
-
-           <!-- Max tokens row (visible when token‑aware truncation enabled) -->
-           <Grid x:Name="PART_MaxTokensRow" Margin="0 0 0 12">
-               <Grid.Style>
-                   <Style TargetType="Grid">
-                       <Style.Triggers>
-                           <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
-                               <Setter Property="Visibility" Value="Collapsed"/>
-                           </DataTrigger>
-                       </Style.Triggers>
-                   </Style>
-               </Grid.Style>
-               <Grid.ColumnDefinitions>
-                   <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="Auto" />
-               </Grid.ColumnDefinitions>
-               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                   <TextBlock x:Name="PART_MaxTokensLabel"
-                              Text="Max tokens"
-                              Foreground="{DynamicResource TextBrush}"
-                              FontSize="12" />
-                   <TextBlock x:Name="PART_MaxTokensSubLabel"
-                              Text="Maximum token count for the conversation window (leave empty for model default)"
-                              Foreground="{DynamicResource TextSecondaryBrush}"
-                              FontSize="11"
-                              Margin="0 2 0 0"
-                              TextWrapping="Wrap" />
-               </StackPanel>
-               <TextBox x:Name="PART_MaxTokensTextBox"
-                        Grid.Column="1"
-                        Width="72"
-                        VerticalAlignment="Center"
-                        TextAlignment="Center"
-                        LostFocus="ContextSettingChanged" />
-           </Grid>
-
-           <!-- Anchor tokens row -->
-           <Grid x:Name="PART_AnchorTokensRow" Margin="0 0 0 12">
-               <Grid.Style>
-                   <Style TargetType="Grid">
-                       <Style.Triggers>
-                           <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
-                               <Setter Property="Visibility" Value="Collapsed"/>
-                           </DataTrigger>
-                       </Style.Triggers>
-                   </Style>
-               </Grid.Style>
-               <Grid.ColumnDefinitions>
-                   <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="Auto" />
-               </Grid.ColumnDefinitions>
-               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                   <TextBlock x:Name="PART_AnchorTokensLabel"
-                              Text="Anchor tokens"
-                              Foreground="{DynamicResource TextBrush}"
-                              FontSize="12" />
-                   <TextBlock x:Name="PART_AnchorTokensSubLabel"
-                              Text="Tokens reserved for early messages"
-                              Foreground="{DynamicResource TextSecondaryBrush}"
-                              FontSize="11"
-                              Margin="0 2 0 0"
-                              TextWrapping="Wrap" />
-               </StackPanel>
-               <TextBox x:Name="PART_AnchorTokensTextBox"
-                        Grid.Column="1"
-                        Width="72"
-                        VerticalAlignment="Center"
-                        TextAlignment="Center"
-                        LostFocus="ContextSettingChanged" />
-           </Grid>
-
-           <!-- Tail tokens row -->
-           <Grid x:Name="PART_TailTokensRow" Margin="0 0 0 12">
-               <Grid.Style>
-                   <Style TargetType="Grid">
-                       <Style.Triggers>
-                           <DataTrigger Binding="{Binding IsChecked, ElementName=PART_EnableTokenAwareTruncationCheckBox}" Value="False">
-                               <Setter Property="Visibility" Value="Collapsed"/>
-                           </DataTrigger>
-                       </Style.Triggers>
-                   </Style>
-               </Grid.Style>
-               <Grid.ColumnDefinitions>
-                   <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="Auto" />
-               </Grid.ColumnDefinitions>
-               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                   <TextBlock x:Name="PART_TailTokensLabel"
-                              Text="Tail tokens"
-                              Foreground="{DynamicResource TextBrush}"
-                              FontSize="12" />
-                   <TextBlock x:Name="PART_TailTokensSubLabel"
-                              Text="Tokens reserved for recent messages"
-                              Foreground="{DynamicResource TextSecondaryBrush}"
-                              FontSize="11"
-                              Margin="0 2 0 0"
-                              TextWrapping="Wrap" />
-               </StackPanel>
-               <TextBox x:Name="PART_TailTokensTextBox"
-                        Grid.Column="1"
-                        Width="72"
-                        VerticalAlignment="Center"
-                        TextAlignment="Center"
-                        LostFocus="ContextSettingChanged" />
-           </Grid>
-
-           <!-- Tool‑focus window toggle -->
-           <Grid Margin="0 0 0 12">
-               <Grid.ColumnDefinitions>
-                   <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="Auto" />
-               </Grid.ColumnDefinitions>
-               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                   <TextBlock x:Name="PART_ToolFocusWindowLabel"
-                              Text="Tool‑focus window"
-                              Foreground="{DynamicResource TextBrush}"
-                              FontSize="12" />
-                   <TextBlock x:Name="PART_ToolFocusWindowSubLabel"
-                              Text="Tighten context window when tool‑use is detected"
-                              Foreground="{DynamicResource TextSecondaryBrush}"
-                              FontSize="11"
-                              Margin="0 2 0 0"
-                              TextWrapping="Wrap" />
-               </StackPanel>
-               <CheckBox x:Name="PART_EnableToolFocusWindowCheckBox"
-                         Grid.Column="1"
-                         VerticalAlignment="Center"
-                         Checked="ContextSettingChanged"
-                         Unchecked="ContextSettingChanged" />
-           </Grid>
-
-           <!-- Retry‑follow‑up window toggle -->
-           <Grid Margin="0 0 0 20">
-               <Grid.ColumnDefinitions>
-                   <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="Auto" />
-               </Grid.ColumnDefinitions>
-               <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0">
-                   <TextBlock x:Name="PART_RetryFollowUpWindowLabel"
-                              Text="Retry‑follow‑up window"
-                              Foreground="{DynamicResource TextBrush}"
-                              FontSize="12" />
-                   <TextBlock x:Name="PART_RetryFollowUpWindowSubLabel"
-                              Text="Expand context window for retry/follow‑up detection"
-                              Foreground="{DynamicResource TextSecondaryBrush}"
-                              FontSize="11"
-                              Margin="0 2 0 0"
-                              TextWrapping="Wrap" />
-               </StackPanel>
-               <CheckBox x:Name="PART_EnableRetryFollowUpWindowCheckBox"
-                         Grid.Column="1"
-                         VerticalAlignment="Center"
-                         Checked="ContextSettingChanged"
-                         Unchecked="ContextSettingChanged" />
-           </Grid>
-
-           <!-- Hint note -->
             <Border Background="{DynamicResource Surface2Brush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1"
@@ -412,7 +475,7 @@
                                VerticalAlignment="Top"
                                Margin="0 0 8 0" />
                     <TextBlock x:Name="PART_ContextHintText"
-                               Text="System messages and anchor turns are always kept. Cached prefixes only reduce cost on providers that explicitly support prompt caching."
+                               Text="System messages and anchor turns are always kept. Cached prefixes only help on providers that explicitly support prompt caching."
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                FontSize="11"
                                TextWrapping="Wrap" />

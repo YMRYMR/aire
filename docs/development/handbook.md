@@ -151,6 +151,12 @@ Key services:
 | `ChatInteractionApplicationService` | User interaction coordination |
 | `ConversationApplicationService` | Conversation lifecycle (create, delete, search) |
 | `LocalApiApplicationService` | Local API request/response normalization |
+| `SwitchModelApplicationService` | Model switching from tool calls |
+| `ConversationExportService` | Export conversations to Markdown |
+| `PromptTemplateService` | Prompt template CRUD and shortcut matching |
+| `ContextInjectionToolService` | Structured context injection (clipboard, env, file, URL) |
+| `AgentModeService` | Backward-compatible alias for `OrchestratorModeService` |
+| `CustomInstructionsService` | Persistent per-user instructions appended to system prompts |
 
 ### UI Decomposition (Partial Classes)
 
@@ -163,6 +169,9 @@ MainWindow is decomposed into multiple files to keep each focused:
 | `MainWindow.State.cs` | State management (active conversation, provider) |
 | `MainWindow.WindowState.cs` | Window lifecycle (minimize, close, restore) |
 | `MainWindow.ViewState.cs` | UI view state (theme, layout) |
+| `MainWindow.ChatCoordinator.cs` | Chat turn orchestration (prompt, provider call, tool loop) |
+| `MainWindow.CommandPalette.cs` | Ctrl+K command palette |
+| `MainWindow.AgentMode.cs` | Orchestrator Mode toggle, goals, heartbeat banner |
 
 Other large windows (SettingsWindow, OnboardingWindow, HelpWindow, ImageViewerWindow)
 follow the same partial-class decomposition pattern.
@@ -306,6 +315,9 @@ public static List<object> ToOllamaTools(...)
 | `SystemToolService` | System inspection |
 | `MemoryToolService` | Internal memory |
 | `EmailToolService` | Email operations |
+| `ContextInjectionToolService` | Context injection (clipboard, env, datetime, file, URL) |
+| `AgentToolService` | Show image |
+| `ToolResultCache` | Caches idempotent read-only tool results within a turn |
 | `McpManager` | MCP server tools |
 
 ---
@@ -323,7 +335,7 @@ public static List<object> ToOllamaTools(...)
 | Table | Purpose |
 |---|---|
 | `Providers` | Provider configurations (type, API key, base URL, model, timeout, capabilities) |
-| `Conversations` | Conversation metadata (title, provider, assistant mode, timestamps) |
+| `Conversations` | Conversation metadata (title, provider, assistant mode, parent ID for branches, timestamps) |
 | `Messages` | Messages with role, content, images, attachments |
 | `Settings` | Key-value app settings |
 | `EmailAccounts` | Email integration with encrypted OAuth tokens |
@@ -542,16 +554,19 @@ if (!isFirstInstance)
 
 ### Local API
 
-Loopback-only HTTP listener on `127.0.0.1:51234`. Provides:
+Loopback-only TCP listener on `127.0.0.1:51234`. Line-delimited JSON. DPAPI-encrypted token.
 
-- Send messages
-- Switch providers and models
-- Inspect app state
-- List top-level windows
-- Select a window for the current session
-- Capture the selected window as a PNG path or base64 payload
+Provides:
 
-Intended for trusted local automation and AI agent integration.
+- Send messages, switch providers and models
+- Inspect app state, list top-level windows
+- Select and capture windows
+- Manage conversations (create, delete, rename, branch)
+- Control assistant mode, language, and tool categories
+- Approve or deny tool calls, execute tools directly
+- Read execution trace for debugging
+
+See the Help window (Local API tab) for the full method reference and code examples.
 
 ---
 
@@ -592,6 +607,33 @@ dotnet run --project .\Aire.Screenshots\Aire.Screenshots.csproj -- run-plan --pl
 
 Screenshots are written to `Aire/Assets/Help/{locale}/` and can be committed
 directly. AIs can use this to verify UI changes visually.
+
+When the UI changes in a user-visible way, refresh the full language batch so
+the help images stay consistent across the supported locales.
+
+### Orchestrator Mode
+
+Orchestrator Mode is the goal-driven workflow that replaced the older
+agent-mode behavior. It keeps the user informed in plain language while Aire
+works through a goal list, retries failures, and switches providers or models
+when needed.
+
+Key points:
+
+- The main composer button toggles the session on and off.
+- The chat input stays usable so the user can steer the session with new
+  prompts.
+- While active, Aire renders centered narration bubbles for start, resume,
+  progress, completion, pause, and block messages.
+- The session persists goals, tool permissions, retry history, and token state
+  so it can resume after a pause or crash.
+- The orchestration prompt asks the model to explain what it is doing and why
+  before major steps.
+- The kill switch is intentionally redundant: button, keyboard shortcut, and
+  voice command.
+
+The help system mirrors this behavior with screenshots and a dedicated
+Orchestrator Mode explanation, so the docs and the UI stay aligned.
 
 When the goal is autonomous agent behavior rather than docs capture, prefer the
 local API methods above so the agent can reuse the same window-selection and

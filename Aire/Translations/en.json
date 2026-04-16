@@ -31,10 +31,13 @@
     "help.search": "Search help…",
     "help.tab.gettingStarted": "Getting Started",
     "help.tab.toolsVoice": "Tools & Voice",
+    "settings.tab.usage": "Usage",
     "help.tab.providers": "Providers",
     "help.tab.localApi": "Local API",
     "tooltip.help": "Help",
     "tooltip.settings": "Settings",
+    "tooltip.orchestratorOn": "Orchestrator Mode active — all tools auto-approved",
+    "tooltip.orchestratorOff": "Orchestrator Mode — click to activate",
     "tooltip.clear": "Clear conversation",
     "tooltip.mic": "Start voice input",
     "tooltip.stopRecording": "Stop recording  (say 'AIRE PAUSE' to pause)",
@@ -218,6 +221,16 @@
     "settings.usageConversations": "Conversations with usage",
     "settings.usageProviders": "Providers with usage",
     "settings.usageAssistantTurns": "Assistant turns tracked",
+    "settings.usageConversationSingular": "1 conversation",
+    "settings.usageConversationPlural": "conversations",
+    "settings.usageAssistantTurnSingular": "1 assistant turn",
+    "settings.usageAssistantTurnPlural": "assistant turns",
+    "settings.usageLastUsed": "last used {0}",
+    "settings.usageNeverUsed": "never used",
+    "settings.usageEnabled": "enabled",
+    "settings.usageDisabled": "disabled",
+    "settings.usageUpdated": "updated {0}",
+    "settings.usageNoTokensRecorded": "no tokens recorded",
     "settings.usageHint": "Tokens are recorded from assistant turns that return usage data. When a provider does not expose live spend, Aire estimates it from recorded tokens and published model pricing.",
     "settings.usageLiveTitle": "Live provider usage",
     "settings.usageNoProviderSelected": "No provider selected",
@@ -252,6 +265,47 @@
     "settings.tab.context": "Context",
     "settings.tab.autoAccept": "Auto‑accept",
     "settings.tab.connections": "Connections",
+    "settings.templates.listTitle": "Templates",
+    "settings.templates.listSubtitle": "Reusable prompts and slash shortcuts.",
+    "settings.templates.addButton": "+ Add template",
+    "settings.templates.panelSubtitle": "Pick a starter, try it with sample text, then save.",
+    "settings.templates.starterTitle": "1. Pick a starter",
+    "settings.templates.starterDescription": "Choose a simple recipe. Aire fills in the template for you.",
+    "settings.templates.explainButton": "Start explain template",
+    "settings.templates.fixButton": "Start fix template",
+    "settings.templates.summarizeButton": "Start summarize template",
+    "settings.templates.reviewButton": "Start review template",
+    "settings.templates.starterHint": "You can still rename it and change every word.",
+    "settings.templates.nameLabel": "Name",
+    "settings.templates.shortcutLabel": "Shortcut",
+    "settings.templates.prefixLabel": "Extra note for Aire",
+    "settings.templates.prefixDescription": "Optional text Aire adds before the template.",
+    "settings.templates.bodyStepTitle": "2. Type the words you want Aire to reuse",
+    "settings.templates.testStepTitle": "3. Test it",
+    "settings.templates.testStepDescription": "Type a sample code snippet or a short piece of text. Aire will show you how the template changes it.",
+    "settings.templates.codeExampleButton": "Use code example",
+    "settings.templates.textExampleButton": "Use text example",
+    "settings.templates.previewHeading": "What Aire will say",
+    "settings.templates.saveButton": "Save",
+    "settings.templates.selectTitle": "Select a template",
+    "settings.templates.previewEmpty": "Select a template to see a preview",
+    "settings.templates.samplePlaceholder": "Paste a short example here to test the template.",
+    "settings.templates.newTemplate": "New Template",
+    "settings.templates.sampleText": "This is a short note that needs to be explained or summarized.",
+    "settings.templates.sampleReviewText": "Here is some text that I selected and want reviewed.",
+    "settings.templates.previewEmptyValue": "(empty)",
+    "settings.templates.recipeExplainName": "Explain code",
+    "settings.templates.recipeExplainShortcut": "/explain",
+    "settings.templates.recipeExplainBody": "Please explain this code in simple words:\n\n{{code}}",
+    "settings.templates.recipeFixName": "Fix mistakes",
+    "settings.templates.recipeFixShortcut": "/fix",
+    "settings.templates.recipeFixBody": "Find and fix any problems in this code:\n\n{{code}}",
+    "settings.templates.recipeSummarizeName": "Summarize text",
+    "settings.templates.recipeSummarizeShortcut": "/summarize",
+    "settings.templates.recipeSummarizeBody": "Summarize this text in a short, clear way:\n\n{{text}}",
+    "settings.templates.recipeReviewName": "Review selection",
+    "settings.templates.recipeReviewShortcut": "/review",
+    "settings.templates.recipeReviewBody": "Review the selected text and tell me what is good and what can be improved:\n\n{{selection}}",
     "main.sessionActive": "Session active",
     "main.endSession": "End session",
     "main.thinking": "Thinking…",
@@ -607,7 +661,27 @@
     "settings.regenerateToken": "Regenerate API token?",
     "settings.regenerateTokenMsg": "Existing local tools will stop working until they use the new token.",
     "ollama.uninstallModel": "Uninstall Ollama Model",
-    "ollama.uninstallModelMsg": "Are you sure you want to uninstall '{0}'? This will delete the model files from your system."
+    "ollama.uninstallModelMsg": "Are you sure you want to uninstall '{0}'? This will delete the model files from your system.",
+    "help.tab.contextTemplates": "Context & Templates",
+    "orchestrator.title": "Orchestrator Mode",
+    "orchestrator.dialogTitle": "Orchestrator Mode configuration",
+    "orchestrator.goalsLabel": "Goals",
+    "orchestrator.goalsDescription": "Write one goal per line. The orchestrator will keep track of them while it runs.",
+    "orchestrator.tokenBudgetLabel": "Token budget (0 = unlimited):",
+    "orchestrator.categoriesLabel": "Allowed tool categories",
+    "orchestrator.categoriesDescription": "Leave everything checked if you want the orchestrator to handle the full goal flow.",
+    "orchestrator.category.files": "Files",
+    "orchestrator.category.browser": "Browser",
+    "orchestrator.category.agent": "Agent",
+    "orchestrator.category.mouse": "Mouse",
+    "orchestrator.category.keyboard": "Keyboard",
+    "orchestrator.category.system": "System",
+    "orchestrator.category.email": "Email",
+    "orchestrator.startButton": "Start",
+    "orchestrator.cancelButton": "Cancel",
+    "settings.templates.createTitle": "Create a template",
+    "orchestrator.goalWatermarkExamples": "Find the cheapest non-stop flight from Madrid to London next Friday.\nWrite a 50,000-word mystery novel about a cat investigator and an ancient spaceship.\nWrite a Rust app that shows me how to cook pasta and prints the steps in a terminal UI.\nFind all text documents on this machine that mention the singularity.\nSummarize the release notes on this webpage and tell me if they affect Linux users.\nCompare the product details on these two webpages and tell me which one is cheaper.\nDraft a polite email asking for an extension on a deadline.\nFind the best train option from Barcelona to Valencia this weekend and note the price.\nRead this GitHub issue and turn it into a short implementation checklist.\nSearch my downloads folder for PDFs that mention rent or lease and list the files.\nWrite a Python script that renames image files by date taken.\nTake the text from this page and turn it into a simple FAQ.\nFind three family-friendly restaurants near Plaza Mayor with vegetarian options.\nCompare the salary, commute, and remote policy in these two job offer emails.\nLook at this support ticket and propose the smallest safe fix.\nSummarize this meeting transcript in five bullets and list open questions.\nFind all Word documents on this machine that mention the word protocol.\nHelp me plan a one-day itinerary in Lisbon with two museum stops and a lunch place.\nDraft a changelog entry for the last code change and keep it short.\nTurn this rough product idea into a clear step-by-step launch plan.",
+    "settings.templates.watermarkExamples": "Explain this code in simple words:\n\n{{code}}\nSummarize this meeting note into five bullets:\n\n{{text}}\nRewrite this paragraph in plain English:\n\n{{text}}\nTurn this support ticket into a short checklist:\n\n{{text}}\nExtract the action items from this email:\n\n{{text}}\nReview the selected text and point out unclear parts:\n\n{{selection}}\nDraft a friendly reply using the clipboard text as context:\n\n{{clipboard}}\nConvert this rough idea into a short project brief:\n\n{{text}}\nCreate a concise changelog entry from these notes:\n\n{{text}}\nFind the bugs in this code and suggest fixes:\n\n{{code}}\nTurn this article into a beginner-friendly FAQ:\n\n{{text}}\nWrite a short social post announcing this update:\n\n{{text}}\nCompare these two product descriptions and highlight the differences:\n\n{{selection}}\n\n{{clipboard}}\nGenerate a study guide from these class notes:\n\n{{text}}\nTurn this clipboard text into a polished email:\n\n{{clipboard}}\nCreate a project summary for a manager:\n\n{{text}}\nRewrite this recipe in simple step-by-step language:\n\n{{text}}\nTurn this code comment into a better commit message:\n\n{{code}}\nDraft a one-paragraph description for this webpage:\n\n{{text}}\nSummarize this document for someone who is busy:\n\n{{text}}"
   },
   "help": [
     {
@@ -708,6 +782,38 @@
     },
     {
       "tab": "Getting Started",
+      "type": "text",
+      "title": "Command Palette",
+      "imagePath": "Assets/Help/main-chat-command-palette.png",
+      "imageCaption": "The command palette provides quick access to actions, templates, and navigation.",
+      "links": [
+        {
+          "label": "Open Settings",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "Press Ctrl+K to open the command palette — a quick-access menu that lets you trigger common actions without reaching for the mouse.\n\nWhat you can do from the palette:\n• Start a new conversation.\n• Toggle tools on or off.\n• Toggle Orchestrator Mode.\n• Open Settings.\n• Export the current conversation.\n• Apply a prompt template (if you have any configured).\n• Switch assistant mode.\n\nStart typing to filter the list. Use ↑ / ↓ to navigate and press Enter to select."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Conversation Export",
+      "links": [
+        {
+          "label": "Open Settings",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "You can export any conversation as a Markdown file.\n\nHow to export:\n• Press Ctrl+K to open the command palette and choose Export Conversation.\n• Or right-click a conversation in the sidebar and choose Export from the context menu.\n\nThe exported file includes:\n• Provider name, model, and timestamps.\n• All user and assistant messages.\n• Image references as notes (images are not embedded).\n• Tool results are cleaned up for readability.\n\nThe file is saved wherever you choose in the save dialog."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Conversation Branching",
+      "content": "You can fork a conversation from any point in its history.\n\nHow to branch:\n• Right-click any message in the chat and choose Branch from here.\n• A new conversation is created with all messages up to that point.\n• The original conversation is not changed.\n• The branched conversation appears indented under its parent in the sidebar, forming a tree.\n\nThis is useful when you want to explore a different direction without losing the original thread.\n\nTo delete a branch, right-click it in the sidebar and choose Delete."
+    },
+    {
+      "tab": "Getting Started",
       "type": "table",
       "title": "Keyboard Shortcuts",
       "cols": [
@@ -716,28 +822,48 @@
       ],
       "rows": [
         [
+          "Alt+Space",
+          "Global hotkey: toggle the Aire window from any app"
+        ],
+        [
+          "Ctrl+K",
+          "Open command palette"
+        ],
+        [
           "Enter",
-          "Send message"
+          "Send message (or approve a pending tool call)"
         ],
         [
           "Shift+Enter",
           "New line in the input box"
         ],
         [
+          "Escape",
+          "Close search bar / dismiss dialog / deny a pending tool call"
+        ],
+        [
           "↑ / ↓",
           "Navigate message history (when cursor is on first/last line)"
+        ],
+        [
+          "← / →",
+          "Navigate between dialog buttons (in confirmation and approval dialogs)"
         ],
         [
           "Ctrl+F",
           "Search conversation"
         ],
         [
-          "Ctrl+Scroll",
-          "Adjust font size"
+          "Ctrl+N",
+          "New conversation"
         ],
         [
-          "Escape",
-          "Close search bar / dismiss dialog"
+          "Ctrl+,",
+          "Open Settings"
+        ],
+        [
+          "Ctrl+Scroll",
+          "Adjust font size"
         ]
       ]
     },
@@ -913,6 +1039,62 @@
         }
       ],
       "content": "Auto-accept profiles let you define which actions Aire can approve automatically without interrupting you each time.\n\nBuilt-in examples include Developer, News browser, and Conservative.\n\nWhat to keep in mind:\n• Profiles are a convenience, not a security replacement.\n• Start conservatively and only auto-accept actions you really trust.\n• File writes, input control, and external side effects are usually worth keeping manual.\n\nIf you are unsure, leave auto-accept restrictive and review actions one by one."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Orchestrator Mode",
+      "imagePath": "Assets/Help/main-chat-orchestrator-mode.png",
+      "imageCaption": "The orchestrator mode toggle in the composer area. When active, the button turns red, narration bubbles appear in chat, and the session can be steered from the textbox.",
+      "links": [
+        {
+          "label": "Open Settings",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Orchestrator Mode is Aire's goal runner. You give it one or more goals, Aire keeps working through them, and it tells you in plain language what it is doing and why.\n\nHow to start:\n• Click the Orchestrator button in the composer area, or\n• Open the command palette (Ctrl+K) and choose Toggle Orchestrator Mode.\n\nWhen it starts:\n• Aire opens a fresh conversation for the orchestrator run.\n• The dialog remembers your last goals, token budget, and tool-category choices.\n• The textbox stays editable so you can steer the run while it is active.\n\nWhat the AI sees:\n• Your goal list.\n• The allowed tool categories.\n• The current progress and failure history.\n• New user messages as steering input.\n\nWhat you see:\n• Centered narration bubbles for start, resume, progress, completion, pause, and block messages.\n• A red active-state button with a heartbeat pulse while the orchestrator is running.\n• The same button stops the run when you click it again.\n\nWhen it stops:\n• The goals are complete.\n• You stop it.\n• All configured models are out of tokens.\n• The same task fails three times across different attempts, in which case Aire asks you for guidance.\n\nThe orchestrator prompt also asks the model to explain what it is going to do before major steps, so the user can follow the plan without reading raw tool calls."
+    },
+    {
+      "tab": "Context & Templates",
+      "type": "text",
+      "title": "Custom Instructions",
+      "imagePath": "Assets/Help/settings-context.png",
+      "imageCaption": "Custom instructions in Settings → Context let you add persistent guidance to every conversation.",
+      "links": [
+        {
+          "label": "Open context settings",
+          "action": "settings:context"
+        }
+      ],
+      "content": "Custom instructions are persistent text that Aire appends to every system prompt. They let you give the AI standing guidance that applies to all conversations.\n\nHow to set them up:\n• Open Settings (⚙) → Context tab.\n• Type or paste your instructions in the multi-line text box.\n• Changes are saved automatically.\n\nCommon uses:\n• Specify your preferred coding language or framework.\n• Set a response style (concise, detailed, technical).\n• Give context about your project or role.\n• Add formatting preferences.\n\nCustom instructions are included with every message, so keep them concise. For longer, task-specific prompts, use prompt templates instead."
+    },
+    {
+      "tab": "Context & Templates",
+      "type": "text",
+      "title": "Prompt Templates",
+      "imagePath": "Assets/Help/settings-templates.png",
+      "imageCaption": "Template management in Settings → Templates with a list, edit form, and live preview.",
+      "links": [
+        {
+          "label": "Open template settings",
+          "action": "settings:templates"
+        }
+      ],
+      "content": "Prompt templates are reusable text snippets you can quickly insert into the chat. They support parameterized placeholders so you can customize each use.\n\nHow to create a template:\n• Open Settings (⚙) → Templates tab.\n• Click Add to create a new template.\n• Fill in the name, optional prefix, optional shortcut key, and the template body.\n• Use {{placeholder}} syntax for parts you want to fill in each time (for example, {{language}} or {{filename}}).\n• Click Save. A live preview below the form shows the resolved output.\n\nHow to use a template:\n• Press Ctrl+K to open the command palette.\n• Start typing the template name or shortcut.\n• Select it to insert the resolved text into the chat input.\n\nStarter templates (Explain, Fix bugs, Code review, Summarize) are provided on first run. You can edit or delete these and add your own."
+    },
+    {
+      "tab": "Context & Templates",
+      "type": "text",
+      "title": "Cost Tracking",
+      "imagePath": "Assets/Help/settings-usage.png",
+      "imageCaption": "The Usage tab in Settings shows per-provider cost breakdown, trends, and estimated spend.",
+      "links": [
+        {
+          "label": "Open usage settings",
+          "action": "settings:usage"
+        }
+      ],
+      "content": "The Usage tab in Settings tracks how much you spend on each AI provider.\n\nWhat you can see:\n• Per-provider cost breakdown with totals.\n• Trend charts showing usage over time.\n• Live quota information (when the provider reports it).\n• Estimated spend and currency conversion.\n\nHow it works:\n• Aire records token usage after each AI turn.\n• Costs are estimated based on known pricing for common models.\n• Data is stored locally and never sent anywhere.\n\nThis is useful for understanding which models and providers you use most, and for keeping your spending within budget."
     },
     {
       "tab": "Connections",
@@ -1131,8 +1313,8 @@
         ],
         [
           "open_settings",
-          "—",
-          "Open the Settings window."
+          "tab?",
+          "Open the Settings window, optionally navigating to a specific tab."
         ],
         [
           "open_browser",
@@ -1151,13 +1333,13 @@
         ],
         [
           "list_conversations",
-          "—",
-          "All saved conversations (ID, title, date)."
+          "search?",
+          "All saved conversations, optionally filtered by a search string."
         ],
         [
           "create_conversation",
-          "title?",
-          "Create a new conversation and switch to it."
+          "title?, providerId?",
+          "Create a new conversation and switch to it. Optionally specify a provider."
         ],
         [
           "select_conversation",
@@ -1165,9 +1347,24 @@
           "Switch to an existing conversation."
         ],
         [
+          "delete_conversation",
+          "conversationId",
+          "Delete a conversation."
+        ],
+        [
+          "rename_conversation",
+          "conversationId, title",
+          "Rename a conversation."
+        ],
+        [
           "get_messages",
           "conversationId",
           "All messages in a conversation."
+        ],
+        [
+          "branch_conversation",
+          "conversationId, upToMessageId",
+          "Create a new conversation branching from the given message."
         ],
         [
           "set_provider",
@@ -1180,9 +1377,39 @@
           "Change the model for a provider."
         ],
         [
+          "set_language",
+          "languageCode",
+          "Change the app language immediately."
+        ],
+        [
+          "set_assistant_mode",
+          "mode",
+          "Set the assistant mode for the current conversation (e.g., Developer, General)."
+        ],
+        [
+          "list_assistant_modes",
+          "—",
+          "List all available assistant modes."
+        ],
+        [
+          "list_tool_categories",
+          "—",
+          "List all tool categories and their enabled state."
+        ],
+        [
+          "set_tool_categories",
+          "categories[]",
+          "Enable specific tool categories."
+        ],
+        [
           "send_message",
-          "text",
+          "text, conversationId?",
           "Send a message to the active conversation. Returns true when accepted."
+        ],
+        [
+          "stop_ai",
+          "—",
+          "Stop the current AI response."
         ],
         [
           "list_pending_approvals",

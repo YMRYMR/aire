@@ -24,6 +24,7 @@ namespace Aire.Services
         private readonly ContextInjectionToolService _contextTool;
         private readonly McpManager              _mcpManager;
         private readonly EmailToolService        _emailTool;
+        private readonly ToolResultCache         _cache = new();
 
         /// <summary>
         /// Checks whether a tool name belongs to the keyboard-control family.
@@ -110,9 +111,18 @@ namespace Aire.Services
 
             request.Tool = NormalizeToolName(request.Tool);
 
+            // Check cache for idempotent read-only tools.
+            if (ToolResultCache.IsCacheable(request.Tool))
+            {
+                var cacheKey = ToolResultCache.BuildKey(request.Tool, request.Parameters);
+                var cached = _cache.TryGet(cacheKey);
+                if (cached != null)
+                    return cached;
+            }
+
             try
             {
-                return request.Tool switch
+                var result = request.Tool switch
                 {
                     "execute_command"        => await _commandTool.ExecuteAsync(request),
                     "open_url"               => await _webTool.ExecuteOpenUrlAsync(request),
@@ -125,6 +135,7 @@ namespace Aire.Services
                     "get_browser_html"       => await _browserTool.ExecuteGetBrowserHtmlAsync(request),
                     "execute_browser_script" => await _browserTool.ExecuteBrowserScriptAsync(request),
                     "get_browser_cookies"    => await _browserTool.ExecuteGetBrowserCookiesAsync(request),
+                    "take_screenshot"       => await CaptureScreenshotAsync(),
                     "get_clipboard"          => SystemToolService.ExecuteGetClipboard(),
                     "set_clipboard"          => SystemToolService.ExecuteSetClipboard(request),
                     "show_notification"      => SystemToolService.ExecuteNotify(request),
@@ -145,12 +156,44 @@ namespace Aire.Services
                     var t when _mcpManager.IsToolMcp(t) => await ExecuteMcpToolAsync(request),
                     _                        => await _fileSystemService.ExecuteAsync(request)
                 };
+
+                // Cache results for idempotent read-only tools.
+                if (ToolResultCache.IsCacheable(request.Tool))
+                {
+                    var cacheKey = ToolResultCache.BuildKey(request.Tool, request.Parameters);
+                    _cache.Set(cacheKey, result);
+                }
+
+                return result;
             }
             catch
             {
                 AppLogger.Warn(nameof(ToolExecutionService), $"Unhandled error executing tool '{request.Tool}'.");
                 return new ToolExecutionResult { TextResult = "ERROR: Tool execution failed." };
             }
+        }
+
+        private static Task<ToolExecutionResult> CaptureScreenshotAsync()
+        {
+            var capture = WindowCaptureService.CaptureActiveWindow(new WindowCaptureOptions
+            {
+                ActivateWindow = false,
+                ReturnBase64 = false
+            });
+
+            if (!capture.Ok || string.IsNullOrWhiteSpace(capture.PngPath))
+            {
+                var error = string.IsNullOrWhiteSpace(capture.ErrorMessage)
+                    ? "Error: unable to capture screenshot."
+                    : $"Error: {capture.ErrorMessage}";
+                return Task.FromResult(new ToolExecutionResult { TextResult = error });
+            }
+
+            return Task.FromResult(new ToolExecutionResult
+            {
+                TextResult = $"SUCCESS: Captured screenshot of '{capture.WindowTitle}'.",
+                ScreenshotPath = capture.PngPath
+            });
         }
 
         /// <summary>
@@ -176,5 +219,15 @@ namespace Aire.Services
         /// <param name="message">Notification body text.</param>
         public static void ShowSystemNotification(string title, string message)
             => SystemToolService.ShowSystemNotification(title, message);
+
+        /// <summary>
+        /// Clears the tool result cache. Called between conversation turns.
+        /// </summary>
+        public void ClearCache() => _cache.Clear();
+
+        /// <summary>
+        /// Number of cached tool results currently held.
+        /// </summary>
+        public int CachedResultCount => _cache.Count;
     }
 }

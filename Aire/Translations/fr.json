@@ -1,73 +1,86 @@
-﻿{
-    "code": "fr",
-    "nativeName": "Français",
-    "flag": "🇫🇷",
-    "strings": {
-        "settings.title": "Paramètres — Aire",
-        "settings.aiProviders": "Fournisseurs d'IA",
-        "settings.appearance": "Apparence",
-        "settings.brightness": "Luminosité",
-        "settings.dark": "Sombre",
-        "settings.light": "Clair (Beige)",
-        "settings.colorTint": "Teinte de couleur",
-        "settings.accentTint": "Couleur d'accent",
-        "settings.accentBrightness": "Luminosité de l'accent",
-        "settings.neutralLeft": "← Neutre",
-        "settings.neutralRight": "Neutre →",
-        "settings.fontSize": "Taille de police",
-        "settings.language": "Langue",
-        "settings.name": "Nom",
-        "settings.type": "Type",
-        "settings.model": "Modèle",
-        "settings.apiKey": "Clé API",
-        "settings.baseUrl": "URL de base (facultatif)",
-        "settings.enabled": "Activé",
-        "settings.addProvider": "+ Ajouter",
-        "settings.selectProvider": "Sélectionner un fournisseur",
-        "settings.loginClaude": "Se connecter avec Claude.ai",
-        "settings.reloginClaude": "Se reconnecter avec Claude.ai",
-        "settings.anthropicHint": "Astuce : laissez vide pour utiliser la variable d'environnement ANTHROPIC_API_KEY.",
-        "help.title": "Aide — Aire",
-        "help.search": "Rechercher de l'aide…",
-        "help.tab.gettingStarted": "Premiers pas",
-        "help.tab.toolsVoice": "Outils et voix",
-        "help.tab.providers": "Fournisseurs",
-        "help.tab.localApi": "API locale",
-        "tooltip.help": "Aide",
-        "tooltip.settings": "Paramètres",
-        "tooltip.clear": "Effacer la conversation",
-        "tooltip.mic": "Démarrer la saisie vocale",
-        "tooltip.stopRecording": "Arrêter l'enregistrement (dites 'AIRE PAUSE' pour mettre en pause)",
-        "tooltip.voicePaused": "Voix en pause (dites 'AIRE RESUME' pour continuer)",
-        "tooltip.downloadingWhisper": "Téléchargement du modèle Whisper…",
-        "tooltip.downloadWhisper": "Cliquez pour télécharger le modèle Whisper (~150 Mo)",
-        "tooltip.voiceOn": "Sortie vocale activée — cliquez pour désactiver",
-        "tooltip.voiceOff": "Sortie vocale désactivée — cliquez pour activer",
-        "tooltip.modeCurrent": "Mode assistant : {0}",
-        "tooltip.searchChat": "Rechercher dans la conversation (Ctrl+F)",
-        "tooltip.pinAttached": "Épinglé dans la barre d'état système — cliquez pour le réancrer au-dessus de la barre d'état système",
-        "tooltip.pinDetached": "Désépinglé — cliquez pour le réancrer au-dessus de la barre d'état système",
-        "settings.voiceOutput": "Sortie vocale",
-        "settings.connections": "Connexions",
-        "settings.context": "Contexte",
-        "settings.contextDescription": "Contrôlez la quantité d'historique des conversations qu'Aire envoie au fournisseur à chaque tour, ainsi que la manière dont la mise en cache et le résumé sont appliqués.",
-        "settings.contextHistory": "HISTOIRE",
-        "settings.contextMaxMessages": "Taille de la fenêtre",
-        "settings.contextMaxMessagesDescription": "Nombre maximum de messages envoyés au fournisseur par tour",
-        "settings.contextAnchorMessages": "Messages d'ancrage",
-        "settings.contextAnchorMessagesDescription": "Les premiers messages sont toujours conservés, même en supprimant l'historique plus ancien",
-        "settings.contextCaching": "MISE EN CACHE",
-        "settings.contextPromptCaching": "Mise en cache rapide",
-        "settings.contextPromptCachingDescription": "Marquer les préfixes stables comme étant compatibles avec le cache lorsque le fournisseur le prend en charge",
-        "settings.contextUncachedRecentMessages": "Queue non mise en cache",
-        "settings.contextUncachedRecentMessagesDescription": "Les messages les plus récents sont toujours envoyés à jour, jamais marqués en cache",
-        "settings.contextSummaries": "RÉSUMÉS",
-        "settings.contextAutoSummarise": "Résumé automatique",
-        "settings.contextAutoSummariseDescription": "Le résumé condensé se transforme en un bref résumé conservé dans son contexte",
-        "settings.contextSummaryMaxCharacters": "Limite récapitulative",
-        "settings.contextSummaryMaxCharactersDescription": "Nombre maximum de caractères que le résumé condensé peut occuper",
-        "settings.contextHint": "Les messages système et les tours d'ancrage sont toujours conservés. Les préfixes mis en cache réduisent uniquement les coûts pour les fournisseurs qui prennent explicitement en charge la mise en cache des invites.",
-        "settings.contextRestoreDefaults": "Restaurer les valeurs par défaut",
+{
+  "code": "fr",
+  "nativeName": "Français",
+  "flag": "🇫🇷",
+  "strings": {
+    "settings.title": "Paramètres — Aire",
+    "settings.aiProviders": "Fournisseurs d'IA",
+    "settings.appearance": "Apparence",
+    "settings.brightness": "Luminosité",
+    "settings.dark": "Sombre",
+    "settings.light": "Clair (Beige)",
+    "settings.colorTint": "Teinte de couleur",
+    "settings.accentTint": "Couleur d'accent",
+    "settings.accentBrightness": "Luminosité de l'accent",
+    "settings.neutralLeft": "← Neutre",
+    "settings.neutralRight": "Neutre →",
+    "settings.fontSize": "Taille de police",
+    "settings.language": "Langue",
+    "settings.name": "Nom",
+    "settings.type": "Type",
+    "settings.model": "Modèle",
+    "settings.apiKey": "Clé API",
+    "settings.baseUrl": "URL de base (facultatif)",
+    "settings.enabled": "Activé",
+    "settings.addProvider": "+ Ajouter",
+    "settings.selectProvider": "Sélectionner un fournisseur",
+    "settings.loginClaude": "Se connecter avec Claude.ai",
+    "settings.reloginClaude": "Se reconnecter avec Claude.ai",
+    "settings.anthropicHint": "Astuce : laissez vide pour utiliser la variable d'environnement ANTHROPIC_API_KEY.",
+    "help.title": "Aide — Aire",
+    "help.search": "Rechercher de l'aide…",
+    "help.tab.gettingStarted": "Premiers pas",
+    "help.tab.toolsVoice": "Outils et voix",
+    "settings.tab.usage": "Utilisation",
+    "help.tab.providers": "Fournisseurs",
+    "help.tab.localApi": "API locale",
+    "tooltip.help": "Aide",
+    "tooltip.settings": "Paramètres",
+    "tooltip.orchestratorOn": "Mode orchestrateur actif — tous les outils sont approuvés automatiquement",
+    "tooltip.orchestratorOff": "Mode orchestrateur — cliquez pour activer",
+    "tooltip.clear": "Effacer la conversation",
+    "settings.usageConversationSingular": "1 conversation",
+    "settings.usageConversationPlural": "conversations",
+    "settings.usageAssistantTurnSingular": "1 tour assistant",
+    "settings.usageAssistantTurnPlural": "tours assistant",
+    "settings.usageLastUsed": "dernière utilisation {0}",
+    "settings.usageNeverUsed": "jamais utilisé",
+    "settings.usageEnabled": "activé",
+    "settings.usageDisabled": "désactivé",
+    "settings.usageUpdated": "mis à jour {0}",
+    "settings.usageNoTokensRecorded": "aucun jeton enregistré",
+    "tooltip.mic": "Démarrer la saisie vocale",
+    "tooltip.stopRecording": "Arrêter l'enregistrement (dites 'AIRE PAUSE' pour mettre en pause)",
+    "tooltip.voicePaused": "Voix en pause (dites 'AIRE RESUME' pour continuer)",
+    "tooltip.downloadingWhisper": "Téléchargement du modèle Whisper…",
+    "tooltip.downloadWhisper": "Cliquez pour télécharger le modèle Whisper (~150 Mo)",
+    "tooltip.voiceOn": "Sortie vocale activée — cliquez pour désactiver",
+    "tooltip.voiceOff": "Sortie vocale désactivée — cliquez pour activer",
+    "tooltip.modeCurrent": "Mode assistant : {0}",
+    "tooltip.searchChat": "Rechercher dans la conversation (Ctrl+F)",
+    "tooltip.pinAttached": "Épinglé dans la barre d'état système — cliquez pour le réancrer au-dessus de la barre d'état système",
+    "tooltip.pinDetached": "Désépinglé — cliquez pour le réancrer au-dessus de la barre d'état système",
+    "settings.voiceOutput": "Sortie vocale",
+    "settings.connections": "Connexions",
+    "settings.context": "Contexte",
+    "settings.contextDescription": "Contrôlez la quantité d'historique des conversations qu'Aire envoie au fournisseur à chaque tour, ainsi que la manière dont la mise en cache et le résumé sont appliqués.",
+    "settings.contextHistory": "HISTOIRE",
+    "settings.contextMaxMessages": "Taille de la fenêtre",
+    "settings.contextMaxMessagesDescription": "Nombre maximum de messages envoyés au fournisseur par tour",
+    "settings.contextAnchorMessages": "Messages d'ancrage",
+    "settings.contextAnchorMessagesDescription": "Les premiers messages sont toujours conservés, même en supprimant l'historique plus ancien",
+    "settings.contextCaching": "MISE EN CACHE",
+    "settings.contextPromptCaching": "Mise en cache rapide",
+    "settings.contextPromptCachingDescription": "Marquer les préfixes stables comme étant compatibles avec le cache lorsque le fournisseur le prend en charge",
+    "settings.contextUncachedRecentMessages": "Queue non mise en cache",
+    "settings.contextUncachedRecentMessagesDescription": "Les messages les plus récents sont toujours envoyés à jour, jamais marqués en cache",
+    "settings.contextSummaries": "RÉSUMÉS",
+    "settings.contextAutoSummarise": "Résumé automatique",
+    "settings.contextAutoSummariseDescription": "Le résumé condensé se transforme en un bref résumé conservé dans son contexte",
+    "settings.contextSummaryMaxCharacters": "Limite récapitulative",
+    "settings.contextSummaryMaxCharactersDescription": "Nombre maximum de caractères que le résumé condensé peut occuper",
+    "settings.contextHint": "Les messages système et les tours d'ancrage sont toujours conservés. Les préfixes mis en cache réduisent uniquement les coûts pour les fournisseurs qui prennent explicitement en charge la mise en cache des invites.",
+    "settings.contextRestoreDefaults": "Restaurer les valeurs par défaut",
     "settings.contextCompaction": "COMPACTION",
     "settings.contextTokenAwareTruncation": "Token-aware truncation",
     "settings.contextTokenAwareTruncationDescription": "Trim history based on token counts instead of message counts",
@@ -81,1155 +94,1266 @@
     "settings.contextToolFocusWindowDescription": "Tighten context window when tool-use is detected",
     "settings.contextRetryFollowUpWindow": "Retry-follow-up window",
     "settings.contextRetryFollowUpWindowDescription": "Expand context window for retry/follow-up detection",
-        "settings.autoAccept": "Accepter automatiquement",
-        "settings.profile": "Profil",
-        "settings.apply": "Appliquer",
-        "settings.saveAs": "Enregistrer sous",
-        "settings.delete": "Supprimer",
-        "settings.autoAcceptEnabled": "Activer l'acceptation automatique pour les outils sélectionnés",
-        "settings.autoAcceptCautionTitle": "⚠ Attention",
-        "settings.autoAcceptCaution": "Laisser les IA agir sans surveillance peut être dangereux. Activez uniquement les outils que vous comprenez parfaitement.",
-        "settings.autoAcceptSelectTools": "Sélectionnez les outils qui peuvent être exécutés sans confirmation :",
-        "autoAccept.category.webBrowser": "Web/Navigateur",
-        "autoAccept.category.commands": "Commandes",
-        "autoAccept.category.fileSystem": "Système de fichiers",
-        "autoAccept.category.systemClipboard": "Système / Presse-papiers",
-        "autoAccept.category.memory": "Mémoire",
-        "autoAccept.category.email": "E-mail",
-        "autoAccept.category.aiTaskFlow": "IA / Flux de tâches",
-        "autoAccept.category.mouseKeyboard": "Souris / Clavier",
-        "autoAccept.tool.browseWeb": "Naviguer sur le Web (récupérer l'URL)",
-        "autoAccept.tool.httpRequest": "Requête HTTP",
-        "autoAccept.tool.openBrowserTab": "Ouvrir l'onglet du navigateur",
-        "autoAccept.tool.listBrowserTabs": "Liste des onglets du navigateur",
-        "autoAccept.tool.readBrowserTab": "Lire l'onglet du navigateur",
-        "autoAccept.tool.switchBrowserTab": "Changer d'onglet du navigateur",
-        "autoAccept.tool.closeBrowserTab": "Fermer l'onglet du navigateur",
-        "autoAccept.tool.getBrowserHtml": "Obtenir le HTML du navigateur",
-        "autoAccept.tool.executeBrowserScript": "Exécuter le script du navigateur",
-        "autoAccept.tool.getBrowserCookies": "Obtenir les cookies du navigateur",
-        "autoAccept.tool.executeCommand": "Exécuter la commande",
-        "autoAccept.tool.readCommandOutput": "Lire le résultat de la commande",
-        "autoAccept.tool.listFiles": "Liste des fichiers",
-        "autoAccept.tool.readFile": "Lire le fichier",
-        "autoAccept.tool.searchFiles": "Rechercher des fichiers",
-        "autoAccept.tool.searchFileContent": "Rechercher le contenu du fichier",
-        "autoAccept.tool.writeToFile": "Écrire dans un fichier",
-        "autoAccept.tool.applyDiff": "Appliquer la différence de code",
-        "autoAccept.tool.createDirectory": "Créer un répertoire",
-        "autoAccept.tool.deleteFile": "Supprimer le fichier",
-        "autoAccept.tool.moveFile": "Déplacer/renommer le fichier",
-        "autoAccept.tool.openFile": "Ouvrir le fichier",
-        "autoAccept.tool.getClipboard": "Obtenir le presse-papiers",
-        "autoAccept.tool.setClipboard": "Définir le presse-papiers",
-        "autoAccept.tool.notify": "Afficher la notification",
-        "autoAccept.tool.getSystemInfo": "Obtenir des informations sur le système",
-        "autoAccept.tool.getRunningProcesses": "Liste des processus en cours d'exécution",
-        "autoAccept.tool.getActiveWindow": "Obtenir une fenêtre active",
-        "autoAccept.tool.getSelectedText": "Obtenir le texte sélectionné",
-        "autoAccept.tool.remember": "Souviens-toi",
-        "autoAccept.tool.recall": "Rappel",
-        "autoAccept.tool.setReminder": "Définir un rappel",
-        "autoAccept.tool.readEmails": "Lire les e-mails",
-        "autoAccept.tool.searchEmails": "Rechercher des e-mails",
-        "autoAccept.tool.sendEmail": "Envoyer un e-mail",
-        "autoAccept.tool.replyToEmail": "Répondre à l'e-mail",
-        "autoAccept.tool.newTask": "Créer une nouvelle tâche",
-        "autoAccept.tool.askFollowupQuestion": "Poser une question complémentaire",
-        "autoAccept.tool.attemptCompletion": "Marquer la tâche comme terminée",
-        "autoAccept.tool.skill": "Compétence d'exécution",
-        "autoAccept.tool.switchMode": "Mode de commutation",
-        "autoAccept.tool.switchModel": "Changer de modèle",
-        "autoAccept.tool.updateTodoList": "Mettre à jour la liste de tâches",
-        "autoAccept.tool.showImage": "Afficher l'image",
-        "autoAccept.tool.mouseTools": "Outils de la souris (déplacer, cliquer, faire défiler)",
-        "autoAccept.tool.keyboardTools": "Outils du clavier (saisir du texte, combinaisons de touches)",
-        "autoAccept.tooltip.browseWeb": "Récupère une page Web et renvoie son texte à l'IA. En lecture seule et généralement sûr.",
-        "autoAccept.tooltip.httpRequest": "Envoie une requête HTTP arbitraire (GET, POST, PUT, DELETE, etc.) à n'importe quelle URL. Peut soumettre des formulaires, appeler des API ou déclencher des effets secondaires sur des serveurs distants.",
-        "autoAccept.tooltip.openBrowserTab": "Ouvre une URL dans la fenêtre du navigateur Aire, qui vous est visible. Généralement sûr.",
-        "autoAccept.tooltip.listBrowserTabs": "Répertorie les titres et les URL de tous les onglets ouverts dans le navigateur Aire. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.readBrowserTab": "Lit le contenu textuel rendu d'un onglet de navigateur ouvert. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.switchBrowserTab": "Modifie l'onglet actif dans le navigateur Aire. Sûr.",
-        "autoAccept.tooltip.closeBrowserTab": "Ferme l'un des onglets ouverts dans le navigateur Aire. Sûr, mais ferme le contenu que vous souhaiterez peut-être conserver.",
-        "autoAccept.tooltip.getBrowserHtml": "Renvoie la source HTML brute d'un onglet de navigateur ouvert. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.executeBrowserScript": "Exécute du JavaScript arbitraire dans un onglet de navigateur ouvert. Risque élevé : peut lire les cookies, soumettre des formulaires ou interagir avec n'importe quel élément de la page.",
-        "autoAccept.tooltip.getBrowserCookies": "Lit les cookies à partir d’un onglet de navigateur ouvert. Peut exposer des jetons de session et des informations d'authentification.",
-        "autoAccept.tooltip.executeCommand": "Exécute une commande shell ou lance toute application installée sans vous le demander au préalable. Risque élevé : activez-le uniquement si vous faites confiance à l'IA pour exécuter des commandes de manière autonome.",
-        "autoAccept.tooltip.readCommandOutput": "Lit le résultat d'un processus en arrière-plan précédemment démarré. Généralement sûr.",
-        "autoAccept.tooltip.listFiles": "Répertorie le contenu d'un dossier. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.readFile": "Ouvre et lit le contenu d'un fichier. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.searchFiles": "Recherche des fichiers par modèle de nom dans un dossier. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.searchFileContent": "Recherche des modèles de texte dans le contenu du fichier (comme grep). En lecture seule et sécurisé.",
-        "autoAccept.tooltip.writeToFile": "Crée ou écrase un fichier avec un nouveau contenu. Peut modifier ou supprimer des données existantes.",
-        "autoAccept.tooltip.applyDiff": "Applique un correctif pour modifier les lignes d'un fichier existant. Peut modifier silencieusement le code source ou les fichiers de configuration.",
-        "autoAccept.tooltip.createDirectory": "Crée un nouveau dossier. Généralement sûr.",
-        "autoAccept.tooltip.deleteFile": "Supprime définitivement un fichier. Risque élevé : les fichiers supprimés peuvent ne pas être récupérables.",
-        "autoAccept.tooltip.moveFile": "Déplace ou renomme un fichier ou un dossier. Peut écraser les fichiers existants à la destination.",
-        "autoAccept.tooltip.openFile": "Ouvre un fichier avec son application par défaut (par exemple, ouvre un PDF dans votre visionneuse PDF). Sûr.",
-        "autoAccept.tooltip.getClipboard": "Lit le contenu actuel du presse-papiers. Peut exposer les données sensibles que vous avez copiées.",
-        "autoAccept.tooltip.setClipboard": "Écrase votre presse-papiers avec le texte généré par l'IA. Sûr, mais remplace tout ce que vous aviez copié.",
-        "autoAccept.tooltip.notify": "Affiche une notification système. Sûr.",
-        "autoAccept.tooltip.getSystemInfo": "Lit les informations sur le système d’exploitation, le matériel et l’environnement. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.getRunningProcesses": "Renvoie une liste des processus en cours d'exécution sur votre ordinateur. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.getActiveWindow": "Renvoie le titre et le processus de la fenêtre actuellement ciblée. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.getSelectedText": "Lit le texte actuellement sélectionné à l'écran. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.remember": "Enregistre une paire clé-valeur dans la mémoire persistante de l'IA. Sûr.",
-        "autoAccept.tooltip.recall": "Lit une valeur dans la mémoire persistante de l'IA. En lecture seule et sécurisé.",
-        "autoAccept.tooltip.setReminder": "Planifie qu'une notification de rappel apparaisse après un délai. Sûr.",
-        "autoAccept.tooltip.readEmails": "Lit les e-mails de votre compte de messagerie connecté. Peut exposer une correspondance privée.",
-        "autoAccept.tooltip.searchEmails": "Recherche dans votre boîte aux lettres les messages correspondants. Lecture seule.",
-        "autoAccept.tooltip.sendEmail": "Rédige et envoie un e-mail en votre nom. Risque élevé : les e-mails sont envoyés immédiatement et peuvent être irréversibles.",
-        "autoAccept.tooltip.replyToEmail": "Envoie une réponse à un fil de discussion existant. Risque élevé – identique à l’envoi d’un e-mail.",
-        "autoAccept.tooltip.newTask": "Démarre une nouvelle sous-tâche. L’IA peut enchaîner de nombreux appels d’outils sans autre invite.",
-        "autoAccept.tooltip.askFollowupQuestion": "L'IA fait une pause pour vous poser une question de clarification avant de continuer. Généralement sûr.",
-        "autoAccept.tooltip.attemptCompletion": "L'IA signale qu'elle a terminé la tâche en cours et présente un résumé. Sûr.",
-        "autoAccept.tooltip.skill": "Exécute une compétence ou une macro intégrée. Le risque dépend de ce que fait la compétence.",
-        "autoAccept.tooltip.switchMode": "Modifie le mode de fonctionnement de l'IA (par exemple, de chat à assistant de codage). Généralement sûr.",
-        "autoAccept.tooltip.switchModel": "Passe à un autre modèle d’IA ou à un autre fournisseur en cours de conversation. Généralement sûr.",
-        "autoAccept.tooltip.updateTodoList": "Ajoute, met à jour ou coche des éléments dans la liste des tâches à faire. Sûr.",
-        "autoAccept.tooltip.showImage": "Affiche une image à partir d'un chemin de fichier ou d'une URL dans le chat. Sûr.",
-        "autoAccept.tooltip.mouseTools": "Déplace le curseur et clique n'importe où sur l'écran. Risque élevé : peut interagir avec n'importe quelle application ou élément d'interface utilisateur sans que vous le voyiez au préalable.",
-        "autoAccept.tooltip.keyboardTools": "Tape du texte ou appuie sur des combinaisons de touches dans la fenêtre ciblée. Risque élevé : peut envoyer des données à n'importe quelle application.",
-        "mcp.servers": "Serveurs MCP",
-        "mcp.serversDescription": "Étendez l'IA avec des outils personnalisés en connectant des serveurs MCP. Les modifications prennent effet immédiatement.",
-        "mcp.tip": "La plupart des serveurs nécessitent Node.js (npx). Si un serveur ne démarre pas, assurez-vous que Node.js est installé — nodejs.org",
-        "mcp.discover": "Découvrir",
-        "mcp.searchPlaceholder": "Serveurs de recherche…",
-        "mcp.installed": "Installé",
-        "mcp.installedServers": "Serveurs installés",
-        "mcp.addCustom": "+ Personnalisé",
-        "mcp.edit": "Modifier",
-        "mcp.remove": "Retirer",
-        "mcp.enabled": "Activé",
-        "mcp.disabled": "Désactivé",
-        "settings.apiAccessTitle": "Accès API local",
-        "settings.apiAccessDescription": "Autorisez les applications locales de confiance à ouvrir Aire, à lire l'historique des conversations et à demander des actions via l'API locale.",
-        "settings.apiAccessEnabled": "Activer l'accès API local",
-        "settings.apiAccessTokenTitle": "Jeton d'authentification",
-        "settings.apiAccessTokenDescription": "Transmettez ce jeton dans les requêtes API locales pour autoriser le contrôle.",
-        "settings.apiAccessTokenCopy": "Copier",
-        "settings.apiAccessTokenRegenerate": "Régénérer",
-        "settings.voiceOutputEnabled": "Activer la sortie vocale",
-        "settings.voiceMicOnly": "Parler uniquement lors de l'utilisation du microphone",
-        "settings.voice": "Voix",
-        "settings.voiceSpeed": "Vitesse",
-        "settings.usageTrustTitle": "Ce qu'Aire suit",
-        "settings.usageRecordedSourceTitle": "Enregistré",
-        "settings.usageRecordedSource": "Tours de l'assistant stockés avec le nombre de tokens.",
-        "settings.usageHint": "Les jetons sont enregistrés à partir des tours d'assistant qui renvoient des données d'utilisation. Lorsqu'un fournisseur n'expose pas les dépenses en direct, Aire les estime à partir des jetons enregistrés et des prix publics du modèle.",
-        "settings.usageLiveSourceTitle": "Signalé en direct",
-        "settings.usageLiveSource": "Quota ou solde signalé par le fournisseur lorsque l'API l'expose.",
-        "settings.usageEstimatedSourceTitle": "Estimé",
-        "settings.usageEstimatedSource": "Lorsque l'utilisation en direct n'est pas disponible, Aire estime les dépenses à partir des jetons enregistrés et des prix publics du modèle.",
-        "settings.usageSpendLiveLabel": "En direct : {0}",
-        "settings.usageSpendLiveUnitsLabel": "En direct : {0}",
-        "settings.usageSpendEstimatedLabel": "Estimé : {0}",
-        "settings.usageSpendUnavailable": "Indisponible",
-        "settings.usageTrendTitle": "Tendance d'utilisation enregistrée",
-        "settings.usageTrendHint": "Graphique en courbe lissée des tokens de l'assistant stockés par fournisseur et modèle.",
-        "settings.usageTrendEmpty": "Aucun token d'assistant enregistré pour le moment.",
-        "settings.voiceLocalOnly": "Utilisez uniquement les voix locales (pas d'Internet requis)",
-        "settings.voiceLocalOnlyDescription": "Utilisez uniquement les voix locales (pas d'Internet requis)",
-        "settings.downloadVoices": "Téléchargez les voix Windows...",
-        "main.sessionActive": "Séance active",
-        "main.endSession": "Terminer la session",
-        "main.thinking": "Réflexion…",
-        "main.assistantModeSwitched": "Mode assistant basculé sur {0}.",
-        "main.remove": "Supprimer",
-        "menu.find": "Rechercher... Ctrl+F",
-        "menu.saveChat": "Enregistrer la conversation en texte...",
-        "confirm.deleteTitle": "Supprimer '{0}' ?",
-        "confirm.deleteMsg": "Cela supprimera définitivement le fournisseur et sa configuration.",
-        "onboarding.welcomeTitle": "Bienvenue sur Aire",
-        "onboarding.welcomeSubtitle": "L'IA pour tous",
-        "onboarding.welcomeDesc": "Une application de chat IA basée sur la barre d'état système qui vous permet de discuter avec n'importe quel fournisseur d'IA — OpenAI, Anthropic Claude, Google AI, Ollama — le tout au même endroit.",
-        "onboarding.getStarted": "Commençons →",
-        "onboarding.pickerTitle": "Choisissez votre fournisseur d'IA",
-        "onboarding.pickerSubtitle": "Choisissez-en un pour commencer. Vous pourrez en ajouter d'autres à tout moment.",
-        "onboarding.addAiTitle": "Ajoutez votre première IA",
-        "onboarding.addAiSubtitle": "Connectez-vous à un fournisseur d'IA pour commencer à discuter.",
-        "onboarding.providerType": "Type de fournisseur",
-        "onboarding.name": "Nom",
-        "onboarding.apiKey": "Clé API",
-        "onboarding.baseUrl": "URL de base (facultatif — laisser vide pour OpenAI)",
-        "onboarding.model": "Modèle",
-        "onboarding.testConnection": "Tester la connexion",
-        "onboarding.skipForNow": "Passer pour l'instant",
-        "onboarding.finish": "Terminer →",
-        "onboarding.doneTitle": "Vous êtes prêt !",
-        "onboarding.doneDesc": "Aire fonctionne dans votre barre système. Cliquez sur l'icône à tout moment pour ouvrir le chat.",
-        "onboarding.startChatting": "Commencer à discuter",
-        "onboarding.testing": "Test en cours…",
-        "onboarding.testOk": "Connecté !",
-        "onboarding.testFail": "Échec du test",
-        "onboarding.fillKeyFirst": "Remplissez d'abord la clé API.",
-        "onboarding.whereApiKey": "Où obtenir une clé API ?",
-        "onboarding.signUpPrefix": "Vous n'avez pas de compte ? Inscrivez-vous à",
-        "tooltip.sidebar": "Historique des conversations",
-        "tooltip.providerCooldown": "Le fournisseur est en délai de récupération",
-        "tooltip.checkAvailability": "Vérifier si le fournisseur est à nouveau disponible",
-        "tooltip.browser": "Ouvrir le navigateur (l'IA peut lire les onglets ouverts)",
-        "placeholder.search": "Rechercher…",
-        "tooltip.newConversation": "Nouvelle conversation",
-        "tooltip.openImageViewer": "Cliquer pour ouvrir dans la visionneuse d'images",
-        "tooltip.allow": "Autoriser",
-        "tooltip.deny": "Refuser",
-        "tooltip.previousMatch": "Correspondance précédente",
-        "tooltip.nextMatch": "Correspondance suivante",
-        "tooltip.close": "Fermer",
-        "tooltip.openFile": "Cliquer pour ouvrir le fichier",
-        "tooltip.removeAttachment": "Supprimer la pièce jointe",
-        "tooltip.stopThinking": "Arrêter la réflexion de l'IA",
-        "tooltip.toolsDisabled": "Outils désactivés — cliquez pour choisir les catégories d'outils",
-        "tooltip.toolsEnabled": "Catégories d'outils activées : {0}",
-        "warning.largeFile": "⚠ Fichier volumineux — le fournisseur peut le rejeter",
-        "menu.copyChat": "Copier le chat en texte",
-        "menu.clearConversation": "Effacer la conversation",
-        "menu.restoreWindowSizes": "Restaurer les tailles de fenêtres d'origine",
-        "menu.rename": "Renommer",
-        "menu.delete": "Supprimer",
-        "menu.deleteAllConversations": "Supprimer toutes les conversations",
-        "settings.setupWizard": "Assistant de configuration",
-        "settings.apiAccessEnabledTooltip": "Permet à d'autres applications locales de contrôler Aire. Laissez désactivé sauf si vous faites confiance à l'appelant.",
-        "settings.testSelectedVoice": "Tester la voix sélectionnée",
-        "tooltip.dragReorder": "Glisser pour réorganiser",
-        "tooltip.runTests": "Exécuter les tests",
-        "cooldown.suffix": "Cliquez sur ↻ pour effacer le délai de récupération et réessayer.",
-        "settings.refreshModelsTooltip": "Actualiser la liste des modèles depuis le serveur",
-        "tools.enableAllCategories": "Activer toutes les catégories d'outils",
-        "tools.noTools": "Aucun outil",
-        "toolCategory.filesystem.label": "Fichiers",
-        "toolCategory.filesystem.description": "Lire et modifier les fichiers et dossiers locaux.",
-        "toolCategory.browser.label": "Navigateur",
-        "toolCategory.browser.description": "Inspecter et contrôler les onglets et pages du navigateur.",
-        "toolCategory.agent.label": "Agent",
-        "toolCategory.agent.description": "Utiliser les outils de planification, de suivi et de gestion des tâches.",
-        "toolCategory.mouse.label": "Souris",
-        "toolCategory.mouse.description": "Déplacer la souris, cliquer, glisser, faire défiler et prendre des captures d'écran.",
-        "toolCategory.keyboard.label": "Clavier",
-        "toolCategory.keyboard.description": "Saisir du texte et envoyer des pressions de touches.",
-        "toolCategory.system.label": "Système",
-        "toolCategory.system.description": "Inspecter les processus, ouvrir des applications et lancer des actions système locales.",
-        "toolCategory.email.label": "E-mail",
-        "toolCategory.email.description": "Lire, rechercher, envoyer et répondre aux e-mails.",
-        "toolDesc.list_directory": "Lister {0}/ ?",
-        "toolDesc.list_files": "Lister {0}/ ?",
-        "toolDesc.read_file": "Lire {0} ?",
-        "toolDesc.write_file": "Écrire dans {0} ?",
-        "toolDesc.write_to_file": "Écrire dans {0} ?",
-        "toolDesc.apply_diff": "Modifier {0} ?",
-        "toolDesc.create_directory": "Créer le dossier {0} ?",
-        "toolDesc.delete_file": "Supprimer {0} ?",
-        "toolDesc.move_file": "Déplacer {0} → {1} ?",
-        "toolDesc.search_files": "Rechercher '{0}' dans {1}/ ?",
-        "toolDesc.execute_command_default": "Exécuter une commande ?",
-        "toolDesc.execute_command_run": "Exécuter : {0} ?",
-        "toolDesc.execute_command_open": "Ouvrir {0} ?",
-        "toolDesc.read_command_output": "Lire la sortie de la commande ?",
-        "toolDesc.open_url": "Récupérer {0} ?",
-        "toolDesc.web_fetch": "Récupérer {0} ?",
-        "toolDesc.open_browser_tab": "Ouvrir {0} ?",
-        "toolDesc.list_browser_tabs": "Lister les onglets ouverts ?",
-        "toolDesc.read_browser_tab": "Lire l'onglet actuel ?",
-        "toolDesc.new_task": "Démarrer la tâche : {0} ?",
-        "toolDesc.attempt_completion": "Terminer ?",
-        "toolDesc.ask_followup_question": "Demander : {0} ?",
-        "toolDesc.skill": "Exécuter la compétence : {0} ?",
-        "toolDesc.switch_model": "Passer à {0} ?",
-        "toolDesc.switch_mode": "Passer en mode {0} ?",
-        "toolDesc.update_todo_list": "Mettre à jour la liste de tâches ?",
-        "toolDesc.begin_keyboard_session": "Démarrer la session clavier ?",
-        "toolDesc.end_keyboard_session": "Terminer la session clavier ?",
-        "toolDesc.type_text": "Saisir \"{0}\" ?",
-        "toolDesc.key_press": "Appuyer sur {0} ?",
-        "toolDesc.key_combo": "Appuyer sur {0} ?",
-        "toolDesc.begin_mouse_session": "Démarrer la session souris ({0} min) ?",
-        "toolDesc.end_mouse_session": "Terminer la session souris ?",
-        "toolDesc.take_screenshot": "Prendre une capture d'écran ?",
-        "toolDesc.mouse_move": "Déplacer la souris vers ({0}, {1}) ?",
-        "toolDesc.mouse_click": "Cliquer sur ({0}, {1}) ?",
-        "toolDesc.mouse_double_click": "Double-cliquer sur ({0}, {1}) ?",
-        "toolDesc.mouse_drag": "Glisser ({0},{1}) → ({2},{3}) ?",
-        "toolDesc.default": "Exécuter '{0}' ?",
-        "toolStatus.approved": "✓ {0}",
-        "toolStatus.denied": "✗ Refusé",
-        "assistantMode.architect.name": "Architecte",
-        "assistantMode.architect.description": "Mode de compromis systèmes et conception",
-        "assistantMode.creative-writer.name": "Rédacteur créatif",
-        "assistantMode.creative-writer.description": "Mode d'écriture expressive riche en idées",
-        "assistantMode.developer.name": "Développeur",
-        "assistantMode.developer.description": "Mode technique axé sur l'implémentation",
-        "assistantMode.general.name": "Général",
-        "assistantMode.general.description": "Comportement par défaut équilibré",
-        "assistantMode.painter.name": "Peintre",
-        "assistantMode.painter.description": "Mode de création d'images et de concepts visuels",
-        "assistantMode.philosopher.name": "Philosophe",
-        "assistantMode.philosopher.description": "Mode de raisonnement conceptuel et de vision du monde",
-        "assistantMode.psicologist.name": "Psychologue",
-        "assistantMode.psicologist.description": "Mode réflexif empathique",
-        "assistantMode.scientist.name": "Scientifique",
-        "assistantMode.scientist.description": "Mode analytique basé sur des preuves",
-        "assistantMode.security.name": "Sécurité",
-        "assistantMode.security.description": "Mode d'analyse et de revue axé sur la sécurité",
-        "assistantMode.teacher.name": "Enseignant",
-        "assistantMode.teacher.description": "Mode explicatif axé sur l'apprentissage",
-        "setup.title": "Aire - Configuration",
-        "setup.heroTitle": "Configuration initiale",
-        "setup.heroDescription": "Choisissez les paramètres d'accessibilité et les modes assistant par défaut avant qu'Aire n'ouvre son assistant de configuration normal.",
-        "setup.languageSectionTitle": "1. Langue",
-        "setup.languageSectionDescription": "Choisissez la langue que Aire doit utiliser au premier lancement.",
-        "setup.assistantModeSectionTitle": "2. Mode assistant par défaut",
-        "setup.assistantModeSectionDescription": "Ce sera le mode de départ pour les nouvelles conversations jusqu'à ce que vous le changiez.",
-        "setup.accessibilitySectionTitle": "3. Paramètres d'accessibilité par défaut",
-        "setup.voiceOutputLabel": "Activer la sortie vocale dans Aire dès le départ",
-        "setup.voiceOutputDescription": "Aire peut lire les réponses à voix haute après l'ouverture de l'application principale.",
-        "setup.voiceInputLabel": "Activer la saisie vocale dès le départ",
-        "setup.voiceInputDescription": "Si le modèle vocal local est disponible, Aire commencera à écouter automatiquement au lancement.",
-        "setup.localVoicesLabel": "Utiliser uniquement les voix Windows locales",
-        "setup.localVoicesDescription": "Utile lorsque vous souhaitez que la configuration et la sortie vocale fonctionnent hors ligne.",
-        "setup.voiceGuidedSectionTitle": "4. Configuration guidée par la voix",
-        "setup.voiceGuidanceLabel": "Lire les instructions de configuration à voix haute",
-        "setup.voiceCommandsLabel": "Autoriser les commandes de configuration vocales",
-        "setup.voiceCommandsDescription": "Les commandes reconnues incluent : English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
-        "setup.startVoice": "Lancer la Configuration Vocale",
-        "setup.stopVoice": "Arrêter la Configuration Vocale",
-        "setup.summaryTitle": "Résumé",
-        "setup.savePreferences": "Enregistrer les préférences",
-        "setup.saveAndOpen": "Enregistrer et ouvrir Aire",
-        "setup.summaryLanguage": "Langue",
-        "setup.summaryAssistantMode": "Mode assistant par défaut",
-        "setup.summaryVoiceOutput": "Sortie vocale dans Aire",
-        "setup.summaryVoiceInput": "Saisie vocale dans Aire",
-        "setup.summaryLocalVoices": "Utiliser uniquement les voix locales",
-        "setup.summaryReadAloud": "Lire la configuration à voix haute",
-        "setup.summaryVoiceCommands": "Commandes de configuration vocales",
-        "setup.summaryNextStep": "Lorsque vous ouvrirez Aire, il continuera avec l'assistant de configuration normal afin que vous puissiez configurer un fournisseur.",
-        "setup.summarySpoken": "Langue {0}. Mode assistant {1}. Sortie vocale {2}. Saisie vocale {3}. Dites enregistrer, ou dites ouvrir Aire.",
-        "setup.voiceStatusListening": "La configuration vocale écoute. Prononcez une commande, puis faites une pause.",
-        "setup.voiceStatusCommandsOff": "Les commandes de configuration vocales sont désactivées.",
-        "setup.voiceStatusModelNeeded": "Les commandes vocales nécessitent le modèle vocal local. Lancez la Configuration Vocale pour le télécharger.",
-        "setup.voiceStatusReady": "Les commandes vocales sont prêtes. Lancez la Configuration Vocale pour commencer à écouter.",
-        "setup.launchNotFoundMessage": "Les préférences ont été enregistrées, mais Aire.exe n'a pas été trouvé à côté de l'application de configuration. Lancez Aire manuellement pour continuer avec la configuration.",
-        "setup.preferencesSaved": "Préférences enregistrées.",
-        "setup.preferencesSavedSpoken": "Préférences enregistrées. Aire est prêt à ouvrir son assistant de configuration.",
-        "setup.voiceStatusDownloading": "Téléchargement du modèle vocal local pour la configuration vocale...",
-        "setup.voiceStatusDownloadFailed": "Le téléchargement du modèle vocal a échoué. Vérifiez la connexion Internet et réessayez.",
-        "setup.voiceStatusStartFailed": "La configuration vocale n'a pas pu démarrer : {0}",
-        "setup.voiceStatusDownloadProgress": "Téléchargement du modèle vocal : {0}%",
-        "setup.voiceStatusCommandNotRecognized": "Commande vocale non reconnue : {0}",
-        "setup.voiceStatusCommandApplied": "Commande vocale appliquée : {0}",
-        "setup.enabled": "Activé",
-        "setup.disabled": "Désactivé",
-        "setup.yes": "Oui",
-        "setup.no": "Non",
-        "setup.enabledSpoken": "activé",
-        "setup.disabledSpoken": "désactivé",
-        "panic.title": "Arrêt Aire",
-        "panic.tooltip": "Cliquez pour arrêter immédiatement la session clavier/souris active. Glissez pour repositionner.",
-        "panic.stopButton": "⏹ ARRÊTER LA SESSION",
-        "settings.tab.providers": "Fournisseurs d'IA",
-        "settings.tab.appearance": "Apparence",
-        "settings.tab.voice": "Voix",
-        "settings.tab.context": "Contexte",
-        "settings.tab.autoAccept": "Auto‑acceptation",
-        "settings.tab.connections": "Connexions",
-        "mcp.nameLabel": "Nom",
-        "mcp.commandLabel": "Commande",
-        "mcp.argsLabel": "Arguments",
-        "mcp.workDirLabel": "Répertoire de travail (facultatif)",
-        "mcp.envVarsLabel": "Variables d’environnement — une par ligne :  KEY=value",
-        "onboarding.provider.openai.subtitle": "GPT-4o, o3 et plus",
-        "onboarding.provider.codex.subtitle": "Pont CLI local",
-        "onboarding.provider.ollama.subtitle": "Local, gratuit, privé",
-        "onboarding.provider.anthropic.subtitle": "Claude Sonnet, Haïku",
-        "onboarding.provider.claudeweb.subtitle": "Connexion via navigateur",
-        "onboarding.provider.openrouter.subtitle": "100+ modèles, offre gratuite",
-        "onboarding.provider.deepseek.subtitle": "Chat, Reasonneur, V3",
-        "onboarding.provider.zai.subtitle": "Modèles GLM · z.ai",
-        "onboarding.provider.inception.subtitle": "Mercury et Inception",
-        "onboarding.provider.googleai.subtitle": "Gemini Pro et Flash",
-        "onboarding.provider.googleaiimage.subtitle": "Génération d’images Gemini",
-        "onboarding.provider.groq.subtitle": "Offre gratuite, très rapide",
-        "login.title": "Connectez-vous avec Claude.ai — Aire",
-        "login.header": "Connectez-vous sur claude.ai. Aire détectera automatiquement votre connexion et fermera cette fenêtre.",
-        "login.waiting": "En attente de connexion…",
-        "login.success": "Connecté — mise en place de la session…",
-        "login.webview2Title": "WebView2 requis",
-        "login.webview2Message": "Le runtime WebView2 est requis mais n’est pas installé.\n\nTéléchargez-le ici : https://developer.microsoft.com/fr-fr/microsoft-edge/webview2/\n\nImpossible d’initialiser la fenêtre de connexion. Veuillez réessayer ou redémarrer l’application.",
-        "viewer.title": "Visualiseur d’images",
-        "viewer.closeTip": "Fermer (Esc)",
-        "viewer.zoomOut": "Zoom hors (–)",
-        "viewer.zoomIn": "Zoom vers l’intérieur (+)",
-        "viewer.fit": "Adapte à la taille",
-        "viewer.fitTip": "Adapter à la fenêtre (F)",
-        "viewer.actual": "1:1",
-        "viewer.actualTip": "Taille réelle en pixels",
-        "viewer.copy": "Copier",
-        "viewer.copyTip": "Copier dans le presse-papiers (Ctrl+C)",
-        "viewer.saveAs": "Enregistrer sous…",
-        "viewer.saveTip": "Enregistrer l'image (Ctrl+S)",
-        "update.title": "Mise à jour Aire disponible",
-        "update.headline": "Une nouvelle version d'Aire est disponible.",
-        "update.available": "Aire {0} est disponible",
-        "update.current": "Version actuelle: {0}",
-        "update.description": "Installez la dernière mise à jour pour obtenir les derniers correctifs et améliorations.",
-        "update.later": "Plus tard",
-        "update.releasePage": "Page de lancement",
-        "update.installNow": "Installer maintenant",
-        "browser.title": "Aire — Navigateur",
-        "browser.back": "Reculer",
-        "browser.forward": "Avancer",
-        "browser.reload": "Rafraîchir  (F5)",
-        "browser.newTab": "Nouvel onglet  (Ctrl+T)",
-        "browser.closeAll": "Fermer tous les onglets",
-        "browser.openExternal": "Ouvrir la page courante dans le navigateur par défaut",
-        "browser.closeBrowser": "Fermer le navigateur",
-        "browser.newTabLabel": "Nouvel onglet",
-        "browser.error": "Erreur",
-        "browser.errorLoad": "Erreur lors du chargement de la page.",
-        "init.title": "Aire",
-        "init.starting": "Début…",
-        "confirm.title": "Confirmer",
-        "confirm.clearTitle": "Effacer toutes les messages ?",
-        "confirm.clearMessage": "Cela supprimera permanentement le dialogue de la base de données.",
-        "confirm.yes": "Oui",
-        "confirm.no": "Non",
-        "confirm.ok": "Valider",
-        "confirm.regenerateToken": "Régénérer le token API ?",
-        "confirm.regenerateMsg": "Les outils locaux existants arrêteront de fonctionner jusqu'à ce qu'ils utilisent le nouveau token.",
-        "confirm.deleteProvider": "Supprimer le fournisseur ?",
-        "input.cancel": "Annuler",
-        "input.ok": "Valider",
-        "ollama.checking": "Vérification d'Ollama sur votre machine...",
-        "ollama.description": "Ollama exécute des modèles d'IA localement sur votre ordinateur.",
-        "ollama.bullet1": "Gratuit et open source, pas de clé API nécessaire",
-        "ollama.bullet2": "Vos données restent sur votre machine — rien n'est envoyé dans le nuage",
-        "ollama.bullet3": "Travaille hors ligne une fois un modèle téléchargé",
-        "ollama.downloadInstall": "Télécharger et Installer Ollama (gratuit, environ 700 MB)",
-        "ollama.installedNotRun": "Ollama est installé mais ne s'exécute pas.",
-        "ollama.starting": "Démarre automatiquement...",
-        "ollama.retry": "Recommencer",
-        "ollama.chooseModel": "Choisissez un modèle:",
-        "ollama.refreshTip": "Actualiser la liste des modèles chez Ollama",
-        "ollama.downloadTip": "Télécharger ce modèle chez Ollama",
-        "ollama.legend": "✓ = installé  ·  ★ = recommandé  ·  ↓ = téléchargeable",
-        "ollama.cancel": "✕ Annuler",
-        "ollama.errorStatus": "Erreur lors du vérification de l'état d'Ollama.",
-        "ollama.running": "Ollama est en cours d'exécution. Chargement des modèles…",
-        "ollama.loadingModels": "Chargement des modèles…",
-        "ollama.couldNotLoad": "Impossible de charger les modèles.",
-        "ollama.downloading": "Téléchargement du installeur Ollama…",
-        "ollama.installComplete": "Installation complète. Démarrage d'Ollama…",
-        "ollama.installFailed": "L'installation a échoué.",
-        "ollama.connecting": "Connexion…",
-        "ollama.downloadCancel": "Téléchargement annulé.",
-        "ollama.downloadFailed": "Le téléchargement a échoué.",
-        "ollama.cancelling": "Annulation…",
-        "ollama.uninstallFailed": "L'installation a échoué.",
-        "ollama.importFailed": "L'importation a échoué.",
-        "email.addTitle": "Ajouter un compte email",
-        "email.editTitle": "Éditer le compte email",
-        "email.deleteConfirm": "Supprimer '{0}' ?",
-        "email.openingBrowser": "Ouverture du navigateur…",
-        "email.authorized": "✓ Autorisé",
-        "email.connectionFailed": "✗ Connexion échouée.",
-        "email.testing": "Testowanie...",
-        "email.fieldsRequired": "Les noms d'affichage et l'adresse e-mail sont requis.",
-        "email.signInFirst": "Connectez-vous avec Google en premier.",
-        "mcp.addTitle": "Ajouter un serveur MCP",
-        "mcp.removeConfirm": "Supprimer '{0}' ?",
-        "mcp.fieldsRequired": "Nom et commande sont requis.",
-        "mcp.starting": "Démarage...",
-        "mcp.connectionFailed": "✗ Échec de la connexion.",
-        "mcp.connected": "✓ Connecté — {0} outil(s) disponible(s)",
-        "mcp.editTitle": "Éditer {0}",
-        "captest.notTested": "Pas encore testé",
-        "captest.validating": "Validation en cours…",
-        "captest.running": "En cours…",
-        "captest.cancelled": "Tests annulés.",
-        "captest.failed": "Exécution du test échouée.",
-        "captest.cancelling": "Annulation en cours…",
-        "captest.lastTested": "Dernier test : {0}",
-        "captest.justNow": "il y a à peine",
-        "captest.secondsAgo": "{0}s auparavant",
-        "captest.minutesAgo": "{0}m auparavant",
-        "captest.hoursAgo": "{0}h auparavant",
-        "captest.daysAgo": "{0}d auparavant",
-        "toast.modelRefreshed": "La liste des modèles a été actualisée depuis le serveur.",
-        "toast.modelRefreshFail": "Impossible d'actualiser les modèles.",
-        "toast.modelsImported": "Modèles importés. Mise à jour de la liste…",
-        "toast.importFailed": "Échec de l’importation.",
-        "toast.tokenCopied": "M Mandat API copié dans le presse-papiers.",
-        "toast.tokenRegenerated": "Nouveau mandat API généré.",
-        "toast.saveProviderFail": "Impossible d'enregistrer le fournisseur.",
-        "toast.addProviderFail": "Impossible d’ajouter le fournisseur. Veuillez réessayer.",
-        "toast.deleteProviderFail": "Impossible de supprimer le fournisseur. Veuillez réessayer.",
-        "toast.toggleProviderFail": "Impossible de basculer le statut du fournisseur. Veuillez réessayer.",
-        "toast.databaseError": "Erreur de base de données.",
-        "duration.month": "1 mois",
-        "duration.minute": "1 minute",
-        "duration.minutes": "{0} minutes",
-        "duration.hour": "1 heure",
-        "duration.hours": "{0} heures",
-        "duration.day": "1 jour",
-        "duration.days": "{0} jours",
-        "onboard.fetchingModels": "Récupération des modèles les plus récents…",
-        "onboard.fetchFailed": "Impossible de récupérer les modèles — affichage de la liste intégrée",
-        "onboard.installingCodex": "Installation du Codex CLI…",
-        "onboard.codexDetected": "Le Codex CLI a été détecté. Vous pouvez tester la connexion maintenant.",
-        "onboard.alreadyConfigured": "Déjà configuré",
-        "onboard.alreadyConfigMsg": "Ce fournisseur est déjà configuré. Éditez-le dans les Paramètres.",
-        "attach.missing": "Aucune pièce jointe",
-        "attach.missingMsg": "Le fichier '{0}' n'est plus disponible sur le disque.",
-        "attach.mayBeExec": "Le fichier '{0}' peut être exécutable ou contenir du contenu d’ Garten. L’ouvrir quand même ?",
-        "attach.openAttach": "Ouvrir l’_attachment",
-        "ollama.installing": "Installation… {0}%",
-        "email.connected": "✓ Connecté",
-        "login.claudeLoggedIn": "✓ Connecté avec Claude.ai",
-        "settings.installCodex": "Installer Codex CLI",
-        "settings.installCodexMsg": "Cela va exécuter 'npm install -g @openai/codex' sur votre système. Continuer?",
-        "settings.regenerateToken": "Régénérer le jeton API?",
-        "settings.regenerateTokenMsg": "Les outils locaux existants cesseront de fonctionner jusqu'à ce qu'ils utilisent le nouveau jeton.",
-        "ollama.uninstallModel": "Désinstaller le modèle Ollama",
-        "ollama.uninstallModelMsg": "Êtes-vous sûr de vouloir désinstaller '{0}'? Cela supprimera les fichiers du modèle de votre système."
-    },
-    "help": [
+    "settings.autoAccept": "Accepter automatiquement",
+    "settings.profile": "Profil",
+    "settings.apply": "Appliquer",
+    "settings.saveAs": "Enregistrer sous",
+    "settings.delete": "Supprimer",
+    "settings.autoAcceptEnabled": "Activer l'acceptation automatique pour les outils sélectionnés",
+    "settings.autoAcceptCautionTitle": "⚠ Attention",
+    "settings.autoAcceptCaution": "Laisser les IA agir sans surveillance peut être dangereux. Activez uniquement les outils que vous comprenez parfaitement.",
+    "settings.autoAcceptSelectTools": "Sélectionnez les outils qui peuvent être exécutés sans confirmation :",
+    "autoAccept.category.webBrowser": "Web/Navigateur",
+    "autoAccept.category.commands": "Commandes",
+    "autoAccept.category.fileSystem": "Système de fichiers",
+    "autoAccept.category.systemClipboard": "Système / Presse-papiers",
+    "autoAccept.category.memory": "Mémoire",
+    "autoAccept.category.email": "E-mail",
+    "autoAccept.category.aiTaskFlow": "IA / Flux de tâches",
+    "autoAccept.category.mouseKeyboard": "Souris / Clavier",
+    "autoAccept.tool.browseWeb": "Naviguer sur le Web (récupérer l'URL)",
+    "autoAccept.tool.httpRequest": "Requête HTTP",
+    "autoAccept.tool.openBrowserTab": "Ouvrir l'onglet du navigateur",
+    "autoAccept.tool.listBrowserTabs": "Liste des onglets du navigateur",
+    "autoAccept.tool.readBrowserTab": "Lire l'onglet du navigateur",
+    "autoAccept.tool.switchBrowserTab": "Changer d'onglet du navigateur",
+    "autoAccept.tool.closeBrowserTab": "Fermer l'onglet du navigateur",
+    "autoAccept.tool.getBrowserHtml": "Obtenir le HTML du navigateur",
+    "autoAccept.tool.executeBrowserScript": "Exécuter le script du navigateur",
+    "autoAccept.tool.getBrowserCookies": "Obtenir les cookies du navigateur",
+    "autoAccept.tool.executeCommand": "Exécuter la commande",
+    "autoAccept.tool.readCommandOutput": "Lire le résultat de la commande",
+    "autoAccept.tool.listFiles": "Liste des fichiers",
+    "autoAccept.tool.readFile": "Lire le fichier",
+    "autoAccept.tool.searchFiles": "Rechercher des fichiers",
+    "autoAccept.tool.searchFileContent": "Rechercher le contenu du fichier",
+    "autoAccept.tool.writeToFile": "Écrire dans un fichier",
+    "autoAccept.tool.applyDiff": "Appliquer la différence de code",
+    "autoAccept.tool.createDirectory": "Créer un répertoire",
+    "autoAccept.tool.deleteFile": "Supprimer le fichier",
+    "autoAccept.tool.moveFile": "Déplacer/renommer le fichier",
+    "autoAccept.tool.openFile": "Ouvrir le fichier",
+    "autoAccept.tool.getClipboard": "Obtenir le presse-papiers",
+    "autoAccept.tool.setClipboard": "Définir le presse-papiers",
+    "autoAccept.tool.notify": "Afficher la notification",
+    "autoAccept.tool.getSystemInfo": "Obtenir des informations sur le système",
+    "autoAccept.tool.getRunningProcesses": "Liste des processus en cours d'exécution",
+    "autoAccept.tool.getActiveWindow": "Obtenir une fenêtre active",
+    "autoAccept.tool.getSelectedText": "Obtenir le texte sélectionné",
+    "autoAccept.tool.remember": "Souviens-toi",
+    "autoAccept.tool.recall": "Rappel",
+    "autoAccept.tool.setReminder": "Définir un rappel",
+    "autoAccept.tool.readEmails": "Lire les e-mails",
+    "autoAccept.tool.searchEmails": "Rechercher des e-mails",
+    "autoAccept.tool.sendEmail": "Envoyer un e-mail",
+    "autoAccept.tool.replyToEmail": "Répondre à l'e-mail",
+    "autoAccept.tool.newTask": "Créer une nouvelle tâche",
+    "autoAccept.tool.askFollowupQuestion": "Poser une question complémentaire",
+    "autoAccept.tool.attemptCompletion": "Marquer la tâche comme terminée",
+    "autoAccept.tool.skill": "Compétence d'exécution",
+    "autoAccept.tool.switchMode": "Mode de commutation",
+    "autoAccept.tool.switchModel": "Changer de modèle",
+    "autoAccept.tool.updateTodoList": "Mettre à jour la liste de tâches",
+    "autoAccept.tool.showImage": "Afficher l'image",
+    "autoAccept.tool.mouseTools": "Outils de la souris (déplacer, cliquer, faire défiler)",
+    "autoAccept.tool.keyboardTools": "Outils du clavier (saisir du texte, combinaisons de touches)",
+    "autoAccept.tooltip.browseWeb": "Récupère une page Web et renvoie son texte à l'IA. En lecture seule et généralement sûr.",
+    "autoAccept.tooltip.httpRequest": "Envoie une requête HTTP arbitraire (GET, POST, PUT, DELETE, etc.) à n'importe quelle URL. Peut soumettre des formulaires, appeler des API ou déclencher des effets secondaires sur des serveurs distants.",
+    "autoAccept.tooltip.openBrowserTab": "Ouvre une URL dans la fenêtre du navigateur Aire, qui vous est visible. Généralement sûr.",
+    "autoAccept.tooltip.listBrowserTabs": "Répertorie les titres et les URL de tous les onglets ouverts dans le navigateur Aire. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.readBrowserTab": "Lit le contenu textuel rendu d'un onglet de navigateur ouvert. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.switchBrowserTab": "Modifie l'onglet actif dans le navigateur Aire. Sûr.",
+    "autoAccept.tooltip.closeBrowserTab": "Ferme l'un des onglets ouverts dans le navigateur Aire. Sûr, mais ferme le contenu que vous souhaiterez peut-être conserver.",
+    "autoAccept.tooltip.getBrowserHtml": "Renvoie la source HTML brute d'un onglet de navigateur ouvert. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.executeBrowserScript": "Exécute du JavaScript arbitraire dans un onglet de navigateur ouvert. Risque élevé : peut lire les cookies, soumettre des formulaires ou interagir avec n'importe quel élément de la page.",
+    "autoAccept.tooltip.getBrowserCookies": "Lit les cookies à partir d’un onglet de navigateur ouvert. Peut exposer des jetons de session et des informations d'authentification.",
+    "autoAccept.tooltip.executeCommand": "Exécute une commande shell ou lance toute application installée sans vous le demander au préalable. Risque élevé : activez-le uniquement si vous faites confiance à l'IA pour exécuter des commandes de manière autonome.",
+    "autoAccept.tooltip.readCommandOutput": "Lit le résultat d'un processus en arrière-plan précédemment démarré. Généralement sûr.",
+    "autoAccept.tooltip.listFiles": "Répertorie le contenu d'un dossier. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.readFile": "Ouvre et lit le contenu d'un fichier. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.searchFiles": "Recherche des fichiers par modèle de nom dans un dossier. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.searchFileContent": "Recherche des modèles de texte dans le contenu du fichier (comme grep). En lecture seule et sécurisé.",
+    "autoAccept.tooltip.writeToFile": "Crée ou écrase un fichier avec un nouveau contenu. Peut modifier ou supprimer des données existantes.",
+    "autoAccept.tooltip.applyDiff": "Applique un correctif pour modifier les lignes d'un fichier existant. Peut modifier silencieusement le code source ou les fichiers de configuration.",
+    "autoAccept.tooltip.createDirectory": "Crée un nouveau dossier. Généralement sûr.",
+    "autoAccept.tooltip.deleteFile": "Supprime définitivement un fichier. Risque élevé : les fichiers supprimés peuvent ne pas être récupérables.",
+    "autoAccept.tooltip.moveFile": "Déplace ou renomme un fichier ou un dossier. Peut écraser les fichiers existants à la destination.",
+    "autoAccept.tooltip.openFile": "Ouvre un fichier avec son application par défaut (par exemple, ouvre un PDF dans votre visionneuse PDF). Sûr.",
+    "autoAccept.tooltip.getClipboard": "Lit le contenu actuel du presse-papiers. Peut exposer les données sensibles que vous avez copiées.",
+    "autoAccept.tooltip.setClipboard": "Écrase votre presse-papiers avec le texte généré par l'IA. Sûr, mais remplace tout ce que vous aviez copié.",
+    "autoAccept.tooltip.notify": "Affiche une notification système. Sûr.",
+    "autoAccept.tooltip.getSystemInfo": "Lit les informations sur le système d’exploitation, le matériel et l’environnement. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.getRunningProcesses": "Renvoie une liste des processus en cours d'exécution sur votre ordinateur. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.getActiveWindow": "Renvoie le titre et le processus de la fenêtre actuellement ciblée. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.getSelectedText": "Lit le texte actuellement sélectionné à l'écran. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.remember": "Enregistre une paire clé-valeur dans la mémoire persistante de l'IA. Sûr.",
+    "autoAccept.tooltip.recall": "Lit une valeur dans la mémoire persistante de l'IA. En lecture seule et sécurisé.",
+    "autoAccept.tooltip.setReminder": "Planifie qu'une notification de rappel apparaisse après un délai. Sûr.",
+    "autoAccept.tooltip.readEmails": "Lit les e-mails de votre compte de messagerie connecté. Peut exposer une correspondance privée.",
+    "autoAccept.tooltip.searchEmails": "Recherche dans votre boîte aux lettres les messages correspondants. Lecture seule.",
+    "autoAccept.tooltip.sendEmail": "Rédige et envoie un e-mail en votre nom. Risque élevé : les e-mails sont envoyés immédiatement et peuvent être irréversibles.",
+    "autoAccept.tooltip.replyToEmail": "Envoie une réponse à un fil de discussion existant. Risque élevé – identique à l’envoi d’un e-mail.",
+    "autoAccept.tooltip.newTask": "Démarre une nouvelle sous-tâche. L’IA peut enchaîner de nombreux appels d’outils sans autre invite.",
+    "autoAccept.tooltip.askFollowupQuestion": "L'IA fait une pause pour vous poser une question de clarification avant de continuer. Généralement sûr.",
+    "autoAccept.tooltip.attemptCompletion": "L'IA signale qu'elle a terminé la tâche en cours et présente un résumé. Sûr.",
+    "autoAccept.tooltip.skill": "Exécute une compétence ou une macro intégrée. Le risque dépend de ce que fait la compétence.",
+    "autoAccept.tooltip.switchMode": "Modifie le mode de fonctionnement de l'IA (par exemple, de chat à assistant de codage). Généralement sûr.",
+    "autoAccept.tooltip.switchModel": "Passe à un autre modèle d’IA ou à un autre fournisseur en cours de conversation. Généralement sûr.",
+    "autoAccept.tooltip.updateTodoList": "Ajoute, met à jour ou coche des éléments dans la liste des tâches à faire. Sûr.",
+    "autoAccept.tooltip.showImage": "Affiche une image à partir d'un chemin de fichier ou d'une URL dans le chat. Sûr.",
+    "autoAccept.tooltip.mouseTools": "Déplace le curseur et clique n'importe où sur l'écran. Risque élevé : peut interagir avec n'importe quelle application ou élément d'interface utilisateur sans que vous le voyiez au préalable.",
+    "autoAccept.tooltip.keyboardTools": "Tape du texte ou appuie sur des combinaisons de touches dans la fenêtre ciblée. Risque élevé : peut envoyer des données à n'importe quelle application.",
+    "mcp.servers": "Serveurs MCP",
+    "mcp.serversDescription": "Étendez l'IA avec des outils personnalisés en connectant des serveurs MCP. Les modifications prennent effet immédiatement.",
+    "mcp.tip": "La plupart des serveurs nécessitent Node.js (npx). Si un serveur ne démarre pas, assurez-vous que Node.js est installé — nodejs.org",
+    "mcp.discover": "Découvrir",
+    "mcp.searchPlaceholder": "Serveurs de recherche…",
+    "mcp.installed": "Installé",
+    "mcp.installedServers": "Serveurs installés",
+    "mcp.addCustom": "+ Personnalisé",
+    "mcp.edit": "Modifier",
+    "mcp.remove": "Retirer",
+    "mcp.enabled": "Activé",
+    "mcp.disabled": "Désactivé",
+    "settings.apiAccessTitle": "Accès API local",
+    "settings.apiAccessDescription": "Autorisez les applications locales de confiance à ouvrir Aire, à lire l'historique des conversations et à demander des actions via l'API locale.",
+    "settings.apiAccessEnabled": "Activer l'accès API local",
+    "settings.apiAccessTokenTitle": "Jeton d'authentification",
+    "settings.apiAccessTokenDescription": "Transmettez ce jeton dans les requêtes API locales pour autoriser le contrôle.",
+    "settings.apiAccessTokenCopy": "Copier",
+    "settings.apiAccessTokenRegenerate": "Régénérer",
+    "settings.voiceOutputEnabled": "Activer la sortie vocale",
+    "settings.voiceMicOnly": "Parler uniquement lors de l'utilisation du microphone",
+    "settings.voice": "Voix",
+    "settings.voiceSpeed": "Vitesse",
+    "settings.usageTrustTitle": "Ce qu'Aire suit",
+    "settings.usageRecordedSourceTitle": "Enregistré",
+    "settings.usageRecordedSource": "Tours de l'assistant stockés avec le nombre de tokens.",
+    "settings.usageHint": "Les jetons sont enregistrés à partir des tours d'assistant qui renvoient des données d'utilisation. Lorsqu'un fournisseur n'expose pas les dépenses en direct, Aire les estime à partir des jetons enregistrés et des prix publics du modèle.",
+    "settings.usageLiveSourceTitle": "Signalé en direct",
+    "settings.usageLiveSource": "Quota ou solde signalé par le fournisseur lorsque l'API l'expose.",
+    "settings.usageEstimatedSourceTitle": "Estimé",
+    "settings.usageEstimatedSource": "Lorsque l'utilisation en direct n'est pas disponible, Aire estime les dépenses à partir des jetons enregistrés et des prix publics du modèle.",
+    "settings.usageSpendLiveLabel": "En direct : {0}",
+    "settings.usageSpendLiveUnitsLabel": "En direct : {0}",
+    "settings.usageSpendEstimatedLabel": "Estimé : {0}",
+    "settings.usageSpendUnavailable": "Indisponible",
+    "settings.usageTrendTitle": "Tendance d'utilisation enregistrée",
+    "settings.usageTrendHint": "Graphique en courbe lissée des tokens de l'assistant stockés par fournisseur et modèle.",
+    "settings.usageTrendEmpty": "Aucun token d'assistant enregistré pour le moment.",
+    "settings.voiceLocalOnly": "Utilisez uniquement les voix locales (pas d'Internet requis)",
+    "settings.voiceLocalOnlyDescription": "Utilisez uniquement les voix locales (pas d'Internet requis)",
+    "settings.downloadVoices": "Téléchargez les voix Windows...",
+    "main.sessionActive": "Séance active",
+    "main.endSession": "Terminer la session",
+    "main.thinking": "Réflexion…",
+    "main.assistantModeSwitched": "Mode assistant basculé sur {0}.",
+    "main.remove": "Supprimer",
+    "menu.find": "Rechercher... Ctrl+F",
+    "menu.saveChat": "Enregistrer la conversation en texte...",
+    "confirm.deleteTitle": "Supprimer '{0}' ?",
+    "confirm.deleteMsg": "Cela supprimera définitivement le fournisseur et sa configuration.",
+    "onboarding.welcomeTitle": "Bienvenue sur Aire",
+    "onboarding.welcomeSubtitle": "L'IA pour tous",
+    "onboarding.welcomeDesc": "Une application de chat IA basée sur la barre d'état système qui vous permet de discuter avec n'importe quel fournisseur d'IA — OpenAI, Anthropic Claude, Google AI, Ollama — le tout au même endroit.",
+    "onboarding.getStarted": "Commençons →",
+    "onboarding.pickerTitle": "Choisissez votre fournisseur d'IA",
+    "onboarding.pickerSubtitle": "Choisissez-en un pour commencer. Vous pourrez en ajouter d'autres à tout moment.",
+    "onboarding.addAiTitle": "Ajoutez votre première IA",
+    "onboarding.addAiSubtitle": "Connectez-vous à un fournisseur d'IA pour commencer à discuter.",
+    "onboarding.providerType": "Type de fournisseur",
+    "onboarding.name": "Nom",
+    "onboarding.apiKey": "Clé API",
+    "onboarding.baseUrl": "URL de base (facultatif — laisser vide pour OpenAI)",
+    "onboarding.model": "Modèle",
+    "onboarding.testConnection": "Tester la connexion",
+    "onboarding.skipForNow": "Passer pour l'instant",
+    "onboarding.finish": "Terminer →",
+    "onboarding.doneTitle": "Vous êtes prêt !",
+    "onboarding.doneDesc": "Aire fonctionne dans votre barre système. Cliquez sur l'icône à tout moment pour ouvrir le chat.",
+    "onboarding.startChatting": "Commencer à discuter",
+    "onboarding.testing": "Test en cours…",
+    "onboarding.testOk": "Connecté !",
+    "onboarding.testFail": "Échec du test",
+    "onboarding.fillKeyFirst": "Remplissez d'abord la clé API.",
+    "onboarding.whereApiKey": "Où obtenir une clé API ?",
+    "onboarding.signUpPrefix": "Vous n'avez pas de compte ? Inscrivez-vous à",
+    "tooltip.sidebar": "Historique des conversations",
+    "tooltip.providerCooldown": "Le fournisseur est en délai de récupération",
+    "tooltip.checkAvailability": "Vérifier si le fournisseur est à nouveau disponible",
+    "tooltip.browser": "Ouvrir le navigateur (l'IA peut lire les onglets ouverts)",
+    "placeholder.search": "Rechercher…",
+    "tooltip.newConversation": "Nouvelle conversation",
+    "tooltip.openImageViewer": "Cliquer pour ouvrir dans la visionneuse d'images",
+    "tooltip.allow": "Autoriser",
+    "tooltip.deny": "Refuser",
+    "tooltip.previousMatch": "Correspondance précédente",
+    "tooltip.nextMatch": "Correspondance suivante",
+    "tooltip.close": "Fermer",
+    "tooltip.openFile": "Cliquer pour ouvrir le fichier",
+    "tooltip.removeAttachment": "Supprimer la pièce jointe",
+    "tooltip.stopThinking": "Arrêter la réflexion de l'IA",
+    "tooltip.toolsDisabled": "Outils désactivés — cliquez pour choisir les catégories d'outils",
+    "tooltip.toolsEnabled": "Catégories d'outils activées : {0}",
+    "warning.largeFile": "⚠ Fichier volumineux — le fournisseur peut le rejeter",
+    "menu.copyChat": "Copier le chat en texte",
+    "menu.clearConversation": "Effacer la conversation",
+    "menu.restoreWindowSizes": "Restaurer les tailles de fenêtres d'origine",
+    "menu.rename": "Renommer",
+    "menu.delete": "Supprimer",
+    "menu.deleteAllConversations": "Supprimer toutes les conversations",
+    "settings.setupWizard": "Assistant de configuration",
+    "settings.apiAccessEnabledTooltip": "Permet à d'autres applications locales de contrôler Aire. Laissez désactivé sauf si vous faites confiance à l'appelant.",
+    "settings.testSelectedVoice": "Tester la voix sélectionnée",
+    "tooltip.dragReorder": "Glisser pour réorganiser",
+    "tooltip.runTests": "Exécuter les tests",
+    "cooldown.suffix": "Cliquez sur ↻ pour effacer le délai de récupération et réessayer.",
+    "settings.refreshModelsTooltip": "Actualiser la liste des modèles depuis le serveur",
+    "tools.enableAllCategories": "Activer toutes les catégories d'outils",
+    "tools.noTools": "Aucun outil",
+    "toolCategory.filesystem.label": "Fichiers",
+    "toolCategory.filesystem.description": "Lire et modifier les fichiers et dossiers locaux.",
+    "toolCategory.browser.label": "Navigateur",
+    "toolCategory.browser.description": "Inspecter et contrôler les onglets et pages du navigateur.",
+    "toolCategory.agent.label": "Agent",
+    "toolCategory.agent.description": "Utiliser les outils de planification, de suivi et de gestion des tâches.",
+    "toolCategory.mouse.label": "Souris",
+    "toolCategory.mouse.description": "Déplacer la souris, cliquer, glisser, faire défiler et prendre des captures d'écran.",
+    "toolCategory.keyboard.label": "Clavier",
+    "toolCategory.keyboard.description": "Saisir du texte et envoyer des pressions de touches.",
+    "toolCategory.system.label": "Système",
+    "toolCategory.system.description": "Inspecter les processus, ouvrir des applications et lancer des actions système locales.",
+    "toolCategory.email.label": "E-mail",
+    "toolCategory.email.description": "Lire, rechercher, envoyer et répondre aux e-mails.",
+    "toolDesc.list_directory": "Lister {0}/ ?",
+    "toolDesc.list_files": "Lister {0}/ ?",
+    "toolDesc.read_file": "Lire {0} ?",
+    "toolDesc.write_file": "Écrire dans {0} ?",
+    "toolDesc.write_to_file": "Écrire dans {0} ?",
+    "toolDesc.apply_diff": "Modifier {0} ?",
+    "toolDesc.create_directory": "Créer le dossier {0} ?",
+    "toolDesc.delete_file": "Supprimer {0} ?",
+    "toolDesc.move_file": "Déplacer {0} → {1} ?",
+    "toolDesc.search_files": "Rechercher '{0}' dans {1}/ ?",
+    "toolDesc.execute_command_default": "Exécuter une commande ?",
+    "toolDesc.execute_command_run": "Exécuter : {0} ?",
+    "toolDesc.execute_command_open": "Ouvrir {0} ?",
+    "toolDesc.read_command_output": "Lire la sortie de la commande ?",
+    "toolDesc.open_url": "Récupérer {0} ?",
+    "toolDesc.web_fetch": "Récupérer {0} ?",
+    "toolDesc.open_browser_tab": "Ouvrir {0} ?",
+    "toolDesc.list_browser_tabs": "Lister les onglets ouverts ?",
+    "toolDesc.read_browser_tab": "Lire l'onglet actuel ?",
+    "toolDesc.new_task": "Démarrer la tâche : {0} ?",
+    "toolDesc.attempt_completion": "Terminer ?",
+    "toolDesc.ask_followup_question": "Demander : {0} ?",
+    "toolDesc.skill": "Exécuter la compétence : {0} ?",
+    "toolDesc.switch_model": "Passer à {0} ?",
+    "toolDesc.switch_mode": "Passer en mode {0} ?",
+    "toolDesc.update_todo_list": "Mettre à jour la liste de tâches ?",
+    "toolDesc.begin_keyboard_session": "Démarrer la session clavier ?",
+    "toolDesc.end_keyboard_session": "Terminer la session clavier ?",
+    "toolDesc.type_text": "Saisir \"{0}\" ?",
+    "toolDesc.key_press": "Appuyer sur {0} ?",
+    "toolDesc.key_combo": "Appuyer sur {0} ?",
+    "toolDesc.begin_mouse_session": "Démarrer la session souris ({0} min) ?",
+    "toolDesc.end_mouse_session": "Terminer la session souris ?",
+    "toolDesc.take_screenshot": "Prendre une capture d'écran ?",
+    "toolDesc.mouse_move": "Déplacer la souris vers ({0}, {1}) ?",
+    "toolDesc.mouse_click": "Cliquer sur ({0}, {1}) ?",
+    "toolDesc.mouse_double_click": "Double-cliquer sur ({0}, {1}) ?",
+    "toolDesc.mouse_drag": "Glisser ({0},{1}) → ({2},{3}) ?",
+    "toolDesc.default": "Exécuter '{0}' ?",
+    "toolStatus.approved": "✓ {0}",
+    "toolStatus.denied": "✗ Refusé",
+    "assistantMode.architect.name": "Architecte",
+    "assistantMode.architect.description": "Mode de compromis systèmes et conception",
+    "assistantMode.creative-writer.name": "Rédacteur créatif",
+    "assistantMode.creative-writer.description": "Mode d'écriture expressive riche en idées",
+    "assistantMode.developer.name": "Développeur",
+    "assistantMode.developer.description": "Mode technique axé sur l'implémentation",
+    "assistantMode.general.name": "Général",
+    "assistantMode.general.description": "Comportement par défaut équilibré",
+    "assistantMode.painter.name": "Peintre",
+    "assistantMode.painter.description": "Mode de création d'images et de concepts visuels",
+    "assistantMode.philosopher.name": "Philosophe",
+    "assistantMode.philosopher.description": "Mode de raisonnement conceptuel et de vision du monde",
+    "assistantMode.psicologist.name": "Psychologue",
+    "assistantMode.psicologist.description": "Mode réflexif empathique",
+    "assistantMode.scientist.name": "Scientifique",
+    "assistantMode.scientist.description": "Mode analytique basé sur des preuves",
+    "assistantMode.security.name": "Sécurité",
+    "assistantMode.security.description": "Mode d'analyse et de revue axé sur la sécurité",
+    "assistantMode.teacher.name": "Enseignant",
+    "assistantMode.teacher.description": "Mode explicatif axé sur l'apprentissage",
+    "setup.title": "Aire - Configuration",
+    "setup.heroTitle": "Configuration initiale",
+    "setup.heroDescription": "Choisissez les paramètres d'accessibilité et les modes assistant par défaut avant qu'Aire n'ouvre son assistant de configuration normal.",
+    "setup.languageSectionTitle": "1. Langue",
+    "setup.languageSectionDescription": "Choisissez la langue que Aire doit utiliser au premier lancement.",
+    "setup.assistantModeSectionTitle": "2. Mode assistant par défaut",
+    "setup.assistantModeSectionDescription": "Ce sera le mode de départ pour les nouvelles conversations jusqu'à ce que vous le changiez.",
+    "setup.accessibilitySectionTitle": "3. Paramètres d'accessibilité par défaut",
+    "setup.voiceOutputLabel": "Activer la sortie vocale dans Aire dès le départ",
+    "setup.voiceOutputDescription": "Aire peut lire les réponses à voix haute après l'ouverture de l'application principale.",
+    "setup.voiceInputLabel": "Activer la saisie vocale dès le départ",
+    "setup.voiceInputDescription": "Si le modèle vocal local est disponible, Aire commencera à écouter automatiquement au lancement.",
+    "setup.localVoicesLabel": "Utiliser uniquement les voix Windows locales",
+    "setup.localVoicesDescription": "Utile lorsque vous souhaitez que la configuration et la sortie vocale fonctionnent hors ligne.",
+    "setup.voiceGuidedSectionTitle": "4. Configuration guidée par la voix",
+    "setup.voiceGuidanceLabel": "Lire les instructions de configuration à voix haute",
+    "setup.voiceCommandsLabel": "Autoriser les commandes de configuration vocales",
+    "setup.voiceCommandsDescription": "Les commandes reconnues incluent : English, Spanish, General, Developer, Architect, Teacher, Enable voice output, Disable voice output, Enable voice input, Disable voice input, Read summary, Save, Open Aire.",
+    "setup.startVoice": "Lancer la Configuration Vocale",
+    "setup.stopVoice": "Arrêter la Configuration Vocale",
+    "setup.summaryTitle": "Résumé",
+    "setup.savePreferences": "Enregistrer les préférences",
+    "setup.saveAndOpen": "Enregistrer et ouvrir Aire",
+    "setup.summaryLanguage": "Langue",
+    "setup.summaryAssistantMode": "Mode assistant par défaut",
+    "setup.summaryVoiceOutput": "Sortie vocale dans Aire",
+    "setup.summaryVoiceInput": "Saisie vocale dans Aire",
+    "setup.summaryLocalVoices": "Utiliser uniquement les voix locales",
+    "setup.summaryReadAloud": "Lire la configuration à voix haute",
+    "setup.summaryVoiceCommands": "Commandes de configuration vocales",
+    "setup.summaryNextStep": "Lorsque vous ouvrirez Aire, il continuera avec l'assistant de configuration normal afin que vous puissiez configurer un fournisseur.",
+    "setup.summarySpoken": "Langue {0}. Mode assistant {1}. Sortie vocale {2}. Saisie vocale {3}. Dites enregistrer, ou dites ouvrir Aire.",
+    "setup.voiceStatusListening": "La configuration vocale écoute. Prononcez une commande, puis faites une pause.",
+    "setup.voiceStatusCommandsOff": "Les commandes de configuration vocales sont désactivées.",
+    "setup.voiceStatusModelNeeded": "Les commandes vocales nécessitent le modèle vocal local. Lancez la Configuration Vocale pour le télécharger.",
+    "setup.voiceStatusReady": "Les commandes vocales sont prêtes. Lancez la Configuration Vocale pour commencer à écouter.",
+    "setup.launchNotFoundMessage": "Les préférences ont été enregistrées, mais Aire.exe n'a pas été trouvé à côté de l'application de configuration. Lancez Aire manuellement pour continuer avec la configuration.",
+    "setup.preferencesSaved": "Préférences enregistrées.",
+    "setup.preferencesSavedSpoken": "Préférences enregistrées. Aire est prêt à ouvrir son assistant de configuration.",
+    "setup.voiceStatusDownloading": "Téléchargement du modèle vocal local pour la configuration vocale...",
+    "setup.voiceStatusDownloadFailed": "Le téléchargement du modèle vocal a échoué. Vérifiez la connexion Internet et réessayez.",
+    "setup.voiceStatusStartFailed": "La configuration vocale n'a pas pu démarrer : {0}",
+    "setup.voiceStatusDownloadProgress": "Téléchargement du modèle vocal : {0}%",
+    "setup.voiceStatusCommandNotRecognized": "Commande vocale non reconnue : {0}",
+    "setup.voiceStatusCommandApplied": "Commande vocale appliquée : {0}",
+    "setup.enabled": "Activé",
+    "setup.disabled": "Désactivé",
+    "setup.yes": "Oui",
+    "setup.no": "Non",
+    "setup.enabledSpoken": "activé",
+    "setup.disabledSpoken": "désactivé",
+    "panic.title": "Arrêt Aire",
+    "panic.tooltip": "Cliquez pour arrêter immédiatement la session clavier/souris active. Glissez pour repositionner.",
+    "panic.stopButton": "⏹ ARRÊTER LA SESSION",
+    "settings.tab.providers": "Fournisseurs d'IA",
+    "settings.tab.appearance": "Apparence",
+    "settings.tab.voice": "Voix",
+    "settings.tab.context": "Contexte",
+    "settings.tab.templates": "Modèles",
+    "settings.tab.autoAccept": "Auto‑acceptation",
+    "settings.tab.connections": "Connexions",
+    "mcp.nameLabel": "Nom",
+    "mcp.commandLabel": "Commande",
+    "mcp.argsLabel": "Arguments",
+    "mcp.workDirLabel": "Répertoire de travail (facultatif)",
+    "mcp.envVarsLabel": "Variables d’environnement — une par ligne :  KEY=value",
+    "onboarding.provider.openai.subtitle": "GPT-4o, o3 et plus",
+    "onboarding.provider.codex.subtitle": "Pont CLI local",
+    "onboarding.provider.ollama.subtitle": "Local, gratuit, privé",
+    "onboarding.provider.anthropic.subtitle": "Claude Sonnet, Haïku",
+    "onboarding.provider.claudeweb.subtitle": "Connexion via navigateur",
+    "onboarding.provider.openrouter.subtitle": "100+ modèles, offre gratuite",
+    "onboarding.provider.deepseek.subtitle": "Chat, Reasonneur, V3",
+    "onboarding.provider.zai.subtitle": "Modèles GLM · z.ai",
+    "onboarding.provider.inception.subtitle": "Mercury et Inception",
+    "onboarding.provider.googleai.subtitle": "Gemini Pro et Flash",
+    "onboarding.provider.googleaiimage.subtitle": "Génération d’images Gemini",
+    "onboarding.provider.groq.subtitle": "Offre gratuite, très rapide",
+    "login.title": "Connectez-vous avec Claude.ai — Aire",
+    "login.header": "Connectez-vous sur claude.ai. Aire détectera automatiquement votre connexion et fermera cette fenêtre.",
+    "login.waiting": "En attente de connexion…",
+    "login.success": "Connecté — mise en place de la session…",
+    "login.webview2Title": "WebView2 requis",
+    "login.webview2Message": "Le runtime WebView2 est requis mais n’est pas installé.\n\nTéléchargez-le ici : https://developer.microsoft.com/fr-fr/microsoft-edge/webview2/\n\nImpossible d’initialiser la fenêtre de connexion. Veuillez réessayer ou redémarrer l’application.",
+    "viewer.title": "Visualiseur d’images",
+    "viewer.closeTip": "Fermer (Esc)",
+    "viewer.zoomOut": "Zoom hors (–)",
+    "viewer.zoomIn": "Zoom vers l’intérieur (+)",
+    "viewer.fit": "Adapte à la taille",
+    "viewer.fitTip": "Adapter à la fenêtre (F)",
+    "viewer.actual": "1:1",
+    "viewer.actualTip": "Taille réelle en pixels",
+    "viewer.copy": "Copier",
+    "viewer.copyTip": "Copier dans le presse-papiers (Ctrl+C)",
+    "viewer.saveAs": "Enregistrer sous…",
+    "viewer.saveTip": "Enregistrer l'image (Ctrl+S)",
+    "update.title": "Mise à jour Aire disponible",
+    "update.headline": "Une nouvelle version d'Aire est disponible.",
+    "update.available": "Aire {0} est disponible",
+    "update.current": "Version actuelle: {0}",
+    "update.description": "Installez la dernière mise à jour pour obtenir les derniers correctifs et améliorations.",
+    "update.later": "Plus tard",
+    "update.releasePage": "Page de lancement",
+    "update.installNow": "Installer maintenant",
+    "browser.title": "Aire — Navigateur",
+    "browser.back": "Reculer",
+    "browser.forward": "Avancer",
+    "browser.reload": "Rafraîchir  (F5)",
+    "browser.newTab": "Nouvel onglet  (Ctrl+T)",
+    "browser.closeAll": "Fermer tous les onglets",
+    "browser.openExternal": "Ouvrir la page courante dans le navigateur par défaut",
+    "browser.closeBrowser": "Fermer le navigateur",
+    "browser.newTabLabel": "Nouvel onglet",
+    "browser.error": "Erreur",
+    "browser.errorLoad": "Erreur lors du chargement de la page.",
+    "init.title": "Aire",
+    "init.starting": "Début…",
+    "confirm.title": "Confirmer",
+    "confirm.clearTitle": "Effacer toutes les messages ?",
+    "confirm.clearMessage": "Cela supprimera permanentement le dialogue de la base de données.",
+    "confirm.yes": "Oui",
+    "confirm.no": "Non",
+    "confirm.ok": "Valider",
+    "confirm.regenerateToken": "Régénérer le token API ?",
+    "confirm.regenerateMsg": "Les outils locaux existants arrêteront de fonctionner jusqu'à ce qu'ils utilisent le nouveau token.",
+    "confirm.deleteProvider": "Supprimer le fournisseur ?",
+    "input.cancel": "Annuler",
+    "input.ok": "Valider",
+    "ollama.checking": "Vérification d'Ollama sur votre machine...",
+    "ollama.description": "Ollama exécute des modèles d'IA localement sur votre ordinateur.",
+    "ollama.bullet1": "Gratuit et open source, pas de clé API nécessaire",
+    "ollama.bullet2": "Vos données restent sur votre machine — rien n'est envoyé dans le nuage",
+    "ollama.bullet3": "Travaille hors ligne une fois un modèle téléchargé",
+    "ollama.downloadInstall": "Télécharger et Installer Ollama (gratuit, environ 700 MB)",
+    "ollama.installedNotRun": "Ollama est installé mais ne s'exécute pas.",
+    "ollama.starting": "Démarre automatiquement...",
+    "ollama.retry": "Recommencer",
+    "ollama.chooseModel": "Choisissez un modèle:",
+    "ollama.refreshTip": "Actualiser la liste des modèles chez Ollama",
+    "ollama.downloadTip": "Télécharger ce modèle chez Ollama",
+    "ollama.legend": "✓ = installé  ·  ★ = recommandé  ·  ↓ = téléchargeable",
+    "ollama.cancel": "✕ Annuler",
+    "ollama.errorStatus": "Erreur lors du vérification de l'état d'Ollama.",
+    "ollama.running": "Ollama est en cours d'exécution. Chargement des modèles…",
+    "ollama.loadingModels": "Chargement des modèles…",
+    "ollama.couldNotLoad": "Impossible de charger les modèles.",
+    "ollama.downloading": "Téléchargement du installeur Ollama…",
+    "ollama.installComplete": "Installation complète. Démarrage d'Ollama…",
+    "ollama.installFailed": "L'installation a échoué.",
+    "ollama.connecting": "Connexion…",
+    "ollama.downloadCancel": "Téléchargement annulé.",
+    "ollama.downloadFailed": "Le téléchargement a échoué.",
+    "ollama.cancelling": "Annulation…",
+    "ollama.uninstallFailed": "L'installation a échoué.",
+    "ollama.importFailed": "L'importation a échoué.",
+    "email.addTitle": "Ajouter un compte email",
+    "email.editTitle": "Éditer le compte email",
+    "email.deleteConfirm": "Supprimer '{0}' ?",
+    "email.openingBrowser": "Ouverture du navigateur…",
+    "email.authorized": "✓ Autorisé",
+    "email.connectionFailed": "✗ Connexion échouée.",
+    "email.testing": "Testowanie...",
+    "email.fieldsRequired": "Les noms d'affichage et l'adresse e-mail sont requis.",
+    "email.signInFirst": "Connectez-vous avec Google en premier.",
+    "mcp.addTitle": "Ajouter un serveur MCP",
+    "mcp.removeConfirm": "Supprimer '{0}' ?",
+    "mcp.fieldsRequired": "Nom et commande sont requis.",
+    "mcp.starting": "Démarage...",
+    "mcp.connectionFailed": "✗ Échec de la connexion.",
+    "mcp.connected": "✓ Connecté — {0} outil(s) disponible(s)",
+    "mcp.editTitle": "Éditer {0}",
+    "captest.notTested": "Pas encore testé",
+    "captest.validating": "Validation en cours…",
+    "captest.running": "En cours…",
+    "captest.cancelled": "Tests annulés.",
+    "captest.failed": "Exécution du test échouée.",
+    "captest.cancelling": "Annulation en cours…",
+    "captest.lastTested": "Dernier test : {0}",
+    "captest.justNow": "il y a à peine",
+    "captest.secondsAgo": "{0}s auparavant",
+    "captest.minutesAgo": "{0}m auparavant",
+    "captest.hoursAgo": "{0}h auparavant",
+    "captest.daysAgo": "{0}d auparavant",
+    "toast.modelRefreshed": "La liste des modèles a été actualisée depuis le serveur.",
+    "toast.modelRefreshFail": "Impossible d'actualiser les modèles.",
+    "toast.modelsImported": "Modèles importés. Mise à jour de la liste…",
+    "toast.importFailed": "Échec de l’importation.",
+    "toast.tokenCopied": "M Mandat API copié dans le presse-papiers.",
+    "toast.tokenRegenerated": "Nouveau mandat API généré.",
+    "toast.saveProviderFail": "Impossible d'enregistrer le fournisseur.",
+    "toast.addProviderFail": "Impossible d’ajouter le fournisseur. Veuillez réessayer.",
+    "toast.deleteProviderFail": "Impossible de supprimer le fournisseur. Veuillez réessayer.",
+    "toast.toggleProviderFail": "Impossible de basculer le statut du fournisseur. Veuillez réessayer.",
+    "toast.databaseError": "Erreur de base de données.",
+    "duration.month": "1 mois",
+    "duration.minute": "1 minute",
+    "duration.minutes": "{0} minutes",
+    "duration.hour": "1 heure",
+    "duration.hours": "{0} heures",
+    "duration.day": "1 jour",
+    "duration.days": "{0} jours",
+    "onboard.fetchingModels": "Récupération des modèles les plus récents…",
+    "onboard.fetchFailed": "Impossible de récupérer les modèles — affichage de la liste intégrée",
+    "onboard.installingCodex": "Installation du Codex CLI…",
+    "onboard.codexDetected": "Le Codex CLI a été détecté. Vous pouvez tester la connexion maintenant.",
+    "onboard.alreadyConfigured": "Déjà configuré",
+    "onboard.alreadyConfigMsg": "Ce fournisseur est déjà configuré. Éditez-le dans les Paramètres.",
+    "attach.missing": "Aucune pièce jointe",
+    "attach.missingMsg": "Le fichier '{0}' n'est plus disponible sur le disque.",
+    "attach.mayBeExec": "Le fichier '{0}' peut être exécutable ou contenir du contenu d’ Garten. L’ouvrir quand même ?",
+    "attach.openAttach": "Ouvrir l’_attachment",
+    "ollama.installing": "Installation… {0}%",
+    "email.connected": "✓ Connecté",
+    "login.claudeLoggedIn": "✓ Connecté avec Claude.ai",
+    "settings.installCodex": "Installer Codex CLI",
+    "settings.installCodexMsg": "Cela va exécuter 'npm install -g @openai/codex' sur votre système. Continuer?",
+    "settings.regenerateToken": "Régénérer le jeton API?",
+    "settings.regenerateTokenMsg": "Les outils locaux existants cesseront de fonctionner jusqu'à ce qu'ils utilisent le nouveau jeton.",
+    "ollama.uninstallModel": "Désinstaller le modèle Ollama",
+    "ollama.uninstallModelMsg": "Êtes-vous sûr de vouloir désinstaller '{0}'? Cela supprimera les fichiers du modèle de votre système.",
+    "help.tab.contextTemplates": "Contexte et modèles",
+    "orchestrator.title": "Mode Orchestrator",
+    "settings.templates.createTitle": "Créer un modèle",
+    "orchestrator.goalWatermarkExamples": "Find the cheapest non-stop flight from Madrid to London next Friday.\\nWrite a 50,000-word mystery novel about a cat investigator and an ancient spaceship.\\nWrite a Rust app that shows me how to cook pasta and prints the steps in a terminal UI.\\nFind all text documents on this machine that mention the singularity.\\nSummarize the release notes on this webpage and tell me if they affect Linux users.\\nCompare the product details on these two webpages and tell me which one is cheaper.\\nDraft a polite email asking for an extension on a deadline.\\nFind the best train option from Barcelona to Valencia this weekend and note the price.\\nRead this GitHub issue and turn it into a short implementation checklist.\\nSearch my downloads folder for PDFs that mention rent or lease and list the files.\\nWrite a Python script that renames image files by date taken.\\nTake the text from this page and turn it into a simple FAQ.\\nFind three family-friendly restaurants near Plaza Mayor with vegetarian options.\\nCompare the salary, commute, and remote policy in these two job offer emails.\\nLook at this support ticket and propose the smallest safe fix.\\nSummarize this meeting transcript in five bullets and list open questions.\\nFind all Word documents on this machine that mention the word protocol.\\nHelp me plan a one-day itinerary in Lisbon with two museum stops and a lunch place.\\nDraft a changelog entry for the last code change and keep it short.\\nTurn this rough product idea into a clear step-by-step launch plan.",    "settings.templates.watermarkExamples": "Explain this code in simple words:\\n\\n{{code}}\\nSummarize this meeting note into five bullets:\\n\\n{{text}}\\nRewrite this paragraph in plain English:\\n\\n{{text}}\\nTurn this support ticket into a short checklist:\\n\\n{{text}}\\nExtract the action items from this email:\\n\\n{{text}}\\nReview the selected text and point out unclear parts:\\n\\n{{selection}}\\nDraft a friendly reply using the clipboard text as context:\\n\\n{{clipboard}}\\nConvert this rough idea into a short project brief:\\n\\n{{text}}\\nCreate a concise changelog entry from these notes:\\n\\n{{text}}\\nFind the bugs in this code and suggest fixes:\\n\\n{{code}}\\nTurn this article into a beginner-friendly FAQ:\\n\\n{{text}}\\nWrite a short social post announcing this update:\\n\\n{{text}}\\nCompare these two product descriptions and highlight the differences:\\n\\n{{selection}}\\n\\n{{clipboard}}\\nGenerate a study guide from these class notes:\\n\\n{{text}}\\nTurn this clipboard text into a polished email:\\n\\n{{clipboard}}\\nCreate a project summary for a manager:\\n\\n{{text}}\\nRewrite this recipe in simple step-by-step language:\\n\\n{{text}}\\nTurn this code comment into a better commit message:\\n\\n{{code}}\\nDraft a one-paragraph description for this webpage:\\n\\n{{text}}\\nSummarize this document for someone who is busy:\\n\\n{{text}}",    "orchestrator.dialogTitle": "Configuration du mode Orchestrator",
+    "orchestrator.goalsLabel": "Objectifs",
+    "orchestrator.goalsDescription": "Écrivez un objectif par ligne. L’orchestrator les suivra pendant l’exécution.",
+    "orchestrator.tokenBudgetLabel": "Budget de jetons (0 = illimité) :",
+    "orchestrator.categoriesLabel": "Catégories d’outils autorisées",
+    "orchestrator.categoriesDescription": "Laissez tout coché si vous voulez que l’orchestrator gère tout le flux d’objectifs.",
+    "orchestrator.category.files": "Fichiers",
+    "orchestrator.category.browser": "Navigateur",
+    "orchestrator.category.agent": "Agent",
+    "orchestrator.category.mouse": "Souris",
+    "orchestrator.category.keyboard": "Clavier",
+    "orchestrator.category.system": "Système",
+    "orchestrator.category.email": "E-mail",
+    "orchestrator.startButton": "Démarrer",
+    "orchestrator.cancelButton": "Annuler",
+    "help.orchestrator.title": "Mode Orchestrator",
+    "help.orchestrator.link": "Ouvrir les paramètres",
+    "help.orchestrator.imageCaption": "Le bouton Orchestrator devient rouge lorsqu’il est actif. Vous pouvez continuer à le guider depuis la zone de chat, et la session peut être reprise plus tard.",
+    "help.orchestrator.content": "Le mode Orchestrator pousse Aire vers une liste d’objectifs au lieu d’attendre une réponse à la fois.\n\nLancez-le depuis le bouton principal ou avec Ctrl+K. Il ouvre ou reprend une session sauvegardée, crée une nouvelle conversation si nécessaire, et continue jusqu’à ce que les objectifs soient terminés, que vous l’arrêtiez, qu’il n’ait plus de jetons utilisables ou que la même tâche échoue trois fois de trois façons différentes.\n\nVous pouvez continuer à écrire dans la zone de chat pour le guider pendant qu’il travaille. L’orchestrator doit expliquer clairement ce qu’il fait, tenir l’utilisateur informé et afficher des bulles de narration utiles."
+  },
+  "help": [
+    {
+      "tab": "Assistant de configuration",
+      "type": "text",
+      "title": "Fonctionnement de l'assistant d'installation",
+      "links": [
         {
-            "tab": "Assistant de configuration",
-            "type": "text",
-            "title": "Fonctionnement de l'assistant d'installation",
-            "links": [
-                {
-                    "label": "Ouvrez l'assistant de configuration",
-                    "action": "onboarding"
-                },
-                {
-                    "label": "Ouvrir la configuration de l'IA",
-                    "action": "settings:providers"
-                }
-            ],
-            "imagePath": "Assets/Help/onboarding-provider-picker.png",
-            "imageCaption": "L'assistant d'installation vous aide à choisir un fournisseur avant de commencer à discuter.",
-            "content": "L'assistant d'installation apparaît la première fois que vous lancez Aire, ou lorsqu'aucun fournisseur d'IA n'est encore configuré. Son rôle est de vous faire passer d'une nouvelle installation à un chat fonctionnel le plus vite possible.\n\nCe que fait l'assistant, étape par étape :\n• Bienvenue : explique ce qu'est Aire et vous permet de choisir la langue de l'application.\n• Sélecteur de fournisseur : affiche les méthodes courantes pour connecter Aire à des services d'IA.\n• Configuration du fournisseur : demande les détails nécessaires pour le fournisseur que vous avez choisi.\n• Terminer : confirme qu'Aire est prêt et vous amène à l'application principale.\n\nSi vous débutez avec l'IA, l'assistant est le meilleur point de départ. Il commence par le parcours le plus simple et masque les paramètres avancés jusqu'à ce que vous en ayez besoin.\n\nVous pouvez ignorer la configuration et revenir plus tard, mais il vous faut au moins un fournisseur configuré avant qu'Aire puisse répondre aux messages de discussion."
+          "label": "Ouvrez l'assistant de configuration",
+          "action": "onboarding"
         },
         {
-            "tab": "Assistant de configuration",
-            "type": "text",
-            "title": "Choisir un fournisseur",
-            "links": [
-                {
-                    "label": "Ouvrez l'assistant de configuration",
-                    "action": "onboarding"
-                },
-                {
-                    "label": "plateforme.openai.com",
-                    "action": "https://platform.openai.com"
-                },
-                {
-                    "label": "console.anthropic.com",
-                    "action": "https://console.anthropic.com"
-                },
-                {
-                    "label": "aistudio.google.com",
-                    "action": "https://aistudio.google.com"
-                }
-            ],
-            "content": "Le sélecteur de fournisseur est l'endroit où vous choisissez à quel service d'IA Aire parlera en votre nom.\n\nVoici ce que signifient les options principales :\n• OpenAI : un point de départ courant si vous voulez une configuration cloud simple et une large prise en charge des modèles.\n• API Anthropic : une autre option cloud puissante, connue pour les modèles Claude.\n• Claude.ai : utilise une connexion via le navigateur au lieu d'une clé API.\n• Google AI : se connecte aux modèles de discussion Gemini via Google AI Studio.\n• Google AI Images : une configuration dédiée à la génération d'images Gemini.\n• Ollama : exécute les modèles localement sur votre ordinateur. C'est bon pour la confidentialité et l'utilisation hors ligne, mais cela dépend de votre matériel.\n• Codex : utilise le pont CLI Codex local au lieu d'une clé API classique.\n• Groq, OpenRouter, DeepSeek, Inception et z.ai : autres fournisseurs ou points de terminaison compatibles OpenAI, souvent utiles si vous avez déjà un compte chez eux.\n\nLequel choisir ?\n• Si vous voulez la configuration cloud la plus simple pour le chat : commencez par OpenAI, Anthropic ou Google AI.\n• Si vous voulez du local et du privé : choisissez Ollama.\n• Si vous voulez générer des images Gemini : choisissez Google AI Images.\n• Si vous payez déjà pour un fournisseur spécifique ailleurs : choisissez ce même fournisseur ici.\n\nVous n'êtes pas bloqué. L'assistant vous aide d'abord à ajouter un fournisseur, et vous pouvez en ajouter d'autres plus tard dans Paramètres."
-        },
-        {
-            "tab": "Assistant de configuration",
-            "type": "text",
-            "title": "Renseigner les détails du fournisseur",
-            "links": [
-                {
-                    "label": "Ouvrez l'assistant de configuration",
-                    "action": "onboarding"
-                },
-                {
-                    "label": "Ouvrir la configuration de l'IA",
-                    "action": "settings:providers"
-                }
-            ],
-            "imagePath": "Assets/Help/onboarding-provider-setup.png",
-            "imageCaption": "Étape de configuration du fournisseur avec son type, son nom, ses identifiants, son modèle et le test de connexion.",
-            "content": "Après avoir choisi un fournisseur, l'assistant vous demande uniquement les informations dont ce fournisseur a besoin.\n\nChamps typiques :\n• Type de fournisseur : le service que vous souhaitez utiliser.\n• Nom : l'étiquette que Aire affichera dans la fenêtre de discussion.\n• Clé API : le jeton secret qui permet à Aire de communiquer avec le fournisseur. Certains fournisseurs utilisent plutôt une connexion via le navigateur et certains fournisseurs locaux n'ont pas besoin de clé API du tout.\n• URL de base : nécessaire uniquement pour certains services compatibles OpenAI ou certaines configurations auto-hébergées.\n• Modèle : le modèle d'IA spécifique que vous souhaitez utiliser.\n\nNotes spécifiques au fournisseur :\n• Claude.ai utilise une connexion via le navigateur au lieu d'une clé API classique.\n• Ollama est local et fonctionne généralement sans clé API.\n• Codex utilise le pont CLI Codex local, ce qui permet à l'assistant de proposer l'installation du CLI au lieu de demander une clé API classique.\n• Google AI Images est destiné à la génération d'images plutôt qu'au chat classique.\n\nLe bouton Tester la connexion est là pour vous aider à confirmer la configuration avant de terminer. Si le test réussit, Aire peut généralement utiliser ce fournisseur immédiatement.\n\nConseils pratiques :\n• Si vous ne savez pas quel modèle choisir, commencez par la suggestion par défaut.\n• Si vous voyez un champ Clé API, collez la clé exactement telle qu'elle est fournie par le service.\n• Si un fournisseur propose à la fois un accès API et une connexion via le navigateur, privilégiez l'accès API si vous voulez le comportement d'automatisation et d'intégration le plus stable.\n\nUne fois l'assistant terminé, vous pourrez toujours modifier l'un de ces paramètres plus tard dans l'onglet Fournisseurs d'IA."
-        },
-        {
-            "tab": "Getting Started",
-            "type": "text",
-            "title": "Aperçu",
-            "links": [
-                {
-            "label": "Configurez votre première IA",
-                    "action": "settings:providers"
-                },
-                {
-                    "label": "Changer le look d'Aire",
-                    "action": "settings:appearance"
-                }
-            ],
-            "content": "Aire est une application de chat de bureau qui reste dans votre barre d'état système jusqu'à ce que vous en ayez besoin. Vous pouvez la considérer comme une fenêtre de discussion unique pouvant se connecter à de nombreux services d'IA.\n\nSi vous débutez avec l'IA, le point de départ habituel est simple :\n• Ouvrez la configuration de l'IA.\n• Ajoutez un fournisseur, comme OpenAI, Anthropic, Google AI ou Ollama.\n• Choisissez un modèle.\n• Tapez une question dans la zone de discussion et appuyez sur Entrée.\n\nCe qu'Aire peut faire :\n• Parler à différents services d'IA depuis une seule application.\n• Enregistrer vos conversations sur votre ordinateur.\n• Laisser l'IA utiliser des outils, avec votre approbation, pour lire des fichiers, exécuter des commandes, parcourir des pages, etc.\n• Utiliser la saisie et la sortie vocales avec les fonctionnalités vocales de Windows.\n• Permettre à d'autres applications locales de communiquer avec Aire via l'API locale."
-        },
-        {
-            "tab": "Getting Started",
-            "type": "text",
-            "title": "Langue",
-            "links": [
-                {
-            "label": "Configurez votre première IA",
-                    "action": "settings:appearance"
-                }
-            ],
-            "imagePath": "Assets/Help/settings-language.png",
-            "imageCaption": "Le sélecteur de langue dans Paramètres → Apparence.",
-            "content": "Ouvrez Paramètres (⚙) → Apparence et faites défiler jusqu’à la section Langue.\n\nCliquez sur la liste déroulante et choisissez l’une des langues disponibles. L’application se met à jour immédiatement, sans redémarrage.\n\nLa langue est enregistrée automatiquement et restaurée au prochain lancement. Vous pouvez aussi la changer dès la première étape de l’assistant d’installation."
-        },
-        {
-            "tab": "Getting Started",
-            "type": "text",
-            "title": "Icône de la barre d'état",
-            "content": "Aire s'exécute dans la barre d'état système (coin inférieur droit de la barre des tâches).\n\n• Cliquez avec le bouton gauche ou le bouton droit sur l'icône de la barre d'état pour ouvrir la fenêtre de discussion.\n• Cliquez avec le bouton droit sur l'icône de la barre d'état pour accéder aux options : Ouvrir, Paramètres, Quitter.\n• Fermer la fenêtre la masque ; Aire continue de fonctionner en arrière-plan.\n• Pour quitter complètement, cliquez avec le bouton droit sur l'icône de la barre d'état et choisissez Quitter."
-        },
-        {
-            "tab": "Getting Started",
-            "type": "text",
-            "title": "Chat",
-            "links": [
-                {
-                    "label": "Fournisseurs ouverts",
-                    "action": "settings:providers"
-                }
-            ],
-            "imagePath": "Assets/Help/main-chat.png",
-            "imageCaption": "Fenêtre de discussion principale avec le sélecteur de fournisseur, la zone de conversation, la recherche et le compositeur.",
-            "content": "• Tapez votre message dans la zone de saisie en bas et appuyez sur Entrée pour l'envoyer.\n• Appuyez sur Maj+Entrée pour ajouter une nouvelle ligne sans envoyer.\n• Appuyez sur ↑ / ↓ pour parcourir les messages précédents que vous avez envoyés (cela ne fonctionne que lorsque le curseur se trouve sur la première ou la dernière ligne de la zone de saisie).\n• Faites glisser une image dans la zone de saisie pour la joindre à votre message (nécessite un modèle compatible avec la vision).\n• Appuyez sur Ctrl+F pour effectuer une recherche dans la conversation. Utilisez ↑ / ↓ ou les boutons fléchés pour passer d'une correspondance à l'autre. Appuyez sur Échap pour fermer la barre de recherche.\n• Cliquez avec le bouton droit sur la zone de discussion pour copier ou enregistrer la conversation sous forme de fichier texte.\n• Le bouton 🗑 efface la conversation en cours (demande d'abord une confirmation).\n• Le bouton 💬 dans la barre latérale ouvre l'historique de vos conversations."
-        },
-        {
-            "tab": "Getting Started",
-            "type": "table",
-            "title": "Raccourcis clavier",
-            "cols": [
-                "Raccourci",
-                "Action"
-            ],
-            "rows": [
-                [
-                    "Entrer",
-                    "Envoyer un message"
-                ],
-                [
-                    "Maj+Entrée",
-                    "Nouvelle ligne dans la zone de saisie"
-                ],
-                [
-                    "↑ / ↓",
-                    "Naviguer dans l'historique des messages (lorsque le curseur est sur la première/dernière ligne)"
-                ],
-                [
-                    "Ctrl+F",
-                    "Rechercher une conversation"
-                ],
-                [
-                    "Ctrl+Défilement",
-                    "Ajuster la taille de la police"
-                ],
-                [
-                    "Échap",
-                    "Fermer la barre de recherche / fermer la boîte de dialogue"
-                ]
-            ]
-        },
-        {
-            "tab": "Getting Started",
-            "type": "text",
-            "title": "Conseils",
-            "content": "• Vous pouvez configurer plusieurs fournisseurs d'IA et basculer entre eux en haut de la fenêtre de discussion. Chaque conversation mémorise son fournisseur et son assistant.\n• Redimensionnez la fenêtre en faisant glisser n'importe quel bord, y compris le haut.\n• Les conversations et les paramètres sont stockés localement sous %LOCALAPPDATA%\\Aire.\n• L'IA peut demander des outils pour des fichiers, des commandes, des actions de navigateur, etc., mais Aire demande toujours une approbation sauf si une règle d'acceptation automatique s'applique.\n• Si une réponse de l'IA est interrompue, le modèle a peut-être atteint sa limite de jetons ou de sortie. Demandez-lui de continuer, réduisez la taille de la tâche ou utilisez un modèle avec une fenêtre contextuelle plus grande."
-        },
-        {
-            "tab": "Getting Started",
-            "type": "text",
-            "title": "Modes assistants",
-            "imagePath": "Assets/Help/main-chat-modes.png",
-            "imageCaption": "Menu du mode assistant ouvert depuis l'en-tête principal. Chaque conversation garde son propre mode.",
-            "content": "Le bouton de mode dans l'en-tête principal modifie la façon dont Aire présente votre demande avant de l'envoyer au fournisseur.\n\nLes modes actuels incluent Architecte, Écrivain créatif, Développeur, Général, Peintre, Philosophe, Psychologue, Scientifique, Sécurité et Enseignant.\n\nÀ quoi servent les modes :\n• Ils ajustent le style et les priorités de l'assistant.\n• Le mode sélectionné est enregistré par conversation, ce qui permet à des discussions différentes de conserver des rôles différents.\n• Général est la valeur par défaut pour les nouvelles conversations.\n• Les différents fournisseurs conservent toujours leurs propres particularités, mais Aire transmet systématiquement le mode choisi comme consigne partagée.\n\nExemples pratiques :\n• Développeur : idéal pour le code, le débogage et les tâches terminal.\n• Architecte : idéal pour la structure, les compromis et la planification.\n• Enseignant : idéal pour les explications et les conseils étape par étape.\n• Peintre : idéal pour les invites et la génération orientées image lorsque le fournisseur actuel le prend en charge."
-        },
-        {
-            "tab": "Tools & Voice",
-            "type": "text",
-            "title": "Catégories d'outils",
-            "imagePath": "Assets/Help/main-chat-tools.png",
-            "imageCaption": "Menu Outils ouvert depuis le compositeur. Vous pouvez tout activer, tout désactiver ou choisir seulement certaines catégories.",
-            "content": "Le bouton clé près de la zone de discussion contrôle les catégories d'outils que le fournisseur actuel est autorisé à utiliser.\n\nComment ça marche :\n• Cliquez sur le bouton clé à molette pour ouvrir le menu des catégories.\n• Activez uniquement les catégories que vous voulez autoriser à l'IA.\n• Choisissez Aucun outil si vous voulez une conversation uniquement textuelle.\n• Aire mémorise les catégories d'outils sélectionnées et les utilise dans le cadre de la politique d'outils actuelle.\n\nPourquoi c'est important :\n• Moins de catégories activées rendent l'utilisation de l'outil plus facile à comprendre.\n• Restreindre les catégories peut réduire les risques et les effets de bord accidentels.\n• Si un fournisseur ne prend pas en charge les outils, le bouton clé est masqué."
-        },
-        {
-            "tab": "Providers",
-            "type": "text",
-            "title": "Fournisseurs d'IA",
-            "imagePath": "Assets/Help/settings-providers.png",
-            "imageCaption": "Paramètres du fournisseur avec la liste des fournisseurs à gauche et le formulaire du fournisseur sélectionné à droite.",
-            "links": [
-                {
-                    "label": "Ouvrir la configuration de l'IA",
-                    "action": "settings:providers"
-                },
-                {
-                    "label": "plateforme.openai.com",
-                    "action": "https://platform.openai.com"
-                },
-                {
-                    "label": "console.anthropic.com",
-                    "action": "https://console.anthropic.com"
-                },
-                {
-                    "label": "aistudio.google.com",
-                    "action": "https://aistudio.google.com"
-                }
-            ],
-            "content": "Un fournisseur est le service d'IA auquel Aire s'adresse en votre nom. La plupart des utilisateurs n'ont besoin de configurer qu'un seul fournisseur pour commencer.\n\nChaque entrée de fournisseur comporte quatre parties principales :\n• Nom : l'étiquette que vous verrez dans Aire.\n• Type : quel service d'IA utiliser.\n• Modèle : le modèle spécifique que vous souhaitez que ce service exécute.\n• Identifiants : généralement une clé API, ou pour Claude.ai, une connexion via le navigateur.\n\nChoix courants :\n• OpenAI : collez votre clé API depuis platform.openai.com.\n• Anthropic : connectez-vous avec Claude.ai dans le navigateur, ou collez une clé API Anthropic.\n• Google AI : collez votre clé API Gemini depuis aistudio.google.com.\n• Ollama : utilisez un serveur Ollama local sur votre propre machine. Aucune clé API n'est nécessaire.\n• Points de terminaison compatibles OpenAI : des services comme Groq, Mistral, OpenRouter, DeepSeek ou LM Studio peuvent souvent fonctionner en définissant l'URL de base.\n\nSi vous ne savez pas lequel utiliser, OpenAI ou Anthropic sont généralement les options cloud les plus simples, tandis qu'Ollama est l'option locale habituelle.\n\nLes fournisseurs peuvent être activés ou désactivés sans être supprimés. Les modifications sont enregistrées automatiquement."
-        },
-        {
-            "tab": "Providers",
-            "type": "table",
-            "title": "Modes d'appel d'outils",
-            "intro": "Aire prend en charge deux méthodes pour donner à un modèle d'IA l'accès aux outils. Le mode est choisi automatiquement en fonction du type de fournisseur, mais il peut être remplacé par modèle dans un fichier JSON personnalisé (voir Modèles personnalisés).",
-            "cols": [
-                "Mode",
-                "Comment ça marche"
-            ],
-            "rows": [
-                [
-                    "Basé sur du texte\n(par défaut : OpenAI, Anthropic)",
-                    "Les descriptions des outils sont intégrées dans l'invite système. L'IA répond avec un bloc XML <tool_call>. Cela fonctionne avec n'importe quel modèle qui suit les instructions de façon fiable."
-                ],
-                [
-                    "Appel de fonction natif\n(par défaut : Ollama, Google AI)",
-                    "Les schémas d'outils structurés sont envoyés via l'API du fournisseur. L'IA renvoie des objets d'appel de fonction structurés. C'est plus précis, mais cela nécessite une prise en charge explicite de l'API."
-                ],
-                [
-                    "Non pris en charge",
-                    "Le modèle ne peut pas utiliser d'outils. Définissez cela dans un fichier de modèle personnalisé pour ignorer les invites d'outils pour les modèles qui s'y mélangent."
-                ]
-            ]
-        },
-        {
-            "tab": "Providers",
-            "type": "table",
-            "title": "Compatibilité des fournisseurs et des modèles",
-            "intro": "Utilisez le bouton Tests de capacité pour vérifier votre combinaison spécifique de fournisseur et de modèle.",
-            "cols": [
-                "Fournisseur / point de terminaison",
-                "Mode",
-                "Remarques"
-            ],
-            "rows": [
-                [
-                    "OpenAI",
-                    "Natif",
-                    "GPT-4o, GPT-4.1, GPT-4o-mini : prise en charge fiable des outils"
-                ],
-                [
-                    "Anthropic",
-                    "Basé sur du texte",
-                    "Claude 3.5 Sonnet et plus récents : excellent suivi des instructions"
-                ],
-                [
-                    "Google AI (Gemini)",
-                    "Natif",
-                    "Gemini 2.0 Flash et versions ultérieures recommandés"
-                ],
-                [
-                    "Ollama (local)",
-                    "Natif",
-                    "qwen2.5-coder, llama3.1 et mistral-nemo fonctionnent bien ; les petits modèles varient"
-                ],
-                [
-                    "Groq (OpenAI + URL de base)",
-                    "Natif",
-                    "URL de base : https://api.groq.com/openai/v1 - très rapide"
-                ],
-                [
-                    "Mistral (OpenAI + URL de base)",
-                    "Natif",
-                    "URL de base : https://api.mistral.ai/v1"
-                ],
-                [
-                    "OpenRouter (OpenAI + URL de base)",
-                    "Natif",
-                    "URL de base : https://openrouter.ai/api/v1 - plus de 100 modèles"
-                ],
-                [
-                    "DeepSeek (OpenAI + URL de base)",
-                    "Natif",
-                    "URL de base : https://api.deepseek.com/v1"
-                ],
-                [
-                    "LM Studio (OpenAI + URL de base)",
-                    "Natif",
-                    "URL de base : http://localhost:1234/v1 - activez l'appel de fonction dans les paramètres de LM Studio"
-                ]
-            ]
-        },
-        {
-            "tab": "Providers",
-            "type": "text",
-            "title": "Tests de capacité",
-            "links": [
-                {
-                    "label": "Ouvrir la configuration de l'IA",
-                    "action": "settings:providers"
-                }
-            ],
-            "content": "Le bouton Exécuter les tests vérifie ce que le fournisseur et le modèle sélectionnés peuvent réellement faire.\n\nCe qui est testé :\n• Les tests de capacité d'appel d'outil vérifient si le modèle demande l'outil Aire attendu. Aucune action réelle sur les fichiers, le navigateur ou le système n'est exécutée.\n• Les tests de capacité de génération d'images appellent directement le chemin de génération d'images du fournisseur. Ces tests peuvent consommer le quota du fournisseur et échouer si votre compte ou votre modèle ne prend pas en charge la génération d'images.\n\nComment l'utiliser :\n• Ouvrez Paramètres ⚙ → sélectionnez un fournisseur → cliquez sur Exécuter les tests.\n• Le formulaire du fournisseur est verrouillé pendant l'exécution pour éviter les modifications de configuration en cours de test.\n• Les résultats sont mis en cache par combinaison fournisseur/modèle et se rechargent rapidement la prochaine fois.\n\nLecture des résultats :\n• ✓ (vert) : le fournisseur a géré la fonctionnalité correctement.\n• ✗ (rouge) : le fournisseur ou le modèle n'a pas atteint cette fonctionnalité.\n• Si le message mentionne des limites de quota, de solde ou de débit, l'échec vient du compte du fournisseur plutôt que d'Aire lui-même.\n\nSi un modèle échoue à de nombreux tests d'outils, essayez un autre modèle ou ajustez ses métadonnées personnalisées. Si la génération d'images échoue, vérifiez que le compte, le modèle et le quota du fournisseur l'autorisent réellement."
-        },
-        {
-            "tab": "Providers",
-            "type": "code",
-            "title": "Modèles personnalisés",
-            "intro": "Créez un fichier JSON dans le répertoire Data\\Models de l'application pour personnaliser la liste des modèles pour n'importe quel type de fournisseur. Utilisez le tableau des capacités pour déclarer ce qu'un modèle prend en charge.\n\nIndicateurs de capacité :\n• \"vision\" : le modèle accepte les pièces jointes d'images\n• \"tools\" : le modèle peut utiliser des outils\n• \"toolcallmode:native\" : force l'appel de fonctions natif\n• \"toolcallmode:text\" : force l'appel d'outils basé sur du texte\n• \"toolcallmode:unsupported\" : désactive complètement les invites d'outils.\n\nIndicateurs de format de sortie des outils (pour les modèles qui intègrent des appels d'outils dans leur réponse textuelle) :\n• \"toolformat:hermes\" : format Hermes/Qwen : <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" : format ReAct/LangChain : {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" : schéma natif d'appels d'outils OpenAI intégré dans le contenu\n• \"toolformat:text\" : format de texte par défaut d'Aire : {\"tool\":...\", ...}",
-            "content": "{\n  \"providerType\": \"OpenAI\",\n  \"models\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"vision\", \"tools\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (pas d'outils)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"mon-modele-affine\",\n      \"displayName\": \"Mon réglage fin\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
-        },
-        {
-            "tab": "Tools & Voice",
-            "type": "text",
-            "title": "Outils d'IA",
-            "links": [
-                {
-            "label": "Examiner les approbations des actions d'IA",
-                    "action": "settings:auto-accept"
-                }
-            ],
-            "content": "Certains modèles d'IA peuvent demander à Aire d'effectuer des actions à leur place. Aire appelle ces actions des outils.\n\nImportant : les outils ne fonctionnent pas en silence. Aire vous montre ce que l'IA veut faire, puis vous approuvez ou refusez.\n\nExemples de ce que les outils peuvent faire :\n• Lire ou écrire des fichiers.\n• Exécuter des commandes shell.\n• Ouvrir et lire des pages Web.\n• Inspecter les onglets du navigateur.\n• Prendre des captures d'écran.\n• Taper, cliquer ou déplacer la souris.\n• Lire ou envoyer un e-mail.\n\nSi vous débutez avec cette fonctionnalité, l'habitude la plus sûre est simple : lisez la demande d'action avant de l'approuver. Approuvez les actions en lecture seule lorsqu'elles ont du sens et soyez plus prudent avec les actions qui modifient des fichiers, envoient des messages ou contrôlent le clavier et la souris."
-        },
-        {
-            "tab": "Tools & Voice",
-            "type": "text",
-            "title": "Accepter automatiquement les profils",
-            "links": [
-                {
-            "label": "Examiner les approbations des actions d'IA",
-                    "action": "settings:auto-accept"
-                }
-            ],
-            "content": "Les profils d'acceptation automatique vous permettent de définir les actions qu'Aire peut approuver automatiquement sans vous interrompre à chaque fois.\n\nLes exemples intégrés incluent Développeur, Navigateur d'actualités et Conservateur.\n\nÀ garder à l'esprit :\n• Les profils sont une commodité, pas un remplacement de la sécurité.\n• Commencez prudemment et n'acceptez automatiquement que les actions en lesquelles vous avez vraiment confiance.\n• Les écritures de fichiers, le contrôle des entrées et les effets secondaires externes valent généralement la peine d'être gardés manuellement.\n\nEn cas de doute, laissez l'acceptation automatique restrictive et examinez les actions une par une."
-        },
-        {
-            "tab": "Connexions",
-            "type": "text",
-            "title": "Serveurs MCP",
-            "imagePath": "Assets/Help/settings-connections.png",
-            "imageCaption": "Paramètres de connexions avec le catalogue MCP et la liste des serveurs installés.",
-            "links": [
-                {
-            "label": "Ouvrir les paramètres de connexion",
-                    "action": "settings:connections"
-                }
-            ],
-            "content": "Les serveurs MCP sont des services d'assistance externes qui donnent à Aire plus d'outils et de sources de données. MCP signifie Model Context Protocol.\n\nEn clair, un serveur MCP est un pont entre Aire et un autre système, comme :\n• votre système de fichiers,\n• GitHub,\n• SQLite,\n• des outils de récupération Web,\n• des outils de mémoire,\n• Slack, Gmail ou Notion.\n\nComment Aire les gère :\n• L'onglet Connexions comprend un catalogue organisé de serveurs MCP courants.\n• Vous pouvez les installer, les supprimer, les activer, les désactiver et les modifier depuis l'application.\n• Certains serveurs ont besoin d'informations d'identification supplémentaires ou de Node.js/npm sur la machine.\n\nBon conseil de débutant :\n• Commencez avec un serveur simple, comme Filesystem ou Web Fetch.\n• Lisez la description avant de l'installer.\n• Traitez un serveur MCP comme n'importe quelle autre intégration : utile, mais à laquelle vous devez faire confiance avant de l'activer."
-        },
-        {
-            "tab": "Tools & Voice",
-            "type": "text",
-            "title": "Sessions clavier et souris",
-            "links": [
-                {
-            "label": "Examiner les approbations des actions d'IA",
-                    "action": "settings:auto-accept"
-                }
-            ],
-            "content": "Certaines tâches nécessitent que l'IA contrôle le clavier et la souris. Lorsqu'une session est active :\n\n• Une bannière apparaît en bas de la fenêtre de discussion pour indiquer que la session est active.\n• Un bouton flottant ⏹ STOP SESSION apparaît en haut à droite de votre écran ; cliquez dessus à tout moment pour annuler immédiatement.\n• Dites « AIRE STOP » pour annuler à la voix.\n• Cliquez sur « Fin de session » dans la bannière pour annuler.\n\nL'IA demandera l'approbation pour chaque action individuelle (appui sur une touche, clic de souris, etc.) avant de l'exécuter."
-        },
-        {
-            "tab": "Tools & Voice",
-            "type": "text",
-            "title": "Entrée vocale",
-            "links": [
-                {
-            "label": "Ouvrir les paramètres vocaux",
-                    "action": "settings:voice"
-                }
-            ],
-            "content": "Cliquez sur le bouton 🎤 pour démarrer la reconnaissance vocale. Aire utilise la reconnaissance vocale intégrée à Windows : aucune clé API ni connexion Internet n'est requise.\n\n• Parlez normalement. Vos mots apparaissent dans la zone de saisie pendant que vous parlez.\n• Lorsque vous arrêtez de parler, un compte à rebours (5 → 1) apparaît sur le bouton. Si vous restez silencieux, le message est envoyé automatiquement à 0.\n• Recommencez à parler à tout moment pour réinitialiser le compte à rebours.\n• Cliquez à nouveau sur le bouton (qui affiche ⏹) pour arrêter sans envoyer.\n\nLa précision de la reconnaissance vocale dépend de la langue de votre Windows et de la qualité du microphone. Vous pouvez entraîner la reconnaissance vocale Windows via Paramètres Windows → Heure et langue → Parole."
-        },
-        {
-            "tab": "Tools & Voice",
-            "type": "table",
-            "title": "Commandes vocales",
-            "intro": "Dites « AIRE » suivi de l'un de ces mots lorsque le microphone est actif :",
-            "cols": [
-                "Commande",
-                "Effet"
-            ],
-            "rows": [
-                [
-                    "ENVOYER AIRE",
-                    "Envoyer immédiatement le message actuel"
-                ],
-                [
-                    "AIRE PAUSE",
-                    "Suspendre le compte à rebours du silence"
-                ],
-                [
-                    "CV AIR",
-                    "Reprendre le compte à rebours"
-                ],
-                [
-                    "AIRE CLAIRE",
-                    "Effacer la zone de saisie"
-                ],
-                [
-                    "AIRE ANNULER",
-                    "Effacer la zone de saisie"
-                ],
-                [
-                    "AIRE ANNULER",
-                    "Arrêter d'écouter sans envoyer"
-                ],
-                [
-                    "AIRE NOUVEAU",
-                    "Démarrer une nouvelle conversation"
-                ],
-                [
-                    "PARAMÈTRES D'AIRE",
-                    "Ouvrir la fenêtre Paramètres"
-                ],
-                [
-                    "AIRE OUVERT/SPECTACLE",
-                    "Afficher la fenêtre de discussion principale"
-                ],
-                [
-                    "AIRE FERMER/MASQUER",
-                    "Masquer la fenêtre de discussion principale"
-                ],
-                [
-                    "AIRE OUI/NON",
-                    "Approuver ou refuser une action IA en attente"
-                ],
-                [
-                    "ARRÊT AIRE",
-                    "Arrêt d'urgence : mettez immédiatement fin à toute session clavier/souris active"
-                ]
-            ]
-        },
-        {
-            "tab": "Tools & Voice",
-            "type": "text",
-            "title": "Sortie vocale",
-            "links": [
-                {
-            "label": "Ouvrir les paramètres vocaux",
-                    "action": "settings:voice"
-                }
-            ],
-            "content": "Aire peut lire les réponses de l'IA à haute voix à l'aide de la synthèse vocale Windows. Activez-la dans Paramètres (⚙) → Sortie vocale.\n\n• Choisissez de prononcer toutes les réponses, ou seulement lorsque vous utilisez le microphone.\n• Sélectionnez une voix et ajustez la vitesse de lecture.\n• Activez ou désactivez rapidement la sortie vocale à l'aide de l'icône de haut-parleur située à côté du bouton du microphone."
-        },
-        {
-            "tab": "Apparence",
-            "type": "text",
-            "title": "Apparence",
-            "links": [
-                {
-            "label": "Ouvrir les paramètres d'apparence",
-                    "action": "settings:appearance"
-                }
-            ],
-            "content": "Ouvrez Paramètres (⚙) → Apparence pour modifier l'apparence de l'application.\n\n• Thème : basculez entre Foncé et Clair (Beige).\n• Teinte de couleur : faites glisser le curseur pour appliquer une teinte à l'ensemble de l'interface. L'extrémité gauche (noire) et l'extrémité droite (blanche) signifient qu'il n'y a aucune teinte ; le curseur est sur des niveaux de gris purs par défaut.\n• Taille de la police : maintenez Ctrl enfoncé et faites défiler la molette de la souris sur la zone de discussion ou de saisie pour augmenter ou diminuer la taille de la police. Le réglage est enregistré automatiquement.\n\nTous les paramètres d'apparence sont enregistrés et restaurés au prochain lancement."
-        },
-        {
-            "tab": "Local API",
-            "type": "text",
-            "title": "Qu'est-ce que l'API locale ?",
-            "imagePath": "Assets/Help/settings-connections.png",
-            "imageCaption": "Paramètres de connexion où l'accès à l'API locale, les comptes de messagerie et les serveurs MCP sont configurés.",
-            "links": [
-                {
-            "label": "Ouvrir les paramètres de connexion",
-                    "action": "settings:connections"
-                }
-            ],
-            "content": "L'API locale permet à un autre programme sur le même ordinateur de communiquer avec Aire.\n\nPour les non-développeurs : vous n'avez généralement pas besoin de cette fonctionnalité.\n\nPour les développeurs et les utilisateurs avancés : c'est le moyen le plus simple de connecter votre propre script, outil, automatisation ou application de bureau à Aire. Un programme local peut :\n• demander à Aire d'afficher ou de masquer sa fenêtre principale,\n• lister les conversations et lire les messages,\n• envoyer un message à la conversation active,\n• changer de fournisseur ou de conversation,\n• inspecter les approbations d'outils en attente,\n• et appeler directement Aire Tools.\n\nComment ça marche :\n• Aire écoute sur le port TCP 51234.\n• Il écoute uniquement sur 127.0.0.1, les autres ordinateurs ne peuvent donc pas l'atteindre directement.\n• Chaque requête est un objet JSON envoyé sur une seule ligne.\n• Chaque réponse est un objet JSON renvoyé sous la forme d'une seule ligne.\n\nPour l'utiliser, ouvrez d'abord les paramètres de connexions et activez l'accès à l'API locale."
-        },
-        {
-            "tab": "Local API",
-            "type": "text",
-            "title": "Démarrage rapide de l'API locale",
-            "links": [
-                {
-            "label": "Ouvrir les paramètres de connexion",
-                    "action": "settings:connections"
-                }
-            ],
-            "content": "Pour connecter une autre application à Aire, utilisez cette liste de contrôle :\n\n1. Ouvrez les paramètres de connexions.\n2. Activez l'accès à l'API locale.\n3. Copiez le jeton d'authentification.\n4. Depuis votre application ou votre script, ouvrez une connexion TCP à 127.0.0.1:51234.\n5. Envoyez une ligne JSON avec la méthode, le jeton et les paramètres facultatifs.\n6. Lisez une ligne JSON.\n7. Fermez la connexion.\n\nUn bon premier test est la méthode ping. Si le ping fonctionne, essayez show_main_window, list_providers et create_conversation.\n\nOrdre d'intégration recommandé :\n• ping\n• show_main_window\n• list_providers\n• create_conversation\n• list_conversations\n• get_messages\n• send_message\n• get_state\n• wait_for_ending_approval si vous voulez coopérer avec les approbations d'outils\n• execute_tool seulement après être à l'aise avec le flux d'approbation et le modèle de sécurité"
-        },
-        {
-            "tab": "Local API",
-            "type": "text",
-            "title": "Authentification",
-            "links": [
-                {
-            "label": "Ouvrir les paramètres de connexion",
-                    "action": "settings:connections"
-                },
-                {
-            "label": "Examiner les approbations des actions d'IA",
-                    "action": "settings:auto-accept"
-                }
-            ],
-            "content": "Chaque demande d'API locale doit inclure le jeton d'authentification.\n\nOù l'obtenir :\n• Ouvrez les paramètres de connexions.\n• Recherchez la section API locale.\n• Cliquez sur Copier pour copier le jeton.\n• Collez ce jeton dans la configuration de votre application ou de votre script.\n\nCe qu'il faut savoir :\n• Si vous cliquez sur Régénérer, les anciennes intégrations cesseront de fonctionner jusqu'à ce qu'elles utilisent le nouveau jeton.\n• L'API doit être activée, pas seulement configurée.\n• Tout processus sur votre ordinateur connaissant le jeton peut contrôler Aire.\n\nConseils pratiques pour les développeurs :\n• Conservez le jeton dans un fichier de configuration local ou une variable d'environnement, pas en dur dans le contrôle de code source.\n• Traitez-le comme un secret local.\n• Si vous soupçonnez une fuite, régénérez-le."
-        },
-        {
-            "tab": "Local API",
-            "type": "code",
-            "title": "Protocole",
-            "intro": "L'API locale est un protocole JSON sur ligne unique transporté sur TCP.\n\nModèle de connexion :\n• connectez-vous à 127.0.0.1:51234\n• écrivez exactement une requête JSON compacte suivie d'une nouvelle ligne\n• lisez exactement une ligne de réponse JSON\n• fermez la connexion\n\nForme de la demande :\n{ \"method\": \"METHODE\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nForme de la réponse :\n{ \"ok\": true, \"result\": ... }\nou\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nSi vous écrivez une bibliothèque cliente, construisez d'abord autour de ce modèle simple requête-réponse. Vous n'avez pas besoin de HTTP ou de WebSockets pour commencer.",
-            "content": "{ \"method\": \"ping\", \"token\": \"VOTRE_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"VOTRE_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ok\": true, \"result\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"VOTRE_TOKEN\", \"parameters\": { \"text\": \"Bonjour !\" } }\n{ \"ok\": true, \"result\": true }"
-        },
-        {
-            "tab": "Local API",
-            "type": "table",
-            "title": "Méthodes disponibles",
-            "cols": [
-                "Méthode",
-                "Paramètres",
-                "Description"
-            ],
-            "rows": [
-                [
-                    "ping",
-                    "—",
-                    "Vérifie si Aire est en cours d'exécution. Renvoie le même instantané d'état que get_state."
-                ],
-                [
-                    "get_state",
-                    "—",
-                    "Fournisseur actuel, modèle, ID de conversation active et état de l'API locale."
-                ],
-                [
-                    "show_main_window",
-                    "—",
-                    "Amène la fenêtre de discussion Aire au premier plan."
-                ],
-                [
-                    "hide_main_window",
-                    "—",
-                    "Masque la fenêtre de discussion dans la barre d'état."
-                ],
-                [
-                    "open_settings",
-                    "—",
-                    "Ouvre la fenêtre Paramètres."
-                ],
-                [
-                    "navigateur_ouvert",
-                    "—",
-                    "Ouvre la fenêtre du navigateur Aire."
-                ],
-                [
-                    "list_providers",
-                    "—",
-                    "Tous les fournisseurs d'IA configurés avec identifiants et noms."
-                ],
-                [
-                    "create_provider",
-                    "name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritedCredentialsFromProviderId?",
-                    "Crée un nouveau fournisseur à partir de l'API locale."
-                ],
-                [
-                    "liste_conversations",
-                    "—",
-                    "Toutes les conversations enregistrées (ID, titre, date)."
-                ],
-                [
-                    "create_conversation",
-                    "titre?",
-                    "Crée une nouvelle conversation et y accède."
-                ],
-                [
-                    "select_conversation",
-                    "ID de conversation",
-                    "Bascule vers une conversation existante."
-                ],
-                [
-                    "get_messages",
-                    "ID de conversation",
-                    "Tous les messages d'une conversation."
-                ],
-                [
-                    "set_provider",
-                    "ID du fournisseur",
-                    "Change le fournisseur d'IA actif."
-                ],
-                [
-                    "set_provider_model",
-                    "ID du fournisseur, modèle",
-                    "Change le modèle d'un fournisseur."
-                ],
-                [
-                    "envoyer_message",
-                    "texte",
-                    "Envoie un message à la conversation active. Renvoie true une fois accepté."
-                ],
-                [
-                    "list_ending_approvals",
-                    "—",
-                    "Les appels d'outils sont actuellement en attente d'approbation."
-                ],
-                [
-                    "wait_for_ending_approval",
-                    "timeout_secondes ?",
-                    "Attend la prochaine approbation d'outil en attente ou renvoie null à l'expiration du délai."
-                ],
-                [
-                    "approuve_tool_call",
-                    "indice",
-                    "Approuve un appel d'outil en attente par son index de liste actuel."
-                ],
-                [
-                    "refuser_tool_call",
-                    "indice",
-                    "Refuse un appel d'outil en attente par son index de liste actuel."
-                ],
-                [
-                    "execute_tool",
-                    "tool, parameters, wait_for_approval?, approved_timeout_seconds?",
-                    "Exécute directement un outil Aire et attend éventuellement l'approbation."
-                ],
-                [
-                    "get_trace",
-                    "after_id?, limit?",
-                    "Lit les entrées de trace d'exécution de l'outil pour le débogage."
-                ],
-                [
-                    "clear_trace",
-                    "—",
-                    "Efface la trace d'exécution de l'outil."
-                ]
-            ]
-        },
-        {
-            "tab": "Local API",
-            "type": "text",
-            "title": "Par quelles méthodes dois-je commencer ?",
-            "content": "Si vous créez une autre application qui se connecte à Aire, commencez par les méthodes les plus simples.\n\nOrdre d'apprentissage recommandé :\n• ping : confirme qu'Aire est en cours d'exécution et que votre jeton est valide.\n• show_main_window : confirme que vous pouvez déclencher une action d'application visible.\n• get_state : inspecte la conversation actuelle et l'état du fournisseur.\n• list_conversations et get_messages : lisent les données en toute sécurité.\n• send_message : effectue un aller-retour complet requête-réponse.\n• list_ending_approvals, apply_tool_call, deny_tool_call : s'intègrent au modèle d'approbation d'Aire.\n• execute_tool : seulement après avoir compris les implications en matière de sécurité et le comportement d'approbation.\n\nDans la plupart des intégrations, send_message et les méthodes en lecture seule suffisent."
-        },
-        {
-            "tab": "Local API",
-            "type": "code",
-            "title": "Exemple PowerShell",
-            "intro": "Cet exemple montre la forme la plus simple et la plus utile d'un client API locale dans PowerShell. Enregistrez votre jeton dans les paramètres de connexions, collez-le ci-dessous, puis essayez un ping avant toute autre chose.",
-            "content": "$TOKEN = \"collez votre jeton ici\"\n$PORT = 51234\n\nfunction Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; token = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = [Net.Sockets.TcpClient]::new(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    return $resp | ConvertFrom-Json\n}\n\n# Vérifiez qu'Aire fonctionne et inspectez l'état\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Créer et sélectionner une conversation\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).result\nInvoke-Aire \"select_conversation\" @{ conversationId = $id }\n\n# Envoyer un message (renvoie true une fois accepté)\nInvoke-Aire \"send_message\" @{ text = \"Bonjour de PowerShell\" }\n\n# Lire les messages de conversation une fois le tour terminé\n(Invoke-Aire \"get_messages\" @{ conversationId = $id }).result\n\n# Exécuter un outil directement\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; parameters = @{ path = \"C:/Temp/notes.txt\" } }"
-        },
-        {
-            "tab": "Local API",
-            "type": "code",
-            "title": "Exemple Python",
-            "intro": "Cet exemple utilise uniquement la bibliothèque standard Python. C'est un bon point de départ si vous voulez ajouter le support d'Aire à un autre outil local.",
-            "content": "import socket, json\n\nTOKEN = \"collez votre jeton ici\"\n\ndef aire(method, **params):\n    req = {\"method\": method, \"token\": TOKEN}\n    if params:\n        req[\"parameters\"] = params\n    with socket.create_connection((\"127.0.0.1\", 51234)) as s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(state[\"result\"])\n\nconversation_id = aire(\"create_conversation\", title=\"Test API\")[\"result\"]\naire(\"select_conversation\", conversationId=conversation_id)\naire(\"send_message\", text=\"Bonjour de Python\")\n\nmessages = aire(\"get_messages\", conversationId=conversation_id)[\"result\"]\nprint(messages)\n\nresult = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    parameters={\"path\": \"C:/Temp/notes.txt\"}\n)\nprint(result)"
-        },
-        {
-            "tab": "Local API",
-            "type": "text",
-            "title": "Conseils d'intégration",
-            "content": "• Vérifiez toujours ok avant d'utiliser le résultat. Si ok est faux, lisez le message d'erreur et gérez-le.\n• send_message confirme uniquement qu'Aire a accepté le message dans la conversation active. Si votre intégration a besoin de la réponse finale, suivez avec get_messages ou surveillez les approbations et les traces.\n• Conservez un seul appel de méthode par connexion TCP. Connectez-vous, envoyez, lisez, fermez.\n• Commencez par des actions en lecture seule et des actions visibles avant d'utiliser execute_tool.\n• Si votre intégration doit coopérer avec le modèle de sécurité d'Aire, utilisez list_ending_approvals, wait_for_ending_approval, apply_tool_call et deny_tool_call au lieu de supposer que chaque action s'exécute immédiatement.\n• execute_tool est puissant car il permet à votre code d'appeler directement les outils Aire. Utilisez-le avec précaution.\n• L'API est volontairement locale uniquement. N'exposez pas le port 51234 à votre réseau ou à Internet.\n• Pour des outils internes de type production, stockez le jeton en dehors du code source et intégrez le ping à votre contrôle de santé de démarrage."
+          "label": "Ouvrir la configuration de l'IA",
+          "action": "settings:providers"
         }
-    ]
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-picker.png",
+      "imageCaption": "L'assistant d'installation vous aide à choisir un fournisseur avant de commencer à discuter.",
+      "content": "L'assistant d'installation apparaît la première fois que vous lancez Aire, ou lorsqu'aucun fournisseur d'IA n'est encore configuré. Son rôle est de vous faire passer d'une nouvelle installation à un chat fonctionnel le plus vite possible.\n\nCe que fait l'assistant, étape par étape :\n• Bienvenue : explique ce qu'est Aire et vous permet de choisir la langue de l'application.\n• Sélecteur de fournisseur : affiche les méthodes courantes pour connecter Aire à des services d'IA.\n• Configuration du fournisseur : demande les détails nécessaires pour le fournisseur que vous avez choisi.\n• Terminer : confirme qu'Aire est prêt et vous amène à l'application principale.\n\nSi vous débutez avec l'IA, l'assistant est le meilleur point de départ. Il commence par le parcours le plus simple et masque les paramètres avancés jusqu'à ce que vous en ayez besoin.\n\nVous pouvez ignorer la configuration et revenir plus tard, mais il vous faut au moins un fournisseur configuré avant qu'Aire puisse répondre aux messages de discussion."
+    },
+    {
+      "tab": "Assistant de configuration",
+      "type": "text",
+      "title": "Choisir un fournisseur",
+      "links": [
+        {
+          "label": "Ouvrez l'assistant de configuration",
+          "action": "onboarding"
+        },
+        {
+          "label": "plateforme.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "Le sélecteur de fournisseur est l'endroit où vous choisissez à quel service d'IA Aire parlera en votre nom.\n\nVoici ce que signifient les options principales :\n• OpenAI : un point de départ courant si vous voulez une configuration cloud simple et une large prise en charge des modèles.\n• API Anthropic : une autre option cloud puissante, connue pour les modèles Claude.\n• Claude.ai : utilise une connexion via le navigateur au lieu d'une clé API.\n• Google AI : se connecte aux modèles de discussion Gemini via Google AI Studio.\n• Google AI Images : une configuration dédiée à la génération d'images Gemini.\n• Ollama : exécute les modèles localement sur votre ordinateur. C'est bon pour la confidentialité et l'utilisation hors ligne, mais cela dépend de votre matériel.\n• Codex : utilise le pont CLI Codex local au lieu d'une clé API classique.\n• Groq, OpenRouter, DeepSeek, Inception et z.ai : autres fournisseurs ou points de terminaison compatibles OpenAI, souvent utiles si vous avez déjà un compte chez eux.\n\nLequel choisir ?\n• Si vous voulez la configuration cloud la plus simple pour le chat : commencez par OpenAI, Anthropic ou Google AI.\n• Si vous voulez du local et du privé : choisissez Ollama.\n• Si vous voulez générer des images Gemini : choisissez Google AI Images.\n• Si vous payez déjà pour un fournisseur spécifique ailleurs : choisissez ce même fournisseur ici.\n\nVous n'êtes pas bloqué. L'assistant vous aide d'abord à ajouter un fournisseur, et vous pouvez en ajouter d'autres plus tard dans Paramètres."
+    },
+    {
+      "tab": "Assistant de configuration",
+      "type": "text",
+      "title": "Renseigner les détails du fournisseur",
+      "links": [
+        {
+          "label": "Ouvrez l'assistant de configuration",
+          "action": "onboarding"
+        },
+        {
+          "label": "Ouvrir la configuration de l'IA",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/onboarding-provider-setup.png",
+      "imageCaption": "Étape de configuration du fournisseur avec son type, son nom, ses identifiants, son modèle et le test de connexion.",
+      "content": "Après avoir choisi un fournisseur, l'assistant vous demande uniquement les informations dont ce fournisseur a besoin.\n\nChamps typiques :\n• Type de fournisseur : le service que vous souhaitez utiliser.\n• Nom : l'étiquette que Aire affichera dans la fenêtre de discussion.\n• Clé API : le jeton secret qui permet à Aire de communiquer avec le fournisseur. Certains fournisseurs utilisent plutôt une connexion via le navigateur et certains fournisseurs locaux n'ont pas besoin de clé API du tout.\n• URL de base : nécessaire uniquement pour certains services compatibles OpenAI ou certaines configurations auto-hébergées.\n• Modèle : le modèle d'IA spécifique que vous souhaitez utiliser.\n\nNotes spécifiques au fournisseur :\n• Claude.ai utilise une connexion via le navigateur au lieu d'une clé API classique.\n• Ollama est local et fonctionne généralement sans clé API.\n• Codex utilise le pont CLI Codex local, ce qui permet à l'assistant de proposer l'installation du CLI au lieu de demander une clé API classique.\n• Google AI Images est destiné à la génération d'images plutôt qu'au chat classique.\n\nLe bouton Tester la connexion est là pour vous aider à confirmer la configuration avant de terminer. Si le test réussit, Aire peut généralement utiliser ce fournisseur immédiatement.\n\nConseils pratiques :\n• Si vous ne savez pas quel modèle choisir, commencez par la suggestion par défaut.\n• Si vous voyez un champ Clé API, collez la clé exactement telle qu'elle est fournie par le service.\n• Si un fournisseur propose à la fois un accès API et une connexion via le navigateur, privilégiez l'accès API si vous voulez le comportement d'automatisation et d'intégration le plus stable.\n\nUne fois l'assistant terminé, vous pourrez toujours modifier l'un de ces paramètres plus tard dans l'onglet Fournisseurs d'IA."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Aperçu",
+      "links": [
+        {
+          "label": "Configurez votre première IA",
+          "action": "settings:providers"
+        },
+        {
+          "label": "Changer le look d'Aire",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "Aire est une application de chat de bureau qui reste dans votre barre d'état système jusqu'à ce que vous en ayez besoin. Vous pouvez la considérer comme une fenêtre de discussion unique pouvant se connecter à de nombreux services d'IA.\n\nSi vous débutez avec l'IA, le point de départ habituel est simple :\n• Ouvrez la configuration de l'IA.\n• Ajoutez un fournisseur, comme OpenAI, Anthropic, Google AI ou Ollama.\n• Choisissez un modèle.\n• Tapez une question dans la zone de discussion et appuyez sur Entrée.\n\nCe qu'Aire peut faire :\n• Parler à différents services d'IA depuis une seule application.\n• Enregistrer vos conversations sur votre ordinateur.\n• Laisser l'IA utiliser des outils, avec votre approbation, pour lire des fichiers, exécuter des commandes, parcourir des pages, etc.\n• Utiliser la saisie et la sortie vocales avec les fonctionnalités vocales de Windows.\n• Permettre à d'autres applications locales de communiquer avec Aire via l'API locale."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Langue",
+      "links": [
+        {
+          "label": "Configurez votre première IA",
+          "action": "settings:appearance"
+        }
+      ],
+      "imagePath": "Assets/Help/settings-language.png",
+      "imageCaption": "Le sélecteur de langue dans Paramètres → Apparence.",
+      "content": "Ouvrez Paramètres (⚙) → Apparence et faites défiler jusqu’à la section Langue.\n\nCliquez sur la liste déroulante et choisissez l’une des langues disponibles. L’application se met à jour immédiatement, sans redémarrage.\n\nLa langue est enregistrée automatiquement et restaurée au prochain lancement. Vous pouvez aussi la changer dès la première étape de l’assistant d’installation."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Icône de la barre d'état",
+      "content": "Aire s'exécute dans la barre d'état système (coin inférieur droit de la barre des tâches).\n\n• Cliquez avec le bouton gauche ou le bouton droit sur l'icône de la barre d'état pour ouvrir la fenêtre de discussion.\n• Cliquez avec le bouton droit sur l'icône de la barre d'état pour accéder aux options : Ouvrir, Paramètres, Quitter.\n• Fermer la fenêtre la masque ; Aire continue de fonctionner en arrière-plan.\n• Pour quitter complètement, cliquez avec le bouton droit sur l'icône de la barre d'état et choisissez Quitter."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Command Palette",
+      "imagePath": "Assets/Help/main-chat-command-palette.png",
+      "imageCaption": "The command palette provides quick access to actions, templates, and navigation.",
+      "links": [
+        {
+          "label": "Open Settings",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "Press Ctrl+K to open the command palette — a quick-access menu that lets you trigger common actions without reaching for the mouse.\n\nWhat you can do from the palette:\n• Start a new conversation.\n• Toggle tools on or off.\n• Toggle Orchestrator Mode.\n• Open Settings.\n• Export the current conversation.\n• Apply a prompt template (if you have any configured).\n• Switch assistant mode.\n\nStart typing to filter the list. Use ↑ / ↓ to navigate and press Enter to select."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Conversation Export",
+      "links": [
+        {
+          "label": "Open Settings",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "You can export any conversation as a Markdown file.\n\nHow to export:\n• Press Ctrl+K to open the command palette and choose Export Conversation.\n• Or right-click a conversation in the sidebar and choose Export from the context menu.\n\nThe exported file includes:\n• Provider name, model, and timestamps.\n• All user and assistant messages.\n• Image references as notes (images are not embedded).\n• Tool results are cleaned up for readability.\n\nThe file is saved wherever you choose in the save dialog."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Conversation Branching",
+      "content": "You can fork a conversation from any point in its history.\n\nHow to branch:\n• Right-click any message in the chat and choose Branch from here.\n• A new conversation is created with all messages up to that point.\n• The original conversation is not changed.\n• The branched conversation appears indented under its parent in the sidebar, forming a tree.\n\nThis is useful when you want to explore a different direction without losing the original thread.\n\nTo delete a branch, right-click it in the sidebar and choose Delete."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Chat",
+      "links": [
+        {
+          "label": "Fournisseurs ouverts",
+          "action": "settings:providers"
+        }
+      ],
+      "imagePath": "Assets/Help/main-chat.png",
+      "imageCaption": "Fenêtre de discussion principale avec le sélecteur de fournisseur, la zone de conversation, la recherche et le compositeur.",
+      "content": "• Tapez votre message dans la zone de saisie en bas et appuyez sur Entrée pour l'envoyer.\n• Appuyez sur Maj+Entrée pour ajouter une nouvelle ligne sans envoyer.\n• Appuyez sur ↑ / ↓ pour parcourir les messages précédents que vous avez envoyés (cela ne fonctionne que lorsque le curseur se trouve sur la première ou la dernière ligne de la zone de saisie).\n• Faites glisser une image dans la zone de saisie pour la joindre à votre message (nécessite un modèle compatible avec la vision).\n• Appuyez sur Ctrl+F pour effectuer une recherche dans la conversation. Utilisez ↑ / ↓ ou les boutons fléchés pour passer d'une correspondance à l'autre. Appuyez sur Échap pour fermer la barre de recherche.\n• Cliquez avec le bouton droit sur la zone de discussion pour copier ou enregistrer la conversation sous forme de fichier texte.\n• Le bouton 🗑 efface la conversation en cours (demande d'abord une confirmation).\n• Le bouton 💬 dans la barre latérale ouvre l'historique de vos conversations."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "table",
+      "title": "Raccourcis clavier",
+      "cols": [
+        "Raccourci",
+        "Action"
+      ],
+      "rows": [
+        [
+          "Entrer",
+          "Envoyer un message"
+        ],
+        [
+          "Maj+Entrée",
+          "Nouvelle ligne dans la zone de saisie"
+        ],
+        [
+          "↑ / ↓",
+          "Naviguer dans l'historique des messages (lorsque le curseur est sur la première/dernière ligne)"
+        ],
+        [
+          "Ctrl+F",
+          "Rechercher une conversation"
+        ],
+        [
+          "Ctrl+Défilement",
+          "Ajuster la taille de la police"
+        ],
+        [
+          "Échap",
+          "Fermer la barre de recherche / fermer la boîte de dialogue"
+        ]
+      ]
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Conseils",
+      "content": "• Vous pouvez configurer plusieurs fournisseurs d'IA et basculer entre eux en haut de la fenêtre de discussion. Chaque conversation mémorise son fournisseur et son assistant.\n• Redimensionnez la fenêtre en faisant glisser n'importe quel bord, y compris le haut.\n• Les conversations et les paramètres sont stockés localement sous %LOCALAPPDATA%\\Aire.\n• L'IA peut demander des outils pour des fichiers, des commandes, des actions de navigateur, etc., mais Aire demande toujours une approbation sauf si une règle d'acceptation automatique s'applique.\n• Si une réponse de l'IA est interrompue, le modèle a peut-être atteint sa limite de jetons ou de sortie. Demandez-lui de continuer, réduisez la taille de la tâche ou utilisez un modèle avec une fenêtre contextuelle plus grande."
+    },
+    {
+      "tab": "Getting Started",
+      "type": "text",
+      "title": "Modes assistants",
+      "imagePath": "Assets/Help/main-chat-modes.png",
+      "imageCaption": "Menu du mode assistant ouvert depuis l'en-tête principal. Chaque conversation garde son propre mode.",
+      "content": "Le bouton de mode dans l'en-tête principal modifie la façon dont Aire présente votre demande avant de l'envoyer au fournisseur.\n\nLes modes actuels incluent Architecte, Écrivain créatif, Développeur, Général, Peintre, Philosophe, Psychologue, Scientifique, Sécurité et Enseignant.\n\nÀ quoi servent les modes :\n• Ils ajustent le style et les priorités de l'assistant.\n• Le mode sélectionné est enregistré par conversation, ce qui permet à des discussions différentes de conserver des rôles différents.\n• Général est la valeur par défaut pour les nouvelles conversations.\n• Les différents fournisseurs conservent toujours leurs propres particularités, mais Aire transmet systématiquement le mode choisi comme consigne partagée.\n\nExemples pratiques :\n• Développeur : idéal pour le code, le débogage et les tâches terminal.\n• Architecte : idéal pour la structure, les compromis et la planification.\n• Enseignant : idéal pour les explications et les conseils étape par étape.\n• Peintre : idéal pour les invites et la génération orientées image lorsque le fournisseur actuel le prend en charge."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Catégories d'outils",
+      "imagePath": "Assets/Help/main-chat-tools.png",
+      "imageCaption": "Menu Outils ouvert depuis le compositeur. Vous pouvez tout activer, tout désactiver ou choisir seulement certaines catégories.",
+      "content": "Le bouton clé près de la zone de discussion contrôle les catégories d'outils que le fournisseur actuel est autorisé à utiliser.\n\nComment ça marche :\n• Cliquez sur le bouton clé à molette pour ouvrir le menu des catégories.\n• Activez uniquement les catégories que vous voulez autoriser à l'IA.\n• Choisissez Aucun outil si vous voulez une conversation uniquement textuelle.\n• Aire mémorise les catégories d'outils sélectionnées et les utilise dans le cadre de la politique d'outils actuelle.\n\nPourquoi c'est important :\n• Moins de catégories activées rendent l'utilisation de l'outil plus facile à comprendre.\n• Restreindre les catégories peut réduire les risques et les effets de bord accidentels.\n• Si un fournisseur ne prend pas en charge les outils, le bouton clé est masqué."
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "Fournisseurs d'IA",
+      "imagePath": "Assets/Help/settings-providers.png",
+      "imageCaption": "Paramètres du fournisseur avec la liste des fournisseurs à gauche et le formulaire du fournisseur sélectionné à droite.",
+      "links": [
+        {
+          "label": "Ouvrir la configuration de l'IA",
+          "action": "settings:providers"
+        },
+        {
+          "label": "plateforme.openai.com",
+          "action": "https://platform.openai.com"
+        },
+        {
+          "label": "console.anthropic.com",
+          "action": "https://console.anthropic.com"
+        },
+        {
+          "label": "aistudio.google.com",
+          "action": "https://aistudio.google.com"
+        }
+      ],
+      "content": "Un fournisseur est le service d'IA auquel Aire s'adresse en votre nom. La plupart des utilisateurs n'ont besoin de configurer qu'un seul fournisseur pour commencer.\n\nChaque entrée de fournisseur comporte quatre parties principales :\n• Nom : l'étiquette que vous verrez dans Aire.\n• Type : quel service d'IA utiliser.\n• Modèle : le modèle spécifique que vous souhaitez que ce service exécute.\n• Identifiants : généralement une clé API, ou pour Claude.ai, une connexion via le navigateur.\n\nChoix courants :\n• OpenAI : collez votre clé API depuis platform.openai.com.\n• Anthropic : connectez-vous avec Claude.ai dans le navigateur, ou collez une clé API Anthropic.\n• Google AI : collez votre clé API Gemini depuis aistudio.google.com.\n• Ollama : utilisez un serveur Ollama local sur votre propre machine. Aucune clé API n'est nécessaire.\n• Points de terminaison compatibles OpenAI : des services comme Groq, Mistral, OpenRouter, DeepSeek ou LM Studio peuvent souvent fonctionner en définissant l'URL de base.\n\nSi vous ne savez pas lequel utiliser, OpenAI ou Anthropic sont généralement les options cloud les plus simples, tandis qu'Ollama est l'option locale habituelle.\n\nLes fournisseurs peuvent être activés ou désactivés sans être supprimés. Les modifications sont enregistrées automatiquement."
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "Modes d'appel d'outils",
+      "intro": "Aire prend en charge deux méthodes pour donner à un modèle d'IA l'accès aux outils. Le mode est choisi automatiquement en fonction du type de fournisseur, mais il peut être remplacé par modèle dans un fichier JSON personnalisé (voir Modèles personnalisés).",
+      "cols": [
+        "Mode",
+        "Comment ça marche"
+      ],
+      "rows": [
+        [
+          "Basé sur du texte\n(par défaut : OpenAI, Anthropic)",
+          "Les descriptions des outils sont intégrées dans l'invite système. L'IA répond avec un bloc XML <tool_call>. Cela fonctionne avec n'importe quel modèle qui suit les instructions de façon fiable."
+        ],
+        [
+          "Appel de fonction natif\n(par défaut : Ollama, Google AI)",
+          "Les schémas d'outils structurés sont envoyés via l'API du fournisseur. L'IA renvoie des objets d'appel de fonction structurés. C'est plus précis, mais cela nécessite une prise en charge explicite de l'API."
+        ],
+        [
+          "Non pris en charge",
+          "Le modèle ne peut pas utiliser d'outils. Définissez cela dans un fichier de modèle personnalisé pour ignorer les invites d'outils pour les modèles qui s'y mélangent."
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "table",
+      "title": "Compatibilité des fournisseurs et des modèles",
+      "intro": "Utilisez le bouton Tests de capacité pour vérifier votre combinaison spécifique de fournisseur et de modèle.",
+      "cols": [
+        "Fournisseur / point de terminaison",
+        "Mode",
+        "Remarques"
+      ],
+      "rows": [
+        [
+          "OpenAI",
+          "Natif",
+          "GPT-4o, GPT-4.1, GPT-4o-mini : prise en charge fiable des outils"
+        ],
+        [
+          "Anthropic",
+          "Basé sur du texte",
+          "Claude 3.5 Sonnet et plus récents : excellent suivi des instructions"
+        ],
+        [
+          "Google AI (Gemini)",
+          "Natif",
+          "Gemini 2.0 Flash et versions ultérieures recommandés"
+        ],
+        [
+          "Ollama (local)",
+          "Natif",
+          "qwen2.5-coder, llama3.1 et mistral-nemo fonctionnent bien ; les petits modèles varient"
+        ],
+        [
+          "Groq (OpenAI + URL de base)",
+          "Natif",
+          "URL de base : https://api.groq.com/openai/v1 - très rapide"
+        ],
+        [
+          "Mistral (OpenAI + URL de base)",
+          "Natif",
+          "URL de base : https://api.mistral.ai/v1"
+        ],
+        [
+          "OpenRouter (OpenAI + URL de base)",
+          "Natif",
+          "URL de base : https://openrouter.ai/api/v1 - plus de 100 modèles"
+        ],
+        [
+          "DeepSeek (OpenAI + URL de base)",
+          "Natif",
+          "URL de base : https://api.deepseek.com/v1"
+        ],
+        [
+          "LM Studio (OpenAI + URL de base)",
+          "Natif",
+          "URL de base : http://localhost:1234/v1 - activez l'appel de fonction dans les paramètres de LM Studio"
+        ]
+      ]
+    },
+    {
+      "tab": "Providers",
+      "type": "text",
+      "title": "Tests de capacité",
+      "links": [
+        {
+          "label": "Ouvrir la configuration de l'IA",
+          "action": "settings:providers"
+        }
+      ],
+      "content": "Le bouton Exécuter les tests vérifie ce que le fournisseur et le modèle sélectionnés peuvent réellement faire.\n\nCe qui est testé :\n• Les tests de capacité d'appel d'outil vérifient si le modèle demande l'outil Aire attendu. Aucune action réelle sur les fichiers, le navigateur ou le système n'est exécutée.\n• Les tests de capacité de génération d'images appellent directement le chemin de génération d'images du fournisseur. Ces tests peuvent consommer le quota du fournisseur et échouer si votre compte ou votre modèle ne prend pas en charge la génération d'images.\n\nComment l'utiliser :\n• Ouvrez Paramètres ⚙ → sélectionnez un fournisseur → cliquez sur Exécuter les tests.\n• Le formulaire du fournisseur est verrouillé pendant l'exécution pour éviter les modifications de configuration en cours de test.\n• Les résultats sont mis en cache par combinaison fournisseur/modèle et se rechargent rapidement la prochaine fois.\n\nLecture des résultats :\n• ✓ (vert) : le fournisseur a géré la fonctionnalité correctement.\n• ✗ (rouge) : le fournisseur ou le modèle n'a pas atteint cette fonctionnalité.\n• Si le message mentionne des limites de quota, de solde ou de débit, l'échec vient du compte du fournisseur plutôt que d'Aire lui-même.\n\nSi un modèle échoue à de nombreux tests d'outils, essayez un autre modèle ou ajustez ses métadonnées personnalisées. Si la génération d'images échoue, vérifiez que le compte, le modèle et le quota du fournisseur l'autorisent réellement."
+    },
+    {
+      "tab": "Providers",
+      "type": "code",
+      "title": "Modèles personnalisés",
+      "intro": "Créez un fichier JSON dans le répertoire Data\\Models de l'application pour personnaliser la liste des modèles pour n'importe quel type de fournisseur. Utilisez le tableau des capacités pour déclarer ce qu'un modèle prend en charge.\n\nIndicateurs de capacité :\n• \"vision\" : le modèle accepte les pièces jointes d'images\n• \"tools\" : le modèle peut utiliser des outils\n• \"toolcallmode:native\" : force l'appel de fonctions natif\n• \"toolcallmode:text\" : force l'appel d'outils basé sur du texte\n• \"toolcallmode:unsupported\" : désactive complètement les invites d'outils.\n\nIndicateurs de format de sortie des outils (pour les modèles qui intègrent des appels d'outils dans leur réponse textuelle) :\n• \"toolformat:hermes\" : format Hermes/Qwen : <tool_call>{\"name\":\"...\",\"arguments\":{...}}</tool_call>\n• \"toolformat:react\" : format ReAct/LangChain : {\"action\":\"...\",\"action_input\":{...}}\n• \"toolformat:native\" : schéma natif d'appels d'outils OpenAI intégré dans le contenu\n• \"toolformat:text\" : format de texte par défaut d'Aire : {\"tool\":...\", ...}",
+      "content": "{\n  \"providerType\": \"OpenAI\",\n  \"models\": [\n    {\n      \"id\": \"gpt-4o\",\n      \"displayName\": \"GPT-4o\",\n      \"capabilities\": [\"vision\", \"tools\"]\n    },\n    {\n      \"id\": \"o1-mini\",\n      \"displayName\": \"o1-mini (pas d'outils)\",\n      \"capabilities\": [\"toolcallmode:unsupported\"]\n    },\n    {\n      \"id\": \"mon-modele-affine\",\n      \"displayName\": \"Mon réglage fin\",\n      \"capabilities\": [\"tools\", \"toolcallmode:text\"]\n    }\n  ]\n}"
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Outils d'IA",
+      "links": [
+        {
+          "label": "Examiner les approbations des actions d'IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Certains modèles d'IA peuvent demander à Aire d'effectuer des actions à leur place. Aire appelle ces actions des outils.\n\nImportant : les outils ne fonctionnent pas en silence. Aire vous montre ce que l'IA veut faire, puis vous approuvez ou refusez.\n\nExemples de ce que les outils peuvent faire :\n• Lire ou écrire des fichiers.\n• Exécuter des commandes shell.\n• Ouvrir et lire des pages Web.\n• Inspecter les onglets du navigateur.\n• Prendre des captures d'écran.\n• Taper, cliquer ou déplacer la souris.\n• Lire ou envoyer un e-mail.\n\nSi vous débutez avec cette fonctionnalité, l'habitude la plus sûre est simple : lisez la demande d'action avant de l'approuver. Approuvez les actions en lecture seule lorsqu'elles ont du sens et soyez plus prudent avec les actions qui modifient des fichiers, envoient des messages ou contrôlent le clavier et la souris."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Mode Orchestrator",
+      "imagePath": "Assets/Help/main-chat-orchestrator-mode.png",
+      "imageCaption": "Le bouton Orchestrator devient rouge lorsqu’il est actif. Vous pouvez continuer à le guider depuis la zone de chat, et la session peut être reprise plus tard.",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Le mode Orchestrator pousse Aire vers une liste d’objectifs au lieu d’attendre une réponse à la fois.\n\nLancez-le depuis le bouton principal ou avec Ctrl+K. Il ouvre ou reprend une session sauvegardée, crée une nouvelle conversation si nécessaire, et continue jusqu’à ce que les objectifs soient terminés, que vous l’arrêtiez, qu’il n’ait plus de jetons utilisables ou que la même tâche échoue trois fois de trois façons différentes.\n\nVous pouvez continuer à écrire dans la zone de chat pour le guider pendant qu’il travaille. L’orchestrator doit expliquer clairement ce qu’il fait, tenir l’utilisateur informé et afficher des bulles de narration utiles."
+    },
+    {
+      "tab": "Context & Templates",
+      "type": "text",
+      "title": "Custom Instructions",
+      "imagePath": "Assets/Help/settings-context.png",
+      "imageCaption": "Custom instructions in Settings → Context let you add persistent guidance to every conversation.",
+      "links": [
+        {
+          "label": "Open context settings",
+          "action": "settings:context"
+        }
+      ],
+      "content": "Custom instructions are persistent text that Aire appends to every system prompt. They let you give the AI standing guidance that applies to all conversations.\n\nHow to set them up:\n• Open Settings (⚙) → Context tab.\n• Type or paste your instructions in the multi-line text box.\n• Changes are saved automatically.\n\nCommon uses:\n• Specify your preferred coding language or framework.\n• Set a response style (concise, detailed, technical).\n• Give context about your project or role.\n• Add formatting preferences.\n\nCustom instructions are included with every message, so keep them concise. For longer, task-specific prompts, use prompt templates instead."
+    },
+    {
+      "tab": "Context & Templates",
+      "type": "text",
+      "title": "Prompt Templates",
+      "imagePath": "Assets/Help/settings-templates.png",
+      "imageCaption": "Template management in Settings → Templates with a list, edit form, and live preview.",
+      "links": [
+        {
+          "label": "Open template settings",
+          "action": "settings:templates"
+        }
+      ],
+      "content": "Prompt templates are reusable text snippets you can quickly insert into the chat. They support parameterized placeholders so you can customize each use.\n\nHow to create a template:\n• Open Settings (⚙) → Templates tab.\n• Click Add to create a new template.\n• Fill in the name, optional prefix, optional shortcut key, and the template body.\n• Use {{placeholder}} syntax for parts you want to fill in each time (for example, {{language}} or {{filename}}).\n• Click Save. A live preview below the form shows the resolved output.\n\nHow to use a template:\n• Press Ctrl+K to open the command palette.\n• Start typing the template name or shortcut.\n• Select it to insert the resolved text into the chat input.\n\nStarter templates (Explain, Fix bugs, Code review, Summarize) are provided on first run. You can edit or delete these and add your own."
+    },
+    {
+      "tab": "Context & Templates",
+      "type": "text",
+      "title": "Cost Tracking",
+      "imagePath": "Assets/Help/settings-usage.png",
+      "imageCaption": "The Usage tab in Settings shows per-provider cost breakdown, trends, and estimated spend.",
+      "links": [
+        {
+          "label": "Open usage settings",
+          "action": "settings:usage"
+        }
+      ],
+      "content": "The Usage tab in Settings tracks how much you spend on each AI provider.\n\nWhat you can see:\n• Per-provider cost breakdown with totals.\n• Trend charts showing usage over time.\n• Live quota information (when the provider reports it).\n• Estimated spend and currency conversion.\n\nHow it works:\n• Aire records token usage after each AI turn.\n• Costs are estimated based on known pricing for common models.\n• Data is stored locally and never sent anywhere.\n\nThis is useful for understanding which models and providers you use most, and for keeping your spending within budget."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Accepter automatiquement les profils",
+      "links": [
+        {
+          "label": "Examiner les approbations des actions d'IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Les profils d'acceptation automatique vous permettent de définir les actions qu'Aire peut approuver automatiquement sans vous interrompre à chaque fois.\n\nLes exemples intégrés incluent Développeur, Navigateur d'actualités et Conservateur.\n\nÀ garder à l'esprit :\n• Les profils sont une commodité, pas un remplacement de la sécurité.\n• Commencez prudemment et n'acceptez automatiquement que les actions en lesquelles vous avez vraiment confiance.\n• Les écritures de fichiers, le contrôle des entrées et les effets secondaires externes valent généralement la peine d'être gardés manuellement.\n\nEn cas de doute, laissez l'acceptation automatique restrictive et examinez les actions une par une."
+    },
+    {
+      "tab": "Connexions",
+      "type": "text",
+      "title": "Serveurs MCP",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "Paramètres de connexions avec le catalogue MCP et la liste des serveurs installés.",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres de connexion",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "Les serveurs MCP sont des services d'assistance externes qui donnent à Aire plus d'outils et de sources de données. MCP signifie Model Context Protocol.\n\nEn clair, un serveur MCP est un pont entre Aire et un autre système, comme :\n• votre système de fichiers,\n• GitHub,\n• SQLite,\n• des outils de récupération Web,\n• des outils de mémoire,\n• Slack, Gmail ou Notion.\n\nComment Aire les gère :\n• L'onglet Connexions comprend un catalogue organisé de serveurs MCP courants.\n• Vous pouvez les installer, les supprimer, les activer, les désactiver et les modifier depuis l'application.\n• Certains serveurs ont besoin d'informations d'identification supplémentaires ou de Node.js/npm sur la machine.\n\nBon conseil de débutant :\n• Commencez avec un serveur simple, comme Filesystem ou Web Fetch.\n• Lisez la description avant de l'installer.\n• Traitez un serveur MCP comme n'importe quelle autre intégration : utile, mais à laquelle vous devez faire confiance avant de l'activer."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Sessions clavier et souris",
+      "links": [
+        {
+          "label": "Examiner les approbations des actions d'IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Certaines tâches nécessitent que l'IA contrôle le clavier et la souris. Lorsqu'une session est active :\n\n• Une bannière apparaît en bas de la fenêtre de discussion pour indiquer que la session est active.\n• Un bouton flottant ⏹ STOP SESSION apparaît en haut à droite de votre écran ; cliquez dessus à tout moment pour annuler immédiatement.\n• Dites « AIRE STOP » pour annuler à la voix.\n• Cliquez sur « Fin de session » dans la bannière pour annuler.\n\nL'IA demandera l'approbation pour chaque action individuelle (appui sur une touche, clic de souris, etc.) avant de l'exécuter."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Entrée vocale",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres vocaux",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "Cliquez sur le bouton 🎤 pour démarrer la reconnaissance vocale. Aire utilise la reconnaissance vocale intégrée à Windows : aucune clé API ni connexion Internet n'est requise.\n\n• Parlez normalement. Vos mots apparaissent dans la zone de saisie pendant que vous parlez.\n• Lorsque vous arrêtez de parler, un compte à rebours (5 → 1) apparaît sur le bouton. Si vous restez silencieux, le message est envoyé automatiquement à 0.\n• Recommencez à parler à tout moment pour réinitialiser le compte à rebours.\n• Cliquez à nouveau sur le bouton (qui affiche ⏹) pour arrêter sans envoyer.\n\nLa précision de la reconnaissance vocale dépend de la langue de votre Windows et de la qualité du microphone. Vous pouvez entraîner la reconnaissance vocale Windows via Paramètres Windows → Heure et langue → Parole."
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "table",
+      "title": "Commandes vocales",
+      "intro": "Dites « AIRE » suivi de l'un de ces mots lorsque le microphone est actif :",
+      "cols": [
+        "Commande",
+        "Effet"
+      ],
+      "rows": [
+        [
+          "ENVOYER AIRE",
+          "Envoyer immédiatement le message actuel"
+        ],
+        [
+          "AIRE PAUSE",
+          "Suspendre le compte à rebours du silence"
+        ],
+        [
+          "CV AIR",
+          "Reprendre le compte à rebours"
+        ],
+        [
+          "AIRE CLAIRE",
+          "Effacer la zone de saisie"
+        ],
+        [
+          "AIRE ANNULER",
+          "Effacer la zone de saisie"
+        ],
+        [
+          "AIRE ANNULER",
+          "Arrêter d'écouter sans envoyer"
+        ],
+        [
+          "AIRE NOUVEAU",
+          "Démarrer une nouvelle conversation"
+        ],
+        [
+          "PARAMÈTRES D'AIRE",
+          "Ouvrir la fenêtre Paramètres"
+        ],
+        [
+          "AIRE OUVERT/SPECTACLE",
+          "Afficher la fenêtre de discussion principale"
+        ],
+        [
+          "AIRE FERMER/MASQUER",
+          "Masquer la fenêtre de discussion principale"
+        ],
+        [
+          "AIRE OUI/NON",
+          "Approuver ou refuser une action IA en attente"
+        ],
+        [
+          "ARRÊT AIRE",
+          "Arrêt d'urgence : mettez immédiatement fin à toute session clavier/souris active"
+        ]
+      ]
+    },
+    {
+      "tab": "Tools & Voice",
+      "type": "text",
+      "title": "Sortie vocale",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres vocaux",
+          "action": "settings:voice"
+        }
+      ],
+      "content": "Aire peut lire les réponses de l'IA à haute voix à l'aide de la synthèse vocale Windows. Activez-la dans Paramètres (⚙) → Sortie vocale.\n\n• Choisissez de prononcer toutes les réponses, ou seulement lorsque vous utilisez le microphone.\n• Sélectionnez une voix et ajustez la vitesse de lecture.\n• Activez ou désactivez rapidement la sortie vocale à l'aide de l'icône de haut-parleur située à côté du bouton du microphone."
+    },
+    {
+      "tab": "Apparence",
+      "type": "text",
+      "title": "Apparence",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres d'apparence",
+          "action": "settings:appearance"
+        }
+      ],
+      "content": "Ouvrez Paramètres (⚙) → Apparence pour modifier l'apparence de l'application.\n\n• Thème : basculez entre Foncé et Clair (Beige).\n• Teinte de couleur : faites glisser le curseur pour appliquer une teinte à l'ensemble de l'interface. L'extrémité gauche (noire) et l'extrémité droite (blanche) signifient qu'il n'y a aucune teinte ; le curseur est sur des niveaux de gris purs par défaut.\n• Taille de la police : maintenez Ctrl enfoncé et faites défiler la molette de la souris sur la zone de discussion ou de saisie pour augmenter ou diminuer la taille de la police. Le réglage est enregistré automatiquement.\n\nTous les paramètres d'apparence sont enregistrés et restaurés au prochain lancement."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Qu'est-ce que l'API locale ?",
+      "imagePath": "Assets/Help/settings-connections.png",
+      "imageCaption": "Paramètres de connexion où l'accès à l'API locale, les comptes de messagerie et les serveurs MCP sont configurés.",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres de connexion",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "L'API locale permet à un autre programme sur le même ordinateur de communiquer avec Aire.\n\nPour les non-développeurs : vous n'avez généralement pas besoin de cette fonctionnalité.\n\nPour les développeurs et les utilisateurs avancés : c'est le moyen le plus simple de connecter votre propre script, outil, automatisation ou application de bureau à Aire. Un programme local peut :\n• demander à Aire d'afficher ou de masquer sa fenêtre principale,\n• lister les conversations et lire les messages,\n• envoyer un message à la conversation active,\n• changer de fournisseur ou de conversation,\n• inspecter les approbations d'outils en attente,\n• et appeler directement Aire Tools.\n\nComment ça marche :\n• Aire écoute sur le port TCP 51234.\n• Il écoute uniquement sur 127.0.0.1, les autres ordinateurs ne peuvent donc pas l'atteindre directement.\n• Chaque requête est un objet JSON envoyé sur une seule ligne.\n• Chaque réponse est un objet JSON renvoyé sous la forme d'une seule ligne.\n\nPour l'utiliser, ouvrez d'abord les paramètres de connexions et activez l'accès à l'API locale."
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Démarrage rapide de l'API locale",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres de connexion",
+          "action": "settings:connections"
+        }
+      ],
+      "content": "Pour connecter une autre application à Aire, utilisez cette liste de contrôle :\n\n1. Ouvrez les paramètres de connexions.\n2. Activez l'accès à l'API locale.\n3. Copiez le jeton d'authentification.\n4. Depuis votre application ou votre script, ouvrez une connexion TCP à 127.0.0.1:51234.\n5. Envoyez une ligne JSON avec la méthode, le jeton et les paramètres facultatifs.\n6. Lisez une ligne JSON.\n7. Fermez la connexion.\n\nUn bon premier test est la méthode ping. Si le ping fonctionne, essayez show_main_window, list_providers et create_conversation.\n\nOrdre d'intégration recommandé :\n• ping\n• show_main_window\n• list_providers\n• create_conversation\n• list_conversations\n• get_messages\n• send_message\n• get_state\n• wait_for_ending_approval si vous voulez coopérer avec les approbations d'outils\n• execute_tool seulement après être à l'aise avec le flux d'approbation et le modèle de sécurité"
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Authentification",
+      "links": [
+        {
+          "label": "Ouvrir les paramètres de connexion",
+          "action": "settings:connections"
+        },
+        {
+          "label": "Examiner les approbations des actions d'IA",
+          "action": "settings:auto-accept"
+        }
+      ],
+      "content": "Chaque demande d'API locale doit inclure le jeton d'authentification.\n\nOù l'obtenir :\n• Ouvrez les paramètres de connexions.\n• Recherchez la section API locale.\n• Cliquez sur Copier pour copier le jeton.\n• Collez ce jeton dans la configuration de votre application ou de votre script.\n\nCe qu'il faut savoir :\n• Si vous cliquez sur Régénérer, les anciennes intégrations cesseront de fonctionner jusqu'à ce qu'elles utilisent le nouveau jeton.\n• L'API doit être activée, pas seulement configurée.\n• Tout processus sur votre ordinateur connaissant le jeton peut contrôler Aire.\n\nConseils pratiques pour les développeurs :\n• Conservez le jeton dans un fichier de configuration local ou une variable d'environnement, pas en dur dans le contrôle de code source.\n• Traitez-le comme un secret local.\n• Si vous soupçonnez une fuite, régénérez-le."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Protocole",
+      "intro": "L'API locale est un protocole JSON sur ligne unique transporté sur TCP.\n\nModèle de connexion :\n• connectez-vous à 127.0.0.1:51234\n• écrivez exactement une requête JSON compacte suivie d'une nouvelle ligne\n• lisez exactement une ligne de réponse JSON\n• fermez la connexion\n\nForme de la demande :\n{ \"method\": \"METHODE\", \"token\": \"TOKEN\", \"parameters\": { ... } }\n\nForme de la réponse :\n{ \"ok\": true, \"result\": ... }\nou\n{ \"ok\": false, \"errorMessage\": \"message\" }\n\nSi vous écrivez une bibliothèque cliente, construisez d'abord autour de ce modèle simple requête-réponse. Vous n'avez pas besoin de HTTP ou de WebSockets pour commencer.",
+      "content": "{ \"method\": \"ping\", \"token\": \"VOTRE_TOKEN\" }\n{ \"ok\": true, \"result\": { \"providerName\": \"Codex\", \"providerType\": \"Codex\", \"providerModel\": \"gpt-5.4-mini\", \"activeConversationId\": 12 } }\n\n{ \"method\": \"create_conversation\", \"token\": \"VOTRE_TOKEN\", \"parameters\": { \"title\": \"API test\" } }\n{ \"ok\": true, \"result\": 73 }\n\n{ \"method\": \"send_message\", \"token\": \"VOTRE_TOKEN\", \"parameters\": { \"text\": \"Bonjour !\" } }\n{ \"ok\": true, \"result\": true }"
+    },
+    {
+      "tab": "Local API",
+      "type": "table",
+      "title": "Méthodes disponibles",
+      "cols": [
+        "Méthode",
+        "Paramètres",
+        "Description"
+      ],
+      "rows": [
+        [
+          "ping",
+          "—",
+          "Vérifie si Aire est en cours d'exécution. Renvoie le même instantané d'état que get_state."
+        ],
+        [
+          "get_state",
+          "—",
+          "Fournisseur actuel, modèle, ID de conversation active et état de l'API locale."
+        ],
+        [
+          "show_main_window",
+          "—",
+          "Amène la fenêtre de discussion Aire au premier plan."
+        ],
+        [
+          "hide_main_window",
+          "—",
+          "Masque la fenêtre de discussion dans la barre d'état."
+        ],
+        [
+          "open_settings",
+          "—",
+          "Ouvre la fenêtre Paramètres."
+        ],
+        [
+          "navigateur_ouvert",
+          "—",
+          "Ouvre la fenêtre du navigateur Aire."
+        ],
+        [
+          "list_providers",
+          "—",
+          "Tous les fournisseurs d'IA configurés avec identifiants et noms."
+        ],
+        [
+          "create_provider",
+          "name?, type, apiKey?, baseUrl?, model, isEnabled?, color?, selectAfterCreate?, inheritedCredentialsFromProviderId?",
+          "Crée un nouveau fournisseur à partir de l'API locale."
+        ],
+        [
+          "liste_conversations",
+          "—",
+          "Toutes les conversations enregistrées (ID, titre, date)."
+        ],
+        [
+          "create_conversation",
+          "titre?",
+          "Crée une nouvelle conversation et y accède."
+        ],
+        [
+          "select_conversation",
+          "ID de conversation",
+          "Bascule vers une conversation existante."
+        ],
+        [
+          "get_messages",
+          "ID de conversation",
+          "Tous les messages d'une conversation."
+        ],
+        [
+          "set_provider",
+          "ID du fournisseur",
+          "Change le fournisseur d'IA actif."
+        ],
+        [
+          "set_provider_model",
+          "ID du fournisseur, modèle",
+          "Change le modèle d'un fournisseur."
+        ],
+        [
+          "envoyer_message",
+          "texte",
+          "Envoie un message à la conversation active. Renvoie true une fois accepté."
+        ],
+        [
+          "list_ending_approvals",
+          "—",
+          "Les appels d'outils sont actuellement en attente d'approbation."
+        ],
+        [
+          "wait_for_ending_approval",
+          "timeout_secondes ?",
+          "Attend la prochaine approbation d'outil en attente ou renvoie null à l'expiration du délai."
+        ],
+        [
+          "approuve_tool_call",
+          "indice",
+          "Approuve un appel d'outil en attente par son index de liste actuel."
+        ],
+        [
+          "refuser_tool_call",
+          "indice",
+          "Refuse un appel d'outil en attente par son index de liste actuel."
+        ],
+        [
+          "execute_tool",
+          "tool, parameters, wait_for_approval?, approved_timeout_seconds?",
+          "Exécute directement un outil Aire et attend éventuellement l'approbation."
+        ],
+        [
+          "get_trace",
+          "after_id?, limit?",
+          "Lit les entrées de trace d'exécution de l'outil pour le débogage."
+        ],
+        [
+          "clear_trace",
+          "—",
+          "Efface la trace d'exécution de l'outil."
+        ]
+      ]
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Par quelles méthodes dois-je commencer ?",
+      "content": "Si vous créez une autre application qui se connecte à Aire, commencez par les méthodes les plus simples.\n\nOrdre d'apprentissage recommandé :\n• ping : confirme qu'Aire est en cours d'exécution et que votre jeton est valide.\n• show_main_window : confirme que vous pouvez déclencher une action d'application visible.\n• get_state : inspecte la conversation actuelle et l'état du fournisseur.\n• list_conversations et get_messages : lisent les données en toute sécurité.\n• send_message : effectue un aller-retour complet requête-réponse.\n• list_ending_approvals, apply_tool_call, deny_tool_call : s'intègrent au modèle d'approbation d'Aire.\n• execute_tool : seulement après avoir compris les implications en matière de sécurité et le comportement d'approbation.\n\nDans la plupart des intégrations, send_message et les méthodes en lecture seule suffisent."
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Exemple PowerShell",
+      "intro": "Cet exemple montre la forme la plus simple et la plus utile d'un client API locale dans PowerShell. Enregistrez votre jeton dans les paramètres de connexions, collez-le ci-dessous, puis essayez un ping avant toute autre chose.",
+      "content": "$TOKEN = \"collez votre jeton ici\"\n$PORT = 51234\n\nfunction Invoke-Aire {\n    param([string]$Method, [hashtable]$Params = @{})\n    $req = @{ method = $Method; token = $TOKEN }\n    if ($Params.Count) { $req[\"parameters\"] = $Params }\n    $client = [Net.Sockets.TcpClient]::new(\"127.0.0.1\", $PORT)\n    $writer = [IO.StreamWriter]::new($client.GetStream())\n    $writer.AutoFlush = $true\n    $reader = [IO.StreamReader]::new($client.GetStream())\n    $writer.WriteLine(($req | ConvertTo-Json -Compress))\n    $resp = $reader.ReadLine()\n    $client.Close()\n    return $resp | ConvertFrom-Json\n}\n\n# Vérifiez qu'Aire fonctionne et inspectez l'état\n$state = Invoke-Aire \"ping\"\n$state.result\n\n# Créer et sélectionner une conversation\n$id = (Invoke-Aire \"create_conversation\" @{ title = \"API test\" }).result\nInvoke-Aire \"select_conversation\" @{ conversationId = $id }\n\n# Envoyer un message (renvoie true une fois accepté)\nInvoke-Aire \"send_message\" @{ text = \"Bonjour de PowerShell\" }\n\n# Lire les messages de conversation une fois le tour terminé\n(Invoke-Aire \"get_messages\" @{ conversationId = $id }).result\n\n# Exécuter un outil directement\nInvoke-Aire \"execute_tool\" @{ tool = \"read_file\"; parameters = @{ path = \"C:/Temp/notes.txt\" } }"
+    },
+    {
+      "tab": "Local API",
+      "type": "code",
+      "title": "Exemple Python",
+      "intro": "Cet exemple utilise uniquement la bibliothèque standard Python. C'est un bon point de départ si vous voulez ajouter le support d'Aire à un autre outil local.",
+      "content": "import socket, json\n\nTOKEN = \"collez votre jeton ici\"\n\ndef aire(method, **params):\n    req = {\"method\": method, \"token\": TOKEN}\n    if params:\n        req[\"parameters\"] = params\n    with socket.create_connection((\"127.0.0.1\", 51234)) as s:\n        s.sendall((json.dumps(req, separators=(\",\", \":\")) + \"\\n\").encode())\n        return json.loads(s.makefile().readline())\n\nstate = aire(\"ping\")\nprint(state[\"result\"])\n\nconversation_id = aire(\"create_conversation\", title=\"Test API\")[\"result\"]\naire(\"select_conversation\", conversationId=conversation_id)\naire(\"send_message\", text=\"Bonjour de Python\")\n\nmessages = aire(\"get_messages\", conversationId=conversation_id)[\"result\"]\nprint(messages)\n\nresult = aire(\n    \"execute_tool\",\n    tool=\"read_file\",\n    parameters={\"path\": \"C:/Temp/notes.txt\"}\n)\nprint(result)"
+    },
+    {
+      "tab": "Local API",
+      "type": "text",
+      "title": "Conseils d'intégration",
+      "content": "• Vérifiez toujours ok avant d'utiliser le résultat. Si ok est faux, lisez le message d'erreur et gérez-le.\n• send_message confirme uniquement qu'Aire a accepté le message dans la conversation active. Si votre intégration a besoin de la réponse finale, suivez avec get_messages ou surveillez les approbations et les traces.\n• Conservez un seul appel de méthode par connexion TCP. Connectez-vous, envoyez, lisez, fermez.\n• Commencez par des actions en lecture seule et des actions visibles avant d'utiliser execute_tool.\n• Si votre intégration doit coopérer avec le modèle de sécurité d'Aire, utilisez list_ending_approvals, wait_for_ending_approval, apply_tool_call et deny_tool_call au lieu de supposer que chaque action s'exécute immédiatement.\n• execute_tool est puissant car il permet à votre code d'appeler directement les outils Aire. Utilisez-le avec précaution.\n• L'API est volontairement locale uniquement. N'exposez pas le port 51234 à votre réseau ou à Internet.\n• Pour des outils internes de type production, stockez le jeton en dehors du code source et intégrez le ping à votre contrôle de santé de démarrage."
+    }
+  ]
 }

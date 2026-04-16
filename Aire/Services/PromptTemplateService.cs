@@ -63,7 +63,12 @@ namespace Aire.Services
         {
             try
             {
-                if (!File.Exists(TemplatesPath)) return;
+                if (!File.Exists(TemplatesPath))
+                {
+                    _templates = CreateDefaultTemplates();
+                    Save();
+                    return;
+                }
                 var json = File.ReadAllText(TemplatesPath);
                 _templates = JsonSerializer.Deserialize<List<PromptTemplate>>(json, JsonOptions) ?? [];
             }
@@ -72,6 +77,41 @@ namespace Aire.Services
                 _templates = [];
             }
         }
+
+        /// <summary>
+        /// Creates starter templates for first-run users.
+        /// </summary>
+        private static List<PromptTemplate> CreateDefaultTemplates() =>
+        [
+            new()
+            {
+                Name = "Explain",
+                Prefix = "",
+                Shortcut = "/explain",
+                Template = "Explain the following code step by step:\n\n{{code}}"
+            },
+            new()
+            {
+                Name = "Fix bugs",
+                Prefix = "",
+                Shortcut = "/fix",
+                Template = "Find and fix any bugs in this code:\n\n{{code}}"
+            },
+            new()
+            {
+                Name = "Code review",
+                Prefix = "",
+                Shortcut = "/review",
+                Template = "Review this code for correctness, style, and potential improvements:\n\n{{code}}"
+            },
+            new()
+            {
+                Name = "Summarize",
+                Prefix = "",
+                Shortcut = "/summarize",
+                Template = "Summarize the following text concisely:\n\n{{text}}"
+            },
+        ];
 
         public void Save()
         {

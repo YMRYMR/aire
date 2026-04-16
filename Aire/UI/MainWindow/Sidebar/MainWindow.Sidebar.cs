@@ -109,8 +109,10 @@ namespace Aire
             _currentConversationId = summary.Id;
             try
             {
-                await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id);
+                await ConversationFlow.SyncConversationSelectionStateAsync(summary.Id, previousConversationId);
                 await LoadConversationMessages(summary.Id, syncProviderSelection: false);
+                if (_sidebarOpen)
+                    await RefreshSidebarAsync(ConversationSidebar.SearchText.Trim());
             }
             catch (Exception ex)
             {
@@ -121,7 +123,7 @@ namespace Aire
                 {
                     try
                     {
-                        await ConversationFlow.SyncConversationSelectionStateAsync(previousConversationId.Value);
+                        await ConversationFlow.SyncConversationSelectionStateAsync(previousConversationId.Value, summary.Id);
                         RestoreSidebarSelection(previousConversationId.Value);
                     }
                     catch (Exception restoreEx)

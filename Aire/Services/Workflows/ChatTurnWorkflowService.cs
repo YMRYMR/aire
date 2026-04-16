@@ -55,7 +55,8 @@ namespace Aire.Services.Workflows
             IReadOnlyList<ProviderChatMessage> conversationHistory,
             IReadOnlyList<McpToolDefinition>? mcpTools = null,
             bool toolsEnabled = true,
-            string? modePromptSection = null)
+            string? modePromptSection = null,
+            string? customInstructions = null)
         {
             var messages = new List<ProviderChatMessage>();
             if (toolsEnabled &&
@@ -67,6 +68,10 @@ namespace Aire.Services.Workflows
                     : null;
 
                 var sysPrompt = provider.BuildToolSystemPrompt(modelListSection, modePromptSection, mcpSection);
+
+                if (!string.IsNullOrWhiteSpace(customInstructions))
+                    sysPrompt += "\n\n" + customInstructions;
+
                 messages.Add(new ProviderChatMessage { Role = "system", Content = sysPrompt });
             }
 

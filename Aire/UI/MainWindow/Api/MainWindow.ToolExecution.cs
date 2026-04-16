@@ -162,11 +162,15 @@ public partial class MainWindow
             if (_toolExecutionService == null)
                 throw new InvalidOperationException("Tool execution service is not available.");
 
+            await AddOrchestratorToolNarrativeAsync(request);
             var directResult = await _toolExecutionService.ExecuteAsync(request);
             approvalMsg.ToolCallStatus = $"\u2713 {request.Description}";
             return (_localApiApplicationService ?? new LocalApiApplicationService())
                 .BuildCompletedToolResult(directResult);
         }
+
+        if (approved)
+            await AddOrchestratorToolNarrativeAsync(request);
 
         var completion = await completionService.CompleteAsync(request, approved, _currentConversationId);
 

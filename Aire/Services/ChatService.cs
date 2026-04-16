@@ -100,6 +100,20 @@ namespace Aire.Services
         }
 
         /// <summary>
+        /// Sets the current provider directly from an already-configured provider instance.
+        /// This keeps runtime adjustments that do not exist in persistence, such as a
+        /// temporary retry token budget, intact for the active session.
+        /// </summary>
+        /// <param name="provider">Prepared provider instance to use for subsequent chat calls.</param>
+        public Task SetProviderAsync(IAiProvider provider)
+        {
+            ThrowIfDisposed();
+            _currentProvider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _orchestrator.SetProvider(_currentProvider);
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
         /// Clears the active provider so subsequent chat calls fail fast until a new provider is selected.
         /// </summary>
         public Task ClearProviderAsync()

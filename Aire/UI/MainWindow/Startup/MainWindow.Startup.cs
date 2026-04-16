@@ -147,8 +147,6 @@ namespace Aire
             FontSize = AppearanceService.FontSize;
             _speechService.Language = LocalizationService.CurrentCode;
             UpdateVoiceOutputButton();
-            if (LocalizationService.HelpSections.Count == 0)
-                LocalizationService.SetLanguage("en");
             SizeChanged += (s, e) => SaveWindowSize();
             LocationChanged += (s, e) => SaveWindowSize();
             _ttsService.SettingsChanged += SaveWindowSize;
@@ -187,6 +185,7 @@ namespace Aire
 
                 progress?.Report("Loading context settings…");
                 _contextWindowSettings = await _contextSettingsApplicationService.LoadAsync();
+                _customInstructions = await new CustomInstructionsService(_databaseService).LoadAsync();
                 string defaultAssistantMode = string.IsNullOrWhiteSpace(setupPreferences.DefaultAssistantMode)
                     ? _assistantModeApplicationService.GetDefaultMode().Key
                     : setupPreferences.DefaultAssistantMode;

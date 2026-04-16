@@ -91,9 +91,20 @@ namespace Aire.UI
                 RenderUsageTrendChart();
                 await LoadLiveProviderUsageAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                ShowToast(LocalizationService.S("settings.usageRefreshFailed", "Could not refresh usage data."), isError: true);
+                AppLogger.Warn("SettingsWindow.LoadUsageDashboardAsync", "Could not refresh usage data", ex);
+                var L = LocalizationService.S;
+                UsageTotalTokensText.Text = "0";
+                UsageProviderCountText.Text = "0";
+                UsageConversationCountText.Text = "0";
+                UsageAssistantMessageCountText.Text = "0";
+                UsageProvidersListView.ItemsSource = null;
+                UsageConversationsListView.ItemsSource = null;
+                UsageTrendLegendItemsControl.ItemsSource = null;
+                UsageLiveProviderText.Text = L("settings.usageNoProviderSelected", "No provider selected");
+                UsageLiveUsageText.Text = L("settings.usageLiveUnavailable", "Unavailable: live usage unavailable");
+                UsageLiveUsageDetailText.Text = L("settings.usageLiveUnavailableDetail", "Aire could not fetch live usage for the selected provider.");
             }
         }
 
@@ -431,14 +442,23 @@ namespace Aire.UI
             TokenUsage? liveUsage,
             string preferredCurrency)
         {
+            var L = LocalizationService.S;
             var detail = $"{summary.ProviderType}";
             if (!string.IsNullOrWhiteSpace(summary.Model))
                 detail += $" · {summary.Model}";
-            detail += $" · {summary.ConversationCount} conv";
-            detail += summary.AssistantMessageCount == 1 ? " · 1 assistant turn" : $" · {summary.AssistantMessageCount} assistant turns";
-            detail += summary.LastUsedAt.HasValue ? $" · last used {summary.LastUsedAt.Value:g}" : " · never used";
+            detail += summary.ConversationCount == 1
+                ? $" · {L("settings.usageConversationSingular", "1 conversation")}"
+                : $" · {summary.ConversationCount} {L("settings.usageConversationPlural", "conversations")}";
+            detail += summary.AssistantMessageCount == 1
+                ? $" · {L("settings.usageAssistantTurnSingular", "1 assistant turn")}"
+                : $" · {summary.AssistantMessageCount} {L("settings.usageAssistantTurnPlural", "assistant turns")}";
+            detail += summary.LastUsedAt.HasValue
+                ? $" · {string.Format(L("settings.usageLastUsed", "last used {0}"), summary.LastUsedAt.Value.ToString("g"))}"
+                : $" · {L("settings.usageNeverUsed", "never used")}";
 
-            var usageDetail = summary.IsEnabled ? "enabled" : "disabled";
+            var usageDetail = summary.IsEnabled
+                ? L("settings.usageEnabled", "enabled")
+                : L("settings.usageDisabled", "disabled");
             var tokensText = FormatTokens(summary.TokensUsed);
             var spendText = BuildSpendText(summary, liveUsage, preferredCurrency);
             return new UsageProviderRowViewModel(
@@ -453,15 +473,18 @@ namespace Aire.UI
 
         private static UsageConversationRowViewModel BuildConversationRow(ConversationUsageSummary summary, string preferredCurrency)
         {
+            var L = LocalizationService.S;
             var detail = $"{summary.ProviderName}";
             if (!string.IsNullOrWhiteSpace(summary.Model))
                 detail += $" · {summary.Model}";
-            detail += summary.AssistantMessageCount == 1 ? " · 1 assistant turn" : $" · {summary.AssistantMessageCount} assistant turns";
-            detail += $" · updated {summary.UpdatedAt:g}";
+            detail += summary.AssistantMessageCount == 1
+                ? $" · {L("settings.usageAssistantTurnSingular", "1 assistant turn")}"
+                : $" · {summary.AssistantMessageCount} {L("settings.usageAssistantTurnPlural", "assistant turns")}";
+            detail += $" · {string.Format(L("settings.usageUpdated", "updated {0}"), summary.UpdatedAt.ToString("g"))}";
 
             var usageDetail = summary.TokensUsed > 0
-                ? $"updated {summary.UpdatedAt:g}"
-                : "no tokens recorded";
+                ? string.Format(L("settings.usageUpdated", "updated {0}"), summary.UpdatedAt.ToString("g"))
+                : L("settings.usageNoTokensRecorded", "no tokens recorded");
             var spendText = BuildSpendText(summary, preferredCurrency);
 
             return new UsageConversationRowViewModel(

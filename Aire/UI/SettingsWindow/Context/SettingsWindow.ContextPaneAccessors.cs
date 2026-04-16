@@ -10,6 +10,9 @@ namespace Aire.UI
     {
         private ContextSettingsPaneControl ContextPane => ContextSettingsPaneControl;
         private TextBlock ContextDescriptionText => ContextPane.ContextDescriptionText;
+        private TextBlock CustomInstructionsHeader => ContextPane.CustomInstructionsHeader;
+        private TextBlock CustomInstructionsSubLabel => ContextPane.CustomInstructionsSubLabel;
+        private TextBox CustomInstructionsTextBox => ContextPane.CustomInstructionsTextBox;
         private CheckBox EnablePromptCachingCheckBox => ContextPane.EnablePromptCachingCheckBox;
         private CheckBox EnableConversationSummariesCheckBox => ContextPane.EnableConversationSummariesCheckBox;
         private TextBlock MaxMessagesLabel => ContextPane.MaxMessagesLabel;

@@ -3,7 +3,7 @@
     {
       "kind": "start-process",
       "executablePath": "C:\\dev\\aire\\Aire\\bin\\Debug\\net10.0-windows10.0.17763.0\\Aire.exe",
-      "delayMs": 5000
+      "delayMs": 8000
     },
     {
       "kind": "close-update-window",
@@ -18,13 +18,13 @@
     {
       "kind": "show-window",
       "processName": "Aire",
-      "delayMs": 1500
+      "delayMs": 2500
     },
     {
       "kind": "wait-for-window",
       "exactTitle": "Aire",
       "processName": "Aire",
-      "delayMs": 4000
+      "delayMs": 15000
     }
   ],
   "languageBatch": {
@@ -243,6 +243,62 @@
           "delayMs": 300
         }
       ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/settings-templates.png",
+      "titleContains": "Settings",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "select",
+          "automationId": "TabTemplates",
+          "controlType": "tabitem",
+          "delayMs": 400
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/settings-usage.png",
+      "titleContains": "Settings",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 0,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "select",
+          "automationId": "TabUsage",
+          "controlType": "tabitem",
+          "delayMs": 400
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/main-chat-command-palette.png",
+      "exactTitle": "Aire",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 24,
+      "activateWindow": true,
+      "actions": [
+        {
+          "kind": "focus-window",
+          "exactTitle": "Aire",
+          "processName": "Aire",
+          "delayMs": 300
+        }
+      ]
+    },
+    {
+      "outputPath": "Aire/Assets/Help/main-chat-agent-mode.png",
+      "exactTitle": "Aire",
+      "processName": "Aire",
+      "delayMs": 500,
+      "padding": 24,
+      "activateWindow": true
     },
     {
       "outputPath": "Aire/Assets/Help/onboarding-provider-picker.png",

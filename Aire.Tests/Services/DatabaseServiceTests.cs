@@ -356,6 +356,7 @@ public class DatabaseServiceTests : IAsyncLifetime, IDisposable
                 ProviderId INTEGER,
                 Title TEXT,
                 AssistantModeKey TEXT NOT NULL DEFAULT 'general',
+                IsOrchestratorMode INTEGER NOT NULL DEFAULT 0,
                 CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                 UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (ProviderId) REFERENCES Providers (Id)

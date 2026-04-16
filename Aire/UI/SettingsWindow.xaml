@@ -7,10 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:settingsControls="clr-namespace:Aire.UI.Settings.Controls"
     Title="Settings — Aire"
-    Width="760"
-    Height="880"
-    MinWidth="620"
-    MinHeight="580"
+    Width="900"
+    Height="700"
+    MinWidth="420"
+    MinHeight="500"
     Background="{DynamicResource BackgroundBrush}"
     FontSize="13"
     Icon="/aire.ico"
@@ -510,6 +510,11 @@
                 <!--  ══ Context tab ══  -->
                 <TabItem x:Name="TabContext" Header="Context">
                     <settingsControls:ContextSettingsPaneControl x:Name="ContextSettingsPaneControl" />
+                </TabItem>
+
+                <!--  ══ Templates tab ══  -->
+                <TabItem x:Name="TabTemplates" Header="Templates">
+                    <settingsControls:TemplateListPaneControl x:Name="TemplateListPaneControl" />
                 </TabItem>
 
                 <!--  ══ Auto‑accept tab ══  -->

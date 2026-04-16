@@ -55,7 +55,7 @@ namespace Aire.Services.Workflows
         /// <param name="toolResult">Result text returned by the tool path.</param>
         /// <returns>The normalized provider-facing history entry.</returns>
         public string BuildToolResultHistoryContent(string toolName, string toolResult)
-            => $"[File system result — {toolName}]:\n{toolResult}";
+            => $"[File system result — {toolName}]:\n{TrimToolResult(toolResult)}";
 
         /// <summary>
         /// Extracts a file-system-like path from a tool request for auditing.
@@ -204,6 +204,23 @@ namespace Aire.Services.Workflows
 
             if (options.Count == 0)
                 options.Add(raw);
+        }
+
+        private static string TrimToolResult(string toolResult)
+        {
+            if (string.IsNullOrWhiteSpace(toolResult))
+                return string.Empty;
+
+            const int maxLength = 12_000;
+            var trimmed = toolResult.Trim();
+            if (trimmed.Length <= maxLength)
+                return trimmed;
+
+            var headLength = 8_000;
+            var tailLength = 3_000;
+            var head = trimmed[..headLength];
+            var tail = trimmed[^tailLength..];
+            return $"{head}\n...\n[truncated {trimmed.Length - headLength - tailLength} characters]\n...\n{tail}";
         }
     }
 }

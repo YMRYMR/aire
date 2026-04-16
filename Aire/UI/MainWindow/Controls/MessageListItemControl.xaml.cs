@@ -26,11 +26,8 @@ namespace Aire.UI.MainWindow.Controls
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
-            Loaded += (_, _) => ApplyLocalization();
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
-            Unloaded += (_, _) => LocalizationService.LanguageChanged -= OnLanguageChanged;
-            LocalizationService.LanguageChanged += OnLanguageChanged;
 
             MessageBorder.MouseRightButtonUp += MessageBorder_RightClick;
         }
@@ -40,8 +37,10 @@ namespace Aire.UI.MainWindow.Controls
             if (!_appearanceSubscribed)
             {
                 AppearanceService.AppearanceChanged += OnAppearanceChanged;
+                LocalizationService.LanguageChanged += OnLanguageChanged;
                 _appearanceSubscribed = true;
             }
+            ApplyLocalization();
             UpdateVisualState();
         }
 
@@ -50,6 +49,7 @@ namespace Aire.UI.MainWindow.Controls
             if (_appearanceSubscribed)
             {
                 AppearanceService.AppearanceChanged -= OnAppearanceChanged;
+                LocalizationService.LanguageChanged -= OnLanguageChanged;
                 _appearanceSubscribed = false;
             }
         }
@@ -135,7 +135,7 @@ namespace Aire.UI.MainWindow.Controls
         private void MessageBorder_RightClick(object sender, MouseButtonEventArgs e)
         {
             if (_message == null || _message.DbMessageId <= 0) return;
-            if (_message.Sender is "System" or "Date") return;
+            if (_message.Sender is "System" or "Date" or "Orchestrator") return;
 
             var menu = new System.Windows.Controls.ContextMenu();
 
@@ -144,7 +144,7 @@ namespace Aire.UI.MainWindow.Controls
                 Header = LocalizationService.S("menu.branchFromHere", "Branch from here"),
                 Tag = _message
             };
-            branchItem.Click += (s, _) => BranchFromHereClick?.Invoke(this, new RoutedEventArgs { Source = this });
+            branchItem.Click += (s, _) => BranchFromHereClick?.Invoke(this, new RoutedEventArgs());
             menu.Items.Add(branchItem);
 
             menu.IsOpen = true;
@@ -178,11 +178,15 @@ namespace Aire.UI.MainWindow.Controls
             }
 
             DateSeparator.Visibility = msg.Sender == "Date" ? Visibility.Visible : Visibility.Collapsed;
+            var isOrchestrator = msg.IsOrchestratorNarrative || msg.Sender == "Orchestrator";
+            var isDenied = msg.IsDeniedToolCall;
             var isSystem = msg.Sender == "System";
             var isDate = msg.Sender == "Date";
 
-            MessageRow.Visibility = (isSystem || isDate) ? Visibility.Collapsed : Visibility.Visible;
-            SystemText.Visibility = isSystem ? Visibility.Visible : Visibility.Collapsed;
+            OrchestratorNarrativeBorder.Visibility = isOrchestrator ? Visibility.Visible : Visibility.Collapsed;
+            DeniedActionBorder.Visibility = isDenied ? Visibility.Visible : Visibility.Collapsed;
+            MessageRow.Visibility = (isSystem || isDate || isOrchestrator || isDenied) ? Visibility.Collapsed : Visibility.Visible;
+            SystemText.Visibility = isSystem && !isOrchestrator ? Visibility.Visible : Visibility.Collapsed;
             SystemText.Foreground = TryFindResource("StatusTextBrush") as System.Windows.Media.Brush ?? msg.SenderForeground;
 
             MessageRow.HorizontalAlignment = msg.Sender == "You"

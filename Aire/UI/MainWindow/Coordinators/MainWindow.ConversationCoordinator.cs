@@ -7,6 +7,7 @@ using Aire.Data;
 using Aire.Services;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
 using ProviderChatMessage = Aire.Providers.ChatMessage;
+using Brush = System.Windows.Media.Brush;
 
 namespace Aire
 {
@@ -43,31 +44,42 @@ namespace Aire
 
                 foreach (var entry in transcript.Entries)
                 {
-                    var bgBrush = entry.Role switch
+                    var orchestratorBg = _owner.TryFindResource("OrchestratorMessageBrush") as Brush;
+                    var orchestratorFg = _owner.TryFindResource("OrchestratorMessageTextBrush") as Brush;
+                    Brush bgBrush = MainWindow.SystemBgBrush;
+                    Brush fgBrush = MainWindow.SystemFgBrush;
+
+                    if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.User)
                     {
-                        ConversationTranscriptApplicationService.TranscriptRole.User => MainWindow.UserBgBrush,
-                        ConversationTranscriptApplicationService.TranscriptRole.Assistant => MainWindow.AiBgBrush,
-                        ConversationTranscriptApplicationService.TranscriptRole.Tool => MainWindow.AiBgBrush,
-                        _ => MainWindow.SystemBgBrush
-                    };
-                    var fgBrush = entry.Role switch
+                        bgBrush = MainWindow.UserBgBrush;
+                        fgBrush = MainWindow.UserFgBrush;
+                    }
+                    else if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Assistant ||
+                             entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Tool)
                     {
-                        ConversationTranscriptApplicationService.TranscriptRole.User => MainWindow.UserFgBrush,
-                        ConversationTranscriptApplicationService.TranscriptRole.Assistant => MainWindow.AiFgBrush,
-                        ConversationTranscriptApplicationService.TranscriptRole.Tool => MainWindow.AiFgBrush,
-                        _ => MainWindow.SystemFgBrush
-                    };
+                        bgBrush = MainWindow.AiBgBrush;
+                        fgBrush = MainWindow.AiFgBrush;
+                    }
+                    else if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Orchestrator)
+                    {
+                        if (orchestratorBg != null)
+                            bgBrush = orchestratorBg;
+                        if (orchestratorFg != null)
+                            fgBrush = orchestratorFg;
+                    }
 
                     if (entry.StartsNewDateSection)
                         _owner.Messages.Add(_owner.CreateDateSeparator(entry.CreatedAt));
 
                     if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Tool)
                     {
+                        var denied = ChatMessage.SplitDeniedStatus(entry.Text);
                         _owner.Messages.Add(new ChatMessage
                         {
                             Sender = "AI",
                             Text = string.Empty,
-                            ToolCallStatus = entry.Text,
+                            ToolCallStatus = denied.StatusText,
+                            DeniedToolCallActionText = denied.ActionText,
                             Timestamp = entry.CreatedAt.ToString("HH:mm"),
                             MessageDate = entry.CreatedAt,
                             BackgroundBrush = bgBrush,
@@ -76,16 +88,23 @@ namespace Aire
                         continue;
                     }
 
+                    var sender = entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Orchestrator
+                        ? "Orchestrator"
+                        : entry.Sender;
+
                     var chatMsg = new ChatMessage
                     {
                         DbMessageId = entry.MessageId,
-                        Sender = entry.Sender,
+                        Sender = sender,
                         Text = entry.Text,
                         Timestamp = entry.CreatedAt.ToString("HH:mm"),
                         MessageDate = entry.CreatedAt,
                         BackgroundBrush = bgBrush,
                         SenderForeground = fgBrush
                     };
+
+                    if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Orchestrator)
+                        chatMsg.IsOrchestratorNarrative = true;
 
                     if (entry.ImageReferences.Count > 0)
                     {
@@ -125,11 +144,18 @@ namespace Aire
                 _owner.ScrollToBottom();
             }
 
-            public async Task SyncConversationSelectionStateAsync(int conversationId)
+            public async Task SyncConversationSelectionStateAsync(int conversationId, int? previousConversationId = null)
             {
                 var conversation = await _owner._conversationApplicationService.GetConversationAsync(conversationId);
                 if (conversation == null)
                     return;
+
+                if (previousConversationId.HasValue &&
+                    previousConversationId.Value != conversationId &&
+                    _owner._agentModeService?.IsActive == true)
+                {
+                    await _owner.PauseOrchestratorConversationAsync(previousConversationId.Value, "conversation switched", clearSessionStatus: true);
+                }
 
                 _owner.ApplyAssistantModeState(conversation.AssistantModeKey);
 
@@ -154,7 +180,7 @@ namespace Aire
                 }
                 finally
                 {
-                    _owner._suppressProviderChange = false;
+                _owner._suppressProviderChange = false;
                 }
             }
 

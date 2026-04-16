@@ -85,11 +85,18 @@ namespace Aire
                 if (root.HasValue && root.Value.TryGetProperty("isAttached", out var ia))
                     _isAttached = ia.GetBoolean();
 
-                string language = string.IsNullOrWhiteSpace(setupPreferences.LanguageCode)
-                    ? "en"
-                    : setupPreferences.LanguageCode;
-                if (root.HasValue && root.Value.TryGetProperty("language", out var lang) && !string.IsNullOrEmpty(lang.GetString()))
+                string language = !string.IsNullOrWhiteSpace(setupPreferences.LanguageCode)
+                    ? setupPreferences.LanguageCode
+                    : AppState.GetLanguage();
+                if (string.IsNullOrWhiteSpace(language) &&
+                    root.HasValue &&
+                    root.Value.TryGetProperty("language", out var lang) &&
+                    !string.IsNullOrEmpty(lang.GetString()))
+                {
                     language = lang.GetString()!;
+                }
+                if (string.IsNullOrWhiteSpace(language))
+                    language = "en";
                 LocalizationService.SetLanguage(language);
 
                 bool voiceEnabled = setupPreferences.VoiceOutputEnabled;

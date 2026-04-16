@@ -32,8 +32,60 @@ namespace Aire
                 _assistantModeDisplayName);
         }
 
-        internal string BuildAssistantModePrompt()
-            => _assistantModeApplicationService.BuildPromptSection(_assistantModeKey);
+        internal string BuildAssistantModePrompt(bool recoveryTurn = false)
+        {
+            var assistant = _assistantModeApplicationService.BuildPromptSection(_assistantModeKey);
+            var orchestrator = recoveryTurn
+                ? BuildOrchestratorRecoveryModePromptSection()
+                : BuildOrchestratorModePromptSection();
+            if (string.IsNullOrWhiteSpace(orchestrator))
+                return assistant;
+
+            return string.IsNullOrWhiteSpace(assistant)
+                ? orchestrator
+                : $"{assistant}\n\n{orchestrator}";
+        }
+
+        internal string BuildOrchestratorModePromptSection()
+        {
+            if (_agentModeService == null || !_agentModeService.IsActive)
+                return string.Empty;
+
+            var goals = _agentModeService.Goals.Count == 0
+                ? "No goals currently set."
+                : string.Join("\n", _agentModeService.Goals.Select(goal => $"• {goal}"));
+
+            var categories = _agentModeService.AllowedCategories == null || _agentModeService.AllowedCategories.Count == 0
+                ? "All tool categories are allowed."
+                : $"Allowed tool categories: {string.Join(", ", _agentModeService.AllowedCategories.OrderBy(c => c))}.";
+
+            var stopReason = string.IsNullOrWhiteSpace(_agentModeService.StopReason)
+                ? "Continue until the goals are complete, the user stops the mode, or you become blocked."
+                : $"Last stop reason: {_agentModeService.StopReason}.";
+
+            return
+                "ORCHESTRATOR MODE:\n" +
+                "You are running an autonomous goal-driven session. Work through the goals below, use allowed tools automatically, and keep the user informed in plain language.\n" +
+                "Before a meaningful action, briefly explain what you are going to do and why.\n" +
+                "Treat new user messages as steering input and adapt the plan when the user adds clarification.\n" +
+                $"Goals:\n{goals}\n" +
+                $"{categories}\n" +
+                $"{stopReason}\n" +
+                "If a goal is completed, say so clearly and move to the next one. If you are blocked after repeated failures, ask the user for guidance.\n" +
+                "If the session was resumed after a stop or crash, continue from the saved checkpoint instead of restarting from scratch.";
+        }
+
+        internal string BuildOrchestratorRecoveryModePromptSection()
+        {
+            if (_agentModeService == null || !_agentModeService.IsActive)
+                return string.Empty;
+
+            return
+                "ORCHESTRATOR RECOVERY:\n" +
+                "Continue from the interrupted step using the smallest possible reply.\n" +
+                "If you need a tool, emit only the next tool call.\n" +
+                "Do not repeat prior narration or restate the goals unless it is necessary to resume safely.";
+        }
 
         internal void ApplyAssistantModeState(string? key)
         {

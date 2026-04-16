@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Aire.AppLayer.Tools;
@@ -82,6 +83,23 @@ public sealed class ToolApprovalApplicationServiceTests
 
         Assert.False(decision.AutoApprove);
         Assert.Equal(new ToolApprovalSessionState(false, now, false, now), decision.SessionState);
+    }
+
+    [Fact]
+    public async Task DetermineAutoApproveAsync_AutoApprovesInstalledMcpTools()
+    {
+        var policy = new ToolAutoAcceptPolicyService(
+            () => Task.FromResult("{\"Enabled\":true,\"AllowedTools\":[],\"AllowMouseTools\":false,\"AllowKeyboardTools\":false}"),
+            () => Task.FromResult<IReadOnlyList<string>?>(new[] { "fake_mcp_tool" }));
+        var service = new ToolApprovalApplicationService(policy);
+        var now = new DateTime(2026, 4, 9, 10, 0, 0, DateTimeKind.Local);
+
+        var decision = await service.DetermineAutoApproveAsync(
+            "fake_mcp_tool",
+            new ToolApprovalSessionState(false, now, false, now),
+            now);
+
+        Assert.True(decision.AutoApprove);
     }
 
     [Fact]

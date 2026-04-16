@@ -19,6 +19,9 @@ namespace Aire.UI.Settings.Controls
 
         public StackPanel ContextSection => PART_ContextSection;
         public TextBlock ContextDescriptionText => PART_ContextDescriptionText;
+        public TextBlock CustomInstructionsHeader => PART_CustomInstructionsHeader;
+        public TextBlock CustomInstructionsSubLabel => PART_CustomInstructionsSubLabel;
+        public TextBox CustomInstructionsTextBox => PART_CustomInstructionsTextBox;
         public CheckBox EnablePromptCachingCheckBox => PART_EnablePromptCachingCheckBox;
         public CheckBox EnableConversationSummariesCheckBox => PART_EnableConversationSummariesCheckBox;
         public TextBlock MaxMessagesLabel => PART_MaxMessagesLabel;

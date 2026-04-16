@@ -16,6 +16,7 @@ namespace Aire.Data
         public string ProviderName { get; set; } = string.Empty;
         public string ProviderColor { get; set; } = "#888888";
         public string AssistantModeKey { get; set; } = "general";
+        public bool IsOrchestratorMode { get; set; }
         public string AssistantModeDisplayName
             => AssistantModeKey switch
             {
@@ -30,6 +31,10 @@ namespace Aire.Data
                 "philosopher" => "Philosopher",
                 _ => "General"
             };
+
+        public int? ParentConversationId { get; set; }
+
+        public bool IsBranch => ParentConversationId.HasValue;
 
         public string RelativeDate
         {

@@ -94,6 +94,53 @@ internal static class AppState
     public static void SetSelectedWindowId(string windowId) => SetString("selectedWindowId", windowId);
     /// <summary>Returns the selected top-level window id, or empty when none was saved.</summary>
     public static string GetSelectedWindowId() => GetString("selectedWindowId");
+    /// <summary>Persists the latest orchestrator configuration for the next launch.</summary>
+    public static void SetOrchestratorConfig(OrchestratorConfigSnapshot config)
+        => SetString("orchestratorConfig", JsonSerializer.Serialize(config));
+    /// <summary>Returns the latest persisted orchestrator configuration, if any.</summary>
+    public static OrchestratorConfigSnapshot? GetOrchestratorConfig()
+    {
+        var json = GetString("orchestratorConfig");
+        if (string.IsNullOrWhiteSpace(json))
+            return null;
+
+        try
+        {
+            return JsonSerializer.Deserialize<OrchestratorConfigSnapshot>(json);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.Error("AppState.GetOrchestratorConfig", "Failed to read orchestrator config; defaulting to empty", ex);
+            return null;
+        }
+    }
+    /// <summary>Persists the latest orchestrator runtime session for one conversation so it can resume after a stop or crash.</summary>
+    public static void SetOrchestratorSession(OrchestratorSessionSnapshot session)
+    {
+        if (session.ConversationId is not int conversationId)
+            return;
+
+        var sessions = LoadOrchestratorSessions();
+        sessions[conversationId.ToString()] = session;
+        SetString("orchestratorSessions", JsonSerializer.Serialize(sessions));
+    }
+
+    /// <summary>Returns the latest persisted orchestrator runtime session for one conversation, if any.</summary>
+    public static OrchestratorSessionSnapshot? GetOrchestratorSession(int conversationId)
+    {
+        var sessions = LoadOrchestratorSessions();
+        return sessions.TryGetValue(conversationId.ToString(), out var session) ? session : null;
+    }
+
+    /// <summary>Clears the persisted orchestrator runtime session for one conversation.</summary>
+    public static void ClearOrchestratorSession(int conversationId)
+    {
+        var sessions = LoadOrchestratorSessions();
+        if (!sessions.Remove(conversationId.ToString()))
+            return;
+
+        SetString("orchestratorSessions", JsonSerializer.Serialize(sessions));
+    }
     /// <summary>Encrypts and persists the local API token.</summary>
     public static void SetApiAccessToken(string token) => SetSecureString("apiAccessToken", token);
     /// <summary>Loads and decrypts the persisted local API token.</summary>
@@ -228,7 +275,61 @@ internal static class AppState
     }
 
     /// <summary>
+    /// Loads the complete orchestrator-session map from the string-state file.
+    /// </summary>
+    private static Dictionary<string, OrchestratorSessionSnapshot> LoadOrchestratorSessions()
+    {
+        try
+        {
+            var json = GetString("orchestratorSessions");
+            if (!string.IsNullOrWhiteSpace(json))
+                return JsonSerializer.Deserialize<Dictionary<string, OrchestratorSessionSnapshot>>(json)
+                       ?? new Dictionary<string, OrchestratorSessionSnapshot>(StringComparer.OrdinalIgnoreCase);
+
+            var legacyJson = GetString("orchestratorSession");
+            if (!string.IsNullOrWhiteSpace(legacyJson))
+            {
+                var legacy = JsonSerializer.Deserialize<OrchestratorSessionSnapshot>(legacyJson);
+                if (legacy != null)
+                {
+                    var key = (legacy.ConversationId ?? 0).ToString();
+                    return new Dictionary<string, OrchestratorSessionSnapshot>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        [key] = legacy
+                    };
+                }
+            }
+
+            return new Dictionary<string, OrchestratorSessionSnapshot>(StringComparer.OrdinalIgnoreCase);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.Error("AppState.LoadOrchestratorSessions", "Failed to read orchestrator sessions; defaulting to empty", ex);
+            return new Dictionary<string, OrchestratorSessionSnapshot>(StringComparer.OrdinalIgnoreCase);
+        }
+    }
+
+    /// <summary>
     /// Generates a random 256-bit token encoded as uppercase hexadecimal text.
     /// </summary>
     private static string GenerateToken() => Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
 }
+
+/// <summary>Persisted orchestrator settings shown when the dialog is reopened.</summary>
+internal sealed record OrchestratorConfigSnapshot(
+    int TokenBudget,
+    List<string> Goals,
+    List<string> SelectedCategories);
+
+/// <summary>Persisted runtime state for the currently active or paused orchestrator session.</summary>
+public sealed record OrchestratorSessionSnapshot(
+    int? ConversationId,
+    int TokenBudget,
+    int TokensConsumed,
+    int HeartbeatCount,
+    List<string> Goals,
+    List<string> SelectedCategories,
+    Dictionary<string, List<string>> FailureVariants,
+    string? StopReason,
+    string? LastNarrative,
+    DateTimeOffset SavedAt);

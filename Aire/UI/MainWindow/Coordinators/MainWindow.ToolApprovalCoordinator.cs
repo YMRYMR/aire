@@ -30,9 +30,9 @@ namespace Aire
             /// <returns><see langword="true"/> when the tool should run without showing an approval prompt.</returns>
             public async Task<bool> DetermineAutoApproveAsync(string toolName)
             {
-                // Agent mode: auto-approve allowed tools without session check.
-                if (_owner._agentModeService is { IsActive: true } && _owner._agentModeService.ShouldAutoApprove(toolName))
-                    return true;
+                // Orchestrator mode owns tool approval while it is active.
+                if (_owner._agentModeService is { IsActive: true })
+                    return _owner._agentModeService.ShouldAutoApprove(toolName);
 
                 var sessionService = GetSessionService();
                 var decision = await sessionService.DetermineAutoApproveAsync(toolName, DateTime.Now);
@@ -93,6 +93,33 @@ namespace Aire
                 }
 
                 return (approved, approvalMsg);
+            }
+
+            /// <summary>
+            /// Adds a denied tool-call bubble for orchestrator-enforced tool category limits.
+            /// </summary>
+            public ChatMessage AddDeniedToolCall(ToolCallRequest toolCall)
+            {
+                var deniedStatus = LocalizationService.S("toolStatus.denied", "\u2717 Denied");
+                var deniedMsg = new ChatMessage
+                {
+                    Sender = "AI",
+                    Text = string.Empty,
+                    Timestamp = DateTime.Now.ToString("HH:mm"),
+                    MessageDate = DateTime.Now,
+                    BackgroundBrush = MainWindow.AiBgBrush,
+                    SenderForeground = MainWindow.AiFgBrush,
+                    PendingToolCall = toolCall,
+                    ToolCallStatus = deniedStatus,
+                    DeniedToolCallActionText = !string.IsNullOrWhiteSpace(toolCall.Description)
+                        ? toolCall.Description
+                        : toolCall.Tool.Replace('_', ' '),
+                    IsApprovalPending = false
+                };
+
+                _owner.Messages.Add(deniedMsg);
+                _owner.ScrollToBottom();
+                return deniedMsg;
             }
 
             /// <summary>

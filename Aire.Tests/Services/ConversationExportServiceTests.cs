@@ -90,6 +90,20 @@ public sealed class ConversationExportServiceTests
     }
 
     [Fact]
+    public async Task ExportMarkdownAsync_IncludesOrchestratorMessage()
+    {
+        var conversations = new FakeConversationRepo();
+        conversations.AddConversation(1, "Chat");
+        conversations.AddMessage(1, "orchestrator", "I’m resuming the saved session.");
+        var svc = CreateService(conversations);
+
+        var md = await svc.ExportMarkdownAsync(1);
+
+        Assert.Contains("### Orchestrator", md);
+        Assert.Contains("I’m resuming the saved session.", md);
+    }
+
+    [Fact]
     public async Task ExportMarkdownAsync_CleansUpSwitchModelResults()
     {
         var conversations = new FakeConversationRepo();

@@ -35,7 +35,11 @@ namespace Aire
             /// <param name="iteration">Current recursion depth used to enforce the tool-call safety limit.</param>
             /// <param name="wasVoice">Whether the originating user message came from the voice pipeline.</param>
             /// <param name="cancellationToken">Cancellation token for the active chat turn.</param>
-            public async Task RunAiTurnAsync(int iteration = 0, bool wasVoice = false, CancellationToken cancellationToken = default)
+            public async Task RunAiTurnAsync(
+                int iteration = 0,
+                bool wasVoice = false,
+                CancellationToken cancellationToken = default,
+                bool recoveryTurn = false)
             {
                 const int maxIterations = 40;
 
@@ -45,6 +49,10 @@ namespace Aire
                     return;
                 }
 
+                // Clear tool result cache at the start of each top-level turn.
+                if (iteration == 0)
+                    _owner._toolExecutionService.ClearCache();
+
                 _owner.IsThinking = true;
 
                 var toolsEnabled = _owner.ToolsEnabled;
@@ -53,7 +61,7 @@ namespace Aire
 
                 // Capture values that require the UI thread before yielding to the thread pool.
                 var modelListSection  = _owner.BuildModelListSection();
-                var modePromptSection = _owner.BuildAssistantModePrompt();
+                var modePromptSection = _owner.BuildAssistantModePrompt(recoveryTurn);
                 var mcpTools          = Services.Mcp.McpManager.Instance.GetAllTools();
                 var currentProvider   = _owner._currentProvider;
                 var history           = _owner._conversationHistory;
@@ -68,7 +76,8 @@ namespace Aire
                     MainWindow.WindowConversation(history, contextSettings),
                     mcpTools,
                     toolsEnabled,
-                    modePromptSection));
+                    modePromptSection,
+                    _owner._customInstructions));
 
                 Providers.AiResponse response;
                 ChatMessage? streamedMessage = null;
@@ -93,12 +102,19 @@ namespace Aire
                 if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.Error)
                 {
                     _owner.IsThinking = false;
+                    if (await TryRecoverOrchestratorModelCutoffAsync(outcome, iteration, wasVoice, cancellationToken, recoveryTurn))
+                        return;
+
+                    _owner._agentModeService?.RecordTaskFailure("provider-response", outcome.ErrorMessage ?? outcome.TextContent ?? "provider error");
                     await HandleErrorOutcome(outcome);
                     return;
                 }
 
                 if (outcome.Kind == ChatTurnWorkflowService.OutcomeKind.SuccessText)
                 {
+                    if (await TryRecoverOrchestratorModelCutoffAsync(outcome, iteration, wasVoice, cancellationToken, recoveryTurn))
+                        return;
+
                     _owner.IsThinking = false;
                     var success = await _owner._chatTurnApplicationService.HandleSuccessTextAsync(
                         outcome.TextContent,
@@ -217,7 +233,7 @@ namespace Aire
                                 return;
 
                             _owner._conversationHistory.Add(new ProviderChatMessage { Role = "user", Content = answer });
-                            await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken);
+                            await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken, recoveryTurn);
                             return;
                         }
 
@@ -239,12 +255,36 @@ namespace Aire
                                 });
                             }
 
+                            if (_owner._agentModeService?.IsActive == true && _owner._agentModeService.Goals.Count > 0)
+                                _owner._agentModeService.MarkGoalCompleted(_owner._agentModeService.Goals[0]);
+
                             return;
                         }
 
                         var toolName = toolCall.Tool;
+                        if (_owner._agentModeService?.IsActive == true &&
+                            !_owner._agentModeService.ShouldAutoApprove(toolName))
+                        {
+                            var deniedMsg = _owner.ToolApprovals.AddDeniedToolCall(toolCall);
+                            var deniedTurn = await _owner._chatTurnApplicationService.HandleToolExecutionAsync(
+                                assistantTextForCurrentTool,
+                                toolCall,
+                                approved: false,
+                                _owner._currentConversationId,
+                                _owner._currentProvider?.Has(Providers.ProviderCapabilities.ImageInput) == true);
+
+                            _owner._conversationHistory.Add(deniedTurn.AssistantHistoryMessage);
+                            deniedMsg.ToolCallStatus = deniedTurn.ToolCallStatus;
+                            _owner._conversationHistory.Add(deniedTurn.ToolHistoryMessage);
+                            _owner._agentModeService?.RecordTaskFailure(toolCall.Tool, "tool category denied");
+                            _owner.ScrollToBottom();
+                            continue;
+                        }
+
                         bool autoApprove = await _owner.ToolApprovals.DetermineAutoApproveAsync(toolName);
                         var (approved, approvalMsg) = await _owner.ToolApprovals.RequestApprovalAsync(toolCall, autoApprove);
+                        if (approved)
+                            await _owner.AddOrchestratorToolNarrativeAsync(toolCall);
                         var toolTurn = await _owner._chatTurnApplicationService.HandleToolExecutionAsync(
                             assistantTextForCurrentTool,
                             toolCall,
@@ -259,6 +299,17 @@ namespace Aire
                             _owner.ToolApprovals.ApplySessionState(toolCall);
                             if (toolTurn.ExecutionOutcome.ExecutionResult != null)
                                 await _owner.ToolApprovals.PersistScreenshotAsync(toolTurn.ExecutionOutcome.ExecutionResult);
+
+                            var executionText = toolTurn.ExecutionOutcome.ExecutionResult?.TextResult ?? string.Empty;
+                            if (!string.IsNullOrWhiteSpace(executionText) &&
+                                executionText.StartsWith("ERROR", StringComparison.OrdinalIgnoreCase))
+                            {
+                                _owner._agentModeService?.RecordTaskFailure(toolCall.Tool, executionText);
+                            }
+                            else
+                            {
+                                _owner._agentModeService?.ClearTaskFailures(toolCall.Tool);
+                            }
                         }
 
                         _owner._conversationHistory.Add(toolTurn.ToolHistoryMessage);
@@ -272,13 +323,15 @@ namespace Aire
                     await _owner.AddSystemMessageAsync("AI operation stopped.");
                     return;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    await _owner.AddErrorMessageAsync("Tool execution error.");
+                    AppLogger.Warn("MainWindow.ChatCoordinator", "Tool execution failed", ex);
+                    await _owner.AddErrorMessageAsync($"Tool execution error: {ex.Message}");
+                    _owner._agentModeService?.RecordTaskFailure("tool-execution", ex.Message);
                     return;
                 }
 
-                await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken);
+                await RunAiTurnAsync(iteration + 1, wasVoice, cancellationToken, recoveryTurn);
             }
         }
     }

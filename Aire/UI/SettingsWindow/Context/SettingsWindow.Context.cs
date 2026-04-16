@@ -16,6 +16,9 @@ namespace Aire.UI
             {
                 var settings = await _contextSettingsApplicationService.LoadAsync();
                 ApplyContextSettingsToControls(settings);
+
+                var customInstructions = await _customInstructionsService.LoadAsync();
+                CustomInstructionsTextBox.Text = customInstructions;
             }
             catch
             {
@@ -38,8 +41,10 @@ namespace Aire.UI
             {
                 var settings = ReadContextSettingsFromControls();
                 await _contextSettingsApplicationService.SaveAsync(settings);
+                await _customInstructionsService.SaveAsync(CustomInstructionsTextBox.Text ?? string.Empty);
                 ApplyContextSettingsToControls(settings);
                 (Owner as Aire.MainWindow)?.ApplyContextWindowSettings(settings);
+                (Owner as Aire.MainWindow)?.ApplyCustomInstructions(CustomInstructionsTextBox.Text ?? string.Empty);
             }
             catch
             {
@@ -104,6 +109,7 @@ namespace Aire.UI
         {
             _suppressContextSettings = true;
             ApplyContextSettingsToControls(ContextWindowSettings.Default);
+            CustomInstructionsTextBox.Text = string.Empty;
             _suppressContextSettings = false;
             _ = SaveContextSettingsAsync();
         }

@@ -90,17 +90,17 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter TargetName="Bd" Property="Background"
-                                                    Value="{DynamicResource AccentSurfaceBrush}" />
+                                                    Value="{DynamicResource AccentSurface2Brush}" />
                                             <Setter TargetName="Bd" Property="BorderBrush"
                                                     Value="{DynamicResource AccentBorderBrush}" />
                                         </Trigger>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter TargetName="Bd" Property="Background"
-                                                    Value="{DynamicResource AccentSurfaceBrush}" />
+                                                    Value="{DynamicResource BackgroundBrush}" />
                                             <Setter TargetName="Bd" Property="BorderBrush"
                                                     Value="{DynamicResource AccentBorderBrush}" />
                                             <Setter TargetName="Bd" Property="BorderThickness"
-                                                    Value="1.5" />
+                                                    Value="1.25" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -117,19 +117,22 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0"
+                            <!-- Branch indent + tree line -->
+                            <Border x:Name="BranchIndent"
+                                    Grid.Column="0"
+                                    Width="16"
+                                    Visibility="Collapsed">
+                                <Border Width="1"
+                                        Background="{DynamicResource AccentBorderBrush}"
+                                        Opacity="0.4"
+                                        HorizontalAlignment="Center" />
+                            </Border>
+                            <Border Grid.Column="1"
                                     Width="4"
                                     CornerRadius="2"
                                     Margin="0 0 8 0"
                                     Background="{Binding ProviderColor}"
                                     Opacity="0.95" />
-                            <Border x:Name="SelectionIndicator"
-                                    Grid.Column="1"
-                                    Width="5"
-                                    CornerRadius="3"
-                                    Margin="0 0 8 0"
-                                    Background="{DynamicResource AccentBorderBrush}"
-                                    Visibility="Collapsed" />
                             <StackPanel Grid.Column="2">
                                 <Grid>
                                     <TextBlock x:Name="TitleDisplay"
@@ -137,6 +140,7 @@
                                                Foreground="{DynamicResource SidebarTextBrush}"
                                                FontWeight="SemiBold"
                                                TextTrimming="CharacterEllipsis"
+                                               Cursor="Hand"
                                                MouseDown="ConversationTitle_MouseDown">
                                         <TextBlock.ToolTip>
                                             <ToolTip Content="{Binding Title}" />
@@ -157,47 +161,71 @@
                                             LostFocus="TitleEditor_LostFocus" />
                                 </Grid>
                                 <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                    <TextBlock Text="{Binding ProviderName}"
+                                    <TextBlock x:Name="ProviderNameText"
+                                               Text="{Binding ProviderName}"
                                                Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
-                                    <TextBlock Text="·"
+                                    <TextBlock x:Name="ProviderDividerText"
+                                               Text="·"
                                                Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
-                                    <TextBlock Text="{Binding AssistantModeDisplayName}"
+                                    <TextBlock x:Name="ModeNameText"
+                                               Text="{Binding AssistantModeDisplayName}"
                                                Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
-                                    <TextBlock Text="·"
+                                    <TextBlock x:Name="ModeDividerText"
+                                               Text="·"
                                                Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}"
                                                Margin="0 0 4 0" />
-                                    <TextBlock Text="{Binding RelativeDate}"
+                                    <TextBlock x:Name="DateText"
+                                               Text="{Binding RelativeDate}"
                                                Foreground="{DynamicResource SidebarTextSecondaryBrush}"
                                                FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource PercentageConverter}, ConverterParameter=0.77}" />
                                 </StackPanel>
                             </StackPanel>
-                            <Button Grid.Column="3"
-                                    Content="×"
-                                    Tag="{Binding}"
-                                    Click="DeleteConversationButton_Click"
-                                    Width="22"
-                                    Height="22"
-                                    Padding="0"
-                                    Margin="8 0 0 0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    FontSize="10"
-                                    ToolTip="Delete conversation"
-                                    Opacity="0.75" />
+                            <StackPanel Grid.Column="3"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Margin="8 0 0 0">
+                                <Button Content="×"
+                                        Tag="{Binding}"
+                                        Click="DeleteConversationButton_Click"
+                                        Width="22"
+                                        Height="22"
+                                        Padding="0"
+                                        HorizontalAlignment="Right"
+                                        FontSize="10"
+                                        ToolTip="Delete conversation"
+                                        Opacity="0.75" />
+                                <Ellipse x:Name="OrchestratorDot"
+                                         Width="7"
+                                         Height="7"
+                                         Margin="0 4 7 0"
+                                         HorizontalAlignment="Right"
+                                         Fill="{DynamicResource ErrorBrush}"
+                                         Visibility="Collapsed" />
+                            </StackPanel>
                         </Grid>
                         <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsBranch}" Value="True">
+                                <Setter TargetName="BranchIndent" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsOrchestratorMode}" Value="True">
+                                <Setter TargetName="OrchestratorDot" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
                                 <Setter TargetName="TitleDisplay" Property="FontWeight" Value="Bold" />
-                                <Setter TargetName="TitleDisplay" Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
-                                <Setter TargetName="TitleEditor" Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
-                                <Setter TargetName="SelectionIndicator" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="TitleDisplay" Property="Foreground" Value="{DynamicResource TextBrush}" />
+                                <Setter TargetName="TitleEditor" Property="Foreground" Value="{DynamicResource TextBrush}" />
+                                <Setter TargetName="ProviderNameText" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+                                <Setter TargetName="ProviderDividerText" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+                                <Setter TargetName="ModeNameText" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+                                <Setter TargetName="ModeDividerText" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+                                <Setter TargetName="DateText" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsEditing}" Value="True">
                                 <Setter TargetName="TitleDisplay" Property="Visibility" Value="Collapsed" />

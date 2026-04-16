@@ -161,9 +161,9 @@ namespace Aire.Providers
         {
             var basePrompt = ToolOutputFormat switch
             {
-                ToolOutputFormat.Hermes          => FileSystemSystemPrompt.HermesToolCallingText,
-                ToolOutputFormat.React           => FileSystemSystemPrompt.ReactToolCallingText,
-                ToolOutputFormat.NativeToolCalls => FileSystemSystemPrompt.NativeToolCallingText,
+                ToolOutputFormat.Hermes          => FileSystemSystemPrompt.BuildHermes(),
+                ToolOutputFormat.React           => FileSystemSystemPrompt.BuildReact(),
+                ToolOutputFormat.NativeToolCalls => FileSystemSystemPrompt.BuildNativeVerbose(),
                 _                                => FileSystemSystemPrompt.Text,
             };
             var sb = new StringBuilder(basePrompt);
@@ -295,6 +295,24 @@ namespace Aire.Providers
                 Config.MaxTokens = 1024;
         }
 
+        /// <summary>
+        /// Raises the configured output token limit for the active provider session,
+        /// clamped to the model's documented output ceiling when one is known.
+        /// </summary>
+        /// <param name="maxTokens">Desired output token ceiling for subsequent requests.</param>
+        public void SetMaxTokens(int maxTokens)
+        {
+            if (maxTokens <= 0)
+                return;
+
+            Config.MaxTokens = Math.Min(maxTokens, GetModelMaxOutputTokens(Config.Model));
+        }
+
+        /// <summary>
+        /// Returns the currently configured output token limit for this provider session.
+        /// </summary>
+        public int GetConfiguredMaxTokens() => Config.MaxTokens;
+
         public void SetToolsEnabled(bool enabled)
         {
             Config.SkipNativeTools = !enabled;
@@ -384,11 +402,11 @@ namespace Aire.Providers
 
             string basePrompt = ToolOutputFormat switch
             {
-                ToolOutputFormat.Hermes          => FileSystemSystemPrompt.HermesToolCallingText,
-                ToolOutputFormat.React           => FileSystemSystemPrompt.ReactToolCallingText,
+                ToolOutputFormat.Hermes          => FileSystemSystemPrompt.BuildHermes(enabledCategories),
+                ToolOutputFormat.React           => FileSystemSystemPrompt.BuildReact(enabledCategories),
                 ToolOutputFormat.NativeToolCalls => PreferCompactToolDescriptions
                                                     ? FileSystemSystemPrompt.BuildNativeCompact(enabledCategories)
-                                                    : FileSystemSystemPrompt.NativeToolCallingText,
+                                                    : FileSystemSystemPrompt.BuildNativeVerbose(enabledCategories),
                 _                                => FileSystemSystemPrompt.BuildTextBased(enabledCategories),
             };
 

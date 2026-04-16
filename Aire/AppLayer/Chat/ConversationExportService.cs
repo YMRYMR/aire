@@ -56,6 +56,7 @@ namespace Aire.AppLayer.Chat
                 {
                     "user" => "User",
                     "assistant" => "AI",
+                    "orchestrator" => "Orchestrator",
                     "system" => "System",
                     _ => msg.Role
                 };

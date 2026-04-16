@@ -19,18 +19,18 @@ namespace Aire
                 {
                     Name = LocalizationService.S("cmd.newConversation", "New Conversation"),
                     Shortcut = "Ctrl+N",
-                    Execute = () => NewChatButton_Click(null, null)
+                    Execute = () => NewChatButton_Click(this, new RoutedEventArgs())
                 },
                 new CommandItem
                 {
                     Name = LocalizationService.S("cmd.toggleTools", "Toggle Tools Menu"),
-                    Shortcut = "",
+                    Shortcut = string.Empty,
                     Execute = () => ToolsButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent))
                 },
                 new CommandItem
                 {
-                    Name = LocalizationService.S("cmd.toggleAgentMode", "Toggle Agent Mode"),
-                    Shortcut = "",
+                    Name = LocalizationService.S("cmd.toggleOrchestratorMode", "Toggle Orchestrator Mode"),
+                    Shortcut = string.Empty,
                     Execute = () => AgentModeButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ToggleButton.ClickEvent))
                 },
                 new CommandItem
@@ -42,8 +42,8 @@ namespace Aire
                 new CommandItem
                 {
                     Name = LocalizationService.S("cmd.exportConversation", "Export Conversation"),
-                    Shortcut = "",
-                    Execute = () => ExportConversation_Click(null, null)
+                    Shortcut = string.Empty,
+                    Execute = () => ExportConversation_Click(this, new RoutedEventArgs())
                 },
             };
 

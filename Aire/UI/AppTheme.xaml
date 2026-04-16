@@ -16,8 +16,9 @@
     <Color x:Key="TextSecondaryColor">#707070</Color>
     <Color x:Key="BorderColor">#3A3A3A</Color>
     <Color x:Key="ErrorColor">#AA6666</Color>
-    <Color x:Key="WarningColor">#B8860B</Color>
-    <Color x:Key="WarningBackgroundColor">#FFF8E1</Color>
+    <Color x:Key="WarningColor">#FFCC44</Color>
+    <Color x:Key="WarningBackgroundColor">#302800</Color>
+    <Color x:Key="WarningBorderColor">#705800</Color>
     <Color x:Key="LinkColor">#6B9FD4</Color>
     <Color x:Key="CodeForegroundColor">#E0A872</Color>
     <Color x:Key="CodeBackgroundColor">#221D19</Color>
@@ -25,6 +26,9 @@
     <Color x:Key="UserMessageTextColor">#E2E2E2</Color>
     <Color x:Key="AssistantMessageColor">#242424</Color>
     <Color x:Key="AssistantMessageTextColor">#CACACA</Color>
+    <Color x:Key="OrchestratorMessageColor">#1D2430</Color>
+    <Color x:Key="OrchestratorMessageTextColor">#D2D2D2</Color>
+    <Color x:Key="OrchestratorMessageBorderColor">#344152</Color>
 
     <!-- ===== BRUSHES ===== -->
     <SolidColorBrush x:Key="BackgroundBrush"            Color="{StaticResource BackgroundColor}" />
@@ -44,6 +48,7 @@
     <SolidColorBrush x:Key="ErrorBrush"                 Color="{StaticResource ErrorColor}" />
     <SolidColorBrush x:Key="WarningBrush"               Color="{StaticResource WarningColor}" />
     <SolidColorBrush x:Key="WarningBackgroundBrush"     Color="{StaticResource WarningBackgroundColor}" />
+    <SolidColorBrush x:Key="WarningBorderBrush"         Color="{StaticResource WarningBorderColor}" />
     <SolidColorBrush x:Key="LinkBrush"                  Color="{StaticResource LinkColor}" />
     <SolidColorBrush x:Key="CodeForegroundBrush"        Color="{StaticResource CodeForegroundColor}" />
     <SolidColorBrush x:Key="CodeBackgroundBrush"        Color="{StaticResource CodeBackgroundColor}" />
@@ -51,6 +56,9 @@
     <SolidColorBrush x:Key="UserMessageTextBrush"       Color="{StaticResource UserMessageTextColor}" />
     <SolidColorBrush x:Key="AssistantMessageBrush"      Color="{StaticResource AssistantMessageColor}" />
     <SolidColorBrush x:Key="AssistantMessageTextBrush"  Color="{StaticResource AssistantMessageTextColor}" />
+    <SolidColorBrush x:Key="OrchestratorMessageBrush"   Color="{StaticResource OrchestratorMessageColor}" />
+    <SolidColorBrush x:Key="OrchestratorMessageTextBrush" Color="{StaticResource OrchestratorMessageTextColor}" />
+    <SolidColorBrush x:Key="OrchestratorMessageBorderBrush" Color="{StaticResource OrchestratorMessageBorderColor}" />
     <SolidColorBrush x:Key="AccentTextBrush"            Color="{StaticResource TextColor}" />
 
     <!-- ===== HYPERLINK ===== -->
@@ -142,6 +150,50 @@
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="{DynamicResource PrimaryPressedBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== TOGGLEBUTTON ===== -->
+    <Style TargetType="ToggleButton">
+        <Setter Property="Background"      Value="{DynamicResource Surface2Brush}" />
+        <Setter Property="Foreground"      Value="{DynamicResource TextBrush}" />
+        <Setter Property="BorderBrush"     Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding"         Value="10 6" />
+        <Setter Property="Margin"          Value="4" />
+        <Setter Property="Cursor"          Value="Hand" />
+        <Setter Property="FontSize"        Value="13" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background"  Value="{DynamicResource PrimaryHoverBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background"  Value="{DynamicResource PrimaryPressedBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryPressedBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Bd" Property="Background"  Value="{DynamicResource AccentSurfaceBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentBorderBrush}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Bd" Property="Opacity" Value="0.4" />
