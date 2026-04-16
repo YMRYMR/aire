@@ -63,7 +63,7 @@ public class ToolExecutionServiceDescriptionTests
         Assert.Equal("Switch to browser tab 2", _service.GetToolDescription(BuildRequest("switch_browser_tab", "{\"index\":2}")));
         Assert.Equal("Close browser tab 1", _service.GetToolDescription(BuildRequest("close_browser_tab", "{\"index\":1}")));
         Assert.Equal("Get browser tab HTML", _service.GetToolDescription(BuildRequest("get_browser_html", "{}")));
-        Assert.Equal("Run JS: alert(1)", _service.GetToolDescription(BuildRequest("execute_browser_script", "{\"script\":\"alert(1)\"}")));
+        Assert.Equal("Run browser script:\n\n```js\nalert(1)\n```", _service.GetToolDescription(BuildRequest("execute_browser_script", "{\"script\":\"alert(1)\"}")));
         Assert.Equal("Get browser cookies", _service.GetToolDescription(BuildRequest("get_browser_cookies", "{}")));
         Assert.Equal("Read clipboard", _service.GetToolDescription(BuildRequest("get_clipboard", "{}")));
         Assert.Equal("Copy to clipboard: copied", _service.GetToolDescription(BuildRequest("set_clipboard", "{\"text\":\"copied\"}")));

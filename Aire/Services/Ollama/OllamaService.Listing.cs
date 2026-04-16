@@ -16,7 +16,10 @@ namespace Aire.Services
 
             try
             {
-                var response = await _httpClient.GetAsync($"{url}/api/tags", cancellationToken);
+                using var probeCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                probeCts.CancelAfter(TimeSpan.FromSeconds(8));
+
+                var response = await _httpClient.GetAsync($"{url}/api/tags", probeCts.Token);
                 return response.IsSuccessStatusCode;
             }
             catch

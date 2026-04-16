@@ -761,7 +761,7 @@ public class ServiceWorkflowRegressionTests
             Assert.True(approved.ExecutionOutcome.Approved);
             Assert.Contains("still-missing.txt", approved.TextResult, StringComparison.OrdinalIgnoreCase);
             List<Message> messages = await db.GetMessagesAsync(conversationId);
-            Assert.Contains((IEnumerable<Message>)messages, (Predicate<Message>)((Message m) => m.Role == "tool" && m.Content == "✗ Denied"));
+            Assert.Contains((IEnumerable<Message>)messages, (Predicate<Message>)((Message m) => m.Role == "tool" && m.Content == "✗ Denied\nAction: Read file: C:\\temp\\missing.txt"));
             Assert.Contains((IEnumerable<Message>)messages, (Predicate<Message>)((Message m) => m.Role == "tool" && m.Content.StartsWith("✓ Read file:", StringComparison.Ordinal)));
         }
         finally

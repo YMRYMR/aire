@@ -60,19 +60,19 @@ public sealed class SettingsProviderListApplicationServiceTests
     }
 
     [Fact]
-    public async Task CreateDefaultProviderAsync_UsesCanonicalProviderDefaults()
-    {
-        var service = new SettingsProviderListApplicationService();
-        var repository = new FakeProviderRepository();
+        public async Task CreateDefaultProviderAsync_UsesCanonicalProviderDefaults()
+        {
+            var service = new SettingsProviderListApplicationService();
+            var repository = new FakeProviderRepository();
 
-        var provider = await service.CreateDefaultProviderAsync(repository);
+            var provider = await service.CreateDefaultProviderAsync(repository);
 
-        Assert.Equal("OpenAI", provider.Name);
-        Assert.Equal("OpenAI", provider.Type);
-        Assert.False(string.IsNullOrWhiteSpace(provider.Model));
-        Assert.True(provider.IsEnabled);
-        Assert.Equal("#888888", provider.Color);
-    }
+            Assert.Equal("OpenAI", provider.Name);
+            Assert.Equal("OpenAI", provider.Type);
+            Assert.False(string.IsNullOrWhiteSpace(provider.Model));
+            Assert.True(provider.IsEnabled);
+            Assert.Equal(ProviderColorPalette.GetColorForText("OpenAI"), provider.Color);
+        }
 
     [Fact]
     public async Task LoadAsync_ReselectsPreferredProvider_OrFallsBackToCurrentSelection()

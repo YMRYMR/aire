@@ -17,6 +17,9 @@ namespace Aire
         /// </summary>
         private async Task<T> DispatchAsync<T>(Func<Task<T>> action)
         {
+            if (Dispatcher.CheckAccess())
+                return await action().ConfigureAwait(false);
+
             var op = Dispatcher.InvokeAsync(action);
             var task = await op.Task.ConfigureAwait(false);
             return await task.ConfigureAwait(false);
@@ -27,6 +30,9 @@ namespace Aire
         /// </summary>
         private async Task<T> DispatchAsync<T>(Func<T> action)
         {
+            if (Dispatcher.CheckAccess())
+                return action();
+
             var op = Dispatcher.InvokeAsync(action);
             return await op.Task.ConfigureAwait(false);
         }
@@ -141,6 +147,8 @@ namespace Aire
                 var provider = ProviderComboBox.SelectedItem as Provider;
                 var selectedWindow = WindowCaptureService.GetSelectedWindow();
                 var pendingCount = Messages.Count(m => m.IsApprovalPending && m.ApprovalTcs != null && !m.ApprovalTcs.Task.IsCompleted);
+                var isSearchOpen = SearchPanelControl?.SearchPanel?.Visibility == System.Windows.Visibility.Visible;
+                var inputText = ComposerControl?.InputTextBox?.Text;
 
                 return (_localApiApplicationService ?? new Aire.AppLayer.Api.LocalApiApplicationService())
                         .BuildStateSnapshot(
@@ -156,7 +164,7 @@ namespace Aire
                             selectedWindow,
                             pendingCount,
                             isSidebarVisible: _sidebarOpen,
-                            isSearchOpen: SearchPanel.Visibility == System.Windows.Visibility.Visible,
+                            isSearchOpen: isSearchOpen,
                             isAgentModeActive: _agentModeService?.IsActive ?? false,
                             isOrchestratorModeActive: _agentModeService?.IsActive ?? false,
                             orchestratorHeartbeatCount: _agentModeService?.HeartbeatCount ?? 0,
@@ -164,7 +172,7 @@ namespace Aire
                             orchestratorGoals: _agentModeService?.Goals?.ToList() ?? new List<string>(),
                             isVoiceOutputEnabled: _ttsService.VoiceEnabled,
                             isWindowPinned: TrayService?.IsAttachedToTray ?? _isAttached,
-                            inputText: InputTextBox.Text,
+                            inputText: inputText,
                             hasAttachment: _attachedImagePath != null || _attachedFilePath != null,
                             messageCount: Messages.Count(m => m.Sender is not ("Date" or "System")),
                             assistantMode: _assistantModeKey,

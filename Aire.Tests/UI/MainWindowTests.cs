@@ -148,54 +148,56 @@ namespace Aire.Tests.UI
         }
 
         [Fact]
-        public void MainWindow_ApiExecuteToolAndApprovalPaths_Work()
+        public async Task MainWindow_ApiExecuteToolAndApprovalPaths_Work()
         {
-            RunOnStaThread(delegate
+            await Task.Run(() =>
             {
-                EnsureApplication();
-                AppStartupState.MarkReady();
-                MainWindow window = new MainWindow(initializeUi: false);
-                window.Messages = new ObservableCollection<UiModels.ChatMessage>();
-
-                string tempDir = Path.Combine(Path.GetTempPath(), "aire-tool-tests-" + Guid.NewGuid().ToString("N"));
-                Directory.CreateDirectory(tempDir);
-                string testFile = Path.Combine(tempDir, "tool.txt");
-                File.WriteAllText(testFile, "hello from tool");
-                using var databaseService = new DatabaseService();
-                databaseService.InitializeAsync().GetAwaiter().GetResult();
-
-                try
+                RunOnStaThread(async () =>
                 {
-                    window._databaseService = databaseService;
-                    window._toolExecutionService = new ToolExecutionService(new FileSystemService(), new CommandExecutionService());
-                    typeof(MainWindow).GetField("_toolApprovalExecutionApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
-                        .SetValue(window, null);
-                    window.MessagesScrollViewer = new ScrollViewer();
-                    SettingsWindow.SetAutoAcceptCache(string.Empty);
+                    EnsureApplication();
+                    AppStartupState.MarkReady();
+                    MainWindow window = new MainWindow(initializeUi: false);
+                    window.Messages = new ObservableCollection<UiModels.ChatMessage>();
 
-                    using JsonDocument emptyParams = JsonDocument.Parse("[]");
-                    var execTask = window.ApiExecuteToolAsync("read_file", emptyParams.RootElement, false, 300);
-                    var result = execTask.GetAwaiter().GetResult();
+                    string tempDir = Path.Combine(Path.GetTempPath(), "aire-tool-tests-" + Guid.NewGuid().ToString("N"));
+                    Directory.CreateDirectory(tempDir);
+                    string testFile = Path.Combine(tempDir, "tool.txt");
+                    File.WriteAllText(testFile, "hello from tool");
+                    using var databaseService = new DatabaseService();
+                    await databaseService.InitializeAsync();
 
-                    Assert.Equal("pending_approval", result.Status);
-                    Assert.NotNull(result.PendingApprovalIndex);
-
-                    SettingsWindow.SetAutoAcceptCache(JsonSerializer.Serialize(new AutoAcceptSettings
+                    try
                     {
-                        Enabled = true,
-                        AllowedTools = new List<string> { "read_file" },
-                        AllowMouseTools = false,
-                        AllowKeyboardTools = false
-                    }));
-                    using JsonDocument pathParams = JsonDocument.Parse($@"{{""path"":""{testFile.Replace("\\", "\\\\")}""}}");
-                    var allowResult = window.ApiExecuteToolAsync("read_file", pathParams.RootElement, true, 300).GetAwaiter().GetResult();
-                    Assert.Equal("completed", allowResult.Status);
-                    Assert.Contains("hello from tool", allowResult.TextResult);
-                }
-                finally
-                {
-                    try { Directory.Delete(tempDir, true); } catch { }
-                }
+                        window._databaseService = databaseService;
+                        window._toolExecutionService = new ToolExecutionService(new FileSystemService(), new CommandExecutionService());
+                        typeof(MainWindow).GetField("_toolApprovalExecutionApplicationService", BindingFlags.Instance | BindingFlags.NonPublic)!
+                            .SetValue(window, null);
+                        window.MessagesScrollViewer = new ScrollViewer();
+                        SettingsWindow.SetAutoAcceptCache(string.Empty);
+
+                        using JsonDocument emptyParams = JsonDocument.Parse("[]");
+                        var result = await window.ApiExecuteToolAsync("read_file", emptyParams.RootElement, false, 300);
+
+                        Assert.Equal("pending_approval", result.Status);
+                        Assert.NotNull(result.PendingApprovalIndex);
+
+                        SettingsWindow.SetAutoAcceptCache(JsonSerializer.Serialize(new AutoAcceptSettings
+                        {
+                            Enabled = true,
+                            AllowedTools = new List<string> { "read_file" },
+                            AllowMouseTools = false,
+                            AllowKeyboardTools = false
+                        }));
+                        using JsonDocument pathParams = JsonDocument.Parse($@"{{""path"":""{testFile.Replace("\\", "\\\\")}""}}");
+                        var allowResult = await window.ApiExecuteToolAsync("read_file", pathParams.RootElement, true, 300);
+                        Assert.Equal("completed", allowResult.Status);
+                        Assert.Contains("hello from tool", allowResult.TextResult);
+                    }
+                    finally
+                    {
+                        try { Directory.Delete(tempDir, true); } catch { }
+                    }
+                });
             });
         }
 

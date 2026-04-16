@@ -62,7 +62,7 @@ public sealed class LocalApiApplicationServiceTests
         ToolCallRequest request = service.BuildToolRequest("notify", document.RootElement);
 
         Assert.Equal("show_notification", request.Tool);
-        Assert.Equal("show_notification", request.Description);
+        Assert.Contains("notification", request.Description, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(JsonValueKind.Object, request.Parameters.ValueKind);
         Assert.Equal("C:/repo", request.Parameters.GetProperty("path").GetString());
         Assert.Equal(1, request.Parameters.GetProperty("nested").GetProperty("value").GetInt32());

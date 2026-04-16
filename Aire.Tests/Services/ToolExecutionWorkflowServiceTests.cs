@@ -64,7 +64,7 @@ public sealed class ToolExecutionWorkflowServiceTests
         Assert.Equal("C:\\repo\\old.txt", outcome.ToolPath);
         Assert.Contains("Operation denied by user", outcome.HistoryContent, StringComparison.Ordinal);
         Assert.Single(conversations.SavedMessages);
-        Assert.Equal((42, "tool", "✗ Denied"), conversations.SavedMessages[0]);
+        Assert.Equal((42, "tool", "✗ Denied\nAction: Move file"), conversations.SavedMessages[0]);
         Assert.Single(settings.FileAccessLogs);
         Assert.Equal(("move_file", "C:\\repo\\old.txt", false), settings.FileAccessLogs[0]);
     }
