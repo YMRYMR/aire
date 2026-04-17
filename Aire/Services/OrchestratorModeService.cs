@@ -151,9 +151,8 @@ namespace Aire.Services
 
             GoalsChanged?.Invoke();
             ModeChanged?.Invoke();
+            ReportProgress();
         }
-
-        /// <summary>Deactivates orchestrator mode and resets counters.</summary>
         public virtual void Stop(string? reason = null)
         {
             lock (_gate)
@@ -168,6 +167,7 @@ namespace Aire.Services
             }
 
             ModeChanged?.Invoke();
+            ReportProgress();
         }
 
         /// <summary>
@@ -248,6 +248,7 @@ namespace Aire.Services
             {
                 BudgetExhausted?.Invoke();
                 ModeChanged?.Invoke();
+                ReportProgress();
             }
         }
 
@@ -281,6 +282,7 @@ namespace Aire.Services
             {
                 GoalCompleted?.Invoke(goal);
                 GoalsChanged?.Invoke();
+                ReportProgress();
                 if (!_isActive)
                     ModeChanged?.Invoke();
             }
@@ -324,6 +326,7 @@ namespace Aire.Services
             {
                 Blocked?.Invoke(blockedMessage);
                 ModeChanged?.Invoke();
+                ReportProgress();
             }
         }
 
@@ -428,6 +431,7 @@ namespace Aire.Services
 
             var count = Interlocked.Increment(ref _heartbeatCount);
             Heartbeat?.Invoke(count);
+            ReportProgress();
         }
 
         private static TimeSpan NormalizeHeartbeatInterval(TimeSpan? heartbeatInterval)
