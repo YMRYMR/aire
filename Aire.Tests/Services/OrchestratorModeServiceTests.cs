@@ -211,4 +211,18 @@ public sealed class OrchestratorModeServiceTests
         Assert.Null(report.StopReason);
         orchestrator.Stop();
     }
+
+    [Fact]
+    public void ReportProgress_TracksCompletedGoals()
+    {
+        var orchestrator = new OrchestratorModeService();
+        orchestrator.Start(tokenBudget: 1000, goals: ["Goal A", "Goal B", "Goal C"]);
+
+        orchestrator.MarkGoalCompleted("Goal A");
+
+        var report = orchestrator.ReportProgress();
+        Assert.Equal(3, report.GoalsTotal);
+        Assert.Equal(1, report.GoalsCompleted);
+        orchestrator.Stop();
+    }
 }

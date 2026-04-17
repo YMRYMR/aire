@@ -37,6 +37,7 @@ namespace Aire.Services
         private int _tokenBudget;
         private int _tokensConsumed;
         private int _heartbeatCount;
+        private int _goalsCompletedCount;
         private HashSet<string>? _allowedCategories;
         private List<string> _goals = new();
         private bool _isActive;
@@ -135,6 +136,7 @@ namespace Aire.Services
                     _tokenBudget = tokenBudget;
                     _tokensConsumed = 0;
                     _heartbeatCount = 0;
+                    _goalsCompletedCount = 0;
                     _allowedCategories = allowedCategories == null
                         ? null
                         : new HashSet<string>(allowedCategories, StringComparer.OrdinalIgnoreCase);
@@ -238,6 +240,7 @@ namespace Aire.Services
                     _stopReason = "token budget exhausted";
                     StopTimer_NoLock();
                     _isActive = false;
+                    _providerFailureCount.Clear();
                 }
             }
 
@@ -263,11 +266,14 @@ namespace Aire.Services
                     return;
 
                 finished = RemoveGoal_NoLock(goal);
+                if (finished)
+                    _goalsCompletedCount++;
                 if (finished && _goals.Count == 0)
                 {
                     _stopReason = "goals completed";
                     StopTimer_NoLock();
                     _isActive = false;
+                    _providerFailureCount.Clear();
                 }
             }
 
@@ -309,6 +315,7 @@ namespace Aire.Services
                     _stopReason = $"blocked after repeated failures for '{taskKey}'";
                     StopTimer_NoLock();
                     _isActive = false;
+                    _providerFailureCount.Clear();
                     blockedMessage = $"Orchestrator Mode is blocked on '{taskKey}' after three different failed attempts. Please review the goal or provide guidance.";
                 }
             }
@@ -511,8 +518,8 @@ namespace Aire.Services
             lock (_gate)
             {
                 report = new OrchestratorProgressReport(
-                    _goals.Count,
-                    0,
+                    _goals.Count + _goalsCompletedCount,
+                    _goalsCompletedCount,
                     _tokensConsumed,
                     _tokenBudget,
                     _heartbeatCount,
