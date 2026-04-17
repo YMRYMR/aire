@@ -13,11 +13,26 @@ namespace Aire.Services
     /// </summary>
     public class OrchestratorModeService
     {
+        /// <summary>
+        /// Structured progress report emitted on heartbeat ticks and state transitions.
+        /// </summary>
+        public sealed record OrchestratorProgressReport(
+            int GoalsTotal,
+            int GoalsCompleted,
+            int TokensConsumed,
+            int TokenBudget,
+            int HeartbeatCount,
+            string? CurrentGoal,
+            string? StopReason);
+
+        private const int MaxProviderFailures = 3;
+
         private static readonly Lazy<IReadOnlyDictionary<string, string>> ToolCategoryLookupLazy =
             new(BuildToolCategoryLookup);
 
         private readonly object _gate = new();
         private readonly Dictionary<string, HashSet<string>> _failureVariants = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, int> _providerFailureCount = new(StringComparer.OrdinalIgnoreCase);
         private System.Timers.Timer? _heartbeatTimer;
         private int _tokenBudget;
         private int _tokensConsumed;
@@ -66,6 +81,12 @@ namespace Aire.Services
 
         /// <summary>Fires when one goal is explicitly marked complete.</summary>
         public event Action<string>? GoalCompleted;
+
+        /// <summary>Fires when a provider exceeds the failure threshold.</summary>
+        public event Action<string>? ProviderUnhealthy;
+
+        /// <summary>Fires on heartbeat ticks and state transitions with structured progress.</summary>
+        public event Action<OrchestratorProgressReport>? ProgressReported;
 
         /// <summary>
         /// Activates orchestrator mode with the given budget, optional category filter, and optional goals.
@@ -141,6 +162,7 @@ namespace Aire.Services
                 StopTimer_NoLock();
                 _isActive = false;
                 _stopReason = reason;
+                _providerFailureCount.Clear();
             }
 
             ModeChanged?.Invoke();
@@ -429,6 +451,77 @@ namespace Aire.Services
 
             _goals.RemoveAt(index);
             return true;
+        }
+
+        /// <summary>
+        /// Records a failure for a specific provider. After <see cref="MaxProviderFailures"/> distinct
+        /// failures the provider is considered unhealthy and <see cref="ProviderUnhealthy"/> fires.
+        /// </summary>
+        public virtual void RecordProviderFailure(string providerId)
+        {
+            if (string.IsNullOrWhiteSpace(providerId)) return;
+
+            bool becameUnhealthy = false;
+            lock (_gate)
+            {
+                if (!_providerFailureCount.TryGetValue(providerId, out var count))
+                    count = 0;
+                count++;
+                _providerFailureCount[providerId] = count;
+                if (count >= MaxProviderFailures)
+                    becameUnhealthy = true;
+            }
+
+            if (becameUnhealthy)
+                ProviderUnhealthy?.Invoke(providerId);
+        }
+
+        /// <summary>
+        /// Records a successful response from a provider, resetting its failure counter.
+        /// </summary>
+        public virtual void RecordProviderSuccess(string providerId)
+        {
+            if (string.IsNullOrWhiteSpace(providerId)) return;
+
+            lock (_gate)
+            {
+                _providerFailureCount.Remove(providerId);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if a provider has exceeded the failure threshold.
+        /// </summary>
+        public virtual bool IsProviderHealthy(string providerId)
+        {
+            if (string.IsNullOrWhiteSpace(providerId)) return true;
+
+            lock (_gate)
+            {
+                return !_providerFailureCount.TryGetValue(providerId, out var count) || count < MaxProviderFailures;
+            }
+        }
+
+        /// <summary>
+        /// Builds and fires a structured progress report.
+        /// </summary>
+        public virtual OrchestratorProgressReport ReportProgress(string? currentGoal = null)
+        {
+            OrchestratorProgressReport report;
+            lock (_gate)
+            {
+                report = new OrchestratorProgressReport(
+                    _goals.Count,
+                    0,
+                    _tokensConsumed,
+                    _tokenBudget,
+                    _heartbeatCount,
+                    currentGoal ?? _goals.FirstOrDefault(),
+                    _stopReason);
+            }
+
+            ProgressReported?.Invoke(report);
+            return report;
         }
 
         private static IReadOnlyDictionary<string, string> BuildToolCategoryLookup()
