@@ -74,8 +74,9 @@ internal static class ScreenshotCli
         if (!File.Exists(planPath))
             throw new FileNotFoundException("Plan file not found.", planPath);
 
-        // Persist language so Aire picks it up on (re)start.
+        // Persist language and dark theme so Aire picks it up on (re)start.
         LanguageHelper.SetAppStateLanguage(language);
+        AppearanceHelper.SetDarkTheme();
 
         await using var stream = File.OpenRead(planPath);
         var plan = await JsonSerializer.DeserializeAsync<ScreenshotPlan>(stream, JsonOptions.Default)
@@ -139,8 +140,9 @@ internal static class ScreenshotCli
     {
         KillAireProcesses();
 
-        // Persist language so Aire picks it up on the fresh launch.
+        // Persist language and dark theme so Aire picks it up on the fresh launch.
         LanguageHelper.SetAppStateLanguage(lang);
+        AppearanceHelper.SetDarkTheme();
 
         // Start from a clean slate for each language so we don't carry over
         // provider / conversation state from the previous batch.
