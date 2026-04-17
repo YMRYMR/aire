@@ -4,6 +4,10 @@
 **Date:** 2026-04-09
 **Codebase snapshot:** commit `b6e2939` (main)
 
+> **Note:** The metrics below reflect the codebase as of 2026-04-09. For current
+> metrics and an updated assessment, see the
+> [GLM-5.1 analysis (2026-04-17)](./project-analysis-glm-5.1-2026-04-17.md).
+
 ---
 
 ## Executive Summary

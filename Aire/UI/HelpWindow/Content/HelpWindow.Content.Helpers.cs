@@ -68,9 +68,12 @@ namespace Aire.UI
             return tabName switch
             {
                 "Getting Started" => LocalizationService.S("help.tab.gettingStarted", "Getting Started"),
+                "Setup Wizard" => LocalizationService.S("help.tab.setupWizard", "Setup Wizard"),
                 "Tools & Voice" => LocalizationService.S("help.tab.toolsVoice", "Tools & Voice"),
                 "Context & Templates" => LocalizationService.S("help.tab.contextTemplates", "Context & Templates"),
                 "Providers" => LocalizationService.S("help.tab.providers", "Providers"),
+                "Connections" => LocalizationService.S("help.tab.connections", "Connections"),
+                "Appearance" => LocalizationService.S("help.tab.appearance", "Appearance"),
                 "Local API" => LocalizationService.S("help.tab.localApi", "Local API"),
                 _ => tabName
             };

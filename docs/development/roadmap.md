@@ -145,7 +145,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ## 7. Analysis Reports
 
 - [Project analysis by Opus 4.6 (2026-04-09)](./project-analysis-opus-4.6-2026-04-09.md)
-- [GLM-5.1 evaluation (2026-04-11)](./project-analysis-glm-5.1-2026-04-11.md) *(to be created)*
+- [GLM-5.1 evaluation (2026-04-17)](./project-analysis-glm-5.1-2026-04-17.md)
 
 ## 8. Sprint Status (2026-04-13)
 
