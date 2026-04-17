@@ -73,13 +73,20 @@ namespace Aire
 
                     if (entry.Role == ConversationTranscriptApplicationService.TranscriptRole.Tool)
                     {
-                        var denied = ChatMessage.SplitDeniedStatus(entry.Text);
+                        string statusText = entry.Text ?? string.Empty;
+                        string actionText = string.Empty;
+                        if (statusText.StartsWith("Denied", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var denied = ChatMessage.SplitDeniedStatus(statusText);
+                            statusText = denied.StatusText;
+                            actionText = denied.ActionText;
+                        }
                         _owner.Messages.Add(new ChatMessage
                         {
                             Sender = "AI",
                             Text = string.Empty,
-                            ToolCallStatus = denied.StatusText,
-                            DeniedToolCallActionText = denied.ActionText,
+                            ToolCallStatus = statusText,
+                            DeniedToolCallActionText = actionText,
                             Timestamp = entry.CreatedAt.ToString("HH:mm"),
                             MessageDate = entry.CreatedAt,
                             BackgroundBrush = bgBrush,
