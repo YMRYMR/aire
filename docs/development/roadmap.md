@@ -16,8 +16,10 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## 2. Architecture Cleanup
 
-### 2.1 Finish window decomposition `[~]`
-- Keep extracting logic from large window classes into small, testable partials or coordinators.
+### 2.1 Finish window decomposition `[x]`
+- SettingsWindow.Usage.cs (797 lines) extracted into `UsageDashboardCoordinator` inner class.
+- MainWindow.AgentMode.cs (563 lines) extracted into `OrchestratorCoordinator` inner class.
+- All major window classes now use the coordinator pattern.
 
 ### 2.2 Strengthen application-service tests `[x]`
 - 1220 non-UI tests passing, covering all application services.
@@ -83,10 +85,10 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - Template management UI in Settings > Templates tab (list + edit form + live preview)
 - 9 dedicated tests
 
-### 4.5.1 Template editor usability `[~]`
-- Make the template body editor use the available vertical space.
-- Add inline guidance for first-time users with examples and placeholder insertion buttons.
-- Keep the preview visible while editing so users can learn by changing the template.
+### 4.5.1 Template editor usability `[x]`
+- Template body editor stretches to fill available vertical space.
+- Placeholder insertion chips ({{code}}, {{text}}, {{selection}}, {{clipboard}}) above the editor.
+- Preview pinned at bottom, always visible while editing.
 
 ### 4.6 Multi-model comparison `[ ]`
 ### 4.7 Provider-returned images `[ ]`
@@ -107,7 +109,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## 5. AI-Facing Features (Prioritized)
 
-### 5.1 Orchestrator Mode `[~]`
+### 5.1 Orchestrator Mode `[x]`
 - Replace the current agent-mode toggle with a goal-driven orchestrator session.
 - Keep the main-window button as the visible activation / kill switch entry point.
 - Run on a heartbeat loop until goals are complete, the user stops it, or all fallbacks are exhausted.
@@ -131,7 +133,11 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ### 5.5 Workflow chains `[ ]`
 ### 5.6 Local RAG integration `[ ]`
 
-### 5.7 Better automation ergonomics `[~]`
+### 5.7 Better automation ergonomics `[x]`
+- Structured error codes on all local API error responses.
+- `list_methods` discovery endpoint returning catalog of all 60 methods with parameter schemas.
+- Provider health circuit-breaker in orchestrator mode.
+- Structured progress reporting via `OrchestratorProgressReport`.
 ### 5.8 Plugin system `[ ]`
 
 ## 6. Operating Rules
