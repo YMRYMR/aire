@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -282,6 +283,84 @@ public sealed class LocalApiNewRoutesTests
         "start_agent_mode" or "stop_agent_mode" or "toggle_agent_mode" => "toggle_agent_mode",
         _ => method
     };
+
+    // ── Error codes ─────────────────────────────────────────────────────────
+
+    [Fact]
+    public async Task UnknownMethod_ReturnsErrorCode()
+    {
+        var stub = new StubApiCommandHandler();
+        var service = new LocalApiService(stub);
+
+        var response = await service.DispatchAsync(
+            new LocalApiRequest { Method = "nonexistent_xyz" }, CancellationToken.None);
+
+        Assert.False(response.Ok);
+        Assert.Equal("UNKNOWN_METHOD", response.ErrorCode);
+    }
+
+    [Fact]
+    public async Task InvalidOperation_ReturnsInvalidParamsCode()
+    {
+        var stub = new StubApiCommandHandler();
+        var service = new LocalApiService(stub);
+
+        // select_window requires window selection parameters — will throw InvalidOperationException
+        var response = await service.DispatchAsync(
+            new LocalApiRequest { Method = "select_window" }, CancellationToken.None);
+
+        Assert.False(response.Ok);
+        Assert.Equal("INVALID_PARAMS", response.ErrorCode);
+    }
+
+    // ── Method catalog ─────────────────────────────────────────────────────
+
+    [Fact]
+    public async Task ListMethods_ReturnsCatalog()
+    {
+        var stub = new StubApiCommandHandler();
+        var service = new LocalApiService(stub);
+
+        var response = await service.DispatchAsync(
+            new LocalApiRequest { Method = "list_methods" }, CancellationToken.None);
+
+        Assert.True(response.Ok);
+        Assert.NotNull(response.Result);
+
+        var json = JsonSerializer.Serialize(response.Result);
+        using var doc = JsonDocument.Parse(json);
+        var catalog = doc.RootElement;
+
+        Assert.Equal(JsonValueKind.Array, catalog.ValueKind);
+        Assert.True(catalog.GetArrayLength() > 50);
+
+        // Verify first entry shape
+        var first = catalog[0];
+        Assert.True(first.TryGetProperty("method", out _));
+        Assert.True(first.TryGetProperty("description", out _));
+        Assert.True(first.TryGetProperty("parameters", out _));
+    }
+
+    [Fact]
+    public async Task ListMethods_ContainsKeyMethods()
+    {
+        var stub = new StubApiCommandHandler();
+        var service = new LocalApiService(stub);
+
+        var response = await service.DispatchAsync(
+            new LocalApiRequest { Method = "list_methods" }, CancellationToken.None);
+
+        var json = JsonSerializer.Serialize(response.Result);
+        using var doc = JsonDocument.Parse(json);
+
+        var methods = doc.RootElement.EnumerateArray()
+            .Select(e => e.GetProperty("method").GetString())
+            .ToHashSet();
+
+        Assert.Contains("send_message", methods);
+        Assert.Contains("list_methods", methods);
+        Assert.Contains("toggle_orchestrator_mode", methods);
+    }
 
     // ── Stub handler ─────────────────────────────────────────────────────────
 

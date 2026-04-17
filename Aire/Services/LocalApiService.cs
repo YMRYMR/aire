@@ -134,7 +134,7 @@ namespace Aire.Services
             var line = await reader.ReadLineAsync().ConfigureAwait(false);
             if (string.IsNullOrWhiteSpace(line))
             {
-                await WriteResponseAsync(writer, LocalApiResponse.Error("Empty request")).ConfigureAwait(false);
+                await WriteResponseAsync(writer, LocalApiResponse.Error("Empty request", "EMPTY_REQUEST")).ConfigureAwait(false);
                 return;
             }
 
@@ -149,19 +149,19 @@ namespace Aire.Services
             catch (Exception ex)
             {
                 ApiTraceLog.Record("error", "invalid_json", $"Invalid JSON payload: {ex.GetType().Name}", false);
-                await WriteResponseAsync(writer, LocalApiResponse.Error("Invalid JSON payload.")).ConfigureAwait(false);
+                await WriteResponseAsync(writer, LocalApiResponse.Error("Invalid JSON payload.", "INVALID_JSON")).ConfigureAwait(false);
                 return;
             }
 
             if (request == null || string.IsNullOrWhiteSpace(request.Method))
             {
-                await WriteResponseAsync(writer, LocalApiResponse.Error("Missing method")).ConfigureAwait(false);
+                await WriteResponseAsync(writer, LocalApiResponse.Error("Missing method", "MISSING_METHOD")).ConfigureAwait(false);
                 return;
             }
 
             if (!AppState.GetApiAccessEnabled())
             {
-                await WriteResponseAsync(writer, LocalApiResponse.Error("Local API access is disabled in Settings")).ConfigureAwait(false);
+                await WriteResponseAsync(writer, LocalApiResponse.Error("Local API access is disabled in Settings", "API_DISABLED")).ConfigureAwait(false);
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace Aire.Services
                 if (delayMs > 0)
                     await Task.Delay(delayMs, token).ConfigureAwait(false);
                 ApiTraceLog.Record("auth", request.Method, "Rejected invalid or missing auth token", false);
-                await WriteResponseAsync(writer, LocalApiResponse.Error("Missing or invalid auth token")).ConfigureAwait(false);
+                await WriteResponseAsync(writer, LocalApiResponse.Error("Missing or invalid auth token", "AUTH_INVALID")).ConfigureAwait(false);
                 return;
             }
             Interlocked.Exchange(ref _consecutiveInvalidAuthCount, 0);
@@ -216,6 +216,7 @@ namespace Aire.Services
                 {
                     "ping" => LocalApiResponse.OkResult(await _handler.ApiGetStateAsync().ConfigureAwait(false)),
                     "get_state" => LocalApiResponse.OkResult(await _handler.ApiGetStateAsync().ConfigureAwait(false)),
+                    "list_methods" => LocalApiResponse.OkResult(BuildMethodCatalog()),
                     "list_windows" => LocalApiResponse.OkResult(WindowCaptureService.ListWindows()),
                     "get_selected_window" => LocalApiResponse.OkResult(WindowCaptureService.GetSelectedWindow()),
                     "select_window" => LocalApiResponse.OkResult(WindowCaptureService.SelectWindow(BuildWindowSelectionRequest(request.Parameters)
@@ -320,21 +321,21 @@ namespace Aire.Services
                     "branch_conversation" => LocalApiResponse.OkResult(await _handler.ApiBranchConversationAsync(
                         GetInt(request.Parameters, "conversationId"),
                         GetInt(request.Parameters, "upToMessageId")).ConfigureAwait(false)),
-                    _ => LocalApiResponse.Error($"Unknown method: {request.Method}")
+                    _ => LocalApiResponse.Error($"Unknown method: {request.Method}", "UNKNOWN_METHOD")
                 };
             }
             catch (InvalidOperationException)
             {
-                return LocalApiResponse.Error("Invalid local API request.");
+                return LocalApiResponse.Error("Invalid local API request.", "INVALID_PARAMS");
             }
             catch (ArgumentException ex)
             {
-                return LocalApiResponse.Error(ex.Message);
+                return LocalApiResponse.Error(ex.Message, "INVALID_PARAMS");
             }
             catch (Exception ex)
             {
                 ApiTraceLog.Record("error", request?.Method ?? "<null>", $"Unexpected local API failure: {ex.GetType().Name}", false);
-                return LocalApiResponse.Error("An internal error occurred.");
+                return LocalApiResponse.Error("An internal error occurred.", "INTERNAL_ERROR");
             }
         }
 
@@ -597,6 +598,74 @@ namespace Aire.Services
             return string.Equals(request.Token ?? string.Empty, expected, StringComparison.Ordinal);
         }
 
+        private static List<object> BuildMethodCatalog()
+        {
+            return
+            [
+                new { method = "ping", description = "Health check and full state snapshot", parameters = Array.Empty<object>() },
+                new { method = "get_state", description = "Full application state snapshot", parameters = Array.Empty<object>() },
+                new { method = "list_methods", description = "Return this catalog of all available methods", parameters = Array.Empty<object>() },
+                new { method = "list_windows", description = "List capturable windows", parameters = Array.Empty<object>() },
+                new { method = "get_selected_window", description = "Get the currently selected window", parameters = Array.Empty<object>() },
+                new { method = "select_window", description = "Select a window by title or handle", parameters = new[] { new { name = "title", type = "string?", required = false }, new { name = "hwnd", type = "long?", required = false } } },
+                new { method = "close_window", description = "Close a window", parameters = new[] { new { name = "title", type = "string?", required = false }, new { name = "hwnd", type = "long?", required = false } } },
+                new { method = "close_selected_window", description = "Close the currently selected window", parameters = Array.Empty<object>() },
+                new { method = "capture_window", description = "Capture screenshot of a window", parameters = new[] { new { name = "title", type = "string?", required = false }, new { name = "hwnd", type = "long?", required = false }, new { name = "includeTitleBar", type = "bool", required = false } } },
+                new { method = "capture_selected_window", description = "Capture the selected window", parameters = new[] { new { name = "includeTitleBar", type = "bool", required = false } } },
+                new { method = "show_main_window", description = "Show the main chat window", parameters = Array.Empty<object>() },
+                new { method = "hide_main_window", description = "Hide the main chat window", parameters = Array.Empty<object>() },
+                new { method = "open_settings", description = "Open settings window", parameters = new[] { new { name = "tab", type = "string?", required = false } } },
+                new { method = "open_browser", description = "Open the built-in browser window", parameters = Array.Empty<object>() },
+                new { method = "list_providers", description = "List all configured AI providers", parameters = Array.Empty<object>() },
+                new { method = "create_provider", description = "Create a new AI provider", parameters = new[] { new { name = "name", type = "string", required = true }, new { name = "type", type = "string", required = true }, new { name = "apiKey", type = "string?", required = false }, new { name = "baseUrl", type = "string?", required = false }, new { name = "model", type = "string", required = true }, new { name = "isEnabled", type = "bool", required = false }, new { name = "color", type = "string?", required = false }, new { name = "selectAfterCreate", type = "bool", required = false }, new { name = "inheritCredentialsFromProviderId", type = "int?", required = false } } },
+                new { method = "list_conversations", description = "List conversations", parameters = new[] { new { name = "search", type = "string", required = true } } },
+                new { method = "create_conversation", description = "Create a new conversation", parameters = new[] { new { name = "title", type = "string", required = true }, new { name = "providerId", type = "int?", required = false } } },
+                new { method = "select_conversation", description = "Select a conversation by ID", parameters = new[] { new { name = "conversationId", type = "int", required = true } } },
+                new { method = "delete_conversation", description = "Delete a conversation", parameters = new[] { new { name = "conversationId", type = "int", required = true } } },
+                new { method = "rename_conversation", description = "Rename a conversation", parameters = new[] { new { name = "conversationId", type = "int", required = true }, new { name = "title", type = "string", required = true } } },
+                new { method = "get_messages", description = "Get messages in a conversation", parameters = new[] { new { name = "conversationId", type = "int", required = true } } },
+                new { method = "set_provider", description = "Switch to a different provider", parameters = new[] { new { name = "providerId", type = "int", required = true } } },
+                new { method = "set_provider_model", description = "Change the model on a provider", parameters = new[] { new { name = "providerId", type = "int", required = true }, new { name = "model", type = "string", required = true } } },
+                new { method = "set_language", description = "Change the UI language", parameters = new[] { new { name = "languageCode", type = "string", required = true } } },
+                new { method = "set_assistant_mode", description = "Set the assistant mode", parameters = new[] { new { name = "mode", type = "string", required = true } } },
+                new { method = "list_assistant_modes", description = "List available assistant modes", parameters = Array.Empty<object>() },
+                new { method = "list_tool_categories", description = "List tool categories and their states", parameters = Array.Empty<object>() },
+                new { method = "set_tool_categories", description = "Enable or disable tool categories", parameters = new[] { new { name = "categories", type = "string[]", required = true } } },
+                new { method = "send_message", description = "Send a chat message", parameters = new[] { new { name = "text", type = "string", required = true }, new { name = "conversationId", type = "int?", required = false } } },
+                new { method = "stop_ai", description = "Stop the current AI response", parameters = Array.Empty<object>() },
+                new { method = "list_pending_approvals", description = "List pending tool approval requests", parameters = Array.Empty<object>() },
+                new { method = "wait_for_pending_approval", description = "Wait for a pending tool approval to appear", parameters = new[] { new { name = "timeout_seconds", type = "int", required = false } } },
+                new { method = "approve_tool_call", description = "Approve a pending tool call by index", parameters = new[] { new { name = "index", type = "int", required = true } } },
+                new { method = "deny_tool_call", description = "Deny a pending tool call by index", parameters = new[] { new { name = "index", type = "int", required = true } } },
+                new { method = "execute_tool", description = "Execute a tool directly", parameters = new[] { new { name = "tool", type = "string", required = true }, new { name = "parameters", type = "object?", required = false }, new { name = "wait_for_approval", type = "bool", required = false }, new { name = "approval_timeout_seconds", type = "int", required = false } } },
+                new { method = "get_trace", description = "Get API trace log entries", parameters = new[] { new { name = "afterId", type = "long", required = true }, new { name = "limit", type = "int", required = false } } },
+                new { method = "clear_trace", description = "Clear the API trace log", parameters = Array.Empty<object>() },
+                new { method = "toggle_sidebar", description = "Toggle the sidebar open or closed", parameters = new[] { new { name = "open", type = "bool?", required = false } } },
+                new { method = "open_sidebar", description = "Open the sidebar", parameters = Array.Empty<object>() },
+                new { method = "close_sidebar", description = "Close the sidebar", parameters = Array.Empty<object>() },
+                new { method = "toggle_voice_output", description = "Toggle voice output on or off", parameters = new[] { new { name = "enabled", type = "bool?", required = false } } },
+                new { method = "open_search", description = "Open search with an optional query", parameters = new[] { new { name = "query", type = "string?", required = false } } },
+                new { method = "set_search", description = "Set the search query", parameters = new[] { new { name = "query", type = "string?", required = false } } },
+                new { method = "navigate_search", description = "Navigate search results", parameters = new[] { new { name = "direction", type = "string", required = true } } },
+                new { method = "search_next", description = "Jump to next search result", parameters = Array.Empty<object>() },
+                new { method = "search_prev", description = "Jump to previous search result", parameters = Array.Empty<object>() },
+                new { method = "close_search", description = "Close the search panel", parameters = Array.Empty<object>() },
+                new { method = "pin_window", description = "Pin or unpin the main window", parameters = new[] { new { name = "pinned", type = "bool?", required = false } } },
+                new { method = "toggle_orchestrator_mode", description = "Start or stop orchestrator mode", parameters = new[] { new { name = "enabled", type = "bool?", required = false }, new { name = "budget", type = "int?", required = false }, new { name = "categories", type = "string[]", required = false }, new { name = "goals", type = "string[]", required = false } } },
+                new { method = "start_orchestrator_mode", description = "Start orchestrator mode", parameters = new[] { new { name = "budget", type = "int?", required = false }, new { name = "categories", type = "string[]", required = false }, new { name = "goals", type = "string[]", required = false } } },
+                new { method = "stop_orchestrator_mode", description = "Stop orchestrator mode", parameters = Array.Empty<object>() },
+                new { method = "set_orchestrator_goals", description = "Update orchestrator goals mid-session", parameters = new[] { new { name = "goals", type = "string[]", required = true } } },
+                new { method = "toggle_agent_mode", description = "Legacy alias for toggle_orchestrator_mode", parameters = new[] { new { name = "enabled", type = "bool?", required = false }, new { name = "budget", type = "int?", required = false }, new { name = "categories", type = "string[]", required = false } } },
+                new { method = "start_agent_mode", description = "Legacy alias for start_orchestrator_mode", parameters = new[] { new { name = "budget", type = "int?", required = false }, new { name = "categories", type = "string[]", required = false } } },
+                new { method = "stop_agent_mode", description = "Legacy alias for stop_orchestrator_mode", parameters = Array.Empty<object>() },
+                new { method = "set_input", description = "Set the input text in the composer", parameters = new[] { new { name = "text", type = "string", required = true } } },
+                new { method = "attach_file", description = "Attach a file to the current message", parameters = new[] { new { name = "filePath", type = "string", required = true } } },
+                new { method = "remove_attachment", description = "Remove the current file attachment", parameters = Array.Empty<object>() },
+                new { method = "branch_from_message", description = "Branch from a specific message in the current conversation", parameters = new[] { new { name = "messageId", type = "int", required = true } } },
+                new { method = "branch_conversation", description = "Branch a conversation from a specific message", parameters = new[] { new { name = "conversationId", type = "int", required = true }, new { name = "upToMessageId", type = "int", required = true } } },
+            ];
+        }
+
         /// <summary>
         /// Cancels and tears down the local API listener.
         /// </summary>
@@ -627,8 +696,9 @@ namespace Aire.Services
         public bool Ok { get; set; }
         public object? Result { get; set; }
         public string? ErrorMessage { get; set; }
+        public string? ErrorCode { get; set; }
 
         public static LocalApiResponse OkResult(object? result) => new() { Ok = true, Result = result };
-        public static LocalApiResponse Error(string error) => new() { Ok = false, ErrorMessage = error };
+        public static LocalApiResponse Error(string error, string? errorCode = null) => new() { Ok = false, ErrorMessage = error, ErrorCode = errorCode };
     }
 }
