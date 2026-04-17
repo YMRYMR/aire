@@ -75,7 +75,7 @@ namespace Aire
                     {
                         string statusText = entry.Text ?? string.Empty;
                         string actionText = string.Empty;
-                        if (statusText.StartsWith("Denied", StringComparison.OrdinalIgnoreCase))
+                        if (statusText.Contains('✗'))
                         {
                             var denied = ChatMessage.SplitDeniedStatus(statusText);
                             statusText = denied.StatusText;
