@@ -589,6 +589,17 @@ namespace Aire.Data
             var sourceConversation = await GetConversationAsync(sourceConversationId)
                 ?? throw new ArgumentException($"Conversation {sourceConversationId} not found.");
 
+            // Validate the branch-point message belongs to the source conversation
+            using (var guardCmd = _connection!.CreateCommand())
+            {
+                guardCmd.CommandText = "SELECT COUNT(*) FROM Messages WHERE Id = @msgId AND ConversationId = @convId";
+                guardCmd.Parameters.AddWithValue("@msgId", upToMessageId);
+                guardCmd.Parameters.AddWithValue("@convId", sourceConversationId);
+                var count = Convert.ToInt64(await guardCmd.ExecuteScalarAsync());
+                if (count == 0)
+                    throw new ArgumentException($"Message {upToMessageId} does not belong to conversation {sourceConversationId}.");
+            }
+
             var branchedTitle = string.IsNullOrWhiteSpace(sourceConversation.Title)
                 ? "Branched chat"
                 : $"{sourceConversation.Title} (branch)";

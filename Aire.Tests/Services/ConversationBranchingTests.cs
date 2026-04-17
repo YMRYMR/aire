@@ -113,6 +113,24 @@ public sealed class ConversationBranchingTests : IAsyncLifetime, IDisposable
     }
 
     [Fact]
+    public async Task BranchConversationAsync_ThrowsForForeignMessageId()
+    {
+        // Seed two separate conversations
+        var (_, conv1) = await SeedConversationAsync();
+        var (_, conv2) = await SeedConversationAsync();
+
+        await _db.SaveMessageAsync(conv1, "user", "msg in conv1");
+        await _db.SaveMessageAsync(conv2, "user", "msg in conv2");
+
+        var conv2Messages = await _db.GetMessagesAsync(conv2);
+        var foreignMsgId = conv2Messages[0].Id;
+
+        // Attempting to branch conv1 using a message ID from conv2 should throw
+        await Assert.ThrowsAsync<System.ArgumentException>(
+            () => _db.BranchConversationAsync(conv1, foreignMsgId));
+    }
+
+    [Fact]
     public async Task BranchConversationAsync_BranchAtLastMessage_CopiesAll()
     {
         var (_, conversationId) = await SeedConversationAsync();

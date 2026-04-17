@@ -114,6 +114,7 @@ Do not commit local databases, generated help screenshots, or user-specific runt
 - [Development handbook](./docs/development/handbook.md)
 - [Development roadmap](./docs/development/roadmap.md)
 - [Project analysis by Opus 4.6 (2026-04-09)](./docs/development/project-analysis-opus-4.6-2026-04-09.md)
+- [Project analysis by GLM-5.1 (2026-04-17)](./docs/development/project-analysis-glm-5.1-2026-04-17.md)
 
 User-facing help currently lives in the app itself and in the checked-in help assets under `Aire/Assets/Help/`.
 
