@@ -11,6 +11,8 @@ Aire is a Windows desktop AI workspace designed to be easy to use from day one. 
 </p>
 <p align="center">
   <img src="Aire/Assets/Help/en/settings-providers.png" height="350" alt="Provider settings" />
+  &nbsp;&nbsp;
+  <img src="Aire/Assets/Help/en/settings-usage-readme.png" height="350" alt="Usage dashboard" />
 </p>
 
 ## What Aire does
