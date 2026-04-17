@@ -115,6 +115,17 @@ namespace Aire.UI.Settings.Controls
         private void FillTextExample_Click(object sender, RoutedEventArgs e)
             => PART_SampleTextBox.Text = LocalizationService.S("settings.templates.sampleText", "This is a short note that needs to be explained or summarized.");
 
+        private void InsertPlaceholder_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button btn && btn.Tag is string placeholder)
+            {
+                var caretIndex = PART_TemplateTextBox.CaretIndex;
+                PART_TemplateTextBox.Text = PART_TemplateTextBox.Text.Insert(caretIndex, placeholder);
+                PART_TemplateTextBox.CaretIndex = caretIndex + placeholder.Length;
+                PART_TemplateTextBox.Focus();
+            }
+        }
+
         private void InitializeWatermark()
             => RefreshWatermark();
 

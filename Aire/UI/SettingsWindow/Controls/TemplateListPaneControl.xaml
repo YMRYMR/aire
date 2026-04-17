@@ -145,239 +145,310 @@
                 BorderThickness="1"
                 CornerRadius="6"
                 Padding="20">
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
-                <Grid x:Name="PART_EditPanel">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <TextBlock x:Name="PART_EditPanelTitle"
-                               Grid.Row="0"
-                               Text="Select a template"
-                               Foreground="{DynamicResource TextBrush}"
-                               FontSize="18"
-                               FontWeight="SemiBold"
-                               Margin="0 0 0 4" />
+                <!-- Scrollable editor area (steps 1-2) -->
+                <ScrollViewer Grid.Row="0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <Grid x:Name="PART_EditPanel">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                    <TextBlock x:Name="PART_EditPanelSubtitle"
-                               Grid.Row="1"
-                               Text="Pick a starter, try it with sample text, then save."
-                               Foreground="{DynamicResource TextSecondaryBrush}"
-                               FontSize="11"
-                               TextWrapping="Wrap"
-                               Margin="0 0 0 18" />
-
-                    <Border Grid.Row="2"
-                            Background="{DynamicResource Surface2Brush}"
-                            BorderBrush="{DynamicResource BorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="14 12"
-                            Margin="0 0 0 16"
-                            Visibility="Collapsed">
-                        <StackPanel>
-                            <TextBlock x:Name="PART_StarterTitle"
-                                       Text="1. Pick a starter"
-                                       Foreground="{DynamicResource TextBrush}"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Margin="0 0 0 6" />
-                            <TextBlock x:Name="PART_StarterDescription"
-                                       Text="Choose a simple recipe. Aire fills in the template for you."
-                                       Foreground="{DynamicResource TextSecondaryBrush}"
-                                       FontSize="11"
-                                       TextWrapping="Wrap"
-                                       Margin="0 0 0 10" />
-
-                            <WrapPanel Margin="0 0 0 10">
-                                <Button x:Name="PART_ExplainRecipeButton"
-                                        Content="Start explain template"
-                                        Click="ApplyExplainRecipe_Click"
-                                        Padding="12 6"
-                                        Margin="0 0 8 8" />
-                                <Button x:Name="PART_FixRecipeButton"
-                                        Content="Start fix template"
-                                        Click="ApplyFixRecipe_Click"
-                                        Padding="12 6"
-                                        Margin="0 0 8 8" />
-                                <Button x:Name="PART_SummarizeRecipeButton"
-                                        Content="Start summarize template"
-                                        Click="ApplySummarizeRecipe_Click"
-                                        Padding="12 6"
-                                        Margin="0 0 8 8" />
-                                <Button x:Name="PART_ReviewRecipeButton"
-                                        Content="Start review template"
-                                        Click="ApplyReviewRecipe_Click"
-                                        Padding="12 6"
-                                        Margin="0 0 8 8" />
-                            </WrapPanel>
-
-                            <TextBlock x:Name="PART_StarterHint"
-                                       Text="You can still rename it and change every word."
-                                       Foreground="{DynamicResource TextSecondaryBrush}"
-                                       FontSize="11"
-                                       TextWrapping="Wrap" />
-                        </StackPanel>
-                    </Border>
-
-                    <Grid Grid.Row="3"
-                          Margin="0 0 0 18">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="16" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-                            <TextBlock x:Name="PART_NameLabel"
-                                       Text="Name"
-                                       Foreground="{DynamicResource TextSecondaryBrush}"
-                                       FontSize="11"
-                                       Margin="0 0 0 4" />
-                            <TextBox x:Name="PART_NameTextBox"
-                                     TextChanged="TemplateField_TextChanged" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2">
-                            <TextBlock x:Name="PART_ShortcutLabel"
-                                       Text="Shortcut"
-                                       Foreground="{DynamicResource TextSecondaryBrush}"
-                                       FontSize="11"
-                                       Margin="0 0 0 4" />
-                            <TextBox x:Name="PART_ShortcutTextBox"
-                                     TextChanged="TemplateField_TextChanged" />
-                        </StackPanel>
-                    </Grid>
-
-                    <StackPanel Grid.Row="4" Margin="0 0 0 12">
-                        <TextBlock x:Name="PART_PrefixLabel"
-                                   Text="Extra note for Aire"
-                                   Foreground="{DynamicResource TextSecondaryBrush}"
-                                   FontSize="11"
+                        <TextBlock x:Name="PART_EditPanelTitle"
+                                   Grid.Row="0"
+                                   Text="Select a template"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
                                    Margin="0 0 0 4" />
-                        <TextBlock x:Name="PART_PrefixDescription"
-                                   Text="Optional text Aire adds before the template."
+
+                        <TextBlock x:Name="PART_EditPanelSubtitle"
+                                   Grid.Row="1"
+                                   Text="Pick a starter, try it with sample text, then save."
                                    Foreground="{DynamicResource TextSecondaryBrush}"
                                    FontSize="11"
-                                   Margin="0 0 0 6"
-                                   TextWrapping="Wrap" />
-                        <TextBox x:Name="PART_PrefixTextBox"
-                                 TextChanged="TemplateField_TextChanged" />
-                    </StackPanel>
+                                   TextWrapping="Wrap"
+                                   Margin="0 0 0 18" />
 
-                    <Border Grid.Row="5"
-                            Background="{DynamicResource Surface2Brush}"
-                            BorderBrush="{DynamicResource BorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="14 12"
-                            Margin="0 0 0 16">
-                        <StackPanel>
-                            <TextBlock x:Name="PART_BodyStepTitle"
-                                       Text="2. Write the template"
-                                       Foreground="{DynamicResource TextSecondaryBrush}"
-                                       FontSize="11"
-                                       Margin="0 0 0 6" />
-                            <Grid MinHeight="220">
-                                <TextBox x:Name="PART_TemplateTextBox"
-                                         AcceptsReturn="True"
-                                         AcceptsTab="True"
-                                         VerticalAlignment="Stretch"
-                                         VerticalContentAlignment="Top"
-                                         Cursor="IBeam"
-                                         TextWrapping="Wrap"
-                                         VerticalScrollBarVisibility="Auto"
-                                         TextChanged="TemplateField_TextChanged"
-                                         MinHeight="220" />
-                                <TextBlock x:Name="PART_TemplateWatermark"
-                                           Margin="12 9"
+                        <Border Grid.Row="2"
+                                Background="{DynamicResource Surface2Brush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="14 12"
+                                Margin="0 0 0 16"
+                                Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock x:Name="PART_StarterTitle"
+                                           Text="1. Pick a starter"
+                                           Foreground="{DynamicResource TextBrush}"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Margin="0 0 0 6" />
+                                <TextBlock x:Name="PART_StarterDescription"
+                                           Text="Choose a simple recipe. Aire fills in the template for you."
                                            Foreground="{DynamicResource TextSecondaryBrush}"
-                                           Opacity="0.72"
-                                           FontStyle="Italic"
-                                           IsHitTestVisible="False"
-                                           TextWrapping="Wrap" />
-                            </Grid>
-                        </StackPanel>
-                    </Border>
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Margin="0 0 0 10" />
 
-                    <Border Grid.Row="6"
-                            Background="{DynamicResource Surface2Brush}"
-                            BorderBrush="{DynamicResource BorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="14 12"
-                            Margin="0 0 0 16">
-                        <StackPanel>
-                            <TextBlock x:Name="PART_TestStepTitle"
-                                       Text="3. Test it"
-                                       Foreground="{DynamicResource TextBrush}"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Margin="0 0 0 6" />
-                            <TextBlock x:Name="PART_TestStepDescription"
-                                       Text="Type a sample code snippet or a short piece of text. Aire will show you how the template changes it."
+                                <WrapPanel Margin="0 0 0 10">
+                                    <Button x:Name="PART_ExplainRecipeButton"
+                                            Content="Start explain template"
+                                            Click="ApplyExplainRecipe_Click"
+                                            Padding="12 6"
+                                            Margin="0 0 8 8" />
+                                    <Button x:Name="PART_FixRecipeButton"
+                                            Content="Start fix template"
+                                            Click="ApplyFixRecipe_Click"
+                                            Padding="12 6"
+                                            Margin="0 0 8 8" />
+                                    <Button x:Name="PART_SummarizeRecipeButton"
+                                            Content="Start summarize template"
+                                            Click="ApplySummarizeRecipe_Click"
+                                            Padding="12 6"
+                                            Margin="0 0 8 8" />
+                                    <Button x:Name="PART_ReviewRecipeButton"
+                                            Content="Start review template"
+                                            Click="ApplyReviewRecipe_Click"
+                                            Padding="12 6"
+                                            Margin="0 0 8 8" />
+                                </WrapPanel>
+
+                                <TextBlock x:Name="PART_StarterHint"
+                                           Text="You can still rename it and change every word."
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           FontSize="11"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+
+                        <Grid Grid.Row="3"
+                              Margin="0 0 0 18">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="PART_NameLabel"
+                                           Text="Name"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           FontSize="11"
+                                           Margin="0 0 0 4" />
+                                <TextBox x:Name="PART_NameTextBox"
+                                         TextChanged="TemplateField_TextChanged" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock x:Name="PART_ShortcutLabel"
+                                           Text="Shortcut"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           FontSize="11"
+                                           Margin="0 0 0 4" />
+                                <TextBox x:Name="PART_ShortcutTextBox"
+                                         TextChanged="TemplateField_TextChanged" />
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Grid.Row="4" Margin="0 0 0 12">
+                            <TextBlock x:Name="PART_PrefixLabel"
+                                       Text="Extra note for Aire"
                                        Foreground="{DynamicResource TextSecondaryBrush}"
                                        FontSize="11"
-                                       TextWrapping="Wrap"
-                                       Margin="0 0 0 10" />
+                                       Margin="0 0 0 4" />
+                            <TextBlock x:Name="PART_PrefixDescription"
+                                       Text="Optional text Aire adds before the template."
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"
+                                       Margin="0 0 0 6"
+                                       TextWrapping="Wrap" />
+                            <TextBox x:Name="PART_PrefixTextBox"
+                                     TextChanged="TemplateField_TextChanged" />
+                        </StackPanel>
 
-                            <WrapPanel Margin="0 0 0 10">
+                        <Border Grid.Row="5"
+                                Background="{DynamicResource Surface2Brush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="14 12"
+                                Margin="0 0 0 8">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock x:Name="PART_BodyStepTitle"
+                                           Grid.Row="0"
+                                           Text="2. Write the template"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           FontSize="11"
+                                           Margin="0 0 0 6" />
+
+                                <WrapPanel Grid.Row="1" Margin="0 0 0 6">
+                                    <Button Content="{}{{code}}"
+                                            Click="InsertPlaceholder_Click"
+                                            Tag="{}{{code}}"
+                                            Padding="8 3"
+                                            Margin="0 0 4 4"
+                                            FontFamily="Consolas"
+                                            FontSize="11"
+                                            ToolTip="Insert code snippet placeholder" />
+                                    <Button Content="{}{{text}}"
+                                            Click="InsertPlaceholder_Click"
+                                            Tag="{}{{text}}"
+                                            Padding="8 3"
+                                            Margin="0 0 4 4"
+                                            FontFamily="Consolas"
+                                            FontSize="11"
+                                            ToolTip="Insert text placeholder" />
+                                    <Button Content="{}{{selection}}"
+                                            Click="InsertPlaceholder_Click"
+                                            Tag="{}{{selection}}"
+                                            Padding="8 3"
+                                            Margin="0 0 4 4"
+                                            FontFamily="Consolas"
+                                            FontSize="11"
+                                            ToolTip="Insert selected text placeholder" />
+                                    <Button Content="{}{{clipboard}}"
+                                            Click="InsertPlaceholder_Click"
+                                            Tag="{}{{clipboard}}"
+                                            Padding="8 3"
+                                            Margin="0 0 4 4"
+                                            FontFamily="Consolas"
+                                            FontSize="11"
+                                            ToolTip="Insert clipboard content placeholder" />
+                                </WrapPanel>
+
+                                <Grid Grid.Row="2" MinHeight="120">
+                                    <TextBox x:Name="PART_TemplateTextBox"
+                                             AcceptsReturn="True"
+                                             AcceptsTab="True"
+                                             VerticalAlignment="Stretch"
+                                             VerticalContentAlignment="Top"
+                                             Cursor="IBeam"
+                                             TextWrapping="Wrap"
+                                             VerticalScrollBarVisibility="Auto"
+                                             TextChanged="TemplateField_TextChanged"
+                                             MinHeight="120" />
+                                    <TextBlock x:Name="PART_TemplateWatermark"
+                                               Margin="12 9"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                               Opacity="0.72"
+                                               FontStyle="Italic"
+                                               IsHitTestVisible="False"
+                                               TextWrapping="Wrap" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+
+                <!-- Pinned preview area -->
+                <Border Grid.Row="1"
+                        Background="{DynamicResource Surface2Brush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="14 12"
+                        Margin="0 8 0 0">
+                    <StackPanel>
+                        <Grid Margin="0 0 0 6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="PART_TestStepTitle"
+                                           Text="3. Test it"
+                                           Foreground="{DynamicResource TextBrush}"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Margin="0 0 0 4" />
+                                <TextBlock x:Name="PART_TestStepDescription"
+                                           Text="Type sample text to see the preview update live."
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           FontSize="11"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <WrapPanel Grid.Column="1" VerticalAlignment="Center" Margin="0 0 8 0">
                                 <Button x:Name="PART_CodeExampleButton"
-                                        Content="Use code example"
+                                        Content="Code sample"
                                         Click="FillCodeExample_Click"
                                         Padding="10 5"
-                                        Margin="0 0 8 8" />
+                                        Margin="0 0 4 0" />
                                 <Button x:Name="PART_TextExampleButton"
-                                        Content="Use text example"
+                                        Content="Text sample"
                                         Click="FillTextExample_Click"
-                                        Padding="10 5"
-                                        Margin="0 0 8 8" />
+                                        Padding="10 5" />
                             </WrapPanel>
 
+                            <Button x:Name="PART_SaveButton"
+                                    Grid.Column="2"
+                                    Content="Save"
+                                    IsEnabled="True"
+                                    Click="SaveButton_Click"
+                                    Padding="14 7"
+                                    VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
                             <TextBox x:Name="PART_SampleTextBox"
+                                     Grid.Column="0"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     Height="90"
+                                     Height="70"
                                      VerticalScrollBarVisibility="Auto"
                                      TextChanged="TemplateField_TextChanged"
-                                     ToolTip="This is only for testing the preview. It is not saved." />
+                                     ToolTip="Sample input for testing. Not saved." />
 
-                            <TextBlock x:Name="PART_PreviewHeading"
-                                       Text="What Aire will say"
-                                       Foreground="{DynamicResource TextSecondaryBrush}"
-                                       FontSize="11"
-                                       Margin="0,12,0,6" />
-                            <Border Background="{DynamicResource SurfaceBrush}"
-                                    BorderBrush="{DynamicResource BorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="6"
-                                    Padding="14 12">
-                                <TextBlock x:Name="PART_PreviewText"
-                                           Foreground="{DynamicResource TextBrush}"
-                                           FontSize="12"
-                                           TextWrapping="Wrap"
-                                           Text="Select a template to see a preview" />
-                            </Border>
-                        </StackPanel>
-                    </Border>
-
-                    <Button x:Name="PART_SaveButton"
-                            Grid.Row="7"
-                            Content="Save"
-                            IsEnabled="True"
-                            Click="SaveButton_Click"
-                            Padding="14 7"
-                            HorizontalAlignment="Right" />
-                </Grid>
-            </ScrollViewer>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock x:Name="PART_PreviewHeading"
+                                           Text="What Aire will say"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           FontSize="11"
+                                           Margin="0 0 0 4" />
+                                <Border Background="{DynamicResource SurfaceBrush}"
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        Padding="10 8"
+                                        MaxHeight="60">
+                                    <TextBlock x:Name="PART_PreviewText"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"
+                                               Text="Select a template to see a preview" />
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>
