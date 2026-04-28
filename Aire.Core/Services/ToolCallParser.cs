@@ -70,10 +70,12 @@ namespace Aire.Services
         public static ParsedAiResponse Parse(string response)
         {
             response = NormalizeBareJsonToolCalls(response);
+            var toolCalls = new List<ToolCallRequest>();
+
+            response = ExtractStructuredActionBlocks(response, toolCalls);
             var cleaned = ThinkBlockRegex.Replace(ToolCallRegex.Replace(response, string.Empty), string.Empty).Trim();
 
             var allMatches = ToolCallRegex.Matches(response);
-            var toolCalls = new List<ToolCallRequest>();
             foreach (Match match in allMatches)
             {
                 var rawJson = match.Groups[2].Value.Trim();
@@ -98,7 +100,7 @@ namespace Aire.Services
                 // The model left the tag open (e.g. <tool_call{"tool":"read_file",...}) —
                 // try to extract valid JSON from the unclosed tag before declaring it cut off.
                 var unclosedMatch = Regex.Match(response,
-                    @"<(?:tool_call|tool_code|tool_use|tool)>?\s*(\{[\s\S]*\})",
+                    @"<(?:tool_call|tool_calls|tool_code|tool_use|tool)>?\s*(\{[\s\S]*\})",
                     RegexOptions.IgnoreCase);
                 if (unclosedMatch.Success)
                 {
@@ -123,6 +125,31 @@ namespace Aire.Services
             }
 
             return new ParsedAiResponse { TextContent = cleaned };
+        }
+
+        private static string ExtractStructuredActionBlocks(string response, List<ToolCallRequest> toolCalls)
+        {
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                return response;
+            }
+
+            const string pattern = @"<(?<tag>folder_structure|file_structure|filesystem_structure|filesystem|file_action)(?<attrs>[^>]*)>[\s\S]*?</\k<tag>>";
+            var matches = Regex.Matches(response, pattern, RegexOptions.IgnoreCase);
+            if (matches.Count == 0)
+            {
+                return response;
+            }
+
+            foreach (Match match in matches)
+            {
+                if (TryParseStructuredActionBlock(match.Value, out var structuredCall))
+                {
+                    toolCalls.Add(structuredCall);
+                }
+            }
+
+            return Regex.Replace(response, pattern, string.Empty, RegexOptions.IgnoreCase).Trim();
         }
     }
 }

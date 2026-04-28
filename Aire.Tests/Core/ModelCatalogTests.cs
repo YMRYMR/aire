@@ -75,6 +75,20 @@ public class ModelCatalogTests : IDisposable
     }
 
     [Fact]
+    public void GetDefaults_MergesLaterCapabilitiesAndContextLength_ForDuplicateModelIds()
+    {
+        Directory.CreateDirectory(_modelsDir);
+        File.WriteAllText(Path.Combine(_modelsDir, "live.json"), "{\r\n  \"providerType\": \"DeepSeek\",\r\n  \"models\": [\r\n    { \"id\": \"deepseek-v4-pro\", \"displayName\": \"deepseek-v4-pro\" }\r\n  ]\r\n}");
+        File.WriteAllText(Path.Combine(_modelsDir, "built-in.json"), "{\r\n  \"providerType\": \"DeepSeek\",\r\n  \"models\": [\r\n    { \"id\": \"deepseek-v4-pro\", \"displayName\": \"DeepSeek 4 Pro\", \"capabilities\": [\"tools\"], \"contextLength\": 128000 }\r\n  ]\r\n}");
+
+        List<ModelDefinition> defaults = ModelCatalog.GetDefaults("DeepSeek");
+
+        var model = Assert.Single(defaults);
+        Assert.False(string.IsNullOrWhiteSpace(model.DisplayName));
+        Assert.Contains("tools", model.Capabilities ?? []);
+    }
+
+    [Fact]
     public void EnsureDefaults_CreatesModelsDirectory()
     {
         ModelCatalog.EnsureDefaults();
@@ -105,9 +119,8 @@ public class ModelCatalogTests : IDisposable
     [Fact]
     public void GetContextLength_ReturnsValueWhenDefined()
     {
-        // Ensure default JSON files are present (they contain contextLength after our updates).
-        ModelCatalog.EnsureDefaults();
-        // For OpenAI's gpt-4o we added contextLength 128000.
+        Directory.CreateDirectory(_modelsDir);
+        File.WriteAllText(Path.Combine(_modelsDir, "openai.json"), "{\r\n  \"providerType\": \"OpenAI\",\r\n  \"models\": [\r\n    { \"id\": \"gpt-4o\", \"displayName\": \"GPT-4o\", \"contextLength\": 128000 }\r\n  ]\r\n}");
         var result = ModelCatalog.GetContextLength("OpenAI", "gpt-4o");
         Assert.Equal(128000, result);
     }

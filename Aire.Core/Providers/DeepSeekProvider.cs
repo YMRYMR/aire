@@ -57,7 +57,12 @@ namespace Aire.Providers
                     .Where(id => !string.IsNullOrEmpty(id) &&
                                  deepseekPrefixes.Any(p => id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
                     .OrderByDescending(id => id)
-                    .Select(id => new ModelDefinition { Id = id, DisplayName = id })
+                    .Select(id => new ModelDefinition
+                    {
+                        Id = id,
+                        DisplayName = id,
+                        Capabilities = new List<string> { "tools" }
+                    })
                     .ToList();
                 return models;
             }

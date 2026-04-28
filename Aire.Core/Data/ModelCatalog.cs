@@ -79,8 +79,8 @@ public static class ModelCatalog
             return [];
         }
 
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var result = new List<ModelDefinition>();
+        var byId = new Dictionary<string, ModelDefinition>(StringComparer.OrdinalIgnoreCase);
 
         IEnumerable<string> files;
         try
@@ -106,8 +106,18 @@ public static class ModelCatalog
 
                 foreach (var model in catalog.Models)
                 {
-                    if (seen.Add(model.Id))
-                        result.Add(model);
+                    if (string.IsNullOrWhiteSpace(model.Id))
+                        continue;
+
+                    if (byId.TryGetValue(model.Id, out var existing))
+                    {
+                        MergeCatalogEntry(existing, model);
+                        continue;
+                    }
+
+                    var copy = CloneModel(model);
+                    result.Add(copy);
+                    byId[copy.Id] = copy;
                 }
             }
             catch
@@ -356,13 +366,48 @@ public static class ModelCatalog
         return changed;
     }
 
+    private static void MergeCatalogEntry(ModelDefinition target, ModelDefinition source)
+    {
+        if (string.IsNullOrWhiteSpace(target.DisplayName) ||
+            string.Equals(target.DisplayName, target.Id, StringComparison.OrdinalIgnoreCase))
+        {
+            if (!string.IsNullOrWhiteSpace(source.DisplayName))
+                target.DisplayName = source.DisplayName;
+        }
+        else if (string.IsNullOrWhiteSpace(source.DisplayName))
+        {
+            // Keep the existing label.
+        }
+
+        if (source.SizeBytes > 0 && target.SizeBytes == 0)
+            target.SizeBytes = source.SizeBytes;
+
+        if (!target.IsInstalled && source.IsInstalled)
+            target.IsInstalled = true;
+
+        if (source.Capabilities != null && source.Capabilities.Count > 0)
+        {
+            var mergedCaps = (target.Capabilities ?? [])
+                .Concat(source.Capabilities)
+                .Where(cap => !string.IsNullOrWhiteSpace(cap))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+            if (mergedCaps.Count > 0)
+                target.Capabilities = mergedCaps;
+        }
+
+        if (!target.ContextLength.HasValue && source.ContextLength.HasValue)
+            target.ContextLength = source.ContextLength;
+    }
+
     private static ModelDefinition CloneModel(ModelDefinition model) => new()
     {
         Id = model.Id,
         DisplayName = model.DisplayName,
         SizeBytes = model.SizeBytes,
         IsInstalled = model.IsInstalled,
-        Capabilities = model.Capabilities?.ToList()
+        Capabilities = model.Capabilities?.ToList(),
+        ContextLength = model.ContextLength
     };
 
     private static string SanitizeToken(string value)

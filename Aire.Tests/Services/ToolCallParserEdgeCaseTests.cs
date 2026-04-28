@@ -38,4 +38,72 @@ public class ToolCallParserEdgeCaseTests
         Exception ex = Record.Exception(() => ToolCallParser.Parse(input));
         Assert.Null(ex);
     }
+
+    [Fact]
+    public void Parse_XmlStyleToolCall_WithArgs_ExtractsToolAndParameters()
+    {
+        string response =
+            "<tool_call name=\"list_files\">\n" +
+            "  <arg name=\"path\" id=\"0\">C:\\dev\\mad</arg>\n" +
+            "  <arg name=\"recursive\" id=\"1\">true</arg>\n" +
+            "</tool_call>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("list_files", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\mad", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+        Assert.True(parsedAiResponse.ToolCall?.Parameters.GetProperty("recursive").GetBoolean());
+    }
+
+    [Fact]
+    public void Parse_PluralToolCallsTag_WithArgs_ExtractsToolAndParameters()
+    {
+        string response =
+            "<tool_calls name=\"list_files\">\n" +
+            "  <arg name=\"path\" id=\"0\">C:\\dev\\aire</arg>\n" +
+            "  <arg name=\"recursive\" id=\"1\">false</arg>\n" +
+            "</tool_calls>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("list_files", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+        Assert.False(parsedAiResponse.ToolCall?.Parameters.GetProperty("recursive").GetBoolean());
+    }
+
+    [Fact]
+    public void Parse_FolderStructureBlock_WithActionCreate_MapsToCreateDirectory()
+    {
+        string response =
+            "<folder_structure>\n" +
+            "  <action>create</action>\n" +
+            "  <path>C:\\dev\\aire\\_deepseek_live2</path>\n" +
+            "</folder_structure>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("create_directory", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\_deepseek_live2", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+    }
+
+    [Fact]
+    public void Parse_TextPlusFolderStructureBlock_ExtractsToolAndKeepsVisibleText()
+    {
+        string response =
+            "I'll start by creating the folder first.\n\n" +
+            "<folder_structure>\n" +
+            "  <action>create</action>\n" +
+            "  <path>C:\\dev\\aire\\_deepseek_live3</path>\n" +
+            "</folder_structure>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("create_directory", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\_deepseek_live3", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+        Assert.Contains("I'll start by creating the folder first.", parsedAiResponse.TextContent);
+    }
 }
