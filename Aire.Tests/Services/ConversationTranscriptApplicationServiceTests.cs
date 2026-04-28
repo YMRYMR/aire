@@ -160,4 +160,24 @@ public class ConversationTranscriptApplicationServiceTests
         Assert.Equal(ConversationTranscriptApplicationService.TranscriptRole.Orchestrator, entry.Role);
         Assert.Empty(transcript.ConversationHistory);
     }
+
+    [Fact]
+    public void BuildTranscript_SkipsMarkerOnlyAssistantTurns()
+    {
+        var service = new ConversationTranscriptApplicationService();
+        var messages = new[]
+        {
+            new Message
+            {
+                Role = "assistant",
+                Content = "<tool_call>\n<tool_calls>\n<tool_calls>\n",
+                CreatedAt = DateTime.UtcNow
+            }
+        };
+
+        var transcript = service.BuildTranscript(messages);
+
+        Assert.Empty(transcript.Entries);
+        Assert.Empty(transcript.ConversationHistory);
+    }
 }

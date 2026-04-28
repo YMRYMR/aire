@@ -47,6 +47,19 @@ public class FileSystemServiceCoverageTests : IDisposable
     }
 
     [Fact]
+    public async Task ExecuteAsync_ListDirectory_HandlesRepoRootWithReservedEntries()
+    {
+        string repoRoot = FindRepositoryRoot();
+
+        ToolExecutionResult result = await _service.ExecuteAsync(CreateRequest("list_directory", "{\"path\":\"" + Escape(repoRoot) + "\" }"));
+
+        Assert.Contains("Contents of:", result.TextResult);
+        Assert.NotNull(result.DirectoryListing);
+        Assert.Contains("Aire", result.TextResult, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("File system operation failed", result.TextResult, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ReadFile_SupportsOffsets()
     {
         string path = Path.Combine(_root, "chunk.txt");
@@ -149,5 +162,22 @@ public class FileSystemServiceCoverageTests : IDisposable
     {
         return value.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r")
             .Replace("\n", "\\n");
+    }
+
+    private static string FindRepositoryRoot()
+    {
+        DirectoryInfo? current = new DirectoryInfo(AppContext.BaseDirectory);
+        while (current is not null)
+        {
+            string solutionPath = Path.Combine(current.FullName, "Aire.sln");
+            if (File.Exists(solutionPath))
+            {
+                return current.FullName;
+            }
+
+            current = current.Parent;
+        }
+
+        throw new InvalidOperationException("Could not locate Aire.sln from the test execution directory.");
     }
 }

@@ -24,6 +24,28 @@ public class StreamingResponsePresentationServiceTests
     }
 
     [Fact]
+    public void GetVisibleText_StripsStandaloneToolMarkers()
+    {
+        var visible = _service.GetVisibleText("<tool_call>\n<tool_calls>\n<tool_calls>\n");
+
+        Assert.Equal(string.Empty, visible);
+    }
+
+    [Fact]
+    public void GetVisibleText_RemovesCompleteStructuredBlocks()
+    {
+        var visible = _service.GetVisibleText(
+            "I’m going to inspect the folder structure first.\n" +
+            "<folder_structure>\n" +
+            "  <action>list</action>\n" +
+            "  <path>C:\\dev\\aire</path>\n" +
+            "</folder_structure>\n" +
+            "Then I’ll report back.");
+
+        Assert.Equal("I’m going to inspect the folder structure first.\nThen I’ll report back.", visible);
+    }
+
+    [Fact]
     public void GetStreamingPreviewText_ShowsPartialWordImmediately()
     {
         // Partial words must be shown as they arrive so the UI feels responsive.

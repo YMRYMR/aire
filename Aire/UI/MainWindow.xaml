@@ -107,7 +107,8 @@
                       VerticalScrollBarVisibility="Auto"
                       Padding="12 8"
                       Background="{DynamicResource BackgroundBrush}"
-                      ContextMenuOpening="MessagesScrollViewer_ContextMenuOpening">
+                      ContextMenuOpening="MessagesScrollViewer_ContextMenuOpening"
+                      ScrollChanged="MessagesScrollViewer_ScrollChanged">
             <ItemsControl x:Name="MessagesItemsControl"
                           Background="Transparent"
                           ItemsSource="{Binding Messages}">

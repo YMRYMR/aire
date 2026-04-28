@@ -91,8 +91,15 @@ namespace Aire.AppLayer.Chat
                 else if (role == TranscriptRole.Assistant)
                 {
                     var parsedAssistant = ToolCallParser.Parse(msg.Content);
-                    var assistantText = _assistantImageResponse.Parse(msg.Content).Text;
-                    history.Add(new ProviderChatMessage { Role = "assistant", Content = assistantText });
+                    var assistantContent = _assistantImageResponse.Parse(msg.Content);
+                    if (string.IsNullOrWhiteSpace(assistantContent.Text) &&
+                        assistantContent.ImageReferences.Count == 0 &&
+                        !parsedAssistant.HasToolCall)
+                    {
+                        continue;
+                    }
+
+                    history.Add(new ProviderChatMessage { Role = "assistant", Content = assistantContent.Text });
 
                     foreach (var toolCall in parsedAssistant.ToolCalls)
                     {

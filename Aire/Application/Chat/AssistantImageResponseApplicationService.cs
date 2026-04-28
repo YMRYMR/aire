@@ -19,6 +19,10 @@ namespace Aire.AppLayer.Chat
             @"^(?<url>https?://\S+\.(png|jpg|jpeg|gif|bmp|webp)(\?\S*)?)$",
             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
+        private static readonly Regex StandaloneToolTagRegex = new(
+            @"</?(?:tool_calls|tool_call|tool_code|tool_use|tool|folder_structure|file_structure|filesystem_structure|filesystem|file_action)>\s*",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private const string ImageMetadataPrefix = "<!--aire-images:";
         private const string ImageMetadataSuffix = "-->";
 
@@ -56,6 +60,7 @@ namespace Aire.AppLayer.Chat
                     text = StandaloneImageUrlRegex.Replace(text, string.Empty);
             }
 
+            text = StandaloneToolTagRegex.Replace(text, string.Empty);
             text = text.Replace("\r\n\r\n\r\n", "\r\n\r\n", StringComparison.Ordinal)
                        .Trim();
 

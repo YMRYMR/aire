@@ -129,6 +129,30 @@ public sealed class ChatTurnWorkflowServiceTests
     }
 
     [Fact]
+    public void BuildRequestMessages_IncludesRepositoryAnalysisRule_InSystemPrompt()
+    {
+        var service = new ChatTurnWorkflowService();
+        var provider = new FakeProvider
+        {
+            ToolOutputFormatValue = ToolOutputFormat.AireText,
+            CapabilitiesValue = ProviderCapabilities.TextChat | ProviderCapabilities.ToolCalling | ProviderCapabilities.SystemPrompt
+        };
+
+        var messages = service.BuildRequestMessages(
+            provider,
+            string.Empty,
+            [new ChatMessage { Role = "user", Content = "Please analyze C:/dev/aire" }],
+            toolsEnabled: true);
+
+        Assert.Equal(2, messages.Count);
+        Assert.Contains("REPOSITORY / CODEBASE ANALYSIS RULE", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("first action must be a filesystem tool call", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("exact absolute path", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("README.md", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("list_directory(path=\"C:/dev/aire\")", messages[0].Content, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public void BuildRequestMessages_UsesCompactPrompt_ForNativeProviderWithCompactEnabled()
     {
         var service = new ChatTurnWorkflowService();

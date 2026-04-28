@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Aire.Services
 {
@@ -10,9 +11,21 @@ namespace Aire.Services
         {
             var results = new List<ToolCallRequest>();
 
+            if (TryParseXmlStyleToolCall(raw, out var xmlResult))
+            {
+                results.Add(xmlResult);
+                return results;
+            }
+
             if (TryExtractTool(NormalizeJson(raw), out var normalizedResult))
             {
                 results.Add(normalizedResult);
+                return results;
+            }
+
+            if (TryParseStructuredActionBlock(raw, out var structuredResult))
+            {
+                results.Add(structuredResult);
                 return results;
             }
 
@@ -57,6 +70,389 @@ namespace Aire.Services
             var results = ParseToolCallJson(raw);
             result = results.Count > 0 ? results[0] : new ToolCallRequest();
             return results.Count > 0;
+        }
+
+        private static bool TryParseXmlStyleToolCall(string raw, out ToolCallRequest result)
+        {
+            result = new ToolCallRequest();
+
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                return false;
+            }
+
+            string candidate = raw.Trim();
+            if (candidate.StartsWith("{", StringComparison.Ordinal) ||
+                candidate.StartsWith("[", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (!candidate.Contains('>'))
+            {
+                return false;
+            }
+
+            string attrs = string.Empty;
+            string body = string.Empty;
+
+            if (candidate.Contains("<", StringComparison.Ordinal))
+            {
+                Match xmlMatch = Regex.Match(candidate,
+                    @"^\s*<(?<tag>tool_calls|tool_call|tool_code|tool_use|tool)(?<attrs>[^>]*)>(?<body>[\s\S]*?)</\k<tag>>\s*$",
+                    RegexOptions.IgnoreCase);
+                if (xmlMatch.Success)
+                {
+                    attrs = xmlMatch.Groups["attrs"].Value;
+                    body = xmlMatch.Groups["body"].Value;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                int closeIndex = candidate.IndexOf('>');
+                if (closeIndex <= 0)
+                {
+                    return false;
+                }
+
+                attrs = candidate[..closeIndex];
+                body = candidate[(closeIndex + 1)..];
+            }
+
+            string tool = ExtractXmlAttribute(attrs, "name");
+            if (string.IsNullOrWhiteSpace(tool))
+            {
+                tool = ExtractXmlAttribute(attrs, "tool");
+            }
+
+            var explicitPayload = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["tool"] = tool
+            };
+
+            bool foundArgument = false;
+            foreach (Match argMatch in Regex.Matches(body,
+                         @"<arg(?<attrs>[^>]*)>(?<value>[\s\S]*?)</arg>",
+                         RegexOptions.IgnoreCase))
+            {
+                string argAttrs = argMatch.Groups["attrs"].Value;
+                string argName = ExtractXmlAttribute(argAttrs, "name");
+                if (string.IsNullOrWhiteSpace(argName))
+                {
+                    argName = ExtractXmlAttribute(argAttrs, "key");
+                }
+
+                if (string.IsNullOrWhiteSpace(argName))
+                {
+                    continue;
+                }
+
+                explicitPayload[NormalizeDetailsParameterName(argName)] = ParseDetailsParameterValue(argMatch.Groups["value"].Value);
+                foundArgument = true;
+            }
+
+            if (!foundArgument)
+            {
+                foreach (var (key, value) in ExtractSimpleStructuredElements(body))
+                {
+                    if (string.IsNullOrWhiteSpace(key))
+                    {
+                        continue;
+                    }
+
+                    explicitPayload[NormalizeDetailsParameterName(key)] = value;
+                    foundArgument = true;
+                }
+            }
+
+            if (!foundArgument)
+            {
+                string trimmedBody = body.Trim();
+                if (trimmedBody.StartsWith("{", StringComparison.Ordinal) &&
+                    trimmedBody.EndsWith("}", StringComparison.Ordinal))
+                {
+                    try
+                    {
+                        using JsonDocument doc = JsonDocument.Parse(trimmedBody);
+                        if (doc.RootElement.ValueKind == JsonValueKind.Object)
+                        {
+                            foreach (JsonProperty property in doc.RootElement.EnumerateObject())
+                            {
+                                if (property.NameEquals("tool") || property.NameEquals("name") || property.NameEquals("arguments") || property.NameEquals("parameters"))
+                                {
+                                    continue;
+                                }
+
+                                explicitPayload[property.Name] = JsonSerializer.Deserialize<object>(property.Value.GetRawText());
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        explicitPayload["text"] = trimmedBody;
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(trimmedBody))
+                {
+                    explicitPayload["text"] = trimmedBody;
+                }
+            }
+
+            string normalized = JsonSerializer.Serialize(explicitPayload);
+            if (!TryExtractTool(normalized, out result))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool TryParseStructuredActionBlock(string raw, out ToolCallRequest result)
+        {
+            result = new ToolCallRequest();
+
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                return false;
+            }
+
+            Match match = StructuredActionBlockRegex.Match(raw.Trim());
+            if (!match.Success)
+            {
+                return false;
+            }
+
+            string rootTag = match.Groups["tag"].Value;
+            string body = match.Groups["body"].Value;
+            string tool = InferToolFromStructuredBlock(rootTag, body, out var extras);
+            if (string.IsNullOrWhiteSpace(tool))
+            {
+                return false;
+            }
+
+            var payload = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["tool"] = tool
+            };
+
+            foreach (var (key, value) in extras)
+            {
+                payload[key] = value;
+            }
+
+            foreach (var (key, value) in ExtractSimpleStructuredElements(body))
+            {
+                if (!payload.ContainsKey(key))
+                {
+                    payload[key] = value;
+                }
+            }
+
+            if (!TryExtractTool(JsonSerializer.Serialize(payload), out result))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsNestedInsideToolCallBlock(Match structuredMatch, string response)
+        {
+            foreach (Match toolMatch in ToolCallRegex.Matches(response))
+            {
+                if (toolMatch.Index <= structuredMatch.Index &&
+                    toolMatch.Index + toolMatch.Length >= structuredMatch.Index + structuredMatch.Length)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static string ExtractXmlAttribute(string attrs, string name)
+        {
+            if (string.IsNullOrWhiteSpace(attrs))
+            {
+                return string.Empty;
+            }
+
+            Match match = Regex.Match(attrs,
+                $@"(?:^|\s){Regex.Escape(name)}\s*=\s*['""](?<value>[^'""]+)['""]",
+                RegexOptions.IgnoreCase);
+            return match.Success ? match.Groups["value"].Value.Trim() : string.Empty;
+        }
+
+        private static IEnumerable<KeyValuePair<string, object?>> ExtractSimpleStructuredElements(string body)
+        {
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                yield break;
+            }
+
+            foreach (Match element in Regex.Matches(body, @"<(?<name>[A-Za-z0-9_:-]+)>(?<value>[\s\S]*?)</\k<name>>", RegexOptions.IgnoreCase))
+            {
+                var name = element.Groups["name"].Value;
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                if (name.Equals("tool", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("tool_call", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("tool_calls", StringComparison.OrdinalIgnoreCase) ||
+                    name.Equals("arg", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                yield return new KeyValuePair<string, object?>(name, ParseDetailsParameterValue(element.Groups["value"].Value));
+            }
+        }
+
+        private static string InferToolFromStructuredBlock(string rootTag, string body, out Dictionary<string, object?> extras)
+        {
+            extras = new Dictionary<string, object?>(StringComparer.Ordinal);
+            if (string.IsNullOrWhiteSpace(body) && string.IsNullOrWhiteSpace(rootTag))
+            {
+                return string.Empty;
+            }
+
+            var values = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+            foreach (var kvp in ExtractSimpleStructuredElements(body))
+            {
+                values[kvp.Key] = kvp.Value;
+            }
+
+            values.TryGetValue("action", out var actionValue);
+            values.TryGetValue("path", out var pathValue);
+            values.TryGetValue("directory", out var directoryValue);
+            values.TryGetValue("content", out var contentValue);
+            values.TryGetValue("text", out var textValue);
+            values.TryGetValue("from", out var fromValue);
+            values.TryGetValue("to", out var toValue);
+            values.TryGetValue("pattern", out var patternValue);
+
+            var action = actionValue?.ToString()?.Trim().ToLowerInvariant() ?? string.Empty;
+            var root = rootTag.Trim().ToLowerInvariant();
+
+            if (root.Contains("folder") || root.Contains("file") || root.Contains("filesystem"))
+            {
+                switch (action)
+                {
+                    case "create":
+                    case "mkdir":
+                    case "make":
+                    case "new":
+                        if (pathValue != null)
+                        {
+                            extras["path"] = pathValue;
+                        }
+
+                        if (root.Contains("file") &&
+                            (contentValue != null || textValue != null || LooksLikeFilePath(pathValue?.ToString())))
+                        {
+                            if (contentValue != null)
+                            {
+                                extras["content"] = contentValue;
+                            }
+                            else if (textValue != null)
+                            {
+                                extras["content"] = textValue;
+                            }
+                            return "write_file";
+                        }
+
+                        return "create_directory";
+                    case "list":
+                    case "ls":
+                    case "dir":
+                    case "show":
+                    case "browse":
+                        if (pathValue != null)
+                        {
+                            extras["path"] = pathValue;
+                        }
+                        else if (directoryValue != null)
+                        {
+                            extras["path"] = directoryValue;
+                        }
+                        return extras.ContainsKey("path") ? "list_directory" : string.Empty;
+                    case "read":
+                    case "cat":
+                    case "open":
+                        if (pathValue != null)
+                        {
+                            extras["path"] = pathValue;
+                        }
+                        return pathValue != null ? "read_file" : string.Empty;
+                    case "write":
+                    case "save":
+                    case "append":
+                        if (pathValue != null)
+                        {
+                            extras["path"] = pathValue;
+                        }
+                        if (contentValue != null)
+                        {
+                            extras["content"] = contentValue;
+                        }
+                        else if (textValue != null)
+                        {
+                            extras["content"] = textValue;
+                        }
+                        if (action == "append")
+                        {
+                            extras["append"] = true;
+                        }
+                        return "write_file";
+                    case "delete":
+                    case "remove":
+                    case "rm":
+                        if (pathValue != null)
+                        {
+                            extras["path"] = pathValue;
+                        }
+                        if (root.Contains("folder") || root.Contains("filesystem"))
+                        {
+                            return LooksLikeFilePath(pathValue?.ToString()) ? "delete_file" : string.Empty;
+                        }
+
+                        return "delete_file";
+                    case "move":
+                    case "rename":
+                        if (fromValue != null)
+                        {
+                            extras["from"] = fromValue;
+                        }
+                        if (toValue != null)
+                        {
+                            extras["to"] = toValue;
+                        }
+                        return "move_file";
+                    case "search":
+                    case "find":
+                        if (directoryValue != null)
+                        {
+                            extras["directory"] = directoryValue;
+                        }
+                        else if (pathValue != null)
+                        {
+                            extras["directory"] = pathValue;
+                        }
+                        if (patternValue != null)
+                        {
+                            extras["pattern"] = patternValue;
+                        }
+                        return !string.IsNullOrWhiteSpace(patternValue?.ToString()) &&
+                               (directoryValue != null || pathValue != null)
+                            ? "search_file_content"
+                            : string.Empty;
+                }
+            }
+
+            return string.Empty;
         }
 
         private static bool TryExtractTool(string json, out ToolCallRequest result)
@@ -181,6 +577,19 @@ namespace Aire.Services
                 AppLogger.Warn(nameof(ToolCallParser) + ".TryExtractTool", "Failed to extract tool from JSON", ex);
                 return false;
             }
+        }
+
+        private static bool LooksLikeFilePath(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            string trimmed = path.Trim();
+            int lastSlash = Math.Max(trimmed.LastIndexOf('/'), trimmed.LastIndexOf('\\'));
+            string lastSegment = lastSlash >= 0 ? trimmed[(lastSlash + 1)..] : trimmed;
+            return lastSegment.Contains('.') && !lastSegment.EndsWith(".", StringComparison.Ordinal);
         }
 
         /// <summary>
