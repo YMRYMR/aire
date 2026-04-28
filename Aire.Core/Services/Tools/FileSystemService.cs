@@ -95,14 +95,24 @@ namespace Aire.Services
                 listing.Entries.Add(new DirectoryEntry { IsDirectory = true, Name = System.IO.Path.GetFileName(d) });
             foreach (var f in files)
             {
-                var info = new FileInfo(f);
-                listing.Entries.Add(new DirectoryEntry
+                try
                 {
-                    IsDirectory = false,
-                    Name     = info.Name,
-                    Size     = FormatSize(info.Length),
-                    Modified = info.LastWriteTime.ToString("yyyy-MM-dd HH:mm")
-                });
+                    var info = new FileInfo(f);
+                    if (IsReservedDeviceName(info.Name))
+                        continue;
+
+                    listing.Entries.Add(new DirectoryEntry
+                    {
+                        IsDirectory = false,
+                        Name = info.Name,
+                        Size = FormatSize(info.Length),
+                        Modified = info.LastWriteTime.ToString("yyyy-MM-dd HH:mm")
+                    });
+                }
+                catch
+                {
+                    // Skip invalid or inaccessible entries instead of failing the whole listing.
+                }
             }
 
             var sb = new StringBuilder();
@@ -340,5 +350,19 @@ namespace Aire.Services
             < 1024L * 1024 * 1024 => $"{bytes / (1024.0 * 1024):F1} MB",
             _                     => $"{bytes / (1024.0 * 1024 * 1024):F1} GB"
         };
+
+        private static bool IsReservedDeviceName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            var trimmed = name.Trim().TrimEnd('.');
+            return trimmed.Equals("con", StringComparison.OrdinalIgnoreCase) ||
+                   trimmed.Equals("prn", StringComparison.OrdinalIgnoreCase) ||
+                   trimmed.Equals("aux", StringComparison.OrdinalIgnoreCase) ||
+                   trimmed.Equals("nul", StringComparison.OrdinalIgnoreCase) ||
+                   trimmed.StartsWith("com", StringComparison.OrdinalIgnoreCase) && trimmed.Length == 4 && char.IsDigit(trimmed[3]) ||
+                   trimmed.StartsWith("lpt", StringComparison.OrdinalIgnoreCase) && trimmed.Length == 4 && char.IsDigit(trimmed[3]);
+        }
     }
 }
