@@ -397,6 +397,11 @@ namespace Aire.Services
                         {
                             extras["path"] = pathValue;
                         }
+                        if (root.Contains("folder") || root.Contains("filesystem"))
+                        {
+                            return LooksLikeFilePath(pathValue?.ToString()) ? "delete_file" : string.Empty;
+                        }
+
                         return "delete_file";
                     case "move":
                     case "rename":

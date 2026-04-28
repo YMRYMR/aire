@@ -142,6 +142,22 @@ public class ToolCallParserEdgeCaseTests
     }
 
     [Fact]
+    public void Parse_PluralToolCallsArray_PreservesArrayOrder()
+    {
+        string response =
+            "<tool_calls>[{\"tool\":\"create_directory\",\"path\":\"C:\\\\dev\\\\aire\\\\one\"},{\"tool\":\"write_file\",\"path\":\"C:\\\\dev\\\\aire\\\\one\\\\note.txt\",\"content\":\"hello\"}]</tool_calls>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal(2, parsedAiResponse.ToolCalls.Count);
+        Assert.Equal("create_directory", parsedAiResponse.ToolCalls[0].Tool);
+        Assert.Equal("write_file", parsedAiResponse.ToolCalls[1].Tool);
+        Assert.Equal("C:\\dev\\aire\\one", parsedAiResponse.ToolCalls[0].Parameters.GetProperty("path").GetString());
+        Assert.Equal("C:\\dev\\aire\\one\\note.txt", parsedAiResponse.ToolCalls[1].Parameters.GetProperty("path").GetString());
+    }
+
+    [Fact]
     public void Parse_FileActionCreate_WithContent_MapsToWriteFile()
     {
         string response =
@@ -157,5 +173,37 @@ public class ToolCallParserEdgeCaseTests
         Assert.Equal("write_file", parsedAiResponse.ToolCall?.Tool);
         Assert.Equal("C:\\dev\\aire\\notes.txt", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
         Assert.Equal("Hello from structured blocks", parsedAiResponse.ToolCall?.Parameters.GetProperty("content").GetString());
+    }
+
+    [Fact]
+    public void Parse_FolderStructureDelete_ForDirectoryLikePath_DoesNotCreateFileDeleteTool()
+    {
+        string response =
+            "<folder_structure>\n" +
+            "  <action>delete</action>\n" +
+            "  <path>C:\\dev\\aire\\notes</path>\n" +
+            "</folder_structure>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.False(parsedAiResponse.HasToolCall);
+        Assert.DoesNotContain("delete_file", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Parse_StandaloneToolTags_AreRemovedFromVisibleText()
+    {
+        string response =
+            "Now I need to learn the real syntax by reading working examples.\n" +
+            "<tool_call>\n" +
+            "<tool_calls>\n" +
+            "<tool_calls>\n";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.False(parsedAiResponse.HasToolCall);
+        Assert.Contains("Now I need to learn the real syntax", parsedAiResponse.TextContent);
+        Assert.DoesNotContain("<tool_call>", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("<tool_calls>", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
     }
 }
