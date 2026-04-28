@@ -305,8 +305,11 @@ namespace Aire.Services
                 return string.Empty;
             }
 
-            var values = ExtractSimpleStructuredElements(body)
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase);
+            var values = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+            foreach (var kvp in ExtractSimpleStructuredElements(body))
+            {
+                values[kvp.Key] = kvp.Value;
+            }
 
             values.TryGetValue("action", out var actionValue);
             values.TryGetValue("path", out var pathValue);

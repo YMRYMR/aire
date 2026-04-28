@@ -118,16 +118,24 @@ namespace Aire.Services
                 };
             }
 
+            bool hasOpenStructuredTag =
+                response.Contains("<folder_structure", StringComparison.OrdinalIgnoreCase) ||
+                response.Contains("<file_structure", StringComparison.OrdinalIgnoreCase) ||
+                response.Contains("<filesystem_structure", StringComparison.OrdinalIgnoreCase) ||
+                response.Contains("<filesystem", StringComparison.OrdinalIgnoreCase) ||
+                response.Contains("<file_action", StringComparison.OrdinalIgnoreCase);
+
             bool hasOpenToolTag =
                 response.Contains("<tool_call", StringComparison.OrdinalIgnoreCase) ||
                 response.Contains("<tool_calls", StringComparison.OrdinalIgnoreCase) ||
                 response.Contains("<tool_code", StringComparison.OrdinalIgnoreCase) ||
                 response.Contains("<tool_use", StringComparison.OrdinalIgnoreCase) ||
-                response.Contains("<tool>", StringComparison.OrdinalIgnoreCase);
+                response.Contains("<tool>", StringComparison.OrdinalIgnoreCase) ||
+                hasOpenStructuredTag;
 
             bool hasClosingToolTag = Regex.IsMatch(
                 response,
-                @"</(?:tool_calls|tool_call|tool_code|tool_use|tool)>",
+                @"</(?:tool_calls|tool_call|tool_code|tool_use|tool|folder_structure|file_structure|filesystem_structure|filesystem|file_action)>",
                 RegexOptions.IgnoreCase);
 
             if (hasOpenToolTag && !hasClosingToolTag)
@@ -135,7 +143,7 @@ namespace Aire.Services
                 // The model left the tag open (e.g. <tool_call{"tool":"read_file",...}) —
                 // try to extract valid JSON from the unclosed tag before declaring it cut off.
                 var unclosedMatch = Regex.Match(response,
-                    @"<(?:tool_call|tool_calls|tool_code|tool_use|tool)>?\s*(\{[\s\S]*\}|\[[\s\S]*\])",
+                    @"<(?:tool_call|tool_calls|tool_code|tool_use|tool|folder_structure|file_structure|filesystem_structure|filesystem|file_action)>?\s*(\{[\s\S]*\}|\[[\s\S]*\])",
                     RegexOptions.IgnoreCase);
                 if (unclosedMatch.Success)
                 {
@@ -152,7 +160,7 @@ namespace Aire.Services
                     }
                 }
 
-                bool looksLikeTruncatedToolPayload = Regex.IsMatch(
+                bool looksLikeTruncatedToolPayload = hasOpenStructuredTag || Regex.IsMatch(
                     response,
                     @"<(?:tool_call|tool_calls|tool_code|tool_use|tool)\b[^>]*>\s*(?:\{|\[|<arg|<folder_structure|<file_action|<filesystem_structure|<filesystem)",
                     RegexOptions.IgnoreCase);

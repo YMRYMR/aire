@@ -206,4 +206,34 @@ public class ToolCallParserEdgeCaseTests
         Assert.DoesNotContain("<tool_call>", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("<tool_calls>", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public void Parse_TruncatedStructuredBlock_ReturnsCutOffWarning()
+    {
+        string response =
+            "I’m going to inspect the folder structure first.\n" +
+            "<folder_structure>\n" +
+            "  <action>list</action>\n" +
+            "  <path>C:\\dev\\aire</path>\n";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.False(parsedAiResponse.HasToolCall);
+        Assert.Contains("cut off before the tool call could complete", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Parse_RepeatedStructuredTags_DoesNotCrash()
+    {
+        string response =
+            "<file_action>\n" +
+            "  <action>create</action>\n" +
+            "  <path>C:\\dev\\aire\\notes.txt</path>\n" +
+            "  <path>C:\\dev\\aire\\notes-final.txt</path>\n" +
+            "  <content>Hello</content>\n" +
+            "</file_action>";
+
+        Exception ex = Record.Exception(() => ToolCallParser.Parse(response));
+        Assert.Null(ex);
+    }
 }
