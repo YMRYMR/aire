@@ -104,6 +104,7 @@ namespace Aire
         private int _historyIndex = -1;
         private string _inputDraft = string.Empty;
         private string _orchestratorInputDraft = string.Empty;
+        private bool _followMessagesScroll = true;
         private readonly List<int> _searchMatchIndices = new();
         private int _searchCurrentIndex = -1;
         private static SolidColorBrush UserBgBrush => Aire.Services.AppearanceService.UserBgBrush;

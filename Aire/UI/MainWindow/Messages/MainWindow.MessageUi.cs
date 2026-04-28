@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media;
 using Aire.Services;
 using ChatMessage = Aire.UI.MainWindow.Models.ChatMessage;
@@ -257,11 +258,25 @@ namespace Aire
         private void AddErrorMessage(string rawError, string? cooldownMsg = null)
             => _ = AddErrorMessageAsync(rawError, cooldownMsg);
 
-        private void ScrollToBottom()
+        private void ScrollToBottom(bool force = false)
         {
+            if (!force && !_followMessagesScroll)
+                return;
+
             Dispatcher.BeginInvoke(
                 () => MessagesScrollViewer.ScrollToBottom(),
                 System.Windows.Threading.DispatcherPriority.Background);
+        }
+
+        private void MessagesScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (MessagesScrollViewer == null)
+                return;
+
+            var threshold = 2.0;
+            var atBottom = MessagesScrollViewer.VerticalOffset + MessagesScrollViewer.ViewportHeight >=
+                           MessagesScrollViewer.ExtentHeight - threshold;
+            _followMessagesScroll = atBottom;
         }
     }
 }

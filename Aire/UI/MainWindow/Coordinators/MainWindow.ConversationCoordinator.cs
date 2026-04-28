@@ -42,6 +42,7 @@ namespace Aire
                 foreach (var input in transcript.InputHistory)
                     _owner._inputHistory.Add(input);
 
+                _owner._followMessagesScroll = true;
                 foreach (var entry in transcript.Entries)
                 {
                     var orchestratorBg = _owner.TryFindResource("OrchestratorMessageBrush") as Brush;
@@ -148,7 +149,7 @@ namespace Aire
                 if (_owner.Messages.Count == 0)
                     _owner.LoadWelcomeMessage();
 
-                _owner.ScrollToBottom();
+                _owner.ScrollToBottom(force: true);
             }
 
             public async Task SyncConversationSelectionStateAsync(int conversationId, int? previousConversationId = null)
@@ -251,7 +252,9 @@ namespace Aire
                 _owner._currentConversationId = id;
                 _owner._conversationHistory.Clear();
                 _owner.Messages.Clear();
+                _owner._followMessagesScroll = true;
                 await _owner.AddSystemMessageAsync(systemMessage);
+                _owner.ScrollToBottom(force: true);
                 return id;
             }
 
@@ -282,9 +285,11 @@ namespace Aire
                 _owner._historyIndex = -1;
                 _owner._inputDraft = string.Empty;
                 _owner._todoListMessage = null;
+                _owner._followMessagesScroll = true;
                 _owner.ApplyAssistantModeState(_owner._assistantModeApplicationService.GetDefaultMode().Key);
                 _owner.CloseSearch();
                 _owner.LoadWelcomeMessage();
+                _owner.ScrollToBottom(force: true);
             }
         }
     }
