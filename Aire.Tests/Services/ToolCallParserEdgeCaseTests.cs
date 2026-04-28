@@ -224,6 +224,39 @@ public class ToolCallParserEdgeCaseTests
     }
 
     [Fact]
+    public void Parse_FolderStructureRead_WithoutPathStaysVisibleText()
+    {
+        string response =
+            "I’m going to read a file next.\n" +
+            "<folder_structure>\n" +
+            "  <action>read</action>\n" +
+            "</folder_structure>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.False(parsedAiResponse.HasToolCall);
+        Assert.Contains("I’m going to read a file next.", parsedAiResponse.TextContent);
+        Assert.DoesNotContain("read_file", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Parse_FolderStructureSearch_WithoutDirectoryStaysVisibleText()
+    {
+        string response =
+            "I’m going to search for matches next.\n" +
+            "<filesystem>\n" +
+            "  <action>search</action>\n" +
+            "  <pattern>TODO</pattern>\n" +
+            "</filesystem>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.False(parsedAiResponse.HasToolCall);
+        Assert.Contains("I’m going to search for matches next.", parsedAiResponse.TextContent);
+        Assert.DoesNotContain("search_file_content", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public void Parse_TruncatedStructuredBlock_ReturnsCutOffWarning()
     {
         string response =

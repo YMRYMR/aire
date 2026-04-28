@@ -386,7 +386,7 @@ namespace Aire.Services
                         {
                             extras["path"] = pathValue;
                         }
-                        return "read_file";
+                        return pathValue != null ? "read_file" : string.Empty;
                     case "write":
                     case "save":
                     case "append":
@@ -445,7 +445,10 @@ namespace Aire.Services
                         {
                             extras["pattern"] = patternValue;
                         }
-                        return string.IsNullOrWhiteSpace(patternValue?.ToString()) ? string.Empty : "search_file_content";
+                        return !string.IsNullOrWhiteSpace(patternValue?.ToString()) &&
+                               (directoryValue != null || pathValue != null)
+                            ? "search_file_content"
+                            : string.Empty;
                 }
             }
 
