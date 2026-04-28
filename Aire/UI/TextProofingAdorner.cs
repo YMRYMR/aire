@@ -96,8 +96,19 @@ namespace Aire.UI
 
         private void DrawUnderline(DrawingContext drawingContext, WpfPen pen, int startIndex, int length)
         {
+            var textLength = _textBox.Text?.Length ?? 0;
+            if (textLength <= 0)
+                return;
+
+            if (startIndex < 0 || startIndex >= textLength)
+                return;
+
+            var safeLength = Math.Min(length, textLength - startIndex);
+            if (safeLength <= 0)
+                return;
+
             var startRect = _textBox.GetRectFromCharacterIndex(startIndex, trailingEdge: false);
-            var endRect = _textBox.GetRectFromCharacterIndex(startIndex + Math.Max(0, length - 1), trailingEdge: true);
+            var endRect = _textBox.GetRectFromCharacterIndex(startIndex + Math.Max(0, safeLength - 1), trailingEdge: true);
 
             if (startRect.IsEmpty || endRect.IsEmpty)
                 return;
@@ -107,9 +118,9 @@ namespace Aire.UI
             var lineStartX = startRect.Left;
             var lineEndX = endRect.Right;
 
-            for (var i = 0; i < length; i++)
+            for (var i = 0; i < safeLength; i++)
             {
-                var rect = _textBox.GetRectFromCharacterIndex(startIndex + i, trailingEdge: i == length - 1);
+                var rect = _textBox.GetRectFromCharacterIndex(startIndex + i, trailingEdge: i == safeLength - 1);
                 if (rect.IsEmpty)
                     continue;
 

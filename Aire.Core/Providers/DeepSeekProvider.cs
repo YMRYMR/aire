@@ -61,7 +61,7 @@ namespace Aire.Providers
                     {
                         Id = id,
                         DisplayName = id,
-                        Capabilities = new List<string> { "tools" }
+                        Capabilities = new List<string> { "tools", "toolcallmode:text", "toolformat:text" }
                     })
                     .ToList();
                 return models;

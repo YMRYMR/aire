@@ -1,9 +1,9 @@
 {
   "providerType": "DeepSeek",
   "models": [
-    { "id": "deepseek-chat", "displayName": "DeepSeek Chat", "capabilities": ["tools"], "contextLength": 128000 },
-    { "id": "deepseek-reasoner", "displayName": "DeepSeek Reasoner", "capabilities": ["tools"], "contextLength": 128000 },
-    { "id": "deepseek-v4-pro", "displayName": "DeepSeek 4 Pro", "capabilities": ["tools"], "contextLength": 128000 },
-    { "id": "deepseek-v4-flash", "displayName": "DeepSeek 4 Flash", "capabilities": ["tools"], "contextLength": 128000 }
+    { "id": "deepseek-chat", "displayName": "DeepSeek Chat", "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 },
+    { "id": "deepseek-reasoner", "displayName": "DeepSeek Reasoner", "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 },
+    { "id": "deepseek-v4-pro", "displayName": "DeepSeek 4 Pro", "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 },
+    { "id": "deepseek-v4-flash", "displayName": "DeepSeek 4 Flash", "capabilities": ["tools", "toolcallmode:text", "toolformat:text"], "contextLength": 128000 }
   ]
 }

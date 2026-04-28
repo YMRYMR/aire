@@ -61,8 +61,34 @@ namespace Aire.Services
             if (!Directory.Exists(path))
                 return new ToolExecutionResult { TextResult = $"Error: Directory not found: {path}" };
 
-            var dirs  = Directory.GetDirectories(path).OrderBy(x => x).ToArray();
-            var files = Directory.GetFiles(path).OrderBy(x => x).ToArray();
+            var dirs  = new List<string>();
+            var files = new List<string>();
+
+            try
+            {
+                foreach (var entry in Directory.EnumerateFileSystemEntries(path))
+                {
+                    try
+                    {
+                        var attributes = File.GetAttributes(entry);
+                        if ((attributes & FileAttributes.Directory) != 0)
+                            dirs.Add(entry);
+                        else
+                            files.Add(entry);
+                    }
+                    catch
+                    {
+                        // Skip invalid or inaccessible entries instead of failing the whole listing.
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ToolExecutionResult { TextResult = $"Error: Directory listing failed: {ex.Message}" };
+            }
+
+            dirs.Sort(StringComparer.OrdinalIgnoreCase);
+            files.Sort(StringComparer.OrdinalIgnoreCase);
 
             var listing = new DirectoryListing { Path = path };
             foreach (var d in dirs)

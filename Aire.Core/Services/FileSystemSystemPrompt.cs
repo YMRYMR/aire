@@ -30,6 +30,12 @@ namespace Aire.Services
             sb.Append("- When asked a capability or product question (what you can do, whether you support something), answer directly in plain language. Do NOT call tools.\n");
             sb.Append("- Call one tool at a time. After each result, call the next if the task is not done.\n");
             sb.Append("- When summarising news or articles, always include each article's full URL verbatim.\n\n");
+            sb.Append("- When asked to analyze, inspect, review, or understand a local project or codebase, your first action must be a filesystem tool call on the exact absolute folder path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n");
+            sb.Append("REPOSITORY / CODEBASE ANALYSIS RULE:\n");
+            sb.Append("- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message.\n");
+            sb.Append("- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n");
+            sb.Append("- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n");
+            sb.Append("- Example: user asks 'Please analyze C:/dev/aire' -> call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
 
             bool hasFs = cats == null || cats.Contains("filesystem");
 
@@ -81,6 +87,11 @@ namespace Aire.Services
                 "- Call one tool at a time. After each tool result, call the next tool if the task is not done.\n" +
                 "- Only stop when the user's ENTIRE request is fully completed.\n" +
                 "- When summarising news or articles from a feed, ALWAYS include each article's full Link: URL verbatim in your reply so the user can click it.\n\n");
+            sb.Append(
+                "REPOSITORY / CODEBASE ANALYSIS RULE:\n" +
+                "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message, and do not shorten it to a relative folder name.\n" +
+                "- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n" +
+                "- Example: user asks 'Please analyze C:/dev/aire' → call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
 
             if (hasFs)
             {
@@ -233,6 +244,15 @@ namespace Aire.Services
                 "2. NEVER say you cannot launch, open, or start applications. You CAN launch any installed application — including GUI apps like GIMP, Notepad, Chrome, VLC — by using execute_command with just the app name (e.g. command=\"gimp\").\n" +
                 "3. When the user asks you to list, read, find, create, edit, move, or delete anything on the file system, you MUST emit a tool call immediately.\n" +
                 "4. When the user asks you to run commands, open applications, or perform any system operation, you MUST use the execute_command tool.\n");
+            if (hasFs)
+                sb.Append(
+                "4a. When the user asks you to analyze, inspect, review, or understand a local project or codebase, your first action must be a filesystem tool call on the exact absolute folder path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n");
+            if (hasFs)
+                sb.Append(
+                "REPOSITORY / CODEBASE ANALYSIS RULE:\n" +
+                "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message, and do not shorten it to a relative folder name.\n" +
+                "- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n" +
+                "- Example: user asks 'Please analyze C:/dev/aire' -> call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
             sb.Append(
                 "5. After receiving a tool result, you MUST respond with a summary AND then IMMEDIATELY call the next tool if the user's task is not yet fully complete. NEVER wait for the user to tell you to continue if you have more tools to run.\n" +
                 "5a. If the user is asking a capability or product question (for example: what you can do, whether you support something, how Aire works, which mode/provider can do something, or whether image generation is available), answer directly in plain language. Do NOT call tools unless the user explicitly asks you to perform the action now.\n");
@@ -339,6 +359,14 @@ namespace Aire.Services
                         "Tool result: (page text containing '... Shows https://example.com/shows ...')\n" +
                         "You: Found it. Opening the Shows page.\n" +
                         "      <tool_call>{\"tool\": \"open_browser_tab\", \"url\": \"https://example.com/shows\"}</tool_call>\n\n");
+                if (hasFs)
+                    sb.Append(
+                        "User: 'Please analyze the project in C:/dev/aire and tell me what you think'\n" +
+                        "You: I'll inspect the repository structure first.\n" +
+                        "      <tool_call>{\"tool\": \"list_directory\", \"path\": \"C:/dev/aire\"}</tool_call>\n" +
+                        "Tool result: (folder listing)\n" +
+                        "You: I'll read the most relevant files next.\n" +
+                        "      <tool_call>{\"tool\": \"read_file\", \"path\": \"C:/dev/aire/README.md\"}</tool_call>\n\n");
             }
 
             if (hasKeyboard || hasMouse)
