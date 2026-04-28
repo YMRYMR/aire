@@ -49,7 +49,7 @@ public class FileSystemServiceCoverageTests : IDisposable
     [Fact]
     public async Task ExecuteAsync_ListDirectory_HandlesRepoRootWithReservedEntries()
     {
-        string repoRoot = @"C:\dev\aire";
+        string repoRoot = FindRepositoryRoot();
 
         ToolExecutionResult result = await _service.ExecuteAsync(CreateRequest("list_directory", "{\"path\":\"" + Escape(repoRoot) + "\" }"));
 
@@ -162,5 +162,22 @@ public class FileSystemServiceCoverageTests : IDisposable
     {
         return value.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r")
             .Replace("\n", "\\n");
+    }
+
+    private static string FindRepositoryRoot()
+    {
+        DirectoryInfo? current = new DirectoryInfo(AppContext.BaseDirectory);
+        while (current is not null)
+        {
+            string solutionPath = Path.Combine(current.FullName, "Aire.sln");
+            if (File.Exists(solutionPath))
+            {
+                return current.FullName;
+            }
+
+            current = current.Parent;
+        }
+
+        throw new InvalidOperationException("Could not locate Aire.sln from the test execution directory.");
     }
 }
