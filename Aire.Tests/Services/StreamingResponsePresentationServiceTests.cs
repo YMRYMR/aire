@@ -24,6 +24,14 @@ public class StreamingResponsePresentationServiceTests
     }
 
     [Fact]
+    public void GetVisibleText_StripsStandaloneToolMarkers()
+    {
+        var visible = _service.GetVisibleText("<tool_call>\n<tool_calls>\n<tool_calls>\n");
+
+        Assert.Equal(string.Empty, visible);
+    }
+
+    [Fact]
     public void GetStreamingPreviewText_ShowsPartialWordImmediately()
     {
         // Partial words must be shown as they arrive so the UI feels responsive.

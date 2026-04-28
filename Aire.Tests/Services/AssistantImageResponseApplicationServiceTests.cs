@@ -49,4 +49,15 @@ public class AssistantImageResponseApplicationServiceTests
         Assert.Equal("https://example.com/a.png", parsed.ImageReferences[0]);
         Assert.Equal("https://example.com/b.png", parsed.ImageReferences[1]);
     }
+
+    [Fact]
+    public void Parse_StripsStandaloneToolMarkersFromVisibleText()
+    {
+        var service = new AssistantImageResponseApplicationService();
+
+        var parsed = service.Parse("Now I need to continue.\n<tool_call>\n<tool_calls>\n<tool_calls>\n");
+
+        Assert.Equal("Now I need to continue.", parsed.Text);
+        Assert.Empty(parsed.ImageReferences);
+    }
 }
