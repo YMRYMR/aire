@@ -350,8 +350,7 @@ namespace Aire.Services
                             extras["path"] = pathValue;
                         }
 
-                        if (root.Contains("file") &&
-                            (contentValue != null || textValue != null || LooksLikeFilePath(pathValue?.ToString())))
+                        if (contentValue != null || textValue != null)
                         {
                             if (contentValue != null)
                             {
@@ -361,6 +360,12 @@ namespace Aire.Services
                             {
                                 extras["content"] = textValue;
                             }
+                            return "write_file";
+                        }
+
+                        if (LooksLikeFilePath(pathValue?.ToString()) &&
+                            (root.Contains("file") || root.Contains("filesystem")))
+                        {
                             return "write_file";
                         }
 

@@ -103,6 +103,40 @@ public class ToolCallParserEdgeCaseTests
     }
 
     [Fact]
+    public void Parse_FilesystemCreate_WithContent_MapsToWriteFile()
+    {
+        string response =
+            "<filesystem>\n" +
+            "  <action>create</action>\n" +
+            "  <path>C:\\dev\\aire\\notes.txt</path>\n" +
+            "  <content>Hello from filesystem blocks</content>\n" +
+            "</filesystem>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("write_file", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\notes.txt", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+        Assert.Equal("Hello from filesystem blocks", parsedAiResponse.ToolCall?.Parameters.GetProperty("content").GetString());
+    }
+
+    [Fact]
+    public void Parse_FilesystemCreate_WithFileLikePathAndNoContent_MapsToWriteFile()
+    {
+        string response =
+            "<filesystem>\n" +
+            "  <action>create</action>\n" +
+            "  <path>C:\\dev\\aire\\empty.txt</path>\n" +
+            "</filesystem>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("write_file", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\empty.txt", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+    }
+
+    [Fact]
     public void Parse_TextPlusFolderStructureBlock_ExtractsToolAndKeepsVisibleText()
     {
         string response =
