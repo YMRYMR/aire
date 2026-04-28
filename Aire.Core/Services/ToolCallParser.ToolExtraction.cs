@@ -99,7 +99,7 @@ namespace Aire.Services
             if (candidate.Contains("<", StringComparison.Ordinal))
             {
                 Match xmlMatch = Regex.Match(candidate,
-                    @"^\s*<(?<tag>tool_call|tool_calls|tool_code|tool_use|tool)(?<attrs>[^>]*)>(?<body>[\s\S]*?)</\k<tag>>\s*$",
+                    @"^\s*<(?<tag>tool_calls|tool_call|tool_code|tool_use|tool)(?<attrs>[^>]*)>(?<body>[\s\S]*?)</\k<tag>>\s*$",
                     RegexOptions.IgnoreCase);
                 if (xmlMatch.Success)
                 {
@@ -217,9 +217,7 @@ namespace Aire.Services
                 return false;
             }
 
-            Match match = Regex.Match(raw.Trim(),
-                @"<(?<tag>folder_structure|file_structure|filesystem_structure|filesystem|file_action)(?<attrs>[^>]*)>(?<body>[\s\S]*?)</\k<tag>>",
-                RegexOptions.IgnoreCase);
+            Match match = StructuredActionBlockRegex.Match(raw.Trim());
             if (!match.Success)
             {
                 return false;
@@ -334,6 +332,21 @@ namespace Aire.Services
                         {
                             extras["path"] = pathValue;
                         }
+
+                        if (root.Contains("file") &&
+                            (contentValue != null || textValue != null || LooksLikeFilePath(pathValue?.ToString())))
+                        {
+                            if (contentValue != null)
+                            {
+                                extras["content"] = contentValue;
+                            }
+                            else if (textValue != null)
+                            {
+                                extras["content"] = textValue;
+                            }
+                            return "write_file";
+                        }
+
                         return "create_directory";
                     case "list":
                     case "ls":
@@ -539,6 +552,19 @@ namespace Aire.Services
                 AppLogger.Warn(nameof(ToolCallParser) + ".TryExtractTool", "Failed to extract tool from JSON", ex);
                 return false;
             }
+        }
+
+        private static bool LooksLikeFilePath(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            string trimmed = path.Trim();
+            int lastSlash = Math.Max(trimmed.LastIndexOf('/'), trimmed.LastIndexOf('\\'));
+            string lastSegment = lastSlash >= 0 ? trimmed[(lastSlash + 1)..] : trimmed;
+            return lastSegment.Contains('.') && !lastSegment.EndsWith(".", StringComparison.Ordinal);
         }
 
         /// <summary>

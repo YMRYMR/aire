@@ -8,7 +8,7 @@ namespace Aire.Services
     public static partial class ToolCallParser
     {
         private static readonly Regex ToolCallRegex = new(
-            @"<(tool_call|tool_calls|tool_code|tool_use|tool)>?\s*((?:(?!</?(?:tool_call|tool_calls|tool_code|tool_use|tool)>)[\s\S])*?)\s*</(?:tool_call|tool_calls|tool_code|tool_use|tool)>",
+            @"<(tool_calls|tool_call|tool_code|tool_use|tool)>?\s*((?:(?!</?(?:tool_calls|tool_call|tool_code|tool_use|tool)>)[\s\S])*?)\s*</(?:tool_calls|tool_call|tool_code|tool_use|tool)>",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex ThinkBlockRegex = new(

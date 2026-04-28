@@ -70,10 +70,8 @@ namespace Aire.Services
         public static ParsedAiResponse Parse(string response)
         {
             response = NormalizeBareJsonToolCalls(response);
-            var toolCalls = new List<ToolCallRequest>();
-
-            response = ExtractStructuredActionBlocks(response, toolCalls);
-            var cleaned = ThinkBlockRegex.Replace(ToolCallRegex.Replace(response, string.Empty), string.Empty).Trim();
+            var collectedToolCalls = new List<(int Index, ToolCallRequest Call)>();
+            CollectStructuredActionBlocks(response, collectedToolCalls);
 
             var allMatches = ToolCallRegex.Matches(response);
             foreach (Match match in allMatches)
@@ -81,9 +79,27 @@ namespace Aire.Services
                 var rawJson = match.Groups[2].Value.Trim();
                 foreach (var toolCall in ParseToolCallJson(rawJson))
                 {
-                    toolCalls.Add(toolCall);
+                    collectedToolCalls.Add((match.Index, toolCall));
                 }
             }
+
+            collectedToolCalls.Sort(static (left, right) =>
+            {
+                int indexComparison = left.Index.CompareTo(right.Index);
+                return indexComparison != 0 ? indexComparison : 0;
+            });
+
+            var toolCalls = new List<ToolCallRequest>(collectedToolCalls.Count);
+            foreach (var (_, toolCall) in collectedToolCalls)
+            {
+                toolCalls.Add(toolCall);
+            }
+
+            var cleaned = ThinkBlockRegex.Replace(
+                ToolCallRegex.Replace(
+                    StructuredActionBlockRegex.Replace(response, string.Empty),
+                    string.Empty),
+                string.Empty).Trim();
 
             if (toolCalls.Count > 0)
             {
@@ -127,29 +143,30 @@ namespace Aire.Services
             return new ParsedAiResponse { TextContent = cleaned };
         }
 
-        private static string ExtractStructuredActionBlocks(string response, List<ToolCallRequest> toolCalls)
+        private static readonly Regex StructuredActionBlockRegex = new(
+            @"<(?<tag>folder_structure|file_structure|filesystem_structure|filesystem|file_action)(?<attrs>[^>]*)>(?<body>[\s\S]*?)</\k<tag>>",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static void CollectStructuredActionBlocks(string response, List<(int Index, ToolCallRequest Call)> toolCalls)
         {
             if (string.IsNullOrWhiteSpace(response))
             {
-                return response;
+                return;
             }
 
-            const string pattern = @"<(?<tag>folder_structure|file_structure|filesystem_structure|filesystem|file_action)(?<attrs>[^>]*)>[\s\S]*?</\k<tag>>";
-            var matches = Regex.Matches(response, pattern, RegexOptions.IgnoreCase);
+            var matches = StructuredActionBlockRegex.Matches(response);
             if (matches.Count == 0)
             {
-                return response;
+                return;
             }
 
             foreach (Match match in matches)
             {
                 if (TryParseStructuredActionBlock(match.Value, out var structuredCall))
                 {
-                    toolCalls.Add(structuredCall);
+                    toolCalls.Add((match.Index, structuredCall));
                 }
             }
-
-            return Regex.Replace(response, pattern, string.Empty, RegexOptions.IgnoreCase).Trim();
         }
     }
 }

@@ -74,6 +74,19 @@ public class ToolCallParserEdgeCaseTests
     }
 
     [Fact]
+    public void Parse_PluralToolCallsJsonTag_ExtractsToolAndParameters()
+    {
+        string response =
+            "<tool_calls>[{\"tool\":\"read_file\",\"path\":\"C:\\\\dev\\\\aire\\\\README.md\"}]</tool_calls>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("read_file", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\README.md", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+    }
+
+    [Fact]
     public void Parse_FolderStructureBlock_WithActionCreate_MapsToCreateDirectory()
     {
         string response =
@@ -105,5 +118,44 @@ public class ToolCallParserEdgeCaseTests
         Assert.Equal("create_directory", parsedAiResponse.ToolCall?.Tool);
         Assert.Equal("C:\\dev\\aire\\_deepseek_live3", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
         Assert.Contains("I'll start by creating the folder first.", parsedAiResponse.TextContent);
+    }
+
+    [Fact]
+    public void Parse_MixedStructuredAndXmlToolCalls_PreservesSourceOrder()
+    {
+        string response =
+            "<tool_call>{\"tool\":\"read_file\",\"path\":\"C:\\\\dev\\\\aire\\\\README.md\"}</tool_call>\n" +
+            "<file_action>\n" +
+            "  <action>create</action>\n" +
+            "  <path>C:\\dev\\aire\\notes.txt</path>\n" +
+            "  <content>Hello</content>\n" +
+            "</file_action>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal(2, parsedAiResponse.ToolCalls.Count);
+        Assert.Equal("read_file", parsedAiResponse.ToolCalls[0].Tool);
+        Assert.Equal("write_file", parsedAiResponse.ToolCalls[1].Tool);
+        Assert.Equal("C:\\dev\\aire\\README.md", parsedAiResponse.ToolCalls[0].Parameters.GetProperty("path").GetString());
+        Assert.Equal("C:\\dev\\aire\\notes.txt", parsedAiResponse.ToolCalls[1].Parameters.GetProperty("path").GetString());
+    }
+
+    [Fact]
+    public void Parse_FileActionCreate_WithContent_MapsToWriteFile()
+    {
+        string response =
+            "<file_action>\n" +
+            "  <action>create</action>\n" +
+            "  <path>C:\\dev\\aire\\notes.txt</path>\n" +
+            "  <content>Hello from structured blocks</content>\n" +
+            "</file_action>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("write_file", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\notes.txt", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+        Assert.Equal("Hello from structured blocks", parsedAiResponse.ToolCall?.Parameters.GetProperty("content").GetString());
     }
 }

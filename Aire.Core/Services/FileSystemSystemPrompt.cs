@@ -31,16 +31,15 @@ namespace Aire.Services
             sb.Append("- Call one tool at a time. After each result, call the next if the task is not done.\n");
             sb.Append("- When summarising news or articles, always include each article's full URL verbatim.\n\n");
             sb.Append("- When asked to analyze, inspect, review, or understand a local project or codebase, your first action must be a filesystem tool call on the exact absolute folder path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n");
-            sb.Append("REPOSITORY / CODEBASE ANALYSIS RULE:\n");
-            sb.Append("- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message.\n");
-            sb.Append("- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n");
-            sb.Append("- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n");
-            sb.Append("- Example: user asks 'Please analyze C:/dev/aire' -> call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
-
             bool hasFs = cats == null || cats.Contains("filesystem");
 
             if (hasFs)
             {
+                sb.Append("REPOSITORY / CODEBASE ANALYSIS RULE:\n");
+                sb.Append("- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your first action must be a filesystem tool call on the exact absolute path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n");
+                sb.Append("- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message.\n");
+                sb.Append("- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n");
+                sb.Append("- Example: user asks 'Please analyze C:/dev/aire' -> call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
                 sb.Append("SCRIPTING: Always write scripts to a temp file first, then execute. Never output large code blocks as plain text.\n\n");
                 sb.Append("LARGE FILES: read_file returns ≤100k chars. Check the 'Remaining' count in the result and re-call with increasing offset until done.\n\n");
             }
@@ -87,14 +86,14 @@ namespace Aire.Services
                 "- Call one tool at a time. After each tool result, call the next tool if the task is not done.\n" +
                 "- Only stop when the user's ENTIRE request is fully completed.\n" +
                 "- When summarising news or articles from a feed, ALWAYS include each article's full Link: URL verbatim in your reply so the user can click it.\n\n");
-            sb.Append(
-                "REPOSITORY / CODEBASE ANALYSIS RULE:\n" +
-                "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message, and do not shorten it to a relative folder name.\n" +
-                "- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n" +
-                "- Example: user asks 'Please analyze C:/dev/aire' → call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
-
             if (hasFs)
             {
+                sb.Append(
+                    "REPOSITORY / CODEBASE ANALYSIS RULE:\n" +
+                    "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your first action must be a filesystem tool call on the exact absolute path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n" +
+                    "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message, and do not shorten it to a relative folder name.\n" +
+                    "- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n" +
+                    "- Example: user asks 'Please analyze C:/dev/aire' → call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
                 sb.Append(
                     "SCRIPTING RULE:\n" +
                     "- When a task requires writing any script, program, or block of code (PowerShell, Python, batch, etc.), ALWAYS use write_file to save it to a temp file FIRST, then execute_command to run it. NEVER output large code blocks as plain text — the chat window has limited capacity and the code will be cut off or break the conversation.\n" +
@@ -246,10 +245,8 @@ namespace Aire.Services
                 "4. When the user asks you to run commands, open applications, or perform any system operation, you MUST use the execute_command tool.\n");
             if (hasFs)
                 sb.Append(
-                "4a. When the user asks you to analyze, inspect, review, or understand a local project or codebase, your first action must be a filesystem tool call on the exact absolute folder path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n");
-            if (hasFs)
-                sb.Append(
                 "REPOSITORY / CODEBASE ANALYSIS RULE:\n" +
+                "- If the user asks you to analyze, inspect, review, or understand a local project or codebase, your first action must be a filesystem tool call on the exact absolute folder path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n" +
                 "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message, and do not shorten it to a relative folder name.\n" +
                 "- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n" +
                 "- Example: user asks 'Please analyze C:/dev/aire' -> call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
