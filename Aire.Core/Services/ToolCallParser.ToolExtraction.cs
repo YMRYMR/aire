@@ -378,7 +378,7 @@ namespace Aire.Services
                         {
                             extras["path"] = directoryValue;
                         }
-                        return "list_directory";
+                        return extras.ContainsKey("path") ? "list_directory" : string.Empty;
                     case "read":
                     case "cat":
                     case "open":

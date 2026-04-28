@@ -208,6 +208,22 @@ public class ToolCallParserEdgeCaseTests
     }
 
     [Fact]
+    public void Parse_FolderStructureList_WithoutPathStaysVisibleText()
+    {
+        string response =
+            "I’m going to inspect the folder structure first.\n" +
+            "<folder_structure>\n" +
+            "  <action>list</action>\n" +
+            "</folder_structure>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.False(parsedAiResponse.HasToolCall);
+        Assert.Contains("I’m going to inspect the folder structure first.", parsedAiResponse.TextContent);
+        Assert.DoesNotContain("list_directory", parsedAiResponse.TextContent, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public void Parse_TruncatedStructuredBlock_ReturnsCutOffWarning()
     {
         string response =
