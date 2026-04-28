@@ -197,6 +197,11 @@ namespace Aire.Services
 
             foreach (Match match in matches)
             {
+                if (IsNestedInsideToolCallBlock(match, response))
+                {
+                    continue;
+                }
+
                 if (TryParseStructuredActionBlock(match.Value, out var structuredCall))
                 {
                     toolCalls.Add((match.Index, toolCalls.Count, structuredCall));

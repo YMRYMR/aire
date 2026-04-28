@@ -236,4 +236,38 @@ public class ToolCallParserEdgeCaseTests
         Exception ex = Record.Exception(() => ToolCallParser.Parse(response));
         Assert.Null(ex);
     }
+
+    [Fact]
+    public void Parse_JsonToolCallContainingStructuredText_UsesJsonToolCall()
+    {
+        string response =
+            "<tool_call>{\"tool\":\"write_file\",\"path\":\"C:\\\\dev\\\\aire\\\\notes.txt\",\"content\":\"<file_action><action>create</action><path>C:\\\\dev\\\\aire\\\\notes-final.txt</path></file_action>\"}</tool_call>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Single(parsedAiResponse.ToolCalls);
+        Assert.Equal("write_file", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\notes.txt", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+    }
+
+    [Fact]
+    public void Parse_NestedStructuredBlockInsideToolCall_DoesNotDuplicate()
+    {
+        string response =
+            "<tool_call>\n" +
+            "  <file_action>\n" +
+            "    <action>create</action>\n" +
+            "    <path>C:\\dev\\aire\\notes.txt</path>\n" +
+            "    <content>Hello</content>\n" +
+            "  </file_action>\n" +
+            "</tool_call>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Single(parsedAiResponse.ToolCalls);
+        Assert.Equal("write_file", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\notes.txt", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+    }
 }

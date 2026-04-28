@@ -11,12 +11,6 @@ namespace Aire.Services
         {
             var results = new List<ToolCallRequest>();
 
-            if (TryParseStructuredActionBlock(raw, out var structuredResult))
-            {
-                results.Add(structuredResult);
-                return results;
-            }
-
             if (TryParseXmlStyleToolCall(raw, out var xmlResult))
             {
                 results.Add(xmlResult);
@@ -26,6 +20,12 @@ namespace Aire.Services
             if (TryExtractTool(NormalizeJson(raw), out var normalizedResult))
             {
                 results.Add(normalizedResult);
+                return results;
+            }
+
+            if (TryParseStructuredActionBlock(raw, out var structuredResult))
+            {
+                results.Add(structuredResult);
                 return results;
             }
 
@@ -255,6 +255,20 @@ namespace Aire.Services
             }
 
             return true;
+        }
+
+        private static bool IsNestedInsideToolCallBlock(Match structuredMatch, string response)
+        {
+            foreach (Match toolMatch in ToolCallRegex.Matches(response))
+            {
+                if (toolMatch.Index <= structuredMatch.Index &&
+                    toolMatch.Index + toolMatch.Length >= structuredMatch.Index + structuredMatch.Length)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static string ExtractXmlAttribute(string attrs, string name)
