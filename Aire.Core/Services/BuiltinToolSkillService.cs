@@ -16,7 +16,7 @@ namespace Aire.Services
             {
                 var text =
                     "AVAILABLE TOOLS:\n" +
-                    "File System: list_directory, read_file, write_file, apply_diff, search_files, search_file_content, create_directory, delete_file, move_file.\n" +
+                    "File System: list_directory, read_file, write_file, edit_file_text, apply_diff, search_files, search_file_content, create_directory, delete_file, move_file.\n" +
                     "Command Execution: execute_command, read_command_output.\n" +
                     "Web (background): open_url(url, max_chars?), http_request(url, method?, headers?, body?).\n" +
                     "Web (browser): open_browser_tab, list_browser_tabs, read_browser_tab, switch_browser_tab, close_browser_tab, get_browser_html, get_browser_cookies, execute_browser_script.\n" +

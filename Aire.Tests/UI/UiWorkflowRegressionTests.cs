@@ -43,6 +43,7 @@ public class UiWorkflowRegressionTests : TestBase
                 pane.AutoAcceptEnabledCheckBox.IsChecked          = true;
                 pane.AutoAcceptReadFileCheckBox.IsChecked          = true;
                 pane.AutoAcceptExecuteCommandCheckBox.IsChecked    = true;
+                pane.AutoAcceptEditFileTextCheckBox.IsChecked      = true;
                 pane.AutoAcceptMouseToolsCheckBox.IsChecked        = true;
                 pane.AutoAcceptKeyboardToolsCheckBox.IsChecked     = false;
 
@@ -60,12 +61,14 @@ public class UiWorkflowRegressionTests : TestBase
                                     .Select(x => x.GetString()).ToList();
                     Assert.Contains("read_file",       (IEnumerable<string?>)tools);
                     Assert.Contains("execute_command", (IEnumerable<string?>)tools);
+                    Assert.Contains("edit_file_text",  (IEnumerable<string?>)tools);
                 }
 
                 // Reset UI and reload — values should be restored from DB.
                 pane.AutoAcceptEnabledCheckBox.IsChecked          = false;
                 pane.AutoAcceptReadFileCheckBox.IsChecked          = false;
                 pane.AutoAcceptExecuteCommandCheckBox.IsChecked    = false;
+                pane.AutoAcceptEditFileTextCheckBox.IsChecked      = false;
                 pane.AutoAcceptMouseToolsCheckBox.IsChecked        = false;
 
                 settings.LoadAutoAcceptSettings().GetAwaiter().GetResult();
@@ -73,6 +76,7 @@ public class UiWorkflowRegressionTests : TestBase
                 Assert.True(pane.AutoAcceptEnabledCheckBox.IsChecked);
                 Assert.True(pane.AutoAcceptReadFileCheckBox.IsChecked);
                 Assert.True(pane.AutoAcceptExecuteCommandCheckBox.IsChecked);
+                Assert.True(pane.AutoAcceptEditFileTextCheckBox.IsChecked);
                 Assert.True(pane.AutoAcceptMouseToolsCheckBox.IsChecked);
                 Assert.False(pane.AutoAcceptKeyboardToolsCheckBox.IsChecked);
 

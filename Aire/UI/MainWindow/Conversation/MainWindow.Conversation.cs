@@ -130,6 +130,29 @@ namespace Aire
                 return;
             }
 
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.None)
+            {
+                switch (e.Key)
+                {
+                    case Key.PageUp:
+                        ScrollMessagesPageUp();
+                        e.Handled = true;
+                        return;
+                    case Key.PageDown:
+                        ScrollMessagesPageDown();
+                        e.Handled = true;
+                        return;
+                    case Key.Home:
+                        ScrollMessagesToTop();
+                        e.Handled = true;
+                        return;
+                    case Key.End:
+                        ScrollMessagesToBottom();
+                        e.Handled = true;
+                        return;
+                }
+            }
+
             // Close command palette on Escape
             if (e.Key == Key.Escape && CommandPalettePopup.IsOpen)
             {

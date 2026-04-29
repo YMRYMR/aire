@@ -36,6 +36,7 @@ namespace Aire.UI
         private CheckBox AutoAcceptSearchFilesCheckBox => AutoAcceptPane.AutoAcceptSearchFilesCheckBox;
         private CheckBox AutoAcceptSearchFileContentCheckBox => AutoAcceptPane.AutoAcceptSearchFileContentCheckBox;
         private CheckBox AutoAcceptWriteToFileCheckBox => AutoAcceptPane.AutoAcceptWriteToFileCheckBox;
+        private CheckBox AutoAcceptEditFileTextCheckBox => AutoAcceptPane.AutoAcceptEditFileTextCheckBox;
         private CheckBox AutoAcceptApplyDiffCheckBox => AutoAcceptPane.AutoAcceptApplyDiffCheckBox;
         private CheckBox AutoAcceptCreateDirectoryCheckBox => AutoAcceptPane.AutoAcceptCreateDirectoryCheckBox;
         private CheckBox AutoAcceptDeleteFileCheckBox => AutoAcceptPane.AutoAcceptDeleteFileCheckBox;

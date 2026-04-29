@@ -24,6 +24,7 @@ namespace Aire.Services
                     "read_file"        => await ReadFileAsync(GetParam(request, "path"), GetInt(request, "offset", 0), GetInt(request, "length", MaxFileReadBytes)),
                     "write_file"       => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), GetBool(request, "append", false)),
                     "write_to_file"    => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), false),
+                    "edit_file_text"   => await EditFileTextAsync(request),
                     "apply_diff"       => await ApplyDiffAsync(GetParam(request, "path"), GetParam(request, "diff")),
                     "create_directory" => CreateDirectory(GetParam(request, "path")),
                     "delete_file"      => DeleteFile(GetParam(request, "path")),
@@ -177,6 +178,252 @@ namespace Aire.Services
             return $"{action} {content.Length} characters to: {path} (file is now {FormatSize(totalSize)})";
         }
 
+        private static async Task<string> EditFileTextAsync(ToolCallRequest request)
+        {
+            var path = GetParam(request, "path");
+            if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
+
+            var mode = GetParam(request, "mode").Trim().ToLowerInvariant();
+            var find = GetParam(request, "find");
+            var replacement = GetParam(request, "replacement");
+            if (string.IsNullOrWhiteSpace(replacement))
+                replacement = GetParam(request, "text");
+            var allOccurrences = GetBool(request, "all_occurrences", false);
+            var caseSensitive = GetBool(request, "case_sensitive", true);
+
+            if (!File.Exists(path) && mode is not ("append" or "prepend"))
+                return $"Error: File not found: {path}";
+
+            var original = File.Exists(path) ? await File.ReadAllTextAsync(path) : string.Empty;
+            var newline = original.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
+            var normalizedReplacement = NormalizeTextToLineEndings(replacement, newline);
+            var effectiveMode = string.IsNullOrWhiteSpace(mode)
+                ? InferEditMode(find, normalizedReplacement)
+                : mode;
+
+            string updated = original;
+            int changedCount = 0;
+            var comparison = caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            switch (effectiveMode)
+            {
+                case "append":
+                    if (string.IsNullOrEmpty(normalizedReplacement))
+                        return "Warning: No text provided to append.";
+                    updated = original + normalizedReplacement;
+                    changedCount = 1;
+                    break;
+
+                case "prepend":
+                    if (string.IsNullOrEmpty(normalizedReplacement))
+                        return "Warning: No text provided to prepend.";
+                    updated = normalizedReplacement + original;
+                    changedCount = 1;
+                    break;
+
+                case "insert_before":
+                    if (string.IsNullOrWhiteSpace(find))
+                        return "Error: find is required for insert_before.";
+                    changedCount = allOccurrences
+                        ? InsertAroundAllOccurrences(original, find, normalizedReplacement, comparison, before: true, out updated)
+                        : InsertAroundFirstOccurrence(original, find, normalizedReplacement, comparison, before: true, out updated);
+                    break;
+
+                case "insert_after":
+                    if (string.IsNullOrWhiteSpace(find))
+                        return "Error: find is required for insert_after.";
+                    changedCount = allOccurrences
+                        ? InsertAroundAllOccurrences(original, find, normalizedReplacement, comparison, before: false, out updated)
+                        : InsertAroundFirstOccurrence(original, find, normalizedReplacement, comparison, before: false, out updated);
+                    break;
+
+                case "delete":
+                    if (string.IsNullOrWhiteSpace(find))
+                        return "Error: find is required for delete.";
+                    changedCount = allOccurrences
+                        ? ReplaceAllOccurrences(original, find, string.Empty, comparison, out updated)
+                        : ReplaceFirstOccurrence(original, find, string.Empty, comparison, out updated);
+                    break;
+
+                case "replace":
+                default:
+                    if (string.IsNullOrWhiteSpace(find))
+                    {
+                        if (string.IsNullOrWhiteSpace(normalizedReplacement))
+                            return "Error: find or replacement text is required.";
+
+                        updated = original + normalizedReplacement;
+                        changedCount = 1;
+                        break;
+                    }
+                    changedCount = allOccurrences
+                        ? ReplaceAllOccurrences(original, find, normalizedReplacement, comparison, out updated)
+                        : ReplaceFirstOccurrence(original, find, normalizedReplacement, comparison, out updated);
+                    break;
+            }
+
+            if (changedCount <= 0)
+                return $"Warning: Text edit applied to {path} but no changes were made (match not found).";
+
+            var targetDir = System.IO.Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(targetDir) && !Directory.Exists(targetDir))
+                Directory.CreateDirectory(targetDir);
+
+            await File.WriteAllTextAsync(path, RestoreLineEndings(updated, newline));
+
+            var action = effectiveMode switch
+            {
+                "append" => "Appended",
+                "prepend" => "Prepended",
+                "insert_before" => "Inserted text before",
+                "insert_after" => "Inserted text after",
+                "delete" => "Deleted text from",
+                _ => "Edited"
+            };
+
+            return $"{action} {path} ({changedCount} change{(changedCount == 1 ? string.Empty : "s")})";
+        }
+
+        private static string InferEditMode(string find, string replacement)
+        {
+            if (!string.IsNullOrWhiteSpace(find) && !string.IsNullOrWhiteSpace(replacement))
+                return "replace";
+            if (!string.IsNullOrWhiteSpace(find) && string.IsNullOrWhiteSpace(replacement))
+                return "delete";
+            if (string.IsNullOrWhiteSpace(find) && !string.IsNullOrWhiteSpace(replacement))
+                return "append";
+            return "replace";
+        }
+
+        private static string NormalizeTextToLineEndings(string text, string newline) =>
+            RestoreLineEndings(NormalizeNewLines(text ?? string.Empty), newline);
+
+        private static int ReplaceFirstOccurrence(string input, string find, string replacement, StringComparison comparison, out string output)
+        {
+            var index = input.IndexOf(find, comparison);
+            if (index < 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            output = input[..index] + replacement + input[(index + find.Length)..];
+            return 1;
+        }
+
+        private static int ReplaceAllOccurrences(string input, string find, string replacement, StringComparison comparison, out string output)
+        {
+            if (string.IsNullOrEmpty(find))
+            {
+                output = input;
+                return 0;
+            }
+
+            var builder = new StringBuilder(input.Length);
+            int lastIndex = 0;
+            int count = 0;
+
+            while (true)
+            {
+                var index = input.IndexOf(find, lastIndex, comparison);
+                if (index < 0)
+                    break;
+
+                builder.Append(input, lastIndex, index - lastIndex);
+                builder.Append(replacement);
+                lastIndex = index + find.Length;
+                count++;
+                if (find.Length == 0)
+                    break;
+            }
+
+            if (count == 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            builder.Append(input, lastIndex, input.Length - lastIndex);
+            output = builder.ToString();
+            return count;
+        }
+
+        private static int InsertAroundFirstOccurrence(string input, string find, string insertion, StringComparison comparison, bool before, out string output)
+        {
+            var index = input.IndexOf(find, comparison);
+            if (index < 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            if (before)
+                output = input[..index] + insertion + input[index..];
+            else
+                output = input[..(index + find.Length)] + insertion + input[(index + find.Length)..];
+            return 1;
+        }
+
+        private static int InsertAroundAllOccurrences(string input, string find, string insertion, StringComparison comparison, bool before, out string output)
+        {
+            if (string.IsNullOrEmpty(find))
+            {
+                output = input;
+                return 0;
+            }
+
+            var builder = new StringBuilder(input.Length + Math.Max(0, insertion.Length * 2));
+            int lastIndex = 0;
+            int count = 0;
+
+            while (true)
+            {
+                var index = input.IndexOf(find, lastIndex, comparison);
+                if (index < 0)
+                    break;
+
+                builder.Append(input, lastIndex, index - lastIndex);
+                if (before)
+                {
+                    builder.Append(insertion);
+                    builder.Append(input, index, find.Length);
+                }
+                else
+                {
+                    builder.Append(input, index, find.Length);
+                    builder.Append(insertion);
+                }
+                lastIndex = index + find.Length;
+                count++;
+                if (find.Length == 0)
+                    break;
+            }
+
+            if (count == 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            builder.Append(input, lastIndex, input.Length - lastIndex);
+            output = builder.ToString();
+            return count;
+        }
+
+        private static int AppendModeFromInputs(string original, string replacement, string newline, string path, out string updated, out int changedCount)
+        {
+            if (string.IsNullOrEmpty(replacement))
+            {
+                updated = original;
+                changedCount = 0;
+                return 0;
+            }
+
+            updated = original + replacement;
+            changedCount = 1;
+            return 1;
+        }
+
         private static async Task<string> ApplyDiffAsync(string path, string diff)
         {
             if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
@@ -184,55 +431,172 @@ namespace Aire.Services
             if (!File.Exists(path)) return $"Error: File not found: {path}";
 
             var original = await File.ReadAllTextAsync(path);
-            var lines    = diff.Split('\n');
-
-            // Simple unified-diff application: look for <<<< ... ==== ... >>>> blocks
-            var result   = original;
+            var newline = original.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
+            var resultLines = NormalizeNewLines(original).Split('\n').ToList();
+            var diffLines = NormalizeNewLines(diff).Split('\n');
+            var changed = false;
             int searchIdx = 0;
 
-            while (searchIdx < lines.Length)
+            while (searchIdx < diffLines.Length)
             {
                 // Find <<<<<<< marker
                 int startMarker = -1;
-                for (int i = searchIdx; i < lines.Length; i++)
+                for (int i = searchIdx; i < diffLines.Length; i++)
                 {
-                    if (lines[i].StartsWith("<<<<<<<"))
+                    if (diffLines[i].StartsWith("<<<<<<<"))
                     { startMarker = i; break; }
                 }
                 if (startMarker < 0) break;
 
                 // Find ======= separator
                 int separator = -1;
-                for (int i = startMarker + 1; i < lines.Length; i++)
+                for (int i = startMarker + 1; i < diffLines.Length; i++)
                 {
-                    if (lines[i].StartsWith("======="))
+                    if (diffLines[i].StartsWith("======="))
                     { separator = i; break; }
                 }
                 if (separator < 0) break;
 
                 // Find >>>>>>> end marker
                 int endMarker = -1;
-                for (int i = separator + 1; i < lines.Length; i++)
+                for (int i = separator + 1; i < diffLines.Length; i++)
                 {
-                    if (lines[i].StartsWith(">>>>>>>"))
+                    if (diffLines[i].StartsWith(">>>>>>>"))
                     { endMarker = i; break; }
                 }
                 if (endMarker < 0) break;
 
-                var oldBlock = string.Join("\n", lines[(startMarker + 1)..separator]);
-                var newBlock = string.Join("\n", lines[(separator + 1)..endMarker]);
+                var oldBlockLines = diffLines[(startMarker + 1)..separator];
+                var newBlockLines = diffLines[(separator + 1)..endMarker];
 
-                if (result.Contains(oldBlock))
-                    result = result.Replace(oldBlock, newBlock);
+                if (TryReplaceBlock(resultLines, oldBlockLines, newBlockLines))
+                    changed = true;
 
                 searchIdx = endMarker + 1;
             }
 
-            if (result == original)
+            if (!changed)
                 return "Warning: Diff applied but no changes were made (old text not found).";
 
-            await File.WriteAllTextAsync(path, result);
+            await File.WriteAllTextAsync(path, RestoreLineEndings(string.Join("\n", resultLines), newline));
             return $"Diff applied to: {path}";
+        }
+
+        private static string NormalizeNewLines(string text) =>
+            text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
+
+        private static string RestoreLineEndings(string text, string newline) =>
+            newline == "\n" ? text : text.Replace("\n", newline, StringComparison.Ordinal);
+
+        private static bool TryReplaceBlock(List<string> lines, string[] oldBlockLines, string[] newBlockLines)
+        {
+            if (TryReplaceBlockExact(lines, oldBlockLines, newBlockLines))
+                return true;
+
+            return TryReplaceBlockIgnoringIndentation(lines, oldBlockLines, newBlockLines);
+        }
+
+        private static bool TryReplaceBlockExact(List<string> lines, string[] oldBlockLines, string[] newBlockLines)
+        {
+            if (oldBlockLines.Length == 0)
+                return false;
+
+            for (int i = 0; i <= lines.Count - oldBlockLines.Length; i++)
+            {
+                bool matches = true;
+                for (int j = 0; j < oldBlockLines.Length; j++)
+                {
+                    if (!string.Equals(lines[i + j].TrimEnd(), oldBlockLines[j].TrimEnd(), StringComparison.Ordinal))
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+
+                if (!matches)
+                    continue;
+
+                lines.RemoveRange(i, oldBlockLines.Length);
+                lines.InsertRange(i, newBlockLines);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool TryReplaceBlockIgnoringIndentation(List<string> lines, string[] oldBlockLines, string[] newBlockLines)
+        {
+            if (oldBlockLines.Length == 0)
+                return false;
+
+            var normalizedOld = oldBlockLines.Select(NormalizeLineForLooseMatch).ToArray();
+            for (int i = 0; i <= lines.Count - oldBlockLines.Length; i++)
+            {
+                bool matches = true;
+                for (int j = 0; j < oldBlockLines.Length; j++)
+                {
+                    if (!string.Equals(NormalizeLineForLooseMatch(lines[i + j]), normalizedOld[j], StringComparison.Ordinal))
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+
+                if (!matches)
+                    continue;
+
+                string targetIndent = GetLeadingWhitespace(lines[i]);
+                string[] reindentedNew = ReindentBlock(newBlockLines, targetIndent);
+                lines.RemoveRange(i, oldBlockLines.Length);
+                lines.InsertRange(i, reindentedNew);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static string NormalizeLineForLooseMatch(string line) =>
+            line.Trim().Replace("\t", "    ", StringComparison.Ordinal);
+
+        private static string GetLeadingWhitespace(string line)
+        {
+            int count = 0;
+            while (count < line.Length && char.IsWhiteSpace(line[count]))
+                count++;
+            return count == 0 ? string.Empty : line[..count];
+        }
+
+        private static string[] ReindentBlock(string[] blockLines, string targetIndent)
+        {
+            int commonIndent = GetCommonIndentWidth(blockLines);
+            return blockLines.Select(line =>
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    return string.Empty;
+
+                var trimmed = commonIndent > 0 && line.Length >= commonIndent
+                    ? line[commonIndent..]
+                    : line.TrimStart();
+                return targetIndent + trimmed;
+            }).ToArray();
+        }
+
+        private static int GetCommonIndentWidth(IEnumerable<string> lines)
+        {
+            int? common = null;
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                int count = 0;
+                while (count < line.Length && char.IsWhiteSpace(line[count]))
+                    count++;
+
+                common = common.HasValue ? Math.Min(common.Value, count) : count;
+            }
+
+            return common ?? 0;
         }
 
         private static string CreateDirectory(string path)

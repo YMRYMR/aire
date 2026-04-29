@@ -95,6 +95,59 @@ public class FileSystemServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task ExecuteAsync_EditFileText_SupportsReplaceInsertDeleteAndAppend()
+    {
+        string replacePath = Path.Combine(_root, "replace.txt");
+        string insertPath = Path.Combine(_root, "insert.txt");
+        string deletePath = Path.Combine(_root, "delete.txt");
+        string appendPath = Path.Combine(_root, "append.txt");
+
+        await File.WriteAllTextAsync(replacePath, "alpha beta gamma");
+        await File.WriteAllTextAsync(insertPath, "alpha gamma");
+        await File.WriteAllTextAsync(deletePath, "alpha beta gamma");
+        await File.WriteAllTextAsync(appendPath, "alpha");
+
+        ToolExecutionResult replace = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = replacePath,
+            ["find"] = "beta",
+            ["replacement"] = "BETA",
+            ["mode"] = "replace"
+        }));
+
+        ToolExecutionResult insertAfter = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = insertPath,
+            ["find"] = "alpha",
+            ["replacement"] = "beta",
+            ["mode"] = "insert_after"
+        }));
+
+        ToolExecutionResult delete = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = deletePath,
+            ["find"] = "beta ",
+            ["mode"] = "delete"
+        }));
+
+        ToolExecutionResult append = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = appendPath,
+            ["replacement"] = " beta",
+            ["mode"] = "append"
+        }));
+
+        Assert.Contains("Edited", replace.TextResult);
+        Assert.Contains("Inserted text after", insertAfter.TextResult);
+        Assert.Contains("Deleted text from", delete.TextResult);
+        Assert.Contains("Appended", append.TextResult);
+        Assert.Equal("alpha BETA gamma", await File.ReadAllTextAsync(replacePath));
+        Assert.Equal("alphabeta gamma", await File.ReadAllTextAsync(insertPath));
+        Assert.Equal("alpha gamma", await File.ReadAllTextAsync(deletePath));
+        Assert.Equal("alpha beta", await File.ReadAllTextAsync(appendPath));
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ApplyDiff_ReplacesMatchedBlock()
     {
         string path = Path.Combine(_root, "diff.txt");
@@ -105,6 +158,32 @@ public class FileSystemServiceTests : IDisposable
             ["diff"] = "<<<<<<<\nold value\n=======\nnew value\n>>>>>>>"
         }))).TextResult, expected: "Diff applied to: " + path);
         Assert.Contains("new value", await File.ReadAllTextAsync(path));
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ApplyDiff_HandlesCrLfInputAndDiff()
+    {
+        string path = Path.Combine(_root, "crlf.txt");
+        await File.WriteAllTextAsync(path, "line1\r\nold value\r\nline3");
+        Assert.Equal(actual: (await _service.ExecuteAsync(BuildRequest("apply_diff", new Dictionary<string, object>
+        {
+            ["path"] = path,
+            ["diff"] = "<<<<<<<\nold value\n=======\nnew value\n>>>>>>>"
+        }))).TextResult, expected: "Diff applied to: " + path);
+        Assert.Equal("line1\r\nnew value\r\nline3", await File.ReadAllTextAsync(path));
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ApplyDiff_IgnoresIndentationMismatch()
+    {
+        string path = Path.Combine(_root, "indent.txt");
+        await File.WriteAllTextAsync(path, "class Demo\n{\n    void Old()\n    {\n        return;\n    }\n}");
+        Assert.Equal(actual: (await _service.ExecuteAsync(BuildRequest("apply_diff", new Dictionary<string, object>
+        {
+            ["path"] = path,
+            ["diff"] = "<<<<<<<\n        return;\n=======\n        Console.WriteLine(\"x\");\n>>>>>>>"
+        }))).TextResult, expected: "Diff applied to: " + path);
+        Assert.Contains("Console.WriteLine(\"x\")", await File.ReadAllTextAsync(path));
     }
 
     [Fact]

@@ -493,6 +493,7 @@ public class ServiceWorkflowRegressionTests
         ToolAutoAcceptPolicyService service = new ToolAutoAcceptPolicyService(() => Task.FromResult<string>(null));
         Assert.True(await service.IsAutoAcceptedAsync("write_file", "{\"Enabled\":true,\"AllowedTools\":[\"write_to_file\",\"list_files\"],\"AllowMouseTools\":true,\"AllowKeyboardTools\":true}"));
         Assert.True(await service.IsAutoAcceptedAsync("list_directory", "{\"Enabled\":true,\"AllowedTools\":[\"write_to_file\",\"list_files\"],\"AllowMouseTools\":true,\"AllowKeyboardTools\":true}"));
+        Assert.True(await service.IsAutoAcceptedAsync("edit_file_text", "{\"Enabled\":true,\"AllowedTools\":[\"write_to_file\",\"edit_file_text\"],\"AllowMouseTools\":true,\"AllowKeyboardTools\":true}"));
         Assert.True(await service.IsAutoAcceptedAsync("click", "{\"Enabled\":true,\"AllowedTools\":[\"write_to_file\",\"list_files\"],\"AllowMouseTools\":true,\"AllowKeyboardTools\":true}"));
         Assert.True(await service.IsAutoAcceptedAsync("type_text", "{\"Enabled\":true,\"AllowedTools\":[\"write_to_file\",\"list_files\"],\"AllowMouseTools\":true,\"AllowKeyboardTools\":true}"));
         Assert.False(await service.IsAutoAcceptedAsync("delete_file", "{\"Enabled\":true,\"AllowedTools\":[\"write_to_file\",\"list_files\"],\"AllowMouseTools\":true,\"AllowKeyboardTools\":true}"));

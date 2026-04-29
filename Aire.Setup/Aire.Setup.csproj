@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Page Include="..\Aire\UI\AppTheme.xaml" Link="UI\AppTheme.xaml" />
+    <Compile Include="..\Aire\UI\MinimumScrollViewportConverter.cs" Link="UI\MinimumScrollViewportConverter.cs" />
     <Compile Include="..\Aire\Services\AppearanceService.cs" Link="Services\AppearanceService.cs" />
     <Compile Include="..\Aire\Services\EdgeTtsService.cs" Link="Services\EdgeTtsService.cs" />
     <Compile Include="..\Aire\Services\SpeechSynthesisService.cs" Link="Services\SpeechSynthesisService.cs" />

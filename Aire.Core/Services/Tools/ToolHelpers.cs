@@ -49,5 +49,13 @@ namespace Aire.Services.Tools
             value = GetInt(request, "tab_index", int.MinValue);
             return value != int.MinValue ? value : fallback;
         }
+
+        public static string Truncate(string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value) || maxLength <= 0)
+                return string.Empty;
+
+            return value.Length <= maxLength ? value : value[..maxLength] + "\u2026";
+        }
     }
 }

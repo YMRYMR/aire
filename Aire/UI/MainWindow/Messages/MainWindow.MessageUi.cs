@@ -268,6 +268,39 @@ namespace Aire
                 System.Windows.Threading.DispatcherPriority.Background);
         }
 
+        private void ScrollMessagesPageUp()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                var step = Math.Max(MessagesScrollViewer.ViewportHeight, 50.0);
+                var offset = Math.Max(0.0, MessagesScrollViewer.VerticalOffset - step);
+                MessagesScrollViewer.ScrollToVerticalOffset(offset);
+            }, System.Windows.Threading.DispatcherPriority.Background);
+        }
+
+        private void ScrollMessagesPageDown()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                var step = Math.Max(MessagesScrollViewer.ViewportHeight, 50.0);
+                var offset = Math.Min(MessagesScrollViewer.ScrollableHeight,
+                    MessagesScrollViewer.VerticalOffset + step);
+                MessagesScrollViewer.ScrollToVerticalOffset(offset);
+            }, System.Windows.Threading.DispatcherPriority.Background);
+        }
+
+        private void ScrollMessagesToTop()
+        {
+            Dispatcher.BeginInvoke(
+                () => MessagesScrollViewer.ScrollToTop(),
+                System.Windows.Threading.DispatcherPriority.Background);
+        }
+
+        private void ScrollMessagesToBottom()
+        {
+            ScrollToBottom(force: true);
+        }
+
         private void MessagesScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (MessagesScrollViewer == null)

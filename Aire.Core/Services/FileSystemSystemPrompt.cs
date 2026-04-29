@@ -35,11 +35,13 @@ namespace Aire.Services
 
             if (hasFs)
             {
+                sb.Append("- For file text work, prefer search_file_content to locate text and edit_file_text to change it. Use execute_command only when a native file tool cannot do the job.\n");
                 sb.Append("REPOSITORY / CODEBASE ANALYSIS RULE:\n");
                 sb.Append("- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your first action must be a filesystem tool call on the exact absolute path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n");
                 sb.Append("- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message.\n");
                 sb.Append("- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n");
                 sb.Append("- Example: user asks 'Please analyze C:/dev/aire' -> call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
+                sb.Append("FILE EDITING RULE: For simple single-file edits, use edit_file_text instead of PowerShell or ad-hoc shell scripts. Use search_file_content to find text across files and apply_diff only for precise multi-hunk patches.\n\n");
                 sb.Append("SCRIPTING: Always write scripts to a temp file first, then execute. Never output large code blocks as plain text.\n\n");
                 sb.Append("LARGE FILES: read_file returns ≤100k chars. Check the 'Remaining' count in the result and re-call with increasing offset until done.\n\n");
             }
@@ -88,12 +90,17 @@ namespace Aire.Services
                 "- When summarising news or articles from a feed, ALWAYS include each article's full Link: URL verbatim in your reply so the user can click it.\n\n");
             if (hasFs)
             {
+                sb.Append("- For file text work, prefer search_file_content to locate text and edit_file_text to change it. Use execute_command only when a native file tool cannot do the job.\n");
                 sb.Append(
                     "REPOSITORY / CODEBASE ANALYSIS RULE:\n" +
                     "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your first action must be a filesystem tool call on the exact absolute path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n" +
                     "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message, and do not shorten it to a relative folder name.\n" +
                     "- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n" +
                     "- Example: user asks 'Please analyze C:/dev/aire' → call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
+                sb.Append(
+                    "FILE EDITING RULE:\n" +
+                    "- For simple single-file edits, use edit_file_text instead of PowerShell or ad-hoc shell scripts.\n" +
+                    "- Use search_file_content to find text across files and apply_diff only for precise multi-hunk patches.\n\n");
                 sb.Append(
                     "SCRIPTING RULE:\n" +
                     "- When a task requires writing any script, program, or block of code (PowerShell, Python, batch, etc.), ALWAYS use write_file to save it to a temp file FIRST, then execute_command to run it. NEVER output large code blocks as plain text — the chat window has limited capacity and the code will be cut off or break the conversation.\n" +
@@ -245,11 +252,19 @@ namespace Aire.Services
                 "4. When the user asks you to run commands, open applications, or perform any system operation, you MUST use the execute_command tool.\n");
             if (hasFs)
                 sb.Append(
+                "4a. For file text work, prefer search_file_content to locate text and edit_file_text to change it. Use execute_command only when a native file tool cannot do the job.\n");
+            if (hasFs)
+                sb.Append(
                 "REPOSITORY / CODEBASE ANALYSIS RULE:\n" +
                 "- If the user asks you to analyze, inspect, review, or understand a local project or codebase, your first action must be a filesystem tool call on the exact absolute folder path the user gave you. Do not answer with a plan first, and do not shorten the path to a relative folder name.\n" +
                 "- If the user asks you to analyze, inspect, review, or understand a local project, repository, or folder, your FIRST reply must be a filesystem tool call that lists the top-level structure of the exact absolute path they provided. Do not begin with a narration-only message, and do not shorten it to a relative folder name.\n" +
                 "- Then read the repository's README.md and solution/project file(s) before giving the report. Keep the first pass focused and practical.\n" +
                 "- Example: user asks 'Please analyze C:/dev/aire' -> call list_directory(path=\"C:/dev/aire\") immediately.\n\n");
+            if (hasFs)
+                sb.Append(
+                "FILE EDITING RULE:\n" +
+                "- For simple single-file edits, use edit_file_text instead of PowerShell or ad-hoc shell scripts.\n" +
+                "- Use search_file_content to find text across files and apply_diff only for precise multi-hunk patches.\n\n");
             sb.Append(
                 "5. After receiving a tool result, you MUST respond with a summary AND then IMMEDIATELY call the next tool if the user's task is not yet fully complete. NEVER wait for the user to tell you to continue if you have more tools to run.\n" +
                 "5a. If the user is asking a capability or product question (for example: what you can do, whether you support something, how Aire works, which mode/provider can do something, or whether image generation is available), answer directly in plain language. Do NOT call tools unless the user explicitly asks you to perform the action now.\n");
@@ -274,6 +289,7 @@ namespace Aire.Services
                     "1. File System: list_directory, " +
                     "read_file(path, offset?, length?) — reads up to 100 000 chars; result shows total size and remaining chars so you can loop with increasing offset for large files, " +
                     "write_file(path, content, append?) — append=true adds to end instead of overwriting; use this to write large content in chunks, " +
+                    "edit_file_text(path, find?, replacement?, mode?, all_occurrences?, case_sensitive?) — simple single-file text edits, " +
                     "apply_diff, search_files, search_file_content(directory, pattern, file_pattern?, max_results?), create_directory, delete_file, move_file.\n");
 
             if (hasFs)

@@ -104,6 +104,7 @@
                     <CheckBox x:Name="PART_AutoAcceptSearchFilesCheckBox" Content="Search files" ToolTip="Searches for files by name pattern inside a folder. Read-only and safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptSearchFileContentCheckBox" Content="Search file content" ToolTip="Searches for text patterns inside file contents (like grep). Read-only and safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptWriteToFileCheckBox" Content="Write to file" ToolTip="Creates or overwrites a file with new content. Can modify or delete existing data." Margin="0 4 0 0" />
+                    <CheckBox x:Name="PART_AutoAcceptEditFileTextCheckBox" Content="Edit file text" ToolTip="Finds and replaces text inside a single file, or inserts/removes text at a match. Prefer this over shell scripts for simple file edits." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptApplyDiffCheckBox" Content="Apply code diff" ToolTip="Applies a patch to modify lines in an existing file. Can silently change source code or config files." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptCreateDirectoryCheckBox" Content="Create directory" ToolTip="Creates a new folder. Generally safe." Margin="0 4 0 0" />
                     <CheckBox x:Name="PART_AutoAcceptDeleteFileCheckBox" Content="Delete file" ToolTip="Permanently deletes a file. High risk — deleted files may not be recoverable." Margin="0 4 0 0" />
