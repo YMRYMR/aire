@@ -121,6 +121,19 @@ public class FileSystemServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task ExecuteAsync_ApplyDiff_IgnoresIndentationMismatch()
+    {
+        string path = Path.Combine(_root, "indent.txt");
+        await File.WriteAllTextAsync(path, "class Demo\n{\n    void Old()\n    {\n        return;\n    }\n}");
+        Assert.Equal(actual: (await _service.ExecuteAsync(BuildRequest("apply_diff", new Dictionary<string, object>
+        {
+            ["path"] = path,
+            ["diff"] = "<<<<<<<\n        return;\n=======\n        Console.WriteLine(\"x\");\n>>>>>>>"
+        }))).TextResult, expected: "Diff applied to: " + path);
+        Assert.Contains("Console.WriteLine(\"x\")", await File.ReadAllTextAsync(path));
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ApplyDiff_ReturnsWarningWhenNoChange()
     {
         string path = Path.Combine(_root, "unchanged.txt");

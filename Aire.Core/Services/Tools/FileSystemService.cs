@@ -185,55 +185,45 @@ namespace Aire.Services
 
             var original = await File.ReadAllTextAsync(path);
             var newline = original.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
-            var originalNormalized = NormalizeNewLines(original);
-            var diffNormalized = NormalizeNewLines(diff);
-            var lines = diffNormalized.Split('\n');
-
-            // Simple unified-diff application: look for <<<< ... ==== ... >>>> blocks.
-            // Normalize line endings before matching so a Windows file can be patched
-            // by a diff produced with LF-only text, while keeping all in-line whitespace exact.
-            var result = originalNormalized;
+            var resultLines = NormalizeNewLines(original).Split('\n').ToList();
+            var diffLines = NormalizeNewLines(diff).Split('\n');
             var changed = false;
             int searchIdx = 0;
 
-            while (searchIdx < lines.Length)
+            while (searchIdx < diffLines.Length)
             {
                 // Find <<<<<<< marker
                 int startMarker = -1;
-                for (int i = searchIdx; i < lines.Length; i++)
+                for (int i = searchIdx; i < diffLines.Length; i++)
                 {
-                    if (lines[i].StartsWith("<<<<<<<"))
+                    if (diffLines[i].StartsWith("<<<<<<<"))
                     { startMarker = i; break; }
                 }
                 if (startMarker < 0) break;
 
                 // Find ======= separator
                 int separator = -1;
-                for (int i = startMarker + 1; i < lines.Length; i++)
+                for (int i = startMarker + 1; i < diffLines.Length; i++)
                 {
-                    if (lines[i].StartsWith("======="))
+                    if (diffLines[i].StartsWith("======="))
                     { separator = i; break; }
                 }
                 if (separator < 0) break;
 
                 // Find >>>>>>> end marker
                 int endMarker = -1;
-                for (int i = separator + 1; i < lines.Length; i++)
+                for (int i = separator + 1; i < diffLines.Length; i++)
                 {
-                    if (lines[i].StartsWith(">>>>>>>"))
+                    if (diffLines[i].StartsWith(">>>>>>>"))
                     { endMarker = i; break; }
                 }
                 if (endMarker < 0) break;
 
-                var oldBlock = string.Join("\n", lines[(startMarker + 1)..separator]);
-                var newBlock = string.Join("\n", lines[(separator + 1)..endMarker]);
+                var oldBlockLines = diffLines[(startMarker + 1)..separator];
+                var newBlockLines = diffLines[(separator + 1)..endMarker];
 
-                int matchIndex = result.IndexOf(oldBlock, StringComparison.Ordinal);
-                if (matchIndex >= 0)
-                {
-                    result = result.Remove(matchIndex, oldBlock.Length).Insert(matchIndex, newBlock);
+                if (TryReplaceBlock(resultLines, oldBlockLines, newBlockLines))
                     changed = true;
-                }
 
                 searchIdx = endMarker + 1;
             }
@@ -241,7 +231,7 @@ namespace Aire.Services
             if (!changed)
                 return "Warning: Diff applied but no changes were made (old text not found).";
 
-            await File.WriteAllTextAsync(path, RestoreLineEndings(result, newline));
+            await File.WriteAllTextAsync(path, RestoreLineEndings(string.Join("\n", resultLines), newline));
             return $"Diff applied to: {path}";
         }
 
@@ -250,6 +240,117 @@ namespace Aire.Services
 
         private static string RestoreLineEndings(string text, string newline) =>
             newline == "\n" ? text : text.Replace("\n", newline, StringComparison.Ordinal);
+
+        private static bool TryReplaceBlock(List<string> lines, string[] oldBlockLines, string[] newBlockLines)
+        {
+            if (TryReplaceBlockExact(lines, oldBlockLines, newBlockLines))
+                return true;
+
+            return TryReplaceBlockIgnoringIndentation(lines, oldBlockLines, newBlockLines);
+        }
+
+        private static bool TryReplaceBlockExact(List<string> lines, string[] oldBlockLines, string[] newBlockLines)
+        {
+            if (oldBlockLines.Length == 0)
+                return false;
+
+            for (int i = 0; i <= lines.Count - oldBlockLines.Length; i++)
+            {
+                bool matches = true;
+                for (int j = 0; j < oldBlockLines.Length; j++)
+                {
+                    if (!string.Equals(lines[i + j].TrimEnd(), oldBlockLines[j].TrimEnd(), StringComparison.Ordinal))
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+
+                if (!matches)
+                    continue;
+
+                lines.RemoveRange(i, oldBlockLines.Length);
+                lines.InsertRange(i, newBlockLines);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool TryReplaceBlockIgnoringIndentation(List<string> lines, string[] oldBlockLines, string[] newBlockLines)
+        {
+            if (oldBlockLines.Length == 0)
+                return false;
+
+            var normalizedOld = oldBlockLines.Select(NormalizeLineForLooseMatch).ToArray();
+            for (int i = 0; i <= lines.Count - oldBlockLines.Length; i++)
+            {
+                bool matches = true;
+                for (int j = 0; j < oldBlockLines.Length; j++)
+                {
+                    if (!string.Equals(NormalizeLineForLooseMatch(lines[i + j]), normalizedOld[j], StringComparison.Ordinal))
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+
+                if (!matches)
+                    continue;
+
+                string targetIndent = GetLeadingWhitespace(lines[i]);
+                string[] reindentedNew = ReindentBlock(newBlockLines, targetIndent);
+                lines.RemoveRange(i, oldBlockLines.Length);
+                lines.InsertRange(i, reindentedNew);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static string NormalizeLineForLooseMatch(string line) =>
+            line.Trim().Replace("\t", "    ", StringComparison.Ordinal);
+
+        private static string GetLeadingWhitespace(string line)
+        {
+            int count = 0;
+            while (count < line.Length && char.IsWhiteSpace(line[count]))
+                count++;
+            return count == 0 ? string.Empty : line[..count];
+        }
+
+        private static string[] ReindentBlock(string[] blockLines, string targetIndent)
+        {
+            int commonIndent = GetCommonIndentWidth(blockLines);
+            return blockLines.Select(line =>
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    return string.Empty;
+
+                var trimmed = commonIndent > 0 && line.Length >= commonIndent
+                    ? line[commonIndent..]
+                    : line.TrimStart();
+                return targetIndent + trimmed;
+            }).ToArray();
+        }
+
+        private static int GetCommonIndentWidth(IEnumerable<string> lines)
+        {
+            int? common = null;
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                int count = 0;
+                while (count < line.Length && char.IsWhiteSpace(line[count]))
+                    count++;
+
+                common = common.HasValue ? Math.Min(common.Value, count) : count;
+            }
+
+            return common ?? 0;
+        }
 
         private static string CreateDirectory(string path)
         {
