@@ -26,10 +26,11 @@ namespace Aire.Providers
             ProviderCapabilities.ToolCalling |
             ProviderCapabilities.SystemPrompt;
 
-        // DeepSeek's current OpenAI-compatible chat endpoints are much more reliable
-        // with Aire's text-based tool-call protocol than with native tool_call payloads.
-        // Keep DeepSeek on the text path so the model emits explicit <tool_call> blocks
-        // that Aire can parse and show as approval/result bubbles.
+        // DeepSeek model support is mixed:
+        // - newer v4 models behave better with native OpenAI-style tool_calls
+        // - older DeepSeek models still fall back to Aire's text protocol
+        // Keep the defaults conservative here; per-model capability tags select the
+        // right tool protocol when the catalog knows the exact model family.
         protected override ToolCallMode DefaultToolCallMode => ToolCallMode.TextBased;
         protected override ToolOutputFormat DefaultToolOutputFormat => ToolOutputFormat.AireText;
 
@@ -68,12 +69,7 @@ namespace Aire.Providers
                     {
                         Id = id,
                         DisplayName = id,
-                        Capabilities = new List<string>
-                        {
-                            "tools",
-                            "toolcallmode:text",
-                            "toolformat:text"
-                        }
+                        Capabilities = BuildCapabilitiesForModel(id)
                     })
                     .ToList();
                 return models;
@@ -83,6 +79,21 @@ namespace Aire.Providers
                 AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "DeepSeek live model fetch failed", ex);
                 return null;
             }
+        }
+
+        private static List<string> BuildCapabilitiesForModel(string modelId)
+        {
+            var capabilities = new List<string> { "tools" };
+            if (modelId.StartsWith("deepseek-v4-", StringComparison.OrdinalIgnoreCase))
+            {
+                capabilities.Add("toolcallmode:native");
+                capabilities.Add("toolformat:native");
+                return capabilities;
+            }
+
+            capabilities.Add("toolcallmode:text");
+            capabilities.Add("toolformat:text");
+            return capabilities;
         }
 
         public override async Task<TokenUsage?> GetTokenUsageAsync(CancellationToken ct)
