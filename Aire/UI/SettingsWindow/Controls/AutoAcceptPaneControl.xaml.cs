@@ -42,6 +42,7 @@ namespace Aire.UI.Settings.Controls
         public CheckBox AutoAcceptSearchFilesCheckBox => PART_AutoAcceptSearchFilesCheckBox;
         public CheckBox AutoAcceptSearchFileContentCheckBox => PART_AutoAcceptSearchFileContentCheckBox;
         public CheckBox AutoAcceptWriteToFileCheckBox => PART_AutoAcceptWriteToFileCheckBox;
+        public CheckBox AutoAcceptEditFileTextCheckBox => PART_AutoAcceptEditFileTextCheckBox;
         public CheckBox AutoAcceptApplyDiffCheckBox => PART_AutoAcceptApplyDiffCheckBox;
         public CheckBox AutoAcceptCreateDirectoryCheckBox => PART_AutoAcceptCreateDirectoryCheckBox;
         public CheckBox AutoAcceptDeleteFileCheckBox => PART_AutoAcceptDeleteFileCheckBox;

@@ -121,6 +121,7 @@ namespace Aire.UI
             AutoAcceptSearchFilesCheckBox.IsChecked = settings.AllowedTools.Contains("search_files");
             AutoAcceptSearchFileContentCheckBox.IsChecked = settings.AllowedTools.Contains("search_file_content");
             AutoAcceptWriteToFileCheckBox.IsChecked = settings.AllowedTools.Contains("write_to_file");
+            AutoAcceptEditFileTextCheckBox.IsChecked = settings.AllowedTools.Contains("edit_file_text");
             AutoAcceptApplyDiffCheckBox.IsChecked = settings.AllowedTools.Contains("apply_diff");
             AutoAcceptCreateDirectoryCheckBox.IsChecked = settings.AllowedTools.Contains("create_directory");
             AutoAcceptDeleteFileCheckBox.IsChecked = settings.AllowedTools.Contains("delete_file");
@@ -173,6 +174,7 @@ namespace Aire.UI
             if (AutoAcceptSearchFilesCheckBox.IsChecked == true) allowedTools.Add("search_files");
             if (AutoAcceptSearchFileContentCheckBox.IsChecked == true) allowedTools.Add("search_file_content");
             if (AutoAcceptWriteToFileCheckBox.IsChecked == true) allowedTools.Add("write_to_file");
+            if (AutoAcceptEditFileTextCheckBox.IsChecked == true) allowedTools.Add("edit_file_text");
             if (AutoAcceptApplyDiffCheckBox.IsChecked == true) allowedTools.Add("apply_diff");
             if (AutoAcceptCreateDirectoryCheckBox.IsChecked == true) allowedTools.Add("create_directory");
             if (AutoAcceptDeleteFileCheckBox.IsChecked == true) allowedTools.Add("delete_file");

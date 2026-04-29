@@ -26,6 +26,7 @@ public class AutoAcceptProfilesApplicationServiceTests
         Assert.Contains(profiles, p => p.Name == "News browser" && p.IsBuiltIn);
         Assert.Contains(profiles, p => p.Name == "My profile" && !p.IsBuiltIn);
         Assert.Contains(profiles, p => p.Name == "My profile" && p.Configuration.AllowedTools.Count == 2);
+        Assert.Contains(profiles, p => p.Name == "Developer" && p.Configuration.AllowedTools.Contains("edit_file_text"));
     }
 
     [Fact]
@@ -36,7 +37,7 @@ public class AutoAcceptProfilesApplicationServiceTests
 
         await service.SaveActiveConfigurationAsync(new(
             true,
-            new[] { "write_to_file", "read_file" },
+            new[] { "write_to_file", "read_file", "edit_file_text" },
             true,
             false));
 
@@ -45,6 +46,7 @@ public class AutoAcceptProfilesApplicationServiceTests
         Assert.True(loaded.Enabled);
         Assert.True(loaded.AllowMouseTools);
         Assert.Contains("write_to_file", loaded.AllowedTools);
+        Assert.Contains("edit_file_text", loaded.AllowedTools);
     }
 
     [Fact]

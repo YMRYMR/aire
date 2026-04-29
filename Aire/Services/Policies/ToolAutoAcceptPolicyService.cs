@@ -124,6 +124,10 @@ namespace Aire.Services.Policies
             {
                 ("write_file", "write_to_file") => true,
                 ("write_to_file", "write_file") => true,
+                ("write_file", "edit_file_text") => true,
+                ("edit_file_text", "write_file") => true,
+                ("write_to_file", "edit_file_text") => true,
+                ("edit_file_text", "write_to_file") => true,
                 ("list_directory", "list_files") => true,
                 ("list_files", "list_directory") => true,
                 _ => false

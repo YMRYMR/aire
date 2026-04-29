@@ -158,7 +158,7 @@ namespace Aire.AppLayer.Tools
                     AllowedTools:
                     [
                         "list_files", "read_file", "search_files", "search_file_content",
-                        "write_to_file", "apply_diff", "create_directory", "move_file", "open_file",
+                        "write_to_file", "edit_file_text", "apply_diff", "create_directory", "move_file", "open_file",
                         "execute_command", "read_command_output",
                         "get_system_info", "get_running_processes", "get_active_window", "get_selected_text",
                         "ask_followup_question", "attempt_completion", "switch_mode", "switch_model", "update_todo_list"

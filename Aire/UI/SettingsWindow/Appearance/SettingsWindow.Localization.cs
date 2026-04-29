@@ -183,6 +183,8 @@ namespace Aire.UI
             AutoAcceptSearchFileContentCheckBox.ToolTip = L("autoAccept.tooltip.searchFileContent", "Searches for text patterns inside file contents (like grep). Read-only and safe.");
             AutoAcceptWriteToFileCheckBox.Content = L("autoAccept.tool.writeToFile", "Write to file");
             AutoAcceptWriteToFileCheckBox.ToolTip = L("autoAccept.tooltip.writeToFile", "Creates or overwrites a file with new content. Can modify or delete existing data.");
+            AutoAcceptEditFileTextCheckBox.Content = L("autoAccept.tool.editFileText", "Edit file text");
+            AutoAcceptEditFileTextCheckBox.ToolTip = L("autoAccept.tooltip.editFileText", "Finds and replaces text inside a single file, or inserts/removes text at a match. Prefer this over shell scripts for simple file edits.");
             AutoAcceptApplyDiffCheckBox.Content = L("autoAccept.tool.applyDiff", "Apply code diff");
             AutoAcceptApplyDiffCheckBox.ToolTip = L("autoAccept.tooltip.applyDiff", "Applies a patch to modify lines in an existing file. Can silently change source code or config files.");
             AutoAcceptCreateDirectoryCheckBox.Content = L("autoAccept.tool.createDirectory", "Create directory");
