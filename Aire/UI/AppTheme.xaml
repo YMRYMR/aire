@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="clr-namespace:Aire.UI">
 
     <!-- ===== BASE THEME PALETTE (AppearanceService overrides brightness/tint/accent at runtime) ===== -->
     <Color x:Key="BackgroundColor">#191919</Color>
@@ -511,6 +512,8 @@
     </Style>
 
     <!-- ===== SCROLLBAR ===== -->
+    <ui:MinimumScrollViewportConverter x:Key="MinimumScrollViewportConverter" />
+
     <Style x:Key="ScrollBarThumbStyle" TargetType="Thumb">
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="IsTabStop"             Value="False" />
@@ -536,7 +539,11 @@
         <Grid Background="Transparent" Width="10">
             <Track x:Name="PART_Track" IsDirectionReversed="True">
                 <Track.Thumb>
-                    <Thumb Style="{StaticResource ScrollBarThumbStyle}" Margin="1 2" />
+                    <Thumb Style="{StaticResource ScrollBarThumbStyle}"
+                           Width="8"
+                           MinHeight="50"
+                           Height="50"
+                           Margin="1 2" />
                 </Track.Thumb>
             </Track>
         </Grid>
@@ -546,7 +553,11 @@
         <Grid Background="Transparent" Height="10">
             <Track x:Name="PART_Track" IsDirectionReversed="False">
                 <Track.Thumb>
-                    <Thumb Style="{StaticResource ScrollBarThumbStyle}" Margin="2 1" />
+                    <Thumb Style="{StaticResource ScrollBarThumbStyle}"
+                           Height="8"
+                           MinWidth="50"
+                           Width="50"
+                           Margin="2 1" />
                 </Track.Thumb>
             </Track>
         </Grid>
@@ -594,15 +605,31 @@
                                    Orientation="Vertical"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
-                                   ViewportSize="{TemplateBinding ViewportHeight}"
-                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}">
+                            <ScrollBar.ViewportSize>
+                                <MultiBinding Converter="{StaticResource MinimumScrollViewportConverter}"
+                                              ConverterParameter="50">
+                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ViewportHeight" />
+                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ScrollableHeight" />
+                                    <Binding RelativeSource="{RelativeSource Self}" Path="ActualHeight" />
+                                </MultiBinding>
+                            </ScrollBar.ViewportSize>
+                        </ScrollBar>
                         <ScrollBar x:Name="PART_HorizontalScrollBar"
                                    Grid.Column="0" Grid.Row="1"
                                    Orientation="Horizontal"
                                    Value="{TemplateBinding HorizontalOffset}"
                                    Maximum="{TemplateBinding ScrollableWidth}"
-                                   ViewportSize="{TemplateBinding ViewportWidth}"
-                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
+                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}">
+                            <ScrollBar.ViewportSize>
+                                <MultiBinding Converter="{StaticResource MinimumScrollViewportConverter}"
+                                              ConverterParameter="50">
+                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ViewportWidth" />
+                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ScrollableWidth" />
+                                    <Binding RelativeSource="{RelativeSource Self}" Path="ActualWidth" />
+                                </MultiBinding>
+                            </ScrollBar.ViewportSize>
+                        </ScrollBar>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
