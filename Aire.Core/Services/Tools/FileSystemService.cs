@@ -184,10 +184,16 @@ namespace Aire.Services
             if (!File.Exists(path)) return $"Error: File not found: {path}";
 
             var original = await File.ReadAllTextAsync(path);
-            var lines    = diff.Split('\n');
+            var newline = original.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
+            var originalNormalized = NormalizeNewLines(original);
+            var diffNormalized = NormalizeNewLines(diff);
+            var lines = diffNormalized.Split('\n');
 
-            // Simple unified-diff application: look for <<<< ... ==== ... >>>> blocks
-            var result   = original;
+            // Simple unified-diff application: look for <<<< ... ==== ... >>>> blocks.
+            // Normalize line endings before matching so a Windows file can be patched
+            // by a diff produced with LF-only text, while keeping all in-line whitespace exact.
+            var result = originalNormalized;
+            var changed = false;
             int searchIdx = 0;
 
             while (searchIdx < lines.Length)
@@ -222,18 +228,28 @@ namespace Aire.Services
                 var oldBlock = string.Join("\n", lines[(startMarker + 1)..separator]);
                 var newBlock = string.Join("\n", lines[(separator + 1)..endMarker]);
 
-                if (result.Contains(oldBlock))
-                    result = result.Replace(oldBlock, newBlock);
+                int matchIndex = result.IndexOf(oldBlock, StringComparison.Ordinal);
+                if (matchIndex >= 0)
+                {
+                    result = result.Remove(matchIndex, oldBlock.Length).Insert(matchIndex, newBlock);
+                    changed = true;
+                }
 
                 searchIdx = endMarker + 1;
             }
 
-            if (result == original)
+            if (!changed)
                 return "Warning: Diff applied but no changes were made (old text not found).";
 
-            await File.WriteAllTextAsync(path, result);
+            await File.WriteAllTextAsync(path, RestoreLineEndings(result, newline));
             return $"Diff applied to: {path}";
         }
+
+        private static string NormalizeNewLines(string text) =>
+            text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
+
+        private static string RestoreLineEndings(string text, string newline) =>
+            newline == "\n" ? text : text.Replace("\n", newline, StringComparison.Ordinal);
 
         private static string CreateDirectory(string path)
         {

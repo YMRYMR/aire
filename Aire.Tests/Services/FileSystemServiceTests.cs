@@ -108,6 +108,19 @@ public class FileSystemServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task ExecuteAsync_ApplyDiff_HandlesCrLfInputAndDiff()
+    {
+        string path = Path.Combine(_root, "crlf.txt");
+        await File.WriteAllTextAsync(path, "line1\r\nold value\r\nline3");
+        Assert.Equal(actual: (await _service.ExecuteAsync(BuildRequest("apply_diff", new Dictionary<string, object>
+        {
+            ["path"] = path,
+            ["diff"] = "<<<<<<<\nold value\n=======\nnew value\n>>>>>>>"
+        }))).TextResult, expected: "Diff applied to: " + path);
+        Assert.Equal("line1\r\nnew value\r\nline3", await File.ReadAllTextAsync(path));
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ApplyDiff_ReturnsWarningWhenNoChange()
     {
         string path = Path.Combine(_root, "unchanged.txt");
