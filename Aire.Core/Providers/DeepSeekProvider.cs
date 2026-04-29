@@ -26,6 +26,14 @@ namespace Aire.Providers
             ProviderCapabilities.ToolCalling |
             ProviderCapabilities.SystemPrompt;
 
+        // DeepSeek model support is mixed:
+        // - newer v4 models behave better with native OpenAI-style tool_calls
+        // - older DeepSeek models still fall back to Aire's text protocol
+        // Keep the defaults conservative here; per-model capability tags select the
+        // right tool protocol when the catalog knows the exact model family.
+        protected override ToolCallMode DefaultToolCallMode => ToolCallMode.TextBased;
+        protected override ToolOutputFormat DefaultToolOutputFormat => ToolOutputFormat.AireText;
+
         protected override string DefaultApiBaseUrl => "https://api.deepseek.com";
 
         public override ProviderFieldHints FieldHints => new() { ShowBaseUrl = false };
@@ -61,7 +69,7 @@ namespace Aire.Providers
                     {
                         Id = id,
                         DisplayName = id,
-                        Capabilities = new List<string> { "tools", "toolcallmode:text", "toolformat:text" }
+                        Capabilities = BuildCapabilitiesForModel(id)
                     })
                     .ToList();
                 return models;
@@ -71,6 +79,21 @@ namespace Aire.Providers
                 AppLogger.Warn($"{GetType().Name}.FetchLiveModels", "DeepSeek live model fetch failed", ex);
                 return null;
             }
+        }
+
+        private static List<string> BuildCapabilitiesForModel(string modelId)
+        {
+            var capabilities = new List<string> { "tools" };
+            if (modelId.StartsWith("deepseek-v4-", StringComparison.OrdinalIgnoreCase))
+            {
+                capabilities.Add("toolcallmode:native");
+                capabilities.Add("toolformat:native");
+                return capabilities;
+            }
+
+            capabilities.Add("toolcallmode:text");
+            capabilities.Add("toolformat:text");
+            return capabilities;
         }
 
         public override async Task<TokenUsage?> GetTokenUsageAsync(CancellationToken ct)

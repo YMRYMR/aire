@@ -95,15 +95,28 @@ public class DeepSeekProviderTests
     {
         using var server = new SimpleJsonServer((method, path) =>
             method == "GET" && path == "/v1/models"
-                ? SimpleJsonServer.Json(200, """{"data":[{"id":"deepseek-reasoner"},{"id":"other-model"},{"id":"deepseek-chat"}]}""")
-                : SimpleJsonServer.Json(404, """{"error":"missing"}"""));
+                ? SimpleJsonServer.Json(200, """{"data":[{"id":"deepseek-reasoner"},{"id":"other-model"},{"id":"deepseek-chat"},{"id":"deepseek-v4-pro"},{"id":"deepseek-v4-flash"}]}""")
+            : SimpleJsonServer.Json(404, """{"error":"missing"}"""));
 
         DeepSeekProvider provider = new DeepSeekProvider();
 
         var models = await provider.FetchLiveModelsAsync("deepseek-key", server.BaseUrl, CancellationToken.None);
 
         Assert.NotNull(models);
-        Assert.Equal(new[] { "deepseek-reasoner", "deepseek-chat" }, models!.Select(m => m.Id).ToArray());
+        Assert.Equal(new[] { "deepseek-v4-pro", "deepseek-v4-flash", "deepseek-reasoner", "deepseek-chat" }, models!.Select(m => m.Id).ToArray());
+
+        var byId = models!.ToDictionary(m => m.Id, StringComparer.OrdinalIgnoreCase);
+        Assert.All(byId.Values, model => Assert.Contains("tools", model.Capabilities ?? []));
+
+        Assert.Contains("toolcallmode:native", byId["deepseek-v4-pro"].Capabilities ?? []);
+        Assert.Contains("toolformat:native", byId["deepseek-v4-pro"].Capabilities ?? []);
+        Assert.Contains("toolcallmode:native", byId["deepseek-v4-flash"].Capabilities ?? []);
+        Assert.Contains("toolformat:native", byId["deepseek-v4-flash"].Capabilities ?? []);
+
+        Assert.Contains("toolcallmode:text", byId["deepseek-chat"].Capabilities ?? []);
+        Assert.Contains("toolformat:text", byId["deepseek-chat"].Capabilities ?? []);
+        Assert.Contains("toolcallmode:text", byId["deepseek-reasoner"].Capabilities ?? []);
+        Assert.Contains("toolformat:text", byId["deepseek-reasoner"].Capabilities ?? []);
     }
 
     [Fact]
