@@ -95,6 +95,20 @@ public class FileSystemServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task ExecuteAsync_WriteFile_WithTextAlias_PersistsContent()
+    {
+        string path = Path.Combine(_root, "nested", "notes-text.txt");
+        ToolExecutionResult result = await _service.ExecuteAsync(BuildRequest("write_file", new Dictionary<string, object>
+        {
+            ["path"] = path,
+            ["text"] = "hello text alias"
+        }));
+
+        Assert.Contains("Wrote 16 characters", result.TextResult);
+        Assert.Equal("hello text alias", await File.ReadAllTextAsync(path));
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ApplyDiff_ReplacesMatchedBlock()
     {
         string path = Path.Combine(_root, "diff.txt");

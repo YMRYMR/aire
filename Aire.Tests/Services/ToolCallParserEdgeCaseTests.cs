@@ -137,6 +137,26 @@ public class ToolCallParserEdgeCaseTests
     }
 
     [Fact]
+    public void Parse_FolderStructureInsideToolCallsEnvelope_StillExtractsStructuredBlock()
+    {
+        string response =
+            "<tool_calls>\n" +
+            "  <folder_structure>\n" +
+            "    <action>create</action>\n" +
+            "    <path>C:\\dev\\aire\\_deepseek_live4\\notes.txt</path>\n" +
+            "    <content>Hello from nested blocks</content>\n" +
+            "  </folder_structure>\n" +
+            "</tool_calls>";
+
+        ParsedAiResponse parsedAiResponse = ToolCallParser.Parse(response);
+
+        Assert.True(parsedAiResponse.HasToolCall);
+        Assert.Equal("write_file", parsedAiResponse.ToolCall?.Tool);
+        Assert.Equal("C:\\dev\\aire\\_deepseek_live4\\notes.txt", parsedAiResponse.ToolCall?.Parameters.GetProperty("path").GetString());
+        Assert.Equal("Hello from nested blocks", parsedAiResponse.ToolCall?.Parameters.GetProperty("content").GetString());
+    }
+
+    [Fact]
     public void Parse_TextPlusFolderStructureBlock_ExtractsToolAndKeepsVisibleText()
     {
         string response =

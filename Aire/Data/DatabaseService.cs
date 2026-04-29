@@ -53,6 +53,16 @@ namespace Aire.Data
             _connection = new SqliteConnection($"Data Source={_databasePath}");
             await _connection.OpenAsync();
 
+            using (var pragma = _connection.CreateCommand())
+            {
+                pragma.CommandText = @"
+                    PRAGMA foreign_keys = ON;
+                    PRAGMA journal_mode = WAL;
+                    PRAGMA synchronous = NORMAL;
+                    PRAGMA busy_timeout = 10000;";
+                await pragma.ExecuteNonQueryAsync();
+            }
+
             await CreateTablesAsync();
             await MigrateProviderTypesAsync();
             await MigrateProviderBaseUrlsAsync();

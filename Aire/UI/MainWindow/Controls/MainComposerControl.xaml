@@ -246,7 +246,7 @@
                          VerticalScrollBarVisibility="Auto"
                          VerticalContentAlignment="Top"
                          MinHeight="40"
-                         MaxHeight="120"
+                         MaxHeight="96"
                          Padding="10 8"
                          PreviewKeyDown="InputTextBox_KeyDown"
                          AllowDrop="True"

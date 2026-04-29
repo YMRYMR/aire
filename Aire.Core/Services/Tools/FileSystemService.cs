@@ -16,14 +16,15 @@ namespace Aire.Services
         {
             try
             {
+                var content = GetContent(request);
                 if (request.Tool == "list_directory")
                     return ExecuteListDirectory(GetParam(request, "path"));
 
                 var text = request.Tool switch
                 {
                     "read_file"        => await ReadFileAsync(GetParam(request, "path"), GetInt(request, "offset", 0), GetInt(request, "length", MaxFileReadBytes)),
-                    "write_file"       => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), GetBool(request, "append", false)),
-                    "write_to_file"    => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), false),
+                    "write_file"       => await WriteFileAsync(GetParam(request, "path"), content, GetBool(request, "append", false)),
+                    "write_to_file"    => await WriteFileAsync(GetParam(request, "path"), content, false),
                     "apply_diff"       => await ApplyDiffAsync(GetParam(request, "path"), GetParam(request, "diff")),
                     "create_directory" => CreateDirectory(GetParam(request, "path")),
                     "delete_file"      => DeleteFile(GetParam(request, "path")),
@@ -42,6 +43,15 @@ namespace Aire.Services
 
         private static string GetParam(ToolCallRequest req, string name) =>
             req.Parameters.TryGetProperty(name, out var v) ? v.GetString() ?? string.Empty : string.Empty;
+
+        private static string GetContent(ToolCallRequest req)
+        {
+            var content = GetParam(req, "content");
+            if (!string.IsNullOrWhiteSpace(content))
+                return content;
+
+            return GetParam(req, "text");
+        }
 
         private static int GetInt(ToolCallRequest req, string name, int defaultValue) =>
             req.Parameters.TryGetProperty(name, out var v) && v.ValueKind == System.Text.Json.JsonValueKind.Number

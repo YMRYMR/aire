@@ -22,6 +22,10 @@ namespace Aire
                 if (string.IsNullOrEmpty(text) || _owner._isProcessing)
                     return;
 
+                // Clear immediately so long prompts do not keep reflowing the composer
+                // while the turn is being prepared and submitted.
+                _owner.InputTextBox.Clear();
+
                 _owner.IsThinking = true;
                 // One yield lets the overlay paint (IsThinking was already set by QueueSendMessage
                 // before this Background-priority invocation, so DataBind/Render have run).

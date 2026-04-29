@@ -26,6 +26,13 @@ namespace Aire.Providers
             ProviderCapabilities.ToolCalling |
             ProviderCapabilities.SystemPrompt;
 
+        // DeepSeek's current OpenAI-compatible chat endpoints are much more reliable
+        // with Aire's text-based tool-call protocol than with native tool_call payloads.
+        // Keep DeepSeek on the text path so the model emits explicit <tool_call> blocks
+        // that Aire can parse and show as approval/result bubbles.
+        protected override ToolCallMode DefaultToolCallMode => ToolCallMode.TextBased;
+        protected override ToolOutputFormat DefaultToolOutputFormat => ToolOutputFormat.AireText;
+
         protected override string DefaultApiBaseUrl => "https://api.deepseek.com";
 
         public override ProviderFieldHints FieldHints => new() { ShowBaseUrl = false };
@@ -61,7 +68,12 @@ namespace Aire.Providers
                     {
                         Id = id,
                         DisplayName = id,
-                        Capabilities = new List<string> { "tools", "toolcallmode:text", "toolformat:text" }
+                        Capabilities = new List<string>
+                        {
+                            "tools",
+                            "toolcallmode:text",
+                            "toolformat:text"
+                        }
                     })
                     .ToList();
                 return models;

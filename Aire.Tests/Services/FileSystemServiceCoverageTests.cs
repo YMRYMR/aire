@@ -91,6 +91,16 @@ public class FileSystemServiceCoverageTests : IDisposable
     }
 
     [Fact]
+    public async Task ExecuteAsync_WriteFile_WithTextAlias_WritesExpectedContent()
+    {
+        string path = Path.Combine(_root, "write-text.txt");
+        ToolExecutionResult write = await _service.ExecuteAsync(CreateRequest("write_file", "{\"path\":\"" + Escape(path) + "\",\"text\":\"hello\"}"));
+
+        Assert.Contains("Wrote 5 characters", write.TextResult);
+        Assert.Equal("hello", await File.ReadAllTextAsync(path));
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ApplyDiff_ReplacesMatchedBlock()
     {
         string path = Path.Combine(_root, "diff.txt");

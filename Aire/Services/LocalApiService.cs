@@ -334,7 +334,7 @@ namespace Aire.Services
             }
             catch (Exception ex)
             {
-                ApiTraceLog.Record("error", request?.Method ?? "<null>", $"Unexpected local API failure: {ex.GetType().Name}", false);
+                ApiTraceLog.Record("error", request?.Method ?? "<null>", $"Unexpected local API failure: {ex}", false);
                 return LocalApiResponse.Error("An internal error occurred.", "INTERNAL_ERROR");
             }
         }

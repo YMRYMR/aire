@@ -264,7 +264,14 @@ namespace Aire.Services
                 if (toolMatch.Index <= structuredMatch.Index &&
                     toolMatch.Index + toolMatch.Length >= structuredMatch.Index + structuredMatch.Length)
                 {
-                    return true;
+                    // Only suppress the nested block when the enclosing tool wrapper itself
+                    // already resolves to a real tool call. DeepSeek sometimes uses
+                    // <tool_calls> as a loose envelope around the actual structured block,
+                    // and in that case we still want the inner block to be parsed.
+                    if (ParseToolCallJson(toolMatch.Value).Count > 0)
+                    {
+                        return true;
+                    }
                 }
             }
 

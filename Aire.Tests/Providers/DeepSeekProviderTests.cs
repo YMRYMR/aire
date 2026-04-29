@@ -40,6 +40,8 @@ public class DeepSeekProviderTests
         Assert.False(deepSeekProvider.FieldHints.ShowBaseUrl);
         Assert.True(deepSeekProvider.Capabilities.HasFlag(ProviderCapabilities.ToolCalling));
         Assert.False(deepSeekProvider.SupportsImages);
+        Assert.Equal(ToolOutputFormat.AireText, deepSeekProvider.ToolOutputFormat);
+        Assert.Equal(ToolCallMode.TextBased, deepSeekProvider.ToolCallMode);
     }
 
     [Fact]
@@ -96,15 +98,18 @@ public class DeepSeekProviderTests
         using var server = new SimpleJsonServer((method, path) =>
             method == "GET" && path == "/v1/models"
                 ? SimpleJsonServer.Json(200, """{"data":[{"id":"deepseek-reasoner"},{"id":"other-model"},{"id":"deepseek-chat"}]}""")
-                : SimpleJsonServer.Json(404, """{"error":"missing"}"""));
+            : SimpleJsonServer.Json(404, """{"error":"missing"}"""));
 
         DeepSeekProvider provider = new DeepSeekProvider();
 
         var models = await provider.FetchLiveModelsAsync("deepseek-key", server.BaseUrl, CancellationToken.None);
 
-        Assert.NotNull(models);
-        Assert.Equal(new[] { "deepseek-reasoner", "deepseek-chat" }, models!.Select(m => m.Id).ToArray());
-    }
+            Assert.NotNull(models);
+            Assert.Equal(new[] { "deepseek-reasoner", "deepseek-chat" }, models!.Select(m => m.Id).ToArray());
+            Assert.All(models!, model => Assert.Contains("tools", model.Capabilities ?? []));
+            Assert.All(models!, model => Assert.Contains("toolcallmode:text", model.Capabilities ?? []));
+            Assert.All(models!, model => Assert.Contains("toolformat:text", model.Capabilities ?? []));
+        }
 
     [Fact]
     public async Task FetchLiveModelsAsync_NonSuccessResponse_ReturnsNull()
