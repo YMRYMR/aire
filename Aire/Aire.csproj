@@ -40,7 +40,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.4" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2651.64" />
     <PackageReference Include="NAudio" Version="2.3.0" />
-    <PackageReference Include="MailKit" Version="4.15.1" />
+    <PackageReference Include="MailKit" Version="4.16.0" />
     <PackageReference Include="SpellCheck.Dictionaries" Version="1.2.0" />
     <PackageReference Include="Svg" Version="3.4.7" />
     <PackageReference Include="System.Management" Version="9.0.0" />
