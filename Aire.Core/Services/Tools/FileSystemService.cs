@@ -24,6 +24,7 @@ namespace Aire.Services
                     "read_file"        => await ReadFileAsync(GetParam(request, "path"), GetInt(request, "offset", 0), GetInt(request, "length", MaxFileReadBytes)),
                     "write_file"       => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), GetBool(request, "append", false)),
                     "write_to_file"    => await WriteFileAsync(GetParam(request, "path"), GetParam(request, "content"), false),
+                    "edit_file_text"   => await EditFileTextAsync(request),
                     "apply_diff"       => await ApplyDiffAsync(GetParam(request, "path"), GetParam(request, "diff")),
                     "create_directory" => CreateDirectory(GetParam(request, "path")),
                     "delete_file"      => DeleteFile(GetParam(request, "path")),
@@ -175,6 +176,252 @@ namespace Aire.Services
             var totalSize = new FileInfo(path).Length;
             var action    = append ? "Appended" : "Wrote";
             return $"{action} {content.Length} characters to: {path} (file is now {FormatSize(totalSize)})";
+        }
+
+        private static async Task<string> EditFileTextAsync(ToolCallRequest request)
+        {
+            var path = GetParam(request, "path");
+            if (string.IsNullOrWhiteSpace(path)) return "Error: No path provided.";
+
+            var mode = GetParam(request, "mode").Trim().ToLowerInvariant();
+            var find = GetParam(request, "find");
+            var replacement = GetParam(request, "replacement");
+            if (string.IsNullOrWhiteSpace(replacement))
+                replacement = GetParam(request, "text");
+            var allOccurrences = GetBool(request, "all_occurrences", false);
+            var caseSensitive = GetBool(request, "case_sensitive", true);
+
+            if (!File.Exists(path) && mode is not ("append" or "prepend"))
+                return $"Error: File not found: {path}";
+
+            var original = File.Exists(path) ? await File.ReadAllTextAsync(path) : string.Empty;
+            var newline = original.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
+            var normalizedReplacement = NormalizeTextToLineEndings(replacement, newline);
+            var effectiveMode = string.IsNullOrWhiteSpace(mode)
+                ? InferEditMode(find, normalizedReplacement)
+                : mode;
+
+            string updated = original;
+            int changedCount = 0;
+            var comparison = caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            switch (effectiveMode)
+            {
+                case "append":
+                    if (string.IsNullOrEmpty(normalizedReplacement))
+                        return "Warning: No text provided to append.";
+                    updated = original + normalizedReplacement;
+                    changedCount = 1;
+                    break;
+
+                case "prepend":
+                    if (string.IsNullOrEmpty(normalizedReplacement))
+                        return "Warning: No text provided to prepend.";
+                    updated = normalizedReplacement + original;
+                    changedCount = 1;
+                    break;
+
+                case "insert_before":
+                    if (string.IsNullOrWhiteSpace(find))
+                        return "Error: find is required for insert_before.";
+                    changedCount = allOccurrences
+                        ? InsertAroundAllOccurrences(original, find, normalizedReplacement, comparison, before: true, out updated)
+                        : InsertAroundFirstOccurrence(original, find, normalizedReplacement, comparison, before: true, out updated);
+                    break;
+
+                case "insert_after":
+                    if (string.IsNullOrWhiteSpace(find))
+                        return "Error: find is required for insert_after.";
+                    changedCount = allOccurrences
+                        ? InsertAroundAllOccurrences(original, find, normalizedReplacement, comparison, before: false, out updated)
+                        : InsertAroundFirstOccurrence(original, find, normalizedReplacement, comparison, before: false, out updated);
+                    break;
+
+                case "delete":
+                    if (string.IsNullOrWhiteSpace(find))
+                        return "Error: find is required for delete.";
+                    changedCount = allOccurrences
+                        ? ReplaceAllOccurrences(original, find, string.Empty, comparison, out updated)
+                        : ReplaceFirstOccurrence(original, find, string.Empty, comparison, out updated);
+                    break;
+
+                case "replace":
+                default:
+                    if (string.IsNullOrWhiteSpace(find))
+                    {
+                        if (string.IsNullOrWhiteSpace(normalizedReplacement))
+                            return "Error: find or replacement text is required.";
+
+                        updated = original + normalizedReplacement;
+                        changedCount = 1;
+                        break;
+                    }
+                    changedCount = allOccurrences
+                        ? ReplaceAllOccurrences(original, find, normalizedReplacement, comparison, out updated)
+                        : ReplaceFirstOccurrence(original, find, normalizedReplacement, comparison, out updated);
+                    break;
+            }
+
+            if (changedCount <= 0)
+                return $"Warning: Text edit applied to {path} but no changes were made (match not found).";
+
+            var targetDir = System.IO.Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(targetDir) && !Directory.Exists(targetDir))
+                Directory.CreateDirectory(targetDir);
+
+            await File.WriteAllTextAsync(path, RestoreLineEndings(updated, newline));
+
+            var action = effectiveMode switch
+            {
+                "append" => "Appended",
+                "prepend" => "Prepended",
+                "insert_before" => "Inserted text before",
+                "insert_after" => "Inserted text after",
+                "delete" => "Deleted text from",
+                _ => "Edited"
+            };
+
+            return $"{action} {path} ({changedCount} change{(changedCount == 1 ? string.Empty : "s")})";
+        }
+
+        private static string InferEditMode(string find, string replacement)
+        {
+            if (!string.IsNullOrWhiteSpace(find) && !string.IsNullOrWhiteSpace(replacement))
+                return "replace";
+            if (!string.IsNullOrWhiteSpace(find) && string.IsNullOrWhiteSpace(replacement))
+                return "delete";
+            if (string.IsNullOrWhiteSpace(find) && !string.IsNullOrWhiteSpace(replacement))
+                return "append";
+            return "replace";
+        }
+
+        private static string NormalizeTextToLineEndings(string text, string newline) =>
+            RestoreLineEndings(NormalizeNewLines(text ?? string.Empty), newline);
+
+        private static int ReplaceFirstOccurrence(string input, string find, string replacement, StringComparison comparison, out string output)
+        {
+            var index = input.IndexOf(find, comparison);
+            if (index < 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            output = input[..index] + replacement + input[(index + find.Length)..];
+            return 1;
+        }
+
+        private static int ReplaceAllOccurrences(string input, string find, string replacement, StringComparison comparison, out string output)
+        {
+            if (string.IsNullOrEmpty(find))
+            {
+                output = input;
+                return 0;
+            }
+
+            var builder = new StringBuilder(input.Length);
+            int lastIndex = 0;
+            int count = 0;
+
+            while (true)
+            {
+                var index = input.IndexOf(find, lastIndex, comparison);
+                if (index < 0)
+                    break;
+
+                builder.Append(input, lastIndex, index - lastIndex);
+                builder.Append(replacement);
+                lastIndex = index + find.Length;
+                count++;
+                if (find.Length == 0)
+                    break;
+            }
+
+            if (count == 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            builder.Append(input, lastIndex, input.Length - lastIndex);
+            output = builder.ToString();
+            return count;
+        }
+
+        private static int InsertAroundFirstOccurrence(string input, string find, string insertion, StringComparison comparison, bool before, out string output)
+        {
+            var index = input.IndexOf(find, comparison);
+            if (index < 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            if (before)
+                output = input[..index] + insertion + input[index..];
+            else
+                output = input[..(index + find.Length)] + insertion + input[(index + find.Length)..];
+            return 1;
+        }
+
+        private static int InsertAroundAllOccurrences(string input, string find, string insertion, StringComparison comparison, bool before, out string output)
+        {
+            if (string.IsNullOrEmpty(find))
+            {
+                output = input;
+                return 0;
+            }
+
+            var builder = new StringBuilder(input.Length + Math.Max(0, insertion.Length * 2));
+            int lastIndex = 0;
+            int count = 0;
+
+            while (true)
+            {
+                var index = input.IndexOf(find, lastIndex, comparison);
+                if (index < 0)
+                    break;
+
+                builder.Append(input, lastIndex, index - lastIndex);
+                if (before)
+                {
+                    builder.Append(insertion);
+                    builder.Append(input, index, find.Length);
+                }
+                else
+                {
+                    builder.Append(input, index, find.Length);
+                    builder.Append(insertion);
+                }
+                lastIndex = index + find.Length;
+                count++;
+                if (find.Length == 0)
+                    break;
+            }
+
+            if (count == 0)
+            {
+                output = input;
+                return 0;
+            }
+
+            builder.Append(input, lastIndex, input.Length - lastIndex);
+            output = builder.ToString();
+            return count;
+        }
+
+        private static int AppendModeFromInputs(string original, string replacement, string newline, string path, out string updated, out int changedCount)
+        {
+            if (string.IsNullOrEmpty(replacement))
+            {
+                updated = original;
+                changedCount = 0;
+                return 0;
+            }
+
+            updated = original + replacement;
+            changedCount = 1;
+            return 1;
         }
 
         private static async Task<string> ApplyDiffAsync(string path, string diff)

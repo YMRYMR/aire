@@ -33,6 +33,7 @@ namespace Aire.Services.Tools
                 "read_file"              => $"Read file: {GetString(request, "path")}",
                 "write_file"             => $"Write to: {GetString(request, "path")}",
                 "write_to_file"          => $"Write to: {GetString(request, "path")}",
+                "edit_file_text"         => DescribeTextEdit(request),
                 "apply_diff"             => $"Apply diff to: {GetString(request, "path")}",
                 "create_directory"       => $"Create directory: {GetString(request, "path")}",
                 "delete_file"            => $"Delete: {GetString(request, "path")}",
@@ -83,6 +84,38 @@ namespace Aire.Services.Tools
             };
         }
 
+        private static string DescribeTextEdit(ToolCallRequest request)
+        {
+            var path = GetString(request, "path");
+            var mode = GetString(request, "mode").Trim().ToLowerInvariant();
+            var find = GetString(request, "find");
+            var replacement = GetString(request, "replacement");
+            if (string.IsNullOrWhiteSpace(replacement))
+                replacement = GetString(request, "text");
+
+            return mode switch
+            {
+                "append" => string.IsNullOrWhiteSpace(path)
+                    ? "Append text to file"
+                    : $"Append text to: {path}",
+                "prepend" => string.IsNullOrWhiteSpace(path)
+                    ? "Prepend text to file"
+                    : $"Prepend text to: {path}",
+                "insert_before" => string.IsNullOrWhiteSpace(find)
+                    ? (string.IsNullOrWhiteSpace(path) ? "Insert text before match" : $"Insert text before match in: {path}")
+                    : $"Insert before '{Truncate(find, 40)}' in: {path}",
+                "insert_after" => string.IsNullOrWhiteSpace(find)
+                    ? (string.IsNullOrWhiteSpace(path) ? "Insert text after match" : $"Insert text after match in: {path}")
+                    : $"Insert after '{Truncate(find, 40)}' in: {path}",
+                "delete" => string.IsNullOrWhiteSpace(find)
+                    ? (string.IsNullOrWhiteSpace(path) ? "Delete matching text" : $"Delete matching text in: {path}")
+                    : $"Delete '{Truncate(find, 40)}' in: {path}",
+                _ => string.IsNullOrWhiteSpace(find)
+                    ? (string.IsNullOrWhiteSpace(path) ? "Edit file text" : $"Edit text in: {path}")
+                    : $"Replace '{Truncate(find, 40)}' with '{Truncate(replacement, 40)}' in: {path}",
+            };
+        }
+
         private static string DescribeBrowserScript(ToolCallRequest request)
         {
             var script = GetString(request, "script");
@@ -117,6 +150,7 @@ namespace Aire.Services.Tools
                 "list_directory"   => GetString(request, "path"),
                 "read_file"        => GetString(request, "path"),
                 "write_file"       => GetString(request, "path"),
+                "edit_file_text"   => GetString(request, "path"),
                 "create_directory" => GetString(request, "path"),
                 "delete_file"      => GetString(request, "path"),
                 "move_file"        => GetString(request, "from"),

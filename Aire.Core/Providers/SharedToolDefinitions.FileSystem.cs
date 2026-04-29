@@ -14,7 +14,8 @@ public static partial class SharedToolDefinitions
                 "This tool can launch GUI desktop applications (e.g. gimp, notepad, chrome, vlc) " +
                 "even if they are not in PATH — the system automatically finds installed apps. " +
                 "To open GIMP: command=\"gimp\". To open GIMP with a file: command=\"gimp \\\"C:/path/file.png\\\"\". " +
-                "Use this tool whenever the user asks to open, launch, or start any application.",
+                "Use this tool whenever the user asks to open, launch, or start any application. " +
+                "Prefer native file tools such as search_file_content and edit_file_text for file work instead of shell commands.",
             Parameters = new()
             {
                 { "command",           new ToolParam("string",  "Command or application name to execute/launch") },
@@ -61,6 +62,24 @@ public static partial class SharedToolDefinitions
                 { "append",  new ToolParam("boolean", "If true, append to the file instead of overwriting (default false)") },
             },
             Required = ["path", "content"],
+        },
+        new()
+        {
+            Name = "edit_file_text", Category = "filesystem",
+            ShortDescription = "Find and change text in one file without shell commands.",
+            Description =
+                "Edit text inside a single file. Use this for exact find/replace, delete, insert-before, insert-after, prepend, or append operations. " +
+                "Prefer this tool over PowerShell or shell scripts for routine single-file text edits.",
+            Parameters = new()
+            {
+                { "path",            new ToolParam("string",  "Absolute path to the file") },
+                { "find",            new ToolParam("string",  "Exact text to find. Leave empty when appending or prepending.") },
+                { "replacement",     new ToolParam("string",  "Text to insert or replace with. Leave empty to delete matched text.") },
+                { "mode",            new ToolParam("string",  "replace, delete, insert_before, insert_after, prepend, append") },
+                { "all_occurrences", new ToolParam("boolean", "If true, apply to all matches instead of only the first") },
+                { "case_sensitive",  new ToolParam("boolean", "If true, use exact case-sensitive matching (default true)") },
+            },
+            Required = ["path"],
         },
         new()
         {

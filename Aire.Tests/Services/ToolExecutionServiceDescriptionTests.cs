@@ -16,6 +16,7 @@ public class ToolExecutionServiceDescriptionTests
         Assert.Equal("read_browser_tab", ToolExecutionMetadata.NormalizeToolName("read_tab"));
         Assert.Equal("set_clipboard", ToolExecutionMetadata.NormalizeToolName("copy_to_clipboard"));
         Assert.Equal("search_file_content", ToolExecutionMetadata.NormalizeToolName("grep"));
+        Assert.Equal("edit_file_text", ToolExecutionMetadata.NormalizeToolName("find_replace"));
     }
 
     [Fact]
@@ -36,6 +37,7 @@ public class ToolExecutionServiceDescriptionTests
         Assert.Equal("Open in browser: https://example.com", _service.GetToolDescription(BuildRequest("open_browser_tab", "{\"url\":\"https://example.com\"}")));
         Assert.Equal("List directory: C:/repo", _service.GetToolDescription(BuildRequest("list_directory", "{\"path\":\"C:/repo\"}")));
         Assert.Equal("Read file: C:/repo/app.cs", _service.GetToolDescription(BuildRequest("read_file", "{\"path\":\"C:/repo/app.cs\"}")));
+        Assert.Equal("Replace 'old' with 'new' in: C:/repo/app.cs", _service.GetToolDescription(BuildRequest("edit_file_text", "{\"path\":\"C:/repo/app.cs\",\"find\":\"old\",\"replacement\":\"new\"}")));
         Assert.Equal("Create directory: C:/repo/new", _service.GetToolDescription(BuildRequest("create_directory", "{\"path\":\"C:/repo/new\"}")));
         Assert.Equal("Delete: C:/repo/old.txt", _service.GetToolDescription(BuildRequest("delete_file", "{\"path\":\"C:/repo/old.txt\"}")));
         Assert.Equal("Move: C:/from.txt → C:/to.txt", _service.GetToolDescription(BuildRequest("move_file", "{\"from\":\"C:/from.txt\",\"to\":\"C:/to.txt\"}")));
@@ -102,6 +104,7 @@ public class ToolExecutionServiceDescriptionTests
         Assert.Equal(Environment.CurrentDirectory, _service.GetToolPath(BuildRequest("execute_command", "{}")));
         Assert.Equal("C:/repo", _service.GetToolPath(BuildRequest("list_directory", "{\"path\":\"C:/repo\"}")));
         Assert.Equal("C:/repo/file.txt", _service.GetToolPath(BuildRequest("write_file", "{\"path\":\"C:/repo/file.txt\"}")));
+        Assert.Equal("C:/repo/file.txt", _service.GetToolPath(BuildRequest("edit_file_text", "{\"path\":\"C:/repo/file.txt\",\"find\":\"old\",\"replacement\":\"new\"}")));
         Assert.Equal("C:/repo/new", _service.GetToolPath(BuildRequest("create_directory", "{\"path\":\"C:/repo/new\"}")));
         Assert.Equal("C:/repo/old.txt", _service.GetToolPath(BuildRequest("delete_file", "{\"path\":\"C:/repo/old.txt\"}")));
         Assert.Equal(string.Empty, _service.GetToolPath(BuildRequest("open_url", "{\"url\":\"https://example.com\"}")));

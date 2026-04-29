@@ -43,6 +43,10 @@ namespace Aire.Services
             "file_write" or "save_file" or "write_to_file" or
             "write_text" or "create_file" => "write_file",
 
+            "edit_text" or "text_edit" or "find_replace" or
+            "replace_text" or "replace_text_in_file" or "modify_text" or
+            "insert_text" or "append_text" or "prepend_text" => "edit_file_text",
+
             "diff" or "patch" or "edit_file" or "file_patch" or "file_edit" => "apply_diff",
 
             "find" or "glob" or "file_search" or "find_file" or

@@ -95,6 +95,59 @@ public class FileSystemServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task ExecuteAsync_EditFileText_SupportsReplaceInsertDeleteAndAppend()
+    {
+        string replacePath = Path.Combine(_root, "replace.txt");
+        string insertPath = Path.Combine(_root, "insert.txt");
+        string deletePath = Path.Combine(_root, "delete.txt");
+        string appendPath = Path.Combine(_root, "append.txt");
+
+        await File.WriteAllTextAsync(replacePath, "alpha beta gamma");
+        await File.WriteAllTextAsync(insertPath, "alpha gamma");
+        await File.WriteAllTextAsync(deletePath, "alpha beta gamma");
+        await File.WriteAllTextAsync(appendPath, "alpha");
+
+        ToolExecutionResult replace = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = replacePath,
+            ["find"] = "beta",
+            ["replacement"] = "BETA",
+            ["mode"] = "replace"
+        }));
+
+        ToolExecutionResult insertAfter = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = insertPath,
+            ["find"] = "alpha",
+            ["replacement"] = "beta",
+            ["mode"] = "insert_after"
+        }));
+
+        ToolExecutionResult delete = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = deletePath,
+            ["find"] = "beta ",
+            ["mode"] = "delete"
+        }));
+
+        ToolExecutionResult append = await _service.ExecuteAsync(BuildRequest("edit_file_text", new Dictionary<string, object>
+        {
+            ["path"] = appendPath,
+            ["replacement"] = " beta",
+            ["mode"] = "append"
+        }));
+
+        Assert.Contains("Edited", replace.TextResult);
+        Assert.Contains("Inserted text after", insertAfter.TextResult);
+        Assert.Contains("Deleted text from", delete.TextResult);
+        Assert.Contains("Appended", append.TextResult);
+        Assert.Equal("alpha BETA gamma", await File.ReadAllTextAsync(replacePath));
+        Assert.Equal("alphabeta gamma", await File.ReadAllTextAsync(insertPath));
+        Assert.Equal("alpha gamma", await File.ReadAllTextAsync(deletePath));
+        Assert.Equal("alpha beta", await File.ReadAllTextAsync(appendPath));
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ApplyDiff_ReplacesMatchedBlock()
     {
         string path = Path.Combine(_root, "diff.txt");

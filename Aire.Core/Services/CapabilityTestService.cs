@@ -262,7 +262,7 @@ public class CapabilityTestRunner
     // Deliberately minimal — just enough to make any capable model call a tool.
 
     private const string ToolNameList =
-        "list_directory, read_file, write_file, apply_diff, search_files, search_file_content,\n" +
+        "list_directory, read_file, write_file, edit_file_text, apply_diff, search_files, search_file_content,\n" +
         "create_directory, delete_file, move_file, execute_command, read_command_output,\n" +
         "open_url, open_browser_tab, list_browser_tabs, read_browser_tab, switch_browser_tab,\n" +
         "close_browser_tab, get_browser_html, get_browser_cookies, execute_browser_script,\n" +

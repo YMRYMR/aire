@@ -15,6 +15,7 @@ namespace Aire.Services
             "read_file" => Format("toolDesc.read_file", "Read {0}?", FileName(GetStr(root, "path"))),
             "write_file" => Format("toolDesc.write_file", "Write to {0}?", FileName(GetStr(root, "path"))),
             "write_to_file" => Format("toolDesc.write_to_file", "Write to {0}?", FileName(GetStr(root, "path"))),
+            "edit_file_text" => DescribeTextEdit(root),
             "apply_diff" => Format("toolDesc.apply_diff", "Edit {0}?", FileName(GetStr(root, "path"))),
             "create_directory" => Format("toolDesc.create_directory", "Create folder {0}?", FileName(GetStr(root, "path"))),
             "delete_file" => Format("toolDesc.delete_file", "Delete {0}?", FileName(GetStr(root, "path"))),
@@ -99,6 +100,34 @@ namespace Aire.Services
                 return T("toolDesc.execute_browser_script_default", "Run browser script?");
 
             return T("toolDesc.execute_browser_script", $"Run browser script:\n\n```js\n{script.Trim()}\n```");
+        }
+
+        private static string DescribeTextEdit(JsonElement root)
+        {
+            var path = GetStr(root, "path");
+            var mode = GetStr(root, "mode").Trim().ToLowerInvariant();
+            var find = GetStr(root, "find");
+            var replacement = GetStr(root, "replacement");
+            if (string.IsNullOrWhiteSpace(replacement))
+                replacement = GetStr(root, "text");
+
+            return mode switch
+            {
+                "append" => Format("toolDesc.edit_file_text_append", "Append text to {0}?", FileName(path)),
+                "prepend" => Format("toolDesc.edit_file_text_prepend", "Prepend text to {0}?", FileName(path)),
+                "insert_before" => string.IsNullOrWhiteSpace(find)
+                    ? Format("toolDesc.edit_file_text_insert_before", "Insert text before a match in {0}?", FileName(path))
+                    : Format("toolDesc.edit_file_text_insert_before_match", "Insert before '{0}' in {1}?", Truncate(find, 40), FileName(path)),
+                "insert_after" => string.IsNullOrWhiteSpace(find)
+                    ? Format("toolDesc.edit_file_text_insert_after", "Insert text after a match in {0}?", FileName(path))
+                    : Format("toolDesc.edit_file_text_insert_after_match", "Insert after '{0}' in {1}?", Truncate(find, 40), FileName(path)),
+                "delete" => string.IsNullOrWhiteSpace(find)
+                    ? Format("toolDesc.edit_file_text_delete", "Delete matching text in {0}?", FileName(path))
+                    : Format("toolDesc.edit_file_text_delete_match", "Delete '{0}' in {1}?", Truncate(find, 40), FileName(path)),
+                _ => string.IsNullOrWhiteSpace(find)
+                    ? Format("toolDesc.edit_file_text_default", "Edit text in {0}?", FileName(path))
+                    : Format("toolDesc.edit_file_text_replace", "Replace '{0}' with '{1}' in {2}?", Truncate(find, 40), Truncate(replacement, 40), FileName(path)),
+            };
         }
 
         private static string Capitalize(string s) =>
